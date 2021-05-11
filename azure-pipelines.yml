@@ -1,0 +1,43 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- master
+- develop
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+- script: npm install
+  displayName: 'Install NPM Packages'
+- script: npm run lint
+  displayName: 'Lint Source Code'
+- script: npm test
+  displayName: 'Run Unit Tests'
+- task: SonarCloudPrepare@1
+  inputs:
+    SonarCloud: 'awsm-sonarcloud'
+    organization: 'digitaldelivery'
+    scannerMode: 'CLI'
+    configMode: 'manual'
+    cliProjectKey: 'PDB-AWSM-Frontend'
+    cliProjectName: 'PDB-AWSM-Frontend'
+    cliSources: '.'
+- task: SonarCloudAnalyze@1
+
+- script: npm run build
+  displayName: 'Compile Application'
+- task: CopyFiles@2
+  displayName: 'Copy Files to Artifact Dev Directory'
+  inputs:
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+    Contents: |
+          build/**
+- task: PublishBuildArtifacts@1
+  displayName: Export compiles html/js/css
+  inputs:
+      pathToPublish: '$(Build.ArtifactStagingDirectory)'
+      artifactName: web_assets

@@ -1,0 +1,37 @@
+.awsm-dropdown-input {
+  .awsm-input {
+    height: 2.5rem;
+    border-radius: 0.25rem;
+    border: 1px solid #d8d8d8;
+    padding: 0.5rem;
+    &.disabled {
+      background-color: rgb(238, 238, 238);
+    }
+    &:focus {
+      border: 1px solid #008F8A;
+      background-color: rgb(240, 249, 249);
+      color: #008F8A;
+    }
+  }
+  .awsm-input-right-content {
+    color: #008F8A;
+    font-size: 0.75rem;
+    right: 0;
+    top: 0;
+    padding-top: 0.65rem;
+    padding-right: 0.5rem;
+  }
+  .input-header {
+    margin-top: 0.75rem;
+    color: black;
+  }
+  .awsm-label-add {
+    margin-top: 0.75rem;
+    cursor: pointer;
+    color: #008F8A;
+    font-size: 0.75rem;
+    &.disabled {
+      color: gray;
+    }
+  }
+}

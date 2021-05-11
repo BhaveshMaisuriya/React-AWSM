@@ -1,0 +1,115 @@
+.awsm-select-toggle {
+  border-radius: 0.25rem;
+  border: 1px solid #d8d8d8;
+  height: 2.5rem;
+  position: relative;
+  cursor: pointer;
+  &.disabled {
+    background-color: rgb(238, 238, 238);
+  }
+  &:after {
+    content: ">";
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    transform: rotate(90deg);
+    font-weight: bold;
+  }
+}
+.awsm-select-menu {
+  margin-top: 0.5rem;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  box-shadow: 0 8px 12px 0 rgba(92, 76, 76, 0.16);
+  border-radius: 0.25rem;
+  padding-left: 0.25rem;
+  max-height: 150px;
+  overflow: auto;
+  .awsm-select-item {
+    cursor: pointer;
+    padding: 0.5rem;
+    &:hover {
+      background-color: #008f8a;
+      color: white;
+    }
+  }
+}
+.dqm-storage-container {
+  padding-right: 1rem;
+  .input-header {
+    margin-top: 0.75rem;
+    color: black;
+  }
+  .section-header {
+    font-weight: 700;
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+    color: black;
+  }
+  .dqm-storage-add {
+    cursor: pointer;
+    color: #008f8a;
+  }
+  .dqm-storage-delete {
+    cursor: pointer;
+    color: red;
+  }
+}
+.awsm-input {
+  height: 2.5rem;
+  border-radius: 0.25rem;
+  border: 1px solid #d8d8d8;
+  padding: 0.5rem;
+  &.disabled {
+    background-color: rgb(238, 238, 238);
+  }
+  &:focus {
+    border: 1px solid #008f8a;
+  }
+  /* Chrome, Safari, Edge, Opera */
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  /* Firefox */
+  &[type="number"] {
+    -moz-appearance: textfield;
+  }
+}
+.awsm-dropdown-input {
+  .awsm-input {
+    height: 2.5rem;
+    border-radius: 0.25rem;
+    border: 1px solid #d8d8d8;
+    padding: 0.5rem;
+    &.disabled {
+      background-color: rgb(238, 238, 238);
+    }
+    &:focus {
+      border: 1px solid #008f8a;
+      background-color: rgb(240, 249, 249);
+      color: #008f8a;
+    }
+  }
+  .awsm-input-right-content {
+    color: #008f8a;
+    font-size: 0.75rem;
+    right: 0;
+    top: 0;
+    padding-top: 0.65rem;
+    padding-right: 0.5rem;
+  }
+  .input-header {
+    margin-top: 0.75rem;
+    color: black;
+  }
+  .awsm-label-add {
+    margin-top: 0.75rem;
+    cursor: pointer;
+    color: #008f8a;
+    font-size: 0.75rem;
+    &.disabled {
+      color: gray;
+    }
+  }
+}

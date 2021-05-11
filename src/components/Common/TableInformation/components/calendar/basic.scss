@@ -1,0 +1,50 @@
+// * {
+// 	box-sizing: border-box;
+// 	margin: 0;
+// 	padding: 0;
+// }
+
+.awsm-ultra-calendar {
+	abbr[data-original-title],
+	abbr[title] {
+		cursor: pointer;
+	}
+	.button-day-select {
+		// background-color: aquamarine;
+		text-align: left;
+		width: 35px;
+		height: 35px;
+		display: table-cell;
+		padding: 0.5em;
+		color: #8b9898;
+		text-align: center;
+		font-size: 0.875em;
+		margin-right: 0.2em;
+
+		&.selected {
+			background-color: #00a19d;
+			color: white;
+			border-radius: 0;
+		}
+	}
+	.DayPicker-Day {
+		border-radius: 0 !important;
+		// margin: 1px !important;
+		&:not(:last-child) {
+			border-right: 4px solid white;
+		}
+	}
+	.DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
+		background-color: #00a19d !important;
+		color: #fff !important;
+	}
+	.DayPicker-Week[role='row']:not(:last-child) {
+		border-bottom: 4px solid white;
+	}
+}
+.DayPicker-Caption {
+	visibility: hidden;
+}
+.DayPicker-Month {
+	margin-top: 0;
+}

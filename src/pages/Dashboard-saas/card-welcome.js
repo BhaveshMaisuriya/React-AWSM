@@ -1,0 +1,39 @@
+import React, { Component } from "react"
+import { Row, Col, Card } from "reactstrap"
+
+//Import Images
+import profileImg from "../../assets/images/profile-img.png"
+
+class CardWelcome extends Component {
+  render() {
+    return (
+      <React.Fragment>
+        <Col xl="4">
+          <Card className="bg-soft-primary">
+            <div>
+              <Row>
+                <Col xs="7">
+                  <div className="text-primary p-3">
+                    <h5 className="text-primary">Welcome Back !</h5>
+                    <p>AWSM Dashboard</p>
+
+                    <ul className="pl-3 mb-0">
+                      <li className="py-1">DQM</li>
+                      <li className="py-1">OPO</li>
+                      <li className="py-1">RTS</li>
+                    </ul>
+                  </div>
+                </Col>
+                <Col xs="5" className="align-self-end">
+                  <img src={profileImg} alt="" className="img-fluid" />
+                </Col>
+              </Row>
+            </div>
+          </Card>
+        </Col>
+      </React.Fragment>
+    )
+  }
+}
+
+export default CardWelcome

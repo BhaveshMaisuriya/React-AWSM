@@ -1,0 +1,232 @@
+{
+    "success"   : true,
+    "resources" : {
+        "rows" : [
+            {
+                "id"   : 1,
+                "name" : "Celia",
+                "rating" : 4
+            },
+            {
+                "id"   : 2,
+                "name" : "Macy",
+                "rating" : 2
+            },
+            {
+                "id"   : 3,
+                "name" : "Gloria",
+                "rating" : 5
+            },
+            {
+                "id"   : 4,
+                "name" : "Madison",
+                "rating" : 4
+            },
+            {
+                "id"   : 5,
+                "name" : "Linda",
+                "rating" : 3
+            },
+            {
+                "id"   : 6,
+                "name" : "Lisa",
+                "rating" : 5
+            }
+        ]
+    },
+    "events"    : {
+        "rows" : [
+            {
+                "id"         : 1,
+                "startDate"  : "2018-09-24T10:00:00",
+                "endDate"    : "2018-09-24T17:00:00",
+                "name"       : "Meeting",
+                "eventColor" : "blue",
+                "subEvents" : [
+                    {
+                        "id"        : 11,
+                        "name"      : "Cool presentation",
+                        "startDate" : "2018-09-24T10:00:00",
+                        "endDate"   : "2018-09-24T12:00:00"
+                    },
+                    {
+                        "id"        : 12,
+                        "name"      : "Outro",
+                        "startDate" : "2018-09-24T15:00:00",
+                        "endDate"   : "2018-09-24T17:00:00"
+                    }
+                ]
+            },
+            {
+                "id"         : 2,
+                "startDate"  : "2018-09-24T08:00:00",
+                "endDate"    : "2018-09-24T19:00:00",
+                "name"       : "1-day coding workshop",
+                "eventColor" : "blue",
+                "subEvents"  : [
+                    {
+                        "id"        : 21,
+                        "iconCls"   : "b-fa b-fa-laptop-code",
+                        "name"      : "Hackathon",
+                        "startDate" : "2018-09-24T08:00:00",
+                        "endDate"   : "2018-09-24T12:00:00"
+                    },
+                    {
+                        "id"        : 22,
+                        "cls"       : "lunch",
+                        "iconCls"   : "b-fa b-fa-utensils",
+                        "name"      : "Lunch break",
+                        "startDate" : "2018-09-24T12:00:00",
+                        "endDate"   : "2018-09-24T13:30:00"
+                    },
+                    {
+                        "id"        : 23,
+                        "iconCls"   : "b-fa b-fa-laptop-code",
+                        "name"      : "Hackathon part 2",
+                        "startDate" : "2018-09-24T13:30:00",
+                        "endDate"   : "2018-09-24T17:00:00"
+                    },
+                    {
+                        "id"        : 24,
+                        "cls"       : "beerathon",
+                        "iconCls"   : "b-fa b-fa-beer",
+                        "name"      : "Beerathon",
+                        "startDate" : "2018-09-24T17:30:00",
+                        "endDate"   : "2018-09-24T19:00:00"
+                    }
+                ]
+            },
+            {
+                "id"         : 3,
+                "startDate"  : "2018-09-24T09:00:00",
+                "endDate"    : "2018-09-24T19:00:00",
+                "name"       : "Conference",
+                "eventColor" : "green",
+                "subEvents"  : [
+                    {
+                        "id"        : 31,
+                        "iconCls"   : "b-fa b-fa-info-circle",
+                        "name"      : "Session: What´s new",
+                        "startDate" : "2018-09-24T09:00:00",
+                        "endDate"   : "2018-09-24T16:00:00"
+                    },
+                    {
+                        "id"        : 33,
+                        "iconCls"   : "b-fa b-fa-guitar",
+                        "name"      : "Live music",
+                        "startDate" : "2018-09-24T17:00:00",
+                        "endDate"   : "2018-09-24T19:00:00"
+                    }
+                ]
+            },
+            {
+                "id"         : 4,
+                "startDate"  : "2018-09-24T10:00:00",
+                "endDate"    : "2018-09-24T17:00:00",
+                "name"       : "Meeting",
+                "eventColor" : "blue",
+                "subEvents" : [
+                    {
+                        "id"        : 41,
+                        "iconCls"   : "b-fa b-fa-file-powerpoint",
+                        "name"      : "Lengthy PPT presentation",
+                        "startDate" : "2018-09-24T10:00:00",
+                        "endDate"   : "2018-09-24T13:00:00"
+                    },
+                    {
+                        "id"        : 42,
+                        "name"      : "Conclusion",
+                        "startDate" : "2018-09-24T15:00:00",
+                        "endDate"   : "2018-09-24T16:00:00"
+                    }
+                ]
+            },
+            {
+                "id"         : 5,
+                "startDate"  : "2018-09-24T09:00:00",
+                "endDate"    : "2018-09-24T18:00:00",
+                "name"       : "Conference",
+                "eventColor" : "green",
+                "subEvents"  : [
+                    {
+                        "id"        : 51,
+                        "name"      : "Session: Recap",
+                        "startDate" : "2018-09-24T09:00:00",
+                        "endDate"   : "2018-09-24T11:00:00"
+                    },
+                    {
+                        "id"        : 52,
+                        "name"      : "Session: What´s next",
+                        "startDate" : "2018-09-24T13:00:00",
+                        "endDate"   : "2018-09-24T18:00:00"
+                    }
+                ]
+            },
+            {
+                "id"         : 6,
+                "startDate"  : "2018-09-24T09:00:00",
+                "endDate"    : "2018-09-24T18:00:00",
+                "name"       : "Conference",
+                "eventColor" : "green",
+                "subEvents"  : [
+                    {
+                        "id"        : 61,
+                        "name"      : "Welcome",
+                        "startDate" : "2018-09-24T09:00:00",
+                        "endDate"   : "2018-09-24T10:00:00"
+                    },
+                    {
+                        "id"        : 62,
+                        "iconCls"   : "b-fa b-fa-cocktail",
+                        "name"      : "Session: Mingle",
+                        "startDate" : "2018-09-24T12:00:00",
+                        "endDate"   : "2018-09-24T14:00:00"
+                    },
+                    {
+                        "id"        : 63,
+                        "name"      : "Adios",
+                        "startDate" : "2018-09-24T17:00:00",
+                        "endDate"   : "2018-09-24T18:00:00"
+                    }
+                ]
+            }
+        ]
+    },
+    "assignments"  : {
+        "rows" : [
+            {
+                "id"       : 1,
+                "event"    : 1,
+                "resource" : 1
+            },
+            {
+                "id"       : 2,
+                "event"    : 2,
+                "resource" : 2
+            },
+            {
+                "id"       : 3,
+                "event"    : 3,
+                "resource" : 3
+            },
+            {
+                "id"       : 4,
+                "event"    : 4,
+                "resource" : 4
+            },
+            {
+                "id"       : 5,
+                "event"    : 5,
+                "resource" : 5
+            },
+            {
+                "id"       : 6,
+                "event"    : 6,
+                "resource" : 6
+            }
+        ]
+    },
+    "dependencies" : {
+        "rows" : []
+    }
+}

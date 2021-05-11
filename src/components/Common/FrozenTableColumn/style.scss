@@ -1,0 +1,89 @@
+@font-face {
+  font-family: "Museo Sans";
+  font-weight: 500;
+  src: url("../../../assets/fonts/MuseoSans/MuseoSans-500.ttf")
+    format("truetype");
+}
+
+@font-face {
+  font-family: "Inter";
+  src: url("../../../assets/fonts/Inter/Inter-SemiBold.ttf") format("truetype");
+}
+
+.container {
+  display: flex;
+  // box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.07);
+  padding: 0px !important;
+  margin: 14px 0px 19px 0px !important;
+  // border-top: 1px solid #d9d9d9;
+  width: 100% !important;
+}
+
+.scroll {
+  overflow-x: scroll;
+  border-right: 1px solid #d9d9d9;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.07);
+}
+
+.fixed {
+  border-spacing: 0;
+  border-right: 1px solid #d9d9d9;
+  border-left: 1px solid #d9d9d9;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.07);
+  border-top: 1px solid #d9d9d9;
+}
+
+.container thead tr {
+  background-color: #f8f9fa;
+  height: 64px;
+}
+
+.scrollable {
+  border-spacing: 0;
+  border-top: 1px solid #d9d9d9;
+}
+
+.container tbody tr {
+  height: 52px;
+}
+
+.container thead td {
+  font-family: Inter;
+  color: #000000;
+  max-height: 64px;
+}
+
+.container tbody td {
+  font-family: Museo Sans;
+  color: rgba(0, 0, 0, 0.75);
+  max-height: 52px;
+}
+
+tbody td .cell-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* number of lines to show */
+  -webkit-box-orient: vertical;
+  display: flex;
+}
+
+tbody td .cell-text-big {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* number of lines to show */
+  -webkit-box-orient: vertical;
+  min-width: 204px;
+  display: flex;
+}
+
+.container td {
+  min-width: 98px !important;
+  max-width: 212px !important;
+  border-bottom: 1px solid #d9d9d9;
+  padding-left: 4px;
+  padding-right: 4px;
+  font-size: 12px;
+  box-sizing: border-box;
+}

@@ -1,0 +1,10 @@
+.DayPicker-Day--highlighted:not(.DayPicker-Day--outside) {
+	background-color: teal;
+}
+.DayPicker-Weekday {
+	cursor: pointer;
+	margin-bottom: 2px;
+}
+.DayPicker-Weekday:hover {
+	background-color: lightblue;
+}

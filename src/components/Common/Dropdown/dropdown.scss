@@ -1,0 +1,40 @@
+.awsm-select-toggle {
+  border-radius: 0.25rem;
+  border: 1px solid #d8d8d8;
+  height: 2.5rem;
+  position: relative;
+  cursor: pointer;
+
+  &.disabled {
+    background-color: rgb(238, 238, 238);
+  }
+
+  &:after {
+    content: ">";
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    transform: rotate(90deg);
+    font-weight: bold;
+  }
+}
+
+.awsm-select-menu {
+  margin-top: 0.5rem;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  box-shadow: 0 8px 12px 0 rgba(92, 76, 76, 0.16);
+  border-radius: 0.25rem;
+  padding-left: 0.25rem;
+  max-height: 150px;
+  overflow: auto;
+
+  .awsm-select-item {
+    cursor: pointer;
+    padding: 0.5rem;
+
+    &:hover {
+      background-color: #008F8A;
+      color: white;
+    }
+  }
+}

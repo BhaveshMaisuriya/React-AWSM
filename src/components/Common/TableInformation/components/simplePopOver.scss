@@ -1,0 +1,26 @@
+.MuiPopover-paper {
+  display: flex;
+  width: 377px;
+  flex-direction: column;
+  border: 1px solid #ced4da;
+  margin-top: 2px;
+
+  label {
+    margin: 0px;
+  }
+  svg {
+    color: #008f8a;
+  }
+}
+.css-ahj2mt-MuiTypography-root {
+  font-family: "Poppins", sans-serif !important;
+  font-size: 0.8125rem !important;
+  line-height: 1.5;
+}
+.MuiPaper-elevation {
+  box-shadow: none !important;
+}
+
+.MuiFormControlLabel-checked {
+  background-color: #e0f4f3;
+}

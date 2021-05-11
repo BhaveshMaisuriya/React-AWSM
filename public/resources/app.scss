@@ -1,0 +1,76 @@
+.b-sch-event-wrap {
+    .b-sch-event {
+        padding-left     : 0;
+        overflow         : visible;
+        background-image : repeating-linear-gradient(45deg, #ddd, #ddd 10px, #eee 10px, #eee 20px) !important;
+    }
+
+    .b-sch-event.b-sch-event-selected,
+    &:hover .b-sch-event {
+        // Needs !important to not have to have a very specific selector here, to keep demo css simple
+        background-image : repeating-linear-gradient(45deg, #ccc, #ccc 10px, #ddd 10px, #ddd 20px) !important;
+    }
+
+    .b-sch-label {
+        cursor     : grab;
+        background : transparent;
+        padding    : .3em 0;
+        margin     : 0;
+        align-self : flex-start;
+        width      : calc(100% - 1px);
+        transition : background .2s;
+
+        &:active {
+            cursor : grabbing;
+        }
+    }
+
+    &:hover .b-sch-label {
+        background : #ddd;
+    }
+}
+
+
+.b-sch-event-content {
+    height           : 100%;
+    margin-left      : 0 !important;
+    background-color : inherit;
+}
+
+.nested {
+    position         : absolute;
+    top              : 0;
+    height           : 100%;
+    display          : flex;
+    justify-content  : center;
+    align-items      : center;
+    overflow         : hidden;
+    background-color : inherit;
+    border-right     : 1px solid;
+}
+
+.nested-dragging {
+    background-color : rosybrown;
+    color            : white;
+}
+
+.b-resize-handle {
+    &:before,
+    &:before {
+        // to make resizable handles visible over nested elements
+        z-index : 10;
+    }
+}
+
+
+.b-sch-event-tooltip h4 {
+    margin : 0.7em 0 0.2em 0;
+}
+
+.lunch,
+.beerathon {
+    background : #feac31;
+}
+
+
+

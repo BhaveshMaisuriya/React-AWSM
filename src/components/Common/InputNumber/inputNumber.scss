@@ -1,0 +1,27 @@
+.awsm-input {
+  height: 2.5rem;
+  border-radius: 0.25rem;
+  border: 1px solid #d8d8d8;
+  padding: 0.5rem;
+
+  &.disabled {
+    background-color: rgb(238, 238, 238);
+  }
+
+  &:focus {
+    border: 1px solid #008F8A;
+  }
+
+  /* Chrome, Safari, Edge, Opera */
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  /* Firefox */
+  &[type='number'] {
+    -moz-appearance: textfield;
+  }
+
+}

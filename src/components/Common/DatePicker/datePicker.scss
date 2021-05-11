@@ -1,0 +1,83 @@
+.awsm-date-picker-container {
+
+  .date-picker-button {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    height: 2.5rem;
+    border: 1px solid #d8d8d8;
+    background-color: white;
+    border-radius: 0.25rem;
+    position: relative;
+  }
+
+  .date-picker-icon {
+    width: 0.85rem;
+    position: absolute;
+    right: 0.35rem;
+    top: 0.5rem;
+    color: rgb(204, 205, 207);
+  }
+}
+
+.awsm-date-picker {
+  display: flex;
+  justify-content: center;
+
+  .rdrMonthAndYearPickers {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+  }
+
+  .rdrSelected {
+    background-color: #008F8A !important;
+    border-radius: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+
+    &.rdrDayHovered {
+      display: none !important;
+      border: none;
+    }
+  }
+
+  .rdrWeekDays {
+    padding: 0.5rem 0;
+
+    .rdrWeekDay {
+      font-weight: 600;
+      color: #333333;
+    }
+  }
+
+  .rdrDay {
+    &:hover {
+      background-color: #DDDDDD;
+    }
+  }
+
+  .rdrDayNumber {
+    font-weight: 500;
+    font-size: 0.8rem;
+    color: #333333;
+
+    span:after {
+      width: 0 !important;
+    }
+
+    &:after {
+      border: none !important;
+      border-radius: 0 !important;
+      background: none;
+      span:after {
+        width: 0 !important;
+      }
+    }
+  }
+
+  .rdrDayEndPreview {
+    border: none !important;
+  }
+}

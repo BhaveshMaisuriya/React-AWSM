@@ -1,0 +1,25 @@
+.arrow {
+  position: absolute;
+  top: 40%;
+  right: 15px;
+  color: #777;
+  cursor: pointer;
+}
+#road_tanker_requirement {
+  cursor: pointer;
+}
+.field {
+  cursor: pointer;
+}
+
+.arrow2 {
+  position: absolute;
+  top: 15%;
+  right: 15px;
+  color: #777;
+  cursor: pointer;
+}
+
+#road_tanker_requirement {
+  background-color: aquamarine;
+}

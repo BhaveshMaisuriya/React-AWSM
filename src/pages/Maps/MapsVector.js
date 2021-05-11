@@ -1,0 +1,124 @@
+import React, { Component } from "react"
+
+import {
+  Card,
+  CardBody,
+  CardSubtitle,
+  CardTitle,
+  Col,
+  Container,
+  Row,
+} from "reactstrap"
+import Vector from "./Vectormap"
+//Import Breadcrumb
+import Breadcrumbs from "../../components/Common/Breadcrumb"
+
+class MapsVector extends Component {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      showingInfoWindow: false,
+      activeMarker: {},
+      selectedPlace: {},
+    }
+    this.onMarkerClick = this.onMarkerClick.bind(this)
+  }
+
+  onMarkerClick() {
+    alert("You clicked in this marker")
+  }
+
+  render() {
+    return (
+      <React.Fragment>
+        <div className="page-content">
+          <Container fluid={true}>
+            <Breadcrumbs title="Maps" breadcrumbItem="Vector Maps" />
+
+            <Row>
+              <Col lg={6}>
+                <Card>
+                  <CardBody>
+                    <CardTitle>World Map</CardTitle>
+                    <CardSubtitle className="mb-3">
+                      Example of vector map.
+                    </CardSubtitle>
+
+                    <div id="world-map-markers" className="vector-map-height">
+                      <Vector
+                        value="world_mill"
+                        width="500"
+                        color="rgb(98, 110, 212)"
+                      />
+                    </div>
+                  </CardBody>
+                </Card>
+              </Col>
+              <Col lg={6}>
+                <Card>
+                  <CardBody>
+                    <CardTitle>Malaysia Map</CardTitle>
+                    <CardSubtitle className="mb-3">
+                      Example of vector map.
+                    </CardSubtitle>
+
+                    <div id="usa" className="vector-map-height">
+                      <Vector
+                        value="asia_mill"
+                        width="500"
+                        color="rgb(98, 110, 212)"
+                      />
+                    </div>
+                  </CardBody>
+                </Card>
+              </Col>
+            </Row>
+
+            <Row>
+              <Col lg={6}>
+                <Card>
+                  <CardBody>
+                    <CardTitle>MY Map</CardTitle>
+                    <CardSubtitle className="mb-3">
+                      Example of vector map.
+                    </CardSubtitle>
+
+                    <div id="uk" className="vector-map-height">
+                      <Vector
+                        value="asia_mill"
+                        width="500"
+                        color="rgb(98, 110, 212)"
+                      />
+                    </div>
+                  </CardBody>
+                </Card>
+              </Col>
+
+              <Col lg={6}>
+                <Card>
+                  <CardBody>
+                    <CardTitle>Asia Vector Map</CardTitle>
+                    <CardSubtitle className="mb-3">
+                      Example of vector map.
+                    </CardSubtitle>
+
+                    <div id="chicago" className="vector-map-height">
+                      <Vector
+                        value="asia_mill"
+                        width="500"
+                        color="rgb(98, 110, 212)"
+                      />
+                    </div>
+                  </CardBody>
+                </Card>
+              </Col>
+            </Row>
+          </Container>
+        </div>
+      </React.Fragment>
+    )
+  }
+}
+
+export default MapsVector

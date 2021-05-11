@@ -1,0 +1,138 @@
+.customize-table-container {
+  overflow: hidden;
+  height: 75vh;
+  width: 800px;
+
+  .customize-table-title {
+    h3 {
+      color: black;
+    }
+
+    .close-button {
+      width: 1rem;
+      color: #999999;
+      margin-right: -5px;
+      cursor: pointer;
+
+      &:hover {
+        background-color: #DDDDDD;
+        color: #777777;
+      }
+    }
+  }
+
+  .customize-table-content {
+    max-height: 75%;
+    display: flex;
+
+    & > div {
+      overflow: auto;
+      border: 1px solid lightgrey;
+      border-radius: 0.25rem;
+      display: inline-block;
+
+      &:first-child {
+        margin-right: 0.35rem;
+      }
+    }
+
+    h5 {
+      padding: 1.5rem 0.5rem;
+      color: black;
+      position: sticky;
+      top: 0;
+      background-color: white;
+      z-index: 1;
+    }
+
+    div[data-rbd-droppable-id=droppable] {
+      background-color: white;
+      width: 100%;
+
+      .drag-content {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border: 1px solid lightgrey;
+        border-radius: 0.5rem;
+        background-color: white;
+        padding: 0.25rem 0.5rem;
+        margin-bottom: 1rem;
+        user-select: none;
+
+        &.drag-content-dragging {
+          background-color: #00a19c;
+        }
+
+        .drag-content-label {
+          margin-left: 0.5rem;
+          padding: 0.25rem;
+        }
+
+        .drag-content-start-icon, .drag-content-x-icon {
+          display: flex;
+          width: 1.25rem;
+          color: lightgrey;
+          padding: 0.25rem;
+        }
+
+        .drag-content-x-icon {
+          cursor: pointer;
+
+          &:hover {
+            background-color: lightgrey;
+            color: black;
+          }
+        }
+      }
+    }
+  }
+
+  .customize-table-footer {
+    .customize-table-footer-error {
+      display: flex;
+      height: 1rem;
+      color: red;
+      margin-top: 0.2rem;
+
+      & > div {
+        margin-left: 0.5rem;
+      }
+
+      & > svg {
+        width: 0.9rem;
+      }
+    }
+  }
+
+  /* width */
+  ::-webkit-scrollbar {
+    width: 0.35rem;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #999;
+  }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #777;
+  }
+}
+.btn-pre-icon {
+  display: flex;
+  align-items: center;
+  svg {
+    width: 1rem;
+    transform: rotate(45deg);
+  }
+  div {
+    margin-left: 0.5rem;
+  }
+}

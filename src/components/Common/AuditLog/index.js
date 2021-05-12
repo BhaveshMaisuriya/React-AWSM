@@ -84,13 +84,13 @@ class AuditLog extends Component {
     const { classes } = this.props
     return (
       <div>
-        <div class="tracking-icon status-intransit">
+        <div className="tracking-icon status-intransit">
           <i>
             {" "}
             <img className={classes.lineIcon} src={lineIcon} />
           </i>
         </div>
-        <div class="tracking-date">
+        <div className="tracking-date">
           {finalDate}
           <span>{finalTime}</span>
         </div>
@@ -106,7 +106,7 @@ class AuditLog extends Component {
             <div className={classes.profilePicImg}>
               {this.getUserInitials(theName)}
             </div>
-            <div class="tracking-content">
+            <div className="tracking-content">
               <b>{theName}</b>
               <span>
                 {theName} <b>{action}</b> {firstWord.join(" ")}
@@ -129,17 +129,17 @@ class AuditLog extends Component {
 
     return (
       <React.Fragment>
-        <div class="tracking-list">
-          <div class="date-time">
+        <div className="tracking-list">
+          <div className="date-time">
             <b>DATE/TIME</b>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <b>ACTION</b>
           </div>
           {data.length === 0 ? null : (
-            <div class="container-data">
+            <div className="container-data">
               {data
                 .map((audit, idx) => (
-                  <div class="tracking-item"> {this.modalData(audit, idx)}</div>
+                  <div key={idx} className="tracking-item"> {this.modalData(audit, idx)}</div>
                 ))
                 .slice(
                   currentAuditPage * rowsAudit,

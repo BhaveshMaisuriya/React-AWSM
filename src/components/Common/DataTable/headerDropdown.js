@@ -68,7 +68,7 @@ const Example = props => {
               </FormGroup>
             </SimpleBar>
           </Form>
-          <Button class="btn btn-primary" type="button">
+          <Button className="btn btn-primary" type="button">
             Apply
           </Button>
         </PopoverBody>

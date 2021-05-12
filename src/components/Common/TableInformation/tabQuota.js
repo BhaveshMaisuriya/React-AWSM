@@ -3,7 +3,7 @@ import { AvForm, AvField } from "availity-reactstrap-validation"
 import { Col, Row } from "reactstrap"
 import "./tabQuota.scss"
 
-const tabQuota = () => {
+const tabQuota = ({ scheduler }) => {
   return (
     <Row>
       <Col className="col-6">
@@ -30,7 +30,8 @@ const tabQuota = () => {
                 errorMessage: "Maximum quota within 10,000,000 only",
               },
             }}
-            className="abc"
+            className={scheduler ? "disabledField" : null}
+            disabled={scheduler}
           />
         </AvForm>
       </Col>

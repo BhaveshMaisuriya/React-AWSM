@@ -97,11 +97,11 @@ const postJwtForgetPwd = data => post(url.POST_FAKE_JWT_PASSWORD_FORGET, data)
 export const postSocialLogin = data => post(url.SOCIAL_LOGIN, data)
 
 // get Products
-export const getProducts = () => get(url.GET_PRODUCTS)
+// export const getProducts = () => get(url.GET_PRODUCTS)
 
 // get Product detail
-export const getProductDetail = id =>
-  get(`${url.GET_PRODUCTS_DETAIL}/${id}`, { params: { id } })
+// export const getProductDetail = id =>
+//   get(`${url.GET_PRODUCTS_DETAIL}/${id}`, { params: { id } })
 
 // get Events
 export const getEvents = () => get(url.GET_EVENTS)
@@ -180,6 +180,9 @@ export const getUserProfile = () => get(url.GET_USER_PROFILE)
 export const getRetailCustomer = params =>
   get(url.GET_RETAIL_CUSTOMER, { params: params })
 
+export const getCommercialCustomer = params =>
+  get(url.GET_COMMERCIAL_CUSTOMER, { params: params })
+
 // get DQM Master Retail Cust Audit Log
 export const getRetailAuditLog = payload =>
   get(url.GET_RETAIL_AUDITLOG, { payload: payload })
@@ -198,6 +201,23 @@ export const updateTableInformation = event =>
 export const getRetailFilter = params => {
   return get(url.GET_RETAIL_FILTER, { params: params })
 }
+// get DQM Master Commercial Cust Filter
+export const getCommercialFilter = params => {
+  return get(url.GET_COMMERCIAL_FILTER, { params: params })
+}
+
+export const getProducts = params => get(url.GET_PRODUCTS, { params: params })
+
+// get DQM Master Product Audit Log
+export const getProductAuditLog = payload =>get(url.GET_PRODUCT_AUDITLOG, { payload: payload })
+
+// get DQM Master Product Filter
+export const getProductFilter = params => get(url.GET_PRODUCT_FILTER, { params: params })
+
+// Get DQM Master Product Details
+export const getProductDetail = productCode => get(`${url.GET_PRODUCT_DETAILS}/${productCode}`)
+
+export const updateProductDetail = payload => put(`${url.GET_PRODUCT_DETAILS}/${payload.productCode}`, payload.body)
 
 export {
   getLoggedInUser,
@@ -209,5 +229,5 @@ export {
   postJwtRegister,
   postJwtLogin,
   postJwtForgetPwd,
-  postJwtProfile,
+  postJwtProfile
 }

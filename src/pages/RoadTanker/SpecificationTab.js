@@ -13,7 +13,7 @@ class SpecificationTab extends PureComponent {
     return (
      <div className="specification">
          <div className="row">
-            <div class="col-md-6 form-group">
+            <div className="col-md-6 form-group">
               <label> PRODUCT TYPE IN SAP</label>
                 <input
                   className="form-control"
@@ -22,7 +22,7 @@ class SpecificationTab extends PureComponent {
                   disabled={true}
                 />
             </div>
-            <div class="col-md-6 form-group">
+            <div className="col-md-6 form-group">
               <label> PUMP TYPE </label>
               <input
                   className="form-control"
@@ -35,8 +35,8 @@ class SpecificationTab extends PureComponent {
          <div className="row">
            <div className="col-md-6 form-group">
              <label>PRODUCT TYPE IN ASWM</label>
-             <select className="form-control">
-              <option selected>Multiproduct</option>
+             <select defaultValue="MultiProduct" className="form-control">
+              <option value="MultiProduct">Multiproduct</option>
              </select>
            </div>
            <div className="col-md-6 form-group">
@@ -54,8 +54,8 @@ class SpecificationTab extends PureComponent {
            </div>
            <div className="col-md-6 form-group">
             <label>CUSTOMER TYPE</label>
-              <select className="form-control">
-                <option selected>Active</option>
+              <select defaultValue="0" className="form-control">
+                <option value="0">Active</option>
               </select>
            </div>
          </div>
@@ -66,8 +66,8 @@ class SpecificationTab extends PureComponent {
                 <label>RT RESTRICTION</label>
                 <a className="extra-button">+ Add</a>
               </div>
-              <select className="form-control">
-                <option selected>Multiproduct, Long Haul, Pit Stop</option>
+              <select defaultValue="0" className="form-control">
+                <option value="0">Multiproduct, Long Haul, Pit Stop</option>
               </select>
             </div>
             <div className="form-group col-md-6">

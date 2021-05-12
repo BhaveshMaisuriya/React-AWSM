@@ -1,14 +1,7 @@
 import React, { Component } from "react"
 import PropTypes from "prop-types"
-import { connect } from "react-redux"
-import { Modal, ModalHeader } from "reactstrap"
-import TableInformation from "../TableInformation"
 import Filter from "../DataTable/filter"
 import { Link } from "react-router-dom"
-import {
-  getTableInformation,
-  updateTableInformation,
-} from "../../../store/actions"
 import "./style.scss"
 class FixedCoulmnTable extends Component {
   constructor(props) {
@@ -21,6 +14,21 @@ class FixedCoulmnTable extends Component {
         this.props.frozen,
         this.props.headers.length
       ),
+      modal: false,
+      //user and last time updated will be get from backend API
+      user: "Nur Izzati",
+      time: "3rd March 2021",
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.props.headers.toString() !== prevProps.headers.toString()) {
+      const fixedHeaders = this.props.headers.slice(0, this.props.frozen)
+      const regularHeaders = this.props.headers.slice(
+        this.props.frozen,
+        this.props.headers.length
+      )
+      this.setState({ fixedHeaders, regularHeaders })
     }
   }
 
@@ -69,13 +77,14 @@ class FixedCoulmnTable extends Component {
       </td>
     ))
   }
-  renderFrozenTd = arr => {
+  renderFrozenTd = (arr, parentIndex) => {
     const { headers, config, modalPop } = this.props
     const sliceArr = headers.slice(0, this.state.fixedHeaders.length)
     return sliceArr.map((e, index) => (
       <td key={index}>
         <Link
           to="#"
+          data-index={parentIndex}
           onClick={modalPop}
           className={config[e].columnSize === 1 ? "cell-text" : "cell-text-big"}
         >
@@ -86,7 +95,7 @@ class FixedCoulmnTable extends Component {
   }
   renderFrozenTr = arr => {
     return arr.map((e, index) => {
-      return <tr key={index}>{this.renderFrozenTd(e)}</tr>
+      return <tr key={index}>{this.renderFrozenTd(e, index)}</tr>
     })
   }
   renderRegularTd = arr => {
@@ -112,7 +121,7 @@ class FixedCoulmnTable extends Component {
     const { tableData } = this.props
     const { fixedHeaders, regularHeaders } = this.state
     return (
-      <div className="container">
+      <div className="container" style={{maxWidth: '100%'}}>
         <table className="fixed">
           <thead>
             <tr>{this.addTd(fixedHeaders)}</tr>

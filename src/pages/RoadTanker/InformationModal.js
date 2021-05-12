@@ -53,7 +53,7 @@ class InformationModal extends PureComponent {
           <ModalBody>
           <div>
             <div className="row">
-              <div class="col-md-6 form-group">
+              <div className="col-md-6 form-group">
                 <label> VEHICAL ID</label>
                   <input
                     className="form-control"
@@ -62,7 +62,7 @@ class InformationModal extends PureComponent {
                     disabled={true}
                   />
               </div>
-              <div class="col-md-6 form-group">
+              <div className="col-md-6 form-group">
                 <label> VEHICAL OWNER</label>
                   <input
                     className="form-control"
@@ -73,7 +73,7 @@ class InformationModal extends PureComponent {
               </div>
             </div>
             <div className="row">
-              <div class="col-md-6 form-group">
+              <div className="col-md-6 form-group">
                 <label>STATUS IN SAP</label>
                   <input
                     className="form-control"
@@ -82,7 +82,7 @@ class InformationModal extends PureComponent {
                     disabled={true}
                   />
               </div>
-              <div class="col-md-6 form-group">
+              <div className="col-md-6 form-group">
                 <label>RT CAPACITY</label>
                   <input
                     className="form-control"
@@ -93,7 +93,7 @@ class InformationModal extends PureComponent {
               </div>
             </div>
             <div className="row">
-              <div class="col-md-12 form-group">
+              <div className="col-md-12 form-group">
                 <label> REMARKS</label>
                   <input
                     className="form-control"

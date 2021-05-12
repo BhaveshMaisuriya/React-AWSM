@@ -27,7 +27,11 @@ import {
   audits,
   auditsCom,
   address,
+  customerPayload,
   filter,
+  filterCom,
+  commercialCustomers,
+  productList
 } from "../../common/data"
 
 let users = [
@@ -222,35 +226,35 @@ const fakeBackend = () => {
     })
   })
 
-  mock.onGet(url.GET_PRODUCTS).reply(() => {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        if (productsData) {
-          // Passing fake JSON data as response
-          resolve([200, productsData])
-        } else {
-          reject([400, "Cannot get products"])
-        }
-      })
-    })
-  })
+  // mock.onGet(url.GET_PRODUCTS).reply(() => {
+  //   return new Promise((resolve, reject) => {
+  //     setTimeout(() => {
+  //       if (productsData) {
+  //         // Passing fake JSON data as response
+  //         resolve([200, productsData])
+  //       } else {
+  //         reject([400, "Cannot get products"])
+  //       }
+  //     })
+  //   })
+  // })
 
-  mock.onGet(new RegExp(`${url.GET_PRODUCTS_DETAIL}/*`)).reply(config => {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        if (productsData) {
-          // Passing fake JSON data as response
-          const { params } = config
-          const product = productsData.find(
-            product => product.id.toString() === params.id
-          )
-          resolve([200, { ...product, recentProducts, comments }])
-        } else {
-          reject([400, "Cannot get product detail"])
-        }
-      })
-    })
-  })
+  // mock.onGet(new RegExp(`${url.GET_PRODUCTS_DETAIL}/*`)).reply(config => {
+  //   return new Promise((resolve, reject) => {
+  //     setTimeout(() => {
+  //       if (productsData) {
+  //         // Passing fake JSON data as response
+  //         const { params } = config
+  //         const product = productsData.find(
+  //           product => product.id.toString() === params.id
+  //         )
+  //         resolve([200, { ...product, recentProducts, comments }])
+  //       } else {
+  //         reject([400, "Cannot get product detail"])
+  //       }
+  //     })
+  //   })
+  // })
 
   mock.onGet(url.GET_EVENTS).reply(() => {
     return new Promise((resolve, reject) => {
@@ -576,6 +580,32 @@ const fakeBackend = () => {
     })
   })
 
+  mock.onGet(url.GET_COMMERCIAL_CUSTOMER).reply(() => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        if (commercialCustomers) {
+          // Passing fake JSON data as response
+          resolve([200, commercialCustomers])
+        } else {
+          reject([400, "Cannot get user profile"])
+        }
+      })
+    })
+  })
+  mock.onGet(url.GET_PRODUCTS).reply(() => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        if (productList) {
+          // Passing fake JSON data as response
+          resolve([200, productList])
+        } else {
+          reject([400, "Cannot get products"])
+        }
+      })
+    })
+  })
+  
+
   mock.onGet(url.GET_RETAIL_AUDITLOG).reply(() => {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
@@ -588,6 +618,22 @@ const fakeBackend = () => {
       })
     })
   })
+
+
+  mock.onGet(url.GET_PRODUCT_AUDITLOG).reply(() => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        if (audits) {
+          // Passing fake JSON data as response
+          resolve([200, audits])
+        } else {
+          reject([400, "Cannot get audit data"])
+        }
+      })
+    })
+  })
+
+
 
   mock.onGet(url.GET_COMMERCIAL_AUDITLOG).reply(() => {
     return new Promise((resolve, reject) => {
@@ -635,6 +681,45 @@ const fakeBackend = () => {
           resolve([200, filter])
         } else {
           reject([400, "Cannot get filter data"])
+        }
+      })
+    })
+  })
+
+  mock.onGet(url.GET_PRODUCT_FILTER).reply(() => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        if (filter) {
+          // Passing fake JSON data as response
+          resolve([200, filter])
+        } else {
+          reject([400, "Cannot get filter data"])
+        }
+      })
+    })
+  })
+
+  mock.onGet(url.GET_COMMERCIAL_FILTER).reply(() => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        if (filterCom) {
+          // Passing fake JSON data as response
+          resolve([200, filterCom])
+        } else {
+          reject([400, "Cannot get filter commercial data"])
+        }
+      })
+    })
+  })
+
+  mock.onGet(new RegExp(`${url.GET_PRODUCT_DETAILS}/*`)).reply(() => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        if (productList) {
+          // Passing fake JSON data as response
+          resolve([200, productList.list[0]])
+        } else {
+          reject([400, "Failed to get Product Details"])
         }
       })
     })

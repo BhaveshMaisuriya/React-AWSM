@@ -2,7 +2,7 @@ import React, { Component } from "react"
 
 import { Card, CardBody, CardTitle, Badge, Button, Modal } from "reactstrap"
 import { Link } from "react-router-dom"
-import EcommerceOrdersModal from "../Ecommerce/EcommerceOrders/EcommerceOrdersModal"
+// import EcommerceOrdersModal from "../Ecommerce/EcommerceOrders/EcommerceOrdersModal"
 
 class LatestTranaction extends Component {
   constructor(props) {

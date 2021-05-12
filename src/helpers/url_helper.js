@@ -12,10 +12,6 @@ export const SOCIAL_LOGIN = "/social-login"
 export const POST_EDIT_JWT_PROFILE = "/post-jwt-profile"
 export const POST_EDIT_PROFILE = "/post-fake-profile"
 
-//PRODUCTS
-export const GET_PRODUCTS = "/products"
-export const GET_PRODUCTS_DETAIL = "/product"
-
 //CALENDER
 export const GET_EVENTS = "/events"
 export const ADD_NEW_EVENT = "/add/event"
@@ -64,12 +60,20 @@ export const GET_USER_PROFILE = "/user"
 //RETAIL CUSTOMER
 export const GET_RETAIL_CUSTOMER = "/retail_customer"
 export const GET_RETAIL_AUDITLOG = "/audit_log"
+export const GET_RETAIL_FILTER = "/retail-customer/filter"
 
 //COMMERCIAL CUSTOMER
-// export const GET_RETAIL_CUSTOMER = "/retail_customer"
+export const GET_COMMERCIAL_CUSTOMER = "/commercial_customer"
 export const GET_COMMERCIAL_AUDITLOG = "/commercial_audit"
+export const GET_COMMERCIAL_FILTER = "/commercial-customer/filter"
+
 //TABLE INFORMATION
 export const GET_TABLE_INFORMATION = "/table_information"
 export const UPDATE_TABLE_INFORMATION = "/update/address"
 
-export const GET_RETAIL_FILTER = "/retail-customer/filter"
+//PRODUCTS
+export const GET_PRODUCTS = "/products"
+export const GET_PRODUCTS_DETAIL = "/productDetail"
+export const GET_PRODUCT_AUDITLOG = "/product_audit"
+export const GET_PRODUCT_FILTER = "/product/filter"
+export const GET_PRODUCT_DETAILS = "/product/details/"

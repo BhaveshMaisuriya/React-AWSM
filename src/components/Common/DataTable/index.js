@@ -30,6 +30,9 @@ class DataTable2 extends Component {
       dataRows: this.props.data,
       modal: false,
       event: {},
+      //user and last time updated will be get from backend API
+      user: "Nur Izzati",
+      time: "3rd March 2021",
     }
     this.toggle = this.toggle.bind(this)
   }
@@ -123,20 +126,34 @@ class DataTable2 extends Component {
     const modalContent = modal ? (
       <Modal isOpen={this.state.modal} contentClassName="modalTIContainer">
         <ModalHeader toggle={this.toggle}>
-          <h3
-            style={{
-              paddingLeft: "15px",
-              paddingTop: "8px",
-              height: "26px",
-              color: "#000000",
-              fontFamily: "Museo Sans",
-              fontSize: "24px",
-              letterSpacing: "0",
-              lineHeight: "26px",
-            }}
-          >
-            Table Information
-          </h3>
+          <div className="d-flex">
+            <h3
+              style={{
+                paddingLeft: "15px",
+                paddingTop: "8px",
+                height: "26px",
+                color: "#000000",
+                fontFamily: "Museo Sans",
+                fontSize: "24px",
+                letterSpacing: "0",
+                lineHeight: "26px",
+              }}
+            >
+              Table Information
+            </h3>
+            <i
+              style={{
+                fontFamily: "Museo Sans 500 Italic",
+                fontSize: "12px",
+                lineHeight: "16px",
+                marginLeft: "8px",
+                marginTop: "11px",
+                color: "#757575",
+              }}
+            >
+              Last Updated By: {this.state.user} on {this.state.time}
+            </i>
+          </div>
         </ModalHeader>
         <div>
           <TableInformation

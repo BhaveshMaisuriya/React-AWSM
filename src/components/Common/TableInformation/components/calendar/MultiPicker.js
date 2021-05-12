@@ -9,23 +9,22 @@ export default function MultiPicker({
   daynames,
   setDaynames,
   setStartDayOfMonth,
-  setIsMulti,
   onSelectDayName,
   selectedMulti,
   setSelectedMulti,
   calendarMonth,
-  startDayOfMonth,
+  selected,
+  setSelected,
 }) {
   return (
-    <div>
+    <div className="MultiExample">
       <DayPicker
         selectedDays={selectedMulti}
-        month={startDayOfMonth}
+        month={selectedMulti[0]}
         weekdayElement={
           <Weekday
             daynames={daynames}
             setDaynames={setDaynames}
-            setIsMulti={setIsMulti}
             onSelectDayName={onSelectDayName}
             selectedMulti={selectedMulti}
             setSelectedMulti={setSelectedMulti}

@@ -13,7 +13,6 @@ const BasicConcepts = ({
   setSelectedDay,
   check,
   setCheck,
-  setIsMulti,
   dateRange,
   setDateRange,
   setSelectedMulti,
@@ -63,6 +62,7 @@ const BasicConcepts = ({
           zIndex: 11,
           fontSize: "1.2rem",
           display: "table-row",
+          height: 40,
         }}
       ></div>
       {check.checkedA ? (
@@ -73,7 +73,6 @@ const BasicConcepts = ({
             daynames={daynames}
             setDaynames={setDaynames}
             setStartDayOfMonth={setStartDayOfMonth}
-            setIsMulti={setIsMulti}
             onSelectDayName={onSelectDayName}
             setSelectedMulti={setSelectedMulti}
             selectedMulti={selectedMulti}
@@ -85,12 +84,10 @@ const BasicConcepts = ({
           daynames={daynames}
           setDaynames={setDaynames}
           setStartDayOfMonth={setStartDayOfMonth}
-          setIsMulti={setIsMulti}
           onSelectDayName={onSelectDayName}
           selectedMulti={selectedMulti}
           setSelectedMulti={setSelectedMulti}
           calendarMonth={calendarMonth}
-          startDayOfMonth={startDayOfMonth}
         />
       ) : (
         <div>
@@ -98,7 +95,6 @@ const BasicConcepts = ({
             daynames={daynames}
             setDaynames={setDaynames}
             setStartDayOfMonth={setStartDayOfMonth}
-            setIsMulti={setIsMulti}
             onSelectDayName={onSelectDayName}
             selectedMulti={selectedMulti}
             setSelectedMulti={setSelectedMulti}

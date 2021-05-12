@@ -35,12 +35,13 @@ import BasicTables from "../pages/Tables/BasicTables"
 import DatatableTables from "../pages/Tables/DatatableTables"
 import ResponsiveTables from "../pages/Tables/ResponsiveTables"
 import EditableTables from "../pages/Tables/EditableTables"
-import RetailCustomer from "../pages/DQM/retail-customer"
+import RetailCustomer from "../pages/DQM/RetailCustomer"
 import CommercialCustomer from "../pages/DQM/CommercialCustomer"
 import HighCharts from "../pages/HighCharts"
 import Bryntum from "../pages/Bryntum"
 import RTS from "../pages/RTS"
 import RoadTanker from "../pages/RoadTanker"
+import Product from "../pages/DQM/ProductList"
 
 const authProtectedRoutes = [
   { path: "/dashboard", component: Dashboard },
@@ -49,6 +50,7 @@ const authProtectedRoutes = [
   { path: "/retail-customer", component: RetailCustomer },
   { path: "/commercial-customer", component: CommercialCustomer },
   { path: "/road-tanker", component: RoadTanker },
+  { path: "/product", component: Product },
   { path: "/cloud-cluster", component: MapsLeaflet },
   { path: "/employee-data", component: ContactsList },
   { path: "/sla-compliance", component: DatatableTables },

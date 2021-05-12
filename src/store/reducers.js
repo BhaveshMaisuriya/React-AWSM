@@ -9,9 +9,6 @@ import Account from "./auth/register/reducer"
 import ForgetPassword from "./auth/forgetpwd/reducer"
 import Profile from "./auth/profile/reducer"
 
-//E-commerce
-import ecommerce from "./e-commerce/reducer"
-
 //Calendar
 import calendar from "./calendar/reducer"
 
@@ -39,6 +36,8 @@ import retailCustomer from "./retailCustomer/reducer"
 //CommercialCustomer
 import commercialCustomer from "./commercialCustomer/reducer"
 
+import products from "./product/reducer"
+
 const rootReducer = combineReducers({
   // public
   Layout,
@@ -46,7 +45,6 @@ const rootReducer = combineReducers({
   Account,
   ForgetPassword,
   Profile,
-  ecommerce,
   calendar,
   chat,
   crypto,
@@ -56,6 +54,7 @@ const rootReducer = combineReducers({
   contacts,
   retailCustomer,
   commercialCustomer,
+  products
 })
 
 export default rootReducer

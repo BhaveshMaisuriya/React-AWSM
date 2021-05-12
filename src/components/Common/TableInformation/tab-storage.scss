@@ -22,6 +22,9 @@
     cursor: pointer;
     color: red;
   }
+  .disabled {
+    background-color: #eee !important;
+  }
 }
 
 .dqm-storage-confirm-delete {

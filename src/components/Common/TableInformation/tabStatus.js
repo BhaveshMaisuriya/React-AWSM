@@ -5,6 +5,7 @@ import DatePicker from "../../Common/DatePicker"
 
 const STATUS_IN_AWSM = ["Active", "Delete"]
 const SALES_AND_INVENTORY = ["Sentinal", "ABC"]
+const SALES_CATEGORY = ["Yes", "No"]
 
 const timeData = []
 for (let i = 0; i < 24; i++) {
@@ -12,47 +13,93 @@ for (let i = 0; i < 24; i++) {
   timeData.push(`${i.toString().padStart(2, "0")}:30`)
 }
 
-
-const TabStatus = () => {
+const TabStatus = ({ scheduler }) => {
   const [timeTo, setTimeTo] = useState("")
   const [timeFrom, setTimeFrom] = useState("")
   const [statusInAWSM, setStatusInAWSM] = useState("")
   const [salesAndInventory, setSalesAndInventory] = useState("")
+  const [salesCategory, setSalesCategory] = useState("")
+  const pathName = window.location.pathname
 
   return (
     <div className="dqm-status-container">
       <div className="row">
         <div className="col-12 col-sm-6">
           <div className="input-header">STATUS IN AWSM</div>
-          <AWSMDropdown value={statusInAWSM} items={STATUS_IN_AWSM} onChange={(value) => setStatusInAWSM(value)} />
+          <AWSMDropdown
+            value={statusInAWSM}
+            items={STATUS_IN_AWSM}
+            onChange={value => setStatusInAWSM(value)}
+            disabled={scheduler}
+          />
         </div>
-        <div className="col-12 col-sm-6">
-          <div className="input-header">SALES AND INVENTORY DATA SOURCE</div>
-          <AWSMDropdown value={salesAndInventory} onChange={(value) => setSalesAndInventory(value)}
-                        items={SALES_AND_INVENTORY} />
-        </div>
+        {pathName === "/retail-customer" ? (
+          <div className="col-12 col-sm-6">
+            <div className="input-header">SALES AND INVENTORY DATA SOURCE</div>
+            <AWSMDropdown
+              value={salesAndInventory}
+              onChange={value => setSalesAndInventory(value)}
+              items={SALES_AND_INVENTORY}
+              disabled={scheduler}
+            />
+          </div>
+        ) : (
+          <div className="col-6"></div>
+        )}
       </div>
       <div>
-        <h6>CLOSE PERIOD</h6>
+        <h6 className="mt-3">CLOSE PERIOD</h6>
         <div className="row">
           <div className="col-3">
             <div className="input-header">CLOSE (FROM)</div>
-            <DatePicker />
+            <DatePicker disabled={scheduler} />
           </div>
           <div className="col-3">
             <div className="input-header">TIME</div>
-            <AWSMDropdown items={timeData} value={timeFrom} onChange={value => setTimeFrom(value)} />
+            <AWSMDropdown
+              items={timeData}
+              value={timeFrom}
+              onChange={value => setTimeFrom(value)}
+              disabled={scheduler}
+            />
           </div>
           <div className="col-3">
             <div className="input-header">CLOSE (TO)</div>
-            <DatePicker />
+            <DatePicker disabled={scheduler} />
           </div>
           <div className="col-3">
             <div className="input-header">TIME</div>
-            <AWSMDropdown items={timeData} value={timeTo} onChange={value => setTimeTo(value)} />
+            <AWSMDropdown
+              items={timeData}
+              value={timeTo}
+              onChange={value => setTimeTo(value)}
+              disabled={scheduler}
+            />
           </div>
         </div>
       </div>
+      {pathName === "/commercial-customer" && (
+        <div className="row">
+          <div className="col-12 col-sm-6">
+            <div className="input-header">SALES CATEGORY</div>
+            <AWSMDropdown
+              value={salesCategory}
+              items={SALES_CATEGORY}
+              onChange={value => setSalesCategory(value)}
+              disabled={scheduler}
+            />
+          </div>
+          <div className="col-12 col-sm-6">
+            <div className="input-header">SALES AND INVENTORY DATA SOURCE</div>
+            <AWSMDropdown
+              value={salesAndInventory}
+              onChange={value => setSalesAndInventory(value)}
+              items={SALES_AND_INVENTORY}
+              disabled={scheduler}
+            />
+          </div>
+        </div>
+      )}
     </div>
   )
 }

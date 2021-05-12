@@ -1,28 +1,30 @@
 import {
-  GET_RETAIL_CUSTOMER_FAIL,
-  GET_RETAIL_CUSTOMER_SUCCESS,
+  GET_COMMERCIAL_CUSTOMER_FAIL,
+  GET_COMMERCIAL_CUSTOMER_SUCCESS,
   GET_COMMERCIAL_AUDITLOG_SUCCESS,
   GET_COMMERCIAL_AUDITLOG_FAIL,
+  GET_COMMERCIAL_FILTER_SUCCESS,
+  GET_COMMERCIAL_FILTER_FAIL
 } from "./actionTypes"
 
 const initialState = {
-  retailCustomers: [],
+  commercialCustomers: [],
   error: {},
   auditsCom: [],
+  filterCom: []
 }
 
 const CommercialCustomer = (state = initialState, action) => {
   switch (action.type) {
-    case GET_RETAIL_CUSTOMER_SUCCESS:
+    case GET_COMMERCIAL_CUSTOMER_SUCCESS:
       return {
         ...state,
-        retailCustomers: action.payload,
+        commercialCustomers: action.payload,
       }
-
-    case GET_RETAIL_CUSTOMER_FAIL:
+    case GET_COMMERCIAL_CUSTOMER_FAIL:
       return {
         ...state,
-        retailCustomers: action.payload,
+        commercialCustomers: action.payload,
       }
 
     case GET_COMMERCIAL_AUDITLOG_SUCCESS:
@@ -32,6 +34,18 @@ const CommercialCustomer = (state = initialState, action) => {
       }
 
     case GET_COMMERCIAL_AUDITLOG_FAIL:
+      return {
+        ...state,
+        error: action.payload,
+      }
+
+    case GET_COMMERCIAL_FILTER_SUCCESS:
+      return {
+        ...state,
+        filterCom: action.payload,
+      }
+
+    case GET_COMMERCIAL_FILTER_FAIL:
       return {
         ...state,
         error: action.payload,

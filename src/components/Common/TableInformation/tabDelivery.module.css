@@ -23,3 +23,7 @@
 #road_tanker_requirement {
   background-color: aquamarine;
 }
+
+.disabled {
+  background-color: #eee !important;
+}

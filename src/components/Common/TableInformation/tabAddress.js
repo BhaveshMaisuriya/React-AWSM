@@ -31,7 +31,7 @@ const addressDummy = [
   },
 ]
 
-const TabAddress = ({}) => {
+const TabAddress = ({ scheduler }) => {
   const [addressData, setAddressData] = useState(addressDummy)
 
   /**
@@ -81,7 +81,7 @@ const TabAddress = ({}) => {
   return (
     <div className="dqm-address-container" id="dqm-address-container">
       {addressData.map((item, index) => (
-        <div>
+        <div key={index}>
           <div className="row">
             <div className="col col-12 col-sm-6 col-lg-6">
               <div className="input-header mb-2">SOLD TO (PARTY)</div>
@@ -144,6 +144,7 @@ const TabAddress = ({}) => {
               <AWSMInput
                 value={item.cluster}
                 onChange={value => onClusterChange(index, value)}
+                disabled={scheduler}
               />
             </div>
             <div className="col col-12 col-sm-6 col-lg-6">
@@ -151,6 +152,7 @@ const TabAddress = ({}) => {
               <AWSMInput
                 value={item.alt_cluster}
                 onChange={value => onAlternativeClusterChange(index, value)}
+                disabled={scheduler}
               />
             </div>
             <div className="col col-12 col-sm-6 col-lg-6">
@@ -158,6 +160,7 @@ const TabAddress = ({}) => {
               <AWSMInput
                 value={item.cloud}
                 onChange={value => onCloudChange(index, value)}
+                disabled={scheduler}
               />
             </div>
             <div className="col col-12 col-sm-6 col-lg-6">
@@ -165,6 +168,7 @@ const TabAddress = ({}) => {
               <AWSMInput
                 value={item.border}
                 onChange={value => onBorderChange(index, value)}
+                disabled={scheduler}
               />
             </div>
             <div className="col col-12 col-sm-6 col-lg-6">

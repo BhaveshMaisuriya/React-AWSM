@@ -1,26 +1,32 @@
 import { takeLatest, put, call, takeEvery } from "redux-saga/effects"
-import Factory from "./factory"
-import { GET_RETAIL_CUSTOMER, GET_COMMERCIAL_AUDITLOG } from "./actionTypes"
+import Factory, { mergeFilterValues } from "./factory"
+import {
+  GET_COMMERCIAL_CUSTOMER,
+  GET_COMMERCIAL_AUDITLOG,
+  GET_COMMERCIAL_FILTER,
+} from "./actionTypes"
 
 import {
-  getRetailCustomerSuccess,
-  getRetailCustomerFail,
+  getCommercialCustomerSuccess,
+  getCommercialCustomerFail,
   getCommercialAuditLogSuccess,
   getCommercialAuditLogFail,
+  getCommercialFilterSuccess,
+  getCommercialFilterFail
 } from "./actions"
 
 import {
-  getRetailCustomer,
+  getCommercialCustomer,
   getCommercialAuditLog,
+  getCommercialFilter
 } from "../../helpers/fakebackend_helper"
 
-function* onGetRetailCustomer({ params = {} }) {
+function* onGetCommercialCustomer({ params = {} }) {
   try {
-    const response = yield call(getRetailCustomer, params)
-    // console.log(params, Factory(response))
-    yield put(getRetailCustomerSuccess(Factory(response)))
+    const response = yield call(getCommercialCustomer, params)
+    yield put(getCommercialCustomerSuccess(Factory(response)))
   } catch (error) {
-    yield put(getRetailCustomerFail(error))
+    yield put(getCommercialCustomerFail(error))
   }
 }
 
@@ -33,9 +39,24 @@ function* onGetCommercialAuditLog() {
   }
 }
 
+function* onGetCommercialFIlter({ params = {} }) {
+  try {
+    const response = yield call(getCommercialFilter)
+    console.log(mergeFilterValues(response, params.search_fields))
+    yield put(
+      getCommercialFilterSuccess(
+        mergeFilterValues(response, params.search_fields)
+      )
+    )
+  } catch (error) {
+    yield put(getCommercialFilterFail(error))
+  }
+}
+
 function* commercialCustomerSaga() {
-  yield takeLatest(GET_RETAIL_CUSTOMER, onGetRetailCustomer)
+  yield takeLatest(GET_COMMERCIAL_CUSTOMER, onGetCommercialCustomer)
   yield takeEvery(GET_COMMERCIAL_AUDITLOG, onGetCommercialAuditLog)
+  yield takeEvery(GET_COMMERCIAL_FILTER, onGetCommercialFIlter)
 }
 
 export default commercialCustomerSaga

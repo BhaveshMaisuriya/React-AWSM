@@ -18,13 +18,15 @@ const useStyles = makeStyles(theme => ({
     alignItems: "center",
     height: "40px",
   },
+  disabled: {
+    backgroundColor: "#eee !important",
+  },
 }))
 
-export default function PopOverCalendar() {
+export default function PopOverCalendar({ disabled }) {
   const [check, setCheck] = useState({
     checkedA: false,
   })
-  const [isMulti, setIsMulti] = useState(false)
   const [dateRange, setDateRange] = useState({
     from: undefined,
     to: undefined,
@@ -48,17 +50,28 @@ export default function PopOverCalendar() {
   const id = open ? "simple-popover" : undefined
 
   let multiCheck
-  if (daynames.length === 1) {
-    multiCheck = `Repeat every ${daynames[0]}`
-  }
-  if (daynames.length === 2) {
-    multiCheck = `Repeat every ${daynames[0]} and ${daynames[1]}`
-  }
-  if (daynames.length > 2 && daynames.length < 7) {
-    multiCheck = `Repeat every ${daynames.map(i => i)}`
-  }
-  if (daynames.length === 7) {
-    multiCheck = "Repeat everyday"
+
+  if (selectedMulti.length > 0) {
+    const selectedDaynames = [
+      ...new Set(
+        selectedMulti.map(day => {
+          return format(day, "EEEE")
+        })
+      ),
+    ]
+
+    if (selectedDaynames.length === 1) {
+      multiCheck = `Repeat every ${selectedDaynames[0]}`
+    }
+    if (selectedDaynames.length === 2) {
+      multiCheck = `Repeat every ${selectedDaynames[0]} and ${selectedDaynames[1]}`
+    }
+    if (selectedDaynames.length > 2 && selectedDaynames.length < 7) {
+      multiCheck = `Repeat every ${selectedDaynames.map(i => i)}`
+    }
+    if (selectedDaynames.length === 7) {
+      multiCheck = "Repeat everyday"
+    }
   }
 
   const dateRangeCheck =
@@ -74,10 +87,13 @@ export default function PopOverCalendar() {
         ? selectedDay
         : format(selectedDay, "do MMM yyyy")
       : ""
-
   return (
     <div>
-      <div aria-describedby={id} onClick={handleClick} className="full-width">
+      <div
+        aria-describedby={id}
+        onClick={disabled ? undefined : handleClick}
+        className={disabled ? classes.disabled : "full-width"}
+      >
         <div className={classes.flex}>
           <Input
             placeholder="Select day or date"
@@ -109,8 +125,6 @@ export default function PopOverCalendar() {
           setSelectedDay={setSelectedDay}
           check={check}
           setCheck={setCheck}
-          isMulti={isMulti}
-          setIsMulti={setIsMulti}
           selectedRange={selectedRange}
           setSelectedRange={setSelectedRange}
           selectedMulti={selectedMulti}

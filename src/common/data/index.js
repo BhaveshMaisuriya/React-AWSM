@@ -16,9 +16,9 @@ import {
 import { chats, contacts, groups, messages } from "./chat"
 import { calenderDefaultCategories, events } from "./calender"
 import { users, userProfile } from "./contacts"
-import { auditsCom } from "./commercialCustomer"
+import { commercialCustomers, auditsCom, filterCom, customerPayload } from "./commercialCustomer"
 import { retailCustomers, audits, address, filter } from "./retailCustomer"
-
+import { productList } from "./product"
 export {
   productsData,
   discountData,
@@ -45,5 +45,9 @@ export {
   audits,
   auditsCom,
   address,
+  customerPayload,
   filter,
+  filterCom,
+  commercialCustomers,
+  productList
 }

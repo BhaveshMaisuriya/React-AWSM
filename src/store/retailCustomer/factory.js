@@ -33,7 +33,6 @@ const checkNullValue = (data, defaultValue) =>
 
 const getValueFromObj = (dataObj, key, defaultVal) => {
   if (Object.prototype.hasOwnProperty.call(dataObj, key)) {
-    // console.log(dataObj[key], checkNullValue(dataObj[key], defaultVal))
     return checkNullValue(dataObj[key], defaultVal)
   } else return defaultVal
 }
@@ -56,9 +55,19 @@ const getAddressTableObj = (retailCustomerObj, data, key) => {
   return tempObj
 }
 
+const getDateObj = (retailCustomerObj, data, key) => {
+  const tempObj = retailCustomerObj
+  if (Object.prototype.hasOwnProperty.call(data, key) && data[key] !== null) {
+    productArray.forEach(
+      p => (tempObj[`${key}_${p}`] = getValueFromObj(data[key], p, "-"))
+    )
+  }
+  return tempObj
+}
+
 const getProductObj = (retailCustomerObj, data, key) => {
   const tempObj = retailCustomerObj
-  if (Object.prototype.hasOwnProperty.call(data, key)) {
+  if (Object.prototype.hasOwnProperty.call(data, key) && data[key] !== null) {
     productArray.forEach(
       p => (tempObj[`${key}_${p}`] = getValueFromObj(data[key], p, "-"))
     )
@@ -68,7 +77,7 @@ const getProductObj = (retailCustomerObj, data, key) => {
 
 const getContactPersonObj = (retailCustomerObj, data, key) => {
   const tempObj = retailCustomerObj
-  if (Object.prototype.hasOwnProperty.call(data, key)) {
+  if (Object.prototype.hasOwnProperty.call(data, key) && data[key] !== null) {
     contactPersonArray.forEach(
       p => (tempObj[`${key}_${p}`] = getValueFromObj(data[key], p, "-"))
     )
@@ -223,9 +232,20 @@ export default function retailCustomerFactory(data) {
     getContactPersonObj(retailCustomerObj, d, "contact_person1")
     getContactPersonObj(retailCustomerObj, d, "contact_person2")
     getContactPersonObj(retailCustomerObj, d, "contact_person3")
+    getDateObj(retailCustomerObj, d, "delivery_open_time_date")
+    getDateObj(retailCustomerObj, d, "actual_open_1_date")
+    getDateObj(retailCustomerObj, d, "actual_open_2_date")
+    getDateObj(retailCustomerObj, d, "actual_open_3_date")
+    getDateObj(retailCustomerObj, d, "no_delivery_interval_1_date")
+    getDateObj(retailCustomerObj, d, "no_delivery_interval_2_date")
+    getDateObj(retailCustomerObj, d, "no_delivery_interval_3_date")
+    getDateObj(retailCustomerObj, d, "no_delivery_interval_4_date")
+    getDateObj(retailCustomerObj, d, "no_delivery_interval_5_date")
+    getDateObj(retailCustomerObj, d, "station_close_period_date")
     finalData.push(retailCustomerObj)
     retailCustomerObj = cloneobj
   })
+  console.log(finalData, "finalData")
   return {
     list: finalData,
     totalRows: getValueFromObj(data, "total_rows", "0"),

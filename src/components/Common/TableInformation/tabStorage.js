@@ -45,6 +45,7 @@ for (let i = 0; i < 24; i++) {
   timeData.push(`${i.toString().padStart(2, "0")}:00`)
   timeData.push(`${i.toString().padStart(2, "0")}:30`)
 }
+timeData.push(`23:59`);
 
 const TabStorage = ({ scheduler }) => {
   const [storageData, setStorageData] = useState(storageDummy)

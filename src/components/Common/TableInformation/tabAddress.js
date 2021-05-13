@@ -92,24 +92,12 @@ const TabAddress = ({ scheduler }) => {
               <AWSMInput value={item.sold_to_company_name} disabled />
             </div>
             <div className="col col-12 col-sm-6 col-lg-6">
-              <div className="input-header mb-2">SITE ID</div>
-              <AWSMInput value={item.site_id} disabled />
-            </div>
-            <div className="col col-12 col-sm-6 col-lg-6">
-              <div className="input-header mb-2">SITE NAME</div>
-              <AWSMInput value={item.site_name} disabled />
-            </div>
-            <div className="col col-12 col-sm-6 col-lg-6">
               <div className="input-header mb-2">ADDRESS 1</div>
               <AWSMInput value={item.address_1} disabled />
             </div>
             <div className="col col-12 col-sm-6 col-lg-6">
               <div className="input-header mb-2">ADDRESS 2</div>
               <AWSMInput value={item.address_2} disabled />
-            </div>
-            <div className="col col-12 col-sm-6 col-lg-6">
-              <div className="input-header mb-2">ADDRESS 3</div>
-              <AWSMInput value={item.address_3} disabled />
             </div>
             <div className="col col-12 col-sm-6 col-lg-6">
               <div className="input-header mb-2">CITY</div>
@@ -162,20 +150,6 @@ const TabAddress = ({ scheduler }) => {
                 onChange={value => onCloudChange(index, value)}
                 disabled={scheduler}
               />
-            </div>
-            <div className="col col-12 col-sm-6 col-lg-6">
-              <div className="input-header mb-2">BORDER</div>
-              <AWSMInput
-                value={item.border}
-                onChange={value => onBorderChange(index, value)}
-                disabled={scheduler}
-              />
-            </div>
-            <div className="col col-12 col-sm-6 col-lg-6">
-              <div className="input-header mb-2">
-                DISTANCE FROM TERMINAL (CLOUD)
-              </div>
-              <AWSMInput value={item.distance_from_terminal} disabled />
             </div>
             <div className="col col-12 col-sm-6 col-lg-6">
               <div className="input-header mb-2">SPEED (KM/Hr)</div>

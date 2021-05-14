@@ -77,8 +77,8 @@ const TabDelivery = ({ scheduler }) => {
         height: "400px",
       }}
     >
-      <Row form>
-        <Col className="col-6">
+      <Row>
+        <Col className="col-6" style={{marginTop: 4}}>
           <SimplePopover handleChange={handleChange} data={data}>
             <div>
               <AvForm>
@@ -92,7 +92,7 @@ const TabDelivery = ({ scheduler }) => {
                   className={scheduler ? styles.disabled : undefined}
                 />
               </AvForm>
-              <Button variant="link" className={styles.add}>+Add</Button>
+              <button className={styles.add}>+Add</button>
               <div className={styles.arrow}>
                 <ArrowDropDownIcon />
               </div>

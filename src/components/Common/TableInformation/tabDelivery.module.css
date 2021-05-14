@@ -12,12 +12,12 @@
   cursor: pointer;
 }
 .add {
-  background-color: transparent;
-  border: 0;
+  background-color: transparent !important;
+  border: 0 !important;
   color: #018f89 !important;
-  position: absolute;
-  top: -8px;
-  right: 0px;
+  position: absolute !important;
+  top: -8px !important;
+  right: 0px !important;
 }
 .arrow2 {
   position: absolute;

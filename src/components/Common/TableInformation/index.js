@@ -114,14 +114,22 @@ class TableInformation extends Component {
    */
    handleUpdate = e => {
     e.preventDefault()
-    console.log("Update success")
     this.setState({
       alert: {
         open: true,
         message: "Update success",
         backgroundColor: "#4CAF50",
       },
-    })
+    });
+    var that = this;
+    setTimeout(function() {
+      that.setState( {
+        alert: {
+          open: false
+        }
+      }
+        )
+    }, 2000);
   }
 
   render() {
@@ -172,7 +180,7 @@ class TableInformation extends Component {
                 <AvField
                   name="remarks"
                   type="text"
-                  label={data.remarks}
+                  label={'REMARKS'}
                   value="Shaziman only"
                   disabled={scheduler}
                   className={`${scheduler ? classes.field : undefined}`}

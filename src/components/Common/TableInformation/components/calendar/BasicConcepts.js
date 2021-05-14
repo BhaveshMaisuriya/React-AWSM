@@ -104,18 +104,34 @@ const BasicConcepts = ({
           />
         </div>
       )}
+      <div className="footerButton">
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={check.checkedA}
+              onChange={handleDayName}
+              name="checkedA"
+            />
+          }
+          label="Start and End day"
+        />
 
-      <FormControlLabel
-        control={
-          <Checkbox
-            checked={check.checkedA}
-            onChange={handleDayName}
-            name="checkedA"
-          />
-        }
-        label="Start and End day"
-      />
-    </div>
+        <div className="text-right">
+          <button
+            type="button"
+            className={`buttonCancel`}
+          >
+            Clear
+          </button>
+          <button
+            type="button"
+            className={`buttonUpdate`}
+          >
+            Apply
+          </button>
+        </div>
+      </div>
+  </div>
   )
 }
 export default BasicConcepts

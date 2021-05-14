@@ -1,5 +1,5 @@
 import React from "react"
-import { Col, Row } from "reactstrap"
+import { Col, Row, Button } from "reactstrap"
 import { AvForm, AvField } from "availity-reactstrap-validation"
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown"
 import styles from "./tabDelivery.module.css"
@@ -12,6 +12,7 @@ for (let i = 0; i < 24; i++) {
   timeData.push(`${i.toString().padStart(2, "0")}:00`)
   timeData.push(`${i.toString().padStart(2, "0")}:30`)
 }
+timeData.push(`23:59`);
 
 const TabDelivery = ({ scheduler }) => {
   const pathName = window.location.pathname
@@ -91,6 +92,7 @@ const TabDelivery = ({ scheduler }) => {
                   className={scheduler ? styles.disabled : undefined}
                 />
               </AvForm>
+              <Button variant="link" className={styles.add}>+Add</Button>
               <div className={styles.arrow}>
                 <ArrowDropDownIcon />
               </div>
@@ -128,11 +130,11 @@ const TabDelivery = ({ scheduler }) => {
         )}
 
         <Col className="col-6">
-          <h6>DILIVERY OPEN TIME (FROM)</h6>
+          <h6>DELIVERY OPEN TIME (FROM)</h6>
           <AWSMDropdown items={timeData} disabled={scheduler} />
         </Col>
         <Col className="col-6">
-          <h6>DILIVERY OPEN TIME (TO)</h6>
+          <h6>DELIVERY OPEN TIME (TO)</h6>
           <AWSMDropdown items={timeData} disabled={scheduler} />
         </Col>
         <Col className="col-12 mt-3">
@@ -226,33 +228,21 @@ const TabDelivery = ({ scheduler }) => {
           <h6>TIME (TO)</h6>
           <AWSMDropdown items={timeData} disabled={scheduler} />
         </Col>
-        <Col className="col-6 mb-3">
-          <PopOverCalendar disabled={scheduler} />
-        </Col>
-        <Col className="col-3">
-          <AWSMDropdown items={timeData} disabled={scheduler} />
-        </Col>
-        <Col className="col-3">
-          <AWSMDropdown items={timeData} disabled={scheduler} />
-        </Col>
-        <Col className="col-6 mb-3">
-          <PopOverCalendar disabled={scheduler} />
-        </Col>
-        <Col className="col-3">
-          <AWSMDropdown items={timeData} disabled={scheduler} />
-        </Col>
-        <Col className="col-3">
-          <AWSMDropdown items={timeData} disabled={scheduler} />
-        </Col>
-        <Col className="col-6">
-          <PopOverCalendar disabled={scheduler} />
-        </Col>
-        <Col className="col-3">
-          <AWSMDropdown items={timeData} disabled={scheduler} />
-        </Col>
-        <Col className="col-3">
-          <AWSMDropdown items={timeData} disabled={scheduler} />
-        </Col>
+        {[2,3,4,5].map(function(){
+          return <>
+            <Col className="col-6 mb-3">
+              <PopOverCalendar disabled={scheduler} />
+            </Col>
+            <Col className="col-3">
+              <AWSMDropdown items={timeData} disabled={scheduler} />
+            </Col>
+            <Col className="col-3">
+              <AWSMDropdown items={timeData} disabled={scheduler} />
+            </Col>
+          </>
+        })
+      }
+        
       </Row>
     </div>
   )

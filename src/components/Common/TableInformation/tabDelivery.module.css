@@ -11,7 +11,14 @@
 .field {
   cursor: pointer;
 }
-
+.add {
+  background-color: transparent;
+  border: 0;
+  color: #018f89 !important;
+  position: absolute;
+  top: -8px;
+  right: 0px;
+}
 .arrow2 {
   position: absolute;
   top: 15%;

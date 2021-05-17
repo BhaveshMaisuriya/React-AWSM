@@ -26,7 +26,13 @@
   color: #777;
   cursor: pointer;
 }
-
+.arrow3 {
+  position: absolute;
+  top: 50%;
+  right: 15px;
+  color: #777;
+  cursor: pointer;
+}
 #road_tanker_requirement {
   background-color: aquamarine;
 }

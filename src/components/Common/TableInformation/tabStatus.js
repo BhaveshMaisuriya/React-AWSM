@@ -2,6 +2,7 @@ import React, { useState } from "react"
 import "./tabStatus.scss"
 import AWSMDropdown from "../Dropdown"
 import DatePicker from "../../Common/DatePicker"
+import PopOverCalendar from "./components/PopOverCalendar"
 
 const STATUS_IN_AWSM = ["Active", "Temporarily Closed", "Inactive"]
 const SALES_AND_INVENTORY = ["Sentinal", "ABC"]
@@ -30,6 +31,7 @@ const TabStatus = ({ scheduler }) => {
           <AWSMDropdown
             value={statusInAWSM}
             items={STATUS_IN_AWSM}
+            selected='Active'
             onChange={value => setStatusInAWSM(value)}
             disabled={scheduler}
           />
@@ -43,6 +45,7 @@ const TabStatus = ({ scheduler }) => {
             items={SALES_AND_INVENTORY}
             disabled={scheduler}
           />
+          <button className='add'>+Add</button>
         </div>
         )}
         {pathName === "/retail-customer" ? (
@@ -59,37 +62,47 @@ const TabStatus = ({ scheduler }) => {
           <div className="col-6"></div>
         )}
       </div>
-      <div>
-        <h6 className="mt-3">CLOSE PERIOD</h6>
-        <div className="row">
-          <div className="col-3">
-            <div className="input-header">CLOSE (FROM)</div>
-            <DatePicker disabled={scheduler} />
-          </div>
-          <div className="col-3">
-            <div className="input-header">TIME</div>
-            <AWSMDropdown
-              items={timeData}
-              value={timeFrom}
-              onChange={value => setTimeFrom(value)}
-              disabled={scheduler}
-            />
-          </div>
-          <div className="col-3">
-            <div className="input-header">CLOSE (TO)</div>
-            <DatePicker disabled={scheduler} />
-          </div>
-          <div className="col-3">
-            <div className="input-header">TIME</div>
-            <AWSMDropdown
-              items={timeData}
-              value={timeTo}
-              onChange={value => setTimeTo(value)}
-              disabled={scheduler}
-            />
-          </div>
-        </div>
-      </div>
+
+
+      {(statusInAWSM !== 'Inactive') &&
+            <div>
+              <h6 className="mt-3">CLOSE PERIOD</h6>
+              <div className="row">
+                <div className="col-3">
+                  <div className="input-header">CLOSE (FROM)</div>
+                  {/* <DatePicker disabled={scheduler} required /> */}
+                  <PopOverCalendar disabled={scheduler} />
+                </div>
+                <div className="col-3">
+                  <div className="input-header">TIME</div>
+                  <AWSMDropdown
+                    items={timeData}
+                    value={timeFrom}
+                    onChange={value => setTimeFrom(value)}
+                    disabled={scheduler}
+                    required
+                  />
+                </div>
+                <div className="col-3">
+                  <div className="input-header">CLOSE (TO)</div>
+                  {/* <DatePicker disabled={scheduler} required /> */}
+                  <PopOverCalendar disabled={scheduler} />
+                </div>
+                <div className="col-3">
+                  <div className="input-header">TIME</div>
+                  <AWSMDropdown
+                    items={timeData}
+                    value={timeTo}
+                    onChange={value => setTimeTo(value)}
+                    disabled={scheduler}
+                    required
+                  />
+                </div>
+              </div>
+            </div>
+      }
+
+
       {pathName === "/commercial-customer" && (
         <div className="row">
           {/* <div className="col-12 col-sm-6">

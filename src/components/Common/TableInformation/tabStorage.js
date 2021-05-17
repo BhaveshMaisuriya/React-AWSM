@@ -45,9 +45,9 @@ for (let i = 0; i < 24; i++) {
   timeData.push(`${i.toString().padStart(2, "0")}:00`)
   timeData.push(`${i.toString().padStart(2, "0")}:30`)
 }
-timeData.push(`23:59`);
+timeData.push(`23:59`)
 
-const TabStorage = ({ scheduler }) => {
+const TabStorage = props => {
   const [storageData, setStorageData] = useState(storageDummy)
   const [endOfDay, setEndOfDay] = useState("")
   const [deleteItem, setDeleteItem] = useState(null)
@@ -57,7 +57,15 @@ const TabStorage = ({ scheduler }) => {
     backgroundColor: "",
   })
 
+  var { scheduler } = props
   const pathName = window.location.pathname
+
+  useEffect(() => {
+    function fetchData() {
+      props.getstorageData(storageDummy)
+    }
+    fetchData()
+  }, [])
 
   /**
    * Update tank capacity value
@@ -111,6 +119,21 @@ const TabStorage = ({ scheduler }) => {
         sale_category: "Yes",
       },
     ])
+    let allData = [
+      ...storageData,
+      {
+        id: nextID,
+        product_code: "12345",
+        tank_capacity: 10000,
+        active_product: "Active",
+        ordering_category: "SMP",
+        terminal: "M808",
+        distance: "40",
+        duration: 4.4,
+        sale_category: "Yes",
+      },
+    ]
+    props.getstorageData(allData)
   }
 
   /**
@@ -162,6 +185,7 @@ const TabStorage = ({ scheduler }) => {
     const newStorageData = [...storageData]
     newStorageData.splice(index, 1)
     setStorageData(newStorageData)
+    props.getstorageData(newStorageData)
     setDeleteItem(null)
   }
 
@@ -177,7 +201,10 @@ const TabStorage = ({ scheduler }) => {
       </div>
       {storageData.map((item, index) => (
         <div key={index}>
-          <div className="d-flex justify-content-between align-items-center">
+          <div
+            className="d-flex justify-content-between align-items-center"
+            style={{ margin: "3em 0 10px 0" }}
+          >
             <div className="section-header">{`STORAGE ${item.id}`}</div>
             <div
               className="dqm-storage-delete"
@@ -186,159 +213,165 @@ const TabStorage = ({ scheduler }) => {
               Delete Storage
             </div>
           </div>
-          {deleteItem && deleteItem.id === item.id && (
-            <div className="dqm-storage-confirm-delete d-flex justify-content-center align-items-center">
-              <div className="m-4">
-                Are you sure you want to delete this Storage
+          <div className="storage_delete_main">
+            {deleteItem && deleteItem.id === item.id && (
+              <div className="dqm-storage-confirm-delete d-flex justify-content-center align-items-center">
+                <div className="m-4">
+                  Are you sure you want to delete this Storage
+                </div>
+                <button
+                  onClick={() => setDeleteItem(null)}
+                  className="btn btn-outline-danger m-2"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={onDeleteStorage}
+                  className="btn btn-danger m-2"
+                >
+                  Delete
+                </button>
               </div>
-              <button
-                onClick={() => setDeleteItem(null)}
-                className="btn btn-outline-danger m-2"
+            )}
+            <div className="row">
+              <div className="col col-12 col-sm-6 col-lg-3">
+                <div className="input-header mb-2">PRODUCT CODE</div>
+                <AWSMInput value={item.product_code} />
+              </div>
+              <div className="col col-12 col-sm-6 col-lg-3">
+                <div className="input-header mb-2">TANK CAPACITY</div>
+                <AWSMInput
+                  value={item.tank_capacity}
+                  onChange={value => onTankCapacityChange(index, value)}
+                  disabled={scheduler}
+                />
+              </div>
+              <div className="col col-12 col-sm-6 col-lg-3">
+                <div className="input-header mb-2">ACTIVE PRODUCT</div>
+                <AWSMDropdown
+                  onChange={value => onActiveProductChange(index, value)}
+                  value={item.active_product}
+                  items={ACTIVE_PRODUCTS}
+                  disabled={scheduler}
+                />
+              </div>
+              <div className="col col-12 col-sm-6 col-lg-3">
+                <DropdownInput
+                  title="ORDERING CATEGORY"
+                  value={item.ordering_category.value}
+                  items={item.ordering_category.items}
+                  onChange={value => onOrderingCategoryChange(index, value)}
+                  onAddItem={value => onAddOrderingCategory(index, value)}
+                />
+                <Snackbar
+                  style={{
+                    border: "1px solid #4CAF50",
+                    borderRadius: "5px",
+                    width: "fit-content",
+                    marginLeft: "auto",
+                  }}
+                  open={alert.open}
+                  message={
+                    <Alert
+                      severity="success"
+                      style={{ color: "#4CAF50", padding: 0 }}
+                    >
+                      {alert.message}
+                    </Alert>
+                  }
+                  ContentProps={{
+                    style: { backgroundColor: "#EDF7ED", padding: "0 15px" },
+                  }}
+                  anchorOrigin={{ vertical: "top", horizontal: "right" }}
+                  onClose={() => setAlert({ ...alert, open: false })}
+                  autoHideDuration={3000}
+                  action={
+                    <IconButton
+                      aria-label="close"
+                      onClick={() => setAlert({ ...alert, open: false })}
+                    >
+                      <CloseIcon style={{ color: "#4CAF50" }} />
+                    </IconButton>
+                  }
+                ></Snackbar>
+              </div>
+              <div className="col col-12 col-sm-6 col-lg-3">
+                <div className="input-header mb-2">TERMINAL</div>
+                <AWSMInput value={item.terminal} />
+              </div>
+              <div className="col col-12 col-sm-6 col-lg-3">
+                <div className="input-header mb-2">DISTANCE</div>
+                <AWSMInput value={item.distance} />
+              </div>
+              <div className="col col-12 col-sm-6 col-lg-3">
+                <div className="input-header mb-2">DURATION</div>
+                <AWSMInputNumber
+                  item={item}
+                  itemKey="duration"
+                  type="number"
+                  value={item.duration}
+                  onChange={value => onDurationChange(index, value)}
+                  disabled={scheduler}
+                />
+              </div>
+              <div className="col col-12 col-sm-6 col-lg-3">
+                <div className="input-header mb-2">SALE CATEGORY</div>
+                <AWSMDropdown
+                  value={item.sale_category}
+                  items={SALES_CATEGORY}                
+                />
+              </div>
+              {pathName === "/commercial-customer" ? (
+                <React.Fragment>
+                  <Col className="col-3" style={{ marginTop: "12px" }}>
+                    <AvForm>
+                      <AvField
+                        name="dead_stock"
+                        type="number"
+                        label="DEADSTOCK"
+                        value=""
+                        placeholder="Numberic only"
+                        style={{ height: "40px" }}
+                        disabled={scheduler}
+                        className={scheduler ? "disabled" : null}
+                      ></AvField>
+                    </AvForm>
+                  </Col>
+                  <Col className="col-3 " style={{ marginTop: "12px" }}>
+                    <AvForm>
+                      <AvField
+                        name="safe_fill"
+                        type="number"
+                        label="SAFE FILL"
+                        value=""
+                        placeholder="Numberic only"
+                        style={{ height: "40px" }}
+                        disabled={scheduler}
+                        className={scheduler ? "disabled" : null}
+                      ></AvField>
+                    </AvForm>
+                  </Col>
+                </React.Fragment>
+              ) : null}
+              <div
+              id="remarks"
+                className={`col ${
+                  pathName === "/retail-customer" ? "col-12" : "col-6"
+                }`}
               >
-                Cancel
-              </button>
-              <button onClick={onDeleteStorage} className="btn btn-danger m-2">
-                Delete
-              </button>
-            </div>
-          )}
-          <div className="row">
-            <div className="col col-12 col-sm-6 col-lg-3">
-              <div className="input-header mb-2">PRODUCT CODE</div>
-              <AWSMInput value={item.product_code} disabled />
-            </div>
-            <div className="col col-12 col-sm-6 col-lg-3">
-              <div className="input-header mb-2">TANK CAPACITY</div>
-              <AWSMInput
-                value={item.tank_capacity}
-                onChange={value => onTankCapacityChange(index, value)}
-                disabled={scheduler}
-              />
-            </div>
-            <div className="col col-12 col-sm-6 col-lg-3">
-              <div className="input-header mb-2">ACTIVE PRODUCT</div>
-              <AWSMDropdown
-                onChange={value => onActiveProductChange(index, value)}
-                value={item.active_product}
-                items={ACTIVE_PRODUCTS}
-                disabled={scheduler}
-              />
-            </div>
-            <div className="col col-12 col-sm-6 col-lg-3">
-              <DropdownInput
-                title="ORDERING CATEGORY"
-                value={item.ordering_category.value}
-                items={item.ordering_category.items}
-                onChange={value => onOrderingCategoryChange(index, value)}
-                onAddItem={value => onAddOrderingCategory(index, value)}
-              />
-              <Snackbar
-                style={{
-                  border: "1px solid #4CAF50",
-                  borderRadius: "5px",
-                  width: "fit-content",
-                  marginLeft: "auto",
-                }}
-                open={alert.open}
-                message={
-                  <Alert
-                    severity="success"
-                    style={{ color: "#4CAF50", padding: 0 }}
-                  >
-                    {alert.message}
-                  </Alert>
-                }
-                ContentProps={{
-                  style: { backgroundColor: "#EDF7ED", padding: "0 15px" },
-                }}
-                anchorOrigin={{ vertical: "top", horizontal: "right" }}
-                onClose={() => setAlert({ ...alert, open: false })}
-                autoHideDuration={3000}
-                action={
-                  <IconButton
-                    aria-label="close"
-                    onClick={() => setAlert({ ...alert, open: false })}
-                  >
-                    <CloseIcon style={{ color: "#4CAF50" }} />
-                  </IconButton>
-                }
-              ></Snackbar>
-            </div>
-            <div className="col col-12 col-sm-6 col-lg-3">
-              <div className="input-header mb-2">TERMINAL</div>
-              <AWSMInput value={item.terminal} disabled />
-            </div>
-            <div className="col col-12 col-sm-6 col-lg-3">
-              <div className="input-header mb-2">DISTANCE</div>
-              <AWSMInput value={item.distance} disabled />
-            </div>
-            <div className="col col-12 col-sm-6 col-lg-3">
-              <div className="input-header mb-2">DURATION</div>
-              <AWSMInputNumber
-                item={item}
-                itemKey="duration"
-                type="number"
-                value={item.duration}
-                onChange={value => onDurationChange(index, value)}
-                disabled={scheduler}
-              />
-            </div>
-            <div className="col col-12 col-sm-6 col-lg-3">
-              <div className="input-header mb-2">SALE CATEGORY</div>
-              <AWSMDropdown
-                value={item.sale_category}
-                items={SALES_CATEGORY}
-                disabled
-              />
-            </div>
-            {pathName === "/commercial-customer" ? (
-              <React.Fragment>
-                <Col className="col-3" style={{ marginTop: "12px" }}>
-                  <AvForm>
-                    <AvField
-                      name="dead_stock"
-                      type="number"
-                      label="DEADSTOCK"
-                      value=""
-                      placeholder="Numberic only"
-                      style={{ height: "40px" }}
-                      disabled={scheduler}
-                      className={scheduler ? "disabled" : null}
-                    ></AvField>
-                  </AvForm>
-                </Col>
-                <Col className="col-3 " style={{ marginTop: "12px" }}>
-                  <AvForm>
-                    <AvField
-                      name="safe_fill"
-                      type="number"
-                      label="SAFE FILL"
-                      value=""
-                      placeholder="Numberic only"
-                      style={{ height: "40px" }}
-                      disabled={scheduler}
-                      className={scheduler ? "disabled" : null}
-                    ></AvField>
-                  </AvForm>
-                </Col>
-              </React.Fragment>
-            ) : null}
-            <div
-              className={`col ${
-                pathName === "/retail-customer" ? "col-12" : "col-6"
-              }`}
-            >
-              <div className="input-header mb-2">REMARKS</div>
-              <AWSMInput
-                className="p-3"
-                placeholder="Write something here..."
-                disabled={scheduler}
-                className={scheduler ? "disabled" : null}
-              />
+                <div className="input-header mb-2">REMARKS</div>
+                <AWSMInput
+                  className="p-3"
+                  placeholder="Write something here..."
+                  disabled={scheduler}
+                  className={scheduler ? "disabled" : null}
+                />
+              </div>
             </div>
           </div>
         </div>
       ))}
+      <hr style={{ margin: "2em 0" }} />
       <div className="mt-4 dqm-storage-add" onClick={onAddStorage}>
         + Add storage
       </div>

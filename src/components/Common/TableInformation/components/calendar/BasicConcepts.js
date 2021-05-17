@@ -7,6 +7,7 @@ import "react-day-picker/lib/style.css"
 import RangePicker from "./RangePicker"
 import MultiPicker from "./MultiPicker"
 import SinglePicker from "./SinglePicker"
+import $ from 'jquery'; 
 
 const BasicConcepts = ({
   selectedDay,
@@ -32,21 +33,59 @@ const BasicConcepts = ({
     start: startDayOfMonth,
     end: endDayOfMonth,
   })
+
   const handleDayClick = (day, { selected }) => {
+    $(".DayPicker-Weekday").removeClass("active_day");
     setDaynames([])
     if (selected) {
       setSelectedDay(undefined)
       return
     }
+    let selectedDays = getDayOfWeek(new Date(day));
+    console.log("day::", day, selectedDays);
     setSelectedDay(day)
   }
+
+  function getDayOfWeek(date) {
+    let alldays = [];
+    var days = [
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+    ];
+    var alltitle = document.getElementsByClassName("DayPicker-Weekday");
+    // dates.map((item, index)=>{
+      var day_no = date.getDay();
+      alldays.push(days[day_no]);
+      
+      for (var i = 0; i < alltitle.length; i++) {
+          console.log("fromday::12", days[day_no], alltitle[i].getAttribute("title"));
+          if(alltitle[i].getAttribute("title") === days[day_no]){
+            console.log("fromday::2", alltitle[i].getAttribute("title"));
+            $(alltitle[i]).addClass("active_day");
+          } 
+      }
+    // })
+    return alldays
+  }
+  
+
   const handleDayName = event => {
     setCheck({ ...check, [event.target.name]: event.target.checked })
     setSelectedDay(undefined)
     setDaynames([])
     setDateRange({ from: undefined, to: undefined })
+    
   }
 
+
+
+
+  // console.log("dateRange::123", dateRange,daynames, check.checkedA)
   return (
     <div
       className="m-3 d-flex flex-column awsm-ultra-calendar"

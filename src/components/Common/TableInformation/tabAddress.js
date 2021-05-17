@@ -144,7 +144,7 @@ const TabAddress = ({ scheduler }) => {
               />
             </div>
             <div className="col col-12 col-sm-6 col-lg-6">
-  <div className="input-header mb-2">SPEED (KM/Hr)</div>
+            <div className="input-header mb-2">SPEED (KM/Hr)</div>
               <AWSMInput value={item.speed} disabled />
             </div>
             <div className="col col-12 col-sm-6 col-lg-6">

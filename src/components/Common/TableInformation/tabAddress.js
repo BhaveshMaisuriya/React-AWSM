@@ -128,15 +128,7 @@ const TabAddress = ({ scheduler }) => {
               <AWSMInput value={item.longitude} disabled />
             </div>
             <div className="col col-12 col-sm-6 col-lg-6">
-              <div className="input-header mb-2">CLUSTER</div>
-              <AWSMInput
-                value={item.cluster}
-                onChange={value => onClusterChange(index, value)}
-                disabled={scheduler}
-              />
-            </div>
-            <div className="col col-12 col-sm-6 col-lg-6">
-              <div className="input-header mb-2">ALTERNATIVE CLUSTER</div>
+             <div className="input-header mb-2">ALTERNATIVE CLUSTER</div>
               <AWSMInput
                 value={item.alt_cluster}
                 onChange={value => onAlternativeClusterChange(index, value)}
@@ -144,16 +136,24 @@ const TabAddress = ({ scheduler }) => {
               />
             </div>
             <div className="col col-12 col-sm-6 col-lg-6">
-              <div className="input-header mb-2">CLOUD</div>
+            <div className="input-header mb-2">CLUSTER</div>
+              <AWSMInput
+                value={item.cluster}
+                onChange={value => onClusterChange(index, value)}
+                disabled={scheduler}
+              />
+            </div>
+            <div className="col col-12 col-sm-6 col-lg-6">
+  <div className="input-header mb-2">SPEED (KM/Hr)</div>
+              <AWSMInput value={item.speed} disabled />
+            </div>
+            <div className="col col-12 col-sm-6 col-lg-6">
+            <div className="input-header mb-2">CLOUD</div>
               <AWSMInput
                 value={item.cloud}
                 onChange={value => onCloudChange(index, value)}
                 disabled={scheduler}
               />
-            </div>
-            <div className="col col-12 col-sm-6 col-lg-6">
-              <div className="input-header mb-2">SPEED (KM/Hr)</div>
-              <AWSMInput value={item.speed} disabled />
             </div>
           </div>
         </div>

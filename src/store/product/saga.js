@@ -41,7 +41,6 @@ function* onGetProductAuditLog() {
 function* onGetProductFIlter({ params = {} }) {
   try {
     const response = yield call(getProductFilter)
-    console.log(mergeFilterValues(response, params.search_fields))
     yield put(
       getProductFilterSuccess(
         mergeFilterValues(response, params.search_fields)

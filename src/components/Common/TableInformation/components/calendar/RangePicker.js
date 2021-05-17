@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import DayPicker, { DateUtils } from "react-day-picker"
 import "react-day-picker/lib/style.css"
 import "./basic.scss"
@@ -20,21 +20,20 @@ export default function RangePicker({
   selected,
   setSelected,
 }) {
-  const [weekdays, setWeekDays] = useState();
+  
+  useEffect(()=>{
+    function fetchData(){
+      var selectedDates = getDatesBetweenDates(dateRange.from, dateRange.to);
+      getDayOfWeek(selectedDates);
+    };
+    fetchData();
+  }, [])
 
   function handleDayClick(day) {
     $(".DayPicker-Weekday").removeClass("active_day");
     const range = DateUtils.addDayToRange(day, dateRange);
     var selectedDates = getDatesBetweenDates(range.from, range.to);
-    let selectedDays = getDayOfWeek(selectedDates);
-    var alltitle = document.getElementsByClassName("DayPicker-Weekday");
-    // for (var i = 0; i < alltitle.length; i++) {
-    //   if(alltitle[i].getAttribute("title").includes(selectedDays) === false) {
-    //     $(alltitle[i]).removeClass("active_day");
-    //   }
-    // }
-
-    setWeekDays(selectedDays);
+    getDayOfWeek(selectedDates);
     setDateRange(range);
   }
 
@@ -68,11 +67,8 @@ export default function RangePicker({
     dates.map((item, index)=>{
       var day_no = item.getDay();
       alldays.push(days[day_no]);
-      
       for (var i = 0; i < alltitle.length; i++) {
-          console.log("fromday::12", days[day_no], alltitle[i].getAttribute("title"));
           if(alltitle[i].getAttribute("title") === days[day_no]){
-            console.log("fromday::2", alltitle[i].getAttribute("title"));
             $(alltitle[i]).addClass("active_day");
           } 
       }

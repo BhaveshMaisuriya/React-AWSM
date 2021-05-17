@@ -245,7 +245,6 @@ export default function retailCustomerFactory(data) {
     finalData.push(retailCustomerObj)
     retailCustomerObj = cloneobj
   })
-  console.log(finalData, "finalData")
   return {
     list: finalData,
     totalRows: getValueFromObj(data, "total_rows", "0"),

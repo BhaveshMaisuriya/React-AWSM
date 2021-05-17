@@ -31,7 +31,6 @@ import {
 
 function* onGetRetailCustomer({ params = {} }) {
   try {
-    // console.log("reailcust", params)
     const response = yield call(getRetailCustomer, params)
     yield put(getRetailCustomerSuccess(Factory(response)))
   } catch (error) {

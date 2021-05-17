@@ -71,9 +71,11 @@ const styles = {
     backgroundColor: "#EEEEEE !important",
   },
 }
+
 class TableInformation extends Component {
   constructor(props) {
     super(props)
+    this.getStorageData = this.getStorageData.bind(this)
     this.state = {
       activeTab: "1",
       modal: true,
@@ -86,6 +88,7 @@ class TableInformation extends Component {
       userRole: {
         scheduler: false,
       },
+      storageData: 0,
     }
   }
 
@@ -112,9 +115,8 @@ class TableInformation extends Component {
    *
    * Call update API when user click update button
    */
-   handleUpdate = e => {
+  handleUpdate = e => {
     e.preventDefault()
-    console.log("Update success")
     this.setState({
       alert: {
         open: true,
@@ -122,6 +124,19 @@ class TableInformation extends Component {
         backgroundColor: "#4CAF50",
       },
     })
+    var that = this
+    setTimeout(function () {
+      that.setState({
+        alert: {
+          open: false,
+        },
+      })
+    }, 2000)
+  }
+
+  getStorageData = val => {
+    console.log("storageData::", val)
+    this.setState({ storageData: val })
   }
 
   render() {
@@ -132,12 +147,12 @@ class TableInformation extends Component {
     const { location } = this.props
     const { scheduler } = this.state.userRole
     const path = location.pathname
-    
+
     return (
       <ModalBody>
         <AvForm>
           <div className={classes.topContainer}>
-            <Row form>
+            <Row>
               <Col className="col-6">
                 <AvField
                   name="ship_to_party"
@@ -172,7 +187,7 @@ class TableInformation extends Component {
                 <AvField
                   name="remarks"
                   type="text"
-                  label={data.remarks}
+                  label={"REMARKS"}
                   value="Shaziman only"
                   disabled={scheduler}
                   className={`${scheduler ? classes.field : undefined}`}
@@ -316,7 +331,10 @@ class TableInformation extends Component {
                     overflowX: "hidden",
                   }}
                 >
-                  <TabStorage scheduler={scheduler} />
+                  <TabStorage
+                    scheduler={scheduler}
+                    getstorageData={this.getStorageData}
+                  />
                 </SimpleBar>
               </TabPane>
               <TabPane tabId="6">
@@ -327,7 +345,7 @@ class TableInformation extends Component {
                     overflowX: "hidden",
                   }}
                 >
-                  <TabQuota scheduler={scheduler} />
+                  <TabQuota scheduler={scheduler} storageData={this.state.storageData} />
                 </SimpleBar>
               </TabPane>
             </TabContent>

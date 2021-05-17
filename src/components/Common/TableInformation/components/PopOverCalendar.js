@@ -23,7 +23,7 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-export default function PopOverCalendar({ disabled }) {
+export default function PopOverCalendar({ disabled, dafultVal }) {
   const [check, setCheck] = useState({
     checkedA: false,
   })
@@ -41,6 +41,7 @@ export default function PopOverCalendar({ disabled }) {
 
   const handleClick = event => {
     setAnchorEl(event.currentTarget)
+    
   }
 
   const handleClose = () => {
@@ -72,6 +73,7 @@ export default function PopOverCalendar({ disabled }) {
     if (selectedDaynames.length === 7) {
       multiCheck = "Repeat everyday"
     }
+    // console.log("selectedDaynames::", selectedDaynames)
   }
 
   const dateRangeCheck =
@@ -100,7 +102,7 @@ export default function PopOverCalendar({ disabled }) {
             fullWidth
             disableUnderline
             disabled
-            value={multiCheck || dateRangeCheck}
+            value={dafultVal === 'today' ? format(new Date(), "do MMM yyyy") : multiCheck || dateRangeCheck}
           ></Input>
           <DateRangeIcon color="disabled" />
         </div>
@@ -120,6 +122,7 @@ export default function PopOverCalendar({ disabled }) {
         }}
         className="mt-1 full-width"
       >
+        {/* {console.log("selectedDay::", dateRange)} */}
         <BasicConcepts
           selectedDay={selectedDay}
           setSelectedDay={setSelectedDay}

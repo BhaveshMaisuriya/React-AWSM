@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types'
+import PropTypes from "prop-types"
 import React, { Component } from "react"
 
 import { connect } from "react-redux"
@@ -88,29 +88,31 @@ class Header extends Component {
   render() {
     return (
       <React.Fragment>
-        <header id="page-topbar" style={{boxShadow: 'none !important'}}>
+        <header id="page-topbar" style={{ boxShadow: "none !important" }}>
           <div className="navbar-header">
             <div className="d-flex">
-              <div className="navbar-brand-box">
-                <Link to="/" className="logo logo-dark">
+              <div className="navbar-brand-box" style={{padding: 0}}>
+                {/* <Link to="/" className="logo logo-dark">
                   <span className="logo-sm">
                     <img src={logo} alt="" height="22" />
                   </span>
                   <span className="logo-lg">
                     <img src={logoDark} alt="" height="17" />
                   </span>
-                </Link>
-
-                <Link to="/" className="logo logo-light">
-                  <span className="logo-sm">
+                </Link> 
+                 <Link to="/" className="logo logo-light">
+                  <span className="logo-sm">  
                     <img src={logoLightSvg} alt="" height="32" style={{marginLeft: '-3px', marginTop: '10px'}} />
                   </span>
                   <span className="logo-lg">
                     <img src={logoLightPng} alt="" height="40" style={{marginTop: '16px'}} />
                   </span>
-                </Link>
-              </div>
+                </Link> */}
 
+               <div className="sideBar_profile">
+                  <ProfileMenu sidebar={true} />
+                </div> 
+</div>
               <button
                 type="button"
                 onClick={this.toggleMenu}
@@ -402,7 +404,7 @@ class Header extends Component {
               </div>
 
               <NotificationDropdown />
-              <ProfileMenu />
+              <ProfileMenu sidebar={false} />
 
               <div
                 onClick={this.toggleRightbar}
@@ -435,5 +437,5 @@ export default connect(mapStatetoProps, { toggleRightSidebar })(
 Header.propTypes = {
   t: PropTypes.any,
   toggleMenuCallback: PropTypes.any,
-  toggleRightSidebar: PropTypes.func
+  toggleRightSidebar: PropTypes.func,
 }

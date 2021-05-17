@@ -84,6 +84,7 @@ class SidebarContent extends Component {
         <div id="sidebar-menu">
           <ul className="metismenu list-unstyled" id="side-menu">
             <li className="menu-title">{this.props.t("Menu")}</li>
+            
             <li>
               <Link to="/#" className="waves-effect">
                 <i className="bx bx-data" />

@@ -1,4 +1,4 @@
-import React, { Component } from "react"
+import React, { Component, Fragment } from "react"
 import PropTypes from 'prop-types'
 import {
   Dropdown,
@@ -22,6 +22,8 @@ class ProfileMenu extends Component {
       name: "Sunny",
     }
     this.toggle = this.toggle.bind(this)
+    this.onMouseEnter = this.onMouseEnter.bind(this)
+    this.onMouseLeave = this.onMouseLeave.bind(this)
   }
 
   toggle() {
@@ -45,10 +47,24 @@ class ProfileMenu extends Component {
     }
   }
 
+  onMouseEnter() {
+    this.setState(prevState => ({
+      menu: !prevState.menu,
+    }))
+  }
+
+  onMouseLeave() {
+    this.setState(prevState => ({
+      menu: !prevState.menu,
+    }))
+  }
+
   render() {
     return (
       <React.Fragment>
         <Dropdown
+        // onMouseOver={this.onMouseEnter} 
+        // onMouseLeave={this.onMouseLeave}
           isOpen={this.state.menu}
           toggle={this.toggle}
           className="d-inline-block"
@@ -63,12 +79,16 @@ class ProfileMenu extends Component {
               src={user1}
               alt="Header Avatar"
             />
-            <span className="d-none d-xl-inline-block ml-2 mr-1">
-              {this.state.name}
-            </span>
-            <i className="mdi mdi-chevron-down d-none d-xl-inline-block"/>
+            {this.props.sidebar === false && 
+              <Fragment>
+                <span className="d-none d-xl-inline-block ml-2 mr-1">
+                  {this.state.name}
+                </span>
+                <i className="mdi mdi-chevron-down d-none d-xl-inline-block"/>
+              </Fragment>
+            }
           </DropdownToggle>
-          <DropdownMenu right>
+          <DropdownMenu left>
             <DropdownItem tag="a" href="/profile">
               <i className="bx bx-user font-size-16 align-middle mr-1"/>
               {this.props.t("Profile")}

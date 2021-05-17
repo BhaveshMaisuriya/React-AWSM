@@ -82,3 +82,29 @@
 .DayPicker-WeekdaysRow > div {
   border-right: 4px solid white;
 }
+
+
+.footerButton {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  .buttonCancel {
+      box-sizing: border-box;
+      height: 32px;
+      width: 70px;
+      border: 1px solid #CBEFED;
+      border-radius: 4px;
+      background-color: #FFFFFF;
+      color: #00A19C;
+      margin-right: 8px;
+  }
+  .buttonUpdate {
+      box-sizing: border-box;
+      height: 32px;
+      width: 70px;
+      border: 1px solid #CBEFED;
+      border-radius: 4px;
+      background-color: #00A19C;
+      color: #FFFFFF;
+    }
+}

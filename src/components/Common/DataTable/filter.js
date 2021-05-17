@@ -205,7 +205,6 @@ const Example = React.memo(props => {
               height:"20px", 
               width:"5px", 
               marginLeft:"5px", 
-              marginTop:"5px"
             }}
             />
             <label

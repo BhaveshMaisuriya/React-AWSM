@@ -12,7 +12,7 @@ for (let i = 0; i < 24; i++) {
   timeData.push(`${i.toString().padStart(2, "0")}:00`)
   timeData.push(`${i.toString().padStart(2, "0")}:30`)
 }
-timeData.push(`23:59`);
+timeData.push(`23:59`)
 
 const TabDelivery = ({ scheduler }) => {
   const pathName = window.location.pathname
@@ -70,15 +70,16 @@ const TabDelivery = ({ scheduler }) => {
   const checkedDay2 = days2.filter(item => {
     return item.checked === true
   })
-  
+
   return (
     <div
       style={{
         height: "400px",
+        paddingRight: "15px",
       }}
     >
-      <Row form>
-        <Col className="col-6">
+      <Row>
+        <Col className="col-6" style={{ marginTop: 4 }}>
           <SimplePopover handleChange={handleChange} data={data}>
             <div>
               <AvForm>
@@ -92,7 +93,7 @@ const TabDelivery = ({ scheduler }) => {
                   className={scheduler ? styles.disabled : undefined}
                 />
               </AvForm>
-              <Button variant="link" className={styles.add}>+Add</Button>
+              <button className={styles.add}>+Add</button>
               <div className={styles.arrow}>
                 <ArrowDropDownIcon />
               </div>
@@ -108,8 +109,9 @@ const TabDelivery = ({ scheduler }) => {
               label="ROAD TANKER ACCESSIBILTY"
               value=""
               placeholder="Type something here..."
-              disabled={scheduler}
-              className={scheduler ? styles.disabled : undefined}
+              disabled
+              // disabled={scheduler}
+              className={styles.disabled} //{scheduler ? styles.disabled : undefined}
             ></AvField>
           </AvForm>
         </Col>
@@ -122,8 +124,9 @@ const TabDelivery = ({ scheduler }) => {
                 label="PUMP TYPE"
                 value=""
                 placeholder="Type something here..."
-                disabled={scheduler}
-                className={scheduler ? styles.disabled : undefined}
+                disabled
+                // disabled={scheduler}
+                className={styles.disabled} //{scheduler ? styles.disabled : undefined}
               ></AvField>
             </AvForm>
           </Col>
@@ -131,11 +134,27 @@ const TabDelivery = ({ scheduler }) => {
 
         <Col className="col-6">
           <h6>DELIVERY OPEN TIME (FROM)</h6>
-          <AWSMDropdown items={timeData} disabled={scheduler} />
+          <AWSMDropdown
+            items={timeData}
+            disabled
+            // disabled={scheduler}
+            className={styles.disabled} //{scheduler ? styles.disabled : undefined}
+          />
+          <div className={styles.arrow3}>
+            <ArrowDropDownIcon />
+          </div>
         </Col>
         <Col className="col-6">
           <h6>DELIVERY OPEN TIME (TO)</h6>
-          <AWSMDropdown items={timeData} disabled={scheduler} />
+          <AWSMDropdown
+            items={timeData}
+            disabled
+            // disabled={scheduler}
+            className={styles.disabled} //{scheduler ? styles.disabled : undefined}
+          />
+          <div className={styles.arrow3}>
+            <ArrowDropDownIcon />
+          </div>
         </Col>
         <Col className="col-12 mt-3">
           <h6>
@@ -146,20 +165,20 @@ const TabDelivery = ({ scheduler }) => {
           <SimplePopover handleChange={handleActualTime1} data={days}>
             <div>
               {/* <AvForm> */}
-                <AvField
-                  name="days1"
-                  type="text"
-                  label="DAY(S)"
-                  value={
-                    checkedDay.length !== 0
-                      ? checkedDay.map(i => i.name)
-                      : "Select day(s)"
-                  }
-                  className={`${styles.field}`}
-                  disabled
-                  className={scheduler ? styles.disabled : undefined}
-                  style={{ height: "40px", marginTop: "-4px" }}
-                />
+              <AvField
+                name="days1"
+                type="text"
+                label="DAY(S)"
+                value={
+                  checkedDay.length !== 0
+                    ? checkedDay.map(i => i.name)
+                    : "Select day(s)"
+                }
+                className={`${styles.field}`}
+                disabled
+                className={scheduler ? styles.disabled : undefined}
+                style={{ height: "40px", marginTop: "-4px" }}
+              />
               {/* </AvForm> */}
               <div className={styles.arrow}>
                 <ArrowDropDownIcon />
@@ -170,10 +189,16 @@ const TabDelivery = ({ scheduler }) => {
         <Col className="col-3">
           <h6>TIME (FROM)</h6>
           <AWSMDropdown items={timeData} disabled={scheduler} />
+          <div className={styles.arrow}>
+            <ArrowDropDownIcon />
+          </div>
         </Col>
         <Col className="col-3">
           <h6>TIME (TO)</h6>
           <AWSMDropdown items={timeData} disabled={scheduler} />
+          <div className={styles.arrow}>
+            <ArrowDropDownIcon />
+          </div>
         </Col>
         {pathName === "/retail-customer" ? (
           <React.Fragment>
@@ -208,41 +233,74 @@ const TabDelivery = ({ scheduler }) => {
             <Col className="col-3">
               <h6>TIME (FROM)</h6>
               <AWSMDropdown items={timeData} disabled={scheduler} />
+              <div className={styles.arrow}>
+                <ArrowDropDownIcon />
+              </div>
             </Col>
             <Col className="col-3">
               <h6>TIME (TO)</h6>
               <AWSMDropdown items={timeData} disabled={scheduler} />
+              <div className={styles.arrow}>
+                <ArrowDropDownIcon />
+              </div>
             </Col>
           </React.Fragment>
         ) : null}
 
         <Col className="col-6 mb-3">
           <h6>NO DELIVERY INTERVAL</h6>
-          <PopOverCalendar disabled={scheduler} />
+          <PopOverCalendar disabled={true} dafultVal={'today'}  />
         </Col>
         <Col className="col-3">
           <h6>TIME (FROM)</h6>
-          <AWSMDropdown items={timeData} disabled={scheduler} />
+          <AWSMDropdown items={timeData} disabled={true} />
+          <div className={styles.arrow}>
+            <ArrowDropDownIcon />
+          </div>
         </Col>
         <Col className="col-3">
           <h6>TIME (TO)</h6>
-          <AWSMDropdown items={timeData} disabled={scheduler} />
+          <AWSMDropdown items={timeData} disabled={true} />
+          <div className={styles.arrow}>
+            <ArrowDropDownIcon />
+          </div>
         </Col>
-        {[2,3,4,5].map(function(){
-          return <>
-            <Col className="col-6 mb-3">
-              <PopOverCalendar disabled={scheduler} />
-            </Col>
-            <Col className="col-3">
-              <AWSMDropdown items={timeData} disabled={scheduler} />
-            </Col>
-            <Col className="col-3">
-              <AWSMDropdown items={timeData} disabled={scheduler} />
-            </Col>
-          </>
-        })
-      }
-        
+        <Col className="col-6 mb-3">
+          <PopOverCalendar disabled={true}  dafultVal={'today'} />
+        </Col>
+        <Col className="col-3">
+          <AWSMDropdown items={timeData} disabled={true} />
+          <div className={styles.arrow2}>
+            <ArrowDropDownIcon />
+          </div>
+        </Col>
+        <Col className="col-3">
+          <AWSMDropdown items={timeData} disabled={true} />
+          <div className={styles.arrow2}>
+            <ArrowDropDownIcon />
+          </div>
+        </Col>
+        {[3, 4, 5].map(function () {
+          return (
+            <>
+              <Col className="col-6 mb-3">
+                <PopOverCalendar disabled={scheduler} />
+              </Col>
+              <Col className="col-3">
+                <AWSMDropdown items={timeData} disabled={scheduler} />
+                <div className={styles.arrow2}>
+                  <ArrowDropDownIcon />
+                </div>
+              </Col>
+              <Col className="col-3">
+                <AWSMDropdown items={timeData} disabled={scheduler} />
+                <div className={styles.arrow2}>
+                  <ArrowDropDownIcon />
+                </div>
+              </Col>
+            </>
+          )
+        })}
       </Row>
     </div>
   )

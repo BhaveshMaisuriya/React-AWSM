@@ -116,14 +116,13 @@ class TableInformation extends Component {
    * Call update API when user click update button
    */
   handleUpdate = e => {
-    e.preventDefault()
     this.setState({
       alert: {
         open: true,
         message: "Update success",
         backgroundColor: "#4CAF50",
       },
-    })
+    });
     var that = this
     setTimeout(function () {
       that.setState({
@@ -131,18 +130,16 @@ class TableInformation extends Component {
           open: false,
         },
       })
-    }, 2000)
+    }, 2000); 
+    this.props.closeModal();
   }
 
   getStorageData = val => {
-    console.log("storageData::", val)
     this.setState({ storageData: val })
   }
 
   render() {
     const { classes, closeModal, data, dataList } = this.props
-    console.log(data)
-    console.log(dataList)
     const { modal } = this.state
     const { location } = this.props
     const { scheduler } = this.state.userRole

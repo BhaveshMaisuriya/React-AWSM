@@ -31,7 +31,6 @@ class ProductDetailModal extends PureComponent {
 
   handleUpdate(event) {
     if (Object.keys(this.state.updateDictionary).length > 0) {
-      console.log(this.state.updateDictionary)
         const { productCode } = this.props.data
         this.props.onUpdateProductDetail({
           productCode,

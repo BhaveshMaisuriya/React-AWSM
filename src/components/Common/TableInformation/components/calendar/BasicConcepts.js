@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { FormControlLabel, Checkbox } from "@material-ui/core"
 import "./basic.scss"
 import { lastDayOfMonth, eachDayOfInterval, format } from "date-fns"
@@ -34,6 +34,13 @@ const BasicConcepts = ({
     end: endDayOfMonth,
   })
 
+  useEffect(()=>{
+    function fetchData(){
+      getDayOfWeek(new Date(selectedDay));
+    };
+    fetchData();
+  }, [])
+
   const handleDayClick = (day, { selected }) => {
     $(".DayPicker-Weekday").removeClass("active_day");
     setDaynames([])
@@ -41,8 +48,7 @@ const BasicConcepts = ({
       setSelectedDay(undefined)
       return
     }
-    let selectedDays = getDayOfWeek(new Date(day));
-    console.log("day::", day, selectedDays);
+    getDayOfWeek(new Date(day));
     setSelectedDay(day)
   }
 
@@ -58,18 +64,14 @@ const BasicConcepts = ({
       "Saturday",
     ];
     var alltitle = document.getElementsByClassName("DayPicker-Weekday");
-    // dates.map((item, index)=>{
       var day_no = date.getDay();
       alldays.push(days[day_no]);
       
       for (var i = 0; i < alltitle.length; i++) {
-          console.log("fromday::12", days[day_no], alltitle[i].getAttribute("title"));
           if(alltitle[i].getAttribute("title") === days[day_no]){
-            console.log("fromday::2", alltitle[i].getAttribute("title"));
             $(alltitle[i]).addClass("active_day");
           } 
       }
-    // })
     return alldays
   }
   
@@ -82,10 +84,6 @@ const BasicConcepts = ({
     
   }
 
-
-
-
-  // console.log("dateRange::123", dateRange,daynames, check.checkedA)
   return (
     <div
       className="m-3 d-flex flex-column awsm-ultra-calendar"

@@ -47,10 +47,10 @@
   font-size: 13px;
   letter-spacing: 0;
   line-height: 13px;
-  margin-left: 15px;
+  margin-left: 0;
   padding-top: 20px;
   padding-bottom: 15px;
-  padding-left: 30px;
+  padding-left: 0;
 }
 
 .container-data {
@@ -62,7 +62,7 @@
 }
 
 .tracking-list {
-  padding-top: 5px;
+  padding: 5px 30px 0 30px;
 }
 .tracking-item {
   // border-left: 1px solid #00a19c;
@@ -70,7 +70,7 @@
   font-size: 0.9rem;
   height: 70px;
   padding-left: 20px;
-  padding-right: 20px;
+  padding-right: 0;
 }
 .tracking-item:last-child {
   border-left: 0px;
@@ -123,14 +123,14 @@
   .tracking-item .tracking-date {
     position: absolute;
     left: -10rem;
-    margin-left: 15px;
+    margin-left: 0;
     height: 34px;
     color: #111111;
     font-size: 14px;
     letter-spacing: 0;
     line-height: 17px;
     padding-top: 18px;
-    padding-left: 30px;
+    padding-left: 0;
   }
   .tracking-item .tracking-date span {
     display: block;

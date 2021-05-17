@@ -42,7 +42,6 @@ function* onGetCommercialAuditLog() {
 function* onGetCommercialFIlter({ params = {} }) {
   try {
     const response = yield call(getCommercialFilter)
-    console.log(mergeFilterValues(response, params.search_fields))
     yield put(
       getCommercialFilterSuccess(
         mergeFilterValues(response, params.search_fields)

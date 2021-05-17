@@ -110,8 +110,7 @@ const TabDelivery = ({ scheduler }) => {
               value=""
               placeholder="Type something here..."
               disabled
-              // disabled={scheduler}
-              className={styles.disabled} //{scheduler ? styles.disabled : undefined}
+              className={styles.disabled}
             ></AvField>
           </AvForm>
         </Col>
@@ -125,8 +124,7 @@ const TabDelivery = ({ scheduler }) => {
                 value=""
                 placeholder="Type something here..."
                 disabled
-                // disabled={scheduler}
-                className={styles.disabled} //{scheduler ? styles.disabled : undefined}
+                className={styles.disabled}
               ></AvField>
             </AvForm>
           </Col>
@@ -137,8 +135,7 @@ const TabDelivery = ({ scheduler }) => {
           <AWSMDropdown
             items={timeData}
             disabled
-            // disabled={scheduler}
-            className={styles.disabled} //{scheduler ? styles.disabled : undefined}
+            className={styles.disabled}
           />
           <div className={styles.arrow3}>
             <ArrowDropDownIcon />
@@ -149,8 +146,7 @@ const TabDelivery = ({ scheduler }) => {
           <AWSMDropdown
             items={timeData}
             disabled
-            // disabled={scheduler}
-            className={styles.disabled} //{scheduler ? styles.disabled : undefined}
+            className={styles.disabled}
           />
           <div className={styles.arrow3}>
             <ArrowDropDownIcon />
@@ -249,7 +245,7 @@ const TabDelivery = ({ scheduler }) => {
 
         <Col className="col-6 mb-3">
           <h6>NO DELIVERY INTERVAL</h6>
-          <PopOverCalendar disabled={true} dafultVal={'today'}  />
+          <PopOverCalendar disabled={true} defaultSelectedDate={'today'}  />
         </Col>
         <Col className="col-3">
           <h6>TIME (FROM)</h6>
@@ -266,7 +262,7 @@ const TabDelivery = ({ scheduler }) => {
           </div>
         </Col>
         <Col className="col-6 mb-3">
-          <PopOverCalendar disabled={true}  dafultVal={'today'} />
+          <PopOverCalendar disabled={true}  defaultSelectedDate={'today'} />
         </Col>
         <Col className="col-3">
           <AWSMDropdown items={timeData} disabled={true} />

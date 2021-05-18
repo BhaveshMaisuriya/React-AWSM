@@ -285,15 +285,27 @@ class Pages extends Component {
                           Customize
                         </button>
                       </div>
-                      <div className="enteriesText">{`${
-                        currentPage * rowsPerPage + 1
-                      } to ${
-                        tableData.totalRows -
-                          (currentPage * rowsPerPage + rowsPerPage) <
-                        0
-                          ? tableData.totalRows
-                          : currentPage * rowsPerPage + rowsPerPage
-                      } of ${tableData.totalRows} enteries`}</div>
+                      <div className="table-top-bar">
+                        <div class="top-page-number">
+                          <div className="enteriesText">{`${
+                            currentPage * rowsPerPage + 1
+                          } to ${
+                            tableData.totalRows -
+                              (currentPage * rowsPerPage + rowsPerPage) <
+                            0
+                              ? tableData.totalRows
+                              : currentPage * rowsPerPage + rowsPerPage
+                          } of ${tableData.totalRows} enteries`}</div>
+                        </div>
+                        <div class="top-pagination">
+                          <TablePagination
+                            count={tableData.totalRows}
+                            rowsPerPage={rowsPerPage}
+                            currentPage={currentPage}
+                            onChangePage={this.handleChangePage}
+                          />
+                        </div>
+                      </div>
                       <FixedColumnTable
                         headers={searchFields}
                         config={tableMapping}

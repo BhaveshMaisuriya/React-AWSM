@@ -155,3 +155,22 @@
   text-align: right;
   margin-top: 10px;
 }
+
+// new css
+.table-top-bar {
+  display: flex;
+  align-items: center;
+  margin: 20px 0;
+  .top-page-number {
+    flex: 0 0 80%;
+    .enteriesText {
+      margin: 0;
+    }
+  }
+  .top-pagination {
+    flex: 0 0 20%;
+    ul.pagination {
+      margin: 0;
+    }
+  }
+}

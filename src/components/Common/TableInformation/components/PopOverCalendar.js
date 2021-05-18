@@ -46,6 +46,11 @@ export default function PopOverCalendar({ disabled, defaultSelectedDate }) {
   const handleClose = () => {
     setAnchorEl(null)
   }
+
+  const applySelectedDate = () => {
+    setAnchorEl(null)
+  }
+
   const open = Boolean(anchorEl)
   const id = open ? "simple-popover" : undefined
 
@@ -121,6 +126,7 @@ export default function PopOverCalendar({ disabled, defaultSelectedDate }) {
         className="mt-1 full-width"
       >
         <BasicConcepts
+          applySelectedDate={applySelectedDate}
           selectedDay={selectedDay}
           setSelectedDay={setSelectedDay}
           check={check}

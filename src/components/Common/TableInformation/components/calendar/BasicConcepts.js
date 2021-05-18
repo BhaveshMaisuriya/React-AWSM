@@ -21,6 +21,7 @@ const BasicConcepts = ({
   daynames,
   setDaynames,
   onSelectDayName,
+  applySelectedDate
 }) => {
   // get calendar month
   const [startDayOfMonth, setStartDayOfMonth] = useState(
@@ -74,6 +75,16 @@ const BasicConcepts = ({
       }
     return alldays
   }
+
+  function clearSelectedDate (){
+    $(".DayPicker-Weekday").removeClass("active_day");
+    setDateRange({ from: undefined, to: undefined })
+    setSelectedDay(undefined);
+  }
+
+  // function applySelectedDate(){
+  //   applySelectedDate
+  // }
   
 
   const handleDayName = event => {
@@ -81,7 +92,6 @@ const BasicConcepts = ({
     setSelectedDay(undefined)
     setDaynames([])
     setDateRange({ from: undefined, to: undefined })
-    
   }
 
   return (
@@ -157,12 +167,14 @@ const BasicConcepts = ({
           <button
             type="button"
             className={`buttonCancel`}
+            onClick={clearSelectedDate}
           >
             Clear
           </button>
           <button
             type="button"
             className={`buttonUpdate`}
+            onClick={applySelectedDate}
           >
             Apply
           </button>

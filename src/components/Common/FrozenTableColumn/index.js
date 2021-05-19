@@ -61,7 +61,7 @@ class FixedCoulmnTable extends Component {
     return arr.map((e, index) => (
       <td key={index}>
         <div
-          className={config[e].columnSize === 1 ? "cell-text" : "cell-text-big"}
+          className={config[e].columnSize === 1 ? "cell-text d-flex align-items-center" : "cell-text-big"}
         >
           <span onClick={this.createSortHandler(config[e].apiKey)}>
             {config[e].label}

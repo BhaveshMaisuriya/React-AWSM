@@ -7,7 +7,6 @@ import "react-day-picker/lib/style.css"
 import RangePicker from "./RangePicker"
 import MultiPicker from "./MultiPicker"
 import SinglePicker from "./SinglePicker"
-import $ from 'jquery'; 
 
 const BasicConcepts = ({
   selectedDay,
@@ -35,57 +34,20 @@ const BasicConcepts = ({
     end: endDayOfMonth,
   })
 
-  useEffect(()=>{
-    function fetchData(){
-      getDayOfWeek(new Date(selectedDay));
-    };
-    fetchData();
-  }, [])
-
   const handleDayClick = (day, { selected }) => {
-    $(".DayPicker-Weekday").removeClass("active_day");
     setDaynames([])
     if (selected) {
       setSelectedDay(undefined)
       return
     }
-    getDayOfWeek(new Date(day));
     setSelectedDay(day)
   }
 
-  function getDayOfWeek(date) {
-    let alldays = [];
-    var days = [
-      "Sunday",
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday",
-    ];
-    var alltitle = document.getElementsByClassName("DayPicker-Weekday");
-      var day_no = date.getDay();
-      alldays.push(days[day_no]);
-      
-      for (var i = 0; i < alltitle.length; i++) {
-          if(alltitle[i].getAttribute("title") === days[day_no]){
-            $(alltitle[i]).addClass("active_day");
-          } 
-      }
-    return alldays
-  }
-
   function clearSelectedDate (){
-    $(".DayPicker-Weekday").removeClass("active_day");
+    setDaynames([])
     setDateRange({ from: undefined, to: undefined })
     setSelectedDay(undefined);
   }
-
-  // function applySelectedDate(){
-  //   applySelectedDate
-  // }
-  
 
   const handleDayName = event => {
     setCheck({ ...check, [event.target.name]: event.target.checked })

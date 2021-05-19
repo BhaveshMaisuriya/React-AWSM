@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react"
 import "react-day-picker/lib/style.css"
 import getArrayDays from "./monthArr"
+import jQuery from 'jquery'; 
 
 export default function Weekday({
   weekday,
@@ -16,6 +17,7 @@ export default function Weekday({
 
   useEffect(() => {
     const arrSelected = daynames.map(dayname => {
+      getDayOfWeek(dayname, 'add');
       const arr = getArrayDays(calendarMonth, dayname)
       return arr
     })
@@ -23,15 +25,26 @@ export default function Weekday({
     setSelectedMulti(arrSelected.flat())
   }, [daynames.length])
 
-  const onSelectDayName = day => {
-    const newDaynames = [...daynames]
+  const onSelectDayName = async(day) => {
+    const newDaynames = [...daynames];
     const index = newDaynames.indexOf(day)
     if (index >= 0) {
       newDaynames.splice(index, 1)
+      await getDayOfWeek(day, 'remove');
     } else {
-      newDaynames.push(day)
+      newDaynames.push(day);
+      await getDayOfWeek(day, 'add');
     }
     setDaynames(newDaynames)
+  }
+
+  const getDayOfWeek = async(selectedday, val) => {
+    var alltitle = document.getElementsByClassName("DayPicker-Weekday");
+    for (var i = 0; i < alltitle.length; i++) {
+      if(alltitle[i].getAttribute("title").toLowerCase() === selectedday.toLowerCase()){
+        val === 'add' ? await jQuery(alltitle[i]).addClass("active_day") : await jQuery(alltitle[i]).removeClass("active_day");
+      }
+    }
   }
 
   return (

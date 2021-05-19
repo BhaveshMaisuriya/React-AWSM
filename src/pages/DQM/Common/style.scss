@@ -161,19 +161,22 @@
   align-items: center;
   margin: 20px 0;
   .top-page-number {
-    flex: 0 0 73%;
+    flex: 0 0 75%;
     .enteriesText {
       margin: 0;
     }
   }
   .top-pagination {
-    flex: 0 0 22%;
+    flex: 0 0 20%;
     ul.pagination {
       margin: 0;
     }
   }
   .top-customize {
     flex: 0 0 5%;
+    button {
+      padding: 6px 10px;
+    }
   }
 }
 .Download-excel {

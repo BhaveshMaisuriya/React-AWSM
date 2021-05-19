@@ -221,6 +221,16 @@ popover-auto[x-placement^="bottom"] > .arrow::after {
   border-bottom-color: #ced4da !important;
 }
 .DayPicker-Weekday.active_day {
-  background-color: #00a19c !important;
-  color: #fff !important;
+  background-color: #e0f4f3 !important;
+}
+.modal-header .modal-title .close {
+  font-size: 19.5px !important;
+  font-family: 'Poppins' !important;
+}
+.dropDown-arrow {
+  position: absolute;
+  top: 5px;
+  right: 0;
+  color: #777;
+  cursor: pointer;
 }

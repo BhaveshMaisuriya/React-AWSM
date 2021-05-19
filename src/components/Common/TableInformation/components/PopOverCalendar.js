@@ -55,7 +55,6 @@ export default function PopOverCalendar({ disabled, defaultSelectedDate }) {
   const id = open ? "simple-popover" : undefined
 
   let multiCheck
-
   if (selectedMulti.length > 0) {
     const selectedDaynames = [
       ...new Set(
@@ -92,6 +91,7 @@ export default function PopOverCalendar({ disabled, defaultSelectedDate }) {
         ? selectedDay
         : format(selectedDay, "do MMM yyyy")
       : ""
+
   return (
     <div>
       <div
@@ -105,7 +105,7 @@ export default function PopOverCalendar({ disabled, defaultSelectedDate }) {
             fullWidth
             disableUnderline
             disabled
-            value={defaultSelectedDate === 'today' ? format(new Date(), "do MMM yyyy") : multiCheck || dateRangeCheck}
+            value={defaultSelectedDate === 'everyday' ? 'Repeat everyday' : multiCheck || dateRangeCheck}
           ></Input>
           <DateRangeIcon color="disabled" />
         </div>

@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { Dropdown, DropdownMenu, DropdownToggle } from "reactstrap"
 import "./dropdown.scss"
-
+import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown"
 /**
  * Dropdown menu
  * @param items
@@ -37,6 +37,9 @@ const AWSMDropdown = ({ items, value, onChange, disabled = false}) => {
       >
         {value}
       </DropdownToggle>
+      <div className='dropDown-arrow'>
+        <ArrowDropDownIcon />
+      </div>
       <DropdownMenu className="awsm-select-menu w-100">
         {items && items.map((item, index) =>
           <div key={index} onClick={() => onValueChange(item)} className="awsm-select-item">{item}</div>

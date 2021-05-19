@@ -266,9 +266,9 @@ const CustomizeTableModal = ({
         <DialogContent className="customize-table-container">
           <div className="d-flex justify-content-between align-items-center mb-4 customize-table-title">
             <h3>Customise Column</h3>
-            <div onClick={closeDialog} className="close-button">
-              <XIcon />
-            </div>
+            <button type="button" className="close" aria-label="Close" onClick={closeDialog}>
+              <span aria-hidden="true">×</span>
+            </button>
           </div>
           <div className="customize-table-content">
             <div className="col-5">

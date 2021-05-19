@@ -13,7 +13,6 @@ import {
   CardTitle,
   Modal,
   ModalHeader,
-  
 } from "reactstrap"
 import { Link } from "react-router-dom"
 import eyeIcon from "../../../assets/images/auditlog-eye.svg"
@@ -27,6 +26,8 @@ import {
   filterObject,
 } from "./helper"
 import "./style.scss"
+import SettingsIcon from '@material-ui/icons/Settings';
+import GetAppIcon from '@material-ui/icons/GetApp';
 
 const styles = {
   headerText: {
@@ -60,7 +61,7 @@ class Pages extends Component {
       currentAuditPage: 0,
       modal: false,
       customizeModalOpen: false,
-      selectedItem: 0
+      selectedItem: 0,
     }
     this.toggle = this.toggle.bind(this)
     this.toggleTI = this.toggleTI.bind(this)
@@ -185,9 +186,9 @@ class Pages extends Component {
   /**
    * Handling the modal state when modal is click
    */
-  modalHandlerTI = (e) => {
+  modalHandlerTI = e => {
     const newState = {
-      modalTI: true
+      modalTI: true,
     }
     if (e && e.target && e.target.getAttribute("data-index") != null) {
       newState.selectedItem = e.target.getAttribute("data-index")
@@ -219,25 +220,21 @@ class Pages extends Component {
   runTableInformation = () => {
     const { modalTI } = this.state
     const ModalComponent = this.props.modalComponent
-    const modalContent = modalTI && ModalComponent ? (
-    <ModalComponent 
-      data={this.props.tableData.list[this.state.selectedItem]}
-      visible={modalTI}
-      onCancel={this.toggleTI} />
+    const modalContent =
+      modalTI && ModalComponent ? (
+        <ModalComponent
+          data={this.props.tableData.list[this.state.selectedItem]}
+          visible={modalTI}
+          onCancel={this.toggleTI}
+        />
       ) : null
     return modalContent
   }
 
   render() {
     const { currentPage, rowsPerPage, searchFields } = this.state
-    const {
-      tableData,
-      classes,
-      filter,
-      tableMapping,
-      cardTitle,
-      headerTitle,
-    } = this.props
+    const { tableData, classes, filter, tableMapping, cardTitle, headerTitle } =
+      this.props
     if (!tableData || tableData.length === 0) return ""
     return (
       <React.Fragment>
@@ -253,12 +250,18 @@ class Pages extends Component {
           <div className="container-fluid">
             <div className={classes.modalHeader}>
               <Header title={headerTitle} />
-              <div className={classes.headerText}>
+              <div className={`${classes.headerText} d-flex justify-content-between align-items-center`}>
+                <div className="Download-excel">
+                  <button className="btn btn-outline-primary">
+                    <GetAppIcon />Download Excel
+                  </button>
+                </div>
                 <Link
                   to="#"
                   onClick={() => {
                     this.modalHandler()
                   }}
+                  className='ml-2'
                 >
                   <img src={eyeIcon} alt="info" /> View Audit Log
                 </Link>
@@ -278,12 +281,6 @@ class Pages extends Component {
                           searchOnClickHandler={this.getCustomerData}
                           searchOnChangeHandler={this.handleSearchBox}
                         />
-                        <button
-                          className="btn btn-outline-primary"
-                          onClick={this.handleOpenCustomizeTable}
-                        >
-                          Customize
-                        </button>
                       </div>
                       <div className="table-top-bar">
                         <div class="top-page-number">
@@ -304,6 +301,14 @@ class Pages extends Component {
                             currentPage={currentPage}
                             onChangePage={this.handleChangePage}
                           />
+                        </div>
+                        <div className="top-customize">
+                          <button
+                            className="btn btn-outline-primary"
+                            onClick={this.handleOpenCustomizeTable}
+                          >
+                            <SettingsIcon />
+                          </button>
                         </div>
                       </div>
                       <FixedColumnTable
@@ -352,7 +357,7 @@ Pages.propType = {
   headerTitle: PropTypes.string.isRequired,
   cardTitle: PropTypes.string.isRequired,
   tableName: PropTypes.string.isRequired,
-  modalComponent: PropTypes.element
+  modalComponent: PropTypes.element,
 }
 
 export default withStyles(styles)(Pages)

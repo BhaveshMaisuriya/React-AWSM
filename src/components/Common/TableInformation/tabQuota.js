@@ -3,7 +3,7 @@ import { AvForm, AvField } from "availity-reactstrap-validation"
 import { Col, Row } from "reactstrap"
 import "./tabQuota.scss"
 
-const tabQuota = ({ scheduler, storageData }) => {
+const tabQuota = ({ scheduler, storageData, productCode, productId }) => {
   return (
     <Fragment>
       {storageData.length > 0 &&
@@ -15,7 +15,7 @@ const tabQuota = ({ scheduler, storageData }) => {
                   <AvField
                     name="product_code"
                     label="PRODUCT CODE (QUOTA)"
-                    value="Active"
+                    value={item.product_code}
                     disabled
                     className="disabledField"
                   />

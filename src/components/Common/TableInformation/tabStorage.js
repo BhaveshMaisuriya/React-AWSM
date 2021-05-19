@@ -189,6 +189,13 @@ const TabStorage = props => {
     setDeleteItem(null)
   }
 
+  const getProductCode = (val, index) => {
+    const newStorageData = [...storageData];
+    newStorageData[index].product_code = val;
+    setStorageData(newStorageData);
+    props.getstorageData(newStorageData);
+  }
+
   return (
     <div className="dqm-storage-container" id="dqm-storage-container">
       <div className="w-50">
@@ -236,7 +243,7 @@ const TabStorage = props => {
             <div className="row">
               <div className="col col-12 col-sm-6 col-lg-3">
                 <div className="input-header mb-2">PRODUCT CODE</div>
-                <AWSMInput value={item.product_code} />
+                <AWSMInput value={item.product_code} onChange={(e) => getProductCode(e, index)} disabled={scheduler} />
               </div>
               <div className="col col-12 col-sm-6 col-lg-3">
                 <div className="input-header mb-2">TANK CAPACITY</div>
@@ -297,11 +304,11 @@ const TabStorage = props => {
               </div>
               <div className="col col-12 col-sm-6 col-lg-3">
                 <div className="input-header mb-2">TERMINAL</div>
-                <AWSMInput value={item.terminal} />
+                <AWSMInput defaultValue={item.terminal} />
               </div>
               <div className="col col-12 col-sm-6 col-lg-3">
                 <div className="input-header mb-2">DISTANCE</div>
-                <AWSMInput value={item.distance} />
+                <AWSMInput defaultValue={item.distance} />
               </div>
               <div className="col col-12 col-sm-6 col-lg-3">
                 <div className="input-header mb-2">DURATION</div>

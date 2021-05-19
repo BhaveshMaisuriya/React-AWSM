@@ -15,13 +15,34 @@ for (let i = 0; i < 24; i++) {
 }
 timeData.push(`23:59`);
 
-const TabStatus = ({ scheduler }) => {
+const TabStatus = ({ scheduler, props }) => {
   const [timeTo, setTimeTo] = useState("")
   const [timeFrom, setTimeFrom] = useState("")
+  const [closeTimeTo, setCloseTimeTo] = useState("")
+  const [closeTimeFrom, setCloseTimeFrom] = useState("")
   const [statusInAWSM, setStatusInAWSM] = useState("")
   const [salesAndInventory, setSalesAndInventory] = useState("")
-  const [salesCategory, setSalesCategory] = useState("")
-  const pathName = window.location.pathname
+  const [statusValue, setStatusValue] = useState({'closeTimeFrom': closeTimeFrom, 'timeFrom': timeFrom, 'closeTimeTo': closeTimeTo, 'timeTo': timeTo, });
+  const pathName = window.location.pathname;
+
+  function UpdateStatusValue(val, type){
+    let newStatusValue = {...statusValue};
+    if(type === 'closeTimeFrom'){
+      newStatusValue.closeTimeFrom = val;
+      setCloseTimeFrom(val);
+    } else if(type === 'timeFrom'){
+      newStatusValue.timeFrom = val;
+      setTimeFrom(val);
+    } else if(type === 'closeTimeTo'){
+      newStatusValue.closeTimeTo = val;
+      setCloseTimeTo(val);
+    } else {
+      newStatusValue.timeTo = val;
+      setTimeTo(val);      
+    }
+    setStatusValue(newStatusValue);
+    props.getStatusValue(newStatusValue);
+  }
 
   return (
     <div className="dqm-status-container">
@@ -62,47 +83,45 @@ const TabStatus = ({ scheduler }) => {
           <div className="col-6"></div>
         )}
       </div>
-
-
-      {(statusInAWSM !== 'Inactive') &&
-            <div>
-              <h6 className="mt-3">CLOSE PERIOD</h6>
-              <div className="row">
-                <div className="col-3">
-                  <div className="input-header">CLOSE (FROM)</div>
-                  {/* <DatePicker disabled={scheduler} required /> */}
-                  <PopOverCalendar disabled={scheduler} />
-                </div>
-                <div className="col-3">
-                  <div className="input-header">TIME</div>
-                  <AWSMDropdown
-                    items={timeData}
-                    value={timeFrom}
-                    onChange={value => setTimeFrom(value)}
-                    disabled={scheduler}
-                    required
-                  />
-                </div>
-                <div className="col-3">
-                  <div className="input-header">CLOSE (TO)</div>
-                  {/* <DatePicker disabled={scheduler} required /> */}
-                  <PopOverCalendar disabled={scheduler} />
-                </div>
-                <div className="col-3">
-                  <div className="input-header">TIME</div>
-                  <AWSMDropdown
-                    items={timeData}
-                    value={timeTo}
-                    onChange={value => setTimeTo(value)}
-                    disabled={scheduler}
-                    required
-                  />
-                </div>
-              </div>
-            </div>
-      }
-
-
+      <div>
+        <h6 className="mt-3">CLOSE PERIOD</h6>
+        <div className="row">
+          <div className="col-3">
+            <div className="input-header">CLOSE (FROM) {(statusInAWSM === 'Temporarily Closed') && <span className="required_highlight">*</span>}</div>
+            <PopOverCalendar 
+              disabled={(statusInAWSM === 'Temporarily Closed') ? scheduler : true} 
+              onSelect={value => UpdateStatusValue(value, 'closeTimeFrom')}
+            />
+          </div>
+          <div className="col-3">
+            <div className="input-header">TIME {(statusInAWSM === 'Temporarily Closed') && <span className="required_highlight">*</span>}</div>
+            <AWSMDropdown
+              items={timeData}
+              value={timeFrom}
+              onChange={value => UpdateStatusValue(value, 'timeFrom')} 
+              disabled={(statusInAWSM === 'Temporarily Closed') ? scheduler : true}
+              required
+            />
+          </div>
+          <div className="col-3">
+            <div className="input-header">CLOSE (TO) {(statusInAWSM === 'Temporarily Closed') && <span className="required_highlight">*</span>}</div>
+            <PopOverCalendar 
+              disabled={(statusInAWSM === 'Temporarily Closed') ? scheduler : true} 
+              onChange={value => UpdateStatusValue(value, 'closeTimeTo')}
+            />
+          </div>
+          <div className="col-3">
+            <div className="input-header">TIME {(statusInAWSM === 'Temporarily Closed') && <span className="required_highlight">*</span>}</div>
+            <AWSMDropdown
+              items={timeData}
+              value={timeTo}
+              onChange={value => UpdateStatusValue(value, 'timeTo')} 
+              disabled={(statusInAWSM === 'Temporarily Closed') ? scheduler : true}
+              required
+            />
+          </div>
+        </div>
+      </div>
       {pathName === "/commercial-customer" && (
         <div className="row">
           {/* <div className="col-12 col-sm-6">

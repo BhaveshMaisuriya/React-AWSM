@@ -76,6 +76,7 @@ class TableInformation extends Component {
   constructor(props) {
     super(props)
     this.getStorageData = this.getStorageData.bind(this)
+    this.getStatusValue = this.getStatusValue.bind(this)
     this.state = {
       activeTab: "1",
       modal: true,
@@ -89,6 +90,7 @@ class TableInformation extends Component {
         scheduler: false,
       },
       storageData: 0,
+      statusData: {},
     }
   }
 
@@ -110,6 +112,9 @@ class TableInformation extends Component {
         activeTab: tab,
       })
     }
+  }
+  getStatusValue = (val) => {
+    this.setState({ statusData: val });
   }
   /**
    *
@@ -191,7 +196,7 @@ class TableInformation extends Component {
                 ></AvField>
               </Col>
             </Row>
-            <Nav pills justified>
+            <Nav pills justified className="align-items-center">
               <NavItem>
                 <NavLink
                   className={classnames({
@@ -294,7 +299,7 @@ class TableInformation extends Component {
                       overflowX: "hidden",
                     }}
                   >
-                    <TabStatus scheduler={scheduler} />
+                    <TabStatus scheduler={scheduler} getStatusValue={this.getStatusValue} />
                   </SimpleBar>
                 </div>
               </TabPane>

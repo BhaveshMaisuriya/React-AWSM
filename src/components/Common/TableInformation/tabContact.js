@@ -90,8 +90,8 @@ const tabContact = ({ scheduler }) => {
               name="contact_name"
               placeholder="Name (etc: John Doe)"
               value={contactsDummy ? contactsDummy.contact_name : ""}
-              disabled={scheduler ? true : false}
-              className={scheduler ? "disabledField" : ""}
+              disabled={true}
+              className="disabledField"
             />
           </AvForm>
         </Col>
@@ -102,8 +102,8 @@ const tabContact = ({ scheduler }) => {
               type="number"
               placeholder="Contact No. (etc: 011-234556799)"
               value={contactsDummy ? contactsDummy.contact_phone : ""}
-              disabled={scheduler ? true : false}
-              className={scheduler ? "disabledField" : ""}
+              disabled={true}
+              className="disabledField"
               validate={{
                 max: {
                   value: 10000000,
@@ -121,8 +121,8 @@ const tabContact = ({ scheduler }) => {
               name="contact_email"
               placeholder="Email (etc: johndoe@petronas.com)"
               value={contactsDummy ? contactsDummy.contact_email : ""}
-              disabled={scheduler ? true : false}
-              className={scheduler ? "disabledField" : ""}
+              disabled={true}
+              className="disabledField"
             />
           </AvForm>
         </Col>

@@ -7,7 +7,6 @@
 
 .table-header {
   height: 24px;
-  width: 235px;
   color: #333333;
   font-family: "Museo Sans";
   font-weight: 700;
@@ -151,9 +150,9 @@
   font-style: italic;
   letter-spacing: 0;
   line-height: 16px;
-  float: right;
   text-align: right;
   margin-top: 10px;
+  margin-left: 10px;
 }
 
 // new css
@@ -162,15 +161,49 @@
   align-items: center;
   margin: 20px 0;
   .top-page-number {
-    flex: 0 0 80%;
+    flex: 0 0 73%;
     .enteriesText {
       margin: 0;
     }
   }
   .top-pagination {
-    flex: 0 0 20%;
+    flex: 0 0 22%;
     ul.pagination {
       margin: 0;
     }
+  }
+  .top-customize {
+    flex: 0 0 5%;
+  }
+}
+.Download-excel {
+  border-right: 1px solid #D9D9D9;
+  button {
+    background: #fff;
+    border: unset;
+    margin-right: 20px;
+    box-shadow: 0px 0px 3px 1px #cccccc36;
+  }
+}
+
+.Confirmation-box {
+  height: 600px;
+  background: #f8f9fa;
+  div {
+    position: relative;
+    text-align: center;
+    top: 40%;
+  }
+  h3{
+    color: #000;
+    margin-bottom: 15px;
+  }
+  p{
+    margin-bottom: 25px;
+  }
+  button {
+    width: 120px;
+    height: 40px;
+    margin-right: 10px;
   }
 }

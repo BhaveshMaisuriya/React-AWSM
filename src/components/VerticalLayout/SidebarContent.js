@@ -84,7 +84,6 @@ class SidebarContent extends Component {
         <div id="sidebar-menu">
           <ul className="metismenu list-unstyled" id="side-menu">
             <li className="menu-title">{this.props.t("Menu")}</li>
-            
             <li>
               <Link to="/#" className="waves-effect">
                 <i className="bx bx-data" />
@@ -99,7 +98,7 @@ class SidebarContent extends Component {
                   <Link to="/sales-inventory">Sales & Inventory</Link>
                   <Link to="/retail-customer">Retail Customer</Link>
                   <Link to="/commercial-customer">Commercial Customer</Link>
-                  <Link to="/commercial-customer">Depot & Terminal</Link>
+                  <Link to="/terminal">Terminal</Link>
                   <Link to="/road-tanker">Road Tanker</Link>
                   <Link to="/employee-data">Employee Data</Link>
                   <Link to="/product">Product</Link>
@@ -145,7 +144,6 @@ class SidebarContent extends Component {
               </Link>
             </li>
 
-
             <li>
               <Link to="#" className=" waves-effect">
                 <i className="bx bxs-report" />
@@ -153,14 +151,12 @@ class SidebarContent extends Component {
               </Link>
             </li>
 
-
             <li>
               <Link to="#" className=" waves-effect">
                 <i className="bx bxs-user-detail" />
                 <span>EMS</span>
               </Link>
             </li>
-
 
             {/* <li className="menu-title">{this.props.t("Apps")}</li> */}
 
@@ -182,7 +178,7 @@ class SidebarContent extends Component {
                 <span>Bryntum</span>
               </Link>
             </li> */}
-{/*
+            {/*
             <li>
               <Link to="/#" className="has-arrow waves-effect">
                 <i className="bx bx-briefcase-alt" />

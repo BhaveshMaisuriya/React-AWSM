@@ -11,7 +11,7 @@ import "./input.scss"
  * @returns {JSX.Element}
  * @constructor
  */
-const AWSMInput = ({disabled, onChange, placeholder, value, type="text"}) => {
+const AWSMInput = ({disabled, onChange, placeholder, value, type="text", defaultValue}) => {
 
   /**
    * Call to onChange event
@@ -25,6 +25,7 @@ const AWSMInput = ({disabled, onChange, placeholder, value, type="text"}) => {
   return (
     <input type={type}
            value={value}
+           defaultValue={defaultValue}
            placeholder={placeholder}
            disabled={disabled}
            onChange={onValueChange}

@@ -1,8 +1,4 @@
 import axios from "axios"
-import accessToken from "./jwt-token-access/accessToken"
-
-//pass new generated access token here
-const token = accessToken
 
 //apply base url for axios
 // TODO dummy api endpoint
@@ -10,14 +6,19 @@ const API_URL = "https://6073f3f2066e7e0017e78a3d.mockapi.io/api/v1/"
 
 const axiosApi = axios.create({
   baseURL: API_URL,
+  headers: {
+    'content-type': 'application/json',
+    Authorization: 'Bearer ' + sessionStorage.getItem('apiAccessToken')
+  },
 })
 
-axiosApi.defaults.headers.common["Authorization"] = token
-
+// ADTODO
 axiosApi.interceptors.response.use(
   response => response,
   error => Promise.reject(error)
 )
+
+export { axiosApi }
 
 export async function get(url, config = {}) {
   return await axiosApi.get(url, { ...config }).then(response => response.data)

@@ -4,6 +4,7 @@ import SearchBar from "../../../components/Common/SearchBar"
 import TablePagination from "../../../components/Common/DataTable/tablePagination"
 import PropTypes from "prop-types"
 import { withStyles } from "@material-ui/core/styles"
+import IconButton from '@material-ui/core/IconButton';
 import { Divider } from "@material-ui/core"
 import {
   Row,
@@ -16,10 +17,12 @@ import {
 } from "reactstrap"
 import { Link } from "react-router-dom"
 import eyeIcon from "../../../assets/images/auditlog-eye.svg"
+import customiseTableIcon from "../../../assets/images/AWSM-Customise-Table.svg"
 import AuditLog from "../../../components/Common/AuditLog"
 import FixedColumnTable from "../../../components/Common/FrozenTableColumn"
 // import { tableColumns, tableMapping } from "./tableMapping"
 import CustomizeTableModal from "../../../common/CustomizeTable"
+import InformationModal from "../RoadTanker/InformationModal"
 import {
   transformArrayToString,
   transformObjectToStringSentence,
@@ -220,13 +223,12 @@ class Pages extends Component {
   runTableInformation = () => {
     const { modalTI } = this.state
     const ModalComponent = this.props.modalComponent
-    const modalContent =
-      modalTI && ModalComponent ? (
-        <ModalComponent
-          data={this.props.tableData.list[this.state.selectedItem]}
-          visible={modalTI}
-          onCancel={this.toggleTI}
-        />
+    const {headerTitle }= this.props
+    const modalContent = modalTI && ModalComponent ?  headerTitle === "Road Tanker"? <InformationModal visible={true} mode={0}  onCancle = {this.toggleTI}/> : (
+    <ModalComponent
+      data={this.props.tableData.list[this.state.selectedItem]}
+      visible={modalTI}
+      onCancel={this.toggleTI} />
       ) : null
     return modalContent
   }
@@ -284,32 +286,18 @@ class Pages extends Component {
                       </div>
                       <div className="table-top-bar">
                         <div class="top-page-number">
-                          <div className="enteriesText">{`${
-                            currentPage * rowsPerPage + 1
-                          } to ${
-                            tableData.totalRows -
+                          <div className="enteriesText">{`${currentPage * rowsPerPage + 1
+                            } to ${tableData.totalRows -
                               (currentPage * rowsPerPage + rowsPerPage) <
-                            0
+                              0
                               ? tableData.totalRows
                               : currentPage * rowsPerPage + rowsPerPage
-                          } of ${tableData.totalRows} enteries`}</div>
+                            } of ${tableData.totalRows} enteries`}
+                          </div>
                         </div>
-                        <div class="top-pagination">
-                          <TablePagination
-                            count={tableData.totalRows}
-                            rowsPerPage={rowsPerPage}
-                            currentPage={currentPage}
-                            onChangePage={this.handleChangePage}
-                          />
-                        </div>
-                        <div className="top-customize">
-                          <button
-                            className="btn btn-outline-primary"
-                            onClick={this.handleOpenCustomizeTable}
-                          >
-                            <SettingsIcon />
-                          </button>
-                        </div>
+                        <IconButton aria-label="delete" onClick={this.handleOpenCustomizeTable}>
+                          <img src={customiseTableIcon} />
+                        </IconButton>
                       </div>
                       <FixedColumnTable
                         headers={searchFields}

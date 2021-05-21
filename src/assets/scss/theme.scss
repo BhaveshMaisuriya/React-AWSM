@@ -148,79 +148,74 @@ span.flatpickr-weekday {
     margin: -5px 0px;
   }
   .dot {
-    background: #556ee6 !important;
+    background : #556ee6 !important;
     width: 9px !important;
     height: 9px !important;
+    
   }
 }
 
 //Two verification Page
-.verification {
-  input {
-    &:focus {
-      border: none;
-      outline: none !important;
-    }
+.verification{
+ input{
+  &:focus{
+    border: none;
+    outline: none !important;
   }
+ }
 }
 
 @media (max-width: 768px) {
-  .verification {
-    input {
+  .verification{
+    input{
       width: 40px !important;
+   
     }
-  }
+   }
 }
 
 @media (max-width: 320px) {
-  .verification {
-    input {
+  .verification{
+    input{
       width: 30px !important;
       height: 30px !important;
       font-size: 15px !important;
+   
     }
-  }
+   }
 }
 
 //Two verification Page - 2
-.verification-2 {
-  input {
-    &:focus {
-      border: none;
-      outline: none !important;
-    }
+.verification-2{
+  input{
+   &:focus{
+     border: none;
+     outline: none !important;
+   }
   }
-}
-
-@media (max-width: 768px) {
-  .verification-2 {
-    input {
-      width: 40px !important;
-      font-size: 14px;
+ }
+ 
+ @media (max-width: 768px) {
+   .verification-2{
+     input{
+       width: 40px !important;
+       font-size: 14px;
+    
+     }
     }
-  }
-}
-
-@media (max-width: 320px) {
-  .verification-2 {
-    input {
-      width: 30px !important;
-      height: 35px !important;
-      font-size: 15px !important;
+ }
+ 
+ @media (max-width: 320px) {
+   .verification-2{
+     input{
+       width: 30px !important;
+       height: 35px !important;
+       font-size: 15px !important;
+    
+     }
     }
-  }
-}
+ }
 
-.b-panel {
-  height: 1000px;
-}
-
-//  new css
-popover-auto[x-placement^="bottom"] > .arrow::before,
-popover-auto[x-placement^="bottom"] > .arrow::after {
-  border-bottom-color: #ced4da !important;
-}
-.DayPicker-Weekday.active_day {
-  background-color: #00a19c !important;
-  color: #fff !important;
-}
+ .b-panel {
+   height: 1000px;
+ }

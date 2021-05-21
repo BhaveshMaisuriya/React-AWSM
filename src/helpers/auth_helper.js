@@ -1,6 +1,8 @@
+import { userRoleMapping } from "../common/data/userMapping"
 
-
-module.exports = {
-    isUserSignedIn: () => true,
-    isScheduler: () => false
+export const isScheduler = () => {
+    const userEmail = sessionStorage.getItem('userUPN')
+    const userRole = userRoleMapping[userEmail]
+    if (!userEmail || userEmail.length < 1 || !userRole || userRole.length < 1) return false
+    return userRole === "scheduler"
 }

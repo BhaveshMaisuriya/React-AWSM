@@ -1,9 +1,13 @@
 .dqm-storage-container {
   padding-right: 1rem;
+  user-select: none;
 
   .input-header {
     margin-top: 0.75rem;
     color: black;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .section-header {
@@ -32,8 +36,6 @@
   height: 200px;
 }
 
-
-// new css
 .storage_delete_main {
   position: relative;
   .dqm-storage-confirm-delete{

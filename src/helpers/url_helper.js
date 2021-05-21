@@ -61,14 +61,15 @@ export const GET_USER_PROFILE = "/user"
 export const GET_RETAIL_CUSTOMER = "/retail_customer"
 export const GET_RETAIL_AUDITLOG = "/audit_log"
 export const GET_RETAIL_FILTER = "/retail-customer/filter"
+export const GET_RETAIL_CUSTOMER_DETAIL = "/retail_customer_detail"
 
 //COMMERCIAL CUSTOMER
 export const GET_COMMERCIAL_CUSTOMER = "/commercial_customer"
 export const GET_COMMERCIAL_AUDITLOG = "/commercial_audit"
 export const GET_COMMERCIAL_FILTER = "/commercial-customer/filter"
+export const GET_COMMERCIAL_CUSTOMER_DETAIL = "/commercial_customer_detail"
 
 //TABLE INFORMATION
-export const GET_TABLE_INFORMATION = "/table_information"
 export const UPDATE_TABLE_INFORMATION = "/update/address"
 
 //PRODUCTS
@@ -77,3 +78,12 @@ export const GET_PRODUCTS_DETAIL = "/productDetail"
 export const GET_PRODUCT_AUDITLOG = "/product_audit"
 export const GET_PRODUCT_FILTER = "/product/filter"
 export const GET_PRODUCT_DETAILS = "/product/details/"
+
+//ROAD TANKER
+export const GET_ROADTANKER = "/road_tanker"
+export const GET_ROADTANKER_AUDITLOG = "/road-tanker_audit"
+export const GET_ROADTANKER_FILTER = "/road-tanker/filter"
+
+//TERMINAL
+export const GET_TERMINAL = "/terminal"
+export const GET_TERMINAL_AUDITLOG = "/terminal_audit"

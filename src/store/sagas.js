@@ -17,6 +17,9 @@ import contactsSaga from "./contacts/saga"
 import retailCustomerSaga from "./retailCustomer/saga"
 import commercialCustomerSaga from "./commercialCustomer/saga"
 import productSaga from "./product/saga"
+import msGraphSaga from "./ms-graph/saga"
+import roadTankerSaga from "./roadTanker/saga"
+import terminalSaga from "./terminal/saga"
 
 export default function* rootSaga() {
   yield all([
@@ -36,6 +39,9 @@ export default function* rootSaga() {
     fork(contactsSaga),
     fork(retailCustomerSaga),
     fork(commercialCustomerSaga),
-    fork(productSaga)
+    fork(productSaga),
+    fork(roadTankerSaga),
+    fork(terminalSaga),
+    fork(msGraphSaga),
   ])
 }

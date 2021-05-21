@@ -17,6 +17,7 @@ import {
   getTableInformationFail,
   updateTableInformationSuccess,
   updateTableInformationFail,
+  resetRetailTableInformation,
   getRetailFilterSuccess,
   getRetailFilterFail,
 } from "./actions"
@@ -47,9 +48,10 @@ function* onGetRetailAuditLog() {
   }
 }
 
-function* fetchTableInformation() {
+function* onGetTableInformation() {
   try {
-    const response = yield call(getTableInformation)
+    yield put(resetRetailTableInformation())
+    const response = yield call(getTableInformation, params.ship_to_party)
     yield put(getTableInformationSuccess(response))
   } catch (error) {
     yield put(getTableInformationFail(error))
@@ -81,7 +83,7 @@ function* onGetRetailFilter({ params = {} }) {
 function* retailCustomerSaga() {
   yield takeLatest(GET_RETAIL_CUSTOMER, onGetRetailCustomer)
   yield takeLatest(GET_RETAIL_AUDITLOG, onGetRetailAuditLog)
-  yield takeLatest(GET_TABLE_INFORMATION, fetchTableInformation)
+  yield takeLatest(GET_TABLE_INFORMATION, onGetTableInformation)
   yield takeEvery(UPDATE_TABLE_INFORMATION, onUpdateTableInformation)
   yield takeLatest(GET_RETAIL_FILTER, onGetRetailFilter)
 }

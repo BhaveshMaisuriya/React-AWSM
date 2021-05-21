@@ -11,7 +11,8 @@ import {
 import { tableColumns, tableMapping } from "./tableMapping"
 import { transformArrayToString, getCookieByKey } from "../Common/helper"
 import TableInformationWrapper from "../../../components/Common/TableInformationWrapper"
-const RetailTableName = 'retail-table'
+import RetailCustomerModal from "./RetailCustomerModal"
+const RetailTableName = "retail-table"
 
 class RetailCustomer extends Component {
   constructor(props) {
@@ -42,7 +43,7 @@ class RetailCustomer extends Component {
       pagination: 0,
       sort_dir: "desc",
       sort_field: "created",
-      q: "commercial_customer",
+      q: "retail_customer",
     }
     onGetRetailCustomer(params)
     onGetRetailAuditLog(payload)
@@ -80,7 +81,7 @@ class RetailCustomer extends Component {
           address={address}
           headerTitle="Retail Customer"
           cardTitle="Retail Customer List"
-          modalComponent={TableInformationWrapper}
+          modalComponent={RetailCustomerModal}
         />
       </Fragment>
     )

@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { makeStyles } from "@material-ui/core/styles"
 import { Popover, Input } from "@material-ui/core"
 import BasicConcepts from "./calendar/BasicConcepts"
@@ -23,18 +23,33 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-export default function PopOverCalendar({ disabled, defaultSelectedDate }) {
+export default function PopOverCalendar({
+  disabled,
+  range,
+  deliveryData,
+  setDeliveryData,
+  data,
+  onChange,
+  selected,
+  subKey,
+}) {
   const [check, setCheck] = useState({
     checkedA: false,
   })
+
   const [dateRange, setDateRange] = useState({
     from: undefined,
     to: undefined,
   })
+  useEffect(() => {
+    if (range) {
+      setCheck({ checkedA: true })
+    }
+  }, [check.checkedA])
 
   const classes = useStyles()
   const [anchorEl, setAnchorEl] = useState(null)
-  const [selectedDay, setSelectedDay] = useState(undefined)
+  const [selectedDay, setSelectedDay] = useState(selected)
   const [selectedRange, setSelectedRange] = useState([])
   const [selectedMulti, setSelectedMulti] = useState([])
   const [daynames, setDaynames] = useState([])
@@ -51,7 +66,7 @@ export default function PopOverCalendar({ disabled, defaultSelectedDate }) {
     setAnchorEl(null)
   }
 
-  const open = Boolean(anchorEl)
+  let open = Boolean(anchorEl)
   const id = open ? "simple-popover" : undefined
 
   let multiCheck
@@ -105,7 +120,7 @@ export default function PopOverCalendar({ disabled, defaultSelectedDate }) {
             fullWidth
             disableUnderline
             disabled
-            value={defaultSelectedDate === 'today' ? format(new Date(), "do MMM yyyy") : multiCheck || dateRangeCheck}
+            value={multiCheck || dateRangeCheck}
           ></Input>
           <DateRangeIcon color="disabled" />
         </div>
@@ -139,6 +154,10 @@ export default function PopOverCalendar({ disabled, defaultSelectedDate }) {
           setDaynames={setDaynames}
           dateRange={dateRange}
           setDateRange={setDateRange}
+          onChange={onChange}
+          deliveryData={deliveryData}
+          setDeliveryData={setDeliveryData}
+          subKey={subKey}
         />
       </Popover>
     </div>

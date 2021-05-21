@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import { FormControlLabel, Checkbox } from "@material-ui/core"
 import "./basic.scss"
 import { lastDayOfMonth, eachDayOfInterval, format } from "date-fns"
@@ -7,7 +7,6 @@ import "react-day-picker/lib/style.css"
 import RangePicker from "./RangePicker"
 import MultiPicker from "./MultiPicker"
 import SinglePicker from "./SinglePicker"
-import $ from 'jquery'; 
 
 const BasicConcepts = ({
   selectedDay,
@@ -21,13 +20,16 @@ const BasicConcepts = ({
   daynames,
   setDaynames,
   onSelectDayName,
+  onChange,
+  deliveryData,
+  setDeliveryData,
+  subKey,
   applySelectedDate
 }) => {
   // get calendar month
   const [startDayOfMonth, setStartDayOfMonth] = useState(
     new Date(format(new Date(), "MMM yyyy"))
   )
-
   const endDayOfMonth = lastDayOfMonth(startDayOfMonth)
 
   const calendarMonth = eachDayOfInterval({
@@ -35,57 +37,20 @@ const BasicConcepts = ({
     end: endDayOfMonth,
   })
 
-  useEffect(()=>{
-    function fetchData(){
-      getDayOfWeek(new Date(selectedDay));
-    };
-    fetchData();
-  }, [])
-
   const handleDayClick = (day, { selected }) => {
-    $(".DayPicker-Weekday").removeClass("active_day");
     setDaynames([])
     if (selected) {
       setSelectedDay(undefined)
       return
     }
-    getDayOfWeek(new Date(day));
     setSelectedDay(day)
   }
 
-  function getDayOfWeek(date) {
-    let alldays = [];
-    var days = [
-      "Sunday",
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday",
-    ];
-    var alltitle = document.getElementsByClassName("DayPicker-Weekday");
-      var day_no = date.getDay();
-      alldays.push(days[day_no]);
-      
-      for (var i = 0; i < alltitle.length; i++) {
-          if(alltitle[i].getAttribute("title") === days[day_no]){
-            $(alltitle[i]).addClass("active_day");
-          } 
-      }
-    return alldays
-  }
-
   function clearSelectedDate (){
-    $(".DayPicker-Weekday").removeClass("active_day");
+    setDaynames([])
     setDateRange({ from: undefined, to: undefined })
     setSelectedDay(undefined);
   }
-
-  // function applySelectedDate(){
-  //   applySelectedDate
-  // }
-  
 
   const handleDayName = event => {
     setCheck({ ...check, [event.target.name]: event.target.checked })
@@ -124,6 +89,10 @@ const BasicConcepts = ({
             setSelectedMulti={setSelectedMulti}
             selectedMulti={selectedMulti}
             calendarMonth={calendarMonth}
+            deliveryData={deliveryData}
+            setDeliveryData={setDeliveryData}
+            onChange={onChange}
+            subKey={subKey}
           />
         </div>
       ) : daynames.length > 0 ? (
@@ -135,6 +104,10 @@ const BasicConcepts = ({
           selectedMulti={selectedMulti}
           setSelectedMulti={setSelectedMulti}
           calendarMonth={calendarMonth}
+          deliveryData={deliveryData}
+          setDeliveryData={setDeliveryData}
+          onChange={onChange}
+          subKey={subKey}
         />
       ) : (
         <div>
@@ -147,7 +120,11 @@ const BasicConcepts = ({
             setSelectedMulti={setSelectedMulti}
             calendarMonth={calendarMonth}
             selectedDay={selectedDay}
-            handleDayClick={handleDayClick}
+            setSelectedDay={setSelectedDay}
+            deliveryData={deliveryData}
+            setDeliveryData={setDeliveryData}
+            onChange={onChange}
+            subKey={subKey}
           />
         </div>
       )}

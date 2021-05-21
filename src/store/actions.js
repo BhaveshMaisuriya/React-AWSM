@@ -35,3 +35,14 @@ export * from "./commercialCustomer/actions"
 
 // Product
 export * from "./product/actions"
+
+//Terminal
+export * from "./terminal/actions"
+
+//Road Tanker
+export * from "./roadTanker/actions"
+
+// ms-graph
+export * from "./ms-graph/actions"
+
+export * from "./roadTanker/actions"

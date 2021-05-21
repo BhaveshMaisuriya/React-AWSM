@@ -9,7 +9,7 @@ import { ReactSVG } from "react-svg"
 import moment from "moment"
 
 const DatePicker = ({ disabled, format = "Do MMM YYYY", value, onChange }) => {
-  const [date, setDate] = useState(value ? value : new Date())
+  const [date, setDate] = useState(value ? new Date(value) : new Date())
   const [anchorEl, setAnchorEl] = React.useState(null)
   const open = Boolean(anchorEl)
   const id = Date.now().toString()
@@ -31,6 +31,7 @@ const DatePicker = ({ disabled, format = "Do MMM YYYY", value, onChange }) => {
     if (onChange) {
       onChange(date)
     }
+    handleClose()
   }
 
 

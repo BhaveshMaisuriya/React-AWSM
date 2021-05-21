@@ -1,0 +1,101 @@
+.awsm-date-range-picker {
+  .DayPicker-Day--highlighted:not(.DayPicker-Day--outside) {
+    background-color: teal;
+    border-radius: 0 !important;
+  }
+
+  .DayPicker-Day {
+    font-size: 0.8rem;
+    padding: 1rem;
+    border-radius: 0 !important;
+    font-weight: 600;
+    &.DayPicker-Day--before {
+      background-color: white !important;
+      color: #DDDDDD !important;
+    }
+    &.DayPicker-Day--3 {
+      background-color: white !important;
+      color: #DDDDDD !important;
+    }
+    &.DayPicker-Day--every:not(.DayPicker-Day--outside) {
+      background-color: rgb(224, 244, 243);
+    }
+
+    &.DayPicker-Day--0:not(.DayPicker-Day--outside) {
+      background-color: rgb(0, 161, 156) !important;
+    }
+
+    &.DayPicker-Day--1:not(.DayPicker-Day--outside) {
+      background-color: rgb(0, 161, 156) !important;
+    }
+
+    &.DayPicker-Day--2:not(.DayPicker-Day--outside) {
+      background-color: rgb(224, 244, 243);
+    }
+  }
+
+  .DayPicker-caption {
+    display: table-caption;
+    padding: 0 0.5rem;
+  }
+
+  .DayPicker-icon {
+    width: 0.8rem;
+    cursor: pointer;
+
+    &.prev {
+      transform: rotate(180deg);
+    }
+  }
+
+  .DayPicker-Weekday {
+    cursor: pointer !important;
+    margin-bottom: 2px;
+    height: 30px;
+    line-height: 30px;
+    color: black;
+    font-weight: 500;
+
+    &.select {
+      background-color: rgb(0, 161, 156);
+      color: white;
+    }
+  }
+
+  .DayPicker-Weekday:hover {
+    background-color: lightblue;
+  }
+
+  .DayPicker-Week {
+    border-bottom: 4px white solid;
+  }
+
+  .DayPicker-Day:not(:last-child) {
+    border-right: 4px white solid;
+  }
+
+  .calendar-label {
+    height: 2.5rem;
+    border-radius: 0.25rem;
+    border: 1px solid #d8d8d8;
+    padding: 0.5rem;
+    text-align: left;
+    background-color: white;
+    &.disabled {
+      background-color: #EEEEEE
+    }
+
+    &:focus {
+      border: 1px solid #008F8A;
+    }
+  }
+
+  .date-picker-icon {
+    width: 1.2rem;
+    color: #CCCCCC;
+  }
+
+  .DayPicker-Week:first-child {
+    border-top: 4px solid white;
+  }
+}

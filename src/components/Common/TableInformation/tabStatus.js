@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import "./tabStatus.scss"
 import AWSMDropdown from "../Dropdown"
 import DatePicker from "../../Common/DatePicker"
-import PopOverCalendar from "./components/PopOverCalendar"
+import { format } from "date-fns"
 
 const STATUS_IN_AWSM = ["Active", "Temporarily Closed", "Inactive"]
 const SALES_AND_INVENTORY = ["Sentinal", "ABC"]
@@ -15,33 +15,21 @@ for (let i = 0; i < 24; i++) {
 }
 timeData.push(`23:59`);
 
-const TabStatus = ({ scheduler, props }) => {
-  const [timeTo, setTimeTo] = useState("")
-  const [timeFrom, setTimeFrom] = useState("")
-  const [closeTimeTo, setCloseTimeTo] = useState("")
-  const [closeTimeFrom, setCloseTimeFrom] = useState("")
-  const [statusInAWSM, setStatusInAWSM] = useState("")
-  const [salesAndInventory, setSalesAndInventory] = useState("")
-  const [statusValue, setStatusValue] = useState({'closeTimeFrom': closeTimeFrom, 'timeFrom': timeFrom, 'closeTimeTo': closeTimeTo, 'timeTo': timeTo, });
-  const pathName = window.location.pathname;
+const TabStatus = ({ scheduler, data, onChange }) => {
+  const pathName = window.location.pathname
+  const [statusData, setStatusData] = useState(data.status);
 
-  function UpdateStatusValue(val, type){
-    let newStatusValue = {...statusValue};
-    if(type === 'closeTimeFrom'){
-      newStatusValue.closeTimeFrom = val;
-      setCloseTimeFrom(val);
-    } else if(type === 'timeFrom'){
-      newStatusValue.timeFrom = val;
-      setTimeFrom(val);
-    } else if(type === 'closeTimeTo'){
-      newStatusValue.closeTimeTo = val;
-      setCloseTimeTo(val);
+  const onFieldChange = (key, subKey, value) => {
+    const newStatusData = {...statusData}
+    if (subKey) {
+      newStatusData[key][subKey] = value
     } else {
-      newStatusValue.timeTo = val;
-      setTimeTo(val);      
+      newStatusData[key] = value;
     }
-    setStatusValue(newStatusValue);
-    props.getStatusValue(newStatusValue);
+    setStatusData(newStatusData);
+    if (onChange) {
+      onChange("status", newStatusData)
+    }
   }
 
   return (
@@ -50,73 +38,92 @@ const TabStatus = ({ scheduler, props }) => {
         <div className="col-12 col-sm-6">
           <div className="input-header">STATUS IN AWSM</div>
           <AWSMDropdown
-            value={statusInAWSM}
             items={STATUS_IN_AWSM}
-            selected='Active'
-            onChange={value => setStatusInAWSM(value)}
+            onChange={value => onFieldChange("status_awsm", null, value)}
+            value="Active"
             disabled={scheduler}
           />
         </div>
         {pathName === "/commercial-customer" && (
-        <div className="col-12 col-sm-6">
-          <div className="input-header">SALES AND INVENTORY DATA SOURCE</div>
-          <AWSMDropdown
-            value={salesAndInventory}
-            onChange={value => setSalesAndInventory(value)}
-            items={SALES_AND_INVENTORY}
-            disabled={scheduler}
-          />
-          <button className='add'>+Add</button>
-        </div>
+          <div className="col-12 col-sm-6">
+            <div className="input-header">SALES AND INVENTORY DATA SOURCE</div>
+            <AWSMDropdown
+              value={statusData.sales_inventory_data_source}
+              onChange={value => onFieldChange("sales_inventory_data_source", null, value)}
+              items={SALES_AND_INVENTORY}
+              disabled={scheduler}
+            />
+            <button className="add">+Add</button>
+          </div>
         )}
         {pathName === "/retail-customer" ? (
           <div className="col-12 col-sm-6">
             <div className="input-header">SALES AND INVENTORY DATA SOURCE</div>
             <AWSMDropdown
-              value={salesAndInventory}
-              onChange={value => setSalesAndInventory(value)}
+              value={statusData.sales_inventory_data_source}
+              onChange={value =>
+                onFieldChange("sales_inventory_data_source", null, value)
+              }
               items={SALES_AND_INVENTORY}
               disabled={scheduler}
             />
           </div>
         ) : (
-          <div className="col-6"></div>
+          <div className="col-6" />
         )}
       </div>
       <div>
         <h6 className="mt-3">CLOSE PERIOD</h6>
         <div className="row">
           <div className="col-3">
-            <div className="input-header">CLOSE (FROM) {(statusInAWSM === 'Temporarily Closed') && <span className="required_highlight">*</span>}</div>
-            <PopOverCalendar 
-              disabled={(statusInAWSM === 'Temporarily Closed') ? scheduler : true} 
-              onSelect={value => UpdateStatusValue(value, 'closeTimeFrom')}
+            <div className="input-header">CLOSE (FROM)</div>
+            <DatePicker
+              disabled={scheduler || statusData.status_awsm !== 'Inactive'}
+              value={statusData.close_period.date_from}
+              onChange={value =>
+                onFieldChange(
+                  "close_period",
+                  "date_from",
+                  format(value, "yyyy-MM-dd")
+                )
+              }
             />
           </div>
           <div className="col-3">
-            <div className="input-header">TIME {(statusInAWSM === 'Temporarily Closed') && <span className="required_highlight">*</span>}</div>
+            <div className="input-header">TIME</div>
             <AWSMDropdown
               items={timeData}
-              value={timeFrom}
-              onChange={value => UpdateStatusValue(value, 'timeFrom')} 
-              disabled={(statusInAWSM === 'Temporarily Closed') ? scheduler : true}
+              value={statusData.close_period.time_from}
+              onChange={value =>
+                onFieldChange("close_period", "time_from", value)
+              }
+              disabled={scheduler || statusData.status_awsm !== 'Inactive'}
               required
             />
           </div>
           <div className="col-3">
-            <div className="input-header">CLOSE (TO) {(statusInAWSM === 'Temporarily Closed') && <span className="required_highlight">*</span>}</div>
-            <PopOverCalendar 
-              disabled={(statusInAWSM === 'Temporarily Closed') ? scheduler : true} 
-              onChange={value => UpdateStatusValue(value, 'closeTimeTo')}
+            <div className="input-header">CLOSE (TO)</div>
+            <DatePicker
+              disabled={scheduler || statusData.status_awsm !== 'Inactive'}
+              value={statusData.close_period.date_to}
+              onChange={value =>
+                onFieldChange(
+                  "close_period",
+                  "date_to",
+                  format(value, "yyyy-MM-dd")
+                )
+              }
             />
           </div>
           <div className="col-3">
-            <div className="input-header">TIME {(statusInAWSM === 'Temporarily Closed') && <span className="required_highlight">*</span>}</div>
+            <div className="input-header">TIME</div>
             <AWSMDropdown
               items={timeData}
-              value={timeTo}
-              onChange={value => UpdateStatusValue(value, 'timeTo')} 
-              disabled={(statusInAWSM === 'Temporarily Closed') ? scheduler : true}
+              value={statusData.close_period.time_to}
+              onChange={value =>
+                onFieldChange("close_period", "time_to", value)
+              }
+              disabled={scheduler || statusData.status_awsm !== 'Inactive'}
               required
             />
           </div>
@@ -124,15 +131,24 @@ const TabStatus = ({ scheduler, props }) => {
       </div>
       {pathName === "/commercial-customer" && (
         <div className="row">
-          {/* <div className="col-12 col-sm-6">
-            <div className="input-header">SALES CATEGORY</div>
-            <AWSMDropdown
-              value={salesCategory}
-              items={SALES_CATEGORY}
-              onChange={value => setSalesCategory(value)}
-              disabled={scheduler}
-            />
-          </div> */}
+          {/*<div className="col-12 col-sm-6">*/}
+          {/*  <div className="input-header">SALES CATEGORY</div>*/}
+          {/*  <AWSMDropdown*/}
+          {/*    value={statusData.sale_category || ""}*/}
+          {/*    items={SALES_CATEGORY}*/}
+          {/*    onChange={value => onFieldChange("sale_category", null, value)}*/}
+          {/*    disabled={scheduler}*/}
+          {/*  />*/}
+          {/*</div>*/}
+          {/*<div className="col-12 col-sm-6">*/}
+          {/*  <div className="input-header">SALES AND INVENTORY DATA SOURCE</div>*/}
+          {/*  <AWSMDropdown*/}
+          {/*    value={statusData.sales_inventory_data_source || ""}*/}
+          {/*    onChange={value => onFieldChange("sales_inventory_data_source", null, value)}*/}
+          {/*    items={SALES_AND_INVENTORY}*/}
+          {/*    disabled={scheduler}*/}
+          {/*  />*/}
+          {/*</div>*/}
         </div>
       )}
     </div>

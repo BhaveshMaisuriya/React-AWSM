@@ -3,10 +3,13 @@ import Popover from "@material-ui/core/Popover"
 import { FormControlLabel, Checkbox } from "@material-ui/core"
 import "./simplePopOver.scss"
 
-export default function SimplePopover({ handleChange, data, children }) {
+export default function SimplePopover({ handleChange, data, children, disabled }) {
   const [anchorEl, setAnchorEl] = React.useState(null)
 
   const handleClick = event => {
+    if (disabled) {
+      return
+    }
     setAnchorEl(event.currentTarget)
   }
 
@@ -34,12 +37,11 @@ export default function SimplePopover({ handleChange, data, children }) {
           vertical: "top",
           horizontal: "center",
         }}
-        anchorReference={anchorEl}
       >
-        {data.map(item => {
+        {data.map((item, index) => {
           return (
             <FormControlLabel
-              key={item}
+              key={`${item}${index}`}
               control={
                 <Checkbox
                   checked={item.checked}

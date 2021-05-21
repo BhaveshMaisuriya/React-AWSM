@@ -4,6 +4,8 @@ import {
   GET_COMMERCIAL_CUSTOMER,
   GET_COMMERCIAL_AUDITLOG,
   GET_COMMERCIAL_FILTER,
+  GET_COMMERCIAL_TABLE_INFORMATION,
+  UPDATE_COMMERCIAL_TABLE_INFORMATION,
 } from "./actionTypes"
 
 import {
@@ -12,13 +14,20 @@ import {
   getCommercialAuditLogSuccess,
   getCommercialAuditLogFail,
   getCommercialFilterSuccess,
-  getCommercialFilterFail
+  getCommercialFilterFail,
+  getCommercialTableInformationFail,
+  getCommercialTableInformationSuccess,
+  resetCommercialTableInformation,
+  updateCommercialTableInformationSuccess,
+  updateCommercialTableInformationFail,
 } from "./actions"
 
 import {
   getCommercialCustomer,
   getCommercialAuditLog,
-  getCommercialFilter
+  getCommercialFilter,
+  getCommercialDetail,
+  putCommercialDetail,
 } from "../../helpers/fakebackend_helper"
 
 function* onGetCommercialCustomer({ params = {} }) {
@@ -52,10 +61,31 @@ function* onGetCommercialFIlter({ params = {} }) {
   }
 }
 
+function * onGetCommercialTableInformation({ params }) {
+  try {
+    yield put(resetCommercialTableInformation())
+    const response = yield call(getCommercialDetail, params.ship_to_party)
+    yield put(getCommercialTableInformationSuccess(response))
+  } catch (error) {
+    yield put(getCommercialTableInformationFail(error))
+  }
+}
+
+function * onPutCommercialTableInformation({ data }) {
+  try {
+    yield call(putCommercialDetail, data)
+    yield put(updateCommercialTableInformationSuccess())
+  } catch (error) {
+    yield put(updateCommercialTableInformationFail(error))
+  }
+}
+
 function* commercialCustomerSaga() {
   yield takeLatest(GET_COMMERCIAL_CUSTOMER, onGetCommercialCustomer)
   yield takeEvery(GET_COMMERCIAL_AUDITLOG, onGetCommercialAuditLog)
   yield takeEvery(GET_COMMERCIAL_FILTER, onGetCommercialFIlter)
+  yield takeLatest(GET_COMMERCIAL_TABLE_INFORMATION, onGetCommercialTableInformation)
+  yield takeLatest(UPDATE_COMMERCIAL_TABLE_INFORMATION, onPutCommercialTableInformation);
 }
 
 export default commercialCustomerSaga

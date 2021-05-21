@@ -16,8 +16,9 @@
   border: 0 !important;
   color: #018f89 !important;
   position: absolute !important;
-  top: 0px !important;
-  right: 10px !important;
+  top: -8px !important;
+  right: 0px !important;
+  text-align: right;
 }
 .arrow2 {
   position: absolute;

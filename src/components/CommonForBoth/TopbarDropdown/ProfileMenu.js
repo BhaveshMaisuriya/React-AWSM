@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from "react"
+import { connect } from "react-redux"
 import PropTypes from 'prop-types'
 import {
   Dropdown,
@@ -7,23 +8,27 @@ import {
   DropdownItem,
 } from "reactstrap"
 import { withRouter, Link } from "react-router-dom"
+import { getUserProperties, getUserImage } from "store/actions"
+import { userNameMapping, userUPNMapping } from "../../../common/data/userMapping";
+import { signOut } from "../../../AuthService";
 
 //i18n
 import { withTranslation } from "react-i18next"
 
 // users
-import user1 from "../../../assets/images/users/avatar-1.jpg"
+import defaultAvatar from "../../../assets/images/users/avatar-default.png"
+
 
 class ProfileMenu extends Component {
   constructor(props) {
     super(props)
     this.state = {
       menu: false,
-      name: "Sunny",
+      name: "AWSM User",
+      userAvatar: "",
+      userUPN: this.upnFormatter(sessionStorage.getItem('userEmail')),
     }
     this.toggle = this.toggle.bind(this)
-    this.onMouseEnter = this.onMouseEnter.bind(this)
-    this.onMouseLeave = this.onMouseLeave.bind(this)
   }
 
   toggle() {
@@ -45,26 +50,80 @@ class ProfileMenu extends Component {
         this.setState({ name: obj.username })
       }
     }
+
+    const { onGetUserProperties, onGetUserImage } = this.props
+    onGetUserProperties()
+    onGetUserImage(this.state.userUPN)
   }
 
-  onMouseEnter() {
-    this.setState(prevState => ({
-      menu: !prevState.menu,
-    }))
+  nameFormatter(userProperties) {
+    var domainBank = ["pethlab", "pethstag", "dev.petronas", "stag.petronas"];
+    var testAccount = false;
+    var fullName = "";
+
+    domainBank.forEach(domain => {
+      if (userProperties.mail.toLowerCase().includes(domain)) {
+        testAccount = true;
+      }
+    })
+
+    if (testAccount == false) {
+      var charIndex = userProperties.displayName.indexOf('(', 0);
+      fullName = userProperties.displayName.substring(0, charIndex - 1);
+    }
+    else {
+      fullName = userNameMapping[userProperties.mail.toLowerCase()] || "AWSM User"
+    }
+
+    return fullName;
   }
 
-  onMouseLeave() {
-    this.setState(prevState => ({
-      menu: !prevState.menu,
-    }))
+  upnFormatter(userEmail) {
+    if (userEmail != null) {
+      var domainBank = ["pethlab", "pethstag", "dev.petronas", "stag.petronas"];
+      var testAccount = false;
+      var userUPN = "";
+
+      domainBank.forEach(domain => {
+        if (userEmail.toLowerCase().includes(domain)) {
+          testAccount = true;
+        }
+      })
+
+      if (testAccount == false) {
+        userUPN = sessionStorage.getItem('userUPN')
+      }
+      else {
+        userUPN = userUPNMapping[sessionStorage.getItem('userUPN')] || "imageNotFound"
+      }
+      return userUPN;
+    }
+
+
+  }
+
+  renderImage(userImage) {
+    let reader = new FileReader();
+    reader.readAsDataURL(userImage.data);
+
+    reader.onload = function () {
+      this.setState({ userAvatar: reader.result })
+    }.bind(this)
+
   }
 
   render() {
+    const { userProperties, userImage } = this.props
+
+    if (!userImage || userImage.length === 0) {
+    }
+    else {
+      this.renderImage(userImage);
+    }
+
     return (
       <React.Fragment>
         <Dropdown
-        // onMouseOver={this.onMouseEnter} 
-        // onMouseLeave={this.onMouseLeave}
           isOpen={this.state.menu}
           toggle={this.toggle}
           className="d-inline-block"
@@ -74,37 +133,48 @@ class ProfileMenu extends Component {
             id="page-header-user-dropdown"
             tag="button"
           >
-            <img
-              className="rounded-circle header-profile-user"
-              src={user1}
-              alt="Header Avatar"
-            />
-            {this.props.sidebar === false && 
-              <Fragment>
-                <span className="d-none d-xl-inline-block ml-2 mr-1">
-                  {this.state.name}
-                </span>
-                <i className="mdi mdi-chevron-down d-none d-xl-inline-block"/>
-              </Fragment>
+
+            {!userImage || userImage.length === 0 || this.state.userUPN == "imageNotFound" ?
+              <img
+                className="rounded-circle header-profile-user"
+                src={defaultAvatar}
+                alt="Header Avatar"
+              />
+              :
+              <img
+                className="rounded-circle header-profile-user"
+                src={this.state.userAvatar}
+                alt="Header Avatar"
+              />
             }
+            {this.props.sidebar === false && <Fragment>
+              <span className="d-none d-xl-inline-block ml-2 mr-1">
+                {!userProperties || userProperties.length === 0 ? this.state.name : this.nameFormatter(userProperties)}
+              </span>
+              <i className="mdi mdi-chevron-down d-none d-xl-inline-block" />
+            </Fragment>}
           </DropdownToggle>
           <DropdownMenu left>
             <DropdownItem tag="a" href="/profile">
-              <i className="bx bx-user font-size-16 align-middle mr-1"/>
+              <i className="bx bx-user font-size-16 align-middle mr-1" />
               {this.props.t("Profile")}
             </DropdownItem>
             <DropdownItem tag="a" href="#">
               <span className="badge badge-success float-right mt-1">5</span>
-              <i className="bx bx-wrench font-size-17 align-middle mr-1"/>
+              <i className="bx bx-wrench font-size-17 align-middle mr-1" />
               {this.props.t("Settings")}
             </DropdownItem>
             <DropdownItem tag="a" href="auth-lock-screen">
-              <i className="bx bx-lock-open font-size-16 align-middle mr-1"/>
+              <i className="bx bx-lock-open font-size-16 align-middle mr-1" />
               {this.props.t("Lock screen")}
             </DropdownItem>
-            <div className="dropdown-divider"/>
-            <Link to="/logout" className="dropdown-item">
-              <i className="bx bx-power-off font-size-16 align-middle mr-1 text-danger"/>
+            <div className="dropdown-divider" />
+            {/* <Link to="/logout" className="dropdown-item">
+              <i className="bx bx-power-off font-size-16 align-middle mr-1 text-danger" />
+              <span>{this.props.t("Logout")}</span>
+            </Link> */}
+            <Link to={window.location.href} className="dropdown-item" onClick={signOut}>
+              <i className="bx bx-power-off font-size-16 align-middle mr-1 text-danger" />
               <span>{this.props.t("Logout")}</span>
             </Link>
           </DropdownMenu>
@@ -115,7 +185,22 @@ class ProfileMenu extends Component {
 }
 
 ProfileMenu.propTypes = {
-  t: PropTypes.any
+  t: PropTypes.any,
 }
 
-export default withRouter(withTranslation()(ProfileMenu))
+const mapStateToProps = ({ msGraph }) =>
+({
+  userProperties: msGraph.userProperties,
+  userImage: msGraph.userImage,
+})
+
+const mapDispatchToProps = dispatch => ({
+  onGetUserProperties: () => dispatch(getUserProperties()),
+  onGetUserImage: params => dispatch(getUserImage(params)),
+})
+
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withRouter(withTranslation()(ProfileMenu)))

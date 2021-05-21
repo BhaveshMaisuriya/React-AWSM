@@ -42,7 +42,10 @@ fakeBackend()
 class App extends Component {
   constructor(props) {
     super(props)
-    this.state = {}
+    this.state = {
+      loginState: sessionStorage.getItem('loginState'),
+      accessToken: sessionStorage.getItem('graphAccessToken')
+    }
     this.getLayout = this.getLayout.bind(this)
   }
 
@@ -78,6 +81,13 @@ class App extends Component {
 
   render() {
     const Layout = this.getLayout()
+    if (!this.state.loginState && (this.state.accessToken.length == 0 || this.state.accessToken === null)) {
+      console.log("LOADING")
+    }
+    else {
+      console.log("LOADED", this.state.loginState)
+      console.log("LOADED", this.state.accessToken)
+    }
 
     return (
       <React.Fragment>

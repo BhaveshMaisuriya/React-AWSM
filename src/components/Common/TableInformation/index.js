@@ -34,9 +34,7 @@ import TabStatus from "./tabStatus"
 // import TabDelivery from "./tabDelivery"
 import { withRouter } from "react-router-dom"
 import TabContact from "./tabContact"
-import AWSMInput from "../Input"
-import { Snackbar, Alert, IconButton } from "@material-ui/core"
-import CloseIcon from "@material-ui/icons/Close"
+import AWSMAlert from "../AWSMAlert"
 
 import "./style.scss"
 
@@ -81,11 +79,7 @@ class TableInformation extends Component {
       activeTab: "1",
       modal: true,
       event: {},
-      alert: {
-        open: false,
-        message: "",
-        backgroundColor: "",
-      },
+      alert: false,
       userRole: {
         scheduler: false,
       },
@@ -121,26 +115,11 @@ class TableInformation extends Component {
    * Call update API when user click update button
    */
   handleUpdate = e => {
+    e.preventDefault()
+    console.log("Update success")
     this.setState({
-      alert: {
-        open: true,
-        message: "Update success",
-        backgroundColor: "#4CAF50",
-      },
-    });
-    var that = this
-    setTimeout(function () {
-      that.setState({
-        alert: {
-          open: false,
-        },
-      })
-    }, 2000); 
-    this.props.closeModal();
-  }
-
-  getStorageData = val => {
-    this.setState({ storageData: val })
+      alert: true,
+    })
   }
 
   render() {
@@ -189,7 +168,7 @@ class TableInformation extends Component {
                 <AvField
                   name="remarks"
                   type="text"
-                  label={"REMARKS"}
+                  label={data.remarks}
                   value="Shaziman only"
                   disabled={scheduler}
                   className={`${scheduler ? classes.field : undefined}`}
@@ -333,10 +312,7 @@ class TableInformation extends Component {
                     overflowX: "hidden",
                   }}
                 >
-                  <TabStorage
-                    scheduler={scheduler}
-                    getstorageData={this.getStorageData}
-                  />
+                  <TabStorage scheduler={scheduler} />
                 </SimpleBar>
               </TabPane>
               <TabPane tabId="6">
@@ -347,7 +323,7 @@ class TableInformation extends Component {
                     overflowX: "hidden",
                   }}
                 >
-                  <TabQuota scheduler={scheduler} storageData={this.state.storageData} />
+                  <TabQuota scheduler={scheduler} />
                 </SimpleBar>
               </TabPane>
             </TabContent>
@@ -375,41 +351,12 @@ class TableInformation extends Component {
                 </button>
               </div>
             </Col>
-            <Snackbar
-              style={{
-                border: "1px solid #4CAF50",
-                borderRadius: "5px",
-                width: "fit-content",
-                marginLeft: "auto",
-              }}
-              open={this.state.alert.open}
-              message={
-                <Alert
-                  severity="success"
-                  style={{ color: "#4CAF50", padding: 0 }}
-                >
-                  {this.state.alert.message}
-                </Alert>
-              }
-              ContentProps={{
-                style: { backgroundColor: "#EDF7ED", padding: "0 15px" },
-              }}
-              anchorOrigin={{ vertical: "top", horizontal: "right" }}
-              onClose={() =>
-                this.setState({ alert: { ...alert, open: false } })
-              }
-              autoHideDuration={3000}
-              action={
-                <IconButton
-                  aria-label="close"
-                  onClick={() =>
-                    this.setState({ alert: { ...alert, open: false } })
-                  }
-                >
-                  <CloseIcon style={{ color: "#4CAF50" }} />
-                </IconButton>
-              }
-            ></Snackbar>
+            <AWSMAlert
+              status="success"
+              message="Update success!"
+              openAlert={this.state.alert}
+              closeAlert={() => this.setState({ alert: false })}
+            />
           </Row>
         </AvForm>
       </ModalBody>

@@ -11,6 +11,7 @@ import {
   UPDATE_TABLE_INFORMATION,
   UPDATE_TABLE_INFORMATION_SUCCESS,
   UPDATE_TABLE_INFORMATION_FAIL,
+  RESET_RETAIL_TABLE_INFORMATION,
   GET_RETAIL_FILTER,
   GET_RETAIL_FILTER_SUCCESS,
   GET_RETAIL_FILTER_FAIL,
@@ -44,8 +45,9 @@ export const getRetailAuditLogFail = error => ({
   payload: error,
 })
 
-export const getTableInformation = () => ({
+export const getTableInformation = params => ({
   type: GET_TABLE_INFORMATION,
+  params,
 })
 
 export const getTableInformationSuccess = response => ({
@@ -70,6 +72,10 @@ export const updateTableInformationSuccess = event => ({
 
 export const updateTableInformationFail = error => ({
   type: UPDATE_TABLE_INFORMATION_FAIL,
+})
+
+export const resetRetailTableInformation = () => ({
+  type: RESET_RETAIL_TABLE_INFORMATION,
 })
 
 export const getRetailFilter = params => ({

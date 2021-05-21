@@ -24,16 +24,6 @@ class TableInformationWrapper extends PureComponent {
       }
     }
 
-    // closeHandler = () => {
-    //   this.setState({
-    //     visible: false,
-    //   })
-    // }
-
-    const confirmationBox = () => {
-
-    }
-
     const { onCancel, visible, data } = this.props;
 
     const modalContent = visible ? (
@@ -53,15 +43,9 @@ class TableInformationWrapper extends PureComponent {
           <span className="last-updated-sub-title">
               Last Updated By: Nur Izzati on 3rd March 2021
             </span>
-            <button
-            type="button"
-            onClick={() => this.setState({displayConfirmationBox: true})}
-            className="close"
-            data-dismiss="modal"
-            aria-label="Close"
-          >
-            <span aria-hidden="true">&times;</span>
-          </button>
+            <button type="button" className="close" aria-label="Close" onClick={() => this.setState({displayConfirmationBox: true})}>
+              <span aria-hidden="true">×</span>
+            </button>
         </ModalHeader>
         <div>
           {this.state.displayConfirmationBox ?
@@ -78,10 +62,8 @@ class TableInformationWrapper extends PureComponent {
                 closeModal={onCancel}
                 data={data}
                 dataList={data.list}
-              />
-            
+              />            
           }
-
         </div>
       </Modal>
     ) : null

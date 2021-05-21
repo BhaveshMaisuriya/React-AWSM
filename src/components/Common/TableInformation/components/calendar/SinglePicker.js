@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import DayPicker from "react-day-picker"
 import "./basic.scss"
 
@@ -15,16 +15,46 @@ const SinglePicker = ({
   setSelectedMulti,
   calendarMonth,
   selectedDay,
-  handleDayClick,
-  selected,
-  setSelected,
+  setSelectedDay,
+  deliveryData,
+  setDeliveryData,
+  onChange,
+  subKey,
 }) => {
+  const handleDayClick = (day, { selected }) => {
+    setDaynames([])
+    if (selected) {
+      setSelectedDay(undefined)
+      return
+    }
+
+    setSelectedDay(day)
+    setDeliveryData({
+      ...deliveryData,
+      [subKey]: {
+        ...deliveryData[subKey],
+        days: [day],
+        date_from: "",
+        date_to: "",
+        type: "single",
+      },
+    })
+    onChange("delivery", {
+      ...deliveryData,
+      [subKey]: {
+        ...deliveryData[subKey],
+        days: [day],
+        date_from: "",
+        date_to: "",
+        type: "single",
+      },
+    })
+  }
   return (
     <div className="SingleExample">
       <DayPicker
         onDayClick={handleDayClick}
         selectedDays={selectedDay}
-        className="hello"
         weekdayElement={
           <Weekday
             daynames={daynames}
@@ -33,6 +63,10 @@ const SinglePicker = ({
             selectedMulti={selectedMulti}
             setSelectedMulti={setSelectedMulti}
             calendarMonth={calendarMonth}
+            deliveryData={deliveryData}
+            setDeliveryData={setDeliveryData}
+            onChange={onChange}
+            subKey={subKey}
           />
         }
         navbarElement={<Navbar setStartDayOfMonth={setStartDayOfMonth} />}

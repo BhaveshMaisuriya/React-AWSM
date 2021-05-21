@@ -13,8 +13,10 @@ export default function MultiPicker({
   selectedMulti,
   setSelectedMulti,
   calendarMonth,
-  selected,
-  setSelected,
+  deliveryData,
+  setDeliveryData,
+  onChange,
+  subKey,
 }) {
   return (
     <div className="MultiExample">
@@ -29,6 +31,10 @@ export default function MultiPicker({
             selectedMulti={selectedMulti}
             setSelectedMulti={setSelectedMulti}
             calendarMonth={calendarMonth}
+            deliveryData={deliveryData}
+            setDeliveryData={setDeliveryData}
+            onChange={onChange}
+            subKey={subKey}
           />
         }
         navbarElement={<Navbar setStartDayOfMonth={setStartDayOfMonth} />}

@@ -15,18 +15,6 @@ import NotificationDropdown from "../CommonForBoth/TopbarDropdown/NotificationDr
 import ProfileMenu from "../CommonForBoth/TopbarDropdown/ProfileMenu"
 
 import megamenuImg from "../../assets/images/megamenu-img.png"
-import logo from "../../assets/images/pet-logo-sm.png"
-import logoLightPng from "../../assets/images/logo-dark.png"
-import logoLightSvg from "../../assets/images/pet-logo-sm.png"
-import logoDark from "../../assets/images/logo-dark.png"
-
-// import images
-import github from "../../assets/images/brands/github.png"
-import bitbucket from "../../assets/images/brands/bitbucket.png"
-import dribbble from "../../assets/images/brands/dribbble.png"
-import dropbox from "../../assets/images/brands/dropbox.png"
-import mail_chimp from "../../assets/images/brands/mail_chimp.png"
-import slack from "../../assets/images/brands/slack.png"
 
 //i18n
 import { withTranslation } from "react-i18next"
@@ -92,27 +80,10 @@ class Header extends Component {
           <div className="navbar-header">
             <div className="d-flex">
               <div className="navbar-brand-box" style={{padding: 0}}>
-                {/* <Link to="/" className="logo logo-dark">
-                  <span className="logo-sm">
-                    <img src={logo} alt="" height="22" />
-                  </span>
-                  <span className="logo-lg">
-                    <img src={logoDark} alt="" height="17" />
-                  </span>
-                </Link> 
-                 <Link to="/" className="logo logo-light">
-                  <span className="logo-sm">  
-                    <img src={logoLightSvg} alt="" height="32" style={{marginLeft: '-3px', marginTop: '10px'}} />
-                  </span>
-                  <span className="logo-lg">
-                    <img src={logoLightPng} alt="" height="40" style={{marginTop: '16px'}} />
-                  </span>
-                </Link> */}
-
                <div className="sideBar_profile">
                   <ProfileMenu sidebar={true} />
                 </div> 
-</div>
+              </div>
               <button
                 type="button"
                 onClick={this.toggleMenu}
@@ -330,9 +301,9 @@ class Header extends Component {
                 </div>
               </div>
 
-              <LanguageDropdown />
+              {/* <LanguageDropdown /> */}
 
-              <Dropdown
+              {/* <Dropdown
                 className="d-none d-lg-inline-block ml-1"
                 isOpen={this.state.socialDrp}
                 toggle={() => {
@@ -390,8 +361,8 @@ class Header extends Component {
                     </Row>
                   </div>
                 </DropdownMenu>
-              </Dropdown>
-
+              </Dropdown> */}
+{/* 
               <div className="dropdown d-none d-lg-inline-block ml-1">
                 <button
                   type="button"
@@ -401,9 +372,9 @@ class Header extends Component {
                 >
                   <i className="bx bx-fullscreen"></i>
                 </button>
-              </div>
+              </div> */}
 
-              <NotificationDropdown />
+              {/* <NotificationDropdown /> */}
               <ProfileMenu sidebar={false} />
 
               <div

@@ -155,22 +155,24 @@
   margin-left: 10px;
 }
 
-// new css
 .table-top-bar {
   display: flex;
   align-items: center;
-  margin: 20px 0;
+  margin: 20px 0 0px 0;
   .top-page-number {
-    flex: 0 0 73%;
+    flex: 0 0 97%;
     .enteriesText {
       margin: 0;
     }
   }
-  .top-pagination {
-    flex: 0 0 22%;
-    ul.pagination {
-      margin: 0;
+  .top-customize {
+    flex: 0 0 3%;
+    button {
+      padding: 6px 10px;
     }
+    button:focus {
+      box-shadow: unset;
+    } 
   }
   .top-customize {
     flex: 0 0 5%;

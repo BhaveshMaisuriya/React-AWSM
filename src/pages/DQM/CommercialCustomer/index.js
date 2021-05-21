@@ -11,7 +11,7 @@ import {
 } from "../../../store/actions"
 import { tableColumns, tableMapping } from "./tableMapping"
 import { transformArrayToString, getCookieByKey } from "./../Common/helper"
-import TableInformationWrapper from "../../../components/Common/TableInformationWrapper"
+import CommercialCustomerModal from "./CommercialCustomerModal"
 const CommercialCustomerTableName = 'commercial-table'
 
 class CommercialCustomer extends Component {
@@ -81,7 +81,7 @@ class CommercialCustomer extends Component {
           headerTitle="Commercial Customer"
           cardTitle="Commercial Customer List"
           tableName={CommercialCustomerTableName}
-          modalComponent={TableInformationWrapper}
+          modalComponent={CommercialCustomerModal}
         />
       </Fragment>
     )

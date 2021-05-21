@@ -40,17 +40,19 @@ import CommercialCustomer from "../pages/DQM/CommercialCustomer"
 import HighCharts from "../pages/HighCharts"
 import Bryntum from "../pages/Bryntum"
 import RTS from "../pages/RTS"
-import RoadTanker from "../pages/RoadTanker"
+import RoadTanker from "../pages/DQM/RoadTanker"
 import Product from "../pages/DQM/ProductList"
+import Terminal from "../pages/DQM/Terminal"
 
 const authProtectedRoutes = [
   { path: "/dashboard", component: Dashboard },
-  
+
   { path: "/sales-inventory", component: DatatableTables },
   { path: "/retail-customer", component: RetailCustomer },
   { path: "/commercial-customer", component: CommercialCustomer },
   { path: "/road-tanker", component: RoadTanker },
   { path: "/product", component: Product },
+  { path: "/terminal", component: Terminal },
   { path: "/cloud-cluster", component: MapsLeaflet },
   { path: "/employee-data", component: ContactsList },
   { path: "/sla-compliance", component: DatatableTables },

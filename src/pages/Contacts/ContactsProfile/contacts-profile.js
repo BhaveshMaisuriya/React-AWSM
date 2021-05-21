@@ -25,7 +25,7 @@ import profile1 from "assets/images/profile-img.png"
 
 // import charts
 import ApexRevenue from "../ApexRevenue"
-import { getUserProfile } from "store/actions"
+import { getUserProfile, getUserProperties } from "store/actions"
 import images from "assets/images"
 import ToolkitProvider from "react-bootstrap-table2-toolkit"
 import BootstrapTable from "react-bootstrap-table-next"
@@ -50,6 +50,10 @@ class ContactsProfile extends Component {
   componentDidMount() {
     const { onGetUserProfile } = this.props
     onGetUserProfile()
+
+
+    // const { onGetUserProperties } = this.props
+    // onGetUserProperties()
   }
 
   render() {
@@ -280,14 +284,21 @@ class ContactsProfile extends Component {
 ContactsProfile.propTypes = {
   userProfile: PropTypes.any,
   onGetUserProfile: PropTypes.func,
+
+  // userProperties: PropTypes.any,
+  // onGetUserProperties: PropTypes.func,
+
 }
 
 const mapStateToProps = ({ contacts }) => ({
   userProfile: contacts.userProfile,
+  // userProperties: contacts.userProperties,
 })
 
 const mapDispatchToProps = dispatch => ({
   onGetUserProfile: () => dispatch(getUserProfile()),
+  // onGetUserProperties: () => dispatch(getUserProperties()),
+
 })
 
 export default connect(

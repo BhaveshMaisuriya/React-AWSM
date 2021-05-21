@@ -16,8 +16,15 @@ import {
 import { chats, contacts, groups, messages } from "./chat"
 import { calenderDefaultCategories, events } from "./calender"
 import { users, userProfile } from "./contacts"
-import { commercialCustomers, auditsCom, filterCom, customerPayload } from "./commercialCustomer"
+import {
+  commercialCustomers,
+  auditsCom,
+  filterCom,
+  customerPayload,
+} from "./commercialCustomer"
 import { retailCustomers, audits, address, filter } from "./retailCustomer"
+import { roadTanker, auditsRoadTanker } from "./roadTanker"
+import { terminal, auditsTerminal } from "./terminal"
 import { productList } from "./product"
 export {
   productsData,
@@ -49,5 +56,9 @@ export {
   filter,
   filterCom,
   commercialCustomers,
-  productList
+  productList,
+  roadTanker,
+  auditsRoadTanker,
+  terminal,
+  auditsTerminal,
 }

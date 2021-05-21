@@ -4,8 +4,7 @@ import "react-day-picker/lib/style.css"
 import "./basic.scss"
 import Weekday from "./Weekday"
 import Navbar from "./NavBar"
-import $ from 'jquery'; 
-
+import { rangeRight } from "lodash"
 
 export default function RangePicker({
   dateRange,
@@ -17,63 +16,34 @@ export default function RangePicker({
   selectedMulti,
   setSelectedMulti,
   calendarMonth,
-  selected,
-  setSelected,
+  deliveryData,
+  setDeliveryData,
+  onChange,
+  subKey,
 }) {
-  
-  useEffect(()=>{
-    function fetchData(){
-      var selectedDates = getDatesBetweenDates(dateRange.from, dateRange.to);
-      getDayOfWeek(selectedDates);
-    };
-    fetchData();
-  }, [])
-
   function handleDayClick(day) {
-    $(".DayPicker-Weekday").removeClass("active_day");
-    const range = DateUtils.addDayToRange(day, dateRange);
-    var selectedDates = getDatesBetweenDates(range.from, range.to);
-    getDayOfWeek(selectedDates);
-    setDateRange(range);
-  }
-
-  const getDatesBetweenDates = (startDate, endDate) => {
-    var dates = [],
-      currentDate = startDate,
-      addDays = function (days) {
-        var date = new Date(this.valueOf())
-        date.setDate(date.getDate() + days)
-        return date
-      }
-    while (currentDate <= endDate) {
-      dates.push(currentDate)
-      currentDate = addDays.call(currentDate, 1)
-    }
-    return dates
-  }
-
-  function getDayOfWeek(dates) {
-    let alldays = [];
-    var days = [
-      "Sunday",
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday",
-    ];
-    var alltitle = document.getElementsByClassName("DayPicker-Weekday");
-    dates.map((item, index)=>{
-      var day_no = item.getDay();
-      alldays.push(days[day_no]);
-      for (var i = 0; i < alltitle.length; i++) {
-          if(alltitle[i].getAttribute("title") === days[day_no]){
-            $(alltitle[i]).addClass("active_day");
-          } 
-      }
+    const range = DateUtils.addDayToRange(day, dateRange)
+    setDateRange(range)
+    setDeliveryData({
+      ...deliveryData,
+      [subKey]: {
+        ...deliveryData[subKey],
+        days: [],
+        date_from: range.from,
+        date_to: range.to,
+        type: "range",
+      },
     })
-    return alldays
+    onChange("delivery", {
+      ...deliveryData,
+      [subKey]: {
+        ...deliveryData[subKey],
+        date_from: range.from,
+        date_to: range.to,
+        days: [],
+        type: "range",
+      },
+    })
   }
 
   const { from, to } = dateRange
@@ -94,6 +64,10 @@ export default function RangePicker({
             selectedMulti={selectedMulti}
             setSelectedMulti={setSelectedMulti}
             calendarMonth={calendarMonth}
+            deliveryData={deliveryData}
+            setDeliveryData={setDeliveryData}
+            onChange={onChange}
+            subKey={subKey}
           />
         }
         navbarElement={<Navbar setStartDayOfMonth={setStartDayOfMonth} />}

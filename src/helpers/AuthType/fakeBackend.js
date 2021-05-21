@@ -31,8 +31,14 @@ import {
   filter,
   filterCom,
   commercialCustomers,
-  productList
+  productList,
+  auditsRoadTanker,
+  roadTanker,
+  terminal,
+  auditsTerminal,
 } from "../../common/data"
+
+import { axiosApi } from "../api_helper"
 
 let users = [
   {
@@ -46,7 +52,7 @@ let users = [
 
 const fakeBackend = () => {
   // This sets the mock adapter on the default instance
-  const mock = new MockAdapter(axios)
+  const mock = new MockAdapter(axiosApi)
 
   mock.onPost("/post-fake-register").reply(config => {
     const user = JSON.parse(config["data"])
@@ -604,7 +610,31 @@ const fakeBackend = () => {
       })
     })
   })
-  
+  mock.onGet(url.GET_ROADTANKER).reply(() => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        if (roadTanker) {
+          // Passing fake JSON data as response
+          resolve([200, roadTanker])
+        } else {
+          reject([400, "Cannot get user profile"])
+        }
+      })
+    })
+  })
+
+  mock.onGet(url.GET_TERMINAL).reply(() => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        if (terminal) {
+          // Passing fake JSON data as response
+          resolve([200, terminal])
+        } else {
+          reject([400, "Cannot get user profile"])
+        }
+      })
+    })
+  })
 
   mock.onGet(url.GET_RETAIL_AUDITLOG).reply(() => {
     return new Promise((resolve, reject) => {
@@ -619,7 +649,6 @@ const fakeBackend = () => {
     })
   })
 
-
   mock.onGet(url.GET_PRODUCT_AUDITLOG).reply(() => {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
@@ -633,8 +662,6 @@ const fakeBackend = () => {
     })
   })
 
-
-
   mock.onGet(url.GET_COMMERCIAL_AUDITLOG).reply(() => {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
@@ -647,16 +674,16 @@ const fakeBackend = () => {
       })
     })
   })
-  mock.onGet(url.GET_TABLE_INFORMATION).reply(() => {
+  mock.onGet(new RegExp(`${url.GET_RETAIL_CUSTOMER_DETAIL}/*`)).reply(() => {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
-        if (address) {
+        if (retailCustomers) {
           // Passing fake JSON data as response
-          resolve([200, address])
+          resolve([200, retailCustomers.list[0]])
         } else {
-          reject([400, "Cannot get info"])
+          reject([400, "Cannot get retail customer details"])
         }
-      })
+      }, 500)
     })
   })
 
@@ -724,6 +751,62 @@ const fakeBackend = () => {
       })
     })
   })
+
+  mock
+    .onGet(new RegExp(`${url.GET_COMMERCIAL_CUSTOMER_DETAIL}/*`))
+    .reply(() => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          if (commercialCustomers) {
+            // Passing fake JSON data as response
+            resolve([200, commercialCustomers.list[0]])
+          } else {
+            reject([400, "Failed to get Product Details"])
+          }
+        }, 500)
+      })
+    })
+
+  mock.onGet(url.GET_ROADTANKER_AUDITLOG).reply(() => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        if (auditsRoadTanker) {
+          // Passing fake JSON data as response
+          resolve([200, auditsRoadTanker])
+        } else {
+          reject([400, "Cannot get audit data"])
+        }
+      })
+    })
+  })
+
+  mock.onGet(url.GET_TERMINAL_AUDITLOG).reply(() => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        if (auditsTerminal) {
+          // Passing fake JSON data as response
+          resolve([200, auditsTerminal])
+        } else {
+          reject([400, "Cannot get audit data"])
+        }
+      })
+    })
+  })
+
+  mock
+    .onPut(new RegExp(`${url.GET_COMMERCIAL_CUSTOMER_DETAIL}/*`))
+    .reply(() => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          if (commercialCustomers) {
+            // Passing fake JSON data as response
+            resolve([200, commercialCustomers.list[0]])
+          } else {
+            reject([400, "Failed to get Product Details"])
+          }
+        }, 500)
+      })
+    })
 }
 
 export default fakeBackend

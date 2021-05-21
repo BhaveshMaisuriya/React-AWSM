@@ -4,41 +4,13 @@ import AWSMDropdown from "../Dropdown"
 import AWSMInput from "../Input"
 import AWSMInputNumber from "../InputNumber"
 import "./tab-storage.scss"
-import { Col, Row } from "reactstrap"
-import { AvField, AvForm } from "availity-reactstrap-validation"
+import { Col } from "reactstrap"
 
-import { Snackbar, Alert, IconButton } from "@material-ui/core"
-import CloseIcon from "@material-ui/icons/Close"
+import AWSMAlert from "../AWSMAlert"
 
 const ACTIVE_PRODUCTS = ["Active", "None"]
-const ORDERING_CATEGORY = ["SMP", "SCP"]
 const SALES_CATEGORY = ["Yes", "No"]
-
-// Dummy storage data
-const storageDummy = [
-  {
-    id: "1",
-    product_code: "12345",
-    tank_capacity: 10000,
-    active_product: "Active",
-    ordering_category: { items: [...ORDERING_CATEGORY], value: "SMP" },
-    terminal: "M808",
-    distance: "40",
-    duration: 4.4,
-    sale_category: "Yes",
-  },
-  {
-    id: "2",
-    product_code: "12345",
-    tank_capacity: 10000,
-    active_product: "Active",
-    ordering_category: { items: [...ORDERING_CATEGORY], value: "SMP" },
-    terminal: "M808",
-    distance: "40",
-    duration: 4.4,
-    sale_category: "Yes",
-  },
-]
+const ORDERING_CATEGORY = ["SMP"]
 
 const timeData = []
 for (let i = 0; i < 24; i++) {
@@ -47,36 +19,35 @@ for (let i = 0; i < 24; i++) {
 }
 timeData.push(`23:59`)
 
-const TabStorage = props => {
-  const [storageData, setStorageData] = useState(storageDummy)
-  const [endOfDay, setEndOfDay] = useState("")
-  const [deleteItem, setDeleteItem] = useState(null)
+const TabStorage = ({ scheduler, data, onChange }) => {
+  const [storageData, setStorageData] = useState(data.storage)
+  const [endOfDay, setEndOfDay] = useState(data.end_of_day)
+  const [deleteItemKey, setDeleteItemKey] = useState(null)
   const [alert, setAlert] = useState({
     open: false,
     message: "",
     backgroundColor: "",
   })
 
-  var { scheduler } = props
-  const pathName = window.location.pathname
+  const onStorageChange = newStorageData => {
+    if (onChange) {
+      onChange({
+        items: newStorageData,
+        end_of_day: endOfDay,
+      })
+    }
+  }
 
   useEffect(() => {
-    function fetchData() {
-      props.getstorageData(storageDummy)
+    if (onChange) {
+      onChange({
+        items: storageData,
+        end_of_day: endOfDay,
+      })
     }
-    fetchData()
-  }, [])
+  }, [endOfDay])
 
-  /**
-   * Update tank capacity value
-   * @param index: storage index item
-   * @param value: updated value
-   */
-  const onTankCapacityChange = (index, value) => {
-    const newStorageData = [...storageData]
-    newStorageData[index].tank_capacity = value
-    setStorageData(newStorageData)
-  }
+  const pathName = window.location.pathname
 
   /**
    * Update duration value
@@ -86,7 +57,7 @@ const TabStorage = props => {
   const onDurationChange = (index, value) => {
     const newStorageData = [...storageData]
     newStorageData[index].duration = value
-    setStorageData(newStorageData)
+    onStorageChange(newStorageData)
   }
 
   /**
@@ -101,72 +72,53 @@ const TabStorage = props => {
    * Add new storage
    */
   const onAddStorage = () => {
-    const nextID =
-      storageData && storageData.length
-        ? (Number(storageData[storageData.length - 1].id) + 1).toString()
-        : "1"
-    setStorageData([
-      ...storageData,
-      {
-        id: nextID,
-        product_code: "12345",
-        tank_capacity: 10000,
-        active_product: "Active",
-        ordering_category: "SMP",
-        terminal: "M808",
-        distance: "40",
-        duration: 4.4,
-        sale_category: "Yes",
+    const lastStorage = Object.keys(storageData).reduce(
+      (previousValue, currentValue) => {
+        if (currentValue > previousValue) {
+          return currentValue
+        }
+        return previousValue
       },
-    ])
-    let allData = [
-      ...storageData,
-      {
-        id: nextID,
-        product_code: "12345",
-        tank_capacity: 10000,
-        active_product: "Active",
-        ordering_category: "SMP",
-        terminal: "M808",
-        distance: "40",
-        duration: 4.4,
-        sale_category: "Yes",
-      },
-    ]
-    props.getstorageData(allData)
+      "storage_0"
+    )
+    const newStorageData = { ...storageData }
+    newStorageData[`storage_${Number(lastStorage.split("_")[1]) + 1}`] = {
+      tank_capacity: null,
+      active_product: null,
+      ordering_category: null,
+      terminal: null,
+      distance: null,
+      duration: null,
+      remarks: null,
+      sales_category: null,
+      product_code_quota: null,
+      monthly_fixed_quota: null,
+      retail: null,
+      product_name: null,
+      product_code: null,
+    }
+    setStorageData(newStorageData)
+    if (onChange) {
+      onChange("storage", newStorageData)
+    }
   }
 
-  /**
-   * Update active product value
-   * @param index: storage index item
-   * @param value: updated value
-   */
-  const onActiveProductChange = (index, value) => {
-    const newStorageData = [...storageData]
-    newStorageData[index].active_product = value
-    setStorageData(newStorageData)
-  }
-
-  /**
-   * Update ordering category value
-   * @param index: storage index item
-   * @param value: updated value
-   */
-  const onOrderingCategoryChange = (index, value) => {
-    const newStorageData = [...storageData]
-    newStorageData[index].ordering_category.value = value
-    setStorageData(newStorageData)
+  const onUpdateField = (key, subKey, value) => {
+    const newStorageData = { ...storageData }
+    newStorageData[key][subKey] = value
+    if (onChange) {
+      onChange("storage", newStorageData)
+    }
   }
 
   const onAddOrderingCategory = (index, value) => {
     const newStorageData = [...storageData]
+    if (!newStorageData[index].ordering_category.items) {
+      newStorageData[index].ordering_category.items = []
+    }
     newStorageData[index].ordering_category.items.push(value)
-    setStorageData(newStorageData)
-    setAlert({
-      open: true,
-      message: "New Ordering Category added",
-      backgroundColor: "#4CAF50",
-    })
+    onStorageChange(newStorageData)
+    setAlert(true)
   }
 
   /**
@@ -174,19 +126,20 @@ const TabStorage = props => {
    * @param item
    */
   const onSetDeleteItem = item => {
-    setDeleteItem(item)
+    setDeleteItemKey(item)
   }
 
   /**
    * Delete storage
    */
   const onDeleteStorage = () => {
-    const index = storageData.findIndex(item => item.id === deleteItem.id)
-    const newStorageData = [...storageData]
-    newStorageData.splice(index, 1)
+    const newStorageData = { ...storageData }
+    delete newStorageData[deleteItemKey]
     setStorageData(newStorageData)
-    props.getstorageData(newStorageData)
-    setDeleteItem(null)
+    setDeleteItemKey(null)
+    if (onChange) {
+      onChange("storage", newStorageData)
+    }
   }
 
   const getProductCode = (val, index) => {
@@ -204,38 +157,36 @@ const TabStorage = props => {
           onChange={onEndOfDayChange}
           items={timeData}
           disabled={scheduler}
+          value={endOfDay}
         />
       </div>
-      {storageData.map((item, index) => (
+      {Object.keys(storageData).map((key, index) => (
         <div key={index}>
-          <div
-            className="d-flex justify-content-between align-items-center"
-            style={{ margin: "3em 0 10px 0" }}
-          >
-            <div className="section-header">{`STORAGE ${item.id}`}</div>
+          <div className="d-flex justify-content-between align-items-center"
+               style={{ margin: "3em 0 10px 0" }}>
+            <div className="section-header">{`STORAGE ${
+              key.split("_")[1]
+            }`}</div>
             <div
               className="dqm-storage-delete"
-              onClick={() => onSetDeleteItem(item)}
+              onClick={() => onSetDeleteItem(key)}
             >
               Delete Storage
             </div>
           </div>
           <div className="storage_delete_main">
-            {deleteItem && deleteItem.id === item.id && (
+            {deleteItemKey && deleteItemKey === key && (
               <div className="dqm-storage-confirm-delete d-flex justify-content-center align-items-center">
                 <div className="m-4">
                   Are you sure you want to delete this Storage
                 </div>
                 <button
-                  onClick={() => setDeleteItem(null)}
+                  onClick={() => setDeleteItemKey(null)}
                   className="btn btn-outline-danger m-2"
                 >
                   Cancel
                 </button>
-                <button
-                  onClick={onDeleteStorage}
-                  className="btn btn-danger m-2"
-                >
+                <button onClick={onDeleteStorage} className="btn btn-danger m-2">
                   Delete
                 </button>
               </div>
@@ -243,21 +194,25 @@ const TabStorage = props => {
             <div className="row">
               <div className="col col-12 col-sm-6 col-lg-3">
                 <div className="input-header mb-2">PRODUCT CODE</div>
-                <AWSMInput value={item.product_code} onChange={(e) => getProductCode(e, index)} disabled={scheduler} />
+                <AWSMInput
+                  defaultValue={storageData[key].product_code}
+                  onChange={value => onUpdateField(key, "product_code", value)}
+                />
               </div>
               <div className="col col-12 col-sm-6 col-lg-3">
                 <div className="input-header mb-2">TANK CAPACITY</div>
-                <AWSMInput
-                  value={item.tank_capacity}
-                  onChange={value => onTankCapacityChange(index, value)}
+                <AWSMInputNumber
+                  type="number"
+                  defaultValue={storageData[key].tank_capacity}
+                  onChange={value => onUpdateField(key, "tank_capacity", value)}
                   disabled={scheduler}
                 />
               </div>
               <div className="col col-12 col-sm-6 col-lg-3">
                 <div className="input-header mb-2">ACTIVE PRODUCT</div>
                 <AWSMDropdown
-                  onChange={value => onActiveProductChange(index, value)}
-                  value={item.active_product}
+                  onChange={value => onUpdateField(key, "active_product", value)}
+                  value={storageData[key].active_product}
                   items={ACTIVE_PRODUCTS}
                   disabled={scheduler}
                 />
@@ -265,113 +220,98 @@ const TabStorage = props => {
               <div className="col col-12 col-sm-6 col-lg-3">
                 <DropdownInput
                   title="ORDERING CATEGORY"
-                  value={item.ordering_category.value}
-                  items={item.ordering_category.items}
-                  onChange={value => onOrderingCategoryChange(index, value)}
-                  onAddItem={value => onAddOrderingCategory(index, value)}
+                  value={storageData[key].ordering_category || ""}
+                  items={ORDERING_CATEGORY}
+                  onChange={value =>
+                    onUpdateField(key, "ordering_category", value)
+                  }
+                  onAddItem={value => console.log(value)}
                 />
-                <Snackbar
-                  style={{
-                    border: "1px solid #4CAF50",
-                    borderRadius: "5px",
-                    width: "fit-content",
-                    marginLeft: "auto",
-                  }}
-                  open={alert.open}
-                  message={
-                    <Alert
-                      severity="success"
-                      style={{ color: "#4CAF50", padding: 0 }}
-                    >
-                      {alert.message}
-                    </Alert>
-                  }
-                  ContentProps={{
-                    style: { backgroundColor: "#EDF7ED", padding: "0 15px" },
-                  }}
-                  anchorOrigin={{ vertical: "top", horizontal: "right" }}
-                  onClose={() => setAlert({ ...alert, open: false })}
-                  autoHideDuration={3000}
-                  action={
-                    <IconButton
-                      aria-label="close"
-                      onClick={() => setAlert({ ...alert, open: false })}
-                    >
-                      <CloseIcon style={{ color: "#4CAF50" }} />
-                    </IconButton>
-                  }
-                ></Snackbar>
+                <AWSMAlert
+                  status="success"
+                  message="New Ordering Category added"
+                  openAlert={alert}
+                  closeAlert={() => setAlert(false)}
+                />
               </div>
               <div className="col col-12 col-sm-6 col-lg-3">
                 <div className="input-header mb-2">TERMINAL</div>
-                <AWSMInput defaultValue={item.terminal} />
+                <AWSMInput
+                  value={storageData[key].terminal || ""}
+                  onChange={value =>
+                    onUpdateField(key, "terminal", value)
+                  }
+                />
               </div>
               <div className="col col-12 col-sm-6 col-lg-3">
                 <div className="input-header mb-2">DISTANCE</div>
-                <AWSMInput defaultValue={item.distance} />
+                <AWSMInput
+                  value={storageData[key].distance || ""}
+                  onChange={value =>
+                    onUpdateField(key, "distance", value)
+                  }
+                />
               </div>
               <div className="col col-12 col-sm-6 col-lg-3">
                 <div className="input-header mb-2">DURATION</div>
                 <AWSMInputNumber
-                  item={item}
                   itemKey="duration"
                   type="number"
-                  value={item.duration}
-                  onChange={value => onDurationChange(index, value)}
+                  value={storageData[key].duration || ""}
+                  onChange={value => onUpdateField(key, "duration", value)}
                   disabled={scheduler}
                 />
               </div>
               <div className="col col-12 col-sm-6 col-lg-3">
                 <div className="input-header mb-2">SALE CATEGORY</div>
                 <AWSMDropdown
-                  value={item.sale_category}
-                  items={SALES_CATEGORY}                
+                  value={storageData[key].sale_category}
+                  items={SALES_CATEGORY}
+                  onChange={value =>
+                    onUpdateField(key, "sale_category", value)
+                  }
                 />
               </div>
               {pathName === "/commercial-customer" ? (
                 <React.Fragment>
                   <Col className="col-3" style={{ marginTop: "12px" }}>
-                    <AvForm>
-                      <AvField
-                        name="dead_stock"
+                    <div>
+                      <label>DEADSTOCK</label>
+                      <AWSMInputNumber
                         type="number"
-                        label="DEADSTOCK"
-                        value=""
                         placeholder="Numberic only"
-                        style={{ height: "40px" }}
-                        disabled={scheduler}
-                        className={scheduler ? "disabled" : null}
-                      ></AvField>
-                    </AvForm>
+                        defaultValue={storageData[key].dead_stock}
+                        onChange={value =>
+                          onUpdateField(key, "dead_stock", value)
+                        }
+                      />
+                    </div>
                   </Col>
                   <Col className="col-3 " style={{ marginTop: "12px" }}>
-                    <AvForm>
-                      <AvField
-                        name="safe_fill"
+                    <div>
+                      <label>SAFE FILL</label>
+                      <AWSMInputNumber
                         type="number"
-                        label="SAFE FILL"
-                        value=""
                         placeholder="Numberic only"
-                        style={{ height: "40px" }}
-                        disabled={scheduler}
-                        className={scheduler ? "disabled" : null}
-                      ></AvField>
-                    </AvForm>
+                        defaultValue={storageData[key].safe_fill}
+                        onChange={value => onUpdateField(key, "safe_fill", value)}
+                      />
+                    </div>
                   </Col>
                 </React.Fragment>
               ) : null}
               <div
-              id="remarks"
                 className={`col ${
                   pathName === "/retail-customer" ? "col-12" : "col-6"
                 }`}
               >
                 <div className="input-header mb-2">REMARKS</div>
                 <AWSMInput
-                  className="p-3"
                   placeholder="Write something here..."
                   disabled={scheduler}
                   className={scheduler ? "disabled" : null}
+                  defaultValue={storageData[key].remarks}
+                  onChange={value => onUpdateField(key, "remarks", value)}
                 />
               </div>
             </div>

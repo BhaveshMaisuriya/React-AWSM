@@ -1,0 +1,87 @@
+.table-information {
+  // height: 879px;
+  border-radius: 4px;
+  box-shadow: 0 2px 10px 0 rgba(0,0,0,0.05);
+  .form-control:disabled, .form-control[readonly] {
+      border: 1px solid #D9D9D9;
+      background-color: #EEEEEE;
+  }
+}
+
+.close{
+  padding-right: 0px !important;
+  margin-right: 0px !important;
+  display: flex;
+
+  span {
+    margin-left: auto;
+  }
+}
+
+.sub-title {
+  height: 16px;
+  width: 350px;
+  color: #757575;
+  font-family: "Museo Sans";
+  font-size: 12px;
+  font-style: italic;
+  letter-spacing: 0;
+  line-height: 16px;
+}
+
+.modal-title {
+  padding-left: 12px;
+  height: 26px;
+  width: 230px;
+  color: #000000;
+  font-family: "Museo Sans";
+  font-size: 24px;
+  letter-spacing: 0;
+  line-height: 26px;
+}
+
+.modal-lg {
+  button {
+    height:40px;
+    width: 120px;
+  }
+
+  .btn-sec {
+    box-sizing: border-box;
+    border: 1px solid #CBEFED;
+    border-radius: 4px;
+    background-color: white;
+    color: #00A19C !important;
+    :hover{
+      background-color: white;
+    }
+  }
+}
+
+.active {
+  border-radius: 4px 4px 0px 0px;
+  .nav-link {
+    span {
+        color: white;
+    }
+    background-color: #00A19C;
+  }
+}
+
+.extra-button {
+  position: absolute;
+  right: 0px;
+  margin-right: 10px;
+}
+
+.trailer {
+  margin-top: 20px;
+}
+
+.availability {
+  margin-top: 20px;
+}
+
+.specification{
+  margin-top: 20px;
+}

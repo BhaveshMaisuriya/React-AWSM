@@ -38,6 +38,14 @@ import commercialCustomer from "./commercialCustomer/reducer"
 
 import products from "./product/reducer"
 
+import msGraph from "./ms-graph/reducer"
+
+//Retail Customer
+import roadTanker from "./roadTanker/reducer"
+
+//Terminal
+import terminal from "./terminal/reducer"
+
 const rootReducer = combineReducers({
   // public
   Layout,
@@ -54,7 +62,10 @@ const rootReducer = combineReducers({
   contacts,
   retailCustomer,
   commercialCustomer,
-  products
+  products,
+  roadTanker,
+  terminal,
+  msGraph,
 })
 
 export default rootReducer

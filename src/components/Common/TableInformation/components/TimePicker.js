@@ -1,6 +1,7 @@
 import React, { useState } from "react"
 import { Dropdown, DropdownToggle, DropdownMenu, Input } from "reactstrap"
 import "./timePicker.scss"
+import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown"
 /**
  *
  * @param items
@@ -34,6 +35,7 @@ const AWSMDropdown = ({
   return (
     <Dropdown isOpen={dropdownOpen} toggle={toggle}>
       <DropdownToggle
+        caret
         data-toggle="dropdown"
         tag="div"
         aria-expanded={dropdownOpen}

@@ -7,6 +7,7 @@ import {
   GET_TABLE_INFORMATION_SUCCESS,
   UPDATE_TABLE_INFORMATION_SUCCESS,
   UPDATE_TABLE_INFORMATION_FAIL,
+  RESET_RETAIL_TABLE_INFORMATION,
   GET_RETAIL_FILTER_SUCCESS,
   GET_RETAIL_FILTER_FAIL,
 } from "./actionTypes"
@@ -17,6 +18,8 @@ const initialState = {
   audits: [],
   address: [],
   filter: [],
+  currentRetailDetail: null,
+  updateSuccess: false,
 }
 
 const RetailCustomer = (state = initialState, action) => {
@@ -48,13 +51,21 @@ const RetailCustomer = (state = initialState, action) => {
     case GET_TABLE_INFORMATION_SUCCESS:
       return {
         ...state,
-        address: action.payload,
+        currentRetailDetail: action.payload,
       }
 
     case GET_TABLE_INFORMATION_FAIL:
       return {
         ...state,
         error: action.payload,
+      }
+
+    case RESET_RETAIL_TABLE_INFORMATION:
+      return {
+        ...state,
+        currentRetailDetail: null,
+        error: null,
+        updateSuccess: false,
       }
 
     case UPDATE_TABLE_INFORMATION_SUCCESS:

@@ -8,10 +8,11 @@ import "./inputNumber.scss"
  * @param placeholder
  * @param value
  * @param type
+ * @param defaultValue
  * @returns {JSX.Element}
  * @constructor
  */
-const AWSMInputNumber = ({disabled, onChange, placeholder, value, type="text"}) => {
+const AWSMInputNumber = ({disabled, onChange, placeholder, value, type="number", defaultValue}) => {
 
   /**
    * Prevent enter key "e" and "-"
@@ -34,7 +35,7 @@ const AWSMInputNumber = ({disabled, onChange, placeholder, value, type="text"}) 
    */
   const onValueChange = (event) => {
     if (onChange) {
-      onChange(event.target.value)
+      onChange(Number(event.target.value))
     }
   }
   return (
@@ -44,6 +45,7 @@ const AWSMInputNumber = ({disabled, onChange, placeholder, value, type="text"}) 
            disabled={disabled}
            onChange={onValueChange}
            onKeyPress={numberInputValidator}
+           defaultValue={defaultValue}
            className={`awsm-input w-100 ${disabled ? "disabled" : ""}`} />
   )
 }

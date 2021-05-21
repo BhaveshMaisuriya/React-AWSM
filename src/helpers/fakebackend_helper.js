@@ -183,6 +183,11 @@ export const getRetailCustomer = params =>
 export const getCommercialCustomer = params =>
   get(url.GET_COMMERCIAL_CUSTOMER, { params: params })
 
+export const getRoadTanker = params =>
+  get(url.GET_ROADTANKER, { params: params })
+
+export const getTerminal = params => get(url.GET_TERMINAL, { params: params })
+
 // get DQM Master Retail Cust Audit Log
 export const getRetailAuditLog = payload =>
   get(url.GET_RETAIL_AUDITLOG, { payload: payload })
@@ -190,8 +195,18 @@ export const getRetailAuditLog = payload =>
 // get DQM Master Commercial Cust Audit Log
 export const getCommercialAuditLog = payload =>
   get(url.GET_COMMERCIAL_AUDITLOG, { payload: payload })
-// get Table Information
-export const getTableInformation = () => get(url.GET_TABLE_INFORMATION)
+
+// get DQM Road Tanker Audit Log
+export const getRoadTankerAuditLog = payload =>
+  get(url.GET_ROADTANKER_AUDITLOG, { payload: payload })
+
+// get DQM Terminal Audit Log
+export const getTerminalAuditLog = payload =>
+  get(url.GET_TERMINAL_AUDITLOG, { payload: payload })
+
+// get Retail Customer Table Information
+export const getTableInformation = code =>
+  get(`${url.GET_RETAIL_CUSTOMER_DETAIL}/${code}`)
 
 // update Table Information
 export const updateTableInformation = event =>
@@ -209,15 +224,30 @@ export const getCommercialFilter = params => {
 export const getProducts = params => get(url.GET_PRODUCTS, { params: params })
 
 // get DQM Master Product Audit Log
-export const getProductAuditLog = payload =>get(url.GET_PRODUCT_AUDITLOG, { payload: payload })
+export const getProductAuditLog = payload =>
+  get(url.GET_PRODUCT_AUDITLOG, { payload: payload })
 
 // get DQM Master Product Filter
-export const getProductFilter = params => get(url.GET_PRODUCT_FILTER, { params: params })
+export const getProductFilter = params =>
+  get(url.GET_PRODUCT_FILTER, { params: params })
 
 // Get DQM Master Product Details
-export const getProductDetail = productCode => get(`${url.GET_PRODUCT_DETAILS}/${productCode}`)
+export const getProductDetail = productCode =>
+  get(`${url.GET_PRODUCT_DETAILS}/${productCode}`)
 
-export const updateProductDetail = payload => put(`${url.GET_PRODUCT_DETAILS}/${payload.productCode}`, payload.body)
+export const updateProductDetail = payload =>
+  put(`${url.GET_PRODUCT_DETAILS}/${payload.productCode}`, payload.body)
+
+export const getCommercialDetail = code =>
+  get(`${url.GET_COMMERCIAL_CUSTOMER_DETAIL}/${code}`)
+
+export const putCommercialDetail = data =>
+  put(`${url.GET_COMMERCIAL_CUSTOMER_DETAIL}/${data.ship_to_party}`, data)
+  
+// get DQM Master Road Tanker Filter
+export const getRoadTankerFilter = params => {
+  return get(url.GET_ROADTANKER_FILTER, { params: params })
+}
 
 export {
   getLoggedInUser,
@@ -229,5 +259,5 @@ export {
   postJwtRegister,
   postJwtLogin,
   postJwtForgetPwd,
-  postJwtProfile
+  postJwtProfile,
 }

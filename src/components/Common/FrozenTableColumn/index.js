@@ -61,7 +61,7 @@ class FixedCoulmnTable extends Component {
     return arr.map((e, index) => (
       <td key={index}>
         <div
-          className={config[e].columnSize === 1 ? "cell-text" : "cell-text-big"}
+          className={config[e].columnSize === 1 ? "cell-text d-flex align-items-center" : "cell-text-big"}
         >
           <span onClick={this.createSortHandler(config[e].apiKey)}>
             {config[e].label}
@@ -103,11 +103,7 @@ class FixedCoulmnTable extends Component {
     const sliceArr = headers.slice(this.state.fixedHeaders.length, arr.length)
     return sliceArr.map((e, index) => (
       <td key={index}>
-        <div
-          className={config[e].columnSize === 1 ? "cell-text" : "cell-text-big"}
-        >
-          {arr[e]}
-        </div>
+        <div> {arr[e]} </div>
       </td>
     ))
   }
@@ -121,7 +117,7 @@ class FixedCoulmnTable extends Component {
     const { tableData } = this.props
     const { fixedHeaders, regularHeaders } = this.state
     return (
-      <div className="container" style={{maxWidth: '100%'}}>
+      <div className="container">
         <table className="fixed">
           <thead>
             <tr>{this.addTd(fixedHeaders)}</tr>
@@ -153,9 +149,9 @@ FixedCoulmnTable.propType = {
 }
 
 FixedCoulmnTable.defaultProps = {
-  headerSortHandler: () => {},
-  filterDropdownHandler: () => {},
-  filterApplyHandler: () => {},
+  headerSortHandler: () => { },
+  filterDropdownHandler: () => { },
+  filterApplyHandler: () => { },
 }
 
 export default FixedCoulmnTable

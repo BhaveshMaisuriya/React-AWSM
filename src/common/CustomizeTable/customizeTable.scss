@@ -136,3 +136,8 @@
     margin-left: 0.5rem;
   }
 }
+
+#customize_popup.modal-dialog {
+    max-width: 810px !important;
+    width: 100%;
+}

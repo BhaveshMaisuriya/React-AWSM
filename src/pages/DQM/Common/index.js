@@ -31,6 +31,8 @@ import {
 import "./style.scss"
 import SettingsIcon from '@material-ui/icons/Settings';
 import GetAppIcon from '@material-ui/icons/GetApp';
+import * as FileSaver from 'file-saver';
+import * as XLSX from 'xlsx';
 
 const styles = {
   headerText: {
@@ -49,6 +51,9 @@ const styles = {
     alignItems: "center",
   },
 }
+const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+const fileExtension = '.xlsx';
+
 class Pages extends Component {
   constructor(props) {
     super(props)
@@ -68,6 +73,7 @@ class Pages extends Component {
     }
     this.toggle = this.toggle.bind(this)
     this.toggleTI = this.toggleTI.bind(this)
+    this.downloadExcel = this.downloadExcel.bind(this)
   }
 
   getCustomerData = () => {
@@ -170,9 +176,9 @@ class Pages extends Component {
     const { modal, rowsAudit, currentAuditPage } = this.state
     const { audits } = this.props
     const modalContent = modal ? (
-      <Modal isOpen={this.state.modal} contentClassName="modalContainer">
+      <Modal isOpen={this.state.modal} toggle={this.toggle} contentClassName="modalContainer">
         <ModalHeader toggle={this.toggle}>
-          <h3 style={{ paddingLeft: "15px" }}>Audit Log</h3>
+          <h3>Audit Log</h3>
         </ModalHeader>
         <AuditLog
           rowsAudit={rowsAudit}
@@ -233,9 +239,19 @@ class Pages extends Component {
     return modalContent
   }
 
+
+  downloadExcel = (csvData,fileName) => {
+    console.log("excelData::", csvData, this.props);
+    const ws = XLSX.utils.json_to_sheet(csvData);
+    const wb = { Sheets: { 'data': ws }, SheetNames: ['data'] };
+    const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+    const data = new Blob([excelBuffer], {type: fileType});
+    FileSaver.saveAs(data, fileName + fileExtension);
+  }
+
   render() {
     const { currentPage, rowsPerPage, searchFields } = this.state
-    const { tableData, classes, filter, tableMapping, cardTitle, headerTitle } =
+    const { tableData, classes, filter, tableMapping, cardTitle, headerTitle, tableName } =
       this.props
     if (!tableData || tableData.length === 0) return ""
     return (
@@ -254,7 +270,7 @@ class Pages extends Component {
               <Header title={headerTitle} />
               <div className={`${classes.headerText} d-flex justify-content-between align-items-center`}>
                 <div className="Download-excel">
-                  <button className="btn btn-outline-primary">
+                  <button className="btn btn-outline-primary" onClick={() => this.downloadExcel(tableData.list, tableName)}>
                     <GetAppIcon />Download Excel
                   </button>
                 </div>

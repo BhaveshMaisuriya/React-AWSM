@@ -107,3 +107,12 @@ button.filter-button {
   font-size: 20px;
   color: #BDBDBD;
 }
+
+.table_header_fit_text{
+  .header_text{
+    width: fit-content;
+  }
+  .filter-button {
+    margin: 0;
+  }
+}

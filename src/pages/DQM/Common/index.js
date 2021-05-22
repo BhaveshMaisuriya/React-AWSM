@@ -263,7 +263,7 @@ class Pages extends Component {
           closeDialog={this.handleOpenCustomizeTable}
           availableMetric={tableMapping}
           defaultMetric={searchFields}
-        />
+        />  
         <div className="page-content">
           <div className="container-fluid">
             <div className={classes.modalHeader}>

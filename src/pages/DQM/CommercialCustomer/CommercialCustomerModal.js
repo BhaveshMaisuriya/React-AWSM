@@ -77,7 +77,7 @@ const CommercialCustomerModal = props => {
   }
 
   console.log(currentCommercialDetail)
-
+``
   return (
     <Modal isOpen={visible} toggle={() => setDisplayConfirmationBox(!displayConfirmationBox)} className="commercial-customer-modal modal-lg">
       <ModalHeader toggle={() => setDisplayConfirmationBox(!displayConfirmationBox)}>

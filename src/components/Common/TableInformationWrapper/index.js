@@ -27,26 +27,16 @@ class TableInformationWrapper extends PureComponent {
     const { onCancel, visible, data } = this.props;
 
     const modalContent = visible ? (
-      <Modal isOpen={visible} contentClassName="modalTIContainer">
-        <ModalHeader toggle={this.toggleTI}>
-          <span
-            style={{
-              height: "26px",
-              color: "#000000",
-              fontFamily: "Museo Sans",
-              letterSpacing: "0",
-              lineHeight: "26px",
-            }}
-          >
-            Table Information
-          </span>
+      <Modal isOpen={visible} contentClassName="modalTIContainer" toggle={() => setDisplayConfirmationBox(!displayConfirmationBox)} >
+      <ModalHeader toggle={() => setDisplayConfirmationBox(!displayConfirmationBox)}>
+      <h3>
+        <span>Table Information 
           <span className="last-updated-sub-title">
-              Last Updated By: Nur Izzati on 3rd March 2021
-            </span>
-            <button type="button" className="close" aria-label="Close" onClick={() => this.setState({displayConfirmationBox: true})}>
-              <span aria-hidden="true">×</span>
-            </button>
-        </ModalHeader>
+            Last Updated By: Nur Izzati on 3rd March 2021
+          </span>
+        </span>
+      </h3>
+      </ModalHeader>
         <div>
           {this.state.displayConfirmationBox ?
             <div class="Confirmation-box">

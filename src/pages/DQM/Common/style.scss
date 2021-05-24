@@ -28,9 +28,10 @@
 
 //STYLE FOR AUDIT LOG MODAL
 
-.modalContainer {
+#auditLog-modal .modalContainer {
   width: 900px !important;
-  height: 707px;
+  height: 100%;
+  padding-bottom: 50px;
   position: relative !important;
   top: 50% !important;
   bottom: 50% !important;
@@ -165,17 +166,8 @@
       margin: 0;
     }
   }
-  .top-customize {
-    flex: 0 0 3%;
-    button {
-      padding: 6px 10px;
-    }
-    button:focus {
-      box-shadow: unset;
-    } 
-  }
-  .top-customize {
-    flex: 0 0 5%;
+  button {
+    padding: 0;
   }
 }
 .Download-excel {

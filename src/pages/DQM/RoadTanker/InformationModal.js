@@ -1,4 +1,4 @@
-import React, { Component } from "react"
+import React, { Component, Fragment } from "react"
 import {
   Button,
   Modal,
@@ -7,6 +7,7 @@ import {
   Nav,
   NavItem,
   NavLink,
+  ModalHeader,
   ModalFooter,
   ModalBody,
 } from "reactstrap"
@@ -41,6 +42,7 @@ class InformationModal extends Component {
       },
       updateSuccess: false,
       data: data,
+      displayConfirmationBox: false,
     }
   }
 
@@ -84,7 +86,7 @@ class InformationModal extends Component {
       const footer =
         mode === MODE.VIEW_AND_AMEND ? (
           <ModalFooter>
-            <button className="btn-sec" onClick={() => onCancle()}>
+            <button className="btn-sec" onClick={() => this.setState({displayConfirmationBox: !this.state.displayConfirmationBox})}>
               Cancel
             </button>
             <Button
@@ -112,19 +114,17 @@ class InformationModal extends Component {
         isOpen={visible}
         className="table-information modal-lg"
         contentClassName="modalTIContainer"
+        toggle={() => this.setState({displayConfirmationBox: !this.state.displayConfirmationBox})}
       >
-        <div className="modal-header">
-          <h5 className="modal-title">
-            Table Information
-            <span className="sub-title">
-              Last Updated By: Nur Izzati on 3rd March 2021
+          <ModalHeader toggle={() => this.setState({displayConfirmationBox: !this.state.displayConfirmationBox})}>
+          <h3>
+            <span>Table Information
+              <span className="last-updated-sub-title">
+                Last Updated By: Nur Izzati on 3rd March 2021
+              </span>
             </span>
-          </h5>
-
-          <button type="button" onClick={() => onCancle()} className="close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
+          </h3>
+          </ModalHeader>        
         {
           //alert()
         }
@@ -137,7 +137,18 @@ class InformationModal extends Component {
           }}
         />
         <ModalBody>
-          <div>
+        <Fragment>
+          {this.state.displayConfirmationBox ?
+            <div class="Confirmation-box">
+              <div>
+                <h3>Exit Confirmation</h3>
+                <p>Are you sure you want to exit without update? <br />You will lose all the changes made.</p>
+                <button className="btn btn-outline-danger" onClick={() => this.setState({displayConfirmationBox: !this.state.displayConfirmationBox})}>Cancel</button>
+                <button className="btn btn-danger" onClick={() => onCancle()}>Exit</button>
+              </div>
+            </div>
+          : 
+            <div>
             <div className="row">
               <div className="col-md-6 form-group">
                 <label> VEHICAL ID</label>
@@ -255,6 +266,8 @@ class InformationModal extends Component {
               </TabContent>
             </div>
           </div>
+          }
+        </Fragment>
         </ModalBody>
         {modalFooter()}
       </Modal>

@@ -8,7 +8,8 @@ import {
   NavItem,
   NavLink,
   ModalFooter,
-  ModalBody
+  ModalBody,
+  ModalHeader
 } from "reactstrap";
 import AvailabilityTab from "./AvailabilityTab";
 import SpecificationTab from "./SpecificationTab";
@@ -21,6 +22,7 @@ class InformationModal extends PureComponent {
 
     this.state = {
       activeTab: "1",
+      displayConfirmationBox: false,
     }
   }
 
@@ -33,25 +35,29 @@ class InformationModal extends PureComponent {
     }
     const { onCancle, visible } = this.props;
     return (
-      <Modal isOpen={visible} className="table-information modal-lg">
-          <div className="modal-header">
-            <h5 className="modal-title">
-              Table Information
-            </h5>
-            <span className="sub-title">
-              Last Updated By: Nur Izzati on 3rd March 2021
+      <Modal isOpen={visible} className="table-information modal-lg" toggle={() => this.setState({displayConfirmationBox: !this.state.displayConfirmationBox})}>
+        <ModalHeader toggle={() => this.setState({displayConfirmationBox: !this.state.displayConfirmationBox})}>
+          <h3>
+            <span>Product Information
+              <span className="last-updated-sub-title">
+                Last Updated By: Nur Izzati on 3rd March 2021
+              </span>
             </span>
-            <button
-              type="button"
-              onClick={() => onCancle()}
-              className="close"
-            >
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-
-          <ModalBody>
-          <div>
+          </h3>
+        </ModalHeader>
+        <ModalBody>
+        <Fragment>
+          {this.state.displayConfirmationBox ?
+            <div class="Confirmation-box">
+              <div>
+                <h3>Exit Confirmation</h3>
+                <p>Are you sure you want to exit without update? <br />You will lose all the changes made.</p>
+                <button className="btn btn-outline-danger" onClick={() => this.setState({displayConfirmationBox: !this.state.displayConfirmationBox})}>Cancel</button>
+                <button className="btn btn-danger" onClick={() => onCancle()}>Exit</button>
+              </div>
+            </div>
+            :
+            <div>
             <div className="row">
               <div className="col-md-6 form-group">
                 <label> VEHICAL ID</label>
@@ -148,13 +154,15 @@ class InformationModal extends PureComponent {
                 </TabContent>
               </div>
             </div>
-          </ModalBody>
-          <ModalFooter>
-            <button className="btn-sec" onClick={() => onCancle()}>
-              Cancel
-            </button>
-            <Button color="primary">Update</Button>{" "}
-          </ModalFooter>
+          }
+        </Fragment>
+        </ModalBody>
+        <ModalFooter>
+          <button className="btn-sec" onClick={() => this.setState({displayConfirmationBox: !this.state.displayConfirmationBox})}>
+            Cancel
+          </button>
+          <Button color="primary">Update</Button>{" "}
+        </ModalFooter>
       </Modal>
     )
   }

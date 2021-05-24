@@ -176,7 +176,7 @@ class Pages extends Component {
     const { modal, rowsAudit, currentAuditPage } = this.state
     const { audits } = this.props
     const modalContent = modal ? (
-      <Modal isOpen={this.state.modal} toggle={this.toggle} contentClassName="modalContainer">
+      <Modal isOpen={this.state.modal} toggle={this.toggle} id="auditLog-modal" contentClassName="modalContainer">
         <ModalHeader toggle={this.toggle}>
           <h3>Audit Log</h3>
         </ModalHeader>

@@ -142,7 +142,7 @@ class SpecificationTab extends PureComponent {
     return (
       <div className="specification">
         <div className="row">
-          <div class="col-md-6 form-group">
+          <div className="col-md-6 form-group">
             <label> PRODUCT TYPE IN SAP</label>
             <input
               className="form-control"
@@ -151,7 +151,7 @@ class SpecificationTab extends PureComponent {
               disabled={true}
             />
           </div>
-          <div class="col-md-6 form-group">
+          <div className="col-md-6 form-group">
             <label> PUMP TYPE </label>
             <input
               className="form-control"

@@ -77,7 +77,7 @@ const CommercialCustomerModal = props => {
   }
 
   console.log(currentCommercialDetail)
-``
+
   return (
     <Modal isOpen={visible} toggle={() => setDisplayConfirmationBox(!displayConfirmationBox)} className="commercial-customer-modal modal-lg">
       <ModalHeader toggle={() => setDisplayConfirmationBox(!displayConfirmationBox)}>
@@ -91,7 +91,7 @@ const CommercialCustomerModal = props => {
       </ModalHeader>
       <div>
         {displayConfirmationBox ?
-          <div class="Confirmation-box">
+          <div className="Confirmation-box">
             <div>
               <h3>Exit Confirmation</h3>
               <p>Are you sure you want to exit without update? <br />You will lose all the changes made.</p>

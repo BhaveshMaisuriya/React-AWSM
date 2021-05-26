@@ -48,7 +48,7 @@ class InformationModal extends PureComponent {
         <ModalBody>
         <Fragment>
           {this.state.displayConfirmationBox ?
-            <div class="Confirmation-box">
+            <div className="Confirmation-box">
               <div>
                 <h3>Exit Confirmation</h3>
                 <p>Are you sure you want to exit without update? <br />You will lose all the changes made.</p>

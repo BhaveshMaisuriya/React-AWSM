@@ -1571,6 +1571,7 @@ const commercialCustomers = {
     },
   ],
 }
+
 const auditsCom = {
   visible_row_count: 4,
   total_rows: 4,

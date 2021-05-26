@@ -226,7 +226,7 @@ class ContactsProfile extends Component {
                     <MiniCards
                       title={card.title}
                       text={card.text}
-                      iconClass={card.iconClass}
+                      iconclassName={card.iconClass}
                       key={"_card_" + key}
                     />
                   ))}

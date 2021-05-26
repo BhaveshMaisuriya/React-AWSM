@@ -1,4 +1,4 @@
-import React, { Component } from "react"
+import React, { Component, Fragment } from "react"
 import Header from "../../../components/Common/CustomPageHeader"
 import SearchBar from "../../../components/Common/SearchBar"
 import TablePagination from "../../../components/Common/DataTable/tablePagination"
@@ -33,6 +33,7 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import GetAppIcon from '@material-ui/icons/GetApp';
 import * as FileSaver from 'file-saver';
 import * as XLSX from 'xlsx';
+import axios from "axios"
 
 const styles = {
   headerText: {
@@ -70,6 +71,7 @@ class Pages extends Component {
       modal: false,
       customizeModalOpen: false,
       selectedItem: 0,
+      loader: false,
     }
     this.toggle = this.toggle.bind(this)
     this.toggleTI = this.toggleTI.bind(this)
@@ -241,12 +243,32 @@ class Pages extends Component {
 
 
   downloadExcel = (csvData,fileName) => {
-    console.log("excelData::", csvData, this.props);
-    const ws = XLSX.utils.json_to_sheet(csvData);
-    const wb = { Sheets: { 'data': ws }, SheetNames: ['data'] };
-    const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
-    const data = new Blob([excelBuffer], {type: fileType});
-    FileSaver.saveAs(data, fileName + fileExtension);
+    this.setState({loader: true});
+      axios.get("https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/commercial-customer")
+      .then((response) => {
+        if(response.data){
+          const ws = XLSX.utils.json_to_sheet(response.data.list);
+          const wb = { Sheets: { 'data': ws }, SheetNames: ['data'] };
+          const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+          const data = new Blob([excelBuffer], {type: fileType});
+          FileSaver.saveAs(data, fileName + fileExtension);
+          this.setState({loader: false});
+        } else {
+          const ws = XLSX.utils.json_to_sheet(csvData);
+          const wb = { Sheets: { 'data': ws }, SheetNames: ['data'] };
+          const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+          const data = new Blob([excelBuffer], {type: fileType});
+          FileSaver.saveAs(data, fileName + fileExtension);
+          this.setState({loader: false});
+        }
+      }).catch(error=>{
+        const ws = XLSX.utils.json_to_sheet(csvData);
+        const wb = { Sheets: { 'data': ws }, SheetNames: ['data'] };
+        const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+        const data = new Blob([excelBuffer], {type: fileType});
+        FileSaver.saveAs(data, fileName + fileExtension);
+        this.setState({loader: false});
+      })
   }
 
   render() {
@@ -271,7 +293,7 @@ class Pages extends Component {
               <div className={`${classes.headerText} d-flex justify-content-between align-items-center`}>
                 <div className="Download-excel">
                   <button className="btn btn-outline-primary" onClick={() => this.downloadExcel(tableData.list, tableName)}>
-                    <GetAppIcon />Download Excel
+                    {this.state.loader === true ? <Fragment> Downloading ... </Fragment> : <Fragment><GetAppIcon /> Download Excel </Fragment>}
                   </button>
                 </div>
                 <Link
@@ -301,7 +323,7 @@ class Pages extends Component {
                         />
                       </div>
                       <div className="table-top-bar">
-                        <div class="top-page-number">
+                        <div className="top-page-number">
                           <div className="enteriesText">{`${currentPage * rowsPerPage + 1
                             } to ${tableData.totalRows -
                               (currentPage * rowsPerPage + rowsPerPage) <

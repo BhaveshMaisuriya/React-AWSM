@@ -38,7 +38,7 @@ import {
   auditsTerminal,
 } from "../../common/data"
 
-import { axiosApi } from "../api_helper"
+import { axiosApi, API_URL } from "../api_helper"
 
 let users = [
   {
@@ -591,6 +591,7 @@ const fakeBackend = () => {
       setTimeout(() => {
         if (commercialCustomers) {
           // Passing fake JSON data as response
+          console.log("commercial::", resolve, reject)
           resolve([200, commercialCustomers])
         } else {
           reject([400, "Cannot get user profile"])
@@ -598,6 +599,7 @@ const fakeBackend = () => {
       })
     })
   })
+
   mock.onGet(url.GET_PRODUCTS).reply(() => {
     return new Promise((resolve, reject) => {
       setTimeout(() => {

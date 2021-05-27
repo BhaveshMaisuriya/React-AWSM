@@ -56,7 +56,7 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
 
 
   useEffect(() => {
-    if (deliveryData.road_tanker_requirement.length > 0) {
+    if (deliveryData.road_tanker_requirement && deliveryData.road_tanker_requirement.length > 0) {
       const newTanker = deliveryData.road_tanker_requirement.map(item => {
         return { name: item, checked: true }
       })
@@ -280,7 +280,7 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
                 type="text"
                 label="DAY(S)"
                 value={
-                  deliveryData.actual_open_time_1.length !== 0
+                  deliveryData.actual_open_time_1 && deliveryData.actual_open_time_1.length !== 0
                     ? actualOpenTime1.map(i => i.name)
                     : "Select day(s)"
                 }
@@ -301,7 +301,7 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
           <TimePicker
             items={timeData}
             disabled={scheduler}
-            value={deliveryData.actual_open_time_1.time_from}
+            value={deliveryData.actual_open_time_1 ? deliveryData.actual_open_time_1.time_from : ""}
             onChange={value => {
               setDeliveryData({
                 ...deliveryData,
@@ -325,7 +325,7 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
           <TimePicker
             items={timeData}
             disabled={scheduler}
-            value={deliveryData.actual_open_time_1.to}
+            value={deliveryData.actual_open_time_1 ? deliveryData.actual_open_time_1.to || "" : ""}
             onChange={value => {
               setDeliveryData({
                 ...deliveryData,
@@ -380,7 +380,7 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
               <TimePicker
                 items={timeData}
                 disabled={scheduler}
-                value={deliveryData.actual_open_time_2.time_from}
+                value={deliveryData.actual_open_time_2 ? deliveryData.actual_open_time_2.time_from || "" : ""}
                 onChange={value => {
                   setDeliveryData({
                     ...deliveryData,
@@ -404,7 +404,7 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
               <TimePicker
                 items={timeData}
                 disabled={scheduler}
-                value={deliveryData.actual_open_time_2.to}
+                value={deliveryData.actual_open_time_2 ? deliveryData.actual_open_time_2.to || "" : ""}
                 onChange={value => {
                   setDeliveryData({
                     ...deliveryData,

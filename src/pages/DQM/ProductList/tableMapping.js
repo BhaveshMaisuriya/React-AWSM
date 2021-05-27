@@ -1,74 +1,74 @@
 const tableColumns = [
-  "product_code",
-  "product_name",
-  "product_status_in_sap",
-  "product_status_in_awsm",
-  "product_division",
+  "code",
+  "name",
+  "status_sap",
+  "status_awsm",
+  "division",
   "material_group",
   "product_group",
-  "product_category",
-  "product_sub_category",
+  "category",
+  "sub_category",
   "uom",
-  "product_density",
+  "density",
   "remarks"
   
 ]
 
 const tableMapping = {
-  product_code: {
-    label: "Product Code",
-    apiKey: "product_code",
+  code: {
+    label: "Code",
+    apiKey: "code",
+    columnSize: 1,
+  },
+  name: {
+    label: "Name",
+    apiKey: "name",
     columnSize: 2,
   },
-  product_name: {
-    label: "Product Name",
-    apiKey: "product_name",
-    columnSize: 2,
+  status_sap: {
+    label: "Status in SAP",
+    apiKey: "status_sap",
+    columnSize: 1,
   },
-  product_status_in_sap: {
-    label: "Product Status in SAP",
-    apiKey: "product_status_in_sap",
-    columnSize: 2,
+  status_awsm: {
+    label: "Status in AWSM",
+    apiKey: "status_awsm",
+    columnSize: 1,
   },
-  product_status_in_awsm: {
-    label: "Product Status in AWSM",
-    apiKey: "product_status_in_awsm",
-    columnSize: 2,
-  },
-  product_division: {
-    label: "Product Division",
-    apiKey: "product_division",
-    columnSize: 2,
+  division: {
+    label: "Division",
+    apiKey: "division",
+    columnSize: 1,
   },
   material_group: {
     label: "Material Group",
     apiKey: "material_group",
-    columnSize: 2,
+    columnSize: 1,
   },
   product_group: {
     label: "Product Group",
     apiKey: "product_group",
     columnSize: 2,
   },
-  product_category: {
-    label: "Product Category",
-    apiKey: "product_category",
-    columnSize: 2,
+  category: {
+    label: "Category",
+    apiKey: "category",
+    columnSize: 1,
   },
-  product_sub_category: {
-    label: "Product SubCategory",
-    apiKey: "product_sub_category",
+  sub_category: {
+    label: "SubCategory",
+    apiKey: "sub_category",
     columnSize: 2,
   },
   uom: {
     label: "UOM",
     apiKey: "uom",
-    columnSize: 2,
+    columnSize: 1,
   },
-  product_density: {
-    label: "Product Density",
-    apiKey: "product_density",
-    columnSize: 2,
+  density: {
+    label: "Density",
+    apiKey: "density",
+    columnSize: 1,
   },
   remarks: {
     label: "Remarks",

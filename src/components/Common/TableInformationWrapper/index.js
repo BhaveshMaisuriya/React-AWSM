@@ -39,7 +39,7 @@ class TableInformationWrapper extends PureComponent {
       </ModalHeader>
         <div>
           {this.state.displayConfirmationBox ?
-            <div className="Confirmation-box">
+            <div class="Confirmation-box">
               <div>
                 <h3>Exit Confirmation</h3>
                 <p>Are you sure you want to exit without update? <br />You will lose all the changes made.</p>

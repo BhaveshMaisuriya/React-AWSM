@@ -1,4 +1,7 @@
 .awsm-date-range-picker {
+  .DayPicker {
+    max-width: 100%;
+  }
   .DayPicker-Day--highlighted:not(.DayPicker-Day--outside) {
     background-color: teal;
     border-radius: 0 !important;

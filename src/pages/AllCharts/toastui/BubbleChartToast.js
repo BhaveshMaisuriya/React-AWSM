@@ -187,9 +187,9 @@ class BubbleChartToast extends Component {
       tooltip: {
         template: function (category, items) {
           return (
-            '<div className="tui-chart-default-tooltip">' +
-            '<div className="tui-chart-tooltip-head">' +
-            '<span className="tui-chart-legend-rect" style="' +
+            '<div class="tui-chart-default-tooltip">' +
+            '<div class="tui-chart-tooltip-head">' +
+            '<span class="tui-chart-legend-rect" style="' +
             items.cssText +
             '; width: 10px; height: 10px"></span>' +
             "<span>" +
@@ -199,22 +199,22 @@ class BubbleChartToast extends Component {
             items.label +
             "</span>" +
             "</div>" +
-            '<table className="tui-chart-tooltip-body">' +
+            '<table class="tui-chart-tooltip-body">' +
             "<tr>" +
             "<td>GDP</td>" +
-            '<td className="tui-chart-tooltip-value">' +
+            '<td class="tui-chart-tooltip-value">' +
             items.x +
             "</td>" +
             "</tr>" +
             "<tr>" +
             "<td>Life Expectancy</td>" +
-            '<td className="tui-chart-tooltip-value">' +
+            '<td class="tui-chart-tooltip-value">' +
             items.y +
             "</td>" +
             "</tr>" +
             "<tr>" +
             "<td>Population</td>" +
-            '<td className="tui-chart-tooltip-value">' +
+            '<td class="tui-chart-tooltip-value">' +
             items.r +
             "</td>" +
             "</tr>" +

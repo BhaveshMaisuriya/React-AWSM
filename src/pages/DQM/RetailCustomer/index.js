@@ -31,6 +31,7 @@ class RetailCustomer extends Component {
       onGetTableInformation,
     } = this.props
     const { searchFields } = this.state
+    // const apiSearchFields = searchFields.forEach(s =>{})
     const params = {
       limit: 10,
       page: 0,

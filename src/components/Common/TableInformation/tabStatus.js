@@ -16,6 +16,9 @@ for (let i = 0; i < 24; i++) {
 timeData.push(`23:59`);
 
 const TabStatus = ({ scheduler, data, onChange }) => {
+  if (!data.status) {
+    return null
+  }
   const pathName = window.location.pathname
   const [statusData, setStatusData] = useState(data.status);
 
@@ -79,7 +82,7 @@ const TabStatus = ({ scheduler, data, onChange }) => {
             <div className="input-header">CLOSE (FROM)</div>
             <DatePicker
               disabled={scheduler || statusData.status_awsm !== 'Inactive'}
-              value={statusData.close_period.date_from}
+              value={statusData.close_period ? statusData.close_period.date_from || "" : ""}
               onChange={value =>
                 onFieldChange(
                   "close_period",
@@ -93,7 +96,7 @@ const TabStatus = ({ scheduler, data, onChange }) => {
             <div className="input-header">TIME</div>
             <AWSMDropdown
               items={timeData}
-              value={statusData.close_period.time_from}
+              value={statusData.close_period ? statusData.close_period.time_from || "" : ""}
               onChange={value =>
                 onFieldChange("close_period", "time_from", value)
               }
@@ -105,7 +108,7 @@ const TabStatus = ({ scheduler, data, onChange }) => {
             <div className="input-header">CLOSE (TO)</div>
             <DatePicker
               disabled={scheduler || statusData.status_awsm !== 'Inactive'}
-              value={statusData.close_period.date_to}
+              value={statusData.close_period ? statusData.close_period.date_to || "" : ""}
               onChange={value =>
                 onFieldChange(
                   "close_period",
@@ -119,7 +122,7 @@ const TabStatus = ({ scheduler, data, onChange }) => {
             <div className="input-header">TIME</div>
             <AWSMDropdown
               items={timeData}
-              value={statusData.close_period.time_to}
+              value={statusData.close_period ? statusData.close_period.time_to || "" : ""}
               onChange={value =>
                 onFieldChange("close_period", "time_to", value)
               }

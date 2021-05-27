@@ -229,11 +229,11 @@ class SchedulerWithSubtasks extends SchedulerPro {
                 },
                 eventTooltip : {
                     template : data => `
-                        ${data.eventRecord.name ? `<div className="b-sch-event-title">${data.eventRecord.name}</div>` : ''}
+                        ${data.eventRecord.name ? `<div class="b-sch-event-title">${data.eventRecord.name}</div>` : ''}
                         ${data.startClockHtml}
                         ${data.endClockHtml}
                         ${data.eventRecord.subEvents ? '</br>' + data.eventRecord.subEvents.map(r => `
-                        <h4 className="b-tooltip-subevent-title">${r.name}</h4>
+                        <h4 class="b-tooltip-subevent-title">${r.name}</h4>
                         ${DateHelper.format(r.startDate, 'LT')} - ${DateHelper.format(r.endDate, 'LT')}
                     `).join('') : ''}
                     `
@@ -263,8 +263,8 @@ class SchedulerWithSubtasks extends SchedulerPro {
     // eventBodyTemplate is used to render markup inside an event. It is populated using data from eventRenderer()
     eventBodyTemplate(values) {
         return values.map(value => value ? `
-            <div className="nested ${value.cls || ''}" data-id="${value.id}" style="transform: translate(${value.left}px, 0); width: ${value.width}px;">
-                ${value.iconCls ? `<i className="b-icon ${value.iconCls}"></i>` : ''} ${value.name}
+            <div class="nested ${value.cls || ''}" data-id="${value.id}" style="transform: translate(${value.left}px, 0); width: ${value.width}px;">
+                ${value.iconCls ? `<i class="b-icon ${value.iconCls}"></i>` : ''} ${value.name}
             </div> ` : ''
         ).join('');
     }

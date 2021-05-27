@@ -40,4 +40,5 @@
 
 .disabled {
   background-color: #eee !important;
+  color: rgba(16, 16, 16, 0.3) !important;
 }

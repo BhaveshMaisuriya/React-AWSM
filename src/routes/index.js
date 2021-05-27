@@ -25,7 +25,7 @@ import ChartsKnob from "../pages/Charts/charts-knob"
 // Maps
 import MapsGoogle from "../pages/Maps/MapsGoogle"
 import MapsVector from "../pages/Maps/MapsVector"
-import MapsLeaflet from "../pages/Maps/MapsLeaflet"
+// import MapsLeaflet from "../pages/Maps/MapsLeaflet"
 //Contacts
 import ContactsGrid from "../pages/Contacts/contacts-grid"
 import ContactsList from "../pages/Contacts/ContactList/contacts-list"
@@ -53,7 +53,7 @@ const authProtectedRoutes = [
   { path: "/road-tanker", component: RoadTanker },
   { path: "/product", component: Product },
   { path: "/terminal", component: Terminal },
-  { path: "/cloud-cluster", component: MapsLeaflet },
+  // { path: "/cloud-cluster", component: MapsLeaflet },
   { path: "/employee-data", component: ContactsList },
   { path: "/sla-compliance", component: DatatableTables },
   { path: "/order-forecast", component: Calendar },
@@ -74,7 +74,7 @@ const authProtectedRoutes = [
   { path: "/charts-knob", component: ChartsKnob },
   { path: "/maps-google", component: MapsGoogle },
   { path: "/maps-vector", component: MapsVector },
-  { path: "/maps-leaflet", component: MapsLeaflet },
+  // { path: "/maps-leaflet", component: MapsLeaflet },
   // Contacts
   { path: "/contacts-grid", component: ContactsGrid },
   { path: "/contacts-list", component: ContactsList },

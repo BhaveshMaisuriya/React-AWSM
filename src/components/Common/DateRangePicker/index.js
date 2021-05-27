@@ -173,7 +173,7 @@ const DateRangePicker = ({
   const captionElement = ({ date }) => {
     return (
       <div className="DayPicker-caption">
-        <div className="d-flex justify-content-between align-items-center pb-4">
+        <div className="d-flex justify-content-between align-items-center pb-4 pt-4">
           <div onClick={() => setMonth(addMonths(month, -1))}>
             <svg
               className="DayPicker-icon prev"

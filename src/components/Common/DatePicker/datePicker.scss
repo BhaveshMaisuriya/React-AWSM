@@ -9,6 +9,10 @@
     background-color: white;
     border-radius: 0.25rem;
     position: relative;
+    &.disabled {
+      background-color: #EEEEEE;
+      color: rgba(16, 16, 16, 0.3);
+    }
   }
 
   .date-picker-icon {

@@ -23,8 +23,8 @@ import {
   customerPayload,
 } from "./commercialCustomer"
 import { retailCustomers, audits, address, filter } from "./retailCustomer"
-import { roadTanker, auditsRoadTanker } from "./roadTanker"
-import { terminal, auditsTerminal } from "./terminal"
+import { roadTanker, auditsRoadTanker, filterRoadTanker } from "./roadTanker"
+import { terminal, auditsTerminal, filterTerminal } from "./terminal"
 import { productList } from "./product"
 export {
   productsData,
@@ -55,10 +55,12 @@ export {
   customerPayload,
   filter,
   filterCom,
+  filterTerminal,
   commercialCustomers,
-  productList,
-  roadTanker,
   auditsRoadTanker,
+  roadTanker,
+  filterRoadTanker,
+  productList,
   terminal,
   auditsTerminal,
 }

@@ -176,7 +176,6 @@ export const getUsers = () => get(url.GET_USERS)
 export const getUserProfile = () => get(url.GET_USER_PROFILE)
 
 // get retail customer
-// export const getRetailCustomer = () => get(url.GET_RETAIL_CUSTOMER)
 export const getRetailCustomer = params =>
   get(url.GET_RETAIL_CUSTOMER, { params: params })
 
@@ -206,7 +205,12 @@ export const getTerminalAuditLog = payload =>
 
 // get Retail Customer Table Information
 export const getTableInformation = code =>
-  get(`${url.GET_RETAIL_CUSTOMER_DETAIL}/${code}`)
+  // get(`${url.GET_RETAIL_CUSTOMER_DETAIL}/${code}`)
+  axios
+    .get(
+      "https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/retail-customer/0090000039"
+    )
+    .then(response => response.data)
 
 // update Table Information
 export const updateTableInformation = event =>
@@ -221,7 +225,13 @@ export const getCommercialFilter = params => {
   return get(url.GET_COMMERCIAL_FILTER, { params: params })
 }
 
-export const getProducts = params => get(url.GET_PRODUCTS, { params: params })
+// get DQM Master Terminal Filter
+export const getTerminalFilter = params => {
+  return get(url.GET_TERMINAL_FILTER, { params: params })
+}
+
+// export const getProducts = params => get(url.GET_PRODUCTS, { params: params })
+export const getProducts = params => axios.get('https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/product', { params: params})
 
 // get DQM Master Product Audit Log
 export const getProductAuditLog = payload =>
@@ -232,18 +242,29 @@ export const getProductFilter = params =>
   get(url.GET_PRODUCT_FILTER, { params: params })
 
 // Get DQM Master Product Details
+// export const getProductDetail = productCode =>
+//   get(`${url.GET_PRODUCT_DETAILS}/${productCode}`)
+
 export const getProductDetail = productCode =>
-  get(`${url.GET_PRODUCT_DETAILS}/${productCode}`)
+  axios.get(`https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/product/${productCode}`)
+
+// export const updateProductDetail = payload =>
+//   put(`${url.GET_PRODUCT_DETAILS}/${payload.code}`, payload.body)
 
 export const updateProductDetail = payload =>
-  put(`${url.GET_PRODUCT_DETAILS}/${payload.productCode}`, payload.body)
+  axios.put(`https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/product/${payload.code}`, payload.body)
 
 export const getCommercialDetail = code =>
-  get(`${url.GET_COMMERCIAL_CUSTOMER_DETAIL}/${code}`)
+  // get(`${url.GET_COMMERCIAL_CUSTOMER_DETAIL}/${code}`)
+  axios
+    .get(
+      "https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/commercial-customer/0080000000"
+    )
+    .then(response => response.data)
 
 export const putCommercialDetail = data =>
   put(`${url.GET_COMMERCIAL_CUSTOMER_DETAIL}/${data.ship_to_party}`, data)
-  
+
 // get DQM Master Road Tanker Filter
 export const getRoadTankerFilter = params => {
   return get(url.GET_ROADTANKER_FILTER, { params: params })

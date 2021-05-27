@@ -1536,9 +1536,9 @@ const auditsTerminal = {
   ],
 }
 
-const filterCom = [
+const filterTerminal = [
   {
-    ship_to_party: 1283938,
+    ship_to_party: 4283938,
   },
   {
     ship_to_party: 10048060,
@@ -1563,4 +1563,4 @@ const filterCom = [
   },
 ]
 
-export { terminal, auditsTerminal, filterCom }
+export { terminal, auditsTerminal, filterTerminal }

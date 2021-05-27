@@ -51,7 +51,7 @@ export default class StatusColumn extends Column {
             status = 'Started';
         }
 
-        return status ? `<i className="b-fa b-fa-circle ${status}"></i>${status}` : '';
+        return status ? `<i class="b-fa b-fa-circle ${status}"></i>${status}` : '';
     }
 }
 

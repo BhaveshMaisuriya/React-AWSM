@@ -1,5 +1,5 @@
 import { takeLatest, put, call, takeEvery } from "redux-saga/effects"
-import Factory, { mergeFilterValues } from "./factory"
+import { mergeFilterValues } from "./factory"
 import {
   GET_ROAD_TANKER,
   GET_ROADTANKER_AUDITLOG,
@@ -32,7 +32,7 @@ import {
 function* onGetRoadTanker({ params = {} }) {
   try {
     const response = yield call(getRoadTanker, params)
-    yield put(getRoadTankerSuccess(Factory(response)))
+    yield put(getRoadTankerSuccess(response))
   } catch (error) {
     yield put(getRoadTankerFail(error))
   }

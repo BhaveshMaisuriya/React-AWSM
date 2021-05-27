@@ -64,10 +64,10 @@ export const GET_RETAIL_FILTER = "/retail-customer/filter"
 export const GET_RETAIL_CUSTOMER_DETAIL = "/retail_customer_detail"
 
 //COMMERCIAL CUSTOMER
-export const GET_COMMERCIAL_CUSTOMER = "/commercial-customer"
+export const GET_COMMERCIAL_CUSTOMER = "/commercial_customer"
 export const GET_COMMERCIAL_AUDITLOG = "/commercial_audit"
 export const GET_COMMERCIAL_FILTER = "/commercial-customer/filter"
-export const GET_COMMERCIAL_CUSTOMER_DETAIL = "/commercial-customer"
+export const GET_COMMERCIAL_CUSTOMER_DETAIL = "/commercial_customer_detail"
 
 //TABLE INFORMATION
 export const UPDATE_TABLE_INFORMATION = "/update/address"
@@ -87,3 +87,4 @@ export const GET_ROADTANKER_FILTER = "/road-tanker/filter"
 //TERMINAL
 export const GET_TERMINAL = "/terminal"
 export const GET_TERMINAL_AUDITLOG = "/terminal_audit"
+export const GET_TERMINAL_FILTER = "/terminal/filter"

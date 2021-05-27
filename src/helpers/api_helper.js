@@ -2,10 +2,7 @@ import axios from "axios"
 
 //apply base url for axios
 // TODO dummy api endpoint
-// const API_URL = "https://6073f3f2066e7e0017e78a3d.mockapi.io/api/v1/"
-const API_URL = "https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev"
-
-export {API_URL};
+const API_URL = "https://6073f3f2066e7e0017e78a3d.mockapi.io/api/v1/"
 
 const axiosApi = axios.create({
   baseURL: API_URL,

@@ -29,6 +29,7 @@ export const getCommercialCustomerSuccess = response => ({
 
 export const getCommercialCustomerFail = error => ({
   type: GET_COMMERCIAL_CUSTOMER_FAIL,
+  payload: error,
 })
 
 export const getCommercialAuditLog = () => ({
@@ -57,6 +58,7 @@ export const getCommercialFilterSuccess = response => ({
 
 export const getCommercialFilterFail = error => ({
   type: GET_COMMERCIAL_FILTER_FAIL,
+  payload: error,
 })
 
 export const getCommercialTableInformation = (params) => {

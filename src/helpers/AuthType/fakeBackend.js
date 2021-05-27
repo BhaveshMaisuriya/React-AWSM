@@ -30,6 +30,8 @@ import {
   customerPayload,
   filter,
   filterCom,
+  filterRoadTanker,
+  filterTerminal,
   commercialCustomers,
   productList,
   auditsRoadTanker,
@@ -38,7 +40,7 @@ import {
   auditsTerminal,
 } from "../../common/data"
 
-import { axiosApi, API_URL } from "../api_helper"
+import { axiosApi } from "../api_helper"
 
 let users = [
   {
@@ -591,7 +593,6 @@ const fakeBackend = () => {
       setTimeout(() => {
         if (commercialCustomers) {
           // Passing fake JSON data as response
-          console.log("commercial::", resolve, reject)
           resolve([200, commercialCustomers])
         } else {
           reject([400, "Cannot get user profile"])
@@ -599,7 +600,6 @@ const fakeBackend = () => {
       })
     })
   })
-
   mock.onGet(url.GET_PRODUCTS).reply(() => {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
@@ -631,6 +631,19 @@ const fakeBackend = () => {
         if (terminal) {
           // Passing fake JSON data as response
           resolve([200, terminal])
+        } else {
+          reject([400, "Cannot get user profile"])
+        }
+      })
+    })
+  })
+
+  mock.onGet(url.GET_ROADTANKER).reply(() => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        if (roadTanker) {
+          // Passing fake JSON data as response
+          resolve([200, roadTanker])
         } else {
           reject([400, "Cannot get user profile"])
         }
@@ -741,6 +754,30 @@ const fakeBackend = () => {
     })
   })
 
+  mock.onGet(url.GET_ROADTANKER_FILTER).reply(() => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        if (filterRoadTanker) {
+          // Passing fake JSON data as response
+          resolve([200, filterRoadTanker])
+        } else {
+          reject([400, "Cannot get filter road tanker data"])
+        }
+      })
+    })
+  })
+  mock.onGet(url.GET_TERMINAL_FILTER).reply(() => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        if (filterTerminal) {
+          // Passing fake JSON data as response
+          resolve([200, filterTerminal])
+        } else {
+          reject([400, "Cannot get filter terminal data"])
+        }
+      })
+    })
+  })
   mock.onGet(new RegExp(`${url.GET_PRODUCT_DETAILS}/*`)).reply(() => {
     return new Promise((resolve, reject) => {
       setTimeout(() => {

@@ -29,6 +29,7 @@ export const getRetailCustomerSuccess = response => ({
 
 export const getRetailCustomerFail = error => ({
   type: GET_RETAIL_CUSTOMER_FAIL,
+  payload: error,
 })
 
 export const getRetailAuditLog = () => ({
@@ -72,6 +73,7 @@ export const updateTableInformationSuccess = event => ({
 
 export const updateTableInformationFail = error => ({
   type: UPDATE_TABLE_INFORMATION_FAIL,
+  payload: error,
 })
 
 export const resetRetailTableInformation = () => ({

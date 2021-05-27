@@ -12,6 +12,9 @@ const tabQuota = ({ scheduler, data, onChange }) => {
 
   const onUpdateField = (key, subKey, value) => {
     const newStorageData = { ...storageData }
+    if (!newStorageData[key]) {
+      newStorageData[key] = {}
+    }
     newStorageData[key][subKey] = value
     setStorageData(newStorageData)
     if (onChange) {
@@ -21,14 +24,14 @@ const tabQuota = ({ scheduler, data, onChange }) => {
 
   return (
     <>
-      {Object.keys(storageData).map((key, index) => (
+      {Object.keys(storageData).map((key, index) =>  key.startsWith("storage_") ? (
         <Row>
           <Col className="col-6">
             <AvForm>
               <AvField
-                name="product_code"
+                name="code"
                 label="PRODUCT CODE (QUOTA)"
-                value={storageData[key].product_code || ""}
+                value={storageData[key] ? storageData[key].code || "" : ""}
                 disabled
                 className="disabledField"
               />
@@ -40,7 +43,7 @@ const tabQuota = ({ scheduler, data, onChange }) => {
                 name="monthly_quota"
                 type="number"
                 label="MONTHLY FIXED QUOTA"
-                value={storageData[key].product_code_quota || ""}
+                value={storageData[key] ? storageData[key].product_code_quota || "" : ""}
                 placeholder="Quota (etc: 10,000,000)"
                 validate={{
                   max: {
@@ -55,7 +58,7 @@ const tabQuota = ({ scheduler, data, onChange }) => {
             </AvForm>
           </Col>
         </Row>
-      ))}
+      ) : null)}
     </>
   )
 }

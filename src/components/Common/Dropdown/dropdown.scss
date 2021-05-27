@@ -7,15 +7,16 @@
   user-select: none;
   &.disabled {
     background-color: rgb(238, 238, 238);
+    color: rgba(16, 16, 16, 0.3);
   }
 
   &:after {
-    content: "";
-    // position: absolute;
-    // right: 10px;
-    // top: 10px;
-    // transform: rotate(90deg);
-    // font-weight: bold;
+    content: ">";
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    transform: rotate(90deg);
+    font-weight: bold;
   }
 }
 
@@ -37,12 +38,4 @@
       color: white;
     }
   }
-}
-
-.dropDown-arrow {
-  position: absolute;
-  top: 7px;
-  right: 10px;
-  color: #777;
-  cursor: pointer;
 }

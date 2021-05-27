@@ -175,39 +175,41 @@ const commercialCustomers = {
         },
       },
 
-      storage: {
-        storage_1: {
-          id: 1633,
-          tank_capacity: 27000,
-          active_product: null,
-          ordering_category: null,
-          terminal: null,
-          distance: null,
-          duration: null,
-          remarks: null,
-          sales_category: null,
-          product_code_quota: null,
-          monthly_fixed_quota: null,
-          retail: "0090000039",
-          product_name: "PRIMAX 95",
-          product_code: "70020771",
+      "storage": {
+        "storage_1": {
+          "id": 1633,
+          "tank_capacity": 27000,
+          "active_product": null,
+          "ordering_category": null,
+          "ordering_category_items": ["SMP"],
+          "terminal": null,
+          "distance": null,
+          "duration": null,
+          "remarks": null,
+          "sales_category": null,
+          "product_code_quota": null,
+          "monthly_fixed_quota": null,
+          "retail": "0090000039",
+          "name": "PRIMAX 95",
+          "code": "70020771"
         },
-        storage_2: {
-          id: 1634,
-          tank_capacity: 27000,
-          active_product: null,
-          ordering_category: null,
-          terminal: null,
-          distance: null,
-          duration: null,
-          remarks: null,
-          sales_category: null,
-          product_code_quota: null,
-          monthly_fixed_quota: null,
-          retail: "0090000039",
-          product_name: "BIODIESEL B10 (RETAIL)",
-          product_code: "70100346",
-        },
+        "storage_2": {
+          "id": 1634,
+          "tank_capacity": 27000,
+          "active_product": null,
+          "ordering_category": null,
+          "ordering_category_items": ["SMP"],
+          "terminal": null,
+          "distance": null,
+          "duration": null,
+          "remarks": null,
+          "sales_category": null,
+          "product_code_quota": null,
+          "monthly_fixed_quota": null,
+          "retail": "0090000039",
+          "name": "BIODIESEL B10 (RETAIL)",
+          "code": "70100346"
+        }
       },
     },
     {
@@ -1571,7 +1573,6 @@ const commercialCustomers = {
     },
   ],
 }
-
 const auditsCom = {
   visible_row_count: 4,
   total_rows: 4,
@@ -1589,22 +1590,22 @@ const auditsCom = {
     {
       id: 3,
       description: "Najib Sent the Scheduling for Approval",
-      created: "Monday, 1 Feb 2021, 12:00 AM",
+      created: "Monday, 1 Feb 2021 12:00 AM",
     },
     {
       id: 4,
       description: "Najib Refreshed Bloacked DN",
-      created: "Monday, 12 Apr 2021, 1:38 PM",
+      created: "Monday, 12 Apr 2021 1:38 PM",
     },
     {
       id: 5,
       description: "Najib Refreshed Bloacked DN",
-      created: "Monday, 12 Apr 2021, 03:32 PM",
+      created: "Monday, 12 Apr 2021 03:32 PM",
     },
     {
       id: 6,
       description: "Nazmuddin Added 1 New Order in Order Bank",
-      created: "Monday, 12 Apr 2021, 04:20 PM",
+      created: "Monday, 12 Apr 2021 04:20 PM",
     },
   ],
 }

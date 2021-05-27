@@ -73,7 +73,6 @@ function* onGetRetailFilter({ params = {} }) {
     yield put(
       getRetailFilterSuccess(mergeFilterValues(response, params.search_fields))
     )
-    // yield put(getRetailFilterSuccess(response))
   } catch (error) {
     yield put(getRetailFilterFail(error))
   }

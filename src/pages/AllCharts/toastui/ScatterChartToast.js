@@ -591,20 +591,20 @@ class ScatterChartToast extends Component {
       tooltip: {
         template: function (category, items) {
           return (
-            '<div className="tui-chart-default-tooltip">' +
-            '<div className="tui-chart-tooltip-head">' +
+            '<div class="tui-chart-default-tooltip">' +
+            '<div class="tui-chart-tooltip-head">' +
             items.legend +
             "</div>" +
-            '<table className="tui-chart-tooltip-body">' +
+            '<table class="tui-chart-tooltip-body">' +
             "<tr>" +
             "<td>Weight</td>" +
-            '<td className="tui-chart-tooltip-value">' +
+            '<td class="tui-chart-tooltip-value">' +
             items.x +
             "kg</td>" +
             "</tr>" +
             "<tr>" +
             "<td>Height</td>" +
-            '<td className="tui-chart-tooltip-value">' +
+            '<td class="tui-chart-tooltip-value">' +
             items.y +
             "cm</td>" +
             "</tr>" +

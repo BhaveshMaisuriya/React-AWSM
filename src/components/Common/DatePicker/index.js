@@ -37,8 +37,14 @@ const DatePicker = ({ disabled, format = "Do MMM YYYY", value, onChange }) => {
 
   return (
     <div className="awsm-date-picker-container">
-      <button type="button" disabled={disabled} aria-describedby={id} color="primary" onClick={handleClick}
-              className="date-picker-button">
+      <button
+        type="button"
+        disabled={disabled}
+        aria-describedby={id}
+        color="primary"
+        onClick={handleClick}
+        className={`date-picker-button ${disabled ? "disabled" : ""}`}
+      >
         <div className="pl-2">{label}</div>
         <ReactSVG className="date-picker-icon" src={CALENDAR_ICON} />
       </button>
@@ -49,11 +55,11 @@ const DatePicker = ({ disabled, format = "Do MMM YYYY", value, onChange }) => {
         onClose={handleClose}
         anchorOrigin={{
           vertical: "bottom",
-          horizontal: "left"
+          horizontal: "left",
         }}
         transformOrigin={{
           vertical: "top",
-          horizontal: "left"
+          horizontal: "left",
         }}
       >
         <div className="awsm-date-picker">

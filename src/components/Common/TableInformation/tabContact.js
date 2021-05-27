@@ -1,17 +1,17 @@
-import React, { useState } from "react"
+import React, { useMemo } from "react"
 import { AvField, AvForm } from "availity-reactstrap-validation"
 import { Col, Row } from "reactstrap"
 import "./tabContact.scss"
 
 const tabContact = ({ scheduler, data, onChange }) => {
-  const getContactList = () => {
+  const contactList = useMemo(() => {
     const contactList = []
-    if(!data) {
+    if(!data.contact) {
       return []
     }
-    for (const key in data) {
-      if (data.hasOwnProperty(key) && /^contact_[1,2,3]$/.test(key)) {
-        contactList.push({ data: data[key] || {}, key: key, disabled: data[key] != null});
+    for (const key in data.contact) {
+      if (data.contact.hasOwnProperty(key) && /^contact_[1,2,3]$/.test(key)) {
+        contactList.push({ data: data.contact[key] || {}, key: key, disabled: data.contact[key] != null});
       }
     }
     return [0, 1, 2].map(item => {
@@ -21,13 +21,17 @@ const tabContact = ({ scheduler, data, onChange }) => {
         disabled: false
       };
     })
-  }
-  const [contactList, setContactList] = useState(getContactList())
+  }, [data]);
+
   const onFieldChange = (index, key, value) => {
-    const newContactList = [...contactList]
-    newContactList[index].data[key] = value;
-    setContactList(newContactList);
-    onChange(newContactList[index].key, newContactList[index].data)
+    const newContactData = {...data.contact}
+    if (!newContactData[`contact_${index + 1}`]) {
+      newContactData[`contact_${index + 1}`] = {}
+    }
+    newContactData[`contact_${index + 1}`][key] = value;
+    if (onChange) {
+      onChange("contact", newContactData)
+    }
   }
 
   return (
@@ -105,7 +109,7 @@ const tabContact = ({ scheduler, data, onChange }) => {
               <AvField
                 name="contact_name"
                 placeholder="Name (etc: John Doe)"
-                // value={data ? data.contact_name : ""}
+                value={data.territory_manager ? data.territory_manager.name || "" : ""}
                 disabled={!!scheduler}
                 className={scheduler ? "disabledField" : ""}
               />
@@ -117,7 +121,7 @@ const tabContact = ({ scheduler, data, onChange }) => {
                 name="contact_phone"
                 type="number"
                 placeholder="Contact No. (etc: 011-234556799)"
-                // value={contactsDummy ? contactsDummy.contact_phone : ""}
+                value={data.territory_manager ? data.territory_manager.number || "" : ""}
                 disabled={!!scheduler}
                 className={scheduler ? "disabledField" : ""}
                 validate={{
@@ -136,7 +140,7 @@ const tabContact = ({ scheduler, data, onChange }) => {
               <AvField
                 name="contact_email"
                 placeholder="Email (etc: johndoe@petronas.com)"
-                // value={contactsDummy ? contactsDummy.contact_email : ""}
+                value={data.territory_manager ? data.territory_manager.email || "" : ""}
                 disabled={!!scheduler}
                 className={scheduler ? "disabledField" : ""}
               />
@@ -153,7 +157,7 @@ const tabContact = ({ scheduler, data, onChange }) => {
               <AvField
                 name="contact_name"
                 placeholder="Name (etc: John Doe)"
-                // value={contactsDummy ? contactsDummy.contact_name : ""}
+                value={data.retail_sales_manager ? data.retail_sales_manager.name || "" : ""}
                 disabled={!!scheduler}
                 className={scheduler ? "disabledField" : ""}
               />
@@ -165,7 +169,7 @@ const tabContact = ({ scheduler, data, onChange }) => {
                 name="contact_phone"
                 type="number"
                 placeholder="Contact No. (etc: 011-234556799)"
-                // value={contactsDummy ? contactsDummy.contact_phone : ""}
+                value={data.retail_sales_manager ? data.retail_sales_manager.number || "" : ""}
                 disabled={!!scheduler}
                 className={scheduler ? "disabledField" : ""}
                 validate={{
@@ -184,7 +188,7 @@ const tabContact = ({ scheduler, data, onChange }) => {
               <AvField
                 name="contact_email"
                 placeholder="Email (etc: johndoe@petronas.com)"
-                // value={contactsDummy ? contactsDummy.contact_email : ""}
+                value={data.retail_sales_manager ? data.retail_sales_manager.email || "" : ""}
                 disabled={!!scheduler}
                 className={scheduler ? "disabledField" : ""}
               />

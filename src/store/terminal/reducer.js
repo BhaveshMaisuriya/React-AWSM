@@ -7,8 +7,8 @@ import {
   GET_TABLE_INFORMATION_SUCCESS,
   UPDATE_TABLE_INFORMATION_SUCCESS,
   UPDATE_TABLE_INFORMATION_FAIL,
-  GET_RETAIL_FILTER_SUCCESS,
-  GET_RETAIL_FILTER_FAIL,
+  GET_TERMINAL_FILTER_SUCCESS,
+  GET_TERMINAL_FILTER_FAIL,
 } from "./actionTypes"
 
 const initialState = {
@@ -16,7 +16,7 @@ const initialState = {
   error: {},
   auditsTerminal: [],
   address: [],
-  filter: [],
+  filterTerminal: [],
 }
 
 const Terminal = (state = initialState, action) => {
@@ -73,24 +73,13 @@ const Terminal = (state = initialState, action) => {
         error: action.payload,
       }
 
-    case GET_RETAIL_FILTER_SUCCESS:
+    case GET_TERMINAL_FILTER_SUCCESS:
       return {
         ...state,
-        filter: action.payload,
+        filterTerminal: action.payload,
       }
 
-    case GET_RETAIL_FILTER_FAIL:
-      return {
-        ...state,
-        error: action.payload,
-      }
-    case GET_RETAIL_FILTER_SUCCESS:
-      return {
-        ...state,
-        filter: action.payload,
-      }
-
-    case GET_RETAIL_FILTER_FAIL:
+    case GET_TERMINAL_FILTER_FAIL:
       return {
         ...state,
         error: action.payload,

@@ -1,6 +1,14 @@
+import { isNull } from "lodash"
+
+const StringConstants = {
+  daily: "daily",
+  every: "every",
+  range: "range",
+}
+
 const productArray = [
-  "product_code",
-  "product_name",
+  // "code",
+  // "name",
   "tank_capacity",
   "active_product",
   "ordering_category",
@@ -8,16 +16,60 @@ const productArray = [
   "distance",
   "duration",
   "remarks",
-  "station_sales_category",
+  "sales_category",
   "product_code_quota",
+  "monthly_fixed_quota",
+  "retail",
+  "product_name",
+  "product_code",
 ]
 
-const contactPersonArray = [
-  "contact_person_name",
-  "contact_person_number",
-  "contact_person_email",
-  "contact_person_position",
+const dateArray = ["type", "days", "time_from", "time_to"]
+
+const retailDetailsArray = [
+  "ship_to_party",
+  "site_id",
+  "site_name",
+  "ship_to_company",
+  "sold_to_party",
+  "sold_to_company",
+  "status_sap",
+  "status_awsm",
+  "remarks",
+  "setel_activation_status",
+  "contact_last_updated",
+  "sales_inventory_data_source",
+  "road_tanker_requirement",
+  "road_tanker_accessibility",
+  "cluster",
+  "alternate_cluster",
+  "cloud",
+  "border_station",
+  "speed",
 ]
+
+const addressArray = [
+  "city",
+  "state",
+  "country",
+  "postcode",
+  "latitude",
+  "longitude",
+  "region_name",
+  "region_group",
+]
+
+const personDetailsArray = ["name", "number", "email", "position"]
+
+const checkDateInterval = obj => {
+  let interval = "-"
+  if (obj.type === StringConstants.range)
+    interval = obj["date_from"]
+      .toString()
+      .concat(" to ", obj["date_to"].toString())
+  else if (obj.type === StringConstants.every) interval = obj["days"]
+  return interval
+}
 
 export const mergeFilterValues = (filterData, key) => {
   const filterObject = {}
@@ -29,7 +81,7 @@ export const mergeFilterValues = (filterData, key) => {
 }
 
 const checkNullValue = (data, defaultValue) =>
-  data === null ? defaultValue : data
+  isNull(data) ? defaultValue : data
 
 const getValueFromObj = (dataObj, key, defaultVal) => {
   if (Object.prototype.hasOwnProperty.call(dataObj, key)) {
@@ -40,34 +92,31 @@ const getValueFromObj = (dataObj, key, defaultVal) => {
 const getAddressTableObj = (retailCustomerObj, data, key) => {
   const tempObj = retailCustomerObj
   if (Object.prototype.hasOwnProperty.call(data, key)) {
-    tempObj.city = getValueFromObj(data, "city", "-")
-    tempObj.state = getValueFromObj(data, "state", "-")
-    tempObj.country = getValueFromObj(data, "country", "-")
-    tempObj.postcode = getValueFromObj(data, "postcode", "-")
-    tempObj.latitude = getValueFromObj(data, "latitude", "-")
-    tempObj.longitude = getValueFromObj(data, "longitude", "-")
-    tempObj.region_group = getValueFromObj(data, "region_group", "-")
-    tempObj.address =
-      getValueFromObj(data, "address_1", "-") +
-      getValueFromObj(data, "address_2", " ") +
-      getValueFromObj(data, "address_3", " ")
+    addressArray.forEach(
+      p => (tempObj[`${key}_${p}`] = getValueFromObj(data[key], p, "-"))
+    )
+    tempObj[`${key}_address_1`] =
+      getValueFromObj(data[key], "address_1", "-") +
+      getValueFromObj(data[key], "address_2", " ") +
+      getValueFromObj(data[key], "address_3", " ")
   }
   return tempObj
 }
 
 const getDateObj = (retailCustomerObj, data, key) => {
   const tempObj = retailCustomerObj
-  if (Object.prototype.hasOwnProperty.call(data, key) && data[key] !== null) {
-    productArray.forEach(
+  if (Object.prototype.hasOwnProperty.call(data, key) && !isNull(data[key])) {
+    dateArray.forEach(
       p => (tempObj[`${key}_${p}`] = getValueFromObj(data[key], p, "-"))
     )
+    tempObj[`${key}_value`] = checkDateInterval(data[key])
   }
   return tempObj
 }
 
 const getProductObj = (retailCustomerObj, data, key) => {
   const tempObj = retailCustomerObj
-  if (Object.prototype.hasOwnProperty.call(data, key) && data[key] !== null) {
+  if (Object.prototype.hasOwnProperty.call(data, key) && !isNull(data[key])) {
     productArray.forEach(
       p => (tempObj[`${key}_${p}`] = getValueFromObj(data[key], p, "-"))
     )
@@ -77,177 +126,49 @@ const getProductObj = (retailCustomerObj, data, key) => {
 
 const getContactPersonObj = (retailCustomerObj, data, key) => {
   const tempObj = retailCustomerObj
-  if (Object.prototype.hasOwnProperty.call(data, key) && data[key] !== null) {
-    contactPersonArray.forEach(
+  if (Object.prototype.hasOwnProperty.call(data, key) && !isNull(data[key])) {
+    personDetailsArray.forEach(
       p => (tempObj[`${key}_${p}`] = getValueFromObj(data[key], p, "-"))
     )
   }
   return tempObj
 }
 
-const getRetailCustomerObj = () => {
-  const retailCustomerObj = {
-    site_name: "-",
-    ship_to_party: 0,
-    site_id: "-",
-    ship_to_company: "-",
-    station_status_sap: "-",
-    station_status_awsm: "-",
-    remarks: "-",
-    setel_activation_status: "-",
-    territory_manager_name: "-",
-    territory_manager_number: "-",
-    territory_manager_email: "-",
-    retail_sales_manager_name: "-",
-    retail_sales_manager_number: "-",
-    retail_sales_manager_email: "-",
-    contact_last_updated: "-",
-    sales_inventory_data_source: "-",
-    end_of_day: 0,
-    road_tanker_requirement: "-",
-    road_tanker_accessibility: 0,
-    sold_to_party: "-",
-    sold_to_company: "-",
-    station_cluster: "-",
-    alternate_cluster: "-",
-    cloud: "-",
-    border_station: "-",
-    distance_from_terminal: "-",
-    speed: "-",
-  }
-  return retailCustomerObj
-}
-
 export default function retailCustomerFactory(data) {
-  let retailCustomerObj = getRetailCustomerObj()
+  let retailCustomerObj = {}
   const finalData = []
   data.list.forEach(d => {
     const cloneobj = JSON.parse(JSON.stringify(retailCustomerObj))
-    retailCustomerObj.site_name = getValueFromObj(d, "site_name", "-")
-    retailCustomerObj.ship_to_party = getValueFromObj(d, "ship_to_party", "-")
-    retailCustomerObj.site_id = getValueFromObj(d, "site_id", "-")
-    retailCustomerObj.ship_to_company = getValueFromObj(
-      d,
-      "ship_to_company",
-      "-"
+    retailDetailsArray.forEach(
+      p => (retailCustomerObj[`${p}`] = getValueFromObj(d, p, "-"))
     )
-    retailCustomerObj.station_status_sap = getValueFromObj(
-      d,
-      "station_status_sap",
-      "-"
-    )
-    retailCustomerObj.station_status_awsm = getValueFromObj(
-      d,
-      "station_status_awsm",
-      "-"
-    )
-    retailCustomerObj.remarks = getValueFromObj(d, "remarks", "-")
-    retailCustomerObj.setel_activation_status = getValueFromObj(
-      d,
-      "setel_activation_status",
-      "-"
-    )
-    retailCustomerObj.territory_manager_name = getValueFromObj(
-      d,
-      "territory_manager_name",
-      "-"
-    )
-    retailCustomerObj.territory_manager_number = getValueFromObj(
-      d,
-      "territory_manager_number",
-      "-"
-    )
-    retailCustomerObj.territory_manager_email = getValueFromObj(
-      d,
-      "territory_manager_email",
-      "-"
-    )
-    retailCustomerObj.retail_sales_manager_name = getValueFromObj(
-      d,
-      "retail_sales_manager_name",
-      "-"
-    )
-    retailCustomerObj.retail_sales_manager_number = getValueFromObj(
-      d,
-      "retail_sales_manager_number",
-      "-"
-    )
-    retailCustomerObj.retail_sales_manager_email = getValueFromObj(
-      d,
-      "retail_sales_manager_email",
-      "-"
-    )
-    retailCustomerObj.contact_last_updated = getValueFromObj(
-      d,
-      "contact_last_updated",
-      "-"
-    )
-    retailCustomerObj.road_tanker_requirement = getValueFromObj(
-      d,
-      "road_tanker_requirement",
-      "-"
-    )
-    retailCustomerObj.sales_inventory_data_source = getValueFromObj(
-      d,
-      "sales_inventory_data_source",
-      "-"
-    )
-    retailCustomerObj.end_of_day = getValueFromObj(d, "end_of_day", "-")
-    retailCustomerObj.road_tanker_accessibility = getValueFromObj(
-      d,
-      "road_tanker_accessibility",
-      "-"
-    )
-    retailCustomerObj.sold_to_party = getValueFromObj(d, "sold_to_party", "-")
-    retailCustomerObj.sold_to_company = getValueFromObj(
-      d,
-      "sold_to_company",
-      "-"
-    )
-    retailCustomerObj.station_cluster = getValueFromObj(
-      d,
-      "station_cluster",
-      "-"
-    )
-    retailCustomerObj.alternate_cluster = getValueFromObj(
-      d,
-      "alternate_cluster",
-      "-"
-    )
-    retailCustomerObj.cloud = getValueFromObj(d, "cloud", "-")
-    retailCustomerObj.border_station = getValueFromObj(d, "border_station", "-")
-    retailCustomerObj.distance_from_terminal = getValueFromObj(
-      d,
-      "distance_from_terminal",
-      "-"
-    )
-    retailCustomerObj.speed = getValueFromObj(d, "speed", "-")
-    getAddressTableObj(retailCustomerObj, d, "address_table")
-    getProductObj(retailCustomerObj, d, "product_1")
-    getProductObj(retailCustomerObj, d, "product_2")
-    getProductObj(retailCustomerObj, d, "product_3")
-    getProductObj(retailCustomerObj, d, "product_4")
-    getProductObj(retailCustomerObj, d, "product_5")
-    getProductObj(retailCustomerObj, d, "product_6")
-    getContactPersonObj(retailCustomerObj, d, "contact_person1")
-    getContactPersonObj(retailCustomerObj, d, "contact_person2")
-    getContactPersonObj(retailCustomerObj, d, "contact_person3")
-    getDateObj(retailCustomerObj, d, "delivery_open_time_date")
-    getDateObj(retailCustomerObj, d, "actual_open_1_date")
-    getDateObj(retailCustomerObj, d, "actual_open_2_date")
-    getDateObj(retailCustomerObj, d, "actual_open_3_date")
-    getDateObj(retailCustomerObj, d, "no_delivery_interval_1_date")
-    getDateObj(retailCustomerObj, d, "no_delivery_interval_2_date")
-    getDateObj(retailCustomerObj, d, "no_delivery_interval_3_date")
-    getDateObj(retailCustomerObj, d, "no_delivery_interval_4_date")
-    getDateObj(retailCustomerObj, d, "no_delivery_interval_5_date")
-    getDateObj(retailCustomerObj, d, "station_close_period_date")
+    getAddressTableObj(retailCustomerObj, d, "address")
+    getProductObj(retailCustomerObj, d, "storage_1")
+    getProductObj(retailCustomerObj, d, "storage_2")
+    getProductObj(retailCustomerObj, d, "storage_3")
+    getProductObj(retailCustomerObj, d, "storage_4")
+    getProductObj(retailCustomerObj, d, "storage_5")
+    getProductObj(retailCustomerObj, d, "storage_6")
+    getContactPersonObj(retailCustomerObj, d, "contact_1")
+    getContactPersonObj(retailCustomerObj, d, "contact_2")
+    getContactPersonObj(retailCustomerObj, d, "contact_3")
+    getContactPersonObj(retailCustomerObj, d, "territory_manager")
+    getContactPersonObj(retailCustomerObj, d, "retail_sales_manager")
+    getDateObj(retailCustomerObj, d, "delivery_open_time_1")
+    getDateObj(retailCustomerObj, d, "actual_open_time_1")
+    getDateObj(retailCustomerObj, d, "actual_open_time_2")
+    getDateObj(retailCustomerObj, d, "actual_open_time_3")
+    getDateObj(retailCustomerObj, d, "no_delivery_interval_1")
+    getDateObj(retailCustomerObj, d, "no_delivery_interval_2")
+    getDateObj(retailCustomerObj, d, "no_delivery_interval_3")
+    getDateObj(retailCustomerObj, d, "no_delivery_interval_4")
+    getDateObj(retailCustomerObj, d, "no_delivery_interval_5")
+    getDateObj(retailCustomerObj, d, "close_period_1")
     finalData.push(retailCustomerObj)
     retailCustomerObj = cloneobj
   })
-  
   return {
     list: finalData,
-    totalRows: getValueFromObj(data, "total_rows", "0"),
+    total_rows: getValueFromObj(data, "total_rows", "0"),
   }
 }

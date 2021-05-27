@@ -55,7 +55,7 @@ function* onGetProductFIlter({ params = {} }) {
 function* onGetProducts() {
   try {
     const response = yield call(getProducts)
-    yield put(getProductSuccess(response))
+    yield put(getProductSuccess(response.data))
   } catch (error) {
     yield put(getProductFail(error))
   }
@@ -64,7 +64,7 @@ function* onGetProducts() {
 function* onGetProductDetail(action) {
   try {
     const response = yield call(getProductDetail, action.params)
-    yield put(getProductDetailSuccess(response))
+    yield put(getProductDetailSuccess(response.data))
   } catch (error) {
     yield put(getProductDetailFail(error))
   }
@@ -72,6 +72,7 @@ function* onGetProductDetail(action) {
 
 function* onUpdateProductDetail(action) {
   try {
+    console.log('Update Product Details : ', action.params)
     const response = yield call(updateProductDetail, action.params)
     yield put(updateProductDetailSuccess(response))
   } catch (error) {

@@ -5,7 +5,7 @@ import {
   GET_TERMINAL_AUDITLOG,
   GET_TABLE_INFORMATION,
   UPDATE_TABLE_INFORMATION,
-  GET_RETAIL_FILTER,
+  GET_TERMINAL_FILTER,
 } from "./actionTypes"
 
 import {
@@ -17,8 +17,8 @@ import {
   getTableInformationFail,
   updateTableInformationSuccess,
   updateTableInformationFail,
-  getRetailFilterSuccess,
-  getRetailFilterFail,
+  getTerminalFilterSuccess,
+  getTerminalFilterFail,
 } from "./actions"
 
 import {
@@ -26,7 +26,7 @@ import {
   getTerminalAuditLog,
   getTableInformation,
   updateTableInformation,
-  getRetailFilter,
+  getTerminalFilter,
 } from "../../helpers/fakebackend_helper"
 
 function* onGetTerminal({ params = {} }) {
@@ -65,14 +65,16 @@ function* onUpdateTableInformation({ payload: event }) {
   }
 }
 
-function* onGetRetailFilter({ params = {} }) {
+function* onGetTerminalFilter({ params = {} }) {
   try {
-    const response = yield call(getRetailFilter, params)
+    const response = yield call(getTerminalFilter, params)
     yield put(
-      getRetailFilterSuccess(mergeFilterValues(response, params.search_fields))
+      getTerminalFilterSuccess(
+        mergeFilterValues(response, params.search_fields)
+      )
     )
   } catch (error) {
-    yield put(getRetailFilterFail(error))
+    yield put(getTerminalFilterFail(error))
   }
 }
 
@@ -82,7 +84,7 @@ function* terminalSaga() {
   yield takeLatest(GET_TERMINAL_AUDITLOG, onGetTerminalAuditLog)
   yield takeLatest(GET_TABLE_INFORMATION, fetchTableInformation)
   yield takeEvery(UPDATE_TABLE_INFORMATION, onUpdateTableInformation)
-  yield takeLatest(GET_RETAIL_FILTER, onGetRetailFilter)
+  yield takeLatest(GET_TERMINAL_FILTER, onGetTerminalFilter)
 }
 
 export default terminalSaga

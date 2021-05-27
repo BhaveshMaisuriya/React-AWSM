@@ -1,9 +1,8 @@
 import React, { useEffect, useRef, useState } from "react"
 import AWSMDropdown from "../Dropdown"
 import "./dropdownInput.scss"
-import { title } from "react-bootstrap-sweetalert/dist/styles/SweetAlertStyles"
 
-const DropdownInput = ({value, items, title, onChange, onAddItem}) => {
+const DropdownInput = ({value, items, title, onChange, onAddItem, acceptDuplicate = false}) => {
   const [inputMode, setInputMode] = useState(false)
   const [inputValue, setInputValue] = useState("")
   const inputRef = useRef(null)
@@ -18,6 +17,9 @@ const DropdownInput = ({value, items, title, onChange, onAddItem}) => {
 
   const onAddNewItem = () =>  {
     if (inputValue) {
+      if (items.includes(inputValue) && !acceptDuplicate) {
+        return
+      }
       onAddItem(inputValue)
       setInputValue("")
       setInputMode(!inputMode)

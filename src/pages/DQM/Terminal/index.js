@@ -4,7 +4,7 @@ import Page from "../Common"
 import {
   getTerminal,
   getTerminalAuditLog,
-  getProductFilter,
+  getTerminalFilter,
   getTableInformation,
   updateTableInformation,
 } from "../../../store/actions"
@@ -52,12 +52,12 @@ class Terminal extends Component {
     const {
       onGetTerminal,
       onGetTerminalAuditLog,
-      onGetProductFilter,
+      onGetTerminalFilter,
       onGetTableInformation,
       onUpdateTableInformation,
       terminalTable,
       auditsTerminal,
-      filter,
+      filterTerminal,
     } = this.props
     const { searchFields } = this.state
     if (!terminalTable || terminalTable.length === 0) return ""
@@ -69,14 +69,14 @@ class Terminal extends Component {
           tableName={ProductTableName}
           onGetCustomer={onGetTerminal}
           onGetAuditLog={onGetTerminalAuditLog}
-          onGetFilter={onGetProductFilter}
+          onGetFilter={onGetTerminalFilter}
           onGetTableInformation={onGetTableInformation}
           onUpdateTableInformation={onUpdateTableInformation}
           tableColumns={searchFields}
           tableMapping={tableMapping}
           tableData={terminalTable}
           audits={auditsTerminal}
-          filter={filter}
+          filter={filterTerminal}
           modalComponent={TerminalDetailModal}
         />
       </Fragment>
@@ -87,13 +87,13 @@ class Terminal extends Component {
 const mapStateToProps = ({ products, terminal }) => ({
   terminalTable: terminal.terminal,
   auditsTerminal: terminal.auditsTerminal,
-  filter: products.productFilter,
+  filterTerminal: terminal.filterTerminal,
 })
 
 const mapDispatchToProps = dispatch => ({
   onGetTerminal: params => dispatch(getTerminal(params)),
   onGetTerminalAuditLog: payload => dispatch(getTerminalAuditLog(payload)),
-  onGetProductFilter: payload => dispatch(getProductFilter(payload)),
+  onGetTerminalFilter: payload => dispatch(getTerminalFilter(payload)),
   onGetTableInformation: () => dispatch(getTableInformation()),
   onUpdateTableInformation: event => dispatch(updateTableInformation(event)),
 })

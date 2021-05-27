@@ -11,9 +11,9 @@ import {
   UPDATE_TABLE_INFORMATION,
   UPDATE_TABLE_INFORMATION_SUCCESS,
   UPDATE_TABLE_INFORMATION_FAIL,
-  GET_RETAIL_FILTER,
-  GET_RETAIL_FILTER_SUCCESS,
-  GET_RETAIL_FILTER_FAIL,
+  GET_TERMINAL_FILTER,
+  GET_TERMINAL_FILTER_SUCCESS,
+  GET_TERMINAL_FILTER_FAIL,
 } from "./actionTypes"
 
 export const getTerminal = params => ({
@@ -74,17 +74,17 @@ export const updateTableInformationFail = error => ({
   payload: error,
 })
 
-export const getRetailFilter = params => ({
-  type: GET_RETAIL_FILTER,
+export const getTerminalFilter = params => ({
+  type: GET_TERMINAL_FILTER,
   params,
 })
 
-export const getRetailFilterSuccess = response => ({
-  type: GET_RETAIL_FILTER_SUCCESS,
+export const getTerminalFilterSuccess = response => ({
+  type: GET_TERMINAL_FILTER_SUCCESS,
   payload: response,
 })
 
-export const getRetailFilterFail = error => ({
-  type: GET_RETAIL_FILTER_FAIL,
+export const getTerminalFilterFail = error => ({
+  type: GET_TERMINAL_FILTER_FAIL,
   payload: error,
 })

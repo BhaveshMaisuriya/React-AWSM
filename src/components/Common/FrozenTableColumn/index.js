@@ -3,6 +3,7 @@ import PropTypes from "prop-types"
 import Filter from "../DataTable/filter"
 import { Link } from "react-router-dom"
 import "./style.scss"
+import { isEqual } from "lodash"
 class FixedCoulmnTable extends Component {
   constructor(props) {
     super(props)
@@ -22,7 +23,7 @@ class FixedCoulmnTable extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (this.props.headers.toString() !== prevProps.headers.toString()) {
+    if (!isEqual(this.props.headers, prevProps.headers)) {
       const fixedHeaders = this.props.headers.slice(0, this.props.frozen)
       const regularHeaders = this.props.headers.slice(
         this.props.frozen,
@@ -58,12 +59,17 @@ class FixedCoulmnTable extends Component {
 
   addTd = arr => {
     const { config, filterData, filterDropdownHandler } = this.props
+    if (!arr) return null
     return arr.map((e, index) => (
       <td key={index}>
         <div
-          className={"d-flex align-items-center table_header_fit_text"}
+          className={
+            config[e].columnSize === 1
+              ? "cell-text d-flex align-items-center"
+              : "cell-text-big"
+          }
         >
-          <span onClick={this.createSortHandler(config[e].apiKey)} className="header_text">
+          <span onClick={this.createSortHandler(config[e].apiKey)}>
             {config[e].label}
           </span>
           <Filter
@@ -94,6 +100,7 @@ class FixedCoulmnTable extends Component {
     ))
   }
   renderFrozenTr = arr => {
+    if (!arr) return null
     return arr.map((e, index) => {
       return <tr key={index}>{this.renderFrozenTd(e, index)}</tr>
     })
@@ -108,6 +115,7 @@ class FixedCoulmnTable extends Component {
     ))
   }
   renderRegular = arr => {
+    if (!arr) return null
     return arr.map((e, index) => {
       return <tr key={index}>{this.renderRegularTd(e)}</tr>
     })
@@ -117,7 +125,7 @@ class FixedCoulmnTable extends Component {
     const { tableData } = this.props
     const { fixedHeaders, regularHeaders } = this.state
     return (
-      <div className="container">
+      <div className="container" style={{ maxWidth: "100%" }}>
         <table className="fixed">
           <thead>
             <tr>{this.addTd(fixedHeaders)}</tr>
@@ -149,9 +157,9 @@ FixedCoulmnTable.propType = {
 }
 
 FixedCoulmnTable.defaultProps = {
-  headerSortHandler: () => { },
-  filterDropdownHandler: () => { },
-  filterApplyHandler: () => { },
+  headerSortHandler: () => {},
+  filterDropdownHandler: () => {},
+  filterApplyHandler: () => {},
 }
 
 export default FixedCoulmnTable

@@ -19,11 +19,11 @@ export function transformObjectToStringSentence(qObject) {
     const keys = Object.keys(qObject)
     for (let [index, key] of keys.entries()) {
       for (let [index, object] of qObject[key].entries()) {
-        newString = newString.concat(key, " = ", checkType(object))
+        newString = newString.concat(key, " == ", checkType(object))
         if (index !== qObject[key].length - 1)
-          newString = newString.concat(" | ")
+          newString = newString.concat(" || ")
       }
-      if (index !== keys.length - 1) newString = newString.concat(" & ")
+      if (index !== keys.length - 1) newString = newString.concat(" && ")
     }
   }
   return newString

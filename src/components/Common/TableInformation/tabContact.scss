@@ -1,7 +1,8 @@
 .disabledField {
     background-color: #eee !important;
+    color: rgba(16, 16, 16, 0.3) !important;
   }
-  
+
   label[for="monthly_quota"] {
     color: #495057 !important;
   }
@@ -14,4 +15,3 @@
     background-image: url(../../../assets/images/warning.svg) !important;
     background-repeat: no-repeat;
   }
-  

@@ -7,7 +7,7 @@ import AWSMCheckBox from "../CheckBox"
 import { XIcon, AlertIcon, EllipsisIcon, RefreshDotIcon } from "./icons"
 // Css
 import "./customizeTable.scss"
-
+import { Modal, ModalBody, ModalHeader } from "reactstrap"
 /**
  * Select item component
  * @param item
@@ -262,14 +262,11 @@ const CustomizeTableModal = ({
 
   return (
     <div>
-      <Dialog open={open} maxWidth="lg">
-        <DialogContent className="customize-table-container">
-          <div className="d-flex justify-content-between align-items-center mb-4 customize-table-title">
-            <h3>Customise Column</h3>
-            <div onClick={closeDialog} className="close-button">
-              <XIcon />
-            </div>
-          </div>
+      <Modal isOpen={open} toggle={closeDialog} id="customize_popup">
+        <ModalHeader toggle={closeDialog}>
+          <h3>Customise Column</h3>
+        </ModalHeader>
+        <ModalBody className="customize-table-container">
           <div className="customize-table-content">
             <div className="col-5">
               <h5>Available Metrics</h5>
@@ -278,7 +275,7 @@ const CustomizeTableModal = ({
             <div className="col-7 ">
               <h5>Column Arrangement</h5>
               <DragContainer onUpdateOne={onItemSelectChange} items={itemToDrag}
-                             onChange={onItemOderChange} />
+                              onChange={onItemOderChange} />
             </div>
           </div>
           <div className="customize-table-footer">
@@ -305,8 +302,8 @@ const CustomizeTableModal = ({
               </div>
             </div>
           </div>
-        </DialogContent>
-      </Dialog>
+        </ModalBody>
+      </Modal>
     </div>
   )
 }

@@ -33,7 +33,7 @@ import {
 function* onGetCommercialCustomer({ params = {} }) {
   try {
     const response = yield call(getCommercialCustomer, params)
-    yield put(getCommercialCustomerSuccess(Factory(response)))
+    yield put(getCommercialCustomerSuccess(Factory(response.data)))
   } catch (error) {
     yield put(getCommercialCustomerFail(error))
   }

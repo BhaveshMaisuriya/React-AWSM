@@ -4,6 +4,7 @@ import Page from "./../Common"
 // import searchIcon from "../../../assets/images/search.svg"
 import {
   getCommercialCustomer,
+  getDownloadCommercialCustomer,
   getCommercialAuditLog,
   getCommercialFilter,
   getTableInformation,
@@ -29,15 +30,23 @@ class CommercialCustomer extends Component {
       onGetCommercialCustomer,
       onGetCommercialAuditLog,
       onGetTableInformation,
+      onGetDownloadCommercialCustomer,
     } = this.props
     const { searchFields } = this.state
     const params = {
-      limit: 30,
+      limit: 10,
       page: 0,  
-      // sort_dir: "asc",
-      // sort_field: "site_to_party",
+      sort_dir: "asc",
+      sort_field: "ship_to_party",
       search_fields: transformArrayToString(searchFields),
     }
+    const downloadParams = {
+      limit: 10,
+      page: 0,  
+      sort_dir: "asc",
+      sort_field: "ship_to_party",
+      search_fields: '*',
+    }    
     const payload = {
       limit: 6,
       pagination: 0,
@@ -46,6 +55,7 @@ class CommercialCustomer extends Component {
       q: "commercial_customer",
     }
     onGetCommercialCustomer(params)
+    onGetDownloadCommercialCustomer(downloadParams)
     onGetCommercialAuditLog(payload)
     onGetTableInformation()
   }
@@ -58,9 +68,11 @@ class CommercialCustomer extends Component {
       onGetTableInformation,
       onUpdateTableInformation,
       commercialCustomer,
+      downloadCommercialCustomer,
       auditsCom,
       filterCom,
       address,
+      onGetDownloadCommercialCustomer
     } = this.props
     const { searchFields } = this.state
     if (!commercialCustomer || commercialCustomer.length === 0) return ""
@@ -75,6 +87,7 @@ class CommercialCustomer extends Component {
           tableColumns={searchFields}
           tableMapping={tableMapping}
           tableData={commercialCustomer}
+          downloadtableData={downloadCommercialCustomer}
           audits={auditsCom}
           filter={filterCom}
           address={address}
@@ -82,17 +95,19 @@ class CommercialCustomer extends Component {
           cardTitle="Commercial Customer List"
           tableName={CommercialCustomerTableName}
           modalComponent={CommercialCustomerModal}
+          onGetDownloadCustomer={onGetDownloadCommercialCustomer}
         />
       </Fragment>
     )
   }
 }
 
-const mapStateToProps = ({ commercialCustomer, retailCustomer }) => ({
+const mapStateToProps = ({ commercialCustomer, downloadCommercialCustomer, retailCustomer }) => ({
   commercialCustomer: commercialCustomer.commercialCustomers,
   auditsCom: commercialCustomer.auditsCom,
   filterCom: commercialCustomer.filterCom,
   address: retailCustomer.address,
+  downloadCommercialCustomer: commercialCustomer.downloadCommercialCustomer,
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -101,6 +116,7 @@ const mapDispatchToProps = dispatch => ({
   onGetCommercialFilter: payload => dispatch(getCommercialFilter(payload)),
   onGetTableInformation: () => dispatch(getTableInformation()),
   onUpdateTableInformation: event => dispatch(updateTableInformation(event)),
+  onGetDownloadCommercialCustomer: params => dispatch(getDownloadCommercialCustomer(params)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(CommercialCustomer)

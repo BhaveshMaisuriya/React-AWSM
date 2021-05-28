@@ -1,7 +1,8 @@
 import { takeLatest, put, call, takeEvery } from "redux-saga/effects"
-import Factory, { mergeFilterValues } from "./factory"
+import Factory, { mergeFilterValues, DownloadData } from "./factory"
 import {
   GET_COMMERCIAL_CUSTOMER,
+  GET_DOWNLOAD_COMMERCIAL_CUSTOMER,
   GET_COMMERCIAL_AUDITLOG,
   GET_COMMERCIAL_FILTER,
   GET_COMMERCIAL_TABLE_INFORMATION,
@@ -11,6 +12,8 @@ import {
 import {
   getCommercialCustomerSuccess,
   getCommercialCustomerFail,
+  getDownloadCommercialCustomerSuccess,
+  getDownloadCommercialCustomerFail,  
   getCommercialAuditLogSuccess,
   getCommercialAuditLogFail,
   getCommercialFilterSuccess,
@@ -24,6 +27,7 @@ import {
 
 import {
   getCommercialCustomer,
+  getDownloadCommercialCustomer,
   getCommercialAuditLog,
   getCommercialFilter,
   getCommercialDetail,
@@ -36,6 +40,15 @@ function* onGetCommercialCustomer({ params = {} }) {
     yield put(getCommercialCustomerSuccess(Factory(response.data)))
   } catch (error) {
     yield put(getCommercialCustomerFail(error))
+  }
+}
+// download
+function* onGetDownloadCommercialCustomer({ params = {} }) {
+  try {
+    const response = yield call(getDownloadCommercialCustomer, params)
+    yield put(getDownloadCommercialCustomerSuccess(DownloadData(response.data)))
+  } catch (error) {
+    yield put(getDownloadCommercialCustomerFail(error))
   }
 }
 
@@ -86,6 +99,7 @@ function* commercialCustomerSaga() {
   yield takeEvery(GET_COMMERCIAL_FILTER, onGetCommercialFIlter)
   yield takeLatest(GET_COMMERCIAL_TABLE_INFORMATION, onGetCommercialTableInformation)
   yield takeLatest(UPDATE_COMMERCIAL_TABLE_INFORMATION, onPutCommercialTableInformation);
+  yield takeLatest(GET_DOWNLOAD_COMMERCIAL_CUSTOMER, onGetDownloadCommercialCustomer)
 }
 
 export default commercialCustomerSaga

@@ -61,7 +61,7 @@ class Pages extends Component {
     super(props)
     this.state = {
       currentPage: 0,
-      rowsPerPage: 30,
+      rowsPerPage: 10,
       searchTerm: "",
       sortField: "",
       sortDir: "",
@@ -82,11 +82,11 @@ class Pages extends Component {
   }
 
   getCustomerData = () => {
-    const { onGetCustomer } = this.props
+    const { onGetCustomer, onGetDownloadCustomer } = this.props
     const { currentPage, searchTerm, sortField } = this.state
     const { sortDir, searchFields, q } = this.state
     const params = {
-      limit: 30,
+      limit: 10,
       page: currentPage,
       search_term: searchTerm,
       search_fields: transformArrayToString(searchFields),
@@ -94,7 +94,17 @@ class Pages extends Component {
       sort_dir: sortDir,
       sort_field: sortField,
     }
+    const downloadParams = {
+      limit: 10,
+      page: currentPage,
+      search_term: searchTerm,
+      search_fields: '*',
+      q: transformObjectToStringSentence(q),
+      sort_dir: sortDir,
+      sort_field: sortField,
+    }
     onGetCustomer(params)
+    onGetDownloadCustomer(downloadParams);
   }
 
   getRetailFilterData = filterKey => {
@@ -244,11 +254,12 @@ class Pages extends Component {
     return modalContent
   }
 
-
-  downloadExcel = (csvData,fileName) => {
+  downloadExcel = async(csvData,fileName) => {
     this.setState({loader: true});
-    if(csvData.length > 0){
-      const ws = XLSX.utils.json_to_sheet(csvData);
+    const { downloadtableData } = this.props;
+    let downloadData = downloadtableData ? downloadtableData : csvData;
+    if(downloadData.list.length > 0){
+      const ws = XLSX.utils.json_to_sheet(downloadData.list);
       const wb = { Sheets: { 'data': ws }, SheetNames: ['data'] };
       const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
       const data = new Blob([excelBuffer], {type: fileType});
@@ -282,7 +293,7 @@ class Pages extends Component {
               <Header title={headerTitle} />
               <div className={`${classes.headerText} d-flex justify-content-between align-items-center`}>
                 <div className="Download-excel">
-                  <button className="btn btn-outline-primary" onClick={() => this.downloadExcel(tableData.list, tableName)}>
+                  <button className="btn btn-outline-primary" onClick={() => this.downloadExcel(tableData, tableName)}>
                     {this.state.loader === true ? <Fragment> Downloading ... </Fragment> : <Fragment><GetAppIcon /> Download Excel </Fragment>}
                   </button>
                 </div>
@@ -382,6 +393,7 @@ Pages.propType = {
   cardTitle: PropTypes.string.isRequired,
   tableName: PropTypes.string.isRequired,
   modalComponent: PropTypes.element,
+  onGetDownloadCustomer: PropTypes.func.isRequired,
 }
 
 export default withStyles(styles)(Pages)

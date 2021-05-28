@@ -2,6 +2,9 @@ import {
   GET_COMMERCIAL_CUSTOMER,
   GET_COMMERCIAL_CUSTOMER_SUCCESS,
   GET_COMMERCIAL_CUSTOMER_FAIL,
+  GET_DOWNLOAD_COMMERCIAL_CUSTOMER,
+  GET_DOWNLOAD_COMMERCIAL_CUSTOMER_SUCCESS,
+  GET_DOWNLOAD_COMMERCIAL_CUSTOMER_FAIL,
   GET_COMMERCIAL_AUDITLOG,
   GET_COMMERCIAL_AUDITLOG_SUCCESS,
   GET_COMMERCIAL_AUDITLOG_FAIL,
@@ -29,6 +32,21 @@ export const getCommercialCustomerSuccess = response => ({
 
 export const getCommercialCustomerFail = error => ({
   type: GET_COMMERCIAL_CUSTOMER_FAIL,
+  payload: error,
+})
+
+export const getDownloadCommercialCustomer = params => ({
+  type: GET_DOWNLOAD_COMMERCIAL_CUSTOMER,
+  params,
+})
+
+export const getDownloadCommercialCustomerSuccess = response => ({
+  type: GET_DOWNLOAD_COMMERCIAL_CUSTOMER_SUCCESS,
+  payload: response,
+})
+
+export const getDownloadCommercialCustomerFail = error => ({
+  type: GET_DOWNLOAD_COMMERCIAL_CUSTOMER_FAIL,
   payload: error,
 })
 

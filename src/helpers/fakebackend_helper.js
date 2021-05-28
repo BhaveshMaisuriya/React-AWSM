@@ -232,6 +232,8 @@ export const getProducts = params => axios.get('https://cp54ul6po2.execute-api.a
 
 export const getCommercialCustomer = params => axios.get('https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/commercial-customer', { params: params})
 
+export const getDownloadCommercialCustomer = params => axios.get('https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/commercial-customer', { params: params})
+
 // get DQM Master Product Audit Log
 export const getProductAuditLog = payload =>
   get(url.GET_PRODUCT_AUDITLOG, { payload: payload })

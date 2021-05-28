@@ -1,6 +1,8 @@
 import {
   GET_COMMERCIAL_CUSTOMER_FAIL,
   GET_COMMERCIAL_CUSTOMER_SUCCESS,
+  GET_DOWNLOAD_COMMERCIAL_CUSTOMER_FAIL,
+  GET_DOWNLOAD_COMMERCIAL_CUSTOMER_SUCCESS,  
   GET_COMMERCIAL_AUDITLOG_SUCCESS,
   GET_COMMERCIAL_AUDITLOG_FAIL,
   GET_COMMERCIAL_FILTER_SUCCESS,
@@ -19,6 +21,7 @@ const initialState = {
   filterCom: [],
   currentCommercialDetail: null,
   updateSuccess: false,
+  downloadCommercialCustomer: [],
 }
 
 const CommercialCustomer = (state = initialState, action) => {
@@ -34,6 +37,17 @@ const CommercialCustomer = (state = initialState, action) => {
         commercialCustomers: action.payload,
       }
 
+    case GET_DOWNLOAD_COMMERCIAL_CUSTOMER_SUCCESS:
+      return {
+        ...state,
+        downloadCommercialCustomer: action.payload,
+      }
+    case GET_DOWNLOAD_COMMERCIAL_CUSTOMER_FAIL:
+      return {
+        ...state,
+        downloadCommercialCustomer: action.payload,
+      }
+      
     case GET_COMMERCIAL_AUDITLOG_SUCCESS:
       return {
         ...state,

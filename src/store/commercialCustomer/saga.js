@@ -42,7 +42,7 @@ function* onGetCommercialCustomer({ params = {} }) {
     yield put(getCommercialCustomerFail(error))
   }
 }
-
+// download
 function* onGetDownloadCommercialCustomer({ params = {} }) {
   try {
     const response = yield call(getDownloadCommercialCustomer, params)

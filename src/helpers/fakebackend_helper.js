@@ -179,9 +179,6 @@ export const getUserProfile = () => get(url.GET_USER_PROFILE)
 export const getRetailCustomer = params =>
   get(url.GET_RETAIL_CUSTOMER, { params: params })
 
-export const getCommercialCustomer = params =>
-  get(url.GET_COMMERCIAL_CUSTOMER, { params: params })
-
 export const getRoadTanker = params =>
   get(url.GET_ROADTANKER, { params: params })
 
@@ -232,6 +229,8 @@ export const getTerminalFilter = params => {
 
 // export const getProducts = params => get(url.GET_PRODUCTS, { params: params })
 export const getProducts = params => axios.get('https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/product', { params: params})
+
+export const getCommercialCustomer = params => axios.get('https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/commercial-customer', { params: params})
 
 // get DQM Master Product Audit Log
 export const getProductAuditLog = payload =>

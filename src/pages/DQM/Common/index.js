@@ -34,6 +34,7 @@ import GetAppIcon from '@material-ui/icons/GetApp';
 import * as FileSaver from 'file-saver';
 import * as XLSX from 'xlsx';
 import axios from "axios"
+import AWSMAlert from "../../../components/Common/AWSMAlert"
 
 const styles = {
   headerText: {
@@ -60,7 +61,7 @@ class Pages extends Component {
     super(props)
     this.state = {
       currentPage: 0,
-      rowsPerPage: 10,
+      rowsPerPage: 30,
       searchTerm: "",
       sortField: "",
       sortDir: "",
@@ -72,6 +73,8 @@ class Pages extends Component {
       customizeModalOpen: false,
       selectedItem: 0,
       loader: false,
+      error_message: '',
+      alert:false,
     }
     this.toggle = this.toggle.bind(this)
     this.toggleTI = this.toggleTI.bind(this)
@@ -83,7 +86,7 @@ class Pages extends Component {
     const { currentPage, searchTerm, sortField } = this.state
     const { sortDir, searchFields, q } = this.state
     const params = {
-      limit: 10,
+      limit: 30,
       page: currentPage,
       search_term: searchTerm,
       search_fields: transformArrayToString(searchFields),
@@ -244,31 +247,18 @@ class Pages extends Component {
 
   downloadExcel = (csvData,fileName) => {
     this.setState({loader: true});
-      axios.get("https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/commercial-customer")
-      .then((response) => {
-        if(response.data){
-          const ws = XLSX.utils.json_to_sheet(response.data.list);
-          const wb = { Sheets: { 'data': ws }, SheetNames: ['data'] };
-          const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
-          const data = new Blob([excelBuffer], {type: fileType});
-          FileSaver.saveAs(data, fileName + fileExtension);
-          this.setState({loader: false});
-        } else {
-          const ws = XLSX.utils.json_to_sheet(csvData);
-          const wb = { Sheets: { 'data': ws }, SheetNames: ['data'] };
-          const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
-          const data = new Blob([excelBuffer], {type: fileType});
-          FileSaver.saveAs(data, fileName + fileExtension);
-          this.setState({loader: false});
-        }
-      }).catch(error=>{
-        const ws = XLSX.utils.json_to_sheet(csvData);
-        const wb = { Sheets: { 'data': ws }, SheetNames: ['data'] };
-        const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
-        const data = new Blob([excelBuffer], {type: fileType});
-        FileSaver.saveAs(data, fileName + fileExtension);
-        this.setState({loader: false});
-      })
+    if(csvData.length > 0){
+      const ws = XLSX.utils.json_to_sheet(csvData);
+      const wb = { Sheets: { 'data': ws }, SheetNames: ['data'] };
+      const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+      const data = new Blob([excelBuffer], {type: fileType});
+      FileSaver.saveAs(data, fileName + fileExtension);
+      this.setState({loader: false});
+    } else {
+      this.setState({alert: true});
+      this.setState({error_message: 'Data is not available'});
+      this.setState({loader: false});         
+    }
   }
 
   render() {
@@ -324,14 +314,14 @@ class Pages extends Component {
                       </div>
                       <div className="table-top-bar">
                         <div className="top-page-number">
-                          <div className="enteriesText">{`${currentPage * rowsPerPage + 1
-                            } to ${tableData.totalRows -
-                              (currentPage * rowsPerPage + rowsPerPage) <
-                              0
-                              ? tableData.totalRows
-                              : currentPage * rowsPerPage + rowsPerPage
-                            } of ${tableData.totalRows} enteries`}
+                          <div className="enteriesText">{`${currentPage * rowsPerPage + 1} to 
+                           ${rowsPerPage}
+                             of ${tableData.total_rows} enteries`}
                           </div>
+                          {/* ${tableData.total_rows - (currentPage * rowsPerPage + rowsPerPage) < 0
+                              ? tableData.total_rows
+                              : currentPage * rowsPerPage + rowsPerPage
+                            } */}
                         </div>
                         <IconButton aria-label="delete" onClick={this.handleOpenCustomizeTable}>
                           <img src={customiseTableIcon} />
@@ -349,7 +339,7 @@ class Pages extends Component {
                         modalPop={this.modalHandlerTI}
                       />
                       <TablePagination
-                        count={tableData.totalRows}
+                        count={tableData.total_rows}
                         rowsPerPage={rowsPerPage}
                         currentPage={currentPage}
                         onChangePage={this.handleChangePage}
@@ -358,6 +348,14 @@ class Pages extends Component {
                   }
                 </Card>
               </Col>
+              {this.state.loader === false && this.state.error_message !== '' &&
+                <AWSMAlert
+                  status="error"
+                  message={this.state.error_message}
+                  openAlert={this.state.alert}
+                  closeAlert={() => this.setState({ alert: false })}
+                />
+              }
             </Row>
             {this.runAuditLogModal()}
             {this.runTableInformation()}

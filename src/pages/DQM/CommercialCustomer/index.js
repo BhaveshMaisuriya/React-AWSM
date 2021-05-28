@@ -32,10 +32,10 @@ class CommercialCustomer extends Component {
     } = this.props
     const { searchFields } = this.state
     const params = {
-      limit: 10,
-      page: 0,
-      sort_dir: "asc",
-      sort_field: "site_to_party",
+      limit: 30,
+      page: 0,  
+      // sort_dir: "asc",
+      // sort_field: "site_to_party",
       search_fields: transformArrayToString(searchFields),
     }
     const payload = {

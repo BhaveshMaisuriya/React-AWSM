@@ -18,6 +18,7 @@ const CommercialCustomerTableName = 'commercial-table'
 class CommercialCustomer extends Component {
   constructor(props) {
     super(props)
+    this.GetonDownload = this.GetonDownload
     this.state = {
       searchFields: getCookieByKey(CommercialCustomerTableName)
         ? JSON.parse(getCookieByKey(CommercialCustomerTableName))
@@ -30,7 +31,7 @@ class CommercialCustomer extends Component {
       onGetCommercialCustomer,
       onGetCommercialAuditLog,
       onGetTableInformation,
-      onGetDownloadCommercialCustomer,
+      // onGetDownloadCommercialCustomer,
     } = this.props
     const { searchFields } = this.state
     const params = {
@@ -40,13 +41,13 @@ class CommercialCustomer extends Component {
       sort_field: "ship_to_party",
       search_fields: transformArrayToString(searchFields),
     }
-    const downloadParams = {
-      limit: 10,
-      page: 0,  
-      sort_dir: "asc",
-      sort_field: "ship_to_party",
-      search_fields: '*',
-    }    
+    // const downloadParams = {
+    //   limit: 10,
+    //   page: 0,  
+    //   sort_dir: "asc",
+    //   sort_field: "ship_to_party",
+    //   search_fields: '*',
+    // }    
     const payload = {
       limit: 6,
       pagination: 0,
@@ -55,9 +56,14 @@ class CommercialCustomer extends Component {
       q: "commercial_customer",
     }
     onGetCommercialCustomer(params)
-    onGetDownloadCommercialCustomer(downloadParams)
+    // onGetDownloadCommercialCustomer(downloadParams)
     onGetCommercialAuditLog(payload)
     onGetTableInformation()
+  }
+
+  GetonDownload = async(downloadParams) => {
+    const { onGetDownloadCommercialCustomer } = this.props;
+    await onGetDownloadCommercialCustomer(downloadParams);
   }
 
   render() {
@@ -72,7 +78,6 @@ class CommercialCustomer extends Component {
       auditsCom,
       filterCom,
       address,
-      onGetDownloadCommercialCustomer
     } = this.props
     const { searchFields } = this.state
     if (!commercialCustomer || commercialCustomer.length === 0) return ""
@@ -95,14 +100,14 @@ class CommercialCustomer extends Component {
           cardTitle="Commercial Customer List"
           tableName={CommercialCustomerTableName}
           modalComponent={CommercialCustomerModal}
-          onGetDownloadCustomer={onGetDownloadCommercialCustomer}
+          onGetDownloadCustomer={this.GetonDownload}
         />
       </Fragment>
     )
   }
 }
 
-const mapStateToProps = ({ commercialCustomer, downloadCommercialCustomer, retailCustomer }) => ({
+const mapStateToProps = ({ commercialCustomer, retailCustomer }) => ({
   commercialCustomer: commercialCustomer.commercialCustomers,
   auditsCom: commercialCustomer.auditsCom,
   filterCom: commercialCustomer.filterCom,

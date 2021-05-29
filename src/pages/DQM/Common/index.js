@@ -29,12 +29,9 @@ import {
   filterObject,
 } from "./helper"
 import "./style.scss"
-import SettingsIcon from '@material-ui/icons/Settings';
 import GetAppIcon from '@material-ui/icons/GetApp';
-import * as FileSaver from 'file-saver';
-import * as XLSX from 'xlsx';
-import axios from "axios"
 import AWSMAlert from "../../../components/Common/AWSMAlert"
+import DownloadExcel from "./DownloadExcel"
 
 const styles = {
   headerText: {
@@ -53,8 +50,6 @@ const styles = {
     alignItems: "center",
   },
 }
-const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
-const fileExtension = '.xlsx';
 
 class Pages extends Component {
   constructor(props) {
@@ -75,14 +70,16 @@ class Pages extends Component {
       loader: false,
       error_message: '',
       alert:false,
+      DownloadTableData: false,
     }
     this.toggle = this.toggle.bind(this)
     this.toggleTI = this.toggleTI.bind(this)
     this.downloadExcel = this.downloadExcel.bind(this)
+    // this.downloadExcelData = this.downloadExcelData.bind(this)
   }
 
   getCustomerData = () => {
-    const { onGetCustomer, onGetDownloadCustomer } = this.props
+    const { onGetCustomer } = this.props
     const { currentPage, searchTerm, sortField } = this.state
     const { sortDir, searchFields, q } = this.state
     const params = {
@@ -94,17 +91,7 @@ class Pages extends Component {
       sort_dir: sortDir,
       sort_field: sortField,
     }
-    const downloadParams = {
-      limit: 10,
-      page: currentPage,
-      search_term: searchTerm,
-      search_fields: '*',
-      q: transformObjectToStringSentence(q),
-      sort_dir: sortDir,
-      sort_field: sortField,
-    }
     onGetCustomer(params)
-    onGetDownloadCustomer(downloadParams);
   }
 
   getRetailFilterData = filterKey => {
@@ -254,31 +241,41 @@ class Pages extends Component {
     return modalContent
   }
 
-  downloadExcel = async(csvData,fileName) => {
+  downloadExcel = async() => {
     this.setState({loader: true});
-    const { downloadtableData } = this.props;
-    let downloadData = downloadtableData ? downloadtableData : csvData;
-    if(downloadData.list.length > 0){
-      const ws = XLSX.utils.json_to_sheet(downloadData.list);
-      const wb = { Sheets: { 'data': ws }, SheetNames: ['data'] };
-      const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
-      const data = new Blob([excelBuffer], {type: fileType});
-      FileSaver.saveAs(data, fileName + fileExtension);
-      this.setState({loader: false});
+    const current_path = window.location.pathname;
+    if(current_path !== '/commercial-customer'){
+      this.setState({DownloadTableData: true});
     } else {
-      this.setState({alert: true});
-      this.setState({error_message: 'Data is not available'});
-      this.setState({loader: false});         
+      const { currentPage } = this.state
+      const { onGetDownloadCustomer, downloadtableData } = this.props;
+      const downloadParams = {
+        limit: 10,
+        page: currentPage,
+        search_fields: '*',
+      }
+      await onGetDownloadCustomer(downloadParams);
     }
   }
 
+  getLoader = () => {
+    this.setState({loader: false});
+  }
+
+  getAlert = () => {
+    this.setState({alert: true});
+    this.setState({error_message: 'Data is not available'});
+  }
+  
   render() {
     const { currentPage, rowsPerPage, searchFields } = this.state
-    const { tableData, classes, filter, tableMapping, cardTitle, headerTitle, tableName } =
+    const { tableData, classes, filter, tableMapping, cardTitle, headerTitle, tableName, downloadtableData } =
       this.props
     if (!tableData || tableData.length === 0) return ""
     return (
       <React.Fragment>
+        {(downloadtableData && downloadtableData.length !== 0) && this.state.loader && <DownloadExcel tableData={downloadtableData} tableName={tableName} getLoader={this.getLoader} getAlert={this.getAlert} /> }
+        {this.state.DownloadTableData === true && <DownloadExcel tableData={tableData} tableName={tableName} getLoader={this.getLoader} getAlert={this.getAlert} />}
         <CustomizeTableModal
           tableName={this.props.tableName}
           onChange={this.onTableColumnsChange}
@@ -293,7 +290,7 @@ class Pages extends Component {
               <Header title={headerTitle} />
               <div className={`${classes.headerText} d-flex justify-content-between align-items-center`}>
                 <div className="Download-excel">
-                  <button className="btn btn-outline-primary" onClick={() => this.downloadExcel(tableData, tableName)}>
+                  <button className="btn btn-outline-primary" onClick={() => this.downloadExcel()}>
                     {this.state.loader === true ? <Fragment> Downloading ... </Fragment> : <Fragment><GetAppIcon /> Download Excel </Fragment>}
                   </button>
                 </div>

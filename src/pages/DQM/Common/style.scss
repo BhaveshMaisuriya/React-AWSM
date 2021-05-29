@@ -178,6 +178,9 @@
     border: unset;
     margin-right: 20px;
     box-shadow: 0px 0px 3px 1px #cccccc36;
+    &:focus {
+      box-shadow: unset;
+    }
   }
 }
 

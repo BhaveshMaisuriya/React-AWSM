@@ -61,7 +61,12 @@ class CommercialCustomer extends Component {
     onGetTableInformation()
   }
 
-  GetonDownload = async(downloadParams) => {
+  GetonDownload = async(currentPage) => {
+    const downloadParams = {
+      limit: 10,
+      page: currentPage,
+      search_fields: '*',
+    }
     const { onGetDownloadCommercialCustomer } = this.props;
     await onGetDownloadCommercialCustomer(downloadParams);
   }

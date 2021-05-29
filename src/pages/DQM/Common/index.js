@@ -243,18 +243,16 @@ class Pages extends Component {
 
   downloadExcel = async() => {
     this.setState({loader: true});
-    const current_path = window.location.pathname;
-    if(current_path !== '/commercial-customer'){
-      this.setState({DownloadTableData: true});
+      if(this.props.onGetDownloadCustomer){
+        if(!this.props.downloadtableData || this.props.downloadtableData && this.props.downloadtableData.length === 0){
+          const { currentPage } = this.state
+          const { onGetDownloadCustomer } = this.props;
+          await onGetDownloadCustomer(currentPage);
+        }
     } else {
-      const { currentPage } = this.state
-      const { onGetDownloadCustomer, downloadtableData } = this.props;
-      const downloadParams = {
-        limit: 10,
-        page: currentPage,
-        search_fields: '*',
-      }
-      await onGetDownloadCustomer(downloadParams);
+      this.setState({alert: true});
+      this.setState({error_message: 'Download Excel is not implemented yet...'});
+      this.setState({loader: false});
     }
   }
 

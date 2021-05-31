@@ -15,6 +15,9 @@ import {
   GET_RETAIL_FILTER,
   GET_RETAIL_FILTER_SUCCESS,
   GET_RETAIL_FILTER_FAIL,
+  GET_DOWNLOAD_RETAIL_CUSTOMER,
+  GET_DOWNLOAD_RETAIL_CUSTOMER_SUCCESS,
+  GET_DOWNLOAD_RETAIL_CUSTOMER_FAIL
 } from "./actionTypes"
 
 export const getRetailCustomer = params => ({
@@ -29,6 +32,21 @@ export const getRetailCustomerSuccess = response => ({
 
 export const getRetailCustomerFail = error => ({
   type: GET_RETAIL_CUSTOMER_FAIL,
+  payload: error,
+})
+
+export const getDownloadRetailCustomer = params => ({
+  type: GET_DOWNLOAD_RETAIL_CUSTOMER,
+  params,
+})
+
+export const getDownloadRetailCustomerSuccess = response => ({
+  type: GET_DOWNLOAD_RETAIL_CUSTOMER_SUCCESS,
+  payload: response,
+})
+
+export const getDownloadRetailCustomerFail = error => ({
+  type: GET_DOWNLOAD_RETAIL_CUSTOMER_FAIL,
   payload: error,
 })
 

@@ -176,8 +176,26 @@ export const getUsers = () => get(url.GET_USERS)
 export const getUserProfile = () => get(url.GET_USER_PROFILE)
 
 // get retail customer
-export const getRetailCustomer = params =>
-  get(url.GET_RETAIL_CUSTOMER, { params: params })
+export const getRetailCustomer = params => axios.get(
+  "https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/retail-customer",
+  { params: params }
+)
+
+export const getDownloadRetailCustomer = params => axios.get(
+  'https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/retail-customer', 
+  { params: params}
+)
+
+export const getCommercialCustomer = params =>
+  axios.get(
+    "https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/commercial-customer",
+    { params: params }
+  )
+
+export const getDownloadCommercialCustomer = params =>
+  axios.get(
+    "https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/commercial-customer",
+    { params: params })
 
 export const getRoadTanker = params =>
   get(url.GET_ROADTANKER, { params: params })
@@ -228,11 +246,17 @@ export const getTerminalFilter = params => {
 }
 
 // export const getProducts = params => get(url.GET_PRODUCTS, { params: params })
-export const getProducts = params => axios.get('https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/product', { params: params})
+export const getProducts = params =>
+  axios.get(
+    "https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/product",
+    { params: params }
+  )
 
-export const getCommercialCustomer = params => axios.get('https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/commercial-customer', { params: params})
-
-export const getDownloadCommercialCustomer = params => axios.get('https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/commercial-customer', { params: params})
+  export const getDownloadProducts = params =>
+  axios.get(
+    "https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/product",
+    { params: params }
+  )
 
 // get DQM Master Product Audit Log
 export const getProductAuditLog = payload =>
@@ -247,19 +271,24 @@ export const getProductFilter = params =>
 //   get(`${url.GET_PRODUCT_DETAILS}/${productCode}`)
 
 export const getProductDetail = productCode =>
-  axios.get(`https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/product/${productCode}`)
+  axios.get(
+    `https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/product/${productCode}`
+  )
 
 // export const updateProductDetail = payload =>
 //   put(`${url.GET_PRODUCT_DETAILS}/${payload.code}`, payload.body)
 
 export const updateProductDetail = payload =>
-  axios.put(`https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/product/${payload.code}`, payload.body)
+  axios.put(
+    `https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/product/${payload.code}`,
+    payload.body
+  )
 
 export const getCommercialDetail = code =>
   // get(`${url.GET_COMMERCIAL_CUSTOMER_DETAIL}/${code}`)
   axios
     .get(
-      "https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/commercial-customer/0080000000"
+      `https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/commercial-customer/${code}`
     )
     .then(response => response.data)
 

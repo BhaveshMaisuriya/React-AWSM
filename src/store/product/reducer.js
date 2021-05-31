@@ -8,7 +8,9 @@ import {
   GET_PRODUCT_DETAIL_SUCCESS,
   GET_PRODUCT_DETAIL_FAIL,
   UPDATE_PRODUCT_DETAIL_SUCCESS,
-  UPDATE_PRODUCT_DETAIL_FAIL
+  UPDATE_PRODUCT_DETAIL_FAIL,
+  GET_DOWNLOAD_PRODUCTS_SUCCESS,
+  GET_DOWNLOAD_PRODUCTS_FAIL
 } from "./actionTypes"
 
 const initialState = {
@@ -17,7 +19,8 @@ const initialState = {
   productAuditLog: [],
   productFilter: [],
   currentProduct: null,
-  updateStatus: null
+  updateStatus: null,
+  downloadProducts: [],
 }
 
 import { notify } from "../../helpers/notify"
@@ -34,6 +37,18 @@ const Product = (state = initialState, action) => {
       return {
         ...state,
         dataList: action.payload,
+      }
+
+    case GET_DOWNLOAD_PRODUCTS_SUCCESS:
+      return {
+        ...state,
+        downloadProducts: action.payload
+      }
+
+    case GET_DOWNLOAD_PRODUCTS_FAIL:
+      return {
+        ...state,
+        downloadProducts: action.payload,
       }
 
     case GET_PRODUCT_AUDITLOG_SUCCESS:

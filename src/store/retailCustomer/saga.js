@@ -1,11 +1,12 @@
 import { takeLatest, put, call, takeEvery } from "redux-saga/effects"
-import Factory, { mergeFilterValues } from "./factory"
+import Factory, { DownloadData } from "./factory"
 import {
   GET_RETAIL_CUSTOMER,
   GET_RETAIL_AUDITLOG,
   GET_TABLE_INFORMATION,
   UPDATE_TABLE_INFORMATION,
-  GET_RETAIL_FILTER,
+  // GET_RETAIL_FILTER,
+  GET_DOWNLOAD_RETAIL_CUSTOMER,
 } from "./actionTypes"
 
 import {
@@ -19,7 +20,9 @@ import {
   updateTableInformationFail,
   resetRetailTableInformation,
   getRetailFilterSuccess,
-  getRetailFilterFail,
+  // getRetailFilterFail,
+  getDownloadRetailCustomerSuccess,
+  getDownloadRetailCustomerFail
 } from "./actions"
 
 import {
@@ -27,15 +30,26 @@ import {
   getRetailAuditLog,
   getTableInformation,
   updateTableInformation,
-  getRetailFilter,
+  getDownloadRetailCustomer
+  // getRetailFilter,
 } from "../../helpers/fakebackend_helper"
 
 function* onGetRetailCustomer({ params = {} }) {
   try {
     const response = yield call(getRetailCustomer, params)
     yield put(getRetailCustomerSuccess(Factory(response)))
+    yield put(getRetailFilterSuccess(response.data.filters))
   } catch (error) {
     yield put(getRetailCustomerFail(error))
+  }
+}
+
+function* onGetDownloadRetailCustomer({ params = {} }) {
+  try {
+    const response = yield call(getDownloadRetailCustomer, params)
+    yield put(getDownloadRetailCustomerSuccess(DownloadData(response.data)))
+  } catch (error) {
+    yield put(getDownloadRetailCustomerFail(error))
   }
 }
 
@@ -67,16 +81,14 @@ function* onUpdateTableInformation({ payload: event }) {
   }
 }
 
-function* onGetRetailFilter({ params = {} }) {
-  try {
-    const response = yield call(getRetailFilter, params)
-    yield put(
-      getRetailFilterSuccess(mergeFilterValues(response, params.search_fields))
-    )
-  } catch (error) {
-    yield put(getRetailFilterFail(error))
-  }
-}
+// function* onGetRetailFilter({ params = {} }) {
+//   try {
+//     const response = yield call(getRetailFilter, params)
+//     yield put(getRetailFilterSuccess(response))
+//   } catch (error) {
+//     yield put(getRetailFilterFail(error))
+//   }
+// }
 
 //last function
 function* retailCustomerSaga() {
@@ -84,7 +96,8 @@ function* retailCustomerSaga() {
   yield takeLatest(GET_RETAIL_AUDITLOG, onGetRetailAuditLog)
   yield takeLatest(GET_TABLE_INFORMATION, onGetTableInformation)
   yield takeEvery(UPDATE_TABLE_INFORMATION, onUpdateTableInformation)
-  yield takeLatest(GET_RETAIL_FILTER, onGetRetailFilter)
+  // yield takeLatest(GET_RETAIL_FILTER, onGetRetailFilter)
+  yield takeLatest(GET_DOWNLOAD_RETAIL_CUSTOMER, onGetDownloadRetailCustomer)
 }
 
 export default retailCustomerSaga

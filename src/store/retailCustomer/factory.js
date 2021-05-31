@@ -1,4 +1,4 @@
-import { isNull } from "lodash"
+import { isNull, isUndefined } from "lodash"
 
 const StringConstants = {
   daily: "daily",
@@ -80,6 +80,10 @@ export const mergeFilterValues = (filterData, key) => {
   return filterObject
 }
 
+export const DownloadData = (allDownloadData) => {
+  return allDownloadData
+}
+
 const checkNullValue = (data, defaultValue) =>
   isNull(data) ? defaultValue : data
 
@@ -137,38 +141,43 @@ const getContactPersonObj = (retailCustomerObj, data, key) => {
 export default function retailCustomerFactory(data) {
   let retailCustomerObj = {}
   const finalData = []
-  data.list.forEach(d => {
-    const cloneobj = JSON.parse(JSON.stringify(retailCustomerObj))
-    retailDetailsArray.forEach(
-      p => (retailCustomerObj[`${p}`] = getValueFromObj(d, p, "-"))
-    )
-    getAddressTableObj(retailCustomerObj, d, "address")
-    getProductObj(retailCustomerObj, d, "storage_1")
-    getProductObj(retailCustomerObj, d, "storage_2")
-    getProductObj(retailCustomerObj, d, "storage_3")
-    getProductObj(retailCustomerObj, d, "storage_4")
-    getProductObj(retailCustomerObj, d, "storage_5")
-    getProductObj(retailCustomerObj, d, "storage_6")
-    getContactPersonObj(retailCustomerObj, d, "contact_1")
-    getContactPersonObj(retailCustomerObj, d, "contact_2")
-    getContactPersonObj(retailCustomerObj, d, "contact_3")
-    getContactPersonObj(retailCustomerObj, d, "territory_manager")
-    getContactPersonObj(retailCustomerObj, d, "retail_sales_manager")
-    getDateObj(retailCustomerObj, d, "delivery_open_time_1")
-    getDateObj(retailCustomerObj, d, "actual_open_time_1")
-    getDateObj(retailCustomerObj, d, "actual_open_time_2")
-    getDateObj(retailCustomerObj, d, "actual_open_time_3")
-    getDateObj(retailCustomerObj, d, "no_delivery_interval_1")
-    getDateObj(retailCustomerObj, d, "no_delivery_interval_2")
-    getDateObj(retailCustomerObj, d, "no_delivery_interval_3")
-    getDateObj(retailCustomerObj, d, "no_delivery_interval_4")
-    getDateObj(retailCustomerObj, d, "no_delivery_interval_5")
-    getDateObj(retailCustomerObj, d, "close_period_1")
-    finalData.push(retailCustomerObj)
-    retailCustomerObj = cloneobj
-  })
+  if (!isUndefined(data.data.list)) {
+    data.data.list.forEach(d => {
+      const cloneobj = JSON.parse(JSON.stringify(retailCustomerObj))
+      for (const fields in d)
+        retailCustomerObj[`${fields}`] = getValueFromObj(d, fields, "-")
+      retailCustomerObj["address_1"] =
+        getValueFromObj(d, "address_1", "-") +
+        getValueFromObj(d, "address_2", " ") +
+        getValueFromObj(d, "address_3", " ")
+      // getAddressTableObj(retailCustomerObj, d, "address")
+      // getProductObj(retailCustomerObj, d, "storage_1")
+      // getProductObj(retailCustomerObj, d, "storage_2")
+      // getProductObj(retailCustomerObj, d, "storage_3")
+      // getProductObj(retailCustomerObj, d, "storage_4")
+      // getProductObj(retailCustomerObj, d, "storage_5")
+      // getProductObj(retailCustomerObj, d, "storage_6")
+      // getContactPersonObj(retailCustomerObj, d, "contact_1")
+      // getContactPersonObj(retailCustomerObj, d, "contact_2")
+      // getContactPersonObj(retailCustomerObj, d, "contact_3")
+      // getContactPersonObj(retailCustomerObj, d, "territory_manager")
+      // getContactPersonObj(retailCustomerObj, d, "retail_sales_manager")
+      // getDateObj(retailCustomerObj, d, "delivery_open_time_1")
+      // getDateObj(retailCustomerObj, d, "actual_open_time_1")
+      // getDateObj(retailCustomerObj, d, "actual_open_time_2")
+      // getDateObj(retailCustomerObj, d, "actual_open_time_3")
+      // getDateObj(retailCustomerObj, d, "no_delivery_interval_1")
+      // getDateObj(retailCustomerObj, d, "no_delivery_interval_2")
+      // getDateObj(retailCustomerObj, d, "no_delivery_interval_3")
+      // getDateObj(retailCustomerObj, d, "no_delivery_interval_4")
+      // getDateObj(retailCustomerObj, d, "no_delivery_interval_5")
+      // getDateObj(retailCustomerObj, d, "close_period_1")
+      finalData.push(retailCustomerObj)
+      retailCustomerObj = cloneobj
+    })
+  }
   return {
     list: finalData,
-    total_rows: getValueFromObj(data, "total_rows", "0"),
+    total_rows: getValueFromObj(data.data, "total_rows", "0"),
   }
 }

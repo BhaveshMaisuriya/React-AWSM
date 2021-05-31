@@ -10,6 +10,8 @@ import {
   RESET_RETAIL_TABLE_INFORMATION,
   GET_RETAIL_FILTER_SUCCESS,
   GET_RETAIL_FILTER_FAIL,
+  GET_DOWNLOAD_RETAIL_CUSTOMER_SUCCESS,
+  GET_DOWNLOAD_RETAIL_CUSTOMER_FAIL
 } from "./actionTypes"
 
 const initialState = {
@@ -20,6 +22,7 @@ const initialState = {
   filter: [],
   currentRetailDetail: null,
   updateSuccess: false,
+  downloadretailCustomers: [],
 }
 
 const RetailCustomer = (state = initialState, action) => {
@@ -34,6 +37,18 @@ const RetailCustomer = (state = initialState, action) => {
       return {
         ...state,
         retailCustomers: action.payload,
+      }
+
+    case GET_DOWNLOAD_RETAIL_CUSTOMER_SUCCESS:
+      return {
+        ...state,
+        downloadretailCustomers: action.payload,
+      }
+
+    case GET_DOWNLOAD_RETAIL_CUSTOMER_FAIL:
+      return {
+        ...state,
+        downloadretailCustomers: action.payload,
       }
 
     case GET_RETAIL_AUDITLOG_SUCCESS:

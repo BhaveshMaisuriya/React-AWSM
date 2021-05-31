@@ -1,11 +1,12 @@
 import { put, call, takeEvery } from "redux-saga/effects"
-import { mergeFilterValues } from "./factory"
+import factory, { mergeFilterValues, DownloadData } from "./factory"
 import {
   GET_PRODUCT_AUDITLOG,
-  GET_PRODUCT_FILTER,
+  // GET_PRODUCT_FILTER,
   GET_PRODUCTS,
   GET_PRODUCT_DETAIL,
-  UPDATE_PRODUCT_DETAIL
+  UPDATE_PRODUCT_DETAIL,
+  GET_DOWNLOAD_PRODUCTS
 } from "./actionTypes"
 
 import {
@@ -14,19 +15,22 @@ import {
   getProductAuditLogSuccess,
   getProductAuditLogFail,
   getProductFilterSuccess,
-  getProductFilterFail,
+  // getProductFilterFail,
   getProductDetailFail,
   getProductDetailSuccess,
   updateProductDetailSuccess,
-  updateProductDetailFail
+  updateProductDetailFail,
+  getDownloadProductSuccess,
+  getDownloadProductFail,
 } from "./actions"
 
 import {
   getProducts,
   getProductAuditLog,
-  getProductFilter,
+  // getProductFilter,
   getProductDetail,
-  updateProductDetail
+  updateProductDetail,
+  getDownloadProducts,
 } from "../../helpers/fakebackend_helper"
 
 function* onGetProductAuditLog() {
@@ -38,24 +42,33 @@ function* onGetProductAuditLog() {
   }
 }
 
-function* onGetProductFIlter({ params = {} }) {
+// function* onGetProductFIlter({ params = {} }) {
+//   try {
+//     const response = yield call(getProductFilter)
+//     yield put(
+//       getProductFilterSuccess(
+//         mergeFilterValues(response, params.search_fields)
+//       )
+//     )
+//   } catch (error) {
+//     yield put(getProductFilterFail(error))
+//   }
+// }
+
+function* onGetDownloadProducts({ params = {} }) {
   try {
-    const response = yield call(getProductFilter)
-    yield put(
-      getProductFilterSuccess(
-        mergeFilterValues(response, params.search_fields)
-      )
-    )
+    const response = yield call(getDownloadProducts, params)
+    yield put(getDownloadProductSuccess(DownloadData(response.data)))
   } catch (error) {
-    yield put(getProductFilterFail(error))
+    yield put(getDownloadProductFail(error))
   }
 }
 
-
-function* onGetProducts() {
+function* onGetProducts({ params = {} }) {
   try {
-    const response = yield call(getProducts)
-    yield put(getProductSuccess(response.data))
+    const response = yield call(getProducts, params)
+    yield put(getProductSuccess(factory(response)))
+    yield put(getProductFilterSuccess(response.data.filters))
   } catch (error) {
     yield put(getProductFail(error))
   }
@@ -72,7 +85,6 @@ function* onGetProductDetail(action) {
 
 function* onUpdateProductDetail(action) {
   try {
-    console.log('Update Product Details : ', action.params)
     const response = yield call(updateProductDetail, action.params)
     yield put(updateProductDetailSuccess(response))
   } catch (error) {
@@ -82,10 +94,11 @@ function* onUpdateProductDetail(action) {
 
 function* ProductSaga() {
   yield takeEvery(GET_PRODUCT_AUDITLOG, onGetProductAuditLog)
-  yield takeEvery(GET_PRODUCT_FILTER, onGetProductFIlter)
+  // yield takeEvery(GET_PRODUCT_FILTER, onGetProductFIlter)
   yield takeEvery(GET_PRODUCTS, onGetProducts)
   yield takeEvery(GET_PRODUCT_DETAIL, onGetProductDetail)
   yield takeEvery(UPDATE_PRODUCT_DETAIL, onUpdateProductDetail)
+  yield takeEvery(GET_DOWNLOAD_PRODUCTS, onGetDownloadProducts)
 }
 
 export default ProductSaga

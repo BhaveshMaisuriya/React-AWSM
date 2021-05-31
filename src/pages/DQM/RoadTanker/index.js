@@ -4,7 +4,7 @@ import Page from "./../Common"
 import {
   getRoadTanker,
   getRoadTankerAuditLog,
-  getRoadTankerFilter,
+  // getRoadTankerFilter,
   getTableInformation,
   updateTableInformation,
 } from "../../../store/actions"
@@ -15,7 +15,6 @@ import { transformArrayToString, getCookieByKey } from "./../Common/helper"
 import {
   roadTanker as roadTankerData,
   auditsRoadTanker,
-  filterRoadTanker,
   address,
 } from "../../../common/data/roadTanker"
 
@@ -42,7 +41,7 @@ class RoadTanker extends Component {
       limit: 10,
       page: 0,
       sort_dir: "asc",
-      sort_field: "site_to_party",
+      sort_field: "ship_to_party",
       search_fields: transformArrayToString(searchFields),
     }
     const payload = {
@@ -61,7 +60,7 @@ class RoadTanker extends Component {
     const {
       onGetRoadTanker,
       onGetRoadTankerAuditLog,
-      onGetRoadTankerFilter,
+      // onGetRoadTankerFilter,
       onGetTableInformation,
       onUpdateTableInformation,
       // auditsRoadTanker,
@@ -75,14 +74,14 @@ class RoadTanker extends Component {
         <Page
           onGetCustomer={onGetRoadTanker}
           onGetAuditLog={onGetRoadTankerAuditLog}
-          onGetFilter={onGetRoadTankerFilter}
+          // onGetFilter={onGetRoadTankerFilter}
           onGetTableInformation={onGetTableInformation}
           onUpdateTableInformation={onUpdateTableInformation}
           tableColumns={searchFields}
           tableMapping={tableMapping}
           tableData={roadTankerData}
           audits={auditsRoadTanker}
-          filter={filterRoadTanker}
+          filter={roadTankerData.filters}
           address={address}
           headerTitle="Road Tanker"
           cardTitle="Road Tanker List"
@@ -103,7 +102,7 @@ const mapStateToProps = ({ roadTanker }) => ({
 const mapDispatchToProps = dispatch => ({
   onGetRoadTanker: params => dispatch(getRoadTanker(params)),
   onGetRoadTankerAuditLog: payload => dispatch(getRoadTankerAuditLog(payload)),
-  onGetRoadTankerFilter: payload => dispatch(getRoadTankerFilter(payload)),
+  // onGetRoadTankerFilter: payload => dispatch(getRoadTankerFilter(payload)),
   onGetTableInformation: () => dispatch(getTableInformation()),
   onUpdateTableInformation: event => dispatch(updateTableInformation(event)),
 })

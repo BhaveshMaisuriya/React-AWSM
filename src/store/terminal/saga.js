@@ -5,7 +5,7 @@ import {
   GET_TERMINAL_AUDITLOG,
   GET_TABLE_INFORMATION,
   UPDATE_TABLE_INFORMATION,
-  GET_TERMINAL_FILTER,
+  // GET_TERMINAL_FILTER,
 } from "./actionTypes"
 
 import {
@@ -18,7 +18,7 @@ import {
   updateTableInformationSuccess,
   updateTableInformationFail,
   getTerminalFilterSuccess,
-  getTerminalFilterFail,
+  // getTerminalFilterFail,
 } from "./actions"
 
 import {
@@ -26,13 +26,14 @@ import {
   getTerminalAuditLog,
   getTableInformation,
   updateTableInformation,
-  getTerminalFilter,
+  // getTerminalFilter,
 } from "../../helpers/fakebackend_helper"
 
 function* onGetTerminal({ params = {} }) {
   try {
     const response = yield call(getTerminal, params)
     yield put(getTerminalSuccess(Factory(response)))
+    yield put(getTerminalFilterSuccess(response.filters))
   } catch (error) {
     yield put(getTerminalFail(error))
   }
@@ -65,18 +66,18 @@ function* onUpdateTableInformation({ payload: event }) {
   }
 }
 
-function* onGetTerminalFilter({ params = {} }) {
-  try {
-    const response = yield call(getTerminalFilter, params)
-    yield put(
-      getTerminalFilterSuccess(
-        mergeFilterValues(response, params.search_fields)
-      )
-    )
-  } catch (error) {
-    yield put(getTerminalFilterFail(error))
-  }
-}
+// function* onGetTerminalFilter({ params = {} }) {
+//   try {
+//     const response = yield call(getTerminalFilter, params)
+//     yield put(
+//       getTerminalFilterSuccess(
+//         mergeFilterValues(response, params.search_fields)
+//       )
+//     )
+//   } catch (error) {
+//     yield put(getTerminalFilterFail(error))
+//   }
+// }
 
 //last function
 function* terminalSaga() {
@@ -84,7 +85,7 @@ function* terminalSaga() {
   yield takeLatest(GET_TERMINAL_AUDITLOG, onGetTerminalAuditLog)
   yield takeLatest(GET_TABLE_INFORMATION, fetchTableInformation)
   yield takeEvery(UPDATE_TABLE_INFORMATION, onUpdateTableInformation)
-  yield takeLatest(GET_TERMINAL_FILTER, onGetTerminalFilter)
+  // yield takeLatest(GET_TERMINAL_FILTER, onGetTerminalFilter)
 }
 
 export default terminalSaga

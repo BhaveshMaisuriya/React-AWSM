@@ -4,13 +4,13 @@ import Page from "../Common"
 import {
   getRetailCustomer,
   getRetailAuditLog,
-  getRetailFilter,
+  // getRetailFilter,
   getTableInformation,
   updateTableInformation,
 } from "../../../store/actions"
 import { tableColumns, tableMapping } from "./tableMapping"
 import { transformArrayToString, getCookieByKey } from "../Common/helper"
-import TableInformationWrapper from "../../../components/Common/TableInformationWrapper"
+// import TableInformationWrapper from "../../../components/Common/TableInformationWrapper"
 import RetailCustomerModal from "./RetailCustomerModal"
 const RetailTableName = "retail-table"
 
@@ -31,12 +31,11 @@ class RetailCustomer extends Component {
       onGetTableInformation,
     } = this.props
     const { searchFields } = this.state
-    // const apiSearchFields = searchFields.forEach(s =>{})
     const params = {
       limit: 10,
       page: 0,
       sort_dir: "asc",
-      sort_field: "site_to_party",
+      sort_field: "ship_to_party",
       search_fields: transformArrayToString(searchFields),
     }
     const payload = {
@@ -55,7 +54,7 @@ class RetailCustomer extends Component {
     const {
       onGetRetailCustomer,
       onGetRetailAuditLog,
-      onGetRetailFilter,
+      // onGetRetailFilter,
       onGetTableInformation,
       onUpdateTableInformation,
       retailCustomer,
@@ -71,7 +70,7 @@ class RetailCustomer extends Component {
           tableName={RetailTableName}
           onGetCustomer={onGetRetailCustomer}
           onGetAuditLog={onGetRetailAuditLog}
-          onGetFilter={onGetRetailFilter}
+          // onGetFilter={onGetRetailFilter}
           onGetTableInformation={onGetTableInformation}
           onUpdateTableInformation={onUpdateTableInformation}
           tableColumns={searchFields}
@@ -99,7 +98,7 @@ const mapStateToProps = ({ retailCustomer }) => ({
 const mapDispatchToProps = dispatch => ({
   onGetRetailCustomer: params => dispatch(getRetailCustomer(params)),
   onGetRetailAuditLog: payload => dispatch(getRetailAuditLog(payload)),
-  onGetRetailFilter: payload => dispatch(getRetailFilter(payload)),
+  // onGetRetailFilter: payload => dispatch(getRetailFilter(payload)),
   onGetTableInformation: () => dispatch(getTableInformation()),
   onUpdateTableInformation: event => dispatch(updateTableInformation(event)),
 })

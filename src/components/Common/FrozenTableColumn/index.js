@@ -3,7 +3,9 @@ import PropTypes from "prop-types"
 import Filter from "../DataTable/filter"
 import { Link } from "react-router-dom"
 import "./style.scss"
-import { isEqual } from "lodash"
+import { isEqual, isNull, isUndefined } from "lodash"
+import { Badge } from "reactstrap"
+
 class FixedCoulmnTable extends Component {
   constructor(props) {
     super(props)
@@ -46,9 +48,9 @@ class FixedCoulmnTable extends Component {
   }
 
   handleClickApply = (checkedFilter, dataKey) => {
-    const { config, filterApplyHandler } = this.props
+    const { filterApplyHandler } = this.props
     const tempObj = {}
-    tempObj[config[dataKey].apiKey] = checkedFilter
+    tempObj[dataKey] = checkedFilter
     filterApplyHandler(tempObj, "insert")
   }
 
@@ -58,7 +60,7 @@ class FixedCoulmnTable extends Component {
   }
 
   addTd = arr => {
-    const { config, filterData, filterDropdownHandler } = this.props
+    const { config, filterData } = this.props
     if (!arr) return null
     return arr.map((e, index) => (
       <td key={index}>
@@ -73,7 +75,7 @@ class FixedCoulmnTable extends Component {
             dataKey={e}
             handleClickApply={this.handleClickApply}
             handleClickReset={this.handleClickReset}
-            filterDropdownHandler={filterDropdownHandler}
+            // filterDropdownHandler={filterDropdownHandler}
           />
         </div>
       </td>
@@ -104,11 +106,36 @@ class FixedCoulmnTable extends Component {
   renderRegularTd = arr => {
     const { headers, config } = this.props
     const sliceArr = headers.slice(this.state.fixedHeaders.length, arr.length)
-    return sliceArr.map((e, index) => (
-      <td key={index}>
-        <div> {arr[e]} </div>
-      </td>
-    ))
+    return sliceArr.map((e, index) => {
+      switch (config[e].type) {
+        case "badge":
+          return (
+            <td key={index}>
+              <div className="text-center">
+                <Badge
+                  className="font-weight-semibold"
+                  color={config[e].getBadgeColor(arr[e])}
+                  pill
+                >
+                  {arr[e]}
+                </Badge>
+              </div>
+            </td>
+          )
+        default:
+          return (
+            <td key={index}>
+              <div
+                // className={
+                //   config[e].columnSize === 1 ? "cell-text" : "cell-text-big"
+                // }
+              >
+                {isUndefined(arr[e]) ? "-" : arr[e]}
+              </div>
+            </td>
+          )
+      }
+    })
   }
   renderRegular = arr => {
     if (!arr) return null
@@ -146,7 +173,7 @@ FixedCoulmnTable.propType = {
   headers: PropTypes.array.isRequired,
   config: PropTypes.object.isRequired,
   headerSortHandler: PropTypes.func,
-  filterDropdownHandler: PropTypes.func,
+  // filterDropdownHandler: PropTypes.func,
   filterApplyHandler: PropTypes.func,
   filterData: PropTypes.object.isRequired,
   modalPop: PropTypes.func.isRequired,
@@ -154,7 +181,7 @@ FixedCoulmnTable.propType = {
 
 FixedCoulmnTable.defaultProps = {
   headerSortHandler: () => {},
-  filterDropdownHandler: () => {},
+  // filterDropdownHandler: () => {},
   filterApplyHandler: () => {},
 }
 

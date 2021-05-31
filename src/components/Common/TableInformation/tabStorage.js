@@ -23,11 +23,7 @@ const TabStorage = ({ scheduler, data, onChange }) => {
   const [storageData, setStorageData] = useState(data.storage || {})
   const [endOfDay, setEndOfDay] = useState(data.end_of_day)
   const [deleteItemKey, setDeleteItemKey] = useState(null)
-  const [alert, setAlert] = useState({
-    open: false,
-    message: "",
-    backgroundColor: "",
-  })
+  const [alert, setAlert] = useState(false)
 
   const onStorageChange = newStorageData => {
     if (onChange) {

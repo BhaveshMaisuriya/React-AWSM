@@ -30,7 +30,7 @@ const tabQuota = ({ scheduler, data, onChange }) => {
             <AvForm>
               <AvField
                 name="code"
-                label="PRODUCT CODE (QUOTA)"
+                label="PRODUCT CODE"
                 value={storageData[key] ? storageData[key].code || "" : ""}
                 disabled
                 className="disabledField"

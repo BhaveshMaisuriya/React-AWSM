@@ -4,14 +4,14 @@ import Page from "../Common"
 import {
   getProducts,
   getProductAuditLog,
-  getProductFilter,
+  // getProductFilter,
   getTableInformation,
   updateTableInformation,
 } from "../../../store/actions"
 import { tableColumns, tableMapping } from "./tableMapping"
 import { transformArrayToString, getCookieByKey } from "../Common/helper"
 import ProductDetailModal from "./ProductDetailModal"
-const ProductTableName = 'product-table'
+const ProductTableName = "product-table"
 
 class Product extends Component {
   constructor(props) {
@@ -34,7 +34,7 @@ class Product extends Component {
       limit: 10,
       page: 0,
       sort_dir: "asc",
-      sort_field: "site_to_party",
+      sort_field: "code",
       search_fields: transformArrayToString(searchFields),
     }
     const payload = {
@@ -53,7 +53,7 @@ class Product extends Component {
     const {
       onGetProducts,
       onGetProductAuditLog,
-      onGetProductFilter,
+      // onGetProductFilter,
       onGetTableInformation,
       onUpdateTableInformation,
       products,
@@ -70,7 +70,7 @@ class Product extends Component {
           tableName={ProductTableName}
           onGetCustomer={onGetProducts}
           onGetAuditLog={onGetProductAuditLog}
-          onGetFilter={onGetProductFilter}
+          // onGetFilter={onGetProductFilter}
           onGetTableInformation={onGetTableInformation}
           onUpdateTableInformation={onUpdateTableInformation}
           tableColumns={searchFields}
@@ -88,13 +88,13 @@ class Product extends Component {
 const mapStateToProps = ({ products }) => ({
   products: products.dataList,
   audits: products.productAuditLog,
-  filter: products.productFilter
+  filter: products.productFilter,
 })
 
 const mapDispatchToProps = dispatch => ({
   onGetProducts: params => dispatch(getProducts(params)),
   onGetProductAuditLog: payload => dispatch(getProductAuditLog(payload)),
-  onGetProductFilter: payload => dispatch(getProductFilter(payload)),
+  // onGetProductFilter: payload => dispatch(getProductFilter(payload)),
   onGetTableInformation: () => dispatch(getTableInformation()),
   onUpdateTableInformation: event => dispatch(updateTableInformation(event)),
 })

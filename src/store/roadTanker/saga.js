@@ -18,7 +18,7 @@ import {
   updateTableInformationSuccess,
   updateTableInformationFail,
   getRoadTankerFilterSuccess,
-  getRoadTankerFilterFail,
+  // getRoadTankerFilterFail,
 } from "./actions"
 
 import {
@@ -26,13 +26,14 @@ import {
   getRoadTankerAuditLog,
   getTableInformation,
   updateTableInformation,
-  getRoadTankerFilter,
+  // getRoadTankerFilter,
 } from "../../helpers/fakebackend_helper"
 
 function* onGetRoadTanker({ params = {} }) {
   try {
     const response = yield call(getRoadTanker, params)
     yield put(getRoadTankerSuccess(response))
+    yield put(getRoadTankerFilterSuccess(response.filters))
   } catch (error) {
     yield put(getRoadTankerFail(error))
   }
@@ -65,18 +66,18 @@ function* onUpdateTableInformation({ payload: event }) {
   }
 }
 
-function* onGetRoadTankerFilter({ params = {} }) {
-  try {
-    const response = yield call(getRoadTankerFilter, params)
-    yield put(
-      getRoadTankerFilterSuccess(
-        mergeFilterValues(response, params.search_fields)
-      )
-    )
-  } catch (error) {
-    yield put(getRoadTankerFilterFail(error))
-  }
-}
+// function* onGetRoadTankerFilter({ params = {} }) {
+//   try {
+//     const response = yield call(getRoadTankerFilter, params)
+//     yield put(
+//       getRoadTankerFilterSuccess(
+//         mergeFilterValues(response, params.search_fields)
+//       )
+//     )
+//   } catch (error) {
+//     yield put(getRoadTankerFilterFail(error))
+//   }
+// }
 
 //last function
 function* roadTankerSaga() {
@@ -84,7 +85,7 @@ function* roadTankerSaga() {
   yield takeLatest(GET_ROADTANKER_AUDITLOG, onGetRoadTankerAuditLog)
   yield takeLatest(GET_TABLE_INFORMATION, fetchTableInformation)
   yield takeEvery(UPDATE_TABLE_INFORMATION, onUpdateTableInformation)
-  yield takeLatest(GET_ROADTANKER_FILTER, onGetRoadTankerFilter)
+  // yield takeLatest(GET_ROADTANKER_FILTER, onGetRoadTankerFilter)
 }
 
 export default roadTankerSaga

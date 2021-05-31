@@ -29,11 +29,19 @@ const tableMapping = {
     label: "Status in SAP",
     apiKey: "status_sap",
     columnSize: 1,
+    type: "badge",
+    getBadgeColor: (value) => {
+      return value === "ACTIVE" ? "primary" : "secondary"
+    }
   },
   status_awsm: {
     label: "Status in AWSM",
     apiKey: "status_awsm",
     columnSize: 1,
+    type: "badge",
+    getBadgeColor: (value) => {
+      return value === "ACTIVE" ? "primary" : "secondary"
+    }
   },
   division: {
     label: "Division",

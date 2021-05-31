@@ -4,21 +4,21 @@ import Page from "../Common"
 import {
   getTerminal,
   getTerminalAuditLog,
-  getTerminalFilter,
+  // getTerminalFilter,
   getTableInformation,
   updateTableInformation,
 } from "../../../store/actions"
 import { tableColumns, tableMapping } from "./tableMapping"
 import { transformArrayToString, getCookieByKey } from "../Common/helper"
 import TerminalDetailModal from "./TerminalDetailModal"
-const ProductTableName = "product-table"
+const TerminalTableName = "terminal-table"
 
 class Terminal extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      searchFields: getCookieByKey(ProductTableName)
-        ? JSON.parse(getCookieByKey(ProductTableName))
+      searchFields: getCookieByKey(TerminalTableName)
+        ? JSON.parse(getCookieByKey(TerminalTableName))
         : tableColumns,
     }
   }
@@ -34,7 +34,7 @@ class Terminal extends Component {
       limit: 10,
       page: 0,
       sort_dir: "asc",
-      sort_field: "site_to_party",
+      sort_field: "ship_to_party",
       search_fields: transformArrayToString(searchFields),
     }
     const payload = {
@@ -52,7 +52,7 @@ class Terminal extends Component {
     const {
       onGetTerminal,
       onGetTerminalAuditLog,
-      onGetTerminalFilter,
+      // onGetTerminalFilter,
       onGetTableInformation,
       onUpdateTableInformation,
       terminalTable,
@@ -66,10 +66,10 @@ class Terminal extends Component {
         <Page
           headerTitle="Terminal"
           cardTitle="Terminal List"
-          tableName={ProductTableName}
+          tableName={TerminalTableName}
           onGetCustomer={onGetTerminal}
           onGetAuditLog={onGetTerminalAuditLog}
-          onGetFilter={onGetTerminalFilter}
+          // onGetFilter={onGetTerminalFilter}
           onGetTableInformation={onGetTableInformation}
           onUpdateTableInformation={onUpdateTableInformation}
           tableColumns={searchFields}
@@ -84,7 +84,7 @@ class Terminal extends Component {
   }
 }
 
-const mapStateToProps = ({ products, terminal }) => ({
+const mapStateToProps = ({ terminal }) => ({
   terminalTable: terminal.terminal,
   auditsTerminal: terminal.auditsTerminal,
   filterTerminal: terminal.filterTerminal,
@@ -93,7 +93,7 @@ const mapStateToProps = ({ products, terminal }) => ({
 const mapDispatchToProps = dispatch => ({
   onGetTerminal: params => dispatch(getTerminal(params)),
   onGetTerminalAuditLog: payload => dispatch(getTerminalAuditLog(payload)),
-  onGetTerminalFilter: payload => dispatch(getTerminalFilter(payload)),
+  // onGetTerminalFilter: payload => dispatch(getTerminalFilter(payload)),
   onGetTableInformation: () => dispatch(getTableInformation()),
   onUpdateTableInformation: event => dispatch(updateTableInformation(event)),
 })

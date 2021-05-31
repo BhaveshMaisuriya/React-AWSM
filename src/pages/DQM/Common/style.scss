@@ -178,7 +178,24 @@
     border: unset;
     margin-right: 20px;
     box-shadow: 0px 0px 3px 1px #cccccc36;
+    &:focus {
+      box-shadow: unset;
+    }
   }
+}
+
+.vertical-hr-right {
+  border-right: 1px solid #D9D9D9;
+  button {
+    background: #fff;
+    border: unset;
+    margin-right: 20px;
+    box-shadow: 0px 0px 3px 1px #cccccc36;
+  }
+}
+
+.vertical-hr-left {
+  border-left: 1px solid #D9D9D9;
 }
 
 .Confirmation-box {

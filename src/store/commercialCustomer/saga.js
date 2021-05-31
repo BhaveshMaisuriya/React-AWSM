@@ -4,9 +4,9 @@ import {
   GET_COMMERCIAL_CUSTOMER,
   GET_DOWNLOAD_COMMERCIAL_CUSTOMER,
   GET_COMMERCIAL_AUDITLOG,
-  GET_COMMERCIAL_FILTER,
   GET_COMMERCIAL_TABLE_INFORMATION,
   UPDATE_COMMERCIAL_TABLE_INFORMATION,
+  // GET_COMMERCIAL_FILTER,
 } from "./actionTypes"
 
 import {
@@ -17,32 +17,33 @@ import {
   getCommercialAuditLogSuccess,
   getCommercialAuditLogFail,
   getCommercialFilterSuccess,
-  getCommercialFilterFail,
   getCommercialTableInformationFail,
   getCommercialTableInformationSuccess,
   resetCommercialTableInformation,
   updateCommercialTableInformationSuccess,
   updateCommercialTableInformationFail,
+  // getCommercialFilterFail,
 } from "./actions"
 
 import {
   getCommercialCustomer,
   getDownloadCommercialCustomer,
   getCommercialAuditLog,
-  getCommercialFilter,
   getCommercialDetail,
   putCommercialDetail,
+  // getCommercialFilter,
 } from "../../helpers/fakebackend_helper"
 
 function* onGetCommercialCustomer({ params = {} }) {
   try {
     const response = yield call(getCommercialCustomer, params)
-    yield put(getCommercialCustomerSuccess(Factory(response.data)))
+    yield put(getCommercialCustomerSuccess(Factory(response)))
+    yield put(getCommercialFilterSuccess(response.data.filters))
   } catch (error) {
     yield put(getCommercialCustomerFail(error))
   }
 }
-// download
+// download excel
 function* onGetDownloadCommercialCustomer({ params = {} }) {
   try {
     const response = yield call(getDownloadCommercialCustomer, params)
@@ -61,20 +62,7 @@ function* onGetCommercialAuditLog() {
   }
 }
 
-function* onGetCommercialFIlter({ params = {} }) {
-  try {
-    const response = yield call(getCommercialFilter)
-    yield put(
-      getCommercialFilterSuccess(
-        mergeFilterValues(response, params.search_fields)
-      )
-    )
-  } catch (error) {
-    yield put(getCommercialFilterFail(error))
-  }
-}
-
-function * onGetCommercialTableInformation({ params }) {
+function* onGetCommercialTableInformation({ params }) {
   try {
     yield put(resetCommercialTableInformation())
     const response = yield call(getCommercialDetail, params.ship_to_party)
@@ -84,7 +72,7 @@ function * onGetCommercialTableInformation({ params }) {
   }
 }
 
-function * onPutCommercialTableInformation({ data }) {
+function* onPutCommercialTableInformation({ data }) {
   try {
     yield call(putCommercialDetail, data)
     yield put(updateCommercialTableInformationSuccess())
@@ -93,13 +81,32 @@ function * onPutCommercialTableInformation({ data }) {
   }
 }
 
+// function* onGetCommercialFIlter({ params = {} }) {
+//   try {
+//     const response = yield call(getCommercialFilter)
+//     yield put(
+//       getCommercialFilterSuccess(
+//         mergeFilterValues(response, params.search_fields)
+//       )
+//     )
+//   } catch (error) {
+//     yield put(getCommercialFilterFail(error))
+//   }
+// }
+
 function* commercialCustomerSaga() {
   yield takeLatest(GET_COMMERCIAL_CUSTOMER, onGetCommercialCustomer)
   yield takeEvery(GET_COMMERCIAL_AUDITLOG, onGetCommercialAuditLog)
-  yield takeEvery(GET_COMMERCIAL_FILTER, onGetCommercialFIlter)
-  yield takeLatest(GET_COMMERCIAL_TABLE_INFORMATION, onGetCommercialTableInformation)
-  yield takeLatest(UPDATE_COMMERCIAL_TABLE_INFORMATION, onPutCommercialTableInformation);
+  yield takeLatest(
+    GET_COMMERCIAL_TABLE_INFORMATION,
+    onGetCommercialTableInformation
+  )
+  yield takeLatest(
+    UPDATE_COMMERCIAL_TABLE_INFORMATION,
+    onPutCommercialTableInformation
+  )
+  // yield takeEvery(GET_COMMERCIAL_FILTER, onGetCommercialFIlter)
   yield takeLatest(GET_DOWNLOAD_COMMERCIAL_CUSTOMER, onGetDownloadCommercialCustomer)
-}
+  }
 
 export default commercialCustomerSaga

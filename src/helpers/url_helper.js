@@ -58,7 +58,9 @@ export const GET_USERS = "/users"
 export const GET_USER_PROFILE = "/user"
 
 //RETAIL CUSTOMER
-export const GET_RETAIL_CUSTOMER = "/retail_customer"
+// export const GET_RETAIL_CUSTOMER = "/retail_customer"
+export const GET_RETAIL_CUSTOMER =
+  "https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/retail-customer"
 export const GET_RETAIL_AUDITLOG = "/audit_log"
 export const GET_RETAIL_FILTER = "/retail-customer/filter"
 export const GET_RETAIL_CUSTOMER_DETAIL = "/retail_customer_detail"

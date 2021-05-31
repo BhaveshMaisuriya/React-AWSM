@@ -234,7 +234,7 @@ export default function retailCustomerFactory(data) {
     CustomerObj = cloneobj
   })
   return {
-    list: finalData,
-    totalRows: getValueFromObj(data, "total_rows", "0"),
+    list: data.list,
+    total_rows: getValueFromObj(data, "total_rows", "0"),
   }
 }

@@ -1,19 +1,18 @@
 import React, { Component, Fragment } from "react"
 import { connect } from "react-redux"
 import Page from "./../Common"
-// import searchIcon from "../../../assets/images/search.svg"
 import {
   getCommercialCustomer,
   getDownloadCommercialCustomer,
   getCommercialAuditLog,
-  getCommercialFilter,
+  // getCommercialFilter,
   getTableInformation,
   updateTableInformation,
 } from "../../../store/actions"
 import { tableColumns, tableMapping } from "./tableMapping"
 import { transformArrayToString, getCookieByKey } from "./../Common/helper"
 import CommercialCustomerModal from "./CommercialCustomerModal"
-const CommercialCustomerTableName = 'commercial-table'
+const CommercialCustomerTableName = "commercial-table"
 
 class CommercialCustomer extends Component {
   constructor(props) {
@@ -31,23 +30,15 @@ class CommercialCustomer extends Component {
       onGetCommercialCustomer,
       onGetCommercialAuditLog,
       onGetTableInformation,
-      // onGetDownloadCommercialCustomer,
     } = this.props
     const { searchFields } = this.state
     const params = {
       limit: 10,
-      page: 0,  
+      page: 0,
       sort_dir: "asc",
       sort_field: "ship_to_party",
       search_fields: transformArrayToString(searchFields),
     }
-    // const downloadParams = {
-    //   limit: 10,
-    //   page: 0,  
-    //   sort_dir: "asc",
-    //   sort_field: "ship_to_party",
-    //   search_fields: '*',
-    // }    
     const payload = {
       limit: 6,
       pagination: 0,
@@ -56,12 +47,16 @@ class CommercialCustomer extends Component {
       q: "commercial_customer",
     }
     onGetCommercialCustomer(params)
-    // onGetDownloadCommercialCustomer(downloadParams)
     onGetCommercialAuditLog(payload)
     onGetTableInformation()
   }
 
-  GetonDownload = async(downloadParams) => {
+  GetonDownload = async (currentPage) => {
+    const downloadParams = {
+      limit: 10,
+      page: currentPage,
+      search_fields: '*',
+    }
     const { onGetDownloadCommercialCustomer } = this.props;
     await onGetDownloadCommercialCustomer(downloadParams);
   }
@@ -70,7 +65,7 @@ class CommercialCustomer extends Component {
     const {
       onGetCommercialCustomer,
       onGetCommercialAuditLog,
-      onGetCommercialFilter,
+      // onGetCommercialFilter,
       onGetTableInformation,
       onUpdateTableInformation,
       commercialCustomer,
@@ -86,7 +81,7 @@ class CommercialCustomer extends Component {
         <Page
           onGetCustomer={onGetCommercialCustomer}
           onGetAuditLog={onGetCommercialAuditLog}
-          onGetFilter={onGetCommercialFilter}
+          // onGetFilter={onGetCommercialFilter}
           onGetTableInformation={onGetTableInformation}
           onUpdateTableInformation={onUpdateTableInformation}
           tableColumns={searchFields}
@@ -118,7 +113,7 @@ const mapStateToProps = ({ commercialCustomer, retailCustomer }) => ({
 const mapDispatchToProps = dispatch => ({
   onGetCommercialCustomer: params => dispatch(getCommercialCustomer(params)),
   onGetCommercialAuditLog: payload => dispatch(getCommercialAuditLog(payload)),
-  onGetCommercialFilter: payload => dispatch(getCommercialFilter(payload)),
+  // onGetCommercialFilter: payload => dispatch(getCommercialFilter(payload)),
   onGetTableInformation: () => dispatch(getTableInformation()),
   onUpdateTableInformation: event => dispatch(updateTableInformation(event)),
   onGetDownloadCommercialCustomer: params => dispatch(getDownloadCommercialCustomer(params)),

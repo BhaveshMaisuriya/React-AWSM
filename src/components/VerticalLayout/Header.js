@@ -2,26 +2,17 @@ import PropTypes from "prop-types"
 import React, { Component } from "react"
 
 import { connect } from "react-redux"
-import { Row, Col } from "reactstrap"
-
-import { Link } from "react-router-dom"
-
-// Reactstrap
-import { Dropdown, DropdownToggle, DropdownMenu } from "reactstrap"
 
 // Import menuDropdown
-import LanguageDropdown from "../CommonForBoth/TopbarDropdown/LanguageDropdown"
-import NotificationDropdown from "../CommonForBoth/TopbarDropdown/NotificationDropdown"
 import ProfileMenu from "../CommonForBoth/TopbarDropdown/ProfileMenu"
-
-import megamenuImg from "../../assets/images/megamenu-img.png"
+import awsmLogo from "../../assets/images/AWSM-logo.png"
 
 //i18n
 import { withTranslation } from "react-i18next"
 
 // Redux Store
 import { toggleRightSidebar } from "../../store/actions"
-
+import Divider from '@material-ui/core/Divider';
 class Header extends Component {
   constructor(props) {
     super(props)
@@ -79,12 +70,12 @@ class Header extends Component {
         <header id="page-topbar" style={{ boxShadow: "none !important" }}>
           <div className="navbar-header">
             <div className="d-flex">
-              <div className="navbar-brand-box" style={{padding: 0}}>
-               <div className="sideBar_profile">
+              <div className="navbar-brand-box" style={{ padding: 0 }}>
+                <div className="sideBar_profile">
                   <ProfileMenu sidebar={true} />
-                </div> 
+                </div>
               </div>
-              <button
+              {/* <button
                 type="button"
                 onClick={this.toggleMenu}
                 className="btn btn-sm px-3 font-size-16 header-item waves-effect"
@@ -102,8 +93,7 @@ class Header extends Component {
                   />
                   <span className="bx bx-search-alt"></span>
                 </div>
-              </form>
-
+              </form> 
               <Dropdown
                 className="dropdown-mega d-none d-lg-block ml-2"
                 isOpen={this.state.megaMenuDrp}
@@ -119,8 +109,8 @@ class Header extends Component {
                   {" "}
                   {this.props.t("Mega Menu")}{" "}
                   <i className="mdi mdi-chevron-down"></i>
-                </DropdownToggle> */}
-                <DropdownMenu className="dropdown-megamenu">
+                </DropdownToggle>
+                 <DropdownMenu className="dropdown-megamenu">
                   <Row>
                     <Col sm={8}>
                       <Row>
@@ -259,9 +249,10 @@ class Header extends Component {
                     </Col>
                   </Row>
                 </DropdownMenu>
-              </Dropdown>
+              </Dropdown>  */}
             </div>
-            <div className="d-flex">
+            
+            {/*<div className="d-flex">
               <div className="dropdown d-inline-block d-lg-none ml-2">
                 <button
                   onClick={() => {
@@ -301,9 +292,9 @@ class Header extends Component {
                 </div>
               </div>
 
-              {/* <LanguageDropdown /> */}
+             <LanguageDropdown /> 
 
-              {/* <Dropdown
+              <Dropdown
                 className="d-none d-lg-inline-block ml-1"
                 isOpen={this.state.socialDrp}
                 toggle={() => {
@@ -361,8 +352,8 @@ class Header extends Component {
                     </Row>
                   </div>
                 </DropdownMenu>
-              </Dropdown> */}
-{/* 
+              </Dropdown> 
+              
               <div className="dropdown d-none d-lg-inline-block ml-1">
                 <button
                   type="button"
@@ -372,12 +363,12 @@ class Header extends Component {
                 >
                   <i className="bx bx-fullscreen"></i>
                 </button>
-              </div> */}
+              </div> 
 
-              {/* <NotificationDropdown /> */}
+              <NotificationDropdown /> 
               <ProfileMenu sidebar={false} />
 
-              <div
+               <div
                 onClick={this.toggleRightbar}
                 className="dropdown d-inline-block"
               >
@@ -387,8 +378,9 @@ class Header extends Component {
                 >
                   <i className="bx bx-cog bx-spin"></i>
                 </button>
-              </div>
-            </div>
+              </div> 
+            </div>*/}
+            <img src={awsmLogo} alt="AWSM Logo" className="vertical-hr-left"/>
           </div>
         </header>
       </React.Fragment>

@@ -12,9 +12,8 @@ class DownloadExcel extends Component {
     }
 
     componentDidMount = async() => {
-        console.log("downloadData::nm");
+        
         const { tableData, tableName, getLoader, getAlert } = await this.props;
-        console.log("downloadData::n", tableData)
         if(tableData.list && tableData.list.length > 0){
           const ws = XLSX.utils.json_to_sheet(tableData.list);
           const wb = { Sheets: { 'data': ws }, SheetNames: ['data'] };

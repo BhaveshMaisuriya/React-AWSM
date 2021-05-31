@@ -56,11 +56,12 @@ class TablePaginationActions extends Component {
 
   render() {
     const { classes, count, currentPage, rowsPerPage } = this.props
-    const pageNumbers = []
+    let pageNumbers = []
 
     for (let i = 1; i <= Math.ceil(count / rowsPerPage); i++) {
       pageNumbers.push(i)
     }
+    const newpageNumbers = pageNumbers.splice(currentPage, 5)
     return (
       <Pagination>
         <div className="Pagination-Container">
@@ -77,12 +78,13 @@ class TablePaginationActions extends Component {
             </PaginationLink>
           </PaginationItem>
           <Divider className={classes.divider} />
-          {pageNumbers.map(number => (
+          {newpageNumbers.map(number => (
             <PaginationItem
               active={number - 1 === currentPage}
               key={Math.random().toString(36).substr(2, 9)}
             >
               <PaginationLink
+                className="Pagination-Button"
                 value={number}
                 onClick={() => this.props.onChangePage(event, number - 1)}
               >

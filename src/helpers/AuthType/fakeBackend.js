@@ -575,18 +575,18 @@ const fakeBackend = () => {
     })
   })
 
-  mock.onGet(url.GET_RETAIL_CUSTOMER).reply(() => {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        if (retailCustomers) {
-          // Passing fake JSON data as response
-          resolve([200, retailCustomers])
-        } else {
-          reject([400, "Cannot get user profile"])
-        }
-      })
-    })
-  })
+  // mock.onGet(url.GET_RETAIL_CUSTOMER).reply(() => {
+  //   return new Promise((resolve, reject) => {
+  //     setTimeout(() => {
+  //       if (retailCustomers) {
+  //         // Passing fake JSON data as response
+  //         resolve([200, retailCustomers])
+  //       } else {
+  //         reject([400, "Cannot get user profile"])
+  //       }
+  //     })
+  //   })
+  // })
 
   mock.onGet(url.GET_COMMERCIAL_CUSTOMER).reply(() => {
     return new Promise((resolve, reject) => {

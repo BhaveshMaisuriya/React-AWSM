@@ -21,6 +21,7 @@ import TabDelivery from "../../../components/Common/TableInformation/tabDelivery
 import TabContact from "../../../components/Common/TableInformation/tabContact"
 import TabStorage from "../../../components/Common/TableInformation/tabStorage"
 import TabQuota from "../../../components/Common/TableInformation/tabQuota"
+import ExitConfirmation from "../../../components/Common/ExitConfirmation"
 
 //CSS
 import "./CommercialCustomerModal.scss"
@@ -50,7 +51,7 @@ const CommercialCustomerModal = props => {
   const [activeTab, setActiveTab] = useState("1")
   const scheduler = isScheduler()
   const [alert, setAlert] = useState(false)
-  const [displayConfirmationBox, setDisplayConfirmationBox] = useState(false)
+  const [isConfirm, setIsConfirm] = useState(false);
 
   const handleUpdate = e => {
     e.preventDefault()
@@ -76,40 +77,49 @@ const CommercialCustomerModal = props => {
     setCurrentCommercialDetail(newCommercialDetail)
   }
 
+  const onConfirmCancel = () => {
+    setIsConfirm(false)
+  }
+
+  const onConfirmExit = () => {
+    setIsConfirm(false)
+    if (onCancel) {
+      onCancel()
+    }
+  }
   console.log(currentCommercialDetail)
 
   return (
     <Modal isOpen={visible} toggle={() => setDisplayConfirmationBox(!displayConfirmationBox)} className="commercial-customer-modal modal-lg">
       {currentCommercialDetail ? (
         <div>
-          <ModalHeader toggle={() => setDisplayConfirmationBox(!displayConfirmationBox)}>
-          <span>SHIP TO PARTY: {currentCommercialDetail.ship_to_party}</span>
-          <span className="last-updated-sub-title">
-            Last Updated By: Nur Izzati on 3rd March 2021
-          </span>
+          <ModalHeader>
+            <span className="modal-title">
+              SHIP TO PARTY: {currentCommercialDetail.ship_to_party}
+            </span>
+            <span className="last-updated-sub-title">
+              Last Updated By: Nur Izzati on 3rd March 2021
+            </span>
           </ModalHeader>
-          <ModalBody>
-          {displayConfirmationBox ?
-            <div className="Confirmation-box">
-              <div>
-                <h3>Exit Confirmation</h3>
-                <p>Are you sure you want to exit without update? <br />You will lose all the changes made.</p>
-                <button className="btn btn-outline-danger" onClick={() => setDisplayConfirmationBox(!displayConfirmationBox)}>Cancel</button>
-                <button className="btn btn-danger" onClick={onCancel}>Exit</button>
-              </div>
-            </div>
-            :
-            <Fragment>
+
+          <ModalBody className="position-relative">
+            {isConfirm && (
+              <ExitConfirmation
+                onExit={onConfirmExit}
+                onCancel={onConfirmCancel}
+              />
+            )}
+            <>
               <div className="d-flex justify-content-between">
                 <div className="w-50 mr-4">
-                <label>SHIP TO (COMPANY NAME)</label>
+                  <label>SHIP TO (COMPANY NAME)</label>
                   <AWSMInput
                     disabled
                     defaultValue={currentCommercialDetail.ship_to_company}
                   />
                 </div>
                 <div className="w-50 ml-4">
-                <label>STATUS IN SAP</label>
+                  <label>STATUS IN SAP</label>
                   <AWSMInput
                     disabled
                     defaultValue={currentCommercialDetail.station_status_sap}
@@ -121,7 +131,7 @@ const CommercialCustomerModal = props => {
                 defaultValue={currentCommercialDetail.remarks}
                 onChange={value => onFieldValueChange("remarks", value)}
               />
-            
+            </>
             <div className="mt-4">
               <Nav pills justified>
                 <NavItem>
@@ -235,8 +245,20 @@ const CommercialCustomerModal = props => {
                 </TabPane>
               </TabContent>
             </div>
-            </Fragment>
-          }
+            <ModalFooter>
+              <button onClick={() => setIsConfirm(true)} className="btn-sec">
+                Cancel
+              </button>
+              <Button type="submit" color="primary" onClick={handleUpdate}>
+                Update
+              </Button>
+              <AWSMAlert
+                status="success"
+                message="Update success!"
+                openAlert={alert}
+                closeAlert={() => setAlert(false)}
+              />
+            </ModalFooter>
           </ModalBody>
         </div>
       ) : currentCommercialError ? (
@@ -244,20 +266,6 @@ const CommercialCustomerModal = props => {
       ) : (
         <Skeleton variant="rect" width={800} height={300} />
       )}
-      <ModalFooter>
-        <button onClick={() => setDisplayConfirmationBox(!displayConfirmationBox)} className="btn-sec">
-          Cancel
-        </button>
-        <Button type="submit" color="primary" onClick={handleUpdate}>
-          Update
-        </Button>
-        <AWSMAlert
-          status="success"
-          message="Update success!"
-          openAlert={alert}
-          closeAlert={() => setAlert(false)}
-        />
-      </ModalFooter>
     </Modal>
   )
 }

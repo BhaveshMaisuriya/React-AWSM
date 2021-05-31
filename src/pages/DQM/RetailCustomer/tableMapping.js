@@ -4,7 +4,7 @@ const tableColumns = [
   "site_name",
   "site_id",
   "cluster",
-  "address_region_group",
+  "region_group",
   "status_awsm",
   "sales_inventory_data_source",
   "road_tanker_accessibility",
@@ -52,42 +52,42 @@ const tableMapping = {
     apiKey: "site_name",
     columnSize: 2,
   },
-  address_address_1: {
+  address_1: {
     label: "ADDRESS",
     apiKey: "address.address_1",
     columnSize: 2,
   },
-  address_city: {
+  city: {
     label: "CITY",
     apiKey: "address.city",
     columnSize: 2,
   },
-  address_state: {
+  state: {
     label: "STATE",
     apiKey: "address.state",
     columnSize: 2,
   },
-  address_postcode: {
+  postcode: {
     label: "POSTCODE",
     apiKey: "address.postcode",
     columnSize: 1,
   },
-  address_country: {
+  country: {
     label: "COUNTRY",
     apiKey: "address.country",
     columnSize: 1,
   },
-  address_region_group: {
+  region_group: {
     label: "REGION",
     apiKey: "address.region_group",
     columnSize: 1,
   },
-  address_latitude: {
+  latitude: {
     label: "LATITUDE",
     apiKey: "address.latitude",
     columnSize: 1,
   },
-  address_longitude: {
+  longitude: {
     label: "LONGITUDE",
     apiKey: "address.longitude",
     columnSize: 1,
@@ -218,12 +218,12 @@ const tableMapping = {
     columnSize: 1,
   },
   station_close_period_date_from: {
-    label: "STATION CLOSE FROM",
+    label: "CLOSE PERIOD FROM",
     apiKey: "station_close_period.date_from",
     columnSize: 2,
   },
   station_close_period_date_to: {
-    label: "STATION CLOSE TO",
+    label: "CLOSE PERIOD TO",
     apiKey: "station_close_period.date_to",
     columnSize: 2,
   },

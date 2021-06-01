@@ -43,6 +43,11 @@
   width: 100% !important;
   border-spacing: 0;
   border-top: 1px solid #d9d9d9;
+  td .table_text_ellipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 }
 
 .container tbody tr {
@@ -50,9 +55,10 @@
 }
 
 .container thead td {
-  font-family: Inter;
+  // font-family: Inter;
   color: #000000;
   max-height: 64px;
+  font-weight: 600;
 }
 
 .container tbody td {

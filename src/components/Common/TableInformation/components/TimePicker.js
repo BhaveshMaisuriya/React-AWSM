@@ -39,10 +39,12 @@ const AWSMDropdown = ({
         data-toggle="dropdown"
         tag="div"
         aria-expanded={dropdownOpen}
-        className={`awsm-select-toggle p-2 ${disabled ? "disabled" : ""}`}
         disabled={disabled}
       >
-        {value}
+        <div className={`awsm-select-toggle p-2 position-relative ${disabled ? "disabled" : ""}`}>
+          <div>{value}</div>
+          <ArrowDropDownIcon className="awsm-dropdown-arrow"/>
+        </div>
       </DropdownToggle>
       <DropdownMenu className="awsm-select-menu w-100">
         {items &&

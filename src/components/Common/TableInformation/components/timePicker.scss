@@ -7,21 +7,12 @@
   &.disabled {
     background-color: rgb(238, 238, 238);
   }
-  // &:after {
-  //   content: ">";
-  //   position: absolute;
-  //   right: 10px;
-  //   top: 10px;
-  //   transform: rotate(90deg);
-  //   font-weight: bold;
-  // }
-  &:after {
-    content: unset;
+  .awsm-dropdown-arrow {
     position: absolute;
-    right: 10px;
-    top: 10px;
-    transform: rotate(90deg);
-    font-weight: bold;
+    top: 7px;
+    right: 5px;
+    cursor: pointer;
+    color: #777777;
   }
 }
 .awsm-select-menu {

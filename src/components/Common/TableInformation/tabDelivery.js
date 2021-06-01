@@ -273,7 +273,7 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
           </h6>
         </Col>
         <Col className="col-6">
-          <SimplePopover handleChange={handleActualTime1} data={openTime1}>
+          <SimplePopover handleChange={handleActualTime1} data={openTime1} disabled={!!scheduler}>
             <AvForm>
               <AvField
                 name="days1"

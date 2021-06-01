@@ -17,6 +17,7 @@ export function transformObjectToStringSentence(qObject) {
   let newString = ""
   if (Object.keys(qObject).length !== 0 && qObject) {
     const keys = Object.keys(qObject)
+    newString = newString.concat(" ( ")
     for (let [index, key] of keys.entries()) {
       for (let [index, object] of qObject[key].entries()) {
         newString = newString.concat(key, " == ", checkType(object))
@@ -25,6 +26,7 @@ export function transformObjectToStringSentence(qObject) {
       }
       if (index !== keys.length - 1) newString = newString.concat(" && ")
     }
+    newString = newString.concat(" ) ")
   }
   return newString
 }

@@ -41,7 +41,7 @@ const AWSMAlert = ({ status, message, openAlert, closeAlert }) => {
       }}
       anchorOrigin={{ vertical: "top", horizontal: "right" }}
       onClose={closeAlert}
-      autoHideDuration={3000000}
+      autoHideDuration={3000}
       action={
         <IconButton aria-label="close" onClick={closeAlert}>
           <CloseIcon style={{ color: color }} />

@@ -1,7 +1,7 @@
 const roadTanker = {
   visible_row_count: 10,
   total_rows: 90,
-  totalRows: 90,
+  total_rows: 90,
   list: [
     {
       vehicle: "A ACHIEVER",
@@ -274,6 +274,19 @@ const roadTanker = {
       created: "Wednesday, May 19, 2021 3:45 PM",
     },
   ],
+  filters: {
+    vehicle: [
+      "A ACHIEVER",
+      "A SAMAD",
+      "A-GOODMAN",
+      "A-TOPMAN",
+      "A. IKTIHAR",
+      "A.ATHENE",
+      "A.ATLANTIC",
+      "A.CHEETAH",
+    ],
+    owner: [],
+  },
 }
 
 const auditsRoadTanker = {

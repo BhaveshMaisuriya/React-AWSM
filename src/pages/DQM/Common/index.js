@@ -4,7 +4,7 @@ import SearchBar from "../../../components/Common/SearchBar"
 import TablePagination from "../../../components/Common/DataTable/tablePagination"
 import PropTypes from "prop-types"
 import { withStyles } from "@material-ui/core/styles"
-import IconButton from '@material-ui/core/IconButton';
+import IconButton from "@material-ui/core/IconButton"
 import { Divider } from "@material-ui/core"
 import {
   Row,
@@ -29,9 +29,9 @@ import {
   filterObject,
 } from "./helper"
 import "./style.scss"
-import GetAppIcon from '@material-ui/icons/GetApp';
-import AWSMAlert from "../../../components/Common/AWSMAlert"
+import downloadExcelIcon from "../../../assets/images/AWSM-Excel.svg";
 import DownloadExcel from "./DownloadExcel"
+import AWSMAlert from "../../../components/Common/AWSMAlert"
 
 const styles = {
   headerText: {
@@ -50,7 +50,6 @@ const styles = {
     alignItems: "center",
   },
 }
-
 class Pages extends Component {
   constructor(props) {
     super(props)
@@ -69,13 +68,12 @@ class Pages extends Component {
       selectedItem: 0,
       loader: false,
       error_message: '',
-      alert:false,
+      alert: false,
       DownloadTableData: false,
     }
     this.toggle = this.toggle.bind(this)
     this.toggleTI = this.toggleTI.bind(this)
     this.downloadExcel = this.downloadExcel.bind(this)
-    // this.downloadExcelData = this.downloadExcelData.bind(this)
   }
 
   getCustomerData = () => {
@@ -91,19 +89,20 @@ class Pages extends Component {
       sort_dir: sortDir,
       sort_field: sortField,
     }
+
     onGetCustomer(params)
   }
 
-  getRetailFilterData = filterKey => {
-    const { onGetFilter, tableMapping } = this.props
-    const { q } = this.state
-    const params = {
-      q: transformObjectToStringSentence(q),
-      search_fields: tableMapping[filterKey].apiKey,
-    }
+  // getRetailFilterData = filterKey => {
+  //   const { onGetFilter, tableMapping } = this.props
+  //   const { q } = this.state
+  //   const params = {
+  //     q: transformObjectToStringSentence(q),
+  //     search_fields: tableMapping[filterKey].apiKey,
+  //   }
 
-    onGetFilter(params)
-  }
+  //   onGetFilter(params)
+  // }
 
   handleChangePage = (event, currentPage) => {
     this.setState({ currentPage }, () => this.getCustomerData())
@@ -231,48 +230,63 @@ class Pages extends Component {
   runTableInformation = () => {
     const { modalTI } = this.state
     const ModalComponent = this.props.modalComponent
-    const {headerTitle }= this.props
-    const modalContent = modalTI && ModalComponent ?  headerTitle === "Road Tanker"? <InformationModal visible={true} mode={0}  onCancle = {this.toggleTI}/> : (
-    <ModalComponent
-      data={this.props.tableData.list[this.state.selectedItem]}
-      visible={modalTI}
-      onCancel={this.toggleTI} />
+    const { headerTitle } = this.props
+    const modalContent =
+      modalTI && ModalComponent ? (
+        headerTitle === "Road Tanker" ? (
+          <InformationModal visible={true} mode={0} onCancle={this.toggleTI} />
+        ) : (
+          <ModalComponent
+            data={this.props.tableData.list[this.state.selectedItem]}
+            visible={modalTI}
+            onCancel={this.toggleTI}
+          />
+        )
       ) : null
     return modalContent
   }
 
-  downloadExcel = async() => {
-    this.setState({loader: true});
-      if(this.props.onGetDownloadCustomer){
-        if(!this.props.downloadtableData || this.props.downloadtableData && this.props.downloadtableData.length === 0){
-          const { currentPage } = this.state
-          const { onGetDownloadCustomer } = this.props;
-          await onGetDownloadCustomer(currentPage);
-        }
+  downloadExcel = async () => {
+    this.setState({ loader: true });
+    if (this.props.onGetDownloadCustomer) {
+      if (!this.props.downloadtableData || this.props.downloadtableData && this.props.downloadtableData.length === 0) {
+        const { currentPage } = this.state
+        const { onGetDownloadCustomer } = this.props;
+        await onGetDownloadCustomer(currentPage);
+      }
     } else {
-      this.setState({alert: true});
-      this.setState({error_message: 'Download Excel is not implemented yet...'});
-      this.setState({loader: false});
+      this.setState({ alert: true });
+      this.setState({ error_message: 'Something went wrong..' });
+      this.setState({ loader: false });
     }
   }
 
   getLoader = () => {
-    this.setState({loader: false});
+    this.setState({ loader: false });
   }
 
   getAlert = () => {
-    this.setState({alert: true});
-    this.setState({error_message: 'Data is not available'});
+    this.setState({ alert: true });
+    this.setState({ error_message: '' });
   }
-  
+
   render() {
     const { currentPage, rowsPerPage, searchFields } = this.state
-    const { tableData, classes, filter, tableMapping, cardTitle, headerTitle, tableName, downloadtableData } =
-      this.props
+    const {
+      tableData,
+      tableName,
+      classes,
+      filter,
+      tableMapping,
+      cardTitle,
+      headerTitle,
+      downloadtableData
+    } = this.props
+
     if (!tableData || tableData.length === 0) return ""
     return (
       <React.Fragment>
-        {(downloadtableData && downloadtableData.length !== 0) && this.state.loader && <DownloadExcel tableData={downloadtableData} tableName={tableName} getLoader={this.getLoader} getAlert={this.getAlert} /> }
+        {(downloadtableData && downloadtableData.length !== 0) && this.state.loader && <DownloadExcel tableData={downloadtableData} tableName={tableName} getLoader={this.getLoader} getAlert={this.getAlert} />}
         {this.state.DownloadTableData === true && <DownloadExcel tableData={tableData} tableName={tableName} getLoader={this.getLoader} getAlert={this.getAlert} />}
         <CustomizeTableModal
           tableName={this.props.tableName}
@@ -281,15 +295,16 @@ class Pages extends Component {
           closeDialog={this.handleOpenCustomizeTable}
           availableMetric={tableMapping}
           defaultMetric={searchFields}
-        />  
+        />
         <div className="page-content">
           <div className="container-fluid">
             <div className={classes.modalHeader}>
               <Header title={headerTitle} />
               <div className={`${classes.headerText} d-flex justify-content-between align-items-center`}>
-                <div className="Download-excel">
+                <div className="vertical-hr-right">
                   <button className="btn btn-outline-primary" onClick={() => this.downloadExcel()}>
-                    {this.state.loader === true ? <Fragment> Downloading ... </Fragment> : <Fragment><GetAppIcon /> Download Excel </Fragment>}
+                    <img src={downloadExcelIcon} />
+                    {this.state.loader === true ? <Fragment> Downloading ... </Fragment> : <Fragment>Download Excel </Fragment>}
                   </button>
                 </div>
                 <Link
@@ -297,7 +312,7 @@ class Pages extends Component {
                   onClick={() => {
                     this.modalHandler()
                   }}
-                  className='ml-2'
+
                 >
                   <img src={eyeIcon} alt="info" /> View Audit Log
                 </Link>
@@ -320,16 +335,19 @@ class Pages extends Component {
                       </div>
                       <div className="table-top-bar">
                         <div className="top-page-number">
-                          <div className="enteriesText">{`${currentPage * rowsPerPage + 1} to 
-                           ${rowsPerPage}
-                             of ${tableData.total_rows} enteries`}
-                          </div>
-                          {/* ${tableData.total_rows - (currentPage * rowsPerPage + rowsPerPage) < 0
+                          <div className="enteriesText">
+                            {`${currentPage * rowsPerPage + 1} to ${tableData.total_rows -
+                              (currentPage * rowsPerPage + rowsPerPage) <
+                              0
                               ? tableData.total_rows
                               : currentPage * rowsPerPage + rowsPerPage
-                            } */}
+                              } of ${tableData.total_rows} enteries`}
+                          </div>
                         </div>
-                        <IconButton aria-label="delete" onClick={this.handleOpenCustomizeTable}>
+                        <IconButton
+                          aria-label="delete"
+                          onClick={this.handleOpenCustomizeTable}
+                        >
                           <img src={customiseTableIcon} />
                         </IconButton>
                       </div>
@@ -340,7 +358,7 @@ class Pages extends Component {
                         frozen={1}
                         filterData={filter}
                         headerSortHandler={this.handleHeaderSort}
-                        filterDropdownHandler={this.getRetailFilterData}
+                        // filterDropdownHandler={this.getRetailFilterData}
                         filterApplyHandler={this.handleQueryParameterChange}
                         modalPop={this.modalHandlerTI}
                       />
@@ -352,9 +370,10 @@ class Pages extends Component {
                       />
                     </CardBody>
                   }
+
                 </Card>
               </Col>
-              {this.state.loader === false && this.state.error_message !== '' &&
+              { this.state.loader === false && this.state.error_message !== '' &&
                 <AWSMAlert
                   status="error"
                   message={this.state.error_message}
@@ -375,7 +394,7 @@ class Pages extends Component {
 Pages.propType = {
   onGetCustomer: PropTypes.func.isRequired,
   onGetAuditLog: PropTypes.func.isRequired,
-  onGetFilter: PropTypes.func.isRequired,
+  // onGetFilter: PropTypes.func.isRequired,
   onGetTableInformation: PropTypes.func.isRequired,
   onUpdateTableInformation: PropTypes.func.isRequired,
   tableColumns: PropTypes.array.isRequired,

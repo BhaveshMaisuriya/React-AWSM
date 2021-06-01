@@ -219,3 +219,19 @@ span.flatpickr-weekday {
  .b-panel {
    height: 1000px;
  }
+
+ .badge.badge-pill {
+  border-radius: 12px;
+  width: 90px;
+  line-height: 20px;
+ }
+
+ .badge.badge-primary {
+  color: #4CAF50;
+  background-color: #D5FBD6;
+ }
+
+ .badge.badge-secondary {
+  color: #D50000;
+  background-color: #F2B2B2;
+ }

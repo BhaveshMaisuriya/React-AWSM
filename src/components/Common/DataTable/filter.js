@@ -4,17 +4,19 @@ import searchIcon from "../../../assets/images/AWSM-search.svg"
 import selectAllIcon from "../../../assets/images/AWSM-Select-all-Checkbox.svg"
 import selectAllIcon2 from "../../../assets/images/AWSM-Checked-box.svg"
 import "./datatable.scss"
-import { IconButton  } from "@material-ui/core"
-import Checkbox from '@material-ui/core/Checkbox'
+import { IconButton } from "@material-ui/core"
+import Checkbox from "@material-ui/core/Checkbox"
 import selectAllIcon3 from "../../../assets/images/AWSM-Checkbox.svg"
 import FormControlLabel from "@material-ui/core/FormControlLabel"
+import SimpleBar from "simplebar-react"
+import { isNull, isUndefined } from "lodash"
 
 const Example = React.memo(props => {
   const {
     dataFilter,
     dataKey,
     handleClickApply,
-    filterDropdownHandler,
+    // filterDropdownHandler,
     handleClickReset,
   } = props
   const [popoverOpen, setPopoverOpen] = useState(false)
@@ -24,14 +26,14 @@ const Example = React.memo(props => {
   const [checkedCount, setCheckedCount] = useState(0)
   const toggle = () => {
     setPopoverOpen(!popoverOpen)
-    if (popoverOpen === false) filterDropdownHandler(dataKey)
+    // if (popoverOpen === false) filterDropdownHandler(dataKey)
   }
 
   /**
    * dataFilter should never be zero unless api fails or db has no data
    */
   useEffect(() => {
-    if (Object.prototype.hasOwnProperty.call(dataFilter, dataKey)) {
+    if (!isNull(dataFilter[dataKey]) && !isUndefined(dataFilter[dataKey])) {
       setData(
         dataFilter[dataKey].map(item => ({
           text: item,
@@ -106,34 +108,35 @@ const Example = React.memo(props => {
         return item.text
       })
     setCheckedList(checkedFilter)
+    toggle()
     handleClickApply(checkedFilter, dataKey)
-    setPopoverOpen(!popoverOpen)
   }
   function clickReset(e) {
     handleClickReset(dataKey)
     updateCheckedCount("all")
-    setPopoverOpen(!popoverOpen)
+    setCheckAll(true)
+    toggle()
   }
   function selectAll(e) {
     let newData = [...data]
-    newData = newData.map(item => ({...item, checked: true}))
+    newData = newData.map(item => ({ ...item, checked: !checkAll }))
     setData(newData)
-    setCheckAll(!checkAll);
-    
-    handleClickReset(dataKey)
-    updateCheckedCount("all")
+    setCheckAll(!checkAll)
+
+    // handleClickReset(dataKey)
+    updateCheckedCount(!checkAll ? "all" : "none")
   }
   const CustomIcon = () => {
     // untick checkbox icon
-    return <img src={selectAllIcon3} alt="icon"/>
+    return <img src={selectAllIcon3} alt="icon" />
   }
   const CustomIcon2 = () => {
     // ticked checkbox icon
-    return <img src={selectAllIcon2} alt="icon"/>
+    return <img src={selectAllIcon2} alt="icon" />
   }
   const CustomIcon3 = () => {
     // indeterminate icon
-    return <img src={selectAllIcon} alt="icon"/>
+    return <img src={selectAllIcon} alt="icon" />
   }
   return (
     <Fragment>
@@ -149,10 +152,13 @@ const Example = React.memo(props => {
       >
         <PopoverBody className="filter-container">
           <div className="position-relative">
-            <Input placeholder="Search" onChange={onSearchTextChange} 
-            style={{
-              fontFamily: "Museo Sans"
-              }} />
+            <Input
+              placeholder="Search"
+              onChange={onSearchTextChange}
+              style={{
+                fontFamily: "Museo Sans",
+              }}
+            />
             <img
               className="position-absolute search-icon"
               src={searchIcon}
@@ -163,56 +169,69 @@ const Example = React.memo(props => {
             className="pt-2"
             onSubmit={e => {
               e.preventDefault()
-              clickApply(e)
+              // clickApply(e)
             }}
           >
-            {data.length > 0 && data !== undefined
-              ? data.map((row, index) => {
-                  return (
-                    row.visibility && (
-                      <div
-                        key={row.text}
-                        className={`d-flex align-items-center ${
-                          row.checked || checkAll ? "item-checked" : ""
-                        }`}
-                      >
-                        <FormControlLabel
-                          onChange={() => onInputChange(index)}                                      
-                          checked={checkAll || row.checked} 
-                          className={"checkmark"}
-                          control={<Checkbox icon={<CustomIcon/>} checkedIcon={<CustomIcon2/>} 
-                          style={{
-                            height:"20px", 
-                            width:"5px", 
-                            marginLeft:"15px", 
-                            marginTop:"5px"
-                          }}/>}
-                        />
-                        <div className="ml-100">{row.text}</div>
-                      </div>
+            <SimpleBar
+              autoHide={false}
+              style={{ height: "150px", width: "100%" }}
+            >
+              {data.length > 0 && !isNull(data)
+                ? data.map((row, index) => {
+                    return (
+                      row.visibility && (
+                        <div
+                          key={row.text}
+                          className={`d-flex align-items-center ${
+                            row.checked || checkAll ? "item-checked" : ""
+                          }`}
+                        >
+                          <FormControlLabel
+                            onChange={() => onInputChange(index)}
+                            checked={checkAll || row.checked}
+                            className={"checkmark"}
+                            control={
+                              <Checkbox
+                                icon={<CustomIcon />}
+                                checkedIcon={<CustomIcon2 />}
+                                style={{
+                                  height: "20px",
+                                  width: "5px",
+                                  marginLeft: "15px",
+                                  marginTop: "5px",
+                                }}
+                              />
+                            }
+                          />
+                          <div className="ml-100">
+                            {isNull(row.text) ? "-" : row.text}
+                          </div>
+                        </div>
+                      )
                     )
-                  )
-                })
-              : ""}
-            <p style={{marginTop: "-10px"}}></p>
-            
-            <Checkbox 
-          
-            checked={checkAll} onChange = {() => setCheckAll(!checkAll)}
-            icon={<CustomIcon3/>} checkedIcon={<CustomIcon2/>} 
-            onClick={selectAll}
-            style={{
-              height:"20px", 
-              width:"5px", 
-              marginLeft:"5px", 
-              marginTop:"5px"
-            }}
+                  })
+                : ""}
+            </SimpleBar>
+            <p style={{ marginTop: "-10px" }}></p>
+
+            <Checkbox
+              checked={checkAll}
+              onChange={() => setCheckAll(!checkAll)}
+              icon={<CustomIcon3 />}
+              checkedIcon={<CustomIcon2 />}
+              onClick={selectAll}
+              style={{
+                height: "20px",
+                width: "5px",
+                marginLeft: "5px",
+                marginTop: "5px",
+              }}
             />
             <label
               style={{
                 color: "#008F8A",
                 marginLeft: "12px",
-                fontFamily: "Museo Sans"
+                fontFamily: "Museo Sans",
               }}
             >
               Select All
@@ -226,7 +245,7 @@ const Example = React.memo(props => {
                 fontSize: "12px",
                 backgroundColor: "#008F8A",
                 float: "right",
-                fontFamily: "Museo Sans"
+                fontFamily: "Museo Sans",
               }}
               onClick={clickApply}
               disabled={checkedCount === 0 ? true : false}
@@ -246,7 +265,7 @@ const Example = React.memo(props => {
                 border: "2px solid #e0f4f3",
                 color: "#008F8A",
                 marginRight: "5px",
-                fontFamily: "Museo Sans"
+                fontFamily: "Museo Sans",
               }}
               onClick={clickReset}
             >
@@ -260,7 +279,7 @@ const Example = React.memo(props => {
 })
 
 Example.defaultProps = {
-  filterDropdownHandler: () => {},
+  // filterDropdownHandler: () => {},
   handleClickApply: () => {},
   handleClickReset: () => {},
 }

@@ -87,7 +87,6 @@ const CommercialCustomerModal = props => {
       onCancel()
     }
   }
-  console.log(currentCommercialDetail)
 
   return (
     <Modal isOpen={visible} className="commercial-customer-modal modal-lg">

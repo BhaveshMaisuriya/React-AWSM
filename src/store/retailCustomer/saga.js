@@ -1,5 +1,5 @@
 import { takeLatest, put, call, takeEvery } from "redux-saga/effects"
-import Factory, { DownloadData } from "./factory"
+import Factory from "./factory"
 import {
   GET_RETAIL_CUSTOMER,
   GET_RETAIL_AUDITLOG,
@@ -47,7 +47,7 @@ function* onGetRetailCustomer({ params = {} }) {
 function* onGetDownloadRetailCustomer({ params = {} }) {
   try {
     const response = yield call(getDownloadRetailCustomer, params)
-    yield put(getDownloadRetailCustomerSuccess(DownloadData(response.data)))
+    yield put(getDownloadRetailCustomerSuccess(response.data))
   } catch (error) {
     yield put(getDownloadRetailCustomerFail(error))
   }

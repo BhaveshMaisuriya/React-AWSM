@@ -247,7 +247,6 @@ class Pages extends Component {
     return modalContent
   }
 
-
   downloadExcel = async () => {
     this.setState({ loader: true });
     if (this.props.onGetDownloadCustomer) {
@@ -372,6 +371,7 @@ class Pages extends Component {
                       />
                     </CardBody>
                   }
+
                 </Card>
               </Col>
               { this.state.loader === false && this.state.error_message !== '' &&

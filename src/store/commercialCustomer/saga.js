@@ -1,5 +1,5 @@
 import { takeLatest, put, call, takeEvery } from "redux-saga/effects"
-import Factory, { mergeFilterValues, DownloadData } from "./factory"
+import Factory, { mergeFilterValues } from "./factory"
 import {
   GET_COMMERCIAL_CUSTOMER,
   GET_DOWNLOAD_COMMERCIAL_CUSTOMER,
@@ -47,7 +47,7 @@ function* onGetCommercialCustomer({ params = {} }) {
 function* onGetDownloadCommercialCustomer({ params = {} }) {
   try {
     const response = yield call(getDownloadCommercialCustomer, params)
-    yield put(getDownloadCommercialCustomerSuccess(DownloadData(response.data)))
+    yield put(getDownloadCommercialCustomerSuccess(response.data))
   } catch (error) {
     yield put(getDownloadCommercialCustomerFail(error))
   }

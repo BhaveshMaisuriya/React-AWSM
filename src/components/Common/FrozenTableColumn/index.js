@@ -129,6 +129,8 @@ class FixedCoulmnTable extends Component {
                 // className={
                 //   config[e].columnSize === 1 ? "cell-text" : "cell-text-big"
                 // }
+                className="table_text_ellipsis"
+                title={isUndefined(arr[e]) ? "-" : arr[e]}
               >
                 {isUndefined(arr[e]) ? "-" : arr[e]}
               </div>

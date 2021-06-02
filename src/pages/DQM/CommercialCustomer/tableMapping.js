@@ -42,7 +42,7 @@ const tableMapping = {
   sold_to_company: {
     label: "SOLD TO COMPANY",
     apiKey: "sold_to_company",
-    columnSize: 2,
+    columnSize: 3,
   },
   site_id: {
     label: "SITE ID",
@@ -52,7 +52,7 @@ const tableMapping = {
   site_name: {
     label: "SITE NAME",
     apiKey: "site_name",
-    columnSize: 2,
+    columnSize: 3,
   },
   address_1: {
     label: "ADDRESS",

@@ -1,5 +1,5 @@
 import { put, call, takeEvery } from "redux-saga/effects"
-import factory, { mergeFilterValues, DownloadData } from "./factory"
+import factory, { mergeFilterValues } from "./factory"
 import {
   GET_PRODUCT_AUDITLOG,
   // GET_PRODUCT_FILTER,
@@ -58,7 +58,7 @@ function* onGetProductAuditLog() {
 function* onGetDownloadProducts({ params = {} }) {
   try {
     const response = yield call(getDownloadProducts, params)
-    yield put(getDownloadProductSuccess(DownloadData(response.data)))
+    yield put(getDownloadProductSuccess(response.data))
   } catch (error) {
     yield put(getDownloadProductFail(error))
   }

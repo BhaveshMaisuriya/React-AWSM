@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from "react"
 import { connect } from "react-redux"
 import PropTypes from "prop-types"
-import { withStyles } from "@material-ui/core/styles"
+import { withStyles } from "@material-ui/styles"
 import ModalPagination from "./auditModalPagination"
 import lineIcon from "../../../assets/images/auditlog-line.svg"
 import "./style.scss"

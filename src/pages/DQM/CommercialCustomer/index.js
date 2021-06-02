@@ -48,7 +48,7 @@ class CommercialCustomer extends Component {
     }
     onGetCommercialCustomer(params)
     onGetCommercialAuditLog(payload)
-    onGetTableInformation()
+    //onGetTableInformation()
   }
 
   GetonDownload = async (currentPage) => {

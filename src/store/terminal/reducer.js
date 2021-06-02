@@ -17,6 +17,7 @@ const initialState = {
   auditsTerminal: [],
   address: [],
   filterTerminal: [],
+  currentTerminal: null,
 }
 
 const Terminal = (state = initialState, action) => {
@@ -48,7 +49,7 @@ const Terminal = (state = initialState, action) => {
     case GET_TABLE_INFORMATION_SUCCESS:
       return {
         ...state,
-        address: action.payload,
+        currentTerminal: action.payload,
       }
 
     case GET_TABLE_INFORMATION_FAIL:

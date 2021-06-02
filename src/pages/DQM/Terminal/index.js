@@ -45,7 +45,7 @@ class Terminal extends Component {
       q: "product",
     }
     onGetTerminal(params), onGetTerminalAuditLog(payload)
-    onGetTableInformation()
+    //onGetTableInformation()
   }
 
   render() {

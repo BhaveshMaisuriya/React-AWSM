@@ -1,11 +1,12 @@
 import { put, call, takeEvery } from "redux-saga/effects"
-import factory, { mergeFilterValues } from "./factory"
+import factory, { mergeFilterValues, DownloadData } from "./factory"
 import {
   GET_PRODUCT_AUDITLOG,
   // GET_PRODUCT_FILTER,
   GET_PRODUCTS,
   GET_PRODUCT_DETAIL,
   UPDATE_PRODUCT_DETAIL,
+  GET_DOWNLOAD_PRODUCTS
 } from "./actionTypes"
 
 import {
@@ -19,6 +20,8 @@ import {
   getProductDetailSuccess,
   updateProductDetailSuccess,
   updateProductDetailFail,
+  getDownloadProductSuccess,
+  getDownloadProductFail,
 } from "./actions"
 
 import {
@@ -27,6 +30,7 @@ import {
   // getProductFilter,
   getProductDetail,
   updateProductDetail,
+  getDownloadProducts,
 } from "../../helpers/fakebackend_helper"
 
 function* onGetProductAuditLog() {
@@ -51,6 +55,15 @@ function* onGetProductAuditLog() {
 //   }
 // }
 
+function* onGetDownloadProducts({ params = {} }) {
+  try {
+    const response = yield call(getDownloadProducts, params)
+    yield put(getDownloadProductSuccess(DownloadData(response.data)))
+  } catch (error) {
+    yield put(getDownloadProductFail(error))
+  }
+}
+
 function* onGetProducts({ params = {} }) {
   try {
     const response = yield call(getProducts, params)
@@ -72,7 +85,6 @@ function* onGetProductDetail(action) {
 
 function* onUpdateProductDetail(action) {
   try {
-    console.log("Update Product Details : ", action.params)
     const response = yield call(updateProductDetail, action.params)
     yield put(updateProductDetailSuccess(response))
   } catch (error) {
@@ -86,6 +98,7 @@ function* ProductSaga() {
   yield takeEvery(GET_PRODUCTS, onGetProducts)
   yield takeEvery(GET_PRODUCT_DETAIL, onGetProductDetail)
   yield takeEvery(UPDATE_PRODUCT_DETAIL, onUpdateProductDetail)
+  yield takeEvery(GET_DOWNLOAD_PRODUCTS, onGetDownloadProducts)
 }
 
 export default ProductSaga

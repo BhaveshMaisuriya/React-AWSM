@@ -26,6 +26,7 @@ import { retailCustomers, audits, address, filter } from "./retailCustomer"
 import { roadTanker, auditsRoadTanker, filterRoadTanker } from "./roadTanker"
 import { terminal, auditsTerminal, filterTerminal } from "./terminal"
 import { productList } from "./product"
+import { varianceControl } from "./salesAndInventory"
 export {
   productsData,
   discountData,
@@ -63,4 +64,5 @@ export {
   productList,
   terminal,
   auditsTerminal,
+  varianceControl,
 }

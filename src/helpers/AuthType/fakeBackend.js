@@ -38,6 +38,7 @@ import {
   roadTanker,
   terminal,
   auditsTerminal,
+  varianceControl,
 } from "../../common/data"
 
 import { axiosApi } from "../api_helper"
@@ -846,6 +847,32 @@ const fakeBackend = () => {
         }, 500)
       })
     })
+
+  mock.onGet(url.GET_SALES_AND_INVENTORY_VARIANCE_CONTROL).reply(() => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        if (auditsTerminal) {
+          // Passing fake JSON data as response
+          resolve([200, varianceControl])
+        } else {
+          reject([400, "Cannot get audit data"])
+        }
+      })
+    })
+  })
+
+  mock.onPut(url.GET_SALES_AND_INVENTORY_VARIANCE_CONTROL).reply(() => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        if (auditsTerminal) {
+          // Passing fake JSON data as response
+          resolve([200, varianceControl])
+        } else {
+          reject([400, "Cannot get audit data"])
+        }
+      })
+    })
+  })
 }
 
 export default fakeBackend

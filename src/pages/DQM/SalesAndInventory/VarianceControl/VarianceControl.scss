@@ -1,0 +1,136 @@
+.variance-control-container {
+  .variance-label {
+    color: #000000;
+    font-family: "Museo Sans", serif;
+    font-size: 24px;
+    letter-spacing: 0;
+    line-height: 26px;
+    font-weight: 500;
+  }
+
+  .variance-close-button {
+    outline: none;
+    border: none;
+    background-color: white;
+    color: #999999;
+
+    svg {
+      width: 1rem;
+    }
+  }
+  .variance-last-update {
+    color: #757575;
+    font-family: "Museo Sans", serif;
+    font-size: 12px;
+    font-style: italic;
+    letter-spacing: 0;
+    line-height: 16px;
+    float: right;
+    text-align: right;
+    margin-top: 10px;
+  }
+
+  .variance-control-content {
+    min-width: 100%;
+
+    .variance-table-label {
+      color: #555555;
+      font-family: "Museo Sans", serif;
+      font-size: 1rem;
+      letter-spacing: 0;
+      line-height: 17px;
+      font-weight: 600;
+      margin-top: 1.2rem;
+      margin-bottom: 0.6rem;
+    }
+
+    .variance-input {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      > input {
+        outline: none;
+        border: none;
+        background-color: white;
+        height: 3rem;
+        padding: 1rem;
+        margin-bottom: 1px;
+        &:disabled {
+          user-select: none;
+        }
+      }
+
+      &.focus {
+        > input {
+          width: 100%;
+
+          &:focus {
+            background-color: #EBF9F9;
+            border: 1px solid #00A19C;
+            caret-color: #00A19C;
+          }
+        }
+
+        > button {
+          display: none;
+        }
+      }
+
+      &.disabled {
+        > input {
+          width: 100%;
+        }
+
+        > button {
+          display: none;
+        }
+      }
+
+      .button-edit {
+        outline: none;
+        background-color: white;
+        border: none;
+        color: #999999;
+
+        svg {
+          width: 1rem;
+          right: 0;
+        }
+      }
+    }
+
+    .variance-table {
+      border: 2px solid #D9D9D9;
+      border-radius: 4px 4px 0 0;
+      box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.07);
+
+      thead {
+        background-color: #F8F9FA;
+      }
+
+      th {
+        padding: 1rem;
+        font-family: "Museo Sans", serif;
+        font-size: 0.8rem;
+        letter-spacing: 0;
+        color: black;
+      }
+
+      > tbody {
+        > tr {
+          border-top: 2px solid #D9D9D9;
+          box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.07);
+        }
+      }
+    }
+  }
+  .btn {
+    width: 120px;
+    height: 40px;
+  }
+}
+
+.variance-control-modal {
+  max-width: 800px !important;
+}

@@ -7,6 +7,7 @@ import {
   // getProductFilter,
   getTableInformation,
   updateTableInformation,
+  getDownloadProducts
 } from "../../../store/actions"
 import { tableColumns, tableMapping } from "./tableMapping"
 import { transformArrayToString, getCookieByKey } from "../Common/helper"
@@ -46,7 +47,17 @@ class Product extends Component {
     }
     onGetProducts(params)
     onGetProductAuditLog(payload)
-    onGetTableInformation()
+    //onGetTableInformation()
+  }
+
+  GetonDownload = async(currentPage) => {
+    const downloadParams = {
+      limit: 10,
+      page: currentPage,
+      search_fields: '*',
+    }
+    const { onGetDownloadProducts } = this.props;
+    await onGetDownloadProducts(downloadParams);
   }
 
   render() {
@@ -59,6 +70,7 @@ class Product extends Component {
       products,
       audits,
       filter,
+      downloadProduct,
     } = this.props
     const { searchFields } = this.state
     if (!products || products.length === 0) return ""
@@ -76,9 +88,11 @@ class Product extends Component {
           tableColumns={searchFields}
           tableMapping={tableMapping}
           tableData={products}
+          downloadtableData={downloadProduct}
           audits={audits}
           filter={filter}
           modalComponent={ProductDetailModal}
+          onGetDownloadCustomer={this.GetonDownload}
         />
       </Fragment>
     )
@@ -89,6 +103,7 @@ const mapStateToProps = ({ products }) => ({
   products: products.dataList,
   audits: products.productAuditLog,
   filter: products.productFilter,
+  downloadProduct: products.downloadProducts,
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -97,6 +112,7 @@ const mapDispatchToProps = dispatch => ({
   // onGetProductFilter: payload => dispatch(getProductFilter(payload)),
   onGetTableInformation: () => dispatch(getTableInformation()),
   onUpdateTableInformation: event => dispatch(updateTableInformation(event)),
+  onGetDownloadProducts: params => dispatch(getDownloadProducts(params)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Product)

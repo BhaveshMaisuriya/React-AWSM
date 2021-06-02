@@ -1,6 +1,6 @@
 import React, { Component } from "react"
 import PropTypes from "prop-types"
-import { withStyles } from "@material-ui/core/styles"
+import { withStyles } from "@material-ui/styles"
 import { Pagination, PaginationItem, PaginationLink } from "reactstrap"
 import { Divider } from "@material-ui/core"
 import ArrowLeft from "../../../assets/images/arrow-left.png"

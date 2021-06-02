@@ -13,7 +13,10 @@ import {
   GET_PRODUCT_DETAIL_FAIL,
   UPDATE_PRODUCT_DETAIL,
   UPDATE_PRODUCT_DETAIL_FAIL,
-  UPDATE_PRODUCT_DETAIL_SUCCESS
+  UPDATE_PRODUCT_DETAIL_SUCCESS,
+  GET_DOWNLOAD_PRODUCTS,
+  GET_DOWNLOAD_PRODUCTS_SUCCESS,
+  GET_DOWNLOAD_PRODUCTS_FAIL,
 } from "./actionTypes"
 
 export const getProducts = params => ({
@@ -28,6 +31,21 @@ export const getProductSuccess = response => ({
 
 export const getProductFail = error => ({
   type: GET_PRODUCT_FAIL,
+  payload: error
+})
+
+export const getDownloadProducts = params => ({
+  type: GET_DOWNLOAD_PRODUCTS,
+  params,
+})
+
+export const getDownloadProductSuccess = response => ({
+  type: GET_DOWNLOAD_PRODUCTS_SUCCESS,
+  payload: response,
+})
+
+export const getDownloadProductFail = error => ({
+  type: GET_DOWNLOAD_PRODUCTS_FAIL,
   payload: error
 })
 

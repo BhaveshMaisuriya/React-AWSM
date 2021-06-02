@@ -4,7 +4,7 @@ import ArrowLeft from "../../../assets/images/arrow-left.png"
 import ArrowLeftG from "../../../assets/images/arrow-left-grey.png"
 import ArrowRight from "../../../assets/images/arrow-right.png"
 import ArrowRightG from "../../../assets/images/arrow-right-grey.png"
-import { withStyles } from "@material-ui/core/styles"
+import { withStyles } from "@material-ui/styles"
 import { Pagination, PaginationItem, PaginationLink } from "reactstrap"
 import { Divider } from "@material-ui/core"
 

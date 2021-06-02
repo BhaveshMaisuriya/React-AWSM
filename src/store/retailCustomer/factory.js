@@ -80,6 +80,10 @@ export const mergeFilterValues = (filterData, key) => {
   return filterObject
 }
 
+export const DownloadData = (allDownloadData) => {
+  return allDownloadData
+}
+
 const checkNullValue = (data, defaultValue) =>
   isNull(data) ? defaultValue : data
 

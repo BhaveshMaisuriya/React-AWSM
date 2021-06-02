@@ -53,7 +53,7 @@ class RoadTanker extends Component {
     }
     onGetRoadTanker(params)
     onGetRoadTankerAuditLog(payload)
-    onGetTableInformation()
+    //onGetTableInformation()
   }
 
   render() {

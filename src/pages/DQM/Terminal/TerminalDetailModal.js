@@ -3,7 +3,10 @@ import { connect } from "react-redux"
 import { Button, Modal, ModalFooter, ModalBody, ModalHeader } from "reactstrap"
 
 import { isScheduler } from "../../../helpers/auth_helper"
-import { getProductDetail, updateProductDetail } from "../../../store/actions"
+import {
+  getTableInformation,
+  updateTableInformation,
+} from "../../../store/terminal/actions"
 import AddressTab from "./AddressTab"
 import ContactTab from "./ContactTab"
 import StatusTab from "./StatusTab"
@@ -43,16 +46,16 @@ class TerminalDetailModal extends PureComponent {
   }
 
   componentDidMount() {
-    const { onGetProductDetail, data } = this.props
-    onGetProductDetail(data.product_code)
+    const { fetchTableInformation, data } = this.props
+    fetchTableInformation(data.ship_to_party)
   }
 
   handleUpdate(event) {
     if (Object.keys(this.state.updateDictionary).length > 0) {
       console.log(this.state.updateDictionary)
-      const { productCode } = this.props.data
-      this.props.onUpdateProductDetail({
-        productCode,
+      const { ship_to_party } = this.props.data
+      this.props.onUpdateTableInformation({
+        ship_to_party,
         body: this.state.updateDictionary,
       })
     } else this.props.onCancel()
@@ -72,7 +75,7 @@ class TerminalDetailModal extends PureComponent {
         this.setState({ activeTab: tab })
       }
     }
-    const { onCancel, visible, currentProduct } = this.props
+    const { onCancel, visible, currentTerminal, data } = this.props
     const isDisabledField = isScheduler()
     return (
       <Modal isOpen={visible} className="table-information modal-lg">
@@ -86,14 +89,14 @@ class TerminalDetailModal extends PureComponent {
               lineHeight: "26px",
             }}
           >
-            TERMINAL CODE: {currentProduct.product_code}
+            TERMINAL CODE: {data.ship_to_party}
           </span>
           <span className="last-updated-sub-title">
             Last Updated By: Nur Izzati on 3rd March 2021
           </span>
         </ModalHeader>
         <>
-          {currentProduct ? (
+          {currentTerminal ? (
             <ModalBody>
               <div>
                 <div className="row">
@@ -102,7 +105,7 @@ class TerminalDetailModal extends PureComponent {
                     <input
                       className="form-control"
                       type="text"
-                      defaultValue={currentProduct.product_name}
+                      defaultValue={currentTerminal.product_name}
                       disabled={true}
                     />
                   </div>
@@ -115,7 +118,7 @@ class TerminalDetailModal extends PureComponent {
                       placeholder="Type something here..."
                       className="form-control"
                       type="text"
-                      defaultValue={currentProduct.remarks}
+                      defaultValue={currentTerminal.remarks}
                       disabled={isDisabledField}
                       onChange={ev => {
                         this.setState({
@@ -241,7 +244,7 @@ class TerminalDetailModal extends PureComponent {
             <button className="btn-sec" onClick={() => onCancel()}>
               Cancel
             </button>
-            {!isDisabledField && currentProduct ? (
+            {!isDisabledField && currentTerminal ? (
               <Button onClick={this.handleUpdate.bind(this)} color="primary">
                 Update
               </Button>
@@ -253,15 +256,14 @@ class TerminalDetailModal extends PureComponent {
   }
 }
 
-const mapStateToProps = ({ products }) => ({
-  currentProduct: products.currentProduct,
-  error: products.error,
-  updateStatus: products.updateStatus,
+const mapStateToProps = ({ terminal }) => ({
+  currentTerminal: terminal.currentTerminal,
+  error: terminal.error,
 })
 
 const mapDispatchToProps = dispatch => ({
-  onGetProductDetail: params => dispatch(getProductDetail(params)),
-  onUpdateProductDetail: params => dispatch(updateProductDetail(params)),
+  fetchTableInformation: params => dispatch(getTableInformation(params)),
+  onUpdateTableInformation: params => dispatch(updateTableInformation(params)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(TerminalDetailModal)

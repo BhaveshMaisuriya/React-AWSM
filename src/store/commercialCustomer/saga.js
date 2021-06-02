@@ -43,7 +43,6 @@ function* onGetCommercialCustomer({ params = {} }) {
     yield put(getCommercialCustomerFail(error))
   }
 }
-
 // download excel
 function* onGetDownloadCommercialCustomer({ params = {} }) {
   try {

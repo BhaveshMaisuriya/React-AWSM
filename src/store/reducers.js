@@ -46,6 +46,9 @@ import roadTanker from "./roadTanker/reducer"
 //Terminal
 import terminal from "./terminal/reducer"
 
+//Sale and Inventory
+import saleAndInventory from "./salesAndInventory/reducer"
+
 const rootReducer = combineReducers({
   // public
   Layout,
@@ -66,6 +69,7 @@ const rootReducer = combineReducers({
   roadTanker,
   terminal,
   msGraph,
+  saleAndInventory,
 })
 
 export default rootReducer

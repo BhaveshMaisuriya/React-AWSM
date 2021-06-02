@@ -176,14 +176,15 @@ export const getUsers = () => get(url.GET_USERS)
 export const getUserProfile = () => get(url.GET_USER_PROFILE)
 
 // get retail customer
-export const getRetailCustomer = params => axios.get(
-  "https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/retail-customer",
-  { params: params }
-)
+export const getRetailCustomer = params =>
+  axios.get(
+    "https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/retail-customer",
+    { params: params }
+  )
 
 export const getDownloadRetailCustomer = params => axios.get(
-  'https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/retail-customer', 
-  { params: params}
+  'https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/retail-customer',
+  { params: params }
 )
 
 export const getCommercialCustomer = params =>
@@ -252,7 +253,7 @@ export const getProducts = params =>
     { params: params }
   )
 
-  export const getDownloadProducts = params =>
+export const getDownloadProducts = params =>
   axios.get(
     "https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/product",
     { params: params }
@@ -299,6 +300,12 @@ export const putCommercialDetail = data =>
 export const getRoadTankerFilter = params => {
   return get(url.GET_ROADTANKER_FILTER, { params: params })
 }
+
+export const getSaleAndInventoryVarianceControl = () => get(`${url.GET_SALES_AND_INVENTORY_VARIANCE_CONTROL}`)
+export const updateSaleAndInventoryVarianceControl = () => put(`${url.GET_SALES_AND_INVENTORY_VARIANCE_CONTROL}`)
+
+// update tank status modal
+export const updateSaleAndInventoryTankStatusModal = () => put(`/sales_and_inventory_tank_status_modal`)
 
 export {
   getLoggedInUser,

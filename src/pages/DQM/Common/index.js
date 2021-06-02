@@ -3,7 +3,7 @@ import Header from "../../../components/Common/CustomPageHeader"
 import SearchBar from "../../../components/Common/SearchBar"
 import TablePagination from "../../../components/Common/DataTable/tablePagination"
 import PropTypes from "prop-types"
-import { withStyles } from "@material-ui/core/styles"
+import { withStyles } from "@material-ui/styles"
 import IconButton from "@material-ui/core/IconButton"
 import { Divider } from "@material-ui/core"
 import {
@@ -29,6 +29,7 @@ import {
   filterObject,
 } from "./helper"
 import "./style.scss"
+import SettingsIcon from '@material-ui/icons/Settings';
 import downloadExcelIcon from "../../../assets/images/AWSM-Excel.svg";
 import DownloadExcel from "./DownloadExcel"
 import AWSMAlert from "../../../components/Common/AWSMAlert"

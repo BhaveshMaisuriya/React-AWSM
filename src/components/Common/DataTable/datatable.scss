@@ -29,6 +29,15 @@
   outline: none;
 }
 
+.checkmark .MuiFormControlLabel-root {
+  font-size: 12px !important;
+}
+
+.checkmark .MuiFormControlLabel-label {
+  margin-top: auto !important;
+  margin-left: 8px !important;
+}
+
 .filter-button {
   border: none;
   color: grey;

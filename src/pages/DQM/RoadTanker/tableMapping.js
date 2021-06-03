@@ -56,6 +56,10 @@ const tableMapping = {
     label: "STATUS AWSM",
     apiKey: "status_awsm",
     columnSize: 2,
+    type: "badge",
+    getBadgeColor: value => {
+      return value === "ACTIVE" ? "primary" : "secondary"
+    },
   },
   product_type_sap: {
     label: "PRODUCT TYPE SAP",

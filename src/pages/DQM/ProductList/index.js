@@ -60,16 +60,6 @@ class Product extends Component {
     await onGetDownloadProducts(downloadParams);
   }
 
-  GetonDownload = async(currentPage) => {
-    const downloadParams = {
-      limit: 10,
-      page: currentPage,
-      search_fields: '*',
-    }
-    const { onGetDownloadProducts } = this.props;
-    await onGetDownloadProducts(downloadParams);
-  }
-
   render() {
     const {
       onGetProducts,

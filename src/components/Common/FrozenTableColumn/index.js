@@ -64,10 +64,8 @@ class FixedCoulmnTable extends Component {
     if (!arr) return null
     return arr.map((e, index) => (
       <td key={index}>
-        <div
-          className={"d-flex align-items-center table_header_fit_text"}
-        >
-          <span onClick={this.createSortHandler(config[e].apiKey)} className="header_text">
+        <div className={"d-flex align-items-center table_header_fit_text"}>
+          <span onClick={this.createSortHandler(e)} className="header_text">
             {config[e].label}
           </span>
           <Filter

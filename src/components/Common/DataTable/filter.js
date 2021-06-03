@@ -3,13 +3,12 @@ import { Button, Popover, PopoverBody, Input } from "reactstrap"
 import searchIcon from "../../../assets/images/AWSM-search.svg"
 import selectAllIcon from "../../../assets/images/AWSM-Select-all-Checkbox.svg"
 import selectAllIcon2 from "../../../assets/images/AWSM-Checked-box.svg"
-import "./datatable.scss"
-import { IconButton } from "@material-ui/core"
-import Checkbox from "@material-ui/core/Checkbox"
 import selectAllIcon3 from "../../../assets/images/AWSM-Checkbox.svg"
-import FormControlLabel from "@material-ui/core/FormControlLabel"
+import { IconButton, FormControlLabel } from "@material-ui/core"
+import Checkbox from "@material-ui/core/Checkbox"
 import SimpleBar from "simplebar-react"
 import { isNull, isUndefined } from "lodash"
+import "./datatable.scss"
 
 const Example = React.memo(props => {
   const {
@@ -187,9 +186,10 @@ const Example = React.memo(props => {
                           }`}
                         >
                           <FormControlLabel
+                            key={`${row}${index}`}
                             onChange={() => onInputChange(index)}
                             checked={checkAll || row.checked}
-                            className={"checkmark"}
+                            className="checkmark"
                             control={
                               <Checkbox
                                 icon={<CustomIcon />}
@@ -200,12 +200,14 @@ const Example = React.memo(props => {
                                   marginLeft: "15px",
                                   marginTop: "5px",
                                 }}
+                                name={isNull(row.text) ? "-" : row.text}
                               />
                             }
+                            label={isNull(row.text) ? "-" : row.text}
                           />
-                          <div className="ml-100">
+                          {/* <div className="ml-100">
                             {isNull(row.text) ? "-" : row.text}
-                          </div>
+                          </div> */}
                         </div>
                       )
                     )

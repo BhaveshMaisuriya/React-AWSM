@@ -29,8 +29,8 @@ import {
   filterObject,
 } from "./helper"
 import "./style.scss"
-import SettingsIcon from '@material-ui/icons/Settings';
-import downloadExcelIcon from "../../../assets/images/AWSM-Excel.svg";
+import SettingsIcon from "@material-ui/icons/Settings"
+import downloadExcelIcon from "../../../assets/images/AWSM-Excel.svg"
 import DownloadExcel from "./DownloadExcel"
 import AWSMAlert from "../../../components/Common/AWSMAlert"
 
@@ -68,7 +68,7 @@ class Pages extends Component {
       customizeModalOpen: false,
       selectedItem: 0,
       loader: false,
-      error_message: '',
+      error_message: "",
       alert: false,
       DownloadTableData: false,
     }
@@ -113,7 +113,7 @@ class Pages extends Component {
     this.setState({ searchTerm: searchedVal })
   }
 
-  handleHeaderSort = (sortField, sortDir) => {
+  handleHeaderSort = (sortDir, sortField) => {
     this.setState({ sortField, sortDir }, () => this.getCustomerData())
   }
 
@@ -178,7 +178,12 @@ class Pages extends Component {
     const { modal, rowsAudit, currentAuditPage } = this.state
     const { audits } = this.props
     const modalContent = modal ? (
-      <Modal isOpen={this.state.modal} toggle={this.toggle} id="auditLog-modal" contentClassName="modalContainer">
+      <Modal
+        isOpen={this.state.modal}
+        toggle={this.toggle}
+        id="auditLog-modal"
+        contentClassName="modalContainer"
+      >
         <ModalHeader toggle={this.toggle}>
           <h3>Audit Log</h3>
         </ModalHeader>
@@ -248,27 +253,31 @@ class Pages extends Component {
   }
 
   downloadExcel = async () => {
-    this.setState({ loader: true });
+    this.setState({ loader: true })
     if (this.props.onGetDownloadCustomer) {
-      if (!this.props.downloadtableData || this.props.downloadtableData && this.props.downloadtableData.length === 0) {
+      if (
+        !this.props.downloadtableData ||
+        (this.props.downloadtableData &&
+          this.props.downloadtableData.length === 0)
+      ) {
         const { currentPage } = this.state
-        const { onGetDownloadCustomer } = this.props;
-        await onGetDownloadCustomer(currentPage);
+        const { onGetDownloadCustomer } = this.props
+        await onGetDownloadCustomer(currentPage)
       }
     } else {
-      this.setState({ alert: true });
-      this.setState({ error_message: 'Something went wrong..' });
-      this.setState({ loader: false });
+      this.setState({ alert: true })
+      this.setState({ error_message: "Something went wrong.." })
+      this.setState({ loader: false })
     }
   }
 
   getLoader = () => {
-    this.setState({ loader: false });
+    this.setState({ loader: false })
   }
 
   getAlert = () => {
-    this.setState({ alert: true });
-    this.setState({ error_message: '' });
+    this.setState({ alert: true })
+    this.setState({ error_message: "" })
   }
 
   render() {
@@ -281,14 +290,30 @@ class Pages extends Component {
       tableMapping,
       cardTitle,
       headerTitle,
-      downloadtableData
+      downloadtableData,
     } = this.props
 
     if (!tableData || tableData.length === 0) return ""
     return (
       <React.Fragment>
-        {(downloadtableData && downloadtableData.length !== 0) && this.state.loader && <DownloadExcel tableData={downloadtableData} tableName={tableName} getLoader={this.getLoader} getAlert={this.getAlert} />}
-        {this.state.DownloadTableData === true && <DownloadExcel tableData={tableData} tableName={tableName} getLoader={this.getLoader} getAlert={this.getAlert} />}
+        {downloadtableData &&
+          downloadtableData.length !== 0 &&
+          this.state.loader && (
+            <DownloadExcel
+              tableData={downloadtableData}
+              tableName={tableName}
+              getLoader={this.getLoader}
+              getAlert={this.getAlert}
+            />
+          )}
+        {this.state.DownloadTableData === true && (
+          <DownloadExcel
+            tableData={tableData}
+            tableName={tableName}
+            getLoader={this.getLoader}
+            getAlert={this.getAlert}
+          />
+        )}
         <CustomizeTableModal
           tableName={this.props.tableName}
           onChange={this.onTableColumnsChange}
@@ -301,11 +326,20 @@ class Pages extends Component {
           <div className="container-fluid">
             <div className={classes.modalHeader}>
               <Header title={headerTitle} />
-              <div className={`${classes.headerText} d-flex justify-content-between align-items-center`}>
+              <div
+                className={`${classes.headerText} d-flex justify-content-between align-items-center`}
+              >
                 <div className="vertical-hr-right">
-                  <button className="btn btn-outline-primary" onClick={() => this.downloadExcel()}>
+                  <button
+                    className="btn btn-outline-primary"
+                    onClick={() => this.downloadExcel()}
+                  >
                     <img src={downloadExcelIcon} />
-                    {this.state.loader === true ? <Fragment> Downloading ... </Fragment> : <Fragment>Download Excel </Fragment>}
+                    {this.state.loader === true ? (
+                      <Fragment> Downloading ... </Fragment>
+                    ) : (
+                      <Fragment>Download Excel </Fragment>
+                    )}
                   </button>
                 </div>
                 <Link
@@ -313,7 +347,6 @@ class Pages extends Component {
                   onClick={() => {
                     this.modalHandler()
                   }}
-
                 >
                   <img src={eyeIcon} alt="info" /> View Audit Log
                 </Link>
@@ -337,12 +370,13 @@ class Pages extends Component {
                       <div className="table-top-bar">
                         <div className="top-page-number">
                           <div className="enteriesText">
-                            {`${currentPage * rowsPerPage + 1} to ${tableData.total_rows -
-                              (currentPage * rowsPerPage + rowsPerPage) <
+                            {`${currentPage * rowsPerPage + 1} to ${
+                              tableData.total_rows -
+                                (currentPage * rowsPerPage + rowsPerPage) <
                               0
-                              ? tableData.total_rows
-                              : currentPage * rowsPerPage + rowsPerPage
-                              } of ${tableData.total_rows} enteries`}
+                                ? tableData.total_rows
+                                : currentPage * rowsPerPage + rowsPerPage
+                            } of ${tableData.total_rows} enteries`}
                           </div>
                         </div>
                         <IconButton
@@ -371,17 +405,17 @@ class Pages extends Component {
                       />
                     </CardBody>
                   }
-
                 </Card>
               </Col>
-              { this.state.loader === false && this.state.error_message !== '' &&
-                <AWSMAlert
-                  status="error"
-                  message={this.state.error_message}
-                  openAlert={this.state.alert}
-                  closeAlert={() => this.setState({ alert: false })}
-                />
-              }
+              {this.state.loader === false &&
+                this.state.error_message !== "" && (
+                  <AWSMAlert
+                    status="error"
+                    message={this.state.error_message}
+                    openAlert={this.state.alert}
+                    closeAlert={() => this.setState({ alert: false })}
+                  />
+                )}
             </Row>
             {this.runAuditLogModal()}
             {this.runTableInformation()}

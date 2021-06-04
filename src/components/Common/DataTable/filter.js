@@ -177,41 +177,40 @@ const Example = React.memo(props => {
             >
               {data.length > 0 && !isNull(data)
                 ? data.map((row, index) => {
-                    return (
-                      row.visibility && (
-                        <div
-                          key={row.text}
-                          className={`d-flex align-items-center ${
-                            row.checked || checkAll ? "item-checked" : ""
+                  return (
+                    row.visibility && (
+                      <div
+                        key={row.text}
+                        className={`d-flex align-items-center ${row.checked || checkAll ? "item-checked" : ""
                           }`}
-                        >
-                          <FormControlLabel
-                            key={`${row}${index}`}
-                            onChange={() => onInputChange(index)}
-                            checked={checkAll || row.checked}
-                            className="checkmark"
-                            control={
-                              <Checkbox
-                                icon={<CustomIcon />}
-                                checkedIcon={<CustomIcon2 />}
-                                style={{
-                                  height: "20px",
-                                  width: "5px",
-                                  marginLeft: "15px",
-                                  marginTop: "5px",
-                                }}
-                                name={isNull(row.text) ? "-" : row.text}
-                              />
-                            }
-                            label={isNull(row.text) ? "-" : row.text}
-                          />
-                          {/* <div className="ml-100">
+                      >
+                        <FormControlLabel
+                          key={`${row}${index}`}
+                          onChange={() => onInputChange(index)}
+                          checked={checkAll || row.checked}
+                          className="checkmark"
+                          control={
+                            <Checkbox
+                              icon={<CustomIcon />}
+                              checkedIcon={<CustomIcon2 />}
+                              style={{
+                                height: "20px",
+                                width: "5px",
+                                marginLeft: "15px",
+                                marginTop: "5px",
+                              }}
+                              name={isNull(row.text) ? "-" : row.text}
+                            />
+                          }
+                          label={isNull(row.text) ? "-" : row.text}
+                        />
+                        {/* <div className="ml-100">
                             {isNull(row.text) ? "-" : row.text}
                           </div> */}
-                        </div>
-                      )
+                      </div>
                     )
-                  })
+                  )
+                })
                 : ""}
             </SimpleBar>
             <p style={{ marginTop: "-10px" }}></p>
@@ -282,8 +281,8 @@ const Example = React.memo(props => {
 
 Example.defaultProps = {
   // filterDropdownHandler: () => {},
-  handleClickApply: () => {},
-  handleClickReset: () => {},
+  handleClickApply: () => { },
+  handleClickReset: () => { },
 }
 
 export default Example

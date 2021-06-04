@@ -200,6 +200,11 @@ export const getDownloadCommercialCustomer = params =>
     { params: params }
   )
 
+export const getDownloadSales = params =>
+  axios.get(
+    "https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/commercial-customer",
+    { params: params })
+
 export const getRoadTanker = params =>
   axios.get(
     "https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/road-tanker",
@@ -218,6 +223,10 @@ export const getRetailAuditLog = payload =>
 
 // get DQM Master Commercial Cust Audit Log
 export const getCommercialAuditLog = payload =>
+  get(url.GET_COMMERCIAL_AUDITLOG, { payload: payload })
+
+// get DQM Master Commercial Cust Audit Log
+export const getSalesAuditLog = payload =>
   get(url.GET_COMMERCIAL_AUDITLOG, { payload: payload })
 
 // get DQM Road Tanker Audit Log

@@ -31,7 +31,7 @@ import {
 import "./style.scss"
 import SettingsIcon from "@material-ui/icons/Settings"
 import downloadExcelIcon from "../../../assets/images/AWSM-Excel.svg"
-import DownloadExcel from "./DownloadExcel"
+import DownloadExcel from "../../../components/Common/DownloadExcel"
 import AWSMAlert from "../../../components/Common/AWSMAlert"
 
 const styles = {

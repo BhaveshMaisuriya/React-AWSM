@@ -12,6 +12,7 @@ import {
 import { tableColumns, tableMapping } from "./tableMapping"
 import { transformArrayToString, getCookieByKey } from "./../Common/helper"
 import CommercialCustomerModal from "./CommercialCustomerModal"
+import Loader from "../../../components/Common/Loader"
 const CommercialCustomerTableName = "commercial-table"
 
 class CommercialCustomer extends Component {
@@ -75,28 +76,31 @@ class CommercialCustomer extends Component {
       address,
     } = this.props
     const { searchFields } = this.state
-    if (!commercialCustomer || commercialCustomer.length === 0) return ""
+    if (!commercialCustomer) return ""
     return (
       <Fragment>
-        <Page
-          onGetCustomer={onGetCommercialCustomer}
-          onGetAuditLog={onGetCommercialAuditLog}
-          // onGetFilter={onGetCommercialFilter}
-          onGetTableInformation={onGetTableInformation}
-          onUpdateTableInformation={onUpdateTableInformation}
-          tableColumns={searchFields}
-          tableMapping={tableMapping}
-          tableData={commercialCustomer}
-          downloadtableData={downloadCommercialCustomer}
-          audits={auditsCom}
-          filter={filterCom}
-          address={address}
-          headerTitle="Commercial Customer"
-          cardTitle="Commercial Customer List"
-          tableName={CommercialCustomerTableName}
-          modalComponent={CommercialCustomerModal}
-          onGetDownloadCustomer={this.GetonDownload}
-        />
+        {commercialCustomer && commercialCustomer.length === 0 && <Loader /> }
+        {commercialCustomer && commercialCustomer.length !== 0 &&
+          <Page
+            onGetCustomer={onGetCommercialCustomer}
+            onGetAuditLog={onGetCommercialAuditLog}
+            // onGetFilter={onGetCommercialFilter}
+            onGetTableInformation={onGetTableInformation}
+            onUpdateTableInformation={onUpdateTableInformation}
+            tableColumns={searchFields}
+            tableMapping={tableMapping}
+            tableData={commercialCustomer}
+            downloadtableData={downloadCommercialCustomer}
+            audits={auditsCom}
+            filter={filterCom}
+            address={address}
+            headerTitle="Commercial Customer"
+            cardTitle="Commercial Customer List"
+            tableName={CommercialCustomerTableName}
+            modalComponent={CommercialCustomerModal}
+            onGetDownloadCustomer={this.GetonDownload}
+          />
+        }
       </Fragment>
     )
   }

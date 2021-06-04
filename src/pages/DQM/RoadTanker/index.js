@@ -12,8 +12,10 @@ import { tableColumns, tableMapping } from "./tableMapping"
 
 import { transformArrayToString, getCookieByKey } from "./../Common/helper"
 
-import { auditsRoadTanker, address } from "../../../common/data/roadTanker"
-import { filter } from "lodash"
+import {
+  auditsRoadTanker,
+  address,
+} from "../../../common/data/roadTanker"
 
 class RoadTanker extends Component {
   constructor(props) {
@@ -35,9 +37,6 @@ class RoadTanker extends Component {
     const params = {
       limit: 10,
       page: 0,
-      sort_dir: "asc",
-      sort_field: "vehicle",
-      search_fields: transformArrayToString(searchFields),
     }
     const payload = {
       limit: 6,
@@ -61,7 +60,7 @@ class RoadTanker extends Component {
       // auditsRoadTanker,
       filterRoadTanker,
       // address,
-      roadTanker,
+      roadTanker
     } = this.props
 
     const { searchFields } = this.state
@@ -79,7 +78,7 @@ class RoadTanker extends Component {
           tableMapping={tableMapping}
           tableData={roadTanker}
           audits={auditsRoadTanker}
-          filter={filterRoadTanker}
+          filter={{}}
           address={address}
           headerTitle="Road Tanker"
           cardTitle="Road Tanker List"

@@ -276,14 +276,6 @@ const roadTanker = {
   ],
   filters: {
     vehicle: [
-      "A ACHIEVER",
-      "A SAMAD",
-      "A-GOODMAN",
-      "A-TOPMAN",
-      "A. IKTIHAR",
-      "A.ATHENE",
-      "A.ATLANTIC",
-      "A.CHEETAH",
     ],
     owner: [],
   },

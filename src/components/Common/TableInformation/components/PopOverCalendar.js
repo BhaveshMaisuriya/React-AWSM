@@ -7,7 +7,7 @@ import { format } from "date-fns"
 
 const useStyles = makeStyles(theme => ({
   typography: {
-    padding: theme.spacing(2),
+    // padding: theme.spacing(2),
   },
   flex: {
     display: "flex",
@@ -98,15 +98,15 @@ export default function PopOverCalendar({
     !dateRange.to && check.checkedA && dateRange.from
       ? `From ${format(dateRange.from, "do MMM yyyy")} to select another date`
       : dateRange.from && dateRange.to && check.checkedA
-      ? `From ${format(dateRange.from, "do MMM yyyy")} to ${format(
+        ? `From ${format(dateRange.from, "do MMM yyyy")} to ${format(
           dateRange.to,
           "do MMM yyyy"
         )}`
-      : selectedDay
-      ? typeof selectedDay === "string"
-        ? selectedDay
-        : format(selectedDay, "do MMM yyyy")
-      : ""
+        : selectedDay
+          ? typeof selectedDay === "string"
+            ? selectedDay
+            : format(selectedDay, "do MMM yyyy")
+          : ""
   return (
     <div>
       <div

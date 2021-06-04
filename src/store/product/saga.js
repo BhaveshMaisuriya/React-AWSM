@@ -1,12 +1,11 @@
 import { put, call, takeEvery } from "redux-saga/effects"
-import factory, { mergeFilterValues } from "./factory"
+import factory from "./factory"
 import {
   GET_PRODUCT_AUDITLOG,
-  // GET_PRODUCT_FILTER,
   GET_PRODUCTS,
   GET_PRODUCT_DETAIL,
   UPDATE_PRODUCT_DETAIL,
-  GET_DOWNLOAD_PRODUCTS
+  GET_DOWNLOAD_PRODUCTS,
 } from "./actionTypes"
 
 import {
@@ -15,7 +14,6 @@ import {
   getProductAuditLogSuccess,
   getProductAuditLogFail,
   getProductFilterSuccess,
-  // getProductFilterFail,
   getProductDetailFail,
   getProductDetailSuccess,
   updateProductDetailSuccess,
@@ -27,7 +25,6 @@ import {
 import {
   getProducts,
   getProductAuditLog,
-  // getProductFilter,
   getProductDetail,
   updateProductDetail,
   getDownloadProducts,
@@ -41,19 +38,6 @@ function* onGetProductAuditLog() {
     yield put(getProductAuditLogFail(error))
   }
 }
-
-// function* onGetProductFIlter({ params = {} }) {
-//   try {
-//     const response = yield call(getProductFilter)
-//     yield put(
-//       getProductFilterSuccess(
-//         mergeFilterValues(response, params.search_fields)
-//       )
-//     )
-//   } catch (error) {
-//     yield put(getProductFilterFail(error))
-//   }
-// }
 
 function* onGetDownloadProducts({ params = {} }) {
   try {
@@ -94,7 +78,6 @@ function* onUpdateProductDetail(action) {
 
 function* ProductSaga() {
   yield takeEvery(GET_PRODUCT_AUDITLOG, onGetProductAuditLog)
-  // yield takeEvery(GET_PRODUCT_FILTER, onGetProductFIlter)
   yield takeEvery(GET_PRODUCTS, onGetProducts)
   yield takeEvery(GET_PRODUCT_DETAIL, onGetProductDetail)
   yield takeEvery(UPDATE_PRODUCT_DETAIL, onUpdateProductDetail)

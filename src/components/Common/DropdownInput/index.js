@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react"
 import AWSMDropdown from "../Dropdown"
 import "./dropdownInput.scss"
 
-const DropdownInput = ({value, items, title, onChange, onAddItem, acceptDuplicate = false}) => {
+const DropdownInput = ({value, items, title, onChange, onAddItem, acceptDuplicate = false, RowComponent = null, disabled}) => {
   const [inputMode, setInputMode] = useState(false)
   const [inputValue, setInputValue] = useState("")
   const inputRef = useRef(null)
@@ -12,6 +12,9 @@ const DropdownInput = ({value, items, title, onChange, onAddItem, acceptDuplicat
   }
 
   const onInputModeChange = () => {
+    if (disabled) {
+      return
+    }
     setInputMode(!inputMode)
   }
 
@@ -42,10 +45,10 @@ const DropdownInput = ({value, items, title, onChange, onAddItem, acceptDuplicat
       </div>
       <div className={!inputMode ? "d-none" : "d-block position-relative"}>
         <input onChange={onInputValueChange} value={inputValue}  className="awsm-input w-100" ref={inputRef}/>
-        <span className="position-absolute awsm-input-right-content">+12</span>
+        <span className="position-absolute awsm-input-right-content">{`+${items.length}`}</span>
       </div>
       <div className={inputMode ? "d-none" : "d-block"}>
-        <AWSMDropdown value={value} onChange={onChange} items={items} />
+        <AWSMDropdown disabled={disabled} value={value} onChange={onChange} items={items} RowComponent={RowComponent}/>
       </div>
     </div>
   )

@@ -1,19 +1,18 @@
 import { takeLatest, put, call, takeEvery } from "redux-saga/effects"
-import Factory, { mergeFilterValues } from "./factory"
+import Factory from "./factory"
 import {
   GET_COMMERCIAL_CUSTOMER,
   GET_DOWNLOAD_COMMERCIAL_CUSTOMER,
   GET_COMMERCIAL_AUDITLOG,
   GET_COMMERCIAL_TABLE_INFORMATION,
   UPDATE_COMMERCIAL_TABLE_INFORMATION,
-  // GET_COMMERCIAL_FILTER,
 } from "./actionTypes"
 
 import {
   getCommercialCustomerSuccess,
   getCommercialCustomerFail,
   getDownloadCommercialCustomerSuccess,
-  getDownloadCommercialCustomerFail,  
+  getDownloadCommercialCustomerFail,
   getCommercialAuditLogSuccess,
   getCommercialAuditLogFail,
   getCommercialFilterSuccess,
@@ -22,7 +21,6 @@ import {
   resetCommercialTableInformation,
   updateCommercialTableInformationSuccess,
   updateCommercialTableInformationFail,
-  // getCommercialFilterFail,
 } from "./actions"
 
 import {
@@ -31,7 +29,6 @@ import {
   getCommercialAuditLog,
   getCommercialDetail,
   putCommercialDetail,
-  // getCommercialFilter,
 } from "../../helpers/fakebackend_helper"
 
 function* onGetCommercialCustomer({ params = {} }) {
@@ -81,19 +78,6 @@ function* onPutCommercialTableInformation({ data }) {
   }
 }
 
-// function* onGetCommercialFIlter({ params = {} }) {
-//   try {
-//     const response = yield call(getCommercialFilter)
-//     yield put(
-//       getCommercialFilterSuccess(
-//         mergeFilterValues(response, params.search_fields)
-//       )
-//     )
-//   } catch (error) {
-//     yield put(getCommercialFilterFail(error))
-//   }
-// }
-
 function* commercialCustomerSaga() {
   yield takeLatest(GET_COMMERCIAL_CUSTOMER, onGetCommercialCustomer)
   yield takeEvery(GET_COMMERCIAL_AUDITLOG, onGetCommercialAuditLog)
@@ -105,8 +89,10 @@ function* commercialCustomerSaga() {
     UPDATE_COMMERCIAL_TABLE_INFORMATION,
     onPutCommercialTableInformation
   )
-  // yield takeEvery(GET_COMMERCIAL_FILTER, onGetCommercialFIlter)
-  yield takeLatest(GET_DOWNLOAD_COMMERCIAL_CUSTOMER, onGetDownloadCommercialCustomer)
-  }
+  yield takeLatest(
+    GET_DOWNLOAD_COMMERCIAL_CUSTOMER,
+    onGetDownloadCommercialCustomer
+  )
+}
 
 export default commercialCustomerSaga

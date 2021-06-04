@@ -182,10 +182,11 @@ export const getRetailCustomer = params =>
     { params: params }
   )
 
-export const getDownloadRetailCustomer = params => axios.get(
-  'https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/retail-customer',
-  { params: params }
-)
+export const getDownloadRetailCustomer = params =>
+  axios.get(
+    "https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/retail-customer",
+    { params: params }
+  )
 
 export const getCommercialCustomer = params =>
   axios.get(
@@ -196,12 +197,20 @@ export const getCommercialCustomer = params =>
 export const getDownloadCommercialCustomer = params =>
   axios.get(
     "https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/commercial-customer",
-    { params: params })
+    { params: params }
+  )
 
 export const getRoadTanker = params =>
-  get(url.GET_ROADTANKER, { params: params })
+  axios.get(
+    "https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/road-tanker",
+    { params: params }
+  )
 
-export const getTerminal = params => get(url.GET_TERMINAL, { params: params })
+export const getTerminal = params =>
+  axios.get(
+    "https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/terminal",
+    { params: params }
+  )
 
 // get DQM Master Retail Cust Audit Log
 export const getRetailAuditLog = payload =>
@@ -294,18 +303,23 @@ export const getCommercialDetail = code =>
     .then(response => response.data)
 
 export const putCommercialDetail = data =>
-  put(`${url.GET_COMMERCIAL_CUSTOMER_DETAIL}/${data.ship_to_party}`, data)
+  axios
+    .put(`https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/commercial-customer/${data.ship_to_party}`, data)
+    .then(response => response.data)
 
 // get DQM Master Road Tanker Filter
 export const getRoadTankerFilter = params => {
   return get(url.GET_ROADTANKER_FILTER, { params: params })
 }
 
-export const getSaleAndInventoryVarianceControl = () => get(`${url.GET_SALES_AND_INVENTORY_VARIANCE_CONTROL}`)
-export const updateSaleAndInventoryVarianceControl = () => put(`${url.GET_SALES_AND_INVENTORY_VARIANCE_CONTROL}`)
+export const getSaleAndInventoryVarianceControl = () =>
+  get(`${url.GET_SALES_AND_INVENTORY_VARIANCE_CONTROL}`)
+export const updateSaleAndInventoryVarianceControl = () =>
+  put(`${url.GET_SALES_AND_INVENTORY_VARIANCE_CONTROL}`)
 
 // update tank status modal
-export const updateSaleAndInventoryTankStatusModal = () => put(`/sales_and_inventory_tank_status_modal`)
+export const updateSaleAndInventoryTankStatusModal = () =>
+  put(`/sales_and_inventory_tank_status_modal`)
 
 export {
   getLoggedInUser,

@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -11,73 +11,77 @@ export default class MultipleSelect extends Component {
 
     this.state = {
       personName: ["Multiproduct", "Long Haul"],
-      isDeleteBtnShow: true
     }
   }
 
   render() {
-    const {names} = this.props
-    const { 
-      personName, 
-      isDeleteBtnShow
+    const { names, isDeleteBtnShow, onConfirmClick, onDeleteBtnClick, onNoClick } = this.props;
+    const {
+      personName,
     } = this.state;
-    
+
     const handleChange = (event) => {
-      this.setState({personName: event.target.value});
+      this.setState({ personName: event.target.value });
     };
 
-    const onDeleteClick = () => {
-      const {isDeleteBtnShow} = this.state
-      this.setState({isDeleteBtnShow: !isDeleteBtnShow})
-    }
-
-    const showDeleteBtn = () => {
+    const showDeleteBtn = (_name) => {
       const deleteBtn = isDeleteBtnShow ?
-        <a
-          onClick = {
-            () => {
-              onDeleteClick()
+        (
+          <div>
+            <a
+              type="button"
+              onClick={() => onDeleteBtnClick()}
+              className="delete-btn"
+              id="delete"
+              role="button"
+            > Delete
+          </a>
+          </div>) :
+        (<div className="yes-noBtn">
+          <a
+            type="button"
+            onClick={() => {
+              onConfirmClick()
             }
-          }
-          type= "button"
-          className = "delete-btn"
-          id = "delete"
-         > Delete
-        </a> :
-        <div>
-          <div>
-            <a type="button" className="delete-btn">Yes</a>
-          </div>
-          <div>
-            <a type="button" className="delete-btn">No</a>
-          </div>
-        </div>
+            }
+            className="confirm">
+            Confirm |
+          </a>
+          <a
+            type="button"
+            onClick={() => onNoClick()}
+            className="No">
+            No
+            </a>
+        </div>)
 
       return deleteBtn
     }
 
     return (
-        <Select
-          className="form-control popup"
-          multiple
-          value={ personName }
-          onChange = { handleChange }
-          renderValue={(selected) => selected.join(', ')}
-        >
-          {names.map((name) => (
-              <MenuItem key={name} value={name}>
-                <ListItemIcon>
-                    <Checkbox
-                      checked={personName.indexOf(name) !== -1}
-                    />
-                </ListItemIcon>
-                <ListItemText id={name} primary={name}/>
-              </MenuItem>
-          ))}
-          {
-            showDeleteBtn()
-          }       
-        </Select>
-  );
+      <Select
+        className="form-control popup"
+        multiple
+        value={personName}
+        onChange={handleChange}
+        renderValue={(selected) => selected.join(', ')}
+      >
+        {names.map((name) => (
+          <MenuItem key={name} value={name}>
+            <ListItemIcon>
+              <Checkbox
+                checked={personName.indexOf(name) !== -1}
+              />
+            </ListItemIcon>
+            <ListItemText id={name} primary={name} />
+            {
+              name === names[names.length - 1] ?
+                showDeleteBtn(name)
+                : null
+            }
+          </MenuItem>
+        ))}
+      </Select>
+    );
   }
 }

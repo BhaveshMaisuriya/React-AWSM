@@ -3,6 +3,7 @@ import "./tabStatus.scss"
 import AWSMDropdown from "../Dropdown"
 import DatePicker from "../../Common/DatePicker"
 import { format } from "date-fns"
+import DropdownInput from "../DropdownInput"
 
 const STATUS_IN_AWSM = ["Active", "Temporarily Closed", "Inactive"]
 const SALES_AND_INVENTORY = ["Sentinal", "ABC"]
@@ -35,6 +36,12 @@ const TabStatus = ({ scheduler, data, onChange }) => {
     }
   }
 
+  const onAddDataSource = (value) => {
+    const newDataSourceItems = statusData.sales_inventory_data_source_items || []
+    newDataSourceItems.push(value);
+    onFieldChange("sales_inventory_data_source_items", null, newDataSourceItems);
+  }
+
   return (
     <div className="dqm-status-container">
       <div className="row">
@@ -49,14 +56,14 @@ const TabStatus = ({ scheduler, data, onChange }) => {
         </div>
         {pathName === "/commercial-customer" && (
           <div className="col-12 col-sm-6">
-            <div className="input-header">SALES AND INVENTORY DATA SOURCE</div>
-            <AWSMDropdown
+            <DropdownInput
+              title="SALES AND INVENTORY DATA SOURCE"
               value={statusData.sales_inventory_data_source}
               onChange={value => onFieldChange("sales_inventory_data_source", null, value)}
-              items={SALES_AND_INVENTORY}
               disabled={scheduler}
+              items={statusData.sales_inventory_data_source_items || []}
+              onAddItem={onAddDataSource}
             />
-            <button className="add">+Add</button>
           </div>
         )}
         {pathName === "/retail-customer" ? (

@@ -12,11 +12,8 @@ import { tableColumns, tableMapping } from "./tableMapping"
 
 import { transformArrayToString, getCookieByKey } from "./../Common/helper"
 
-import {
-  roadTanker as roadTankerData,
-  auditsRoadTanker,
-  address,
-} from "../../../common/data/roadTanker"
+import { auditsRoadTanker, address } from "../../../common/data/roadTanker"
+import { filter } from "lodash"
 
 class RoadTanker extends Component {
   constructor(props) {
@@ -25,7 +22,6 @@ class RoadTanker extends Component {
       searchFields: getCookieByKey("road-tanker-table")
         ? JSON.parse(getCookieByKey("road-tanker-table"))
         : tableColumns,
-      isTableInformationVisible: false,
     }
   }
 
@@ -35,13 +31,12 @@ class RoadTanker extends Component {
       onGetRoadTankerAuditLog,
       onGetTableInformation,
     } = this.props
-    const { searchFields } = this.state
 
     const params = {
       limit: 10,
       page: 0,
       sort_dir: "asc",
-      sort_field: "ship_to_party",
+      sort_field: "vehicle",
       search_fields: transformArrayToString(searchFields),
     }
     const payload = {
@@ -64,11 +59,14 @@ class RoadTanker extends Component {
       onGetTableInformation,
       onUpdateTableInformation,
       // auditsRoadTanker,
-      // filterRoadTanker,
+      filterRoadTanker,
       // address,
+      roadTanker,
     } = this.props
+
     const { searchFields } = this.state
-    // if (!roadTanker || roadTanker.length === 0) return ""
+    if (!roadTanker || roadTanker.length === 0) return ""
+
     return (
       <Fragment>
         <Page
@@ -79,9 +77,9 @@ class RoadTanker extends Component {
           onUpdateTableInformation={onUpdateTableInformation}
           tableColumns={searchFields}
           tableMapping={tableMapping}
-          tableData={roadTankerData}
+          tableData={roadTanker}
           audits={auditsRoadTanker}
-          filter={roadTankerData.filters}
+          filter={filterRoadTanker}
           address={address}
           headerTitle="Road Tanker"
           cardTitle="Road Tanker List"
@@ -93,9 +91,9 @@ class RoadTanker extends Component {
 }
 
 const mapStateToProps = ({ roadTanker }) => ({
-  // roadTanker: roadTanker.roadTanker,
+  roadTanker: roadTanker.roadTanker,
   // auditsRoadTanker: roadTanker.auditsRoadTanker,
-  // filterRoadTanker: roadTanker.filterRoadTanker,
+  filterRoadTanker: roadTanker.filterRoadTanker,
   // address: retailCustomer.address,
 })
 

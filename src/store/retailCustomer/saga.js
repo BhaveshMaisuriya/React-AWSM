@@ -5,7 +5,6 @@ import {
   GET_RETAIL_AUDITLOG,
   GET_TABLE_INFORMATION,
   UPDATE_TABLE_INFORMATION,
-  // GET_RETAIL_FILTER,
   GET_DOWNLOAD_RETAIL_CUSTOMER,
 } from "./actionTypes"
 
@@ -20,9 +19,8 @@ import {
   updateTableInformationFail,
   resetRetailTableInformation,
   getRetailFilterSuccess,
-  // getRetailFilterFail,
   getDownloadRetailCustomerSuccess,
-  getDownloadRetailCustomerFail
+  getDownloadRetailCustomerFail,
 } from "./actions"
 
 import {
@@ -30,8 +28,7 @@ import {
   getRetailAuditLog,
   getTableInformation,
   updateTableInformation,
-  getDownloadRetailCustomer
-  // getRetailFilter,
+  getDownloadRetailCustomer,
 } from "../../helpers/fakebackend_helper"
 
 function* onGetRetailCustomer({ params = {} }) {
@@ -81,22 +78,12 @@ function* onUpdateTableInformation({ payload: event }) {
   }
 }
 
-// function* onGetRetailFilter({ params = {} }) {
-//   try {
-//     const response = yield call(getRetailFilter, params)
-//     yield put(getRetailFilterSuccess(response))
-//   } catch (error) {
-//     yield put(getRetailFilterFail(error))
-//   }
-// }
-
 //last function
 function* retailCustomerSaga() {
   yield takeLatest(GET_RETAIL_CUSTOMER, onGetRetailCustomer)
   yield takeLatest(GET_RETAIL_AUDITLOG, onGetRetailAuditLog)
   yield takeLatest(GET_TABLE_INFORMATION, onGetTableInformation)
   yield takeEvery(UPDATE_TABLE_INFORMATION, onUpdateTableInformation)
-  // yield takeLatest(GET_RETAIL_FILTER, onGetRetailFilter)
   yield takeLatest(GET_DOWNLOAD_RETAIL_CUSTOMER, onGetDownloadRetailCustomer)
 }
 

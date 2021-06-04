@@ -32,7 +32,7 @@ import {
 function* onGetRoadTanker({ params = {} }) {
   try {
     const response = yield call(getRoadTanker, params)
-    yield put(getRoadTankerSuccess(response))
+    yield put(getRoadTankerSuccess(response.data))
     yield put(getRoadTankerFilterSuccess(response.filters))
   } catch (error) {
     yield put(getRoadTankerFail(error))

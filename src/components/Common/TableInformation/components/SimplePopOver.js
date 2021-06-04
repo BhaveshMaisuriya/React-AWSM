@@ -45,11 +45,11 @@ export default function SimplePopover({ handleChange, data, children, disabled }
               control={
                 <Checkbox
                   checked={item.checked}
-                  onChange={handleChange}
+                  onChange={() => handleChange(item)}
                   name={item.name}
                 />
               }
-              label={item.name}
+              label={item.name || "-"}
               className={`${item.checked ? "MuiFormControlLabel-checked" : ""}`}
             />
           )

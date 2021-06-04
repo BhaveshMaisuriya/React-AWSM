@@ -12,7 +12,7 @@ import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown"
  * @returns {JSX.Element}
  * @constructor
  */
-const AWSMDropdown = ({ items, value, onChange, disabled = false}) => {
+const AWSMDropdown = ({ items, value, onChange, disabled = false, RowComponent = null}) => {
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const toggle = () => setDropdownOpen(prevState => !prevState)
 
@@ -41,9 +41,20 @@ const AWSMDropdown = ({ items, value, onChange, disabled = false}) => {
         </div>
       </DropdownToggle>
       <DropdownMenu className="awsm-select-menu w-100">
-        {items && items.map((item, index) =>
-          <div key={index} onClick={() => onValueChange(item)} className="awsm-select-item">{item}</div>
-        )}
+        {items &&
+          items.map((item, index) =>
+            RowComponent ? (
+              <RowComponent key={index} onChange={() => onChange(item)} item={item} index={index}/>
+            ) : (
+              <div
+                key={index}
+                onClick={() => onValueChange(item)}
+                className="awsm-select-item"
+              >
+                {item || "-"}
+              </div>
+            )
+          )}
       </DropdownMenu>
     </Dropdown>
   )

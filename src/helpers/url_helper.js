@@ -82,7 +82,7 @@ export const GET_PRODUCT_FILTER = "/product/filter"
 export const GET_PRODUCT_DETAILS = "/product/details/"
 
 //ROAD TANKER
-export const GET_ROADTANKER = "/road_tanker"
+export const GET_ROADTANKER = "/road-tanker"
 export const GET_ROADTANKER_AUDITLOG = "/road-tanker_audit"
 export const GET_ROADTANKER_FILTER = "/road-tanker/filter"
 

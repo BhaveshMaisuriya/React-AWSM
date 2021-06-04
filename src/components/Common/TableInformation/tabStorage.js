@@ -86,6 +86,7 @@ const TabStorage = ({ scheduler, data, onChange }) => {
     )
     const newStorageData = { ...storageData }
     newStorageData[`storage_${Number(lastStorage.split("_")[1]) + 1}`] = {
+      id: null,
       tank_capacity: null,
       active_product: null,
       ordering_category: null,
@@ -96,9 +97,11 @@ const TabStorage = ({ scheduler, data, onChange }) => {
       sales_category: null,
       product_code_quota: null,
       monthly_fixed_quota: null,
-      retail: null,
-      product_name: null,
-      product_code: null,
+      dead_stock: null,
+      safe_fill: null,
+      name: null,
+      code: null,
+      ordering_category_items: [],
     }
     setStorageData(newStorageData)
     if (onChange) {

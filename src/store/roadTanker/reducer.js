@@ -24,13 +24,13 @@ const RoadTanker = (state = initialState, action) => {
     case GET_ROAD_TANKER_SUCCESS:
       return {
         ...state,
-        retailCustomers: action.payload,
+        roadTanker: action.payload,
       }
 
     case GET_ROAD_TANKER_FAIL:
       return {
         ...state,
-        retailCustomers: action.payload,
+        roadTanker: action.payload,
       }
 
     case GET_ROADTANKER_AUDITLOG_SUCCESS:

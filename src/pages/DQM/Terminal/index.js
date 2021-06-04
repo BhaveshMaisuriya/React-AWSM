@@ -24,17 +24,13 @@ class Terminal extends Component {
   }
 
   componentDidMount() {
-    const {
-      onGetTerminal,
-      onGetTerminalAuditLog,
-      onGetTableInformation,
-    } = this.props
+    const { onGetTerminal, onGetTerminalAuditLog } = this.props
     const { searchFields } = this.state
     const params = {
       limit: 10,
       page: 0,
       sort_dir: "asc",
-      sort_field: "ship_to_party",
+      sort_field: "code",
       search_fields: transformArrayToString(searchFields),
     }
     const payload = {
@@ -44,8 +40,8 @@ class Terminal extends Component {
       sort_field: "created",
       q: "product",
     }
-    onGetTerminal(params), onGetTerminalAuditLog(payload)
-    //onGetTableInformation()
+    onGetTerminal(params)
+    onGetTerminalAuditLog(payload)
   }
 
   render() {

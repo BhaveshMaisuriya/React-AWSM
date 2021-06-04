@@ -19,11 +19,39 @@ class SpecificationTab extends PureComponent {
         "Mild Steel Tank",
         "New Restriction",
       ],
+      idDeleteBtnShow: true
     }
   }
 
   render() {
     const { mode, scheduler, data, toggle, onChange } = this.props
+
+    function arrayRemove(arr, value) {
+
+      return arr.filter(function (ele) {
+        return ele != value;
+      });
+    }
+
+    const onConfirmClick = () => {
+      const { names, isDeleteBtnShow } = this.state
+      const name = names[names.length - 1]
+      let personNames = arrayRemove(names, name);
+      this.setState({
+        names: personNames,
+        isDeleteBtnShow: !isDeleteBtnShow
+      })
+    }
+
+    const onDeleteBtnClick = () => {
+      const { isDeleteBtnShow } = this.state
+      this.setState({ isDeleteBtnShow: !isDeleteBtnShow })
+    }
+
+    const onNoClick = () => {
+      const { isDeleteBtnShow } = this.state
+      this.setState({ isDeleteBtnShow: !isDeleteBtnShow })
+    }
 
     const setClass = () => {
       const { restriction } = this.state
@@ -110,10 +138,15 @@ class SpecificationTab extends PureComponent {
     }
 
     const rtRestriction = disabled => {
-      const { isRTRestrictionAdding, names } = this.state
+      const { isRTRestrictionAdding, names, isDeleteBtnShow } = this.state
 
       const rtRestriction = isRTRestrictionAdding ? (
-        <MultipleSelect names={names} />
+        <MultipleSelect
+          names={names}
+          isDeleteBtnShow={isDeleteBtnShow}
+          onDeleteBtnClick={onDeleteBtnClick}
+          onConfirmClick={onConfirmClick}
+          onNoClick={onNoClick} />
       ) : (
         <div className="input-group add-restriction">
           <input
@@ -126,9 +159,8 @@ class SpecificationTab extends PureComponent {
           />
           <div className="input-group-append">
             <a
-              className={`btn btn-auto-fill ${
-                disabled ? "disable-link" : null
-              }`}
+              className={`btn btn-auto-fill ${disabled ? "disable-link" : null
+                }`}
               type="button"
               onClick={onAutoFillBtnClick}
             >

@@ -1,5 +1,6 @@
-import React, { Component } from "react"
+import React, { Component, Fragment } from "react"
 import { MDBDataTable } from "mdbreact"
+import { connect } from "react-redux"
 import {
   Row,
   Col,
@@ -10,9 +11,17 @@ import {
   Collapse,
   Button,
   Modal,
+  ModalHeader,
 } from "reactstrap"
-import CustomizeTableModal from "../../common/CustomizeTable"
-import TankStatusModal  from "../DQM/SalesAndInventory/TankStatusModal/TankStatusModal"
+import { withStyles } from "@material-ui/styles"
+import eyeIcon from "../../../assets/images/auditlog-eye.svg"
+import AuditLog from "../../../components/Common/AuditLog"
+import Header from "../../../components/Common/CustomPageHeader"
+import CustomizeTableModal from "../../../common/CustomizeTable"
+import TankStatusModal from "./TankStatusModal/TankStatusModal"
+import downloadExcelIcon from "../../../assets/images/AWSM-Excel.svg"
+import { getSalesAuditLog, getDownloadSales } from "../../../store/actions"
+
 const popTypes = [
   {
     field: "equal",
@@ -63,6 +72,7 @@ const popTypes = [
     label: "Begins With",
   },
 ]
+
 const data = {
   "/sales-inventory": {
     columns: [
@@ -398,21 +408,21 @@ const data = {
         field: "weight",
         sort: "asc",
         width: 100,
-        type: "string"
+        type: "string",
       },
       {
         label: "Restrict Code",
         field: "restrict",
         sort: "asc",
         width: 100,
-        type: "string"
+        type: "string",
       },
       {
         label: "Vehicle Owner",
         field: "vehicle",
         sort: "asc",
         width: 100,
-        type: "string"
+        type: "string",
       },
     ],
     rows: [
@@ -572,12 +582,30 @@ for (var i = 0; i < Object.keys(data).length; i++) {
     data[pathNameKey].rows.push(firstRow)
   }
 }
+import "../../Tables/datatables.scss"
+import VarianceControl from "./VarianceControl"
+import AWSMDropdown from "../../../components/Common/Dropdown"
+import { Link } from "react-router-dom"
+import DownloadExcel from "../../../components/Common/DownloadExcel"
 
-import Breadcrumbs from "../../components/Common/Breadcrumb"
-import "./datatables.scss"
-import VarianceControl from "../DQM/SalesAndInventory/VarianceControl"
-import AWSMDropdown from "../../components/Common/Dropdown"
-class DatatableTables extends Component {
+const styles = {
+  headerText: {
+    marginLeft: "15px",
+    marginBottom: "15px",
+    paddingRight: "32px",
+    textAlign: "right",
+    fontSize: "14px",
+    letterSpacing: "0",
+    color: "#00A19C",
+  },
+  modalHeader: {
+    display: "flex",
+    flexGrow: 1,
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+}
+class SalesAndInventory extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -586,9 +614,36 @@ class DatatableTables extends Component {
       currentItem: null,
       filters: [],
       customiseModalOpen: false,
-      tankStatusModal:false,
+      tankStatusModal: false,
       varianceControl: false,
+      currentPage: 0,
+      rowsPerPage: 10,
+      searchTerm: "",
+      sortField: "",
+      sortDir: "",
+      q: {},
+      rowsAudit: 6,
+      currentAuditPage: 0,
+      modal: false,
+      modalTI: false,
+      loader: false,
+      error_message: "",
+      alert: false,
     }
+    this.toggle = this.toggle.bind(this)
+    this.toggleTI = this.toggleTI.bind(this)
+  }
+
+  componentDidMount() {
+    const { onGetSalesAuditLog } = this.props
+    const payload = {
+      limit: 6,
+      pagination: 0,
+      sort_dir: "desc",
+      sort_field: "created",
+      q: "commercial_customer",
+    }
+    onGetSalesAuditLog(payload)
   }
 
   onEditClicked(i) {
@@ -626,40 +681,158 @@ class DatatableTables extends Component {
     )
   }
 
+  /**
+   * Handling the modal state when modal is click
+   */
+  modalHandler = () => {
+    this.setState({
+      modal: true,
+    })
+  }
+
+  /**
+   * Handling the modal state
+   */
+  toggle() {
+    this.setState(prevState => ({
+      modal: !prevState.modal,
+    }))
+  }
+
+  /**
+   * Handling to close the modal and change state
+   */
+  closeHandler = () => {
+    this.setState({
+      modal: false,
+    })
+  }
+
+  /**
+   * Handling the change page in Audit Log
+   */
+  handleChangeAuditPage = (event, currentAuditPage) => {
+    this.setState({ currentAuditPage })
+  }
+
+  /**
+   * Will run the audit log modal
+   */
+  runAuditLogModal = () => {
+    const { modal, rowsAudit, currentAuditPage } = this.state
+    const { audits } = this.props
+    const modalContent = modal ? (
+      <Modal isOpen={this.state.modal} contentClassName="modalContainer">
+        <ModalHeader toggle={this.toggle}>
+          <h3>Audit Log</h3>
+        </ModalHeader>
+        <AuditLog
+          rowsAudit={rowsAudit}
+          currentAuditPage={currentAuditPage}
+          data={audits.list}
+          closeModal={this.closeHandler}
+          handlePageChange={this.handleChangeAuditPage}
+        />
+      </Modal>
+    ) : null
+    return modalContent
+  }
+
+  /**
+   * Handling the modal state when modal is click
+   */
+  modalHandlerTI = () => {
+    this.setState({
+      modalTI: true,
+    })
+  }
+
+  /**
+   * Handling the modal state
+   */
+  toggleTI() {
+    this.setState(prevState => ({
+      modalTI: !prevState.modalTI,
+    }))
+  }
+
+  /**
+   * Handling to close the modal and change state
+   */
+  closeHandlerTI = () => {
+    this.setState({
+      modalTI: false,
+    })
+  }
+
+  /**
+   * Will run the table information modal
+   */
+  runTableInformation = () => {
+    const { modalTI } = this.state
+
+    const { address } = this.props
+
+    const modalContent = modalTI ? (
+      <Modal isOpen={this.state.modalTI} contentClassName="modalTIContainer">
+        <ModalHeader toggle={this.toggleTI}>
+          <h3
+            style={{
+              paddingLeft: "15px",
+              paddingTop: "8px",
+              height: "26px",
+              color: "#000000",
+              fontFamily: "Museo Sans",
+              fontSize: "24px",
+              letterSpacing: "0",
+              lineHeight: "26px",
+            }}
+          >
+            Table Information
+          </h3>
+        </ModalHeader>
+        <div>
+          <TableInformation
+            closeModal={this.closeHandlerTI}
+            data={address}
+            dataList={address.list}
+          />
+        </div>
+      </Modal>
+    ) : null
+    return modalContent
+  }
+
+  downloadExcel = async () => {
+    this.setState({ loader: true })
+    if (
+      !this.props.downloadtableData ||
+      (this.props.downloadtableData &&
+        this.props.downloadtableData.length === 0)
+    ) {
+      const { currentPage } = this.state
+      const params = {
+        limit: 10,
+        page: currentPage,
+        search_fields: '*',
+      }
+      const { onGetDownloadSales } = this.props
+      await onGetDownloadSales(params)
+    }
+  }
+
+  getLoader = () => {
+    this.setState({ loader: false })
+  }
+
+  getAlert = () => {
+    this.setState({ alert: true })
+    this.setState({ error_message: "" })
+  }
+
   render() {
     const locationPath = this.props.location.pathname
-    let title,
-    subtitle = ""
-    switch (locationPath) {
-      case "/retail-customer":
-        title = "Retail Customer"
-        subtitle = "Retail Customer List"
-        break
-      case "/sales-inventory":
-        title = "Sales & Inventory"
-        subtitle = "Sales List"
-        break
-      case "/commercial-customer":
-        title = "Commercial Customer"
-        subtitle = "Customer List"
-        break
-      case "/road-tanker":
-        title = "Road Tanker"
-        subtitle = "Tanker List"
-        break
-      case "/road-tanker":
-        title = "Road Tanker"
-        subtitle = "Tanker List"
-        break
-      case "/sla-compliance":
-        title = "SLA Compliance"
-        subtitle = "SLA Compliance List"
-        break
-      default:
-        title = "Table"
-        subtitle = "List"
-        break
-    }
+    const { classes } = this.props
 
     for (var i = 0; i < data[locationPath].rows.length; i++) {
       this.addEditBtn(i)
@@ -667,11 +840,24 @@ class DatatableTables extends Component {
 
     const onOpenCustomiseModal = () => {
       this.setState({
-        customiseModalOpen: !this.state.customiseModalOpen
+        customiseModalOpen: !this.state.customiseModalOpen,
       })
     }
+
+    const { downloadtableData } = this.props
+
     return (
       <React.Fragment>
+        {downloadtableData &&
+          downloadtableData.length !== 0 &&
+          this.state.loader && (
+            <DownloadExcel
+              tableData={downloadtableData}
+              tableName='Sales And Inventory'
+              getLoader={this.getLoader}
+              getAlert={this.getAlert}
+            />
+          )}
         <CustomizeTableModal
           tableName="road-tanker-table"
           open={this.state.customiseModalOpen}
@@ -682,14 +868,41 @@ class DatatableTables extends Component {
         />
         <div className="page-content">
           <div className="container-fluid">
-            <Breadcrumbs title="DQM" breadcrumbItem={title} />
+            <div className={classes.modalHeader}>
+              <Header title="Sales And Inventory" />
+              <div
+                className={`${classes.headerText} d-flex justify-content-between align-items-center`}
+              >
+                <div className="vertical-hr-right">
+                  <button
+                    className="btn btn-outline-primary"
+                    onClick={() => this.downloadExcel()}
+                  >
+                    <img src={downloadExcelIcon} />
+                    {this.state.loader === true ? (
+                      <Fragment> Downloading ... </Fragment>
+                    ) : (
+                      <Fragment>Download Excel </Fragment>
+                    )}
+                  </button>
+                </div>
+                <Link
+                  to="#"
+                  onClick={() => {
+                    this.modalHandler()
+                  }}
+                >
+                  <img src={eyeIcon} alt="info" /> View Audit Log
+                </Link>
+              </div>
+            </div>
 
             <Row>
               <Col className="col-12">
                 <Card>
                   <CardBody>
                     <CardTitle>
-                      {subtitle}
+                      Sales List
                       <i
                         style={{ float: "right", fontSize: "24px" }}
                         className="bx bx-export"
@@ -714,8 +927,8 @@ class DatatableTables extends Component {
                                   this.setState({
                                     filters: [
                                       {
-                                        key:
-                                          data[locationPath].columns[0].field,
+                                        key: data[locationPath].columns[0]
+                                          .field,
                                         filter: popTypes[0].field,
                                         value: "",
                                       },
@@ -799,9 +1012,8 @@ class DatatableTables extends Component {
                                           onClick={() => {
                                             var filters = this.state.filters
                                             filters.push({
-                                              key:
-                                                data[locationPath].columns[0]
-                                                  .field,
+                                              key: data[locationPath].columns[0]
+                                                .field,
                                               filter: popTypes[0].field,
                                               value: "",
                                             })
@@ -829,25 +1041,64 @@ class DatatableTables extends Component {
                           <label>REGION & TERMINAL</label>
                           <div className="d-flex">
                             <div className="col-5 p-0">
-                              <AWSMDropdown items={["Northern", "Southern", "Central", "Eastern", "Sabah", "Sarawak"]} value="Northern"/>
+                              <AWSMDropdown
+                                items={[
+                                  "Northern",
+                                  "Southern",
+                                  "Central",
+                                  "Eastern",
+                                  "Sabah",
+                                  "Sarawak",
+                                ]}
+                                value="Northern"
+                              />
                             </div>
                             <div className="col-7 p-0 ml-2">
-                              <AWSMDropdown items={["KVDT"]} value="KVDT"/>
+                              <AWSMDropdown items={["KVDT"]} value="KVDT" />
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
                     <div className="d-flex justify-content-end mt-4">
-                      <button className="btn btn-outline-primary" onClick={onOpenCustomiseModal}>Customise</button>
-                      <div className="grey-text" style={{ width: "1px", backgroundColor: "gray", margin: "0 12px" }}/>
-                      {locationPath === "/sales-inventory" && <div>
-                        <button onClick={() => this.setState({varianceControl: true})} className="btn btn-outline-primary">
+                      <button
+                        className="btn btn-outline-primary"
+                        onClick={onOpenCustomiseModal}
+                      >
+                        Customise
+                      </button>
+                      <div
+                        className="grey-text"
+                        style={{
+                          width: "1px",
+                          backgroundColor: "gray",
+                          margin: "0 12px",
+                        }}
+                      />
+                      <div>
+                        <button
+                          onClick={() =>
+                            this.setState({ varianceControl: true })
+                          }
+                          className="btn btn-outline-primary"
+                        >
                           Sales and Inventory
                         </button>
-                        <button className="btn btn-outline-primary ml-2" onClick={()=> this.setState({tankStatusModal:true})}>Tank Status</button>
-                        <VarianceControl open={this.state.varianceControl} closeDialog={() => this.setState({varianceControl: false})}/>
-                      </div>}
+                        <button
+                          className="btn btn-outline-primary ml-2"
+                          onClick={() =>
+                            this.setState({ tankStatusModal: true })
+                          }
+                        >
+                          Tank Status
+                        </button>
+                        <VarianceControl
+                          open={this.state.varianceControl}
+                          closeDialog={() =>
+                            this.setState({ varianceControl: false })
+                          }
+                        />
+                      </div>
                     </div>
                     <MDBDataTable
                       responsive
@@ -867,7 +1118,7 @@ class DatatableTables extends Component {
         >
           <div className="modal-header">
             <h5 className="modal-title mt-0" id="myModalLabel">
-              Edit {title}
+              Edit Sales & Inventory
             </h5>
             <button
               type="button"
@@ -931,10 +1182,28 @@ class DatatableTables extends Component {
             </button>
           </div>
         </Modal>
-        <TankStatusModal open={this.state.tankStatusModal} handleClose={()=>this.setState({tankStatusModal:false})} modalTitle={`Tank Status`}/>
+        <TankStatusModal
+          open={this.state.tankStatusModal}
+          handleClose={() => this.setState({ tankStatusModal: false })}
+          modalTitle={`Tank Status`}
+        />
+        {this.runAuditLogModal()}
       </React.Fragment>
     )
   }
 }
 
-export default DatatableTables
+const mapStateToProps = ({ saleAndInventory }) => ({
+  audits: saleAndInventory.auditsCom,
+  downloadtableData: saleAndInventory.downloadtableData,
+})
+
+const mapDispatchToProps = dispatch => ({
+  onGetSalesAuditLog: payload => dispatch(getSalesAuditLog(payload)),
+  onGetDownloadSales: params => dispatch(getDownloadSales(params)),
+})
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withStyles(styles)(SalesAndInventory))

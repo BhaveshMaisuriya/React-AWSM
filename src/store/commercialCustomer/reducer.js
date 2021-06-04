@@ -36,7 +36,7 @@ const CommercialCustomer = (state = initialState, action) => {
         ...state,
         commercialCustomers: action.payload,
       }
-
+      
     case GET_DOWNLOAD_COMMERCIAL_CUSTOMER_SUCCESS:
       return {
         ...state,

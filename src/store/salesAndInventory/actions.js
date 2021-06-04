@@ -7,7 +7,13 @@ import {
   UPDATE_SALES_AND_INVENTORY_VARIANCE_CONTROL_FAILED,
   UPDATE_SALES_AND_INVENTORY_TANK_STATUS_MODAL,
   UPDATE_SALES_AND_INVENTORY_TANK_STATUS_MODAL_SUCCESS,
-  UPDATE_SALES_AND_INVENTORY_TANK_STATUS_MODAL_FAILED
+  UPDATE_SALES_AND_INVENTORY_TANK_STATUS_MODAL_FAILED,
+  GET_SALES_AUDITLOG,
+  GET_SALES_AUDITLOG_SUCCESS,
+  GET_SALES_AUDITLOG_FAIL,
+  GET_DOWNLOAD_SALES,
+  GET_DOWNLOAD_SALES_SUCCESS,
+  GET_DOWNLOAD_SALES_FAIL
 } from "./actionTypes"
 
 export const getSalesAndInventoryVarianceControl = () => {
@@ -68,4 +74,33 @@ export const updateSalesAndInventoryTankStatusModalFailed = (error) => {
     payload: error,
   }
 }
+
+export const getSalesAuditLog = () => ({
+  type: GET_SALES_AUDITLOG,
+})
+
+export const getSalesAuditLogSuccess = response => ({
+  type: GET_SALES_AUDITLOG_SUCCESS,
+  payload: response,
+})
+
+export const getSalesAuditLogFail = error => ({
+  type: GET_SALES_AUDITLOG_FAIL,
+  payload: error,
+})
+
+export const getDownloadSales = params => ({
+  type: GET_DOWNLOAD_SALES,
+  params,
+})
+
+export const getDownloadSalesSuccess = response => ({
+  type: GET_DOWNLOAD_SALES_SUCCESS,
+  payload: response,
+})
+
+export const getDownloadSalesFail = error => ({
+  type: GET_DOWNLOAD_SALES_FAIL,
+  payload: error,
+})
 

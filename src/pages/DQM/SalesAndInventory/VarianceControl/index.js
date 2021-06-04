@@ -178,7 +178,7 @@ const VarianceControl = ({ open, scheduler, closeDialog, onChange, getSalesAndIn
               Last Updated: Nur Izzati on 17 Mar 2021
             </div>
             <button className="variance-close-button" onClick={showConfirm}>
-              <XIcon />
+              x
             </button>
           </div>
         </div>

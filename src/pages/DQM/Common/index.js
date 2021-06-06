@@ -77,7 +77,7 @@ class Pages extends Component {
     this.downloadExcel = this.downloadExcel.bind(this)
   }
 
-  getCustomerData = () => {
+  getCustomerData = async() => {
     const { onGetCustomer } = this.props
     const { currentPage, searchTerm, sortField } = this.state
     const { sortDir, searchFields, q } = this.state
@@ -91,7 +91,7 @@ class Pages extends Component {
       sort_field: sortField,
     }
 
-    onGetCustomer(params)
+    await onGetCustomer(params)
   }
 
   // getRetailFilterData = filterKey => {

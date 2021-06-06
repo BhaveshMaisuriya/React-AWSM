@@ -26,7 +26,7 @@ class CommercialCustomer extends Component {
     }
   }
 
-  componentDidMount() {
+  componentDidMount = async() => {
     const {
       onGetCommercialCustomer,
       onGetCommercialAuditLog,
@@ -47,9 +47,8 @@ class CommercialCustomer extends Component {
       sort_field: "created",
       q: "commercial_customer",
     }
-    onGetCommercialCustomer(params)
-    onGetCommercialAuditLog(payload)
-    //onGetTableInformation()
+    await onGetCommercialCustomer(params)
+    await onGetCommercialAuditLog(payload)
   }
 
   GetonDownload = async (currentPage) => {
@@ -77,10 +76,11 @@ class CommercialCustomer extends Component {
     } = this.props
     const { searchFields } = this.state
     if (!commercialCustomer) return ""
+    console.log("commercialCustomer::", commercialCustomer)
     return (
       <Fragment>
-        {commercialCustomer && commercialCustomer.length === 0 && <Loader /> }
-        {commercialCustomer && commercialCustomer.length !== 0 &&
+        {(commercialCustomer && commercialCustomer.length === 0) && <Loader /> }
+        {commercialCustomer && commercialCustomer.list && 
           <Page
             onGetCustomer={onGetCommercialCustomer}
             onGetAuditLog={onGetCommercialAuditLog}

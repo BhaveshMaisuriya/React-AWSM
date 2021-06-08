@@ -32,17 +32,19 @@ const Example = React.memo(props => {
    * dataFilter should never be zero unless api fails or db has no data
    */
   useEffect(() => {
-    if (!isNull(dataFilter[dataKey]) && !isUndefined(dataFilter[dataKey])) {
-      setData(
-        dataFilter[dataKey].map(item => ({
-          text: item,
-          checked: checkedList.length > 0 ? checkedList.includes(item) : true,
-          visibility: true,
-        }))
-      )
-      checkedList.length === 0
-        ? updateCheckedCount("all")
-        : updateCheckedCount("current")
+    if(dataFilter) {
+      if (!isNull(dataFilter[dataKey]) && !isUndefined(dataFilter[dataKey])) {
+        setData(
+          dataFilter[dataKey].map(item => ({
+            text: item,
+            checked: checkedList.length > 0 ? checkedList.includes(item) : true,
+            visibility: true,
+          }))
+        )
+        checkedList.length === 0
+          ? updateCheckedCount("all")
+          : updateCheckedCount("current")
+      }
     }
   }, [dataFilter])
 

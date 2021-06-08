@@ -76,7 +76,6 @@ class CommercialCustomer extends Component {
     } = this.props
     const { searchFields } = this.state
     if (!commercialCustomer) return ""
-    console.log("commercialCustomer::", commercialCustomer)
     return (
       <Fragment>
         {(commercialCustomer && commercialCustomer.length === 0) && <Loader /> }

@@ -66,7 +66,7 @@ class FixedCoulmnTable extends Component {
       <td key={index}>
         <div className={"d-flex align-items-center table_header_fit_text"}>
           <span onClick={this.createSortHandler(e)} className="header_text">
-            {config[e].label}
+            {config[e] && config[e].label}
           </span>
           <Filter
             dataFilter={filterData}
@@ -105,7 +105,7 @@ class FixedCoulmnTable extends Component {
     const { headers, config } = this.props
     const sliceArr = headers.slice(this.state.fixedHeaders.length, arr.length)
     return sliceArr.map((e, index) => {
-      switch (config[e].type) {
+      switch (config[e] && config[e].type) {
         case "badge":
           return (
             <td key={index}>

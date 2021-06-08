@@ -1,4 +1,4 @@
-import React, { Component } from "react"
+import React, { Component, Fragment } from "react"
 import {
   Button,
   Modal,
@@ -26,6 +26,7 @@ import {
   updateTableInformation,
 } from "../../../store/actions"
 import { connect } from "react-redux"
+import ExitConfirmation from "../../../components/Common/ExitConfirmation"
 
 // Information Modal
 class InformationModal extends Component {
@@ -41,12 +42,24 @@ class InformationModal extends Component {
       },
       updateSuccess: false,
       data: data,
+      isConfirm: false,
     }
   }
 
   componentDidMount() {
     const { mode } = this.props ? this.props : MODE.VIEW_AND_AMEND
     this.setState({ mode: mode })
+  }
+
+  onConfirmCancel = () => {
+    this.setState({isConfirm: false });
+  }
+
+  onConfirmExit = () => {
+    this.setState({isConfirm: false });
+      if (this.props.onCancle()) {
+        this.props.onCancle()
+      }
   }
 
   render() {
@@ -84,7 +97,7 @@ class InformationModal extends Component {
       const footer =
         mode === MODE.VIEW_AND_AMEND ? (
           <ModalFooter>
-            <button className="btn-sec" onClick={() => onCancle()}>
+            <button className="btn-sec" onClick={() => this.setState({isConfirm: true })}>
               Cancel
             </button>
             <Button
@@ -137,7 +150,14 @@ class InformationModal extends Component {
           }}
         />
         <ModalBody>
-          <div>
+          {this.state.isConfirm && (
+            <ExitConfirmation
+              onExit={this.onConfirmExit}
+              onCancel={this.onConfirmCancel}
+            />
+          )}
+          <Fragment>
+            <div>
             <div className="row">
               <div className="col-md-6 form-group">
                 <label> VEHICAL OWNER</label>
@@ -246,6 +266,7 @@ class InformationModal extends Component {
               </TabContent>
             </div>
           </div>
+          </Fragment>
         </ModalBody>
         {modalFooter()}
       </Modal>

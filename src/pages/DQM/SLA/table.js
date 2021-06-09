@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react"
+import React, { useEffect, useState, useRef, Fragment } from "react"
 import cloneDeep from "lodash/cloneDeep"
 import throttle from "lodash/throttle"
 import Pagination from "rc-pagination"
@@ -67,7 +67,10 @@ function SLATable(props) {
 
   return (
     <>
-      <div class="search">
+    {tableDatas.length === 0 && <p className="not_found">No Uploaded Documents Found!</p>}
+    {tableDatas.length > 0 &&
+    <Fragment>
+      <div className="search">
         <input
           placeholder="Search"
           value={value}
@@ -82,11 +85,12 @@ function SLATable(props) {
         <tbody className="trhover">{tableData()}</tbody>
       </table>
       <Pagination
-        pageSize={countPerPage}
         onChange={updatePage}
         current={currentPage}
         total={tableDatas.length}
       />
+      </Fragment>
+}
     </>
   )
 }

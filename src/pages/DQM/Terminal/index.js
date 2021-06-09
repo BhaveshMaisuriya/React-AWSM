@@ -6,6 +6,7 @@ import {
   getTerminalAuditLog,
   // getTerminalFilter,
   getTableInformation,
+  getDownloadTerminal,
   updateTableInformation,
 } from "../../../store/actions"
 import { tableColumns, tableMapping } from "./tableMapping"
@@ -46,6 +47,16 @@ class Terminal extends Component {
     onGetTerminalAuditLog(payload)
   }
 
+  GetonDownload = async (currentPage) => {
+    const downloadParams = {
+      limit: 10,
+      page: currentPage,
+      search_fields: '*',
+    }
+    const { onGetDownloadTerminal } = this.props;
+    await onGetDownloadTerminal(downloadParams);
+  }
+
   render() {
     const {
       onGetTerminal,
@@ -55,28 +66,34 @@ class Terminal extends Component {
       onUpdateTableInformation,
       terminalTable,
       auditsTerminal,
+      downloadTerminal,
       filterTerminal,
     } = this.props
     const { searchFields } = this.state
-    if (!terminalTable || terminalTable.length === 0) return (<Loader />)
+    if (!terminalTable || terminalTable.length === 0) return ""
     return (
       <Fragment>
-        <Page
-          headerTitle="Terminal"
-          cardTitle="Terminal List"
-          tableName={TerminalTableName}
-          onGetCustomer={onGetTerminal}
-          onGetAuditLog={onGetTerminalAuditLog}
-          // onGetFilter={onGetTerminalFilter}
-          onGetTableInformation={onGetTableInformation}
-          onUpdateTableInformation={onUpdateTableInformation}
-          tableColumns={searchFields}
-          tableMapping={tableMapping}
-          tableData={terminalTable}
-          audits={auditsTerminal}
-          filter={filterTerminal}
-          modalComponent={TerminalDetailModal}
-        />
+        {(terminalTable && terminalTable.length === 0) && <Loader /> }
+        {terminalTable && terminalTable.list &&
+          <Page
+            headerTitle="Terminal"
+            cardTitle="Terminal List"
+            tableName={TerminalTableName}
+            onGetCustomer={onGetTerminal}
+            onGetAuditLog={onGetTerminalAuditLog}
+            // onGetFilter={onGetTerminalFilter}
+            onGetTableInformation={onGetTableInformation}
+            onUpdateTableInformation={onUpdateTableInformation}
+            tableColumns={searchFields}
+            tableMapping={tableMapping}
+            tableData={terminalTable}
+            audits={auditsTerminal}
+            downloadtableData={downloadTerminal}
+            filter={filterTerminal}
+            modalComponent={TerminalDetailModal}
+            onGetDownloadCustomer={this.GetonDownload}
+          />
+        }
       </Fragment>
     )
   }
@@ -86,6 +103,7 @@ const mapStateToProps = ({ terminal }) => ({
   terminalTable: terminal.terminal,
   auditsTerminal: terminal.auditsTerminal,
   filterTerminal: terminal.filterTerminal,
+  downloadTerminal: terminal.downloadTerminal,
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -94,6 +112,7 @@ const mapDispatchToProps = dispatch => ({
   // onGetTerminalFilter: payload => dispatch(getTerminalFilter(payload)),
   onGetTableInformation: () => dispatch(getTableInformation()),
   onUpdateTableInformation: event => dispatch(updateTableInformation(event)),
+  onGetDownloadTerminal: params => dispatch(getDownloadTerminal(params)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Terminal)

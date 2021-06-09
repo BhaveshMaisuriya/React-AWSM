@@ -1,13 +1,23 @@
 .file_upload_main {
     background-color: #ebf9f9;
     padding: 20px;
-    .MuiDropzoneArea-root {
+    .dropzone {
         border: 3px solid #00a19c;
         background-color: #ebf9f9;
         border-radius: 3px;
+        position: relative;
+        cursor: pointer;
     }
-    .MuiTypography-h5 {
-        display: none;
+    .hide_div{
+        color: #ebf9f9;
+        position: absolute;
+    }
+    .UploadIcon {
+        text-align: center;
+        min-height: 230px;
+        height: 100%;
+        width: 100%;
+        padding: 115px 0;
     }
 }
 

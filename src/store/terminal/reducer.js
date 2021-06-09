@@ -9,6 +9,8 @@ import {
   UPDATE_TABLE_INFORMATION_FAIL,
   GET_TERMINAL_FILTER_SUCCESS,
   GET_TERMINAL_FILTER_FAIL,
+  GET_DOWNLOAD_TERMINAL_SUCCESS,
+  GET_DOWNLOAD_TERMINAL_FAIL,  
 } from "./actionTypes"
 
 const initialState = {
@@ -18,6 +20,7 @@ const initialState = {
   address: [],
   filterTerminal: [],
   currentTerminal: null,
+  downloadTerminal: [],
 }
 
 const Terminal = (state = initialState, action) => {
@@ -29,6 +32,18 @@ const Terminal = (state = initialState, action) => {
       }
 
     case GET_TERMINAL_FAIL:
+      return {
+        ...state,
+        error: action.payload,
+      }
+
+    case GET_DOWNLOAD_TERMINAL_SUCCESS:
+      return {
+        ...state,
+        downloadTerminal: action.payload,
+      }
+
+    case GET_DOWNLOAD_TERMINAL_FAIL:
       return {
         ...state,
         error: action.payload,

@@ -6,6 +6,7 @@ import {
   GET_TABLE_INFORMATION,
   UPDATE_TABLE_INFORMATION,
   // GET_TERMINAL_FILTER,
+  GET_DOWNLOAD_TERMINAL,
 } from "./actionTypes"
 
 import {
@@ -19,13 +20,16 @@ import {
   updateTableInformationFail,
   getTerminalFilterSuccess,
   // getTerminalFilterFail,
+  getDownloadTerminalSuccess,
+  getDownloadTerminalFail
 } from "./actions"
 
 import {
   getTerminal,
   getTerminalAuditLog,
-  getTerminalTableInformation,
+  getTableInformation,
   updateTableInformation,
+  getDownloadTerminal,
   // getTerminalFilter,
 } from "../../helpers/fakebackend_helper"
 
@@ -36,6 +40,15 @@ function* onGetTerminal({ params = {} }) {
     yield put(getTerminalFilterSuccess(response.data.filters))
   } catch (error) {
     yield put(getTerminalFail(error))
+  }
+}
+
+function* onGetDownloadTerminal({ params = {} }) {
+  try {
+    const response = yield call(getDownloadTerminal, params)
+    yield put(getDownloadTerminalSuccess(response.data))
+  } catch (error) {
+    yield put(getDownloadTerminalFail(error))
   }
 }
 
@@ -50,7 +63,7 @@ function* onGetTerminalAuditLog() {
 
 function* fetchTableInformation() {
   try {
-    const response = yield call(getTerminalTableInformation)
+    const response = yield call(getTableInformation)
     yield put(getTableInformationSuccess(response))
   } catch (error) {
     yield put(getTableInformationFail(error))
@@ -85,6 +98,7 @@ function* terminalSaga() {
   yield takeLatest(GET_TERMINAL_AUDITLOG, onGetTerminalAuditLog)
   yield takeLatest(GET_TABLE_INFORMATION, fetchTableInformation)
   yield takeEvery(UPDATE_TABLE_INFORMATION, onUpdateTableInformation)
+  yield takeEvery(GET_DOWNLOAD_TERMINAL, onGetDownloadTerminal)
   // yield takeLatest(GET_TERMINAL_FILTER, onGetTerminalFilter)
 }
 

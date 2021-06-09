@@ -59,19 +59,19 @@ function* onGetRetailAuditLog() {
   }
 }
 
-function* onGetTableInformation() {
+function* onGetTableInformation(action) {
   try {
     yield put(resetRetailTableInformation())
-    const response = yield call(getTableInformation, params.ship_to_party)
+    const response = yield call(getTableInformation, action.params.ship_to_party)
     yield put(getTableInformationSuccess(response))
   } catch (error) {
     yield put(getTableInformationFail(error))
   }
 }
 
-function* onUpdateTableInformation({ payload: event }) {
+function* onUpdateTableInformation(payload) {
   try {
-    const response = yield call(updateTableInformation, event)
+    const response = yield call(updateTableInformation, payload)
     yield put(updateTableInformationSuccess(response))
   } catch (error) {
     yield put(updateTableInformationFail(error))

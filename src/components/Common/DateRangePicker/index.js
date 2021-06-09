@@ -12,6 +12,16 @@ const WEEK_DAYS = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"]
 const DISPLAY_DATE_FORMAT = "do MMM yyyy"
 const SAVE_DATE_FORMAT = "yyyy-MM-dd"
 
+const dateObjectTemplate = {
+  id: null,
+  type: "single",
+  time_from: null,
+  time_to: null,
+  days: [],
+  date_from: null,
+  date_to: null
+}
+
 const DateRangePicker = ({
   defaultValue,
   defaultMonth = new Date(),
@@ -19,7 +29,7 @@ const DateRangePicker = ({
   onChange = () => {},
   singleOnly = false,
 }) => {
-  const [value, setValue] = useState(defaultValue)
+  const [value, setValue] = useState(defaultValue || dateObjectTemplate)
   const [month, setMonth] = useState(defaultMonth)
 
   const getDay = days => {
@@ -32,15 +42,15 @@ const DateRangePicker = ({
       .filter(day => day > -1)
   }
 
-  useEffect(() => {
-    console.log(value)
-    if (onChange) {
-      onChange(value)
-    }
-  }, [value])
+  // useEffect(() => {
+  //   console.log(value)
+  //   if (onChange) {
+  //     onChange(value)
+  //   }
+  // }, [value])
 
   useEffect(() => {
-    setValue(defaultValue)
+    setValue(defaultValue || dateObjectTemplate)
   }, [defaultValue])
 
   const selectedWeekDays = useMemo(() => {
@@ -83,6 +93,9 @@ const DateRangePicker = ({
 
   const labelValue = useMemo(() => {
     if (value.type === "every") {
+      if (value.days.length === 7) {
+        return "Every day"
+      }
       return `Every ${value.days.join(", ")}`
     } else if (value.type === "range") {
       return `From ${
@@ -96,6 +109,8 @@ const DateRangePicker = ({
       }`
     } else if (value.type === "single") {
       return value.days[0] ? format(new Date(value.days[0]), DISPLAY_DATE_FORMAT) : ""
+    } else if (value.type === "daily") {
+      return "Every day"
     }
   }, [value])
 
@@ -216,6 +231,17 @@ const DateRangePicker = ({
     return null
   }
 
+  const onClear = () => {
+    setValue(defaultValue)
+  }
+
+  const onApply = () => {
+    if (onChange) {
+      onChange(value)
+    }
+    handleClose()
+  }
+
   return (
     <div className="awsm-date-range-picker">
       <button
@@ -225,7 +251,7 @@ const DateRangePicker = ({
         onClick={handleClick}
         className={`d-flex justify-content-between align-items-center py-2 w-100 calendar-label ${disabled ? "disabled" : ""}`}
       >
-        <div style={{ maxWidth: "80%" }}>{labelValue}</div>
+        <div className="date-picker-label">{labelValue}</div>
         <ReactSVG className="date-picker-icon" src={CALENDAR_ICON} />
       </button>
       <Popover
@@ -251,21 +277,31 @@ const DateRangePicker = ({
             onDayClick={onDayClick}
             navbarElement={navbarElement}
           />
-          {!singleOnly && (
-            <div className="d-flex align-items-center">
-              <CheckBox
-                checked={isRange}
-                onChange={() =>
-                  setValue({
-                    ...value,
-                    type: !isRange ? "range" : "single",
-                    days: [],
-                  })
-                }
-              />
-              <label>Start and End date</label>
+          <div className="d-flex justify-content-between align-items-center mb-2">
+            {!singleOnly ? (
+              <div className="d-flex align-items-center">
+                <CheckBox
+                  checked={isRange}
+                  onChange={() =>
+                    setValue({
+                      ...value,
+                      type: !isRange ? "range" : "single",
+                      days: [],
+                    })
+                  }
+                />
+                <label>Start and End date</label>
+              </div>
+            ): <div/>}
+            <div className="d-flex pr-2">
+              <button className="btn btn-outline-primary mr-2" onClick={onClear}>
+                Clear
+              </button>
+              <button className="btn btn-primary" onClick={onApply}>
+                Apply
+              </button>
             </div>
-          )}
+          </div>
         </div>
       </Popover>
     </div>

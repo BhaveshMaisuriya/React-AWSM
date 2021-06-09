@@ -13,6 +13,8 @@ import { tableColumns, tableMapping } from "./tableMapping"
 import { transformArrayToString, getCookieByKey } from "../Common/helper"
 // import TableInformationWrapper from "../../../components/Common/TableInformationWrapper"
 import RetailCustomerModal from "./RetailCustomerModal"
+import Loader from "../../../components/Common/Loader"
+
 const RetailTableName = "retail-table"
 
 class RetailCustomer extends Component {
@@ -48,7 +50,7 @@ class RetailCustomer extends Component {
     }
     onGetRetailCustomer(params)
     onGetRetailAuditLog(payload)
-    onGetTableInformation()
+    // onGetTableInformation()
   }
 
   GetonDownload = async(currentPage) => {
@@ -75,7 +77,7 @@ class RetailCustomer extends Component {
       downloadretailCustomer,
     } = this.props
     const { searchFields } = this.state
-    if (!retailCustomer || retailCustomer.length === 0) return ""
+    if (!retailCustomer || retailCustomer.length === 0) return (<Loader />)
     return (
       <Fragment>
         <Page

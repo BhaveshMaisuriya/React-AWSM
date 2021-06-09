@@ -16,3 +16,14 @@
 .invisibleItem {
   display: none;
 }
+.btnAddSmall {
+  color: #009e8e;
+  cursor: pointer;
+  width: fit-content;
+  outline: none;
+  border: none;
+  background-color: white;
+}
+.btnAddSmallDisabled {
+  color: #AAAAAA;
+}

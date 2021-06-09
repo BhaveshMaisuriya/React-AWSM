@@ -101,4 +101,11 @@
   .DayPicker-Week:first-child {
     border-top: 4px solid white;
   }
+
+  .date-picker-label {
+    max-width: 80%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 }

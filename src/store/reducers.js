@@ -49,6 +49,8 @@ import terminal from "./terminal/reducer"
 //Sale and Inventory
 import saleAndInventory from "./salesAndInventory/reducer"
 
+import sla from "./sla/reducer"
+
 const rootReducer = combineReducers({
   // public
   Layout,
@@ -70,6 +72,7 @@ const rootReducer = combineReducers({
   terminal,
   msGraph,
   saleAndInventory,
+  sla
 })
 
 export default rootReducer

@@ -21,6 +21,7 @@ import msGraphSaga from "./ms-graph/saga"
 import roadTankerSaga from "./roadTanker/saga"
 import terminalSaga from "./terminal/saga"
 import saleAndInventorySaga from "./salesAndInventory/saga"
+import slaSaga from "./sla/saga"
 
 export default function* rootSaga() {
   yield all([
@@ -45,5 +46,6 @@ export default function* rootSaga() {
     fork(terminalSaga),
     fork(msGraphSaga),
     fork(saleAndInventorySaga),
+    fork(slaSaga)
   ])
 }

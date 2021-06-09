@@ -1,156 +1,264 @@
-import React, { Component } from "react"
-import { Link } from "react-router-dom"
+import React, { Component, Fragment } from "react"
 import { connect } from "react-redux"
-import { withStyles } from "@material-ui/styles"
 import {
-  Container,
+  getSLAItems,
+  getSLAAuditLog,
+  updateSLAItem,
+} from "../../../store/actions"
+import { tableColumns, tableMapping } from "./tableMapping"
+import Loader from "../../../components/Common/Loader"
+import Header from "../../../components/Common/CustomPageHeader"
+import downloadExcelIcon from "../../../assets/images/AWSM-Excel.svg"
+import { Link } from "react-router-dom"
+import eyeIcon from "../../../assets/images/auditlog-eye.svg"
+import AuditLog from "../../../components/Common/AuditLog"
+import {
   Row,
   Col,
-  Button,
   Card,
   CardBody,
   CardTitle,
   Modal,
   ModalHeader,
-  ModalBody,
-  ModalFooter,
-  Media,
-  Table,
+  CardText,
+  Nav,
+  NavItem,
+  NavLink,
+  TabContent,
+  TabPane,
   CardHeader,
 } from "reactstrap"
-import eyeIcon from "../../../assets/images/auditlog-eye.svg"
-import Header from "../../../components/Common/CustomPageHeader"
-import "./style.scss"
-import FileUpload from "../../../components/Common/FileUpload"
-import SLATable from "./table"
-
-const styles = {
-  headerText: {
-    marginLeft: "15px",
-    marginBottom: "15px",
-    paddingRight: "32px",
-    textAlign: "right",
-    fontSize: "14px",
-    letterSpacing: "0",
-    color: "#00A19C",
-  },
-  modalHeader: {
-    display: "flex",
-    flexGrow: 1,
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-}
+import classnames from "classnames"
+import SLATab from "./SLATab"
+import "./sla.scss"
 
 class SLA extends Component {
   constructor(props) {
     super(props)
-    this.allDocuments = this.allDocuments.bind(this)
     this.state = {
-      documents: [],
-      acceptedFiles: ["image/*"],
+      rowsAudit: 6,
+      currentAuditPage: 0,
+      modal: false,
+      activeTab: "0"
     }
+    this.toggle = this.toggle.bind(this)
   }
 
-  allDocuments = async(val) => {
-    let allData = []
-    var months = [
-      "Jan",
-      "Feb",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "Aug",
-      "Sept",
-      "Oct",
-      "Nov",
-      "Dec",
-    ]
-    val.map((item, index) => {
-      var uploadedDate = ""
-      var uploadedTime = ""
-      var getFullDate = new Date(item.lastModified)
-      var hours = getFullDate.getHours()
-      var minutes = getFullDate.getMinutes()
-      var ampm = hours >= 12 ? "pm" : "am"
-      hours = hours % 12
-      hours = hours ? hours : 12 // the hour '0' should be '12'
-      minutes = minutes < 10 ? "0" + minutes : minutes
-      uploadedDate =
-        getFullDate.getDate() +
-        " " +
-        months[getFullDate.getMonth()] +
-        " " +
-        getFullDate.getFullYear()
-      uploadedTime =
-        getFullDate.getHours() + ":" + getFullDate.getMinutes() + " " + ampm
-      allData.push({
-        name: item.name,
-        uploadedDate: <p className="uploaded_time">{uploadedDate}<br /><span> {uploadedTime}</span></p>,
-        version: "1",
-        uploadedby: "user",
+  componentDidMount() {
+    const {
+        onGetSLAItems,
+        onGetSLAAuditLog,
+    } = this.props
+    const params = {
+      limit: 10,
+      page: 0,
+      sort_dir: "asc",
+      sort_field: "code"
+    }
+    const payload = {
+      limit: 6,
+      pagination: 0,
+      sort_dir: "desc",
+      sort_field: "created",
+      q: "sla",
+    }
+    onGetSLAItems(params)
+    onGetSLAAuditLog(payload)
+  }
+
+    /**
+   * Handling the modal state when modal is click
+   */
+     modalHandler = () => {
+      this.setState({
+        modal: true,
       })
-    })
-    await this.setState({ documents: allData })
+    }
+  
+    /**
+     * Handling the modal state
+     */
+    toggle() {
+      this.setState(prevState => ({
+        modal: !prevState.modal,
+      }))
+    }
+  
+    /**
+     * Handling to close the modal and change state
+     */
+  closeHandler = () => {
+      this.setState({
+        modal: false,
+      })
+  }
+  
+    /**
+     * Handling the change page in Audit Log
+     */
+  handleChangeAuditPage = (event, currentAuditPage) => {
+      this.setState({ currentAuditPage })
+  }
+  
+  handleOpenCustomizeTable = () => {
+      this.setState(prevState => ({
+        customizeModalOpen: !prevState.customizeModalOpen,
+      }))
+  }
+
+  runAuditLogModal = () => {
+    const { modal, rowsAudit, currentAuditPage } = this.state
+    const audits = this.props.slaAuditLog
+    const modalContent = modal ? (
+      <Modal
+        isOpen={this.state.modal}
+        toggle={this.toggle}
+        id="auditLog-modal"
+        contentClassName="modalContainer"
+      >
+        <ModalHeader toggle={this.toggle}>
+          <h3>Audit Log</h3>
+        </ModalHeader>
+        <AuditLog
+          rowsAudit={rowsAudit}
+          currentAuditPage={currentAuditPage}
+          data={audits.list}
+          closeModal={this.closeHandler}
+          handlePageChange={this.handleChangeAuditPage}
+        />
+      </Modal>
+    ) : null
+    return modalContent
+  }
+
+  toggleTabs(tab) {
+    if (this.state.activeTab !== tab) {
+      this.setState({
+        activeTab: tab,
+      })
+    }
   }
 
   render() {
-    const tableHead = {
-      name: "FILE NAME",
-      uploadedDate: "TIME UPDATED",
-      version: "VERSION",
-      uploadedby: "UPLOADED BY",
-      action: "ACTION",
-    }
-    const { classes } = this.props
+    const {
+      slaData
+    } = this.props
+    console.log('SLADATA', slaData)
+    if (!slaData || !slaData.rbd) return (<Loader />)
     return (
-      <React.Fragment>
-        <div className="page-content">
+      <Fragment>
+              <div className="page-content">
           <div className="container-fluid">
-            <div className={classes.modalHeader}>
-              <Header title="Service Level Agreement (SLA)" />
+            <div className="row">
+              <div className="col-10">
+              <h3>Service Level Agreement (SLA)</h3>
+
+              </div>
               <div
-                className={`${classes.headerText} d-flex justify-content-between align-items-center`}
+                className="col-2"
               >
-                <Link to="#">
+               <div className="row">
+               <Link
+                  to="#"
+                  onClick={() => {
+                    this.modalHandler()
+                  }}
+                >
                   <img src={eyeIcon} alt="info" /> View Audit Log
                 </Link>
+               </div>
               </div>
             </div>
-            <Row className="sla_file_upload">
-              <Col lg={12} md={12} xs={12}>
-                <Card>
-                  <CardBody>
-                    <h4>SLA Approved Documents</h4>
-                    <FileUpload
-                      acceptedFiles={this.state.acceptedFiles}
-                      filesLimit={10}
-                      allDocuments={this.allDocuments}
-                    />
-                    <div className="sla_table">
-                      <SLATable
-                        allData={this.state.documents}
-                        tableHead={tableHead}
-                      />
-                    </div>
-                  </CardBody>
-                </Card>
+                  {/*  */}
+                  <Col lg={12}>
+               
+                  <Nav tabs className="nav-tabs-custom nav-sla">
+                      <NavItem>
+                        <NavLink
+                          style={{ cursor: "pointer" }}
+                          className={classnames({
+                            active: this.state.activeTab === "0",
+                          })}
+                          onClick={() => {
+                            this.toggleTabs("0")
+                          }}
+                        >
+                          <h4 className="d-none d-sm-block">RETAIL BUSINESS DIVISION (RBD)</h4>
+                        </NavLink>
+                      </NavItem>
+                      <NavItem>
+                        <NavLink
+                          style={{ cursor: "pointer" }}
+                          className={classnames({
+                            active: this.state.activeTab === "1",
+                          })}
+                          onClick={() => {
+                            this.toggleTabs("1")
+                          }}
+                        >
+                          <h4 className="d-none d-sm-block">COMMERCIAL BUSINESS DIVISION (CBD)</h4>
+                        </NavLink>
+                      </NavItem>
+                      <NavItem>
+                        <NavLink
+                          style={{ cursor: "pointer" }}
+                          className={classnames({
+                            active: this.state.activeTab === "2",
+                          })}
+                          onClick={() => {
+                            this.toggleTabs("2")
+                          }}
+                        >
+                          <h4 className="d-none d-sm-block">INTERNAL</h4>
+                        </NavLink>
+                      </NavItem>
+                      </Nav>
+                          <Card>
+                            <CardBody>
+                            <TabContent activeTab={this.state.activeTab} className="p-3 text-muted">
+                      <TabPane tabId="0">
+                      <Header title="SLA on Customer Order Fulfilment (COF) between Retail Business Division (RBD), Supply & distribution (SSD),
+Finance Division (FDN) & Customer Experience Department"></Header>
+                        <Row>
+                        <SLATab data={slaData.rbd} /> 
+                        </Row>
+                      </TabPane>
+                      <TabPane tabId="1">
+                      <Header title="SLA on Customer Order Fulfilment (COF) between Commercial Business Division (CBD), Supply & distribution (SSD),
+Finance Division (FDN) & Customer Experience Department"></Header>
+                        <Row>
+                        <SLATab data={slaData.cbd} /> 
+                        </Row>
+                      </TabPane>
+                      <TabPane tabId="2">
+                      <Header title="Internal"></Header>
+                      <Row>
+                        <SLATab data={slaData.internal} /> 
+                        </Row>
+                      </TabPane>
+                    </TabContent>
+                            </CardBody>
+                          </Card>
+                
               </Col>
-            </Row>
+                  {/*  */}
+            {this.runAuditLogModal()}
           </div>
         </div>
-      </React.Fragment>
+      </Fragment>
     )
   }
 }
 
-const mapStateToProps = ({ SLA }) => ({})
+const mapStateToProps = ({ sla }) => ({
+    slaData: sla.data,
+    slaAuditLog: sla.slaAuditLog
+})
 
-const mapDispatchToProps = dispatch => ({})
+const mapDispatchToProps = dispatch => ({
+  onGetSLAItems: params => dispatch(getSLAItems(params)),
+  onGetSLAAuditLog: payload => dispatch(getSLAAuditLog(payload)),
+  onUpdateSLAItem: event => dispatch(updateSLAItem(event)),
+})
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(withStyles(styles)(SLA))
+export default connect(mapStateToProps, mapDispatchToProps)(SLA)

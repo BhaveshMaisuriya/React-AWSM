@@ -37,6 +37,7 @@ class ProductDetailModal extends PureComponent {
           code,
           body: {...this.props.currentProduct, ...this.state.updateDictionary}
         })
+        this.props.onCancel()
     } else this.props.onCancel()
   }
 

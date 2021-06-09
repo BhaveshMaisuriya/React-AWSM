@@ -10,21 +10,17 @@ import {
   updateTableInformation,
 } from "../../../store/actions"
 import { tableColumns, tableMapping } from "./tableMapping"
-
 import { transformArrayToString, getCookieByKey } from "./../Common/helper"
-
-import {
-  auditsRoadTanker,
-  address,
-} from "../../../common/data/roadTanker"
+import { auditsRoadTanker, address } from "../../../common/data/roadTanker"
 import Loader from "../../../components/Common/Loader"
 
+const RoadTankerTableName = 'road-tanker-table'
 class RoadTanker extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      searchFields: getCookieByKey("road-tanker-table")
-        ? JSON.parse(getCookieByKey("road-tanker-table"))
+      searchFields: getCookieByKey(RoadTankerTableName)
+        ? JSON.parse(getCookieByKey(RoadTankerTableName))
         : tableColumns,
     }
   }
@@ -80,7 +76,7 @@ class RoadTanker extends Component {
     } = this.props
 
     const { searchFields } = this.state
-    if (!roadTanker || roadTanker.length === 0) return ""
+    if (!roadTanker || roadTanker.length === 0) return (<Loader />)
 
     return (
       <Fragment>
@@ -95,7 +91,7 @@ class RoadTanker extends Component {
             tableColumns={searchFields}
             tableMapping={tableMapping}
             tableData={roadTanker}
-            tableName={'Road Tanker'}
+            tableName={RoadTankerTableName}
             downloadtableData={downloadRoadTanker}
             audits={auditsRoadTanker}
             filter={filterRoadTanker}

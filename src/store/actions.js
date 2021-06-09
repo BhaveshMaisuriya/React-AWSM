@@ -49,3 +49,5 @@ export * from "./roadTanker/actions"
 
 //Sales and inventory
 export * from "./salesAndInventory/actions"
+
+export * from "./sla/actions"

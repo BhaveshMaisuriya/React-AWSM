@@ -24,7 +24,7 @@ import {
 import {
   getTerminal,
   getTerminalAuditLog,
-  getTableInformation,
+  getTerminalTableInformation,
   updateTableInformation,
   // getTerminalFilter,
 } from "../../helpers/fakebackend_helper"
@@ -50,7 +50,7 @@ function* onGetTerminalAuditLog() {
 
 function* fetchTableInformation() {
   try {
-    const response = yield call(getTableInformation)
+    const response = yield call(getTerminalTableInformation)
     yield put(getTableInformationSuccess(response))
   } catch (error) {
     yield put(getTableInformationFail(error))

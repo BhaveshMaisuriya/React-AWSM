@@ -1,156 +1,144 @@
-import React from "react"
-import { Field } from "formik"
-import PopOverCalendar from "../../../../components/Common/TableInformation/components/PopOverCalendar"
+import React, { useState } from "react"
+import DateRangePicker from "../../../../components/Common/DateRangePicker"
+import AWSMInput from "../../../../components/Common/Input"
+import AWSMInputNumber from "../../../../components/Common/InputNumber"
+import AWSMDropdown from "../../../../components/Common/Dropdown"
+import "./Product.scss"
 
-const Product = props => {
+const Product = ({ value, productKey, onChange, scheduler, onDelete }) => {
+  const [isConfirmDelete, setIsConfirmDelete] = useState(false)
+
+  const onFieldChange = (fieldKey, fieldValue) => {
+    const newValue = { ...value }
+    newValue[fieldKey] = fieldValue
+    if (onChange) {
+      onChange(newValue)
+    }
+  }
+
+  const onCancel = () => {
+    setIsConfirmDelete(false)
+  }
+
   return (
-    <div>
-      <h6 className="my-3">PRODUCT {props.index + 1}</h6>
+    <div className="terminal-product">
+      {isConfirmDelete && (
+        <div className="d-flex align-items-center justify-content-center delete-confirm">
+          <div>Are you sure you want to delete this Product?</div>
+          <button
+            className="btn btn-outline-danger mr-2 ml-3"
+            onClick={onCancel}
+          >
+            Cancel
+          </button>
+          <button className="btn btn-danger ml-2" onClick={onDelete}>
+            Delete
+          </button>
+        </div>
+      )}
+      <div className="d-flex justify-content-between">
+        <h6 className="my-3 font-weight-bold">
+          PRODUCT {productKey.substring(8)}
+        </h6>
+        <button
+          className="btn-delete-product"
+          onClick={() => setIsConfirmDelete(true)}
+          disabled={scheduler}
+        >
+          Delete Product
+        </button>
+      </div>
       <div className="row">
         <div className="col-3 form-group">
           <label htmlFor="productName">PRODUCT NAME</label>
-          <Field
-            className="form-control"
-            id="productName"
-            type="number"
-            name="productName"
-            value={props.values.productName}
+          <AWSMInputNumber
+            value={value.name}
             placeholder="Numeric only"
-            onChange={props.handleChange}
             disabled
           />
         </div>
         <div className="col-3 form-group">
           <label htmlFor="productCode">PRODUCT CODE</label>
-          <Field
-            className="form-control"
-            id="productCode"
-            type="number"
-            name="productCode"
-            value={props.values.productCode}
+          <AWSMInputNumber
+            value={value.code}
             placeholder="Numeric only"
-            onChange={props.handleChange}
             disabled
           />
         </div>
         <div className="col-3 form-group">
-          <label htmlFor="statusInSap">STATUS IN SAP</label>
-          <Field
-            className="form-control"
-            id="statusInSap"
-            type="number"
-            as="select"
-            name="statusInSap"
-            value={props.values.statusInSap}
-            onChange={props.handleChange}
-            disabled={props.scheduler}
-          >
-            <option value="active">ACTIVE</option>
-            <option value="delete">DELETE</option>
-          </Field>
+          <label>STATUS IN SAP</label>
+          <AWSMDropdown
+            value={value.status_awsm}
+            disabled={scheduler}
+            items={["ACTIVE", "DELETE"]}
+            onChange={value => onFieldChange("status_awsm", value)}
+          />
         </div>
         <div className="col-3 form-group">
-          <label htmlFor="flowRate">FLOW RATE (L/MIN)</label>
-          <Field
-            className="form-control"
-            id="flowRate"
-            type="number"
-            name="flowRate"
-            value={props.values.flowRate}
-            placeholder="Numeric only"
-            onChange={props.handleChange}
-            disabled={props.scheduler}
+          <label>FLOW RATE (L/MIN)</label>
+          <AWSMInputNumber
+            value={value.flow_rate}
+            disabled={scheduler}
+            onChange={value => onFieldChange("flow_rate", value)}
           />
         </div>
       </div>
-      <h6>VOLUME CAPPING</h6>
-      <div className="row">
+      <h6 className="font-weight-bold">VOLUME CAPPING</h6>
+      <div className="row pt-2">
         <div className="col-3 form-group">
           <label>FROM TO DATE 1</label>
-          <PopOverCalendar range={true} disabled={props.scheduler}>
-            <Field
-              className="form-control"
-              id="fromToDate1"
-              type="number"
-              name="fromToDate1"
-              value={props.values.fromToDate1}
-              onChange={props.handleChange}
-              disabled={props.scheduler}
-            />
-          </PopOverCalendar>
+          <DateRangePicker
+            defaultValue={value.volume_capping_date_range}
+            disabled={scheduler}
+            onChange={value =>
+              onFieldChange("volume_capping_date_range", value)
+            }
+          />
         </div>
         <div className="col-3 form-group">
           <label htmlFor="volume1">VOLUME (L) 1</label>
-          <Field
-            className="form-control"
-            id="volume1"
-            type="number"
-            as="select"
-            name="volume1"
-            value={props.values.volume1}
-            onChange={props.handleChange}
-            disabled={props.scheduler}
-          >
-            <option value="active">Lorem Ipsum</option>
-            <option value="delete">Hello world</option>
-          </Field>
+          <AWSMDropdown
+            value={value.volume_capping_volume}
+            disabled={scheduler}
+            items={["Lorem Ipsum", "Hello world"]}
+            onChange={value => onFieldChange("volume_capping_volume", value)}
+          />
         </div>
         <div className="col-6 form-group">
-          <label htmlFor="remarks1">REMARKS 1</label>
-          <Field
-            className="form-control"
-            id="remarks1"
-            type="number"
-            name="remarks1"
-            value={props.values.remarks1}
-            onChange={props.handleChange}
-            placeholder="Type something here..."
-            disabled={props.scheduler}
+          <label>REMARKS 1</label>
+          <AWSMInput
+            value={value.volume_capping_remarks}
+            disabled={scheduler}
+            onChange={value => onFieldChange("volume_capping_remarks", value)}
           />
         </div>
       </div>
       <div className="row">
         <div className="col-3 form-group">
           <label>FROM TO DATE 2</label>
-          <PopOverCalendar range={true} disabled={props.scheduler}>
-            <Field
-              className="form-control"
-              id="fromToDate2"
-              type="number"
-              name="fromToDate2"
-              value={props.values.fromToDate2}
-              onChange={props.handleChange}
-              disabled={props.scheduler}
-            />
-          </PopOverCalendar>
+          <DateRangePicker
+            defaultValue={value.volume_capping_date_range_2}
+            disabled={scheduler}
+            onChange={value =>
+              onFieldChange("volume_capping_date_range_2", value)
+            }
+          />
         </div>
         <div className="col-3 form-group">
-          <label htmlFor="volume2">VOLUME (L) 2</label>
-          <Field
-            className="form-control"
-            id="volume2"
-            type="number"
-            as="select"
-            name="volume2"
-            value={props.values.volume2}
-            onChange={props.handleChange}
-            disabled={props.scheduler}
-          >
-            <option value="active">Lorem Ipsum</option>
-            <option value="delete">Hello world</option>
-          </Field>
+          <label>VOLUME (L) 2</label>
+          <AWSMDropdown
+            value={value.volume_capping_volume_2}
+            disabled={scheduler}
+            items={["Lorem Ipsum", "Hello world"]}
+            onChange={value => onFieldChange("volume_capping_volume_2", value)}
+          />
         </div>
         <div className="col-6 form-group">
           <label htmlFor="remarks2">REMARKS 2</label>
-          <Field
-            className="form-control"
-            id="remarks2"
-            type="number"
-            name="remarks2"
-            value={props.values.remarks2}
-            onChange={props.handleChange}
-            placeholder="Type something here..."
-            disabled={props.scheduler}
+          <AWSMInput
+            value={value.volume_capping_remarks_2}
+            disabled={scheduler}
+            onChange={value => onFieldChange("volume_capping_remarks_2", value)}
           />
         </div>
       </div>

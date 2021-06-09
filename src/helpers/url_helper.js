@@ -91,3 +91,6 @@ export const GET_TERMINAL = "/terminal"
 export const GET_TERMINAL_AUDITLOG = "/terminal_audit"
 export const GET_TERMINAL_FILTER = "/terminal/filter"
 export const GET_SALES_AND_INVENTORY_VARIANCE_CONTROL = "/sales_and_inventory_variance_control"
+
+export const SLA_ITEMS = "/sla"
+export const GET_SLA_AUDITLOG = "/sla_audit_log"

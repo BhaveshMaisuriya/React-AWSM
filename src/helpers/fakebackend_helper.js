@@ -244,18 +244,30 @@ export const getRoadTankerAuditLog = payload =>
 export const getTerminalAuditLog = payload =>
   get(url.GET_TERMINAL_AUDITLOG, { payload: payload })
 
+export const getTerminalTableInformation = code => axios
+.get(
+  "https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/retail-customer/0090000039"
+)
+.then(response => response.data)
+
 // get Retail Customer Table Information
 export const getTableInformation = code =>
   // get(`${url.GET_RETAIL_CUSTOMER_DETAIL}/${code}`)
   axios
     .get(
-      "https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/retail-customer/0090000039"
+      `https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/retail-customer/${code}`
     )
     .then(response => response.data)
 
 // update Table Information
-export const updateTableInformation = event =>
-  put(url.UPDATE_TABLE_INFORMATION, event)
+export const updateTableInformation = event =>  {
+  console.log(event)
+  return axios.put(
+    `https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/retail-customer/${event.ship_to_party}`,
+    event
+  )
+}
+  // put(url.UPDATE_TABLE_INFORMATION, event)
 
 // get DQM Master Retail Cust Filter
 export const getRetailFilter = params => {
@@ -342,6 +354,11 @@ export const getSaleAndInventory = params =>
     "https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/retail-customer",
     { params: params }
   )
+
+export const getSlaItems = params => get(`${url.SLA_ITEMS}`)
+export const getSlaAuditLog = payload => get(url.GET_SLA_AUDITLOG, { payload })
+export const updateSlaItem = params => put(`${url.SLA_ITEMS}`)
+
 export {
   getLoggedInUser,
   isUserAuthenticated,

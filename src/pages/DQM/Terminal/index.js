@@ -11,6 +11,8 @@ import {
 import { tableColumns, tableMapping } from "./tableMapping"
 import { transformArrayToString, getCookieByKey } from "../Common/helper"
 import TerminalDetailModal from "./TerminalDetailModal"
+import Loader from "../../../components/Common/Loader"
+
 const TerminalTableName = "terminal-table"
 
 class Terminal extends Component {
@@ -56,7 +58,7 @@ class Terminal extends Component {
       filterTerminal,
     } = this.props
     const { searchFields } = this.state
-    if (!terminalTable || terminalTable.length === 0) return ""
+    if (!terminalTable || terminalTable.length === 0) return (<Loader />)
     return (
       <Fragment>
         <Page

@@ -27,7 +27,7 @@ const TabStorage = ({ scheduler, data, onChange }) => {
 
   const onStorageChange = newStorageData => {
     if (onChange) {
-      onChange({
+      onChange("storage", {
         items: newStorageData,
         end_of_day: endOfDay,
       })
@@ -36,7 +36,8 @@ const TabStorage = ({ scheduler, data, onChange }) => {
 
   useEffect(() => {
     if (onChange) {
-      onChange({
+      
+      onChange("storage", {
         items: storageData,
         end_of_day: endOfDay,
       })

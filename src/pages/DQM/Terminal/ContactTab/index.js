@@ -1,9 +1,15 @@
-import React from "react"
+import React,{ useState, useEffect } from "react"
 import { Formik, Form, Field, ErrorMessage } from "formik"
 import { isScheduler } from "../../../../helpers/auth_helper"
+import { isEqual } from "lodash"
 
 const ContactTab = (props) => {
-  const { data } = props;
+  const [data,setData] = useState(props.data)
+
+  useEffect(() => {
+    props.onChange(data)
+  }, [data])
+
   const handleSubmit = values => {
     console.log(values)
   }
@@ -12,34 +18,37 @@ const ContactTab = (props) => {
   return (
     <Formik initialValues={data} onSubmit={handleSubmit}>
       {props => {
+        if(!isEqual(data,props.values)){
+          setData(props.values)
+        }
         return (
           <Form onSubmit={handleSubmit}>
             <div className="row">
               <div className="col-md-6 form-group">
-                <label htmlFor="supervisorName">SUPERVISOR CONTACT NAME</label>
+                <label htmlFor="supervisor.name">SUPERVISOR CONTACT NAME</label>
                 <Field
                   type="text"
-                  name="supervisorName"
+                  name="supervisor.name"
                   id="supervisorName"
                   className="form-control"
                   value={props.values.supervisor.name}
                   placeholder="Type something here..."
-                  onChange={props.handleChange}
                   disabled={isDisabledField}
+                  onChange={props.handleChange}
                 />
-                <ErrorMessage name="supervisorName" component="div" />
+                <ErrorMessage name="supervisor.name" component="div" />
               </div>
               <div className="col-md-6 form-group">
-                <label htmlFor="supervisorNumber">
+                <label htmlFor="supervisor.number">
                   SUPERVISOR CONTACT NUMBER
                 </label>
                 <Field
-                  name="supervisorNumber"
+                  name="supervisor.number"
                   id="supervisorNumber"
                   className="form-control"
                   value={props.values.supervisor.number}
-                  placeholder="Numeric only"
                   onChange={props.handleChange}
+                  placeholder="Numeric only"
                   disabled={isDisabledField}
                 />
                 <ErrorMessage name="supervisorNumber" component="div" />
@@ -47,15 +56,15 @@ const ContactTab = (props) => {
             </div>
             <div className="row">
               <div className="col-md-6 form-group">
-                <label htmlFor="supervisorEmail">SUPERVISOR EMAIL</label>
+                <label htmlFor="supervisor.email">SUPERVISOR EMAIL</label>
                 <Field
                   type="email"
                   id="supervisorEmail"
-                  name="supervisorEmail"
+                  name="supervisor.email"
                   className="form-control"
                   value={props.values.supervisor.email}
-                  placeholder="Type something here..."
                   onChange={props.handleChange}
+                  placeholder="Type something here..."
                   disabled={isDisabledField}
                 />
                 <ErrorMessage name="supervisorEmail" component="div" />
@@ -64,54 +73,54 @@ const ContactTab = (props) => {
 
             <div className="row">
               <div className="col-md-6 form-group">
-                <label htmlFor="superintendantName">
+                <label htmlFor="superintendant.name">
                   SUPERINTENDANT CONTACT NAME
                 </label>
                 <Field
                   type="text"
                   id="superintendantName"
-                  name="superintendantName"
+                  name="superintendant.name"
                   className="form-control"
                   value={props.values.superintendant.name}
-                  placeholder="Type something here..."
                   onChange={props.handleChange}
+                  placeholder="Type something here..."
                   disabled={isDisabledField}
                 />
-                <ErrorMessage name="superintendantName" component="div" />
+                <ErrorMessage name="superintendant.name" component="div" />
               </div>
               <div className="col-md-6 form-group">
-                <label htmlFor="superintendantNumber">
+                <label htmlFor="superintendant.number">
                   SUPERINTENDANT CONTACT NUMBER
                 </label>
                 <Field
                   id="superintendantNumber"
-                  name="superintendantNumber"
+                  name="superintendant.number"
                   className="form-control"
                   value={props.values.superintendant.number}
-                  placeholder="Numeric only"
                   onChange={props.handleChange}
+                  placeholder="Numeric only"
                   disabled={isDisabledField}
                 />
 
-                <ErrorMessage name="superintendantNumber" component="div" />
+                <ErrorMessage name="superintendant.number" component="div" />
               </div>
             </div>
             <div className="row">
               <div className="col-md-6 form-group">
-                <label htmlFor="superintendantEmail">
+                <label htmlFor="superintendant.email">
                   SUPERINTENDANT EMAIL
                 </label>
                 <Field
                   type="email"
                   id="superintendantEmail"
-                  name="superintendantEmail"
+                  name="superintendant.email"
                   className="form-control"
                   placeholder="Type something here..."
                   value={props.values.superintendant.email}
                   onChange={props.handleChange}
                   disabled={isDisabledField}
                 />
-                <ErrorMessage name="superintendantEmail" component="div" />
+                <ErrorMessage name="superintendant.email" component="div" />
               </div>
             </div>
           </Form>

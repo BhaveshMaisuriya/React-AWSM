@@ -72,7 +72,7 @@ class Pages extends Component {
       currentAuditPage: 0,
       modal: false,
       customizeModalOpen: false,
-      selectedItem: 0,
+      selectedItem: null,
       loader: false,
       error_message: "",
       alert: false,
@@ -245,8 +245,9 @@ class Pages extends Component {
     const { modalTI } = this.state
     const ModalComponent = this.props.modalComponent
     const { headerTitle } = this.props
+
     const modalContent =
-      modalTI && ModalComponent ? (
+      modalTI && ModalComponent && this.state.selectedItem!=null ? (
         headerTitle === "Road Tanker" ? (
           <InformationModal visible={true} mode={0} onCancle={this.toggleTI} />
         ) : (

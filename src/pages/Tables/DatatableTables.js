@@ -651,9 +651,9 @@ class DatatableTables extends Component {
         title = "Road Tanker"
         subtitle = "Tanker List"
         break
-      case "/sla-compliance":
-        title = "SLA Compliance"
-        subtitle = "SLA Compliance List"
+      case "/sla":
+        title = "SLA"
+        subtitle = "SLA List"
         break
       default:
         title = "Table"

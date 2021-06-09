@@ -1,157 +1,142 @@
-import React, { useState } from "react"
-import { Formik, Form, Field, ErrorMessage } from "formik"
+import React, { useState, useMemo, useEffect } from "react"
 import styles from "./storageTab.module.css"
 import Product from "./Product"
 import { isScheduler } from "../../../../helpers/auth_helper"
+import AWSMInputNumber from "../../../../components/Common/InputNumber"
 
-const defaultProduct = {
-  productName: "Lorem Ipsum",
-  productCode: "Lorem Ipsum",
-  statusInSap: "Active",
-  flowRate: "",
-  fromToDate1: "",
-  volume1: "",
-  remarks1: "",
-  fromToDate2: "",
-  volume2: "",
-  remarks2: "",
+const newProductTemplate = {
+  id: null,
+  status_awsm: null,
+  flow_rate: null,
+  volume_capping_date_range: null,
+  volume_capping_date_range_2: null,
+  volume_capping_volume: null,
+  volume_capping_remarks: null,
+  volume_capping_volume_2: null,
+  volume_capping_remarks_2: null,
+  terminal: null,
+  name: null,
+  code: null,
 }
 
-const fakeProducts = [
-  {
-    productName: "Lorem Ipsum",
-    productCode: "Lorem Ipsum",
-    statusInSap: "Active",
-    flowRate: "",
-    fromToDate1: "",
-    volume1: "",
-    remarks1: "",
-    fromToDate2: "",
-    volume2: "",
-    remarks2: "",
-  },
-]
-
-const StorageTab = (props) => {
-  const { data } = props
-  const [showAddProduct, setShowAddProduct] = useState(false)
-  const [listProducts, setListProducts] = useState(fakeProducts)
+const StorageTab = ({ data, onChange }) => {
+  const [storageData, setStorageData] = useState(data)
   const scheduler = isScheduler()
-  const handleSubmit = values => {
-    console.log(values)
+
+  useEffect(() => {
+    if (onChange) {
+      onChange(storageData)
+    }
+  }, [storageData])
+
+  useEffect(() => {
+    setStorageData(data)
+  }, [data])
+
+  const onFieldChange = (key, value) => {
+    const newStorageData = { ...data }
+    newStorageData[key] = value
+    setStorageData(newStorageData)
   }
-  const handleShowAddProduct = () => {
-    setShowAddProduct(true)
+
+  const onDeleteProduct = key => {
+    const newStorageData = { ...storageData }
+    delete newStorageData[key]
+    setStorageData(newStorageData)
   }
-  const handleAddProduct = () => {
-    console.log(listProducts)
-    setListProducts([...listProducts, defaultProduct])
+
+  const onAddProduct = () => {
+    let newProductKey = "product_1"
+    if (productList.length > 0) {
+      const lastProductKey = productList.sort().pop()
+      newProductKey =
+        "product_" + (Number(lastProductKey.substring(8)) + 1).toString()
+    }
+    const newStorageData = { ...storageData }
+    newStorageData[newProductKey] = newProductTemplate
+    setStorageData(newStorageData)
   }
+
+  const productList = useMemo(
+    () => Object.keys(storageData).filter(key => key.startsWith("product_")),
+    [storageData]
+  )
+
   return (
-    <Formik initialValues={data} onSubmit={handleSubmit}>
-      {props => {
+    <div>
+      <div className="d-flex">
+        <div className="w-50 mr-2">
+          <label>NO OF LOADING BAY</label>
+          <AWSMInputNumber
+            disabled={scheduler}
+            defaultValue={storageData.loading_bay_no}
+            onChange={value => onFieldChange("loading_bay_no", value)}
+          />
+        </div>
+        <div className="w-50 ml-2">
+          <label>MAX VOL THRESHOLD</label>
+          <AWSMInputNumber
+            disabled={scheduler}
+            defaultValue={storageData.max_volume_threshold}
+            onChange={value => onFieldChange("max_volume_threshold", value)}
+          />
+        </div>
+      </div>
+      <div className="d-flex mt-3">
+        <div className="w-50 mr-2">
+          <label>LOADING TIME (MIN)</label>
+          <AWSMInputNumber
+            disabled={scheduler}
+            defaultValue={storageData.loading_time}
+            onChange={value => onFieldChange("loading_time", value)}
+          />
+        </div>
+        <div className="w-50 ml-2">
+          <label>TURNAROUND TIME (MIN)</label>
+          <AWSMInputNumber
+            disabled={scheduler}
+            defaultValue={storageData.turnaround_time}
+            onChange={value => onFieldChange("turnaround_time", value)}
+          />
+        </div>
+      </div>
+      {productList.length < 1 && (
+        <div className="row m-0 mt-3">
+          <div className={`col-12 form-group ${styles.addButton}`}>
+            <btn
+              className="btn btn-outline"
+              onClick={onAddProduct}
+              disabled={scheduler}
+            >
+              + ADD PRODUCT
+            </btn>
+          </div>
+        </div>
+      )}
+      {productList.map((key, index) => {
         return (
-          <Form onSubmit={props.handleSubmit}>
-            <div className="row">
-              <div className="col-6 form-group">
-                <label htmlFor="loadingBay">NO OF LOADING BAY</label>
-                <Field
-                  className="form-control"
-                  id="loadingBay"
-                  type="number"
-                  name="loadingBay"
-                  value={props.values.loading_bay_no}
-                  placeholder="Numeric only"
-                  onChange={props.handleChange}
-                  disabled={scheduler}
-                />
-                <ErrorMessage name="loadingBay" component="div" />
-              </div>
-              <div className="col-6 form-group">
-                <label htmlFor="maxThreshold">MAX VOL THRESHOLD</label>
-                <Field
-                  className="form-control"
-                  id="maxThreshold"
-                  type="number"
-                  name="maxThreshold"
-                  value={props.values.max_volume_threshold}
-                  placeholder="Numeric only"
-                  onChange={props.handleChange}
-                  disabled={scheduler}
-                />
-                <ErrorMessage name="maxThreshold" component="div" />
-              </div>
-            </div>
-            <div className="row">
-              <div className="col-6 form-group">
-                <label htmlFor="loadingTime">LOADING TIME (MIN)</label>
-                <Field
-                  className="form-control"
-                  id="loadingTime"
-                  type="number"
-                  name="loadingTime"
-                  value={props.values.loading_time}
-                  placeholder="Numeric only"
-                  onChange={props.handleChange}
-                  disabled={scheduler}
-                />
-                <ErrorMessage name="loadingTime" component="div" />
-              </div>
-              <div className="col-6 form-group">
-                <label htmlFor="turnAroundTime">TURNAROUND TIME (MIN)</label>
-                <Field
-                  className="form-control"
-                  id="turnAroundTime"
-                  type="number"
-                  name="turnAroundTime"
-                  value={props.values.turnaround_time}
-                  placeholder="Numeric only"
-                  onChange={props.handleChange}
-                  disabled={scheduler}
-                />
-                <ErrorMessage name="turnAroundTime" component="div" />
-              </div>
-            </div>
-            {!showAddProduct && (
-              <div className="row m-0 mt-3">
-                <div className={`col-12 form-group ${styles.addButton}`}>
-                  <div
-                    className="btn btn-outline"
-                    onClick={handleShowAddProduct}
-                    disabled={scheduler}
-                  >
-                    + ADD PRODUCT
-                  </div>
-                </div>
-              </div>
-            )}
-            {showAddProduct &&
-              listProducts.map((item, index) => {
-                return (
-                  <Product
-                    key={item}
-                    index={index}
-                    values={props.values}
-                    scheduler={scheduler}
-                  />
-                )
-              })}
-            {showAddProduct && (
-              <div>
-                <hr />
-                <div
-                  className="btn btn-outline"
-                  onClick={handleAddProduct}
-                  style={{ color: "#009e8e" }}
-                >
-                  + ADD PRODUCT
-                </div>
-              </div>
-            )}
-          </Form>
+          <Product
+            key={key}
+            productKey={key}
+            value={storageData[key]}
+            scheduler={scheduler}
+            onDelete={() => onDeleteProduct(key)}
+            onChange={value => onFieldChange(key, value)}
+          />
         )
-      }}
-    </Formik>
+      })}
+      {productList.length > 0 && (
+        <button
+          disabled={scheduler}
+          onClick={onAddProduct}
+          className={`${styles.btnAddSmall} ${
+            scheduler ? styles.btnAddSmallDisabled : ""
+          }`}
+        >
+          + ADD PRODUCT
+        </button>
+      )}
+    </div>
   )
 }
 

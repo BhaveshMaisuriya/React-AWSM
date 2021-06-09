@@ -11,6 +11,8 @@ import {
 import { tableColumns, tableMapping } from "./tableMapping"
 import { transformArrayToString, getCookieByKey } from "../Common/helper"
 import RetailCustomerModal from "../RetailCustomer/RetailCustomerModal"
+import Loader from "../../../components/Common/Loader"
+
 const tableName = "salesinventory-table"
 
 class SalesInventory extends Component {
@@ -68,7 +70,7 @@ class SalesInventory extends Component {
       address,
     } = this.props
     const { searchFields } = this.state
-    if (!saleAndInventory || saleAndInventory.length === 0) return ""
+    if (!saleAndInventory || saleAndInventory.length === 0) return (<Loader />)
     return (
       <Fragment>
         <Page

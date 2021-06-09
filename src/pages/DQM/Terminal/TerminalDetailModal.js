@@ -63,7 +63,7 @@ const tempData = {
       flow_rate: 100,
       volume_capping_date_range: {
         id: 1,
-        type: "range",
+        type: "every",
         time_from: "00:00:00",
         time_to: "23:59:00",
         days: [
@@ -98,8 +98,8 @@ const tempData = {
       type: "range",
       time_from: "00:00:00",
       time_to: "23:59:00",
-      date_from: null,
-      date_to: null,
+      date_from:  "2020-06-10",
+      date_to: "2020-07-10",
       days: [
         "Monday",
         "Tuesday"
@@ -114,7 +114,8 @@ const tempData = {
       date_to: null,
       days: [
         "Monday",
-        "Tuesday"
+        "Tuesday",
+        "Thursday"
       ]
     },
     terminal_operation_hours_1: {
@@ -134,8 +135,8 @@ const tempData = {
       type: "range",
       time_from: "00:00:00",
       time_to: "23:59:00",
-      date_from: null,
-      date_to: null,
+      date_from:  "2020-06-10",
+      date_to: "2020-07-10",
       days: [
         "Monday",
         "Tuesday"
@@ -146,8 +147,8 @@ const tempData = {
       type: "range",
       time_from: "00:00:00",
       time_to: "23:59:00",
-      date_from: null,
-      date_to: null,
+      date_from:  "2020-06-10",
+      date_to: "2020-07-10",
       days: [
         "Monday",
         "Tuesday"
@@ -228,6 +229,11 @@ class TerminalDetailModal extends PureComponent {
         activeTab: tab,
       })
     }
+  }
+  onFieldChange = (key, value) => {
+    const newData = {...this.props.data}
+    newData[key] = value;
+    console.log(newData);
   }
 
   onConfirmCancel = () => {
@@ -381,7 +387,7 @@ class TerminalDetailModal extends PureComponent {
                       overflowX: "hidden",
                     }}
                   >
-                    <AddressTab data={tempData.address} />
+                    <AddressTab data={tempData.address} onChange={(value) => this.onFieldChange("address", value)}/>
                   </SimpleBar>
                 </TabPane>
                 <TabPane tabId="2">
@@ -392,7 +398,7 @@ class TerminalDetailModal extends PureComponent {
                       overflowX: "hidden",
                     }}
                   >
-                    <StorageTab data={tempData.storage}/>
+                    <StorageTab data={tempData.storage} onChange={(value) => this.onFieldChange("storage", value)}/>
                   </SimpleBar>
                 </TabPane>
                 <TabPane tabId="3">
@@ -403,7 +409,7 @@ class TerminalDetailModal extends PureComponent {
                       overflowX: "hidden",
                     }}
                   >
-                    <StatusTab data={tempData.status}/>
+                    <StatusTab data={tempData.status} onChange={(value) => this.onFieldChange("status", value)}/>
                   </SimpleBar>
                 </TabPane>
                 <TabPane tabId="4">
@@ -414,7 +420,7 @@ class TerminalDetailModal extends PureComponent {
                       overflowX: "hidden",
                     }}
                   >
-                    <ContactTab data={tempData.contact}/>
+                    <ContactTab data={tempData.contact} onChange={(value) => this.onFieldChange("contact", value)}/>
                   </SimpleBar>
                 </TabPane>
               </TabContent>

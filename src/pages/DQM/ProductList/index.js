@@ -11,6 +11,7 @@ import {
 } from "../../../store/actions"
 import { tableColumns, tableMapping } from "./tableMapping"
 import { transformArrayToString, getCookieByKey } from "../Common/helper"
+import Loader from "../../../components/Common/Loader"
 import ProductDetailModal from "./ProductDetailModal"
 const ProductTableName = "product-table"
 
@@ -73,7 +74,7 @@ class Product extends Component {
       downloadProduct,
     } = this.props
     const { searchFields } = this.state
-    if (!products || products.length === 0) return ""
+    if (!products || products.length === 0) return (<Loader />)
     return (
       <Fragment>
         <Page

@@ -39,6 +39,7 @@ import {
   terminal,
   auditsTerminal,
   varianceControl,
+  slaData
 } from "../../common/data"
 
 import { axiosApi } from "../api_helper"
@@ -819,6 +820,48 @@ const fakeBackend = () => {
       })
     })
   })
+
+
+  mock.onGet(url.SLA_ITEMS).reply(() => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        if (slaData) {
+          // Passing fake JSON data as response
+          resolve([200, slaData])
+        } else {
+          reject([400, "Cannot get audit data"])
+        }
+      })
+    })
+  })
+
+mock
+.onPut(new RegExp(`${url.SLA_ITEMS}/*`))
+.reply(() => {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      if (true) {
+        // Passing fake JSON data as response
+        resolve([200, true])
+      } else {
+        reject([400, "Failed to get Product Details"])
+      }
+    }, 500)
+  })
+})
+
+mock.onGet(url.GET_SLA_AUDITLOG).reply(() => {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      if (auditsTerminal) {
+        // Passing fake JSON data as response
+        resolve([200, auditsTerminal])
+      } else {
+        reject([400, "Cannot get audit data"])
+      }
+    })
+  })
+})
 
   mock.onGet(url.GET_TERMINAL_AUDITLOG).reply(() => {
     return new Promise((resolve, reject) => {

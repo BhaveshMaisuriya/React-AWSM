@@ -1,11 +1,22 @@
-import React from "react"
+import React,{ useState, useEffect } from "react"
 import { Formik, Form, Field } from "formik"
 
 const AddressTab = (props) => {
-  const { data } = props
+  const [data,setData] = useState(props.data)
   const handleSubmit = values => {
     console.log(values)
   }
+
+  useEffect(() => {
+      props.onChange(data)
+  }, [data])
+
+  const handleOnChangeValue = (e) =>{
+    let newData = {...data}
+    newData[e.target.id] = e.target.value
+    setData(newData)
+  }
+
   return (
     <Formik initialValues={data} onSubmit={handleSubmit}>
       {props => {
@@ -16,10 +27,11 @@ const AddressTab = (props) => {
                 <label htmlFor="address">ADDRESS</label>
                 <Field
                   type="text"
-                  id="address"
+                  id="address_1"
                   className="form-control"
+                  value={data.address_1}
+                  onChange={(e)=>handleOnChangeValue(e)}
                   disabled
-                  value={props.values.address_1}
                 />
               </div>
               <div className="col-md-6 form-group">
@@ -28,8 +40,9 @@ const AddressTab = (props) => {
                   type="text"
                   id="city"
                   className="form-control"
+                  value={data.city}
+                  onChange={(e)=>handleOnChangeValue(e)}
                   disabled
-                  value={props.values.city}
                 />
               </div>
             </div>
@@ -40,8 +53,9 @@ const AddressTab = (props) => {
                   type="text"
                   id="postcode"
                   className="form-control"
+                  value={data.postcode}
+                  onChange={(e)=>handleOnChangeValue(e)}
                   disabled
-                  value={props.values.postcode}
                 />
               </div>
               <div className="col-md-6 form-group">
@@ -50,8 +64,9 @@ const AddressTab = (props) => {
                   type="text"
                   id="state"
                   className="form-control"
+                  value={data.state}
+                  onChange={(e)=>handleOnChangeValue(e)}
                   disabled
-                  value={props.values.state}
                 />
               </div>
             </div>
@@ -60,10 +75,11 @@ const AddressTab = (props) => {
                 <label htmlFor="region">REGION</label>
                 <Field
                   type="text"
-                  id="region"
+                  id="region_name"
                   className="form-control"
+                  value={data.region_name}
+                  onChange={(e)=>handleOnChangeValue(e)}
                   disabled
-                  value={props.values.region_name}
                 />
               </div>
               <div className="col-md-6 form-group">
@@ -72,8 +88,9 @@ const AddressTab = (props) => {
                   type="text"
                   id="country"
                   className="form-control"
+                  value={data.country}
+                  onChange={(e)=>handleOnChangeValue(e)}
                   disabled
-                  value={props.values.country}
                 />
               </div>
             </div>
@@ -84,8 +101,9 @@ const AddressTab = (props) => {
                   type="text"
                   id="latitude"
                   className="form-control"
+                  value={data.latitude}
+                  onChange={(e)=>handleOnChangeValue(e)}
                   disabled
-                  value={props.values.latitude}
                 />
               </div>
               <div className="col-md-6 form-group">
@@ -94,8 +112,9 @@ const AddressTab = (props) => {
                   type="text"
                   id="longitude"
                   className="form-control"
+                  value={data.longitude}
+                  onChange={(e)=>handleOnChangeValue(e)}
                   disabled
-                  value={props.values.longitude}
                 />
               </div>
             </div>

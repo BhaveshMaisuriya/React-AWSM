@@ -100,11 +100,11 @@ class SidebarContent extends Component {
                   <Link to="/commercial-customer">Commercial Customer</Link>
                   <Link to="/terminal">Terminal</Link>
                   <Link to="/road-tanker">Road Tanker</Link>
-                  <Link to="/employee-data">Employee Data</Link>
+                  {/* <Link to="/employee-data">Employee Data</Link> */}
                   <Link to="/product">Product</Link>
-                  <Link to="/cloud-cluster">Cloud Clusters</Link>
-                  <Link to="/sla-compliance">SLA Compliance</Link>
-                  <Link to="/order-forecast">Order Forecast Method</Link>
+                  {/* <Link to="/cloud-cluster">Cloud Clusters</Link> */}
+                  <Link to="/sla">SLA</Link>
+                  {/* <Link to="/order-forecast">Order Forecast Method</Link> */}
                 </li>
               </ul>
             </li>

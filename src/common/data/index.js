@@ -27,6 +27,7 @@ import { roadTanker, auditsRoadTanker, filterRoadTanker } from "./roadTanker"
 import { terminal, auditsTerminal, filterTerminal } from "./terminal"
 import { productList } from "./product"
 import { varianceControl } from "./salesAndInventory"
+import { slaData } from "./sla"
 export {
   productsData,
   discountData,
@@ -65,4 +66,5 @@ export {
   terminal,
   auditsTerminal,
   varianceControl,
+  slaData
 }

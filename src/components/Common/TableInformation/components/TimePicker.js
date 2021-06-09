@@ -16,13 +16,13 @@ const AWSMDropdown = ({
   onChange,
   disabled = false,
   defaultEmpty = true,
+  value,
   //   defaultValue,
 }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const toggle = () => setDropdownOpen(prevState => !prevState)
-  const [value, setValue] = useState(
-    defaultEmpty ? "Select time" : items && items[0] ? items[0] : ""
-    // defaultValue
+  const [itemSelected, setValue] = useState(
+    !value ? "Select time" : items ? value : ''
   )
   const onValueChange = item => {
     setValue(item)
@@ -30,6 +30,10 @@ const AWSMDropdown = ({
     if (onChange) {
       onChange(item)
     }
+  }
+
+  const formatdValueHandler = (data) =>{
+    return typeof(data) == "string" ? data.substring(0,5) :data
   }
 
   return (
@@ -42,7 +46,7 @@ const AWSMDropdown = ({
         disabled={disabled}
       >
         <div className={`awsm-select-toggle p-2 position-relative ${disabled ? "disabled" : ""}`}>
-          <div>{value}</div>
+          <div>{formatdValueHandler(itemSelected)}</div>
           <ArrowDropDownIcon className="awsm-dropdown-arrow"/>
         </div>
       </DropdownToggle>
@@ -54,7 +58,7 @@ const AWSMDropdown = ({
               onClick={() => onValueChange(item)}
               className="awsm-select-item"
             >
-              {item}
+              {formatdValueHandler(item)}
             </div>
           ))}
       </DropdownMenu>

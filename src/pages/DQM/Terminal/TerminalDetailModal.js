@@ -259,18 +259,18 @@ class TerminalDetailModal extends PureComponent {
                 </TabPane>
               </TabContent>
               </Fragment>
+              <ModalFooter>
+                <button className="btn-sec" onClick={() =>  this.setState({isConfirm: true })}>
+                  Cancel
+                </button>
+                {!isDisabledField && currentTerminal ? (
+                  <Button onClick={this.handleUpdate.bind(this)} color="primary">
+                    Update
+                  </Button>
+                ) : null}
+              </ModalFooter>
             </ModalBody>
           ) : null}
-          <ModalFooter>
-            <button className="btn-sec" onClick={() =>  this.setState({isConfirm: true })}>
-              Cancel
-            </button>
-            {!isDisabledField && currentTerminal ? (
-              <Button onClick={this.handleUpdate.bind(this)} color="primary">
-                Update
-              </Button>
-            ) : null}
-          </ModalFooter>
         </>
       </Modal>
     )

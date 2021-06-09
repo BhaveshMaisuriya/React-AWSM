@@ -27,7 +27,6 @@
 }
 
 //STYLE FOR AUDIT LOG MODAL
-
 #auditLog-modal .modalContainer {
   width: 900px !important;
   height: 100%;
@@ -37,7 +36,11 @@
   bottom: 50% !important;
   transform: translate(-50%, -50%) !important;
   margin-left: 300px;
-  margin-top: 400px;
+  margin-top: 350px;
+}
+
+.modal-open .modal {
+  overflow: auto !important;
 }
 
 .date-time {

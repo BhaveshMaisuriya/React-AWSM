@@ -9,6 +9,8 @@ import {
   UPDATE_TABLE_INFORMATION_FAIL,
   GET_ROADTANKER_FILTER_SUCCESS,
   GET_ROADTANKER_FILTER_FAIL,
+  GET_DOWNLOAD_ROAD_TANKER_SUCCESS,
+  GET_DOWNLOAD_ROAD_TANKER_FAIL
 } from "./actionTypes"
 
 const initialState = {
@@ -17,6 +19,7 @@ const initialState = {
   auditsRoadTanker: [],
   address: [],
   filterRoadTanker: [],
+  downloadRoadTanker: [],
 }
 
 const RoadTanker = (state = initialState, action) => {
@@ -31,6 +34,18 @@ const RoadTanker = (state = initialState, action) => {
       return {
         ...state,
         roadTanker: action.payload,
+      }
+
+    case GET_DOWNLOAD_ROAD_TANKER_SUCCESS:
+      return {
+        ...state,
+        downloadRoadTanker: action.payload,
+      }
+
+    case GET_DOWNLOAD_ROAD_TANKER_FAIL:
+      return {
+        ...state,
+        downloadRoadTanker: action.payload,
       }
 
     case GET_ROADTANKER_AUDITLOG_SUCCESS:

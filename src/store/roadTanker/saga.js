@@ -1,11 +1,12 @@
 import { takeLatest, put, call, takeEvery } from "redux-saga/effects"
 import { mergeFilterValues } from "./factory"
 import {
-  GET_ROAD_TANKER,
+  GET_DOWNLOAD_ROAD_TANKER,
   GET_ROADTANKER_AUDITLOG,
   GET_ROADTANKER_FILTER,
   GET_TABLE_INFORMATION,
   UPDATE_TABLE_INFORMATION,
+  GET_ROAD_TANKER
 } from "./actionTypes"
 
 import {
@@ -19,6 +20,8 @@ import {
   updateTableInformationFail,
   getRoadTankerFilterSuccess,
   // getRoadTankerFilterFail,
+  getDownloadRoadTankerSuccess,
+  getDownloadRoadTankerFail,
 } from "./actions"
 
 import {
@@ -26,6 +29,7 @@ import {
   getRoadTankerAuditLog,
   getTableInformation,
   updateTableInformation,
+  getDownloadRoadTanker,
   // getRoadTankerFilter,
 } from "../../helpers/fakebackend_helper"
 
@@ -36,6 +40,15 @@ function* onGetRoadTanker({ params = {} }) {
     yield put(getRoadTankerFilterSuccess(response.filters))
   } catch (error) {
     yield put(getRoadTankerFail(error))
+  }
+}
+
+function* onGetDownloadRoadTanker({ params = {} }) {
+  try {
+    const response = yield call(getDownloadRoadTanker, params)
+    yield put(getDownloadRoadTankerSuccess(response.data))
+  } catch (error) {
+    yield put(getDownloadRoadTankerFail(error))
   }
 }
 
@@ -86,6 +99,7 @@ function* roadTankerSaga() {
   yield takeLatest(GET_TABLE_INFORMATION, fetchTableInformation)
   yield takeEvery(UPDATE_TABLE_INFORMATION, onUpdateTableInformation)
   // yield takeLatest(GET_ROADTANKER_FILTER, onGetRoadTankerFilter)
+  yield takeLatest(GET_DOWNLOAD_ROAD_TANKER, onGetDownloadRoadTanker)
 }
 
 export default roadTankerSaga

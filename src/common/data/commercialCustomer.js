@@ -13875,11 +13875,6 @@ const auditsCom = {
       description: "Najib Refreshed Bloacked DN",
       created: "Monday, 12 Apr 2021 03:32 PM",
     },
-    {
-      id: 6,
-      description: "Nazmuddin Added 1 New Order in Order Bank",
-      created: "Monday, 12 Apr 2021 04:20 PM",
-    },
   ],
 }
 

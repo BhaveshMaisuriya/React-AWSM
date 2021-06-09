@@ -211,6 +211,12 @@ export const getRoadTanker = params =>
     { params: params }
   )
 
+  export const getDownloadRoadTanker = params =>
+  axios.get(
+    "https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/road-tanker",
+    { params: params }
+  )
+
 export const getTerminal = params =>
   axios.get(
     "https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/terminal",

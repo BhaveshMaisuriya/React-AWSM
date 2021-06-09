@@ -24,7 +24,7 @@ import TabQuota from "../../../components/Common/TableInformation/tabQuota"
 
 //CSS
 import "./RetailCustomerModal.scss"
-import { Skeleton } from "@material-ui/core"
+import Skeleton from '@material-ui/lab/Skeleton';
 import {
   getTableInformation,
   resetRetailTableInformation,
@@ -32,6 +32,7 @@ import {
 } from "../../../store/actions"
 import AWSMAlert from "../../../components/Common/AWSMAlert"
 import { isScheduler } from "../../../helpers/auth_helper"
+import ExitConfirmation from "../../../components/Common/ExitConfirmation"
 
 const RetailCustomerModal = props => {
   const {
@@ -50,7 +51,8 @@ const RetailCustomerModal = props => {
   const [activeTab, setActiveTab] = useState("1")
   const scheduler = isScheduler()
   const [alert, setAlert] = useState(false)
-
+  const [isConfirm, setIsConfirm] = useState(false);
+  
   const handleUpdate = e => {
     e.preventDefault()
     updateTableInformation(currentRetailDetail)
@@ -75,7 +77,16 @@ const RetailCustomerModal = props => {
     setCurrentRetailDetail(newRetailDetail)
   }
 
-  console.log(currentRetailDetail)
+  const onConfirmCancel = () => {
+    setIsConfirm(false)
+  }
+
+  const onConfirmExit = () => {
+    setIsConfirm(false)
+    if (onCancel) {
+      onCancel()
+    }
+  }
 
   return (
     <Modal isOpen={visible} className="retail-customer-modal modal-lg">     
@@ -88,6 +99,12 @@ const RetailCustomerModal = props => {
         </span>
         </ModalHeader>
         <ModalBody>
+          {isConfirm && (
+            <ExitConfirmation
+              onExit={onConfirmExit}
+              onCancel={onConfirmCancel}
+            />
+          )}
           <>
             <div className="d-flex justify-content-between">
               <div className="w-50 mr-4">
@@ -232,7 +249,7 @@ const RetailCustomerModal = props => {
         <Skeleton variant="rect" width={800} height={300} />
       )}
       <ModalFooter>
-        <button onClick={onCancel} className="btn-sec">
+        <button onClick={() => setIsConfirm(true)} className="btn-sec">
           Cancel
         </button>
         <Button type="submit" color="primary" onClick={handleUpdate}>

@@ -25,7 +25,7 @@ import ExitConfirmation from "../../../components/Common/ExitConfirmation"
 
 //CSS
 import "./CommercialCustomerModal.scss"
-import { Skeleton } from "@material-ui/core"
+import Skeleton from '@material-ui/lab/Skeleton';
 import {
   getCommercialTableInformation,
   resetCommercialTableInformation,
@@ -100,7 +100,6 @@ const CommercialCustomerModal = props => {
               Last Updated By: Nur Izzati on 3rd March 2021
             </span>
           </ModalHeader>
-
           <ModalBody className="position-relative">
             {isConfirm && (
               <ExitConfirmation
@@ -108,7 +107,7 @@ const CommercialCustomerModal = props => {
                 onCancel={onConfirmCancel}
               />
             )}
-            <>
+              <>
               <div className="d-flex justify-content-between">
                 <div className="w-50 mr-4">
                   <label>SHIP TO (COMPANY NAME)</label>
@@ -131,7 +130,7 @@ const CommercialCustomerModal = props => {
                 onChange={value => onFieldValueChange("remarks", value)}
               />
             </>
-            <div className="mt-4">
+              <div className="mt-4">
               <Nav pills justified>
                 <NavItem>
                   <NavLink
@@ -185,7 +184,7 @@ const CommercialCustomerModal = props => {
                 </NavItem>
               </Nav>
             </div>
-            <div>
+              <div>
               <TabContent activeTab={activeTab} className="py-4">
                 <TabPane tabId="1">
                   <div className="simple-bar">
@@ -244,20 +243,6 @@ const CommercialCustomerModal = props => {
                 </TabPane>
               </TabContent>
             </div>
-            <ModalFooter>
-              <button onClick={() => setIsConfirm(true)} className="btn-sec">
-                Cancel
-              </button>
-              <Button type="submit" color="primary" onClick={handleUpdate}>
-                Update
-              </Button>
-              <AWSMAlert
-                status="success"
-                message="Update success!"
-                openAlert={alert}
-                closeAlert={() => setAlert(false)}
-              />
-            </ModalFooter>
           </ModalBody>
         </div>
       ) : currentCommercialError ? (
@@ -265,6 +250,21 @@ const CommercialCustomerModal = props => {
       ) : (
         <Skeleton variant="rect" width={800} height={300} />
       )}
+      <ModalFooter>
+        <button onClick={() => setIsConfirm(true)} className="btn-sec">
+          Cancel
+        </button>
+        <Button type="submit" color="primary" onClick={handleUpdate}>
+          Update
+        </Button>
+        <AWSMAlert
+          status="success"
+          message="Update success!"
+          openAlert={alert}
+          closeAlert={() => setAlert(false)}
+        />
+      </ModalFooter>
+
     </Modal>
   )
 }

@@ -9,6 +9,7 @@ import {
   NavLink,
   ModalFooter,
   ModalBody,
+  ModalHeader,
 } from "reactstrap"
 import AvailabilityTab from "./AvailabilityTab"
 import SpecificationTab from "./SpecificationTab"
@@ -126,21 +127,14 @@ class InformationModal extends Component {
         className="table-information modal-lg"
         contentClassName="modalTIContainer"
       >
-        <div className="modal-header">
+        <ModalHeader toggle={() => this.setState({isConfirm: true })}>
           <h5 className="modal-title">
             VEHICLE ID: {data.vehical_id}
             <span className="sub-title">
               Last Updated By: Nur Izzati on 3rd March 2021
             </span>
           </h5>
-
-          <button type="button" onClick={() => onCancle()} className="close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        {
-          //alert()
-        }
+        </ModalHeader>
         <AWSMAlert
           status="success"
           message=" New RT Restriction Added"
@@ -267,8 +261,9 @@ class InformationModal extends Component {
             </div>
           </div>
           </Fragment>
+          {modalFooter()}
         </ModalBody>
-        {modalFooter()}
+        
       </Modal>
     )
   }

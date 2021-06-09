@@ -3,16 +3,22 @@ import {
   GET_SALES_AND_INVENTORY_VARIANCE_CONTROL_SUCCESS,
   GET_SALES_AND_INVENTORY_TANK_STATUS_MODAL_SUCCESS,
   GET_SALES_AND_INVENTORY_TANK_STATUS_MODAL_FAILED,
+  GET_SALES_AND_INVENTORY_SUCCESS,
+  GET_SALES_AND_INVENTORY_FAIL,
+  GET_SALES_AND_INVENTORY_FILTER_FAIL,
+  GET_SALES_AND_INVENTORY_FILTER_SUCCESS,
   GET_SALES_AUDITLOG_SUCCESS,
   GET_SALES_AUDITLOG_FAIL,
   GET_DOWNLOAD_SALES_SUCCESS,
-  GET_DOWNLOAD_SALES_FAIL
+  GET_DOWNLOAD_SALES_FAIL,
 } from "./actionTypes"
 
 const initialState = {
   varianceControlData: null,
   varianceControlError: null,
-  tankStatusModalError:null,
+  mainTableData: [],
+  filter: {},
+  tankStatusModalError: null,
   auditsCom: [],
   downloadtableData: [],
 }
@@ -38,7 +44,27 @@ const SaleAndInventory = (state = initialState, action) => {
     case GET_SALES_AND_INVENTORY_TANK_STATUS_MODAL_FAILED:
       return {
         ...state,
-        tankStatusModalError:action.payload,
+        tankStatusModalError: action.payload,
+      }
+    case GET_SALES_AND_INVENTORY_SUCCESS:
+      return {
+        ...state,
+        mainTableData: action.payload,
+      }
+    case GET_SALES_AND_INVENTORY_FAIL:
+      return {
+        ...state,
+        mainTableData: action.payload,
+      }
+    case GET_SALES_AND_INVENTORY_FILTER_SUCCESS:
+      return {
+        ...state,
+        filter: action.payload,
+      }
+    case GET_SALES_AND_INVENTORY_FILTER_FAIL:
+      return {
+        ...state,
+        filter: action.payload,
       }
     case GET_SALES_AUDITLOG_SUCCESS:
       return {
@@ -59,7 +85,7 @@ const SaleAndInventory = (state = initialState, action) => {
       return {
         ...state,
         error: action.payload,
-      }      
+      }
     default:
       return state
   }

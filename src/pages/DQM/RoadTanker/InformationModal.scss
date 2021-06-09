@@ -8,7 +8,7 @@
 }
 
 .modalTIContainer{
-  height: 879px !important;
+  height: 100% !important;
 }
 
 .close {
@@ -45,6 +45,7 @@
   letter-spacing: 0;
   line-height: 26px;
   display: flex;
+  align-items: baseline;
 }
 
 .modal-lg {

@@ -203,9 +203,16 @@ export const getDownloadCommercialCustomer = params =>
 export const getDownloadSales = params =>
   axios.get(
     "https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/commercial-customer",
-    { params: params })
+    { params: params }
+    )
 
 export const getRoadTanker = params =>
+  axios.get(
+    "https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/road-tanker",
+    { params: params }
+  )
+
+export const getDownloadRoadTanker = params =>
   axios.get(
     "https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/road-tanker",
     { params: params }
@@ -329,7 +336,12 @@ export const updateSaleAndInventoryVarianceControl = () =>
 // update tank status modal
 export const updateSaleAndInventoryTankStatusModal = () =>
   put(`/sales_and_inventory_tank_status_modal`)
-
+// get sales and inventory table data
+export const getSaleAndInventory = params =>
+  axios.get(
+    "https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/retail-customer",
+    { params: params }
+  )
 export {
   getLoggedInUser,
   isUserAuthenticated,

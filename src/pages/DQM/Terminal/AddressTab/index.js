@@ -1,23 +1,13 @@
 import React from "react"
 import { Formik, Form, Field } from "formik"
 
-const initialValues = {
-  address: "Lot 26103 Jalan SP 4/31 Bandar Saujana Putra",
-  city: "Bandar Saujana Putra",
-  postcode: "42610",
-  state: "Bandar saujana Putra",
-  region: "eastern",
-  country: "Malaysia",
-  latitude: "4.2105 N",
-  longitude: "101.9758 E",
-}
-
-const AddressTab = () => {
+const AddressTab = (props) => {
+  const { data } = props
   const handleSubmit = values => {
     console.log(values)
   }
   return (
-    <Formik initialValues={initialValues} onSubmit={handleSubmit}>
+    <Formik initialValues={data} onSubmit={handleSubmit}>
       {props => {
         return (
           <Form>
@@ -29,7 +19,7 @@ const AddressTab = () => {
                   id="address"
                   className="form-control"
                   disabled
-                  value={props.values.address}
+                  value={props.values.address_1}
                 />
               </div>
               <div className="col-md-6 form-group">
@@ -73,7 +63,7 @@ const AddressTab = () => {
                   id="region"
                   className="form-control"
                   disabled
-                  value={props.values.region}
+                  value={props.values.region_name}
                 />
               </div>
               <div className="col-md-6 form-group">

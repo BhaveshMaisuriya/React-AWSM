@@ -5,6 +5,7 @@ import {
   getRoadTanker,
   getRoadTankerAuditLog,
   // getRoadTankerFilter,
+  getDownloadRoadTanker,
   getTableInformation,
   updateTableInformation,
 } from "../../../store/actions"
@@ -16,6 +17,7 @@ import {
   auditsRoadTanker,
   address,
 } from "../../../common/data/roadTanker"
+import Loader from "../../../components/Common/Loader"
 
 class RoadTanker extends Component {
   constructor(props) {
@@ -33,10 +35,13 @@ class RoadTanker extends Component {
       onGetRoadTankerAuditLog,
       onGetTableInformation,
     } = this.props
-
+    const { searchFields } = this.state
     const params = {
       limit: 10,
-      page: 0,
+      page: 0, 
+      sort_dir: "asc",
+      sort_field: "vehicle",
+      search_fields: transformArrayToString(searchFields),
     }
     const payload = {
       limit: 6,
@@ -50,6 +55,16 @@ class RoadTanker extends Component {
     //onGetTableInformation()
   }
 
+  GetonDownload = async (currentPage) => {
+    const downloadParams = {
+      limit: 10,
+      page: 0,
+      search_fields: '*',
+    }
+    const { onGetDownloadRoadTanker } = this.props;
+    await onGetDownloadRoadTanker(downloadParams);
+  }
+
   render() {
     const {
       onGetRoadTanker,
@@ -59,8 +74,9 @@ class RoadTanker extends Component {
       onUpdateTableInformation,
       // auditsRoadTanker,
       filterRoadTanker,
+      downloadRoadTanker,
       // address,
-      roadTanker
+      roadTanker,
     } = this.props
 
     const { searchFields } = this.state
@@ -68,22 +84,28 @@ class RoadTanker extends Component {
 
     return (
       <Fragment>
-        <Page
-          onGetCustomer={onGetRoadTanker}
-          onGetAuditLog={onGetRoadTankerAuditLog}
-          // onGetFilter={onGetRoadTankerFilter}
-          onGetTableInformation={onGetTableInformation}
-          onUpdateTableInformation={onUpdateTableInformation}
-          tableColumns={searchFields}
-          tableMapping={tableMapping}
-          tableData={roadTanker}
-          audits={auditsRoadTanker}
-          filter={{}}
-          address={address}
-          headerTitle="Road Tanker"
-          cardTitle="Road Tanker List"
-          modalComponent="not null"
-        />
+        {(roadTanker && roadTanker.length === 0) && <Loader /> }
+        {roadTanker && 
+          <Page
+            onGetCustomer={onGetRoadTanker}
+            onGetAuditLog={onGetRoadTankerAuditLog}
+            // onGetFilter={onGetRoadTankerFilter}
+            onGetTableInformation={onGetTableInformation}
+            onUpdateTableInformation={onUpdateTableInformation}
+            tableColumns={searchFields}
+            tableMapping={tableMapping}
+            tableData={roadTanker}
+            tableName={'Road Tanker'}
+            downloadtableData={downloadRoadTanker}
+            audits={auditsRoadTanker}
+            filter={filterRoadTanker}
+            address={address}
+            headerTitle="Road Tanker"
+            cardTitle="Road Tanker List"
+            modalComponent="not null"
+            onGetDownloadCustomer={this.GetonDownload}
+          />
+        }
       </Fragment>
     )
   }
@@ -93,7 +115,7 @@ const mapStateToProps = ({ roadTanker }) => ({
   roadTanker: roadTanker.roadTanker,
   // auditsRoadTanker: roadTanker.auditsRoadTanker,
   filterRoadTanker: roadTanker.filterRoadTanker,
-  // address: retailCustomer.address,
+  downloadRoadTanker: roadTanker.downloadRoadTanker,
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -102,6 +124,7 @@ const mapDispatchToProps = dispatch => ({
   // onGetRoadTankerFilter: payload => dispatch(getRoadTankerFilter(payload)),
   onGetTableInformation: () => dispatch(getTableInformation()),
   onUpdateTableInformation: event => dispatch(updateTableInformation(event)),
+  onGetDownloadRoadTanker: params => dispatch(getDownloadRoadTanker(params)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(RoadTanker)

@@ -1,12 +1,11 @@
 const tableColumns = [
   "vehicle",
   "owner",
-  // 'status',
+  "status_sap",
   "product_type_awsm",
   "pump_type",
   "daily_available_hours",
   "capacity",
-  // 'terminal_home_base',
   "chartering_type",
   "remarks",
 ]

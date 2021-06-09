@@ -15,6 +15,7 @@ import {
   Modal,
   ModalHeader,
 } from "reactstrap"
+import { ReactSVG } from "react-svg"
 import { Link } from "react-router-dom"
 import eyeIcon from "../../../assets/images/auditlog-eye.svg"
 import customiseTableIcon from "../../../assets/images/AWSM-Customise-Table.svg"
@@ -33,6 +34,11 @@ import SettingsIcon from "@material-ui/icons/Settings"
 import downloadExcelIcon from "../../../assets/images/AWSM-Excel.svg"
 import DownloadExcel from "../../../components/Common/DownloadExcel"
 import AWSMAlert from "../../../components/Common/AWSMAlert"
+import VarianceControl from "../SalesAndInventory/VarianceControl"
+import TankStatusModal from "../SalesAndInventory/TankStatusModal/TankStatusModal"
+import VarianceIcon from "../../../assets/images/AWSM-Variance-Control.svg"
+import AWSMDropdown from "../../../components/Common/Dropdown"
+import DatePicker from "../../../components/Common/DatePicker"
 
 const styles = {
   headerText: {
@@ -71,13 +77,15 @@ class Pages extends Component {
       error_message: "",
       alert: false,
       DownloadTableData: false,
+      varianceControl: false,
+      tankStatusModal: false,
     }
     this.toggle = this.toggle.bind(this)
     this.toggleTI = this.toggleTI.bind(this)
     this.downloadExcel = this.downloadExcel.bind(this)
   }
 
-  getCustomerData = async() => {
+  getCustomerData = async () => {
     const { onGetCustomer } = this.props
     const { currentPage, searchTerm, sortField } = this.state
     const { sortDir, searchFields, q } = this.state
@@ -90,7 +98,7 @@ class Pages extends Component {
       sort_dir: sortDir,
       sort_field: sortField,
     }
-
+    if (params.q.length < 1) delete params.q
     await onGetCustomer(params)
   }
 
@@ -281,6 +289,7 @@ class Pages extends Component {
   }
 
   render() {
+    const locationPath = window.location.pathname
     const { currentPage, rowsPerPage, searchFields } = this.state
     const {
       tableData,
@@ -322,6 +331,15 @@ class Pages extends Component {
           availableMetric={tableMapping}
           defaultMetric={searchFields}
         />
+        <VarianceControl
+          open={this.state.varianceControl}
+          closeDialog={() => this.setState({ varianceControl: false })}
+        />
+        <TankStatusModal
+          open={this.state.tankStatusModal}
+          handleClose={() => this.setState({ tankStatusModal: false })}
+          modalTitle={`Tank Status`}
+        />
         <div className="page-content">
           <div className="container-fluid">
             <div className={classes.modalHeader}>
@@ -361,6 +379,35 @@ class Pages extends Component {
                         {cardTitle}
                       </CardTitle>
                       <Divider />
+                      {locationPath === "/sales-inventory" && (
+                        <div className="d-flex align-items-center w-100 mt-4 mb-2">
+                          <div className="col-4 p-0">
+                            <label>DATE</label>
+                            <DatePicker />
+                          </div>
+                          <div className="col-6 p-0 ml-4">
+                            <label>REGION & TERMINAL</label>
+                            <div className="d-flex">
+                              <div className="col-4 p-0">
+                                <AWSMDropdown
+                                  items={[
+                                    "Northern",
+                                    "Southern",
+                                    "Central",
+                                    "Eastern",
+                                    "Sabah",
+                                    "Sarawak",
+                                  ]}
+                                  value="Northern"
+                                />
+                              </div>
+                              <div className="col-8 p-0 ml-2">
+                                <AWSMDropdown items={["KVDT"]} value="KVDT" />
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
                       <div className="d-flex justify-content-between align-items-center">
                         <SearchBar
                           searchOnClickHandler={this.getCustomerData}
@@ -379,12 +426,36 @@ class Pages extends Component {
                             } of ${tableData.total_rows} enteries`}
                           </div>
                         </div>
-                        <IconButton
-                          aria-label="delete"
-                          onClick={this.handleOpenCustomizeTable}
-                        >
-                          <img src={customiseTableIcon} />
-                        </IconButton>
+                        <div className="d-flex align-items-center">
+                          <IconButton
+                            aria-label="delete"
+                            onClick={this.handleOpenCustomizeTable}
+                          >
+                            <img src={customiseTableIcon} />
+                          </IconButton>
+                          {locationPath === "/sales-inventory" && (
+                            <>
+                              <div className="separate" />
+                              <button
+                                onClick={() =>
+                                  this.setState({ varianceControl: true })
+                                }
+                                className="btn btn-outline-primary modal-button"
+                              >
+                                Variance Control
+                                <ReactSVG src={VarianceIcon} />
+                              </button>
+                              <button
+                                className="btn btn-outline-primary ml-2 modal-button"
+                                onClick={() =>
+                                  this.setState({ tankStatusModal: true })
+                                }
+                              >
+                                Tank Status
+                              </button>
+                            </>
+                          )}
+                        </div>
                       </div>
                       <FixedColumnTable
                         headers={searchFields}

@@ -161,8 +161,9 @@
   display: flex;
   align-items: center;
   margin: 20px 0 0px 0;
+  justify-content: space-between;
   .top-page-number {
-    flex: 0 0 97%;
+    //flex: 0 0 97%;
     .enteriesText {
       margin: 0;
     }
@@ -217,5 +218,23 @@
     width: 120px;
     height: 40px;
     margin-right: 10px;
+  }
+}
+.separate {
+  margin: 0 1rem;
+  width: 1px;
+  height: 40px;
+  background-color: #EEEEEE;
+}
+.modal-button {
+  height: 40px;
+  position: relative;
+  padding-left: 25px !important;
+  padding-right: 15px !important;
+  svg {
+    position: absolute;
+    top: 13px;
+    left: 5px;
+    width: 20px;
   }
 }

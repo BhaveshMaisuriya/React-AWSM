@@ -1,6 +1,7 @@
 import React, { useState } from "react"
-import { Snackbar, Alert, IconButton } from "@material-ui/core"
+import { Snackbar, IconButton } from "@material-ui/core"
 import CloseIcon from "@material-ui/icons/Close"
+import Alert from '@material-ui/lab/Alert';
 
 const AWSMAlert = ({ status, message, openAlert, closeAlert }) => {
   let color

@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useRef } from "react"
 import { connect } from "react-redux"
 import "./VarianceControl.scss"
-import { XIcon } from "../../../../common/CustomizeTable/icons"
-import { Modal, ModalBody } from "reactstrap"
+import { Modal, ModalBody, ModalHeader } from "reactstrap"
 import ExitConfirmation from "../../../../components/Common/ExitConfirmation"
 import { getSalesAndInventoryVarianceControl, updateSalesAndInventoryVarianceControl } from "../../../../store/salesAndInventory/actions"
 import AWSMEditIcon from "../../../../assets/images/AWSM-Edit-Icon.svg"
 import { ReactSVG } from "react-svg"
+import { format } from "date-fns"
 
 const headers = [
   { label: "STATION TANK STATUS", value: "station_tank_status" },
@@ -125,16 +125,16 @@ const VarianceTable = ({ headers = [], items = [], scheduler, onChange, rowKey="
 }
 
 const VarianceControl = ({ open, scheduler, closeDialog, onChange, getSalesAndInventoryVarianceControl, varianceControlData }) => {
-  const [data, setData] = useState(varianceControlData);
+  const [data, setData] = useState({ ...varianceControlData, date: format(new Date(), "yyyy-MM-dd")});
   const [isConfirm, setIsConfirm] = useState(false);
 
   useEffect(() => {
-    setData(varianceControlData)
+    setData({ ...varianceControlData, date: format(new Date(), "yyyy-MM-dd")})
   }, [varianceControlData])
 
   useEffect(() => {
     if (open) {
-      getSalesAndInventoryVarianceControl()
+      getSalesAndInventoryVarianceControl(format(new Date(), "yyyy-MM-dd"))
     }
   }, [open])
 
@@ -171,17 +171,10 @@ const VarianceControl = ({ open, scheduler, closeDialog, onChange, getSalesAndIn
   return (
     <Modal isOpen={open} className="variance-control-modal">
       <div className="variance-control-container">
-        <div className="d-flex align-items-center justify-content-between px-4 pt-4 pb-2">
-          <h3 className="variance-label">Variance Control</h3>
-          <div className="d-flex align-items-center">
-            <div className="mr-3 variance-last-update">
-              Last Updated: Nur Izzati on 17 Mar 2021
-            </div>
-            <button className="variance-close-button" onClick={showConfirm}>
-              <XIcon />
-            </button>
-          </div>
-        </div>
+        <ModalHeader toggle={showConfirm}>
+          <h3>Variance Control</h3>
+          <span className="last-updated-sub-title flex-grow-1">Last Updated: Nur Izzati on 17 Mar 2021</span>
+        </ModalHeader>
         <ModalBody className="variance-control-content position-relative">
           {isConfirm && (
             <ExitConfirmation onExit={onExit} onCancel={onCancel}/>
@@ -244,7 +237,7 @@ const mapStateToProps = ({saleAndInventory}) => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  getSalesAndInventoryVarianceControl: () => dispatch(getSalesAndInventoryVarianceControl()),
+  getSalesAndInventoryVarianceControl: date => dispatch(getSalesAndInventoryVarianceControl(date)),
   updateSalesAndInventoryVarianceControl: data => dispatch(updateSalesAndInventoryVarianceControl(data)),
 })
 

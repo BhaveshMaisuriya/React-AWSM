@@ -34,7 +34,167 @@ import {
   UncontrolledTooltip,
 } from "reactstrap"
 import ExitConfirmation from "../../../components/Common/ExitConfirmation"
-
+const tempData = {
+  code: "12345",
+  name: "TERMINAL 1",
+  remarks: "remark",
+  address:{
+    id: 1,
+    city: "Kuala Kangsar",
+    state: "Perak",
+    country: "MYS",
+    postcode: 33000,
+    latitude: 4.76007,
+    longitude: 100.926712,
+    region_name: "North 2",
+    region_group: "Northern",
+    address_1: "LOT 3311, JALAN SULTAN ISKANDAR SHAH KUALA KANGSAR 33000 PERAK",
+    address_2: "JLN SULTAN ISKANDAR SHAH",
+    address_3: ""
+  },
+  storage: {
+    loading_bay_no: 100,
+    max_volume_threshold: 10,
+    loading_time: 100,
+    turnaround_time: 100,
+    product_1: {
+      id: 1,
+      status_awsm: "active",
+      flow_rate: 100,
+      volume_capping_date_range: {
+        id: 1,
+        type: "range",
+        time_from: "00:00:00",
+        time_to: "23:59:00",
+        days: [
+          "Monday",
+          "Tuesday"
+        ],
+        date_from: null,
+        date_to: null
+      },
+      volume_capping_date_range_2: {
+        id: 2,
+        type: "daily",
+        time_from: "00:00:00",
+        time_to: "23:59:00",
+        days: "",
+        date_from: null,
+        date_to: null
+      },
+      volume_capping_volume: 100,
+      volume_capping_remarks: "remark 1",
+      volume_capping_volume_2: 100,
+      volume_capping_remarks_2: "remark 2",
+      terminal: "12345",
+      name: "FOC - PETRONAS SPRINTA F900 10W-40 1L X 6B",
+      code: "10000001"
+    }
+  },
+  status: {
+    status_awsm: "active",
+    inactive_date_range_1: {
+      id: 1,
+      type: "range",
+      time_from: "00:00:00",
+      time_to: "23:59:00",
+      date_from: null,
+      date_to: null,
+      days: [
+        "Monday",
+        "Tuesday"
+      ]
+    },
+    terminal_operating_days_1: {
+      id: 2,
+      type: "range",
+      time_from: "00:00:00",
+      time_to: "23:59:00",
+      date_from: null,
+      date_to: null,
+      days: [
+        "Monday",
+        "Tuesday"
+      ]
+    },
+    terminal_operation_hours_1: {
+      id: 3,
+      type: "range",
+      time_from: "00:00:00",
+      time_to: "23:59:00",
+      date_from: null,
+      date_to: null,
+      days: [
+        "Monday",
+        "Tuesday"
+      ]
+    },
+    no_delivery_interval_1: {
+      id: 4,
+      type: "range",
+      time_from: "00:00:00",
+      time_to: "23:59:00",
+      date_from: null,
+      date_to: null,
+      days: [
+        "Monday",
+        "Tuesday"
+      ]
+    },
+    no_delivery_interval_2: {
+      id: 5,
+      type: "range",
+      time_from: "00:00:00",
+      time_to: "23:59:00",
+      date_from: null,
+      date_to: null,
+      days: [
+        "Monday",
+        "Tuesday"
+      ]
+    },
+    no_delivery_interval_3: {
+      id: 6,
+      type: "range",
+      time_from: "00:00:00",
+      time_to: "23:59:00",
+      date_from: null,
+      date_to: null,
+      days: [
+        "Monday",
+        "Tuesday"
+      ]
+    },
+    no_delivery_interval_4: {
+      id: 7,
+      type: "range",
+      time_from: "00:00:00",
+      time_to: "23:59:00",
+      date_from: null,
+      date_to: null,
+      days: [
+        "Monday",
+        "Tuesday"
+      ]
+    }
+  },
+  contact: {
+    supervisor: {
+      id: 5,
+      name: "NOR AZAM BIN. ABD KARIM - STATION MANAGER",
+      number: "012-3937708",
+      email: "AZAM.KARIM@KOPETRO.COM.MY",
+      position: null
+    },
+    superintendant: {
+      id: 6,
+      name: "PN  ASNIDA BT ASKAR ALI",
+      number: "013-5805799",
+      email: "PSKK1@YAHOO.COM",
+      position: null
+    }
+  }
+}
 class TerminalDetailModal extends PureComponent {
   constructor(props) {
     super(props)
@@ -221,7 +381,7 @@ class TerminalDetailModal extends PureComponent {
                       overflowX: "hidden",
                     }}
                   >
-                    <AddressTab />
+                    <AddressTab data={tempData.address} />
                   </SimpleBar>
                 </TabPane>
                 <TabPane tabId="2">
@@ -232,7 +392,7 @@ class TerminalDetailModal extends PureComponent {
                       overflowX: "hidden",
                     }}
                   >
-                    <StorageTab />
+                    <StorageTab data={tempData.storage}/>
                   </SimpleBar>
                 </TabPane>
                 <TabPane tabId="3">
@@ -243,7 +403,7 @@ class TerminalDetailModal extends PureComponent {
                       overflowX: "hidden",
                     }}
                   >
-                    <StatusTab />
+                    <StatusTab data={tempData.status}/>
                   </SimpleBar>
                 </TabPane>
                 <TabPane tabId="4">
@@ -254,23 +414,23 @@ class TerminalDetailModal extends PureComponent {
                       overflowX: "hidden",
                     }}
                   >
-                    <ContactTab />
+                    <ContactTab data={tempData.contact}/>
                   </SimpleBar>
                 </TabPane>
               </TabContent>
               </Fragment>
+              <ModalFooter>
+                <button className="btn-sec" onClick={() =>  this.setState({isConfirm: true })}>
+                  Cancel
+                </button>
+                {!isDisabledField && currentTerminal ? (
+                  <Button onClick={this.handleUpdate.bind(this)} color="primary">
+                    Update
+                  </Button>
+                ) : null}
+              </ModalFooter>
             </ModalBody>
           ) : null}
-          <ModalFooter>
-            <button className="btn-sec" onClick={() =>  this.setState({isConfirm: true })}>
-              Cancel
-            </button>
-            {!isDisabledField && currentTerminal ? (
-              <Button onClick={this.handleUpdate.bind(this)} color="primary">
-                Update
-              </Button>
-            ) : null}
-          </ModalFooter>
         </>
       </Modal>
     )

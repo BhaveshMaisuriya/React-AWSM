@@ -2,23 +2,15 @@ import React from "react"
 import { Formik, Form, Field, ErrorMessage } from "formik"
 import { isScheduler } from "../../../../helpers/auth_helper"
 
-const initialValues = {
-  supervisorName: "",
-  supervisorNumber: "",
-  supervisorEmail: "",
-  superintendantName: "",
-  superintendantNumber: "",
-  superintendantEmail: "",
-}
-
-const ContactTab = () => {
+const ContactTab = (props) => {
+  const { data } = props;
   const handleSubmit = values => {
     console.log(values)
   }
   const isDisabledField = isScheduler()
 
   return (
-    <Formik initialValues={initialValues} onSubmit={handleSubmit}>
+    <Formik initialValues={data} onSubmit={handleSubmit}>
       {props => {
         return (
           <Form onSubmit={handleSubmit}>
@@ -30,7 +22,7 @@ const ContactTab = () => {
                   name="supervisorName"
                   id="supervisorName"
                   className="form-control"
-                  value={props.values.supervisorName}
+                  value={props.values.supervisor.name}
                   placeholder="Type something here..."
                   onChange={props.handleChange}
                   disabled={isDisabledField}
@@ -42,11 +34,10 @@ const ContactTab = () => {
                   SUPERVISOR CONTACT NUMBER
                 </label>
                 <Field
-                  type="number"
                   name="supervisorNumber"
-                  id="  supervisorNumber"
+                  id="supervisorNumber"
                   className="form-control"
-                  value={props.values.supervisorNumber}
+                  value={props.values.supervisor.number}
                   placeholder="Numeric only"
                   onChange={props.handleChange}
                   disabled={isDisabledField}
@@ -62,7 +53,7 @@ const ContactTab = () => {
                   id="supervisorEmail"
                   name="supervisorEmail"
                   className="form-control"
-                  value={props.values.supervisorEmail}
+                  value={props.values.supervisor.email}
                   placeholder="Type something here..."
                   onChange={props.handleChange}
                   disabled={isDisabledField}
@@ -81,7 +72,7 @@ const ContactTab = () => {
                   id="superintendantName"
                   name="superintendantName"
                   className="form-control"
-                  value={props.values.superintendantName}
+                  value={props.values.superintendant.name}
                   placeholder="Type something here..."
                   onChange={props.handleChange}
                   disabled={isDisabledField}
@@ -93,11 +84,10 @@ const ContactTab = () => {
                   SUPERINTENDANT CONTACT NUMBER
                 </label>
                 <Field
-                  type="number"
                   id="superintendantNumber"
                   name="superintendantNumber"
                   className="form-control"
-                  value={props.values.superintendantNumber}
+                  value={props.values.superintendant.number}
                   placeholder="Numeric only"
                   onChange={props.handleChange}
                   disabled={isDisabledField}
@@ -117,7 +107,7 @@ const ContactTab = () => {
                   name="superintendantEmail"
                   className="form-control"
                   placeholder="Type something here..."
-                  value={props.values.superintendantEmail}
+                  value={props.values.superintendant.email}
                   onChange={props.handleChange}
                   disabled={isDisabledField}
                 />

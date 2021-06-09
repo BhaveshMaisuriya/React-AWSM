@@ -8,28 +8,34 @@ import {
   UPDATE_SALES_AND_INVENTORY_TANK_STATUS_MODAL,
   UPDATE_SALES_AND_INVENTORY_TANK_STATUS_MODAL_SUCCESS,
   UPDATE_SALES_AND_INVENTORY_TANK_STATUS_MODAL_FAILED,
+  GET_SALES_AND_INVENTORY,
+  GET_SALES_AND_INVENTORY_SUCCESS,
+  GET_SALES_AND_INVENTORY_FAIL,
+  GET_SALES_AND_INVENTORY_FILTER_SUCCESS,
+  GET_SALES_AND_INVENTORY_FILTER_FAIL,
   GET_SALES_AUDITLOG,
   GET_SALES_AUDITLOG_SUCCESS,
   GET_SALES_AUDITLOG_FAIL,
   GET_DOWNLOAD_SALES,
   GET_DOWNLOAD_SALES_SUCCESS,
-  GET_DOWNLOAD_SALES_FAIL
+  GET_DOWNLOAD_SALES_FAIL,
 } from "./actionTypes"
 
-export const getSalesAndInventoryVarianceControl = () => {
+export const getSalesAndInventoryVarianceControl = date => {
   return {
     type: GET_SALES_AND_INVENTORY_VARIANCE_CONTROL,
+    date,
   }
 }
 
-export const getSalesAndInventoryVarianceControlSuccess = (data) => {
+export const getSalesAndInventoryVarianceControlSuccess = data => {
   return {
     type: GET_SALES_AND_INVENTORY_VARIANCE_CONTROL_SUCCESS,
     payload: data,
   }
 }
 
-export const getSalesAndInventoryVarianceControlFailed = (error) => {
+export const getSalesAndInventoryVarianceControlFailed = error => {
   return {
     type: GET_SALES_AND_INVENTORY_VARIANCE_CONTROL_FAILED,
     payload: error,
@@ -41,40 +47,69 @@ export const updateSalesAndInventoryVarianceControl = () => {
     type: UPDATE_SALES_AND_INVENTORY_VARIANCE_CONTROL,
   }
 }
-export const updateSaleAndInventoryVarianceControlSuccess = (data) => {
+export const updateSaleAndInventoryVarianceControlSuccess = data => {
   return {
     type: UPDATE_SALES_AND_INVENTORY_VARIANCE_CONTROL_SUCCESS,
     payload: data,
   }
 }
 
-export const updateSalesAndInventoryVarianceControlFailed = (error) => {
+export const updateSalesAndInventoryVarianceControlFailed = error => {
   return {
     type: UPDATE_SALES_AND_INVENTORY_VARIANCE_CONTROL_FAILED,
     payload: error,
   }
 }
 
-export const updateSalesAndInventoryTankStatusModal = (data) => {
+export const updateSalesAndInventoryTankStatusModal = data => {
   return {
-    type:   UPDATE_SALES_AND_INVENTORY_TANK_STATUS_MODAL,
+    type: UPDATE_SALES_AND_INVENTORY_TANK_STATUS_MODAL,
     payload: data,
   }
 }
-export const updateSalesAndInventoryTankStatusModalSuccess = (data) => {
+export const updateSalesAndInventoryTankStatusModalSuccess = data => {
   return {
     type: UPDATE_SALES_AND_INVENTORY_TANK_STATUS_MODAL_SUCCESS,
     payload: data,
   }
 }
 
-export const updateSalesAndInventoryTankStatusModalFailed = (error) => {
+export const updateSalesAndInventoryTankStatusModalFailed = error => {
   return {
     type: UPDATE_SALES_AND_INVENTORY_TANK_STATUS_MODAL_FAILED,
     payload: error,
   }
 }
 
+export const getSaleAndInventory = params => {
+  return {
+    type: GET_SALES_AND_INVENTORY,
+    params,
+  }
+}
+export const getSaleAndInventorySuccess = data => {
+  return {
+    type: GET_SALES_AND_INVENTORY_SUCCESS,
+    payload: data,
+  }
+}
+
+export const getSaleAndInventoryFail = error => {
+  return {
+    type: GET_SALES_AND_INVENTORY_FAIL,
+    payload: error,
+  }
+}
+
+export const getSaleAndInventoryFilterSuccess = response => ({
+  type: GET_SALES_AND_INVENTORY_FILTER_SUCCESS,
+  payload: response,
+})
+
+export const getSaleAndInventoryFilterFail = error => ({
+  type: GET_SALES_AND_INVENTORY_FILTER_FAIL,
+  payload: error,
+})
 export const getSalesAuditLog = () => ({
   type: GET_SALES_AUDITLOG,
 })

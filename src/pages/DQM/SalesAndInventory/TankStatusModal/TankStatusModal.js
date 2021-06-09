@@ -12,8 +12,10 @@ import InputWithSuffix from "../../../../components/Common/TankStatusModal/Input
 import ExitConfirmation from "../../../../components/Common/ExitConfirmation/index"
 import "./TankStatusModal.scss"
 import { updateSalesAndInventoryTankStatusModal } from "store/actions"
+import { XIcon } from "common/CustomizeTable/icons"
 
 const mockDataOfTankStatus = {
+  date: "2020-02-06",
   tableData: [
     {
       status: "LV1",
@@ -44,7 +46,12 @@ const mockDataOfTankStatus = {
 }
 
 const TankStatusModal = props => {
-  const { modalTitle, open, handleClose, updateSalesAndInventoryTankStatusModal } = props
+  const {
+    modalTitle,
+    open,
+    handleClose,
+    updateSalesAndInventoryTankStatusModal,
+  } = props
   const [modalConfirm, setModalConfirm] = useState(false)
   const [data, setData] = useState(mockDataOfTankStatus.tableData)
   const [capacity, setCapacity] = useState(mockDataOfTankStatus.capacity)
@@ -59,118 +66,123 @@ const TankStatusModal = props => {
     data[index][fieldName] = value
     setData([...data])
   }
-  
-  const handleCancelModalConfirm = () =>{
+
+  const handleCancelModalConfirm = () => {
     setModalConfirm(false)
   }
 
-  const handleExitModalConfirm = () =>{
-      handleClose()
-      setTimeout(()=>{
-        setModalConfirm(false)
-      },500)
+  const handleExitModalConfirm = () => {
+    handleClose()
+    setTimeout(() => {
+      setModalConfirm(false)
+    }, 500)
   }
-
 
   return (
     <>
       <div className={`tank_status`}>
-        <Modal
-          isOpen={open}
-          toggle={() => setModalConfirm(true)}
-          centered={true}
-          size={`lg`}
-          className="tank_status_modal"
-        >
-          <ModalHeader toggle={() => setModalConfirm(true)}>{modalTitle}</ModalHeader>
-          <ModalBody className="position-relative">
-            { modalConfirm &&
-            <ExitConfirmation
-            onExit={handleExitModalConfirm}
-            onCancel={handleCancelModalConfirm}
-            />
-}   
-            <div>
-              <Table responsive>
-              <thead>
-                <tr>
-                  <th className="item first-item header">
-                    Station Tank Status
-                  </th>
-                  <th className="item header">Lower Value</th>
-                  <th className="item header">Upper Value</th>
-                  <th className="item last-item header">Percentage (%)</th>
-                </tr>
-              </thead>
-              <tbody>
-                {data &&
-                  data.length &&
-                  data.map((v, i) => {
-                    return (
-                      <tr key={i}>
-                        <td className="item first-item">{v?.status}</td>
-                        <td className="item">
-                          <InputWithSuffix
-                            value={v?.lower_value}
-                            TextOnChangeValue={handleOnchangeValueData}
-                            index={i}
-                            fieldName={"lower_value"}
-                            isEdit={true}
-                          />
-                        </td>
-                        <td className="item">
-                          <InputWithSuffix
-                            value={v?.upper_value}
-                            TextOnChangeValue={handleOnchangeValueData}
-                            index={i}
-                            fieldName={"upper_value"}
-                            isEdit={true}
-                          />
-                        </td>
-                        <td className="item last-item">
-                          <InputWithSuffix
-                            value={v?.percentage}
-                            TextOnChangeValue={handleOnchangeValueData}
-                            index={i}
-                            fieldName={"percentage"}
-                            isEdit={true}
-                          />
-                        </td>
+        <Modal isOpen={open} size={`lg`} className="tank-status-modal">
+          <div className="variance-control-container">
+            <div className="d-flex align-items-center justify-content-between px-4 pt-4 pb-2">
+              <h3 className="variance-label">{modalTitle}</h3>
+              <div className="d-flex align-items-center">
+                <button
+                  className="variance-close-button"
+                  onClick={() => setModalConfirm(true)}
+                >
+                  <XIcon />
+                </button>
+              </div>
+            </div>
+            <ModalBody className="variance-control-content position-relative">
+              {modalConfirm && (
+                <ExitConfirmation
+                  onExit={handleExitModalConfirm}
+                  onCancel={handleCancelModalConfirm}
+                />
+              )}
+              <div className="w-100">
+                <div className="px-2">
+                  <Table responsive className="tank-status-table">
+                    <thead>
+                      <tr>
+                        <th className="item first-item header">
+                          Station Tank Status
+                        </th>
+                        <th className="item header">Lower Value</th>
+                        <th className="item header">Upper Value</th>
+                        <th className="item last-item header">
+                          Percentage (%)
+                        </th>
                       </tr>
-                    )
-                  })}
-              </tbody>
-            </Table>
-            </div>
-            <br />
-            <div
-              style={{ paddingLeft: "1rem", color: "#000000" }}
-              className="col-md-7"
-            >
-              <p style={{ textTransform: "uppercase" }}>
-                Absolute Tank Capacity (%)
-              </p>
-              <InputWithSuffix
-                value={capacity}
-                border
-                inputType={`baseInput`}
-                TextOnChangeValue={v => setCapacity(v)}
-                isEdit={true}
-              />
-            </div>
-            <ModalFooter>
-            <Button
-              color="#fff"
-              style={{ border: "1px solid #CBEFED", color: "#00A19C" }}
-              onClick={() => setModalConfirm(true)}
-            >
-              Cancel
-            </Button>{" "}
-            <Button color="primary" onClick={handleUpdateButtonOnclick}>
-              Update
-            </Button>
-          </ModalFooter>
-          </ModalBody>
+                    </thead>
+                    <tbody>
+                      {data &&
+                        data.length &&
+                        data.map((v, i) => {
+                          return (
+                            <tr key={i}>
+                              <td className="item first-item">{v?.status}</td>
+                              <td className="item">
+                                <InputWithSuffix
+                                  value={v?.lower_value}
+                                  TextOnChangeValue={handleOnchangeValueData}
+                                  index={i}
+                                  fieldName={"lower_value"}
+                                />
+                              </td>
+                              <td className="item">
+                                <InputWithSuffix
+                                  value={v?.upper_value}
+                                  TextOnChangeValue={handleOnchangeValueData}
+                                  index={i}
+                                  fieldName={"upper_value"}
+                                />
+                              </td>
+                              <td className="item last-item">
+                                <InputWithSuffix
+                                  value={v?.percentage}
+                                  TextOnChangeValue={handleOnchangeValueData}
+                                  index={i}
+                                  fieldName={"percentage"}
+                                />
+                              </td>
+                            </tr>
+                          )
+                        })}
+                    </tbody>
+                  </Table>
+                </div>
+                <br />
+                <div className="col-md-7 capacity">
+                  <div className="capacity-title">
+                    Absolute Tank Capacity (%)
+                  </div>
+                  <InputWithSuffix
+                    value={capacity}
+                    inputType={`baseInput`}
+                    TextOnChangeValue={v => setCapacity(v)}
+                    isEdit={false}
+                    disable
+                  />
+                </div>
+                <div className="d-flex align-items-center justify-content-end mt-5 mb-3 tank-status-footer">
+                  <button
+                    className="btn btn-outline-primary px-4"
+                    onClick={() => setModalConfirm(true)}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    className="btn btn-primary ml-4 px-4"
+                    onClick={handleUpdateButtonOnclick}
+                  >
+                    Update
+                  </button>
+                </div>
+              </div>
+            </ModalBody>
+          </div>
         </Modal>
       </div>
     </>
@@ -180,10 +192,8 @@ const TankStatusModal = props => {
 const mapStateToProps = () => ({})
 
 const mapDispatchToProps = dispatch => ({
-  updateSalesAndInventoryTankStatusModal: data => dispatch(updateSalesAndInventoryTankStatusModal(data)),
+  updateSalesAndInventoryTankStatusModal: data =>
+    dispatch(updateSalesAndInventoryTankStatusModal(data)),
 })
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(TankStatusModal)
+export default connect(mapStateToProps, mapDispatchToProps)(TankStatusModal)

@@ -4,13 +4,6 @@ import styles from "./storageTab.module.css"
 import Product from "./Product"
 import { isScheduler } from "../../../../helpers/auth_helper"
 
-const initialValues = {
-  loadingBay: "",
-  maxThreshold: "",
-  loadingTime: "",
-  turnAroundTime: "",
-}
-
 const defaultProduct = {
   productName: "Lorem Ipsum",
   productCode: "Lorem Ipsum",
@@ -39,7 +32,8 @@ const fakeProducts = [
   },
 ]
 
-const StorageTab = () => {
+const StorageTab = (props) => {
+  const { data } = props
   const [showAddProduct, setShowAddProduct] = useState(false)
   const [listProducts, setListProducts] = useState(fakeProducts)
   const scheduler = isScheduler()
@@ -54,7 +48,7 @@ const StorageTab = () => {
     setListProducts([...listProducts, defaultProduct])
   }
   return (
-    <Formik initialValues={initialValues} onSubmit={handleSubmit}>
+    <Formik initialValues={data} onSubmit={handleSubmit}>
       {props => {
         return (
           <Form onSubmit={props.handleSubmit}>
@@ -66,7 +60,7 @@ const StorageTab = () => {
                   id="loadingBay"
                   type="number"
                   name="loadingBay"
-                  value={props.values.loadingBay}
+                  value={props.values.loading_bay_no}
                   placeholder="Numeric only"
                   onChange={props.handleChange}
                   disabled={scheduler}
@@ -80,7 +74,7 @@ const StorageTab = () => {
                   id="maxThreshold"
                   type="number"
                   name="maxThreshold"
-                  value={props.values.maxTheshold}
+                  value={props.values.max_volume_threshold}
                   placeholder="Numeric only"
                   onChange={props.handleChange}
                   disabled={scheduler}
@@ -96,7 +90,7 @@ const StorageTab = () => {
                   id="loadingTime"
                   type="number"
                   name="loadingTime"
-                  value={props.values.loadingTime}
+                  value={props.values.loading_time}
                   placeholder="Numeric only"
                   onChange={props.handleChange}
                   disabled={scheduler}
@@ -110,7 +104,7 @@ const StorageTab = () => {
                   id="turnAroundTime"
                   type="number"
                   name="turnAroundTime"
-                  value={props.values.turnAroundTime}
+                  value={props.values.turnaround_time}
                   placeholder="Numeric only"
                   onChange={props.handleChange}
                   disabled={scheduler}

@@ -21,7 +21,8 @@ for (let i = 0; i < 24; i++) {
   timeData.push(`${i.toString().padStart(2, "0")}:30`)
 }
 
-const TabStatus = () => {
+const TabStatus = (props) => {
+  const { data } = props
   const [statusInAWSM, setStatusInAWSM] = useState("")
   const [terminalOperatingDay, setTerminalOperatingDay] = useState("")
   const scheduler = isScheduler()

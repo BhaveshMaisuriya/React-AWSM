@@ -10,6 +10,7 @@ import {
 } from "../../../store/actions"
 import { tableColumns, tableMapping } from "./tableMapping"
 import { transformArrayToString, getCookieByKey } from "../Common/helper"
+import SalesAndInventoryModal from "./SalesAndInventoryModal"
 import RetailCustomerModal from "../RetailCustomer/RetailCustomerModal"
 import Loader from "../../../components/Common/Loader"
 
@@ -88,7 +89,7 @@ class SalesInventory extends Component {
           address={address}
           headerTitle="Sales & Inventory"
           cardTitle="Sales & Inventory List"
-          modalComponent={RetailCustomerModal}
+          modalComponent={SalesAndInventoryModal}
           onGetDownloadCustomer={this.GetonDownload}
         />
       </Fragment>

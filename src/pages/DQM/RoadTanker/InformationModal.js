@@ -53,14 +53,14 @@ class InformationModal extends Component {
   }
 
   onConfirmCancel = () => {
-    this.setState({isConfirm: false });
+    this.setState({ isConfirm: false });
   }
 
   onConfirmExit = () => {
-    this.setState({isConfirm: false });
-      if (this.props.onCancle()) {
-        this.props.onCancle()
-      }
+    this.setState({ isConfirm: false });
+    if (this.props.onCancle()) {
+      this.props.onCancle()
+    }
   }
 
   render() {
@@ -93,12 +93,12 @@ class InformationModal extends Component {
       this.setState({ data: newData })
     }
     console.log(this.state.data)
-    const { onCancle, visible } = this.props
+    const { onCancel, visible } = this.props
     const modalFooter = () => {
       const footer =
         mode === MODE.VIEW_AND_AMEND ? (
           <ModalFooter>
-            <button className="btn-sec" onClick={() => this.setState({isConfirm: true })}>
+            <button className="btn-sec" onClick={() => this.setState({ isConfirm: true })}>
               Cancel
             </button>
             <Button
@@ -127,7 +127,7 @@ class InformationModal extends Component {
         className="table-information modal-lg"
         contentClassName="modalTIContainer"
       >
-        <ModalHeader toggle={() => this.setState({isConfirm: true })}>
+        <ModalHeader toggle={() => this.setState({ isConfirm: true })}>
           <h5 className="modal-title">
             VEHICLE ID: {data.vehical_id}
             <span className="sub-title">
@@ -152,118 +152,118 @@ class InformationModal extends Component {
           )}
           <Fragment>
             <div>
-            <div className="row">
-              <div className="col-md-6 form-group">
-                <label> VEHICAL OWNER</label>
-                <input
-                  className="form-control"
-                  type="text"
-                  defaultValue={data.vehical_owner}
-                  disabled={true}
-                />
-              </div>
-              <div className="col-md-6 form-group">
-                <label>STATUS IN SAP</label>
-                <input
-                  className="form-control"
-                  type="text"
-                  defaultValue={data.status_in_sap}
-                  disabled={true}
-                />
-              </div>
-            </div>
-            <div className="row">  
-              <div className="col-md-6 form-group">
-                <label>RT CAPACITY</label>
-                <input
-                  className="form-control"
-                  type="text"
-                  defaultValue={data.rt_capacity}
-                  disabled={true}
-                />
-              </div>
-            </div>
-            <div className="row">
-              <div className="col-md-12 form-group">
-                <label> REMARKS</label>
-                <input
-                  className="form-control"
-                  type="text"
-                  defaultValue={data.remarks}
-                  disabled={
-                    (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
-                  }
-                />
-              </div>
-            </div>
-            <div>
-              <Nav tabs>
-                <NavItem
-                  className={activeTab === "1" ? "active" : null}
-                  onClick={() => {
-                    toggle("1")
-                  }}
-                >
-                  <NavLink>
-                    <span>Availability</span>
-                  </NavLink>
-                </NavItem>
-                <NavItem
-                  className={activeTab === "2" ? "active" : null}
-                  onClick={() => {
-                    toggle("2")
-                  }}
-                >
-                  <NavLink>
-                    <span>Specification</span>
-                  </NavLink>
-                </NavItem>
-                <NavItem
-                  className={activeTab === "3" ? "active" : null}
-                  onClick={() => {
-                    toggle("3")
-                  }}
-                >
-                  <NavLink>
-                    <span>Trailer</span>
-                  </NavLink>
-                </NavItem>
-              </Nav>
-              <TabContent activeTab={activeTab}>
-                <TabPane tabId="1">
-                  <AvailabilityTab
-                    mode={mode}
-                    scheduler={scheduler}
-                    data={data.availability}
-                    onChange={onFieldValueChange}
+              <div className="row">
+                <div className="col-md-6 form-group">
+                  <label> VEHICAL OWNER</label>
+                  <input
+                    className="form-control"
+                    type="text"
+                    defaultValue={data.vehical_owner}
+                    disabled={true}
                   />
-                </TabPane>
-                <TabPane tabId="2">
-                  <SpecificationTab
-                    mode={mode}
-                    scheduler={scheduler}
-                    data={data.specification}
-                    toggle={() => {
-                      toggleAlert()
+                </div>
+                <div className="col-md-6 form-group">
+                  <label>STATUS IN SAP</label>
+                  <input
+                    className="form-control"
+                    type="text"
+                    defaultValue={data.status_in_sap}
+                    disabled={true}
+                  />
+                </div>
+              </div>
+              <div className="row">
+                <div className="col-md-6 form-group">
+                  <label>RT CAPACITY</label>
+                  <input
+                    className="form-control"
+                    type="text"
+                    defaultValue={data.rt_capacity}
+                    disabled={true}
+                  />
+                </div>
+              </div>
+              <div className="row">
+                <div className="col-md-12 form-group">
+                  <label> REMARKS</label>
+                  <input
+                    className="form-control"
+                    type="text"
+                    defaultValue={data.remarks}
+                    disabled={
+                      (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
+                    }
+                  />
+                </div>
+              </div>
+              <div>
+                <Nav tabs>
+                  <NavItem
+                    className={activeTab === "1" ? "active" : null}
+                    onClick={() => {
+                      toggle("1")
                     }}
-                    onChange={onFieldValueChange}
-                  />
-                </TabPane>
-                <TabPane tabId="3">
-                  <TrailerTab
-                    mode={mode}
-                    scheduler={scheduler}
-                    data={data.trailer}
-                    onChange={onFieldValueChange}
-                  />
-                </TabPane>
-              </TabContent>
+                  >
+                    <NavLink>
+                      <span>Availability</span>
+                    </NavLink>
+                  </NavItem>
+                  <NavItem
+                    className={activeTab === "2" ? "active" : null}
+                    onClick={() => {
+                      toggle("2")
+                    }}
+                  >
+                    <NavLink>
+                      <span>Specification</span>
+                    </NavLink>
+                  </NavItem>
+                  <NavItem
+                    className={activeTab === "3" ? "active" : null}
+                    onClick={() => {
+                      toggle("3")
+                    }}
+                  >
+                    <NavLink>
+                      <span>Trailer</span>
+                    </NavLink>
+                  </NavItem>
+                </Nav>
+                <TabContent activeTab={activeTab}>
+                  <TabPane tabId="1">
+                    <AvailabilityTab
+                      mode={mode}
+                      scheduler={scheduler}
+                      data={data.availability}
+                      onChange={onFieldValueChange}
+                    />
+                  </TabPane>
+                  <TabPane tabId="2">
+                    <SpecificationTab
+                      mode={mode}
+                      scheduler={scheduler}
+                      data={data.specification}
+                      toggle={() => {
+                        toggleAlert()
+                      }}
+                      onChange={onFieldValueChange}
+                    />
+                  </TabPane>
+                  <TabPane tabId="3">
+                    <TrailerTab
+                      mode={mode}
+                      scheduler={scheduler}
+                      data={data.trailer}
+                      onChange={onFieldValueChange}
+                    />
+                  </TabPane>
+                </TabContent>
+              </div>
             </div>
-          </div>
           </Fragment>
           {modalFooter()}
         </ModalBody>
-        
+
       </Modal>
     )
   }

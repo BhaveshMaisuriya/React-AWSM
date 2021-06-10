@@ -20,7 +20,7 @@
 }
 
 .scroll {
-  width:100% !important;
+  width: 100% !important;
   overflow-x: auto;
   border-right: 1px solid #d9d9d9;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.07);
@@ -113,14 +113,22 @@ tbody td .cell-text-big {
 
 button.filter-button {
   font-size: 20px;
-  color: #BDBDBD;
+  color: #bdbdbd;
 }
 
-.table_header_fit_text{
-  .header_text{
+.table_header_fit_text {
+  .header_text {
     width: max-content;
   }
   .filter-button {
     margin: 0;
   }
+}
+
+.green-text {
+  color: #4caf50;
+}
+
+.red-text {
+  color: #d50000;
 }

@@ -12,7 +12,7 @@ import {
   Modal,
 } from "reactstrap"
 import CustomizeTableModal from "../../common/CustomizeTable"
-import TankStatusModal  from "../DQM/SalesAndInventory/TankStatusModal/TankStatusModal"
+import TankStatusModal from "../DQM/SalesAndInventory/TankStatusModal/TankStatusModal"
 const popTypes = [
   {
     field: "equal",
@@ -586,7 +586,7 @@ class DatatableTables extends Component {
       currentItem: null,
       filters: [],
       customiseModalOpen: false,
-      tankStatusModal:false,
+      tankStatusModal: false,
       varianceControl: false,
     }
   }
@@ -829,10 +829,10 @@ class DatatableTables extends Component {
                           <label>REGION & TERMINAL</label>
                           <div className="d-flex">
                             <div className="col-5 p-0">
-                              <AWSMDropdown items={["Northern", "Southern", "Central", "Eastern", "Sabah", "Sarawak"]} value="Northern"/>
+                              <AWSMDropdown items={["Northern", "Southern", "Central", "Eastern", "Sabah", "Sarawak"]} value="Northern" />
                             </div>
                             <div className="col-7 p-0 ml-2">
-                              <AWSMDropdown items={["KVDT"]} value="KVDT"/>
+                              <AWSMDropdown items={["KVDT"]} value="KVDT" />
                             </div>
                           </div>
                         </div>
@@ -840,14 +840,16 @@ class DatatableTables extends Component {
                     </div>
                     <div className="d-flex justify-content-end mt-4">
                       <button className="btn btn-outline-primary" onClick={onOpenCustomiseModal}>Customise</button>
-                      <div className="grey-text" style={{ width: "1px", backgroundColor: "gray", margin: "0 12px" }}/>
+                      <div className="grey-text" style={{ width: "1px", backgroundColor: "gray", margin: "0 12px" }} />
                       {locationPath === "/sales-inventory" && <div>
-                        <button onClick={() => this.setState({varianceControl: true})} className="btn btn-outline-primary">
+                        <button onClick={() => this.setState({ varianceControl: true })} className="btn btn-outline-primary">
                           Sales and Inventory
                         </button>
-                        <button className="btn btn-outline-primary ml-2" onClick={()=> this.setState({tankStatusModal:true})}>Tank Status</button>
-                        <VarianceControl open={this.state.varianceControl} closeDialog={() => this.setState({varianceControl: false})}/>
-                      </div>}
+                        <button className="btn btn-outline-primary ml-2" onClick={() => this.setState({ tankStatusModal: true })}>Tank Status</button>
+                        <VarianceControl open={this.state.varianceControl} closeDialog={() => this.setState({ varianceControl: false })} />
+                      </div>
+
+                      }
                     </div>
                     <MDBDataTable
                       responsive
@@ -863,7 +865,7 @@ class DatatableTables extends Component {
         </div>
         <Modal
           isOpen={this.state.modalOpen}
-          // toggle={this.tog_standard}
+        // toggle={this.tog_standard}
         >
           <div className="modal-header">
             <h5 className="modal-title mt-0" id="myModalLabel">
@@ -931,7 +933,7 @@ class DatatableTables extends Component {
             </button>
           </div>
         </Modal>
-        <TankStatusModal open={this.state.tankStatusModal} handleClose={()=>this.setState({tankStatusModal:false})} modalTitle={`Tank Status`}/>
+        <TankStatusModal open={this.state.tankStatusModal} handleClose={() => this.setState({ tankStatusModal: false })} modalTitle={`Tank Status`} />
       </React.Fragment>
     )
   }

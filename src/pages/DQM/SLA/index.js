@@ -31,7 +31,7 @@ import {
 import classnames from "classnames"
 import SLATab from "./SLATab"
 import "./sla.scss"
-import Attachments from "./Attachments"
+import Attachments from "./attachments"
 
 class SLA extends Component {
   constructor(props) {
@@ -47,8 +47,8 @@ class SLA extends Component {
 
   componentDidMount() {
     const {
-        onGetSLAItems,
-        onGetSLAAuditLog,
+      onGetSLAItems,
+      onGetSLAAuditLog,
     } = this.props
     const params = {
       limit: 10,
@@ -67,44 +67,44 @@ class SLA extends Component {
     onGetSLAAuditLog(payload)
   }
 
-    /**
-   * Handling the modal state when modal is click
+  /**
+ * Handling the modal state when modal is click
+ */
+  modalHandler = () => {
+    this.setState({
+      modal: true,
+    })
+  }
+
+  /**
+   * Handling the modal state
    */
-     modalHandler = () => {
-      this.setState({
-        modal: true,
-      })
-    }
-  
-    /**
-     * Handling the modal state
-     */
-    toggle() {
-      this.setState(prevState => ({
-        modal: !prevState.modal,
-      }))
-    }
-  
-    /**
-     * Handling to close the modal and change state
-     */
+  toggle() {
+    this.setState(prevState => ({
+      modal: !prevState.modal,
+    }))
+  }
+
+  /**
+   * Handling to close the modal and change state
+   */
   closeHandler = () => {
-      this.setState({
-        modal: false,
-      })
+    this.setState({
+      modal: false,
+    })
   }
-  
-    /**
-     * Handling the change page in Audit Log
-     */
+
+  /**
+   * Handling the change page in Audit Log
+   */
   handleChangeAuditPage = (event, currentAuditPage) => {
-      this.setState({ currentAuditPage })
+    this.setState({ currentAuditPage })
   }
-  
+
   handleOpenCustomizeTable = () => {
-      this.setState(prevState => ({
-        customizeModalOpen: !prevState.customizeModalOpen,
-      }))
+    this.setState(prevState => ({
+      customizeModalOpen: !prevState.customizeModalOpen,
+    }))
   }
 
   runAuditLogModal = () => {
@@ -148,123 +148,123 @@ class SLA extends Component {
     if (!slaData || !slaData.rbd) return (<Loader />)
     return (
       <Fragment>
-              <div className="page-content">
+        <div className="page-content">
           <div className="container-fluid">
             <div className="row">
               <div className="col-10">
-              <h3>Service Level Agreement (SLA)</h3>
+                <h4>Service Level Agreement (SLA)</h4>
 
               </div>
               <div
                 className="col-2"
               >
-               <div className="row">
-               <Link
-                  to="#"
-                  onClick={() => {
-                    this.modalHandler()
-                  }}
-                >
-                  <img src={eyeIcon} alt="info" /> View Audit Log
+                <div className="row">
+                  <Link
+                    to="#"
+                    onClick={() => {
+                      this.modalHandler()
+                    }}
+                  >
+                    <img src={eyeIcon} alt="info" /> View Audit Log
                 </Link>
-               </div>
+                </div>
               </div>
             </div>
-                  {/*  */}
-                  <Col lg={12}>
-               
-                  <Nav tabs className="nav-tabs-custom nav-sla">
-                      <NavItem>
-                        <NavLink
-                          style={{ cursor: "pointer" }}
-                          className={classnames({
-                            active: this.state.activeTab === "0",
-                          })}
-                          onClick={() => {
-                            this.toggleTabs("0")
-                          }}
-                        >
-                          <h4 className="d-none d-sm-block">RETAIL BUSINESS DIVISION (RBD)</h4>
-                        </NavLink>
-                      </NavItem>
-                      <NavItem>
-                        <NavLink
-                          style={{ cursor: "pointer" }}
-                          className={classnames({
-                            active: this.state.activeTab === "1",
-                          })}
-                          onClick={() => {
-                            this.toggleTabs("1")
-                          }}
-                        >
-                          <h4 className="d-none d-sm-block">COMMERCIAL BUSINESS DIVISION (CBD)</h4>
-                        </NavLink>
-                      </NavItem>
-                      <NavItem>
-                        <NavLink
-                          style={{ cursor: "pointer" }}
-                          className={classnames({
-                            active: this.state.activeTab === "2",
-                          })}
-                          onClick={() => {
-                            this.toggleTabs("2")
-                          }}
-                        >
-                          <h4 className="d-none d-sm-block">INTERNAL</h4>
-                        </NavLink>
-                      </NavItem>
-                      <NavItem>
-                        <NavLink
-                          style={{ cursor: "pointer" }}
-                          className={classnames({
-                            active: this.state.activeTab === "3",
-                          })}
-                          onClick={() => {
-                            this.toggleTabs("3")
-                          }}
-                        >
-                          <h4 className="d-none d-sm-block">ATTACHMENTS</h4>
-                        </NavLink>
-                      </NavItem>
-                      </Nav>
-                          <Card>
-                            <CardBody>
-                              {this.state.activeTab === '3' && 
-                                <TabContent activeTab="3" className="p-3 text-muted">
-                                   <TabPane tabId="3">
-                                      <Attachments />
-                                    </TabPane>
-                                </TabContent>
-                              }
-                              {this.state.activeTab !== '3' && 
-                              <TabContent activeTab={this.state.activeTab} className="p-3 text-muted">
+            {/*  */}
+            <Col lg={12}>
+
+              <Nav tabs className="nav-tabs-custom nav-sla">
+                <NavItem>
+                  <NavLink
+                    style={{ cursor: "pointer" }}
+                    className={classnames({
+                      active: this.state.activeTab === "0",
+                    })}
+                    onClick={() => {
+                      this.toggleTabs("0")
+                    }}
+                  >
+                    <h5 className="d-none d-sm-block">RETAIL BUSINESS DIVISION (RBD)</h5>
+                  </NavLink>
+                </NavItem>
+                <NavItem>
+                  <NavLink
+                    style={{ cursor: "pointer" }}
+                    className={classnames({
+                      active: this.state.activeTab === "1",
+                    })}
+                    onClick={() => {
+                      this.toggleTabs("1")
+                    }}
+                  >
+                    <h5 className="d-none d-sm-block">COMMERCIAL BUSINESS DIVISION (CBD)</h5>
+                  </NavLink>
+                </NavItem>
+                <NavItem>
+                  <NavLink
+                    style={{ cursor: "pointer" }}
+                    className={classnames({
+                      active: this.state.activeTab === "2",
+                    })}
+                    onClick={() => {
+                      this.toggleTabs("2")
+                    }}
+                  >
+                    <h5 className="d-none d-sm-block">INTERNAL</h5>
+                  </NavLink>
+                </NavItem>
+                <NavItem>
+                  <NavLink
+                    style={{ cursor: "pointer" }}
+                    className={classnames({
+                      active: this.state.activeTab === "3",
+                    })}
+                    onClick={() => {
+                      this.toggleTabs("3")
+                    }}
+                  >
+                    <h5 className="d-none d-sm-block">ATTACHMENTS</h5>
+                  </NavLink>
+                </NavItem>
+              </Nav>
+              <Card>
+                <CardBody>
+                  {this.state.activeTab === '3' &&
+                    <TabContent activeTab="3" className="p-3 text-muted">
+                      <TabPane tabId="3">
+                        <Attachments />
+                      </TabPane>
+                    </TabContent>
+                  }
+                  {this.state.activeTab !== '3' &&
+                    <TabContent activeTab={this.state.activeTab} className="p-3 text-muted">
                       <TabPane tabId="0">
-                      <Header title="SLA on Customer Order Fulfilment (COF) between Retail Business Division (RBD), Supply & distribution (SSD),
+                        <Header title="SLA on Customer Order Fulfilment (COF) between Retail Business Division (RBD), Supply & distribution (SSD),
 Finance Division (FDN) & Customer Experience Department"></Header>
                         <Row>
-                        <SLATab data={slaData.rbd} /> 
+                          <SLATab data={slaData.rbd} />
                         </Row>
                       </TabPane>
                       <TabPane tabId="1">
-                      <Header title="SLA on Customer Order Fulfilment (COF) between Commercial Business Division (CBD), Supply & distribution (SSD),
+                        <Header title="SLA on Customer Order Fulfilment (COF) between Commercial Business Division (CBD), Supply & distribution (SSD),
 Finance Division (FDN) & Customer Experience Department"></Header>
                         <Row>
-                        <SLATab data={slaData.cbd} /> 
+                          <SLATab data={slaData.cbd} />
                         </Row>
                       </TabPane>
                       <TabPane tabId="2">
-                      <Header title="Internal"></Header>
-                      <Row>
-                        <SLATab data={slaData.internal} /> 
+                        <Header title="Internal"></Header>
+                        <Row>
+                          <SLATab data={slaData.internal} />
                         </Row>
                       </TabPane>
                     </TabContent>
-  }
-                            </CardBody>
-                          </Card>
-                
-              </Col>
-                  {/*  */}
+                  }
+                </CardBody>
+              </Card>
+
+            </Col>
+            {/*  */}
             {this.runAuditLogModal()}
           </div>
         </div>
@@ -274,8 +274,8 @@ Finance Division (FDN) & Customer Experience Department"></Header>
 }
 
 const mapStateToProps = ({ sla }) => ({
-    slaData: sla.data,
-    slaAuditLog: sla.slaAuditLog
+  slaData: sla.data,
+  slaAuditLog: sla.slaAuditLog
 })
 
 const mapDispatchToProps = dispatch => ({

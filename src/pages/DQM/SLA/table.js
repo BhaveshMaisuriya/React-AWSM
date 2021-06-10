@@ -1,8 +1,7 @@
 import React, { useEffect, useState, useRef, Fragment } from "react"
 import cloneDeep from "lodash/cloneDeep"
-import throttle from "lodash/throttle"
-import Pagination from "rc-pagination"
-import "rc-pagination/assets/index.css"
+
+
 
 function SLATable(props) {
   const countPerPage = 10
@@ -84,11 +83,6 @@ function SLATable(props) {
         </thead>
         <tbody className="trhover">{tableData()}</tbody>
       </table>
-      <Pagination
-        onChange={updatePage}
-        current={currentPage}
-        total={tableDatas.length}
-      />
       </Fragment>
 }
     </>

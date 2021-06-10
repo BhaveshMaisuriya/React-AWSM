@@ -73,7 +73,7 @@ class Terminal extends Component {
     if (!terminalTable || terminalTable.length === 0) return ""
     return (
       <Fragment>
-        {(terminalTable && terminalTable.length === 0) && <Loader /> }
+        {(terminalTable && terminalTable.length === 0) && <Loader />}
         {terminalTable && terminalTable.list &&
           <Page
             headerTitle="Terminal"

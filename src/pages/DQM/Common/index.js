@@ -247,16 +247,13 @@ class Pages extends Component {
     const { headerTitle } = this.props
 
     const modalContent =
-      modalTI && ModalComponent && this.state.selectedItem!=null ? (
-        headerTitle === "Road Tanker" ? (
-          <InformationModal visible={true} mode={0} onCancle={this.toggleTI} />
-        ) : (
-          <ModalComponent
-            data={this.props.tableData.list[this.state.selectedItem]}
-            visible={modalTI}
-            onCancel={this.toggleTI}
-          />
-        )
+      modalTI && ModalComponent ? (
+        <ModalComponent
+          data={this.props.tableData.list[this.state.selectedItem]}
+          visible={modalTI}
+          onCancel={this.toggleTI}
+        // mode={0}
+        />
       ) : null
     return modalContent
   }
@@ -418,13 +415,12 @@ class Pages extends Component {
                       <div className="table-top-bar">
                         <div className="top-page-number">
                           <div className="enteriesText">
-                            {`${currentPage * rowsPerPage + 1} to ${
-                              tableData.total_rows -
-                                (currentPage * rowsPerPage + rowsPerPage) <
+                            {`${currentPage * rowsPerPage + 1} to ${tableData.total_rows -
+                              (currentPage * rowsPerPage + rowsPerPage) <
                               0
-                                ? tableData.total_rows
-                                : currentPage * rowsPerPage + rowsPerPage
-                            } of ${tableData.total_rows} enteries`}
+                              ? tableData.total_rows
+                              : currentPage * rowsPerPage + rowsPerPage
+                              } of ${tableData.total_rows} enteries`}
                           </div>
                         </div>
                         <div className="d-flex align-items-center">

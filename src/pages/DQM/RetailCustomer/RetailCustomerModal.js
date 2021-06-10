@@ -60,12 +60,12 @@ const RetailCustomerModal = props => {
     setAlert(true)
   }
 
-  useEffect(() => {
-    getTableInformation(data)
+  useEffect(async() => {
+    await getTableInformation(data)
     return () => {
       resetRetailTableInformation()
     }
-  }, [])
+  }, [data])
 
   useEffect(() => {
     setCurrentRetailDetail(props.currentRetailDetail)

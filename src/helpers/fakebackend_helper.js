@@ -177,9 +177,9 @@ export const getUserProfile = () => get(url.GET_USER_PROFILE)
 
 // get retail customer
 export const getRetailCustomer = params =>
-  axios.get(
+  axios.post(
     "https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/retail-customer",
-    { params: params }
+    { ...params }
   )
 
 export const getDownloadRetailCustomer = params =>
@@ -189,9 +189,9 @@ export const getDownloadRetailCustomer = params =>
   )
 
 export const getCommercialCustomer = params =>
-  axios.get(
+  axios.post(
     "https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/commercial-customer",
-    { params: params }
+    { ...params }
   )
 
 export const getDownloadCommercialCustomer = params =>
@@ -204,12 +204,12 @@ export const getDownloadSales = params =>
   axios.get(
     "https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/commercial-customer",
     { params: params }
-    )
+  )
 
 export const getRoadTanker = params =>
-  axios.get(
+  axios.post(
     "https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/road-tanker",
-    { params: params }
+    { ...params }
   )
 
 export const getDownloadRoadTanker = params =>
@@ -219,12 +219,12 @@ export const getDownloadRoadTanker = params =>
   )
 
 export const getTerminal = params =>
-  axios.get(
+  axios.post(
     "https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/terminal",
-    { params: params }
+    { ...params }
   )
 
-  export const getDownloadTerminal = params =>
+export const getDownloadTerminal = params =>
   axios.get(
     "https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/terminal",
     { params: params }
@@ -250,30 +250,28 @@ export const getRoadTankerAuditLog = payload =>
 export const getTerminalAuditLog = payload =>
   get(url.GET_TERMINAL_AUDITLOG, { payload: payload })
 
-export const getTerminalTableInformation = code => axios
-.get(
-  "https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/retail-customer/0090000039"
-)
-.then(response => response.data)
-
-// get Retail Customer Table Information
-export const getTableInformation = code =>
-  // get(`${url.GET_RETAIL_CUSTOMER_DETAIL}/${code}`)
+export const getTerminalTableInformation = code =>
   axios
     .get(
-      `https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/retail-customer/${code}`
+      "https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/retail-customer/0090000039"
     )
     .then(response => response.data)
 
+// get Retail Customer Table Information
+  export const getTableInformation = code => 
+  code !== undefined && axios.get(
+      `https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/retail-customer/${code}`,
+    )
+    .then(response => response.data)
+  
 // update Table Information
-export const updateTableInformation = event =>  {
-  console.log(event)
+export const updateTableInformation = event => {
   return axios.put(
     `https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/retail-customer/${event.ship_to_party}`,
     event
   )
 }
-  // put(url.UPDATE_TABLE_INFORMATION, event)
+// put(url.UPDATE_TABLE_INFORMATION, event)
 
 // get DQM Master Retail Cust Filter
 export const getRetailFilter = params => {
@@ -291,9 +289,9 @@ export const getTerminalFilter = params => {
 
 // export const getProducts = params => get(url.GET_PRODUCTS, { params: params })
 export const getProducts = params =>
-  axios.get(
+  axios.post(
     "https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/product",
-    { params: params }
+    { ...params }
   )
 
 export const getDownloadProducts = params =>
@@ -338,7 +336,10 @@ export const getCommercialDetail = code =>
 
 export const putCommercialDetail = data =>
   axios
-    .put(`https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/commercial-customer/${data.ship_to_party}`, data)
+    .put(
+      `https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/commercial-customer/${data.ship_to_party}`,
+      data
+    )
     .then(response => response.data)
 
 // get DQM Master Road Tanker Filter
@@ -356,9 +357,9 @@ export const updateSaleAndInventoryTankStatusModal = () =>
   put(`/sales_and_inventory_tank_status_modal`)
 // get sales and inventory table data
 export const getSaleAndInventory = params =>
-  axios.get(
+  axios.post(
     "https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/retail-customer",
-    { params: params }
+    { ...params }
   )
 
 export const getSlaItems = params => get(`${url.SLA_ITEMS}`)

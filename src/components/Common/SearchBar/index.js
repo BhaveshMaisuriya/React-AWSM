@@ -5,6 +5,7 @@ import Paper from "@material-ui/core/Paper"
 import InputBase from "@material-ui/core/InputBase"
 import IconButton from "@material-ui/core/IconButton"
 import SearchIcon from "../../../assets/images/AWSM-search.svg"
+import { isEqual } from "lodash"
 
 const styles = {
   root: {
@@ -37,19 +38,25 @@ class SearchBar extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      searchTerm: "",
+      searchBoxTextValue: "",
+      searchedTerm: "",
     }
   }
 
   handleSearchOnClick = () => {
     const { searchOnClickHandler } = this.props
-    const { searchTerm } = this.state
-    if (searchTerm !== "") searchOnClickHandler()
+    const { searchBoxTextValue, searchedTerm } = this.state
+    if (!isEqual(searchBoxTextValue, searchedTerm))
+      this.setState({ searchedTerm: searchBoxTextValue }, () =>
+        searchOnClickHandler()
+      )
   }
 
-  handleSearchOnChange = searchTerm => {
+  handleSearchOnChange = searchBoxTextValue => {
     const { searchOnChangeHandler } = this.props
-    this.setState({ searchTerm }, () => searchOnChangeHandler(searchTerm))
+    this.setState({ searchBoxTextValue }, () =>
+      searchOnChangeHandler(searchBoxTextValue)
+    )
   }
 
   render() {

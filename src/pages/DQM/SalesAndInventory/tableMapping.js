@@ -21,6 +21,10 @@ const tableMapping = {
     label: "SHIP TO COMPANY",
     apiKey: "ship_to_company",
     columnSize: 2,
+    type: "color",
+    getColor: value => {
+      return value === "G" ? "green-text" : "red-text"
+    },
   },
   station_status_sap: {
     label: "STATION STATUS IN SAP",

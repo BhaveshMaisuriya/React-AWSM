@@ -10,6 +10,7 @@ import {
   updateTableInformation,
 } from "../../../store/actions"
 import { tableColumns, tableMapping } from "./tableMapping"
+import InformationModal from "./InformationModal"
 import { transformArrayToString, getCookieByKey } from "./../Common/helper"
 import { auditsRoadTanker, address } from "../../../common/data/roadTanker"
 import Loader from "../../../components/Common/Loader"
@@ -22,6 +23,7 @@ class RoadTanker extends Component {
       searchFields: getCookieByKey(RoadTankerTableName)
         ? JSON.parse(getCookieByKey(RoadTankerTableName))
         : tableColumns,
+      isRoadTankerTIVisible: true
     }
   }
 
@@ -34,7 +36,7 @@ class RoadTanker extends Component {
     const { searchFields } = this.state
     const params = {
       limit: 10,
-      page: 0, 
+      page: 0,
       sort_dir: "asc",
       sort_field: "vehicle",
       search_fields: transformArrayToString(searchFields),
@@ -75,13 +77,13 @@ class RoadTanker extends Component {
       roadTanker,
     } = this.props
 
-    const { searchFields } = this.state
+    const { searchFields, isRoadTankerTIVisible } = this.state
     if (!roadTanker || roadTanker.length === 0) return (<Loader />)
 
     return (
       <Fragment>
-        {(roadTanker && roadTanker.length === 0) && <Loader /> }
-        {roadTanker && 
+        {(roadTanker && roadTanker.length === 0) && <Loader />}
+        {roadTanker &&
           <Page
             onGetCustomer={onGetRoadTanker}
             onGetAuditLog={onGetRoadTankerAuditLog}
@@ -98,7 +100,7 @@ class RoadTanker extends Component {
             address={address}
             headerTitle="Road Tanker"
             cardTitle="Road Tanker List"
-            modalComponent="not null"
+            modalComponent={InformationModal}
             onGetDownloadCustomer={this.GetonDownload}
           />
         }

@@ -73,7 +73,7 @@ class FixedCoulmnTable extends Component {
             dataKey={e}
             handleClickApply={this.handleClickApply}
             handleClickReset={this.handleClickReset}
-            // filterDropdownHandler={filterDropdownHandler}
+          // filterDropdownHandler={filterDropdownHandler}
           />
         </div>
       </td>
@@ -120,13 +120,18 @@ class FixedCoulmnTable extends Component {
               </div>
             </td>
           )
+        case "color":
+          return (
+            <td key={index}>
+              <div className={`${config[e].getColor(arr[`${e}_color`])}`}>
+                {arr[e]}
+              </div>
+            </td>
+          )
         default:
           return (
             <td key={index}>
               <div
-                // className={
-                //   config[e].columnSize === 1 ? "cell-text" : "cell-text-big"
-                // }
                 className="table_text_ellipsis"
                 title={isUndefined(arr[e]) ? "-" : arr[e]}
               >
@@ -180,9 +185,9 @@ FixedCoulmnTable.propType = {
 }
 
 FixedCoulmnTable.defaultProps = {
-  headerSortHandler: () => {},
+  headerSortHandler: () => { },
   // filterDropdownHandler: () => {},
-  filterApplyHandler: () => {},
+  filterApplyHandler: () => { },
 }
 
 export default FixedCoulmnTable

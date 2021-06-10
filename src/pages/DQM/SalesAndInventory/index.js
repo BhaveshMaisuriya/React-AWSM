@@ -10,7 +10,7 @@ import {
 } from "../../../store/actions"
 import { tableColumns, tableMapping } from "./tableMapping"
 import { transformArrayToString, getCookieByKey } from "../Common/helper"
-import RetailCustomerModal from "../RetailCustomer/RetailCustomerModal"
+import SalesAndInventoryModal from "./SalesAndInventoryModal"
 import Loader from "../../../components/Common/Loader"
 
 const tableName = "salesinventory-table"
@@ -88,7 +88,7 @@ class SalesInventory extends Component {
           address={address}
           headerTitle="Sales & Inventory"
           cardTitle="Sales & Inventory List"
-          modalComponent={RetailCustomerModal}
+          modalComponent={SalesAndInventoryModal}
           onGetDownloadCustomer={this.GetonDownload}
         />
       </Fragment>

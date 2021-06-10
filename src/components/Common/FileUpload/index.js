@@ -1,34 +1,46 @@
-import React, { useState } from 'react';
-import "./style.scss";
-import { DropzoneArea } from 'material-ui-dropzone'
-import PublishRoundedIcon from '@material-ui/icons/PublishRounded';
+import React, { Fragment, useCallback, useState } from "react"
+import "./style.scss"
+import { useDropzone } from "react-dropzone"
+import PublishRoundedIcon from "@material-ui/icons/PublishRounded"
+import AWSMAlert from "../AWSMAlert"
 
 export default function FileUpload(props) {
+  const [alert, setAlert] = useState(true);
 
-  const [files, setFiles] = useState([]);
-  const [dropZoneText, setDropZoneText] = useState('');
+  const onDrop = useCallback(acceptedFiles => {
+    props.allDocuments(acceptedFiles)
+  }, [])
+  const {
+    getRootProps,
+    getInputProps,
+    isDragActive,
+    acceptedFiles,
+    fileRejections,
+  } = useDropzone({ onDrop, accept: props.acceptedFormat })
 
-  const handleChange = (value) => {
-    setFiles(value);
-    props.allDocuments(value);
-  }
+  let allErrors = []
 
-  const deleteDocument = (value) => {
-    setFiles(value);
-    console.log("files::delete", value);
-  }
+  const fileRejectionItems = fileRejections.map(({ file, errors }) =>
+    errors.map(e => allErrors.push(e.message))
+  )
 
   return (
     <div className="file_upload_main">
-      <DropzoneArea
-        onChange={(files) => handleChange(files)}
-        acceptedFiles={props.acceptedFiles}
-        Icon={PublishRoundedIcon}
-        filesLimit={props.filesLimit}
-        // dropzoneText={dropZoneText}
-        onAdd={(fileObjs) => addDocument(fileObjs)}
-        onDelete={(fileObj) => deleteDocument(fileObj)}
-      />
+      <div {...getRootProps()} className="dropzone">
+        <input {...getInputProps()} />
+        <div className="UploadIcon">
+          <PublishRoundedIcon />
+        </div>
+      </div>
+      <div className="hide_div">{fileRejectionItems}</div>
+      {allErrors.length !== 0 && (
+        <AWSMAlert
+          status="error"
+          message={allErrors.join(",")}
+          openAlert={alert}
+          closeAlert={() => setAlert(false)}
+        />
+      )}
     </div>
-  );
+  )
 }

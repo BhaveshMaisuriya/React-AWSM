@@ -31,6 +31,7 @@ import {
 import classnames from "classnames"
 import SLATab from "./SLATab"
 import "./sla.scss"
+import Attachments from "./Attachments"
 
 class SLA extends Component {
   constructor(props) {
@@ -212,10 +213,31 @@ class SLA extends Component {
                           <h4 className="d-none d-sm-block">INTERNAL</h4>
                         </NavLink>
                       </NavItem>
+                      <NavItem>
+                        <NavLink
+                          style={{ cursor: "pointer" }}
+                          className={classnames({
+                            active: this.state.activeTab === "3",
+                          })}
+                          onClick={() => {
+                            this.toggleTabs("3")
+                          }}
+                        >
+                          <h4 className="d-none d-sm-block">ATTACHMENTS</h4>
+                        </NavLink>
+                      </NavItem>
                       </Nav>
                           <Card>
                             <CardBody>
-                            <TabContent activeTab={this.state.activeTab} className="p-3 text-muted">
+                              {this.state.activeTab === '3' && 
+                                <TabContent activeTab="3" className="p-3 text-muted">
+                                   <TabPane tabId="3">
+                                      <Attachments />
+                                    </TabPane>
+                                </TabContent>
+                              }
+                              {this.state.activeTab !== '3' && 
+                              <TabContent activeTab={this.state.activeTab} className="p-3 text-muted">
                       <TabPane tabId="0">
                       <Header title="SLA on Customer Order Fulfilment (COF) between Retail Business Division (RBD), Supply & distribution (SSD),
 Finance Division (FDN) & Customer Experience Department"></Header>
@@ -237,6 +259,7 @@ Finance Division (FDN) & Customer Experience Department"></Header>
                         </Row>
                       </TabPane>
                     </TabContent>
+  }
                             </CardBody>
                           </Card>
                 

@@ -35,6 +35,14 @@
   
   .sla_table {
     margin-top: 25px;
+    .action{
+      display: flex;
+      align-items: center;
+      align-content: center;
+      svg{
+        cursor: pointer;
+      }
+    }
     .Search_input {
       width: 30%;
       min-width: 200px;
@@ -75,4 +83,8 @@
         font-size: 12px;
       }
     }
+  }
+
+  .not_found{
+    text-align: center;
   }

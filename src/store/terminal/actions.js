@@ -14,6 +14,9 @@ import {
   GET_TERMINAL_FILTER,
   GET_TERMINAL_FILTER_SUCCESS,
   GET_TERMINAL_FILTER_FAIL,
+  GET_DOWNLOAD_TERMINAL,
+  GET_DOWNLOAD_TERMINAL_SUCCESS,
+  GET_DOWNLOAD_TERMINAL_FAIL
 } from "./actionTypes"
 
 export const getTerminal = params => ({
@@ -28,6 +31,21 @@ export const getTerminalSuccess = response => ({
 
 export const getTerminalFail = error => ({
   type: GET_TERMINAL_FAIL,
+  payload: error,
+})
+
+export const getDownloadTerminal = params => ({
+  type: GET_DOWNLOAD_TERMINAL,
+  params,
+})
+
+export const getDownloadTerminalSuccess = response => ({
+  type: GET_DOWNLOAD_TERMINAL_SUCCESS,
+  payload: response,
+})
+
+export const getDownloadTerminalFail = error => ({
+  type: GET_DOWNLOAD_TERMINAL_FAIL,
   payload: error,
 })
 

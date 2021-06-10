@@ -224,6 +224,12 @@ export const getTerminal = params =>
     { params: params }
   )
 
+  export const getDownloadTerminal = params =>
+  axios.get(
+    "https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/terminal",
+    { params: params }
+  )
+
 // get DQM Master Retail Cust Audit Log
 export const getRetailAuditLog = payload =>
   get(url.GET_RETAIL_AUDITLOG, { payload: payload })

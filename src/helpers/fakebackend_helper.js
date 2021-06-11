@@ -183,9 +183,9 @@ export const getRetailCustomer = params =>
   )
 
 export const getDownloadRetailCustomer = params =>
-  axios.get(
+  axios.post(
     "https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/retail-customer",
-    { params: params }
+    { ...params }
   )
 
 export const getCommercialCustomer = params =>
@@ -195,15 +195,15 @@ export const getCommercialCustomer = params =>
   )
 
 export const getDownloadCommercialCustomer = params =>
-  axios.get(
+  axios.post(
     "https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/commercial-customer",
-    { params: params }
+    { ...params }
   )
 
 export const getDownloadSales = params =>
-  axios.get(
+  axios.post(
     "https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/commercial-customer",
-    { params: params }
+    { ...params }
   )
 
 export const getRoadTanker = params =>
@@ -213,9 +213,9 @@ export const getRoadTanker = params =>
   )
 
 export const getDownloadRoadTanker = params =>
-  axios.get(
+  axios.post(
     "https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/road-tanker",
-    { params: params }
+    { ...params }
   )
 
 export const getTerminal = params =>
@@ -225,9 +225,9 @@ export const getTerminal = params =>
   )
 
 export const getDownloadTerminal = params =>
-  axios.get(
+  axios.post(
     "https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/terminal",
-    { params: params }
+    { ...params }
   )
 
 // get DQM Master Retail Cust Audit Log
@@ -259,8 +259,7 @@ export const getTerminalTableInformation = code =>
 
 // get Retail Customer Table Information
 export const getTableInformation = code =>
-  // get(`${url.GET_RETAIL_CUSTOMER_DETAIL}/${code}`)
-  axios
+  code !== undefined && axios
     .get(
       `https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/retail-customer/${code}`
     )
@@ -268,7 +267,6 @@ export const getTableInformation = code =>
 
 // update Table Information
 export const updateTableInformation = event => {
-  console.log(event)
   return axios.put(
     `https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/retail-customer/${event.ship_to_party}`,
     event
@@ -298,9 +296,9 @@ export const getProducts = params =>
   )
 
 export const getDownloadProducts = params =>
-  axios.get(
+  axios.post(
     "https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/product",
-    { params: params }
+    { ...params }
   )
 
 // get DQM Master Product Audit Log
@@ -330,7 +328,6 @@ export const updateProductDetail = payload =>
   )
 
 export const getCommercialDetail = code =>
-  // get(`${url.GET_COMMERCIAL_CUSTOMER_DETAIL}/${code}`)
   axios
     .get(
       `https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/commercial-customer/${code}`

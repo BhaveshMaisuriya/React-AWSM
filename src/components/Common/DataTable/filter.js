@@ -9,6 +9,7 @@ import Checkbox from "@material-ui/core/Checkbox"
 import SimpleBar from "simplebar-react"
 import { isNull, isUndefined } from "lodash"
 import "./datatable.scss"
+import ReplayIcon from "@material-ui/icons/Replay"
 
 const Example = React.memo(props => {
   const {
@@ -23,24 +24,36 @@ const Example = React.memo(props => {
   const [data, setData] = useState([])
   const [checkedList, setCheckedList] = useState([])
   const [checkedCount, setCheckedCount] = useState(0)
-  const toggle = () => {
-    setPopoverOpen(!popoverOpen)
-    // if (popoverOpen === false) filterDropdownHandler(dataKey)
-  }
 
+  const [count, setCount] = useState(10)
+
+  const [hasMore, setHasMore] = useState(true)
+  const [current, setCurrent] = useState([])
+
+  var rowsPerLoad = 50;
   /**
    * dataFilter should never be zero unless api fails or db has no data
    */
   useEffect(() => {
-    if(dataFilter) {
+    if (dataFilter) {
       if (!isNull(dataFilter[dataKey]) && !isUndefined(dataFilter[dataKey])) {
-        setData(
-          dataFilter[dataKey].map(item => ({
+        let alldata = []
+        dataFilter[dataKey].map((item, index) => {
+          alldata.push({
             text: item,
             checked: checkedList.length > 0 ? checkedList.includes(item) : true,
             visibility: true,
-          }))
-        )
+          })
+        })
+        setData(alldata)
+        let arr = []
+        alldata.length <= 10 && setHasMore(false);
+        alldata.map((item, index) => {
+          if (index < rowsPerLoad) {
+            arr.push(item)
+          }
+        })
+        setCurrent(arr)
         checkedList.length === 0
           ? updateCheckedCount("all")
           : updateCheckedCount("current")
@@ -139,6 +152,28 @@ const Example = React.memo(props => {
     // indeterminate icon
     return <img src={selectAllIcon} alt="icon" />
   }
+
+  const toggle = () => {
+    setPopoverOpen(!popoverOpen)
+    // if (popoverOpen === false) filterDropdownHandler(dataKey)
+  }
+
+  const getMoreData = () => {
+    if (current.length >= data.length) {
+      setHasMore(false)
+      return
+    } else {
+      let arr = [...current]
+      data.map((item, index) => {
+        if ((index + 1) > count && (index + 1) < (count + rowsPerLoad)) {
+          arr.push(item)
+        }
+      })
+      setCurrent(arr)
+      setCount(count + rowsPerLoad)
+    }
+  }
+
   return (
     <Fragment>
       <Button id={dataKey} type="button" color="link" className="filter-button">
@@ -175,10 +210,10 @@ const Example = React.memo(props => {
           >
             <SimpleBar
               autoHide={false}
-              style={{ height: "150px", width: "100%" }}
+              style={{ height: "150px", width: "100%", overflow: "auto" }}
             >
-              {data.length > 0 && !isNull(data)
-                ? data.map((row, index) => {
+              {current.length > 0 && !isNull(current)
+                ? current.map((row, index) => {
                   return (
                     row.visibility && (
                       <div
@@ -214,6 +249,17 @@ const Example = React.memo(props => {
                   )
                 })
                 : ""}
+              {hasMore && (
+                <IconButton
+                  color="primary"
+                  aria-label="Load More"
+                  component="span"
+                  className="Loadmore_Filters"
+                  onClick={getMoreData}
+                >
+                  <ReplayIcon />
+                </IconButton>
+              )}
             </SimpleBar>
             <p style={{ marginTop: "-10px" }}></p>
 

@@ -33,7 +33,7 @@ const styles = {
   },
 }
 
-class SLA extends Component {
+class Attachments extends Component {
   constructor(props) {
     super(props)
     this.allDocuments = this.allDocuments.bind(this)
@@ -137,4 +137,4 @@ const mapDispatchToProps = dispatch => ({})
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(withStyles(styles)(SLA))
+)(withStyles(styles)(Attachments))

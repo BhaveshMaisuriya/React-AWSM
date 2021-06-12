@@ -115,7 +115,7 @@ const Example = React.memo(props => {
   }
 
   function clickApply(e) {
-    const newData = [...data]
+    const newData = [...current]
     const checkedFilter = newData
       .filter(item => {
         return item.checked === true

@@ -64,7 +64,6 @@ const RetailCustomer = (state = initialState, action) => {
       }
 
     case GET_TABLE_INFORMATION_SUCCESS:
-      console.log("data::", action)
       return {
         ...state,
         currentRetailDetail: action.payload,

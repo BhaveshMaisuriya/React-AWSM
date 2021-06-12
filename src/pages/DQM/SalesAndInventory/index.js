@@ -11,6 +11,7 @@ import {
 import { tableColumns, tableMapping } from "./tableMapping"
 import { transformArrayToString, getCookieByKey } from "../Common/helper"
 import SalesAndInventoryModal from "./SalesAndInventoryModal"
+import RetailCustomerModal from "../RetailCustomer/RetailCustomerModal"
 import Loader from "../../../components/Common/Loader"
 
 const tableName = "salesinventory-table"

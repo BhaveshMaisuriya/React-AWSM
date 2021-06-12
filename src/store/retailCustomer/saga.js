@@ -62,9 +62,7 @@ function* onGetRetailAuditLog() {
 function* onGetTableInformation({ params }) {
   try {
     yield put(resetRetailTableInformation())
-    console.log("data::2", params.ship_to_party)
     const response = yield call(getTableInformation, params.ship_to_party)
-    console.log("data::3", response)
     yield put(getTableInformationSuccess(response))
   } catch (error) {
     yield put(getTableInformationFail(error))

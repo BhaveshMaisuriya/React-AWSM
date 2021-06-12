@@ -89,9 +89,9 @@ const Example = React.memo(props => {
    * @param index
    */
   function onInputChange(index) {
-    const newData = [...data]
+    const newData = [...current]
     newData[index].checked = !newData[index].checked
-    setData(newData)
+    setCurrent(newData)
     if (checkAll) {
       setCheckAll(false)
     }
@@ -111,7 +111,9 @@ const Example = React.memo(props => {
         .includes(event.target.value)
     }
     setData(newData)
+    setCurrent(newData)
   }
+
   function clickApply(e) {
     const newData = [...data]
     const checkedFilter = newData
@@ -132,9 +134,9 @@ const Example = React.memo(props => {
     toggle()
   }
   function selectAll(e) {
-    let newData = [...data]
+    let newData = [...current]
     newData = newData.map(item => ({ ...item, checked: !checkAll }))
-    setData(newData)
+    setCurrent(newData)
     setCheckAll(!checkAll)
 
     // handleClickReset(dataKey)
@@ -212,44 +214,42 @@ const Example = React.memo(props => {
               autoHide={false}
               style={{ height: "150px", width: "100%", overflow: "auto" }}
             >
-              {console.log("current::", current)}
               {current.length > 0 && !isNull(current)
                 ? current.map((row, index) => {
-                    return (
-                      row.visibility && (
-                        <div
-                          key={row.text}
-                          className={`d-flex align-items-center ${
-                            row.checked || checkAll ? "item-checked" : ""
+                  return (
+                    row.visibility && (
+                      <div
+                        key={row.text}
+                        className={`d-flex align-items-center ${row.checked || checkAll ? "item-checked" : ""
                           }`}
-                        >
-                          <FormControlLabel
-                            key={`${row}${index}`}
-                            onChange={() => onInputChange(index)}
-                            checked={checkAll || row.checked}
-                            className="checkmark"
-                            control={
-                              <Checkbox
-                                icon={<CustomIcon />}
-                                checkedIcon={<CustomIcon2 />}
-                                style={{
-                                  height: "20px",
-                                  width: "5px",
-                                  marginLeft: "15px",
-                                  marginTop: "5px",
-                                }}
-                                name={isNull(row.text) ? "-" : row.text}
-                              />
-                            }
-                            label={isNull(row.text) ? "-" : row.text}
-                          />
-                          {/* <div className="ml-100">
+                      >
+                        <FormControlLabel
+                          key={`${row}${index}`}
+                          onChange={() => onInputChange(index)}
+                          checked={checkAll || row.checked}
+                          className="checkmark"
+                          control={
+                            <Checkbox
+                              icon={<CustomIcon />}
+                              checkedIcon={<CustomIcon2 />}
+                              style={{
+                                height: "20px",
+                                width: "5px",
+                                marginLeft: "15px",
+                                marginTop: "5px",
+                              }}
+                              name={isNull(row.text) ? "-" : row.text}
+                            />
+                          }
+                          label={isNull(row.text) ? "-" : row.text}
+                        />
+                        {/* <div className="ml-100">
                             {isNull(row.text) ? "-" : row.text}
                           </div> */}
-                        </div>
-                      )
+                      </div>
                     )
-                  })
+                  )
+                })
                 : ""}
               {hasMore && (
                 <IconButton
@@ -331,8 +331,8 @@ const Example = React.memo(props => {
 
 Example.defaultProps = {
   // filterDropdownHandler: () => {},
-  handleClickApply: () => {},
-  handleClickReset: () => {},
+  handleClickApply: () => { },
+  handleClickReset: () => { },
 }
 
 export default Example

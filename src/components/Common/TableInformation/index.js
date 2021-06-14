@@ -111,7 +111,6 @@ class TableInformation extends Component {
    */
   handleUpdate = e => {
     e.preventDefault()
-    console.log("Update success")
     this.setState({
       alert: true,
     })

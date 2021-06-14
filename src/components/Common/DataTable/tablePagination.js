@@ -7,6 +7,7 @@ import ArrowRightG from "../../../assets/images/arrow-right-grey.png"
 import { withStyles } from "@material-ui/styles"
 import { Pagination, PaginationItem, PaginationLink } from "reactstrap"
 import { Divider } from "@material-ui/core"
+import "./datatable.scss"
 
 const styles = {
   // root: {

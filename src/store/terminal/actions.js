@@ -5,9 +5,9 @@ import {
   GET_TERMINAL_AUDITLOG,
   GET_TERMINAL_AUDITLOG_SUCCESS,
   GET_TERMINAL_AUDITLOG_FAIL,
-  GET_TABLE_INFORMATION,
-  GET_TABLE_INFORMATION_FAIL,
-  GET_TABLE_INFORMATION_SUCCESS,
+  GET_TERMINAL_TABLE_INFORMATION,
+  GET_TERMINAL_TABLE_INFORMATION_FAIL,
+  GET_TERMINAL_TABLE_INFORMATION_SUCCESS,
   UPDATE_TABLE_INFORMATION,
   UPDATE_TABLE_INFORMATION_SUCCESS,
   UPDATE_TABLE_INFORMATION_FAIL,
@@ -63,17 +63,18 @@ export const getTerminalAuditLogFail = error => ({
   payload: error,
 })
 
-export const getTableInformation = () => ({
-  type: GET_TABLE_INFORMATION,
+export const getTerminalTableInformation = params => ({
+  type: GET_TERMINAL_TABLE_INFORMATION,
+  params,
 })
 
-export const getTableInformationSuccess = response => ({
-  type: GET_TABLE_INFORMATION_SUCCESS,
+export const getTerminalTableInformationSuccess = response => ({
+  type: GET_TERMINAL_TABLE_INFORMATION_SUCCESS,
   payload: response,
 })
 
-export const getTableInformationFail = error => ({
-  type: GET_TABLE_INFORMATION_FAIL,
+export const getTerminalTableInformationFail = error => ({
+  type: GET_TERMINAL_TABLE_INFORMATION_FAIL,
   payload: error,
 })
 

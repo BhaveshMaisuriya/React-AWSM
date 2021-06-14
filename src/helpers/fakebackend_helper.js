@@ -253,7 +253,7 @@ export const getTerminalAuditLog = payload =>
 export const getTerminalTableInformation = code =>
   axios
     .get(
-      "https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/retail-customer/0090000039"
+      `https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/terminal/${code}`
     )
     .then(response => response.data)
 

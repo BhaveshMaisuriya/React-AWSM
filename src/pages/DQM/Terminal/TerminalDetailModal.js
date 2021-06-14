@@ -6,6 +6,7 @@ import { isScheduler } from "../../../helpers/auth_helper"
 import {
   getTableInformation,
   updateTableInformation,
+  getTerminalTableInformation,
 } from "../../../store/terminal/actions"
 import AddressTab from "./AddressTab"
 import ContactTab from "./ContactTab"
@@ -209,13 +210,12 @@ class TerminalDetailModal extends PureComponent {
   }
 
   componentDidMount() {
-    const { fetchTableInformation, data } = this.props
-    fetchTableInformation(data.ship_to_party)
+    const { getTerminalTableInformation, data } = this.props
+    getTerminalTableInformation(data)
   }
 
   handleUpdate(event) {
     if (Object.keys(this.state.updateDictionary).length > 0) {
-      console.log(this.state.updateDictionary)
       const { ship_to_party } = this.props.data
       this.props.onUpdateTableInformation({
         ship_to_party,
@@ -233,7 +233,6 @@ class TerminalDetailModal extends PureComponent {
   onFieldChange = (key, value) => {
     const newData = {...this.props.data}
     newData[key] = value;
-    console.log(newData);
   }
 
   onConfirmCancel = () => {
@@ -274,6 +273,12 @@ class TerminalDetailModal extends PureComponent {
             Last Updated By: Nur Izzati on 3rd March 2021
           </span>
         </ModalHeader>
+        {this.state.isConfirm && (
+          <ExitConfirmation
+            onExit={this.onConfirmExit}
+            onCancel={this.onConfirmCancel}
+          />
+        )}
         <>
           {currentTerminal ? (
             <ModalBody>
@@ -449,7 +454,7 @@ const mapStateToProps = ({ terminal }) => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  fetchTableInformation: params => dispatch(getTableInformation(params)),
+  getTerminalTableInformation: params => dispatch(getTerminalTableInformation(params)),
   onUpdateTableInformation: params => dispatch(updateTableInformation(params)),
 })
 

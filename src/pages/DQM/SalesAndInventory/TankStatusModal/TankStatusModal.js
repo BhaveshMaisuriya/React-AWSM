@@ -57,8 +57,6 @@ const TankStatusModal = props => {
   const [capacity, setCapacity] = useState(mockDataOfTankStatus.capacity)
 
   const handleUpdateButtonOnclick = () => {
-    console.log("data", data)
-    console.log("capacity", capacity)
     updateSalesAndInventoryTankStatusModal(data)
   }
 

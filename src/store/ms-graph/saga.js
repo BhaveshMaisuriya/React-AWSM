@@ -19,7 +19,6 @@ import {
 
 function* onGetUserProperties() {
     try {
-        console.log("ENTER TRY")
         const response = yield call(getUserProperties);
         // ADTODO
         // yield put(getUserPropertiesSuccess(response))

@@ -144,7 +144,6 @@ class SLA extends Component {
     const {
       slaData
     } = this.props
-    console.log('SLADATA', slaData)
     if (!slaData || !slaData.rbd) return (<Loader />)
     return (
       <Fragment>

@@ -3,8 +3,8 @@ import {
   GET_TERMINAL_SUCCESS,
   GET_TERMINAL_AUDITLOG_SUCCESS,
   GET_TERMINAL_AUDITLOG_FAIL,
-  GET_TABLE_INFORMATION_FAIL,
-  GET_TABLE_INFORMATION_SUCCESS,
+  GET_TERMINAL_TABLE_INFORMATION_FAIL,
+  GET_TERMINAL_TABLE_INFORMATION_SUCCESS,
   UPDATE_TABLE_INFORMATION_SUCCESS,
   UPDATE_TABLE_INFORMATION_FAIL,
   GET_TERMINAL_FILTER_SUCCESS,
@@ -61,13 +61,13 @@ const Terminal = (state = initialState, action) => {
         error: action.payload,
       }
 
-    case GET_TABLE_INFORMATION_SUCCESS:
+    case GET_TERMINAL_TABLE_INFORMATION_SUCCESS:
       return {
         ...state,
         currentTerminal: action.payload,
       }
 
-    case GET_TABLE_INFORMATION_FAIL:
+    case GET_TERMINAL_TABLE_INFORMATION_FAIL:
       return {
         ...state,
         error: action.payload,

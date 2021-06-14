@@ -12,11 +12,10 @@
 
 .container {
   display: flex;
-  // box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.07);
   padding: 0px !important;
   margin: 14px 0px 19px 0px !important;
-  // border-top: 1px solid #d9d9d9;
   max-width: 100% !important;
+  // height: 602px;
 }
 
 .scroll {
@@ -25,6 +24,7 @@
   border-right: 1px solid #d9d9d9;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.07);
   border-radius: 5px;
+  height: 620px;
 }
 
 .fixed {
@@ -32,7 +32,7 @@
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.07);
   border: 1px solid #d9d9d9;
   border-radius: 5px;
-  height: 600px;
+  height: 602px;
 }
 
 .container thead tr {
@@ -44,7 +44,7 @@
   width: 100% !important;
   border-spacing: 0;
   border-top: 1px solid #d9d9d9;
-  height: 600px;
+  height: 602px;
   td .table_text_ellipsis {
     white-space: nowrap;
     overflow: hidden;

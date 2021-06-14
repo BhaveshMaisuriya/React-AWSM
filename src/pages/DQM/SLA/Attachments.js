@@ -1,10 +1,12 @@
 import React, { Component } from "react"
+import { Link } from "react-router-dom"
 import { connect } from "react-redux"
 import { withStyles } from "@material-ui/styles"
 import {
-  Row,  
+  Row,
   Col,
 } from "reactstrap"
+import eyeIcon from "../../../assets/images/auditlog-eye.svg"
 import "./style.scss"
 import FileUpload from "../../../components/Common/FileUpload"
 import SLATable from "./table"
@@ -56,7 +58,7 @@ class Attachments extends Component {
       "Oct",
       "Nov",
       "Dec",
-    ];
+    ]
     val.map((item, index) => {
       var uploadedDate = ""
       var uploadedTime = ""

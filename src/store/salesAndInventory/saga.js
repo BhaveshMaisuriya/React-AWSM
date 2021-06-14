@@ -45,7 +45,6 @@ function* onGetSalesAndInventory({ params = {} }) {
 function* onGetSalesAndInventoryVarianceControl({ date }) {
   try {
     const response = yield call(getSaleAndInventoryVarianceControl, date)
-    console.log(response)
     yield put(getSalesAndInventoryVarianceControlSuccess(response))
   } catch (error) {
     yield put(getSalesAndInventoryVarianceControlFailed(error))

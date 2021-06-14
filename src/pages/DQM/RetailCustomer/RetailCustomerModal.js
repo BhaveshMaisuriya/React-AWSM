@@ -248,6 +248,7 @@ const RetailCustomerModal = props => {
       ) : (
         <Skeleton variant="rect" width={800} height={300} />
       )}
+      {!isConfirm && (
       <ModalFooter>
         <button onClick={() => setIsConfirm(true)} className="btn-sec">
           Cancel
@@ -262,6 +263,7 @@ const RetailCustomerModal = props => {
           closeAlert={() => setAlert(false)}
         />
       </ModalFooter>
+      )}
     </Modal>
   )
 }

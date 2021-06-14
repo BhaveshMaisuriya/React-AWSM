@@ -215,7 +215,6 @@ class TerminalDetailModal extends PureComponent {
 
   handleUpdate(event) {
     if (Object.keys(this.state.updateDictionary).length > 0) {
-      console.log(this.state.updateDictionary)
       const { ship_to_party } = this.props.data
       this.props.onUpdateTableInformation({
         ship_to_party,
@@ -233,7 +232,6 @@ class TerminalDetailModal extends PureComponent {
   onFieldChange = (key, value) => {
     const newData = {...this.props.data}
     newData[key] = value;
-    console.log(newData);
   }
 
   onConfirmCancel = () => {

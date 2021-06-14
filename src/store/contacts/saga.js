@@ -22,7 +22,6 @@ function* fetchUsers() {
 }
 
 function* fetchUserProfile() {
-  console.log("ENTER fetchUserProfile")
   try {
     const response = yield call(getUserProfile)
     yield put(getUserProfileSuccess(response))

@@ -5,7 +5,6 @@ import {
   getCommercialCustomer,
   getDownloadCommercialCustomer,
   getCommercialAuditLog,
-  // getCommercialFilter,
   getTableInformation,
   updateTableInformation,
 } from "../../../store/actions"
@@ -18,7 +17,6 @@ const CommercialCustomerTableName = "commercial-table"
 class CommercialCustomer extends Component {
   constructor(props) {
     super(props)
-    this.GetonDownload = this.GetonDownload
     this.state = {
       searchFields: getCookieByKey(CommercialCustomerTableName)
         ? JSON.parse(getCookieByKey(CommercialCustomerTableName))
@@ -30,7 +28,6 @@ class CommercialCustomer extends Component {
     const {
       onGetCommercialCustomer,
       onGetCommercialAuditLog,
-      onGetTableInformation,
     } = this.props
     const { searchFields } = this.state
     const params = {
@@ -65,7 +62,6 @@ class CommercialCustomer extends Component {
     const {
       onGetCommercialCustomer,
       onGetCommercialAuditLog,
-      // onGetCommercialFilter,
       onGetTableInformation,
       onUpdateTableInformation,
       commercialCustomer,
@@ -83,7 +79,6 @@ class CommercialCustomer extends Component {
           <Page
             onGetCustomer={onGetCommercialCustomer}
             onGetAuditLog={onGetCommercialAuditLog}
-            // onGetFilter={onGetCommercialFilter}
             onGetTableInformation={onGetTableInformation}
             onUpdateTableInformation={onUpdateTableInformation}
             tableColumns={searchFields}
@@ -116,7 +111,6 @@ const mapStateToProps = ({ commercialCustomer, retailCustomer }) => ({
 const mapDispatchToProps = dispatch => ({
   onGetCommercialCustomer: params => dispatch(getCommercialCustomer(params)),
   onGetCommercialAuditLog: payload => dispatch(getCommercialAuditLog(payload)),
-  // onGetCommercialFilter: payload => dispatch(getCommercialFilter(payload)),
   onGetTableInformation: () => dispatch(getTableInformation()),
   onUpdateTableInformation: event => dispatch(updateTableInformation(event)),
   onGetDownloadCommercialCustomer: params => dispatch(getDownloadCommercialCustomer(params)),

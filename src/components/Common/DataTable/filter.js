@@ -12,13 +12,7 @@ import "./datatable.scss"
 import ReplayIcon from "@material-ui/icons/Replay"
 
 const Example = React.memo(props => {
-  const {
-    dataFilter,
-    dataKey,
-    handleClickApply,
-    // filterDropdownHandler,
-    handleClickReset,
-  } = props
+  const { dataFilter, dataKey, handleClickApply, handleClickReset } = props
   const [popoverOpen, setPopoverOpen] = useState(false)
   const [checkAll, setCheckAll] = useState(true)
   const [data, setData] = useState([])
@@ -30,7 +24,7 @@ const Example = React.memo(props => {
   const [hasMore, setHasMore] = useState(true)
   const [current, setCurrent] = useState([])
 
-  var rowsPerLoad = 50;
+  var rowsPerLoad = 50
   /**
    * dataFilter should never be zero unless api fails or db has no data
    */
@@ -47,7 +41,7 @@ const Example = React.memo(props => {
         })
         setData(alldata)
         let arr = []
-        alldata.length <= 10 && setHasMore(false);
+        alldata.length <= 10 && setHasMore(false)
         alldata.map((item, index) => {
           if (index < rowsPerLoad) {
             arr.push(item)
@@ -89,9 +83,9 @@ const Example = React.memo(props => {
    * @param index
    */
   function onInputChange(index) {
-    const newData = [...data]
+    const newData = [...current]
     newData[index].checked = !newData[index].checked
-    setData(newData)
+    setCurrent(newData)
     if (checkAll) {
       setCheckAll(false)
     }
@@ -111,9 +105,11 @@ const Example = React.memo(props => {
         .includes(event.target.value)
     }
     setData(newData)
+    setCurrent(newData)
   }
+
   function clickApply(e) {
-    const newData = [...data]
+    const newData = [...current]
     const checkedFilter = newData
       .filter(item => {
         return item.checked === true
@@ -125,16 +121,18 @@ const Example = React.memo(props => {
     toggle()
     handleClickApply(checkedFilter, dataKey)
   }
+
   function clickReset(e) {
     handleClickReset(dataKey)
     updateCheckedCount("all")
     setCheckAll(true)
     toggle()
   }
+
   function selectAll(e) {
-    let newData = [...data]
+    let newData = [...current]
     newData = newData.map(item => ({ ...item, checked: !checkAll }))
-    setData(newData)
+    setCurrent(newData)
     setCheckAll(!checkAll)
 
     // handleClickReset(dataKey)
@@ -165,7 +163,7 @@ const Example = React.memo(props => {
     } else {
       let arr = [...current]
       data.map((item, index) => {
-        if ((index + 1) > count && (index + 1) < (count + rowsPerLoad)) {
+        if (index + 1 > count && index + 1 < count + rowsPerLoad) {
           arr.push(item)
         }
       })
@@ -205,7 +203,6 @@ const Example = React.memo(props => {
             className="pt-2"
             onSubmit={e => {
               e.preventDefault()
-              // clickApply(e)
             }}
           >
             <SimpleBar
@@ -214,40 +211,38 @@ const Example = React.memo(props => {
             >
               {current.length > 0 && !isNull(current)
                 ? current.map((row, index) => {
-                  return (
-                    row.visibility && (
-                      <div
-                        key={row.text}
-                        className={`d-flex align-items-center ${row.checked || checkAll ? "item-checked" : ""
+                    return (
+                      row.visibility && (
+                        <div
+                          key={row.text}
+                          className={`d-flex align-items-center ${
+                            row.checked || checkAll ? "item-checked" : ""
                           }`}
-                      >
-                        <FormControlLabel
-                          key={`${row}${index}`}
-                          onChange={() => onInputChange(index)}
-                          checked={checkAll || row.checked}
-                          className="checkmark"
-                          control={
-                            <Checkbox
-                              icon={<CustomIcon />}
-                              checkedIcon={<CustomIcon2 />}
-                              style={{
-                                height: "20px",
-                                width: "5px",
-                                marginLeft: "15px",
-                                marginTop: "5px",
-                              }}
-                              name={isNull(row.text) ? "-" : row.text}
-                            />
-                          }
-                          label={isNull(row.text) ? "-" : row.text}
-                        />
-                        {/* <div className="ml-100">
-                            {isNull(row.text) ? "-" : row.text}
-                          </div> */}
-                      </div>
+                        >
+                          <FormControlLabel
+                            key={`${row}${index}`}
+                            onChange={() => onInputChange(index)}
+                            checked={checkAll || row.checked}
+                            className="checkmark"
+                            control={
+                              <Checkbox
+                                icon={<CustomIcon />}
+                                checkedIcon={<CustomIcon2 />}
+                                style={{
+                                  height: "20px",
+                                  width: "5px",
+                                  marginLeft: "15px",
+                                  marginTop: "5px",
+                                }}
+                                name={isNull(row.text) ? "-" : row.text}
+                              />
+                            }
+                            label={isNull(row.text) ? "-" : row.text}
+                          />
+                        </div>
+                      )
                     )
-                  )
-                })
+                  })
                 : ""}
               {hasMore && (
                 <IconButton
@@ -328,9 +323,8 @@ const Example = React.memo(props => {
 })
 
 Example.defaultProps = {
-  // filterDropdownHandler: () => {},
-  handleClickApply: () => { },
-  handleClickReset: () => { },
+  handleClickApply: () => {},
+  handleClickReset: () => {},
 }
 
 export default Example

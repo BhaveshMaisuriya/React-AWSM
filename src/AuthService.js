@@ -90,7 +90,6 @@ export async function getAPIaccessToken() {
 
 
 export async function getGraphAccessToken() {
-    console.log("ENTER getGraphAccessToken")
     var request = {
         scopes: ["User.Read", "User.Read.All", "Directory.Read.All"]
     };

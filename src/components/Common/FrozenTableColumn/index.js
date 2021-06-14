@@ -3,7 +3,7 @@ import PropTypes from "prop-types"
 import Filter from "../DataTable/filter"
 import { Link } from "react-router-dom"
 import "./style.scss"
-import { isEqual, isNull, isUndefined } from "lodash"
+import { isEqual, isUndefined } from "lodash"
 import { Badge } from "reactstrap"
 
 class FixedCoulmnTable extends Component {
@@ -17,14 +17,10 @@ class FixedCoulmnTable extends Component {
         this.props.frozen,
         this.props.headers.length
       ),
-      modal: false,
-      //user and last time updated will be get from backend API
-      user: "Nur Izzati",
-      time: "3rd March 2021",
     }
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps) {
     if (!isEqual(this.props.headers, prevProps.headers)) {
       const fixedHeaders = this.props.headers.slice(0, this.props.frozen)
       const regularHeaders = this.props.headers.slice(
@@ -73,7 +69,6 @@ class FixedCoulmnTable extends Component {
             dataKey={e}
             handleClickApply={this.handleClickApply}
             handleClickReset={this.handleClickReset}
-          // filterDropdownHandler={filterDropdownHandler}
           />
         </div>
       </td>
@@ -178,16 +173,14 @@ FixedCoulmnTable.propType = {
   headers: PropTypes.array.isRequired,
   config: PropTypes.object.isRequired,
   headerSortHandler: PropTypes.func,
-  // filterDropdownHandler: PropTypes.func,
   filterApplyHandler: PropTypes.func,
   filterData: PropTypes.object.isRequired,
   modalPop: PropTypes.func.isRequired,
 }
 
 FixedCoulmnTable.defaultProps = {
-  headerSortHandler: () => { },
-  // filterDropdownHandler: () => {},
-  filterApplyHandler: () => { },
+  headerSortHandler: () => {},
+  filterApplyHandler: () => {},
 }
 
 export default FixedCoulmnTable

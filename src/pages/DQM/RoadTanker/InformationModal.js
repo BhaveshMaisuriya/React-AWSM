@@ -92,7 +92,6 @@ class InformationModal extends Component {
       newData[fieldName] = value
       this.setState({ data: newData })
     }
-    console.log(this.state.data)
     const { onCancel, visible } = this.props
     const modalFooter = () => {
       const footer =

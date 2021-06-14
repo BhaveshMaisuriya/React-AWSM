@@ -15,29 +15,11 @@ import NonAuthLayout from "./components/NonAuthLayout"
 // Import scss
 import "./assets/scss/theme.scss"
 
-// Import Firebase Configuration file
-// import { initFirebaseBackend } from "./helpers/firebase_helper"
-
 // Import fackbackend Configuration file
 import fakeBackend from "./helpers/AuthType/fakeBackend"
 
 // Activating fake backend
 fakeBackend()
-
-// Activating fake firebase
-// const firebaseConfig = {
-//   apiKey: process.env.REACT_APP_APIKEY,
-//   authDomain: process.env.REACT_APP_AUTHDOMAIN,
-//   databaseURL: process.env.REACT_APP_DATABASEURL,
-//   projectId: process.env.REACT_APP_PROJECTID,
-//   storageBucket: process.env.REACT_APP_STORAGEBUCKET,
-//   messagingSenderId: process.env.REACT_APP_MESSAGINGSENDERID,
-//   appId: process.env.REACT_APP_APPID,
-//   measurementId: process.env.REACT_APP_MEASUREMENTID,
-// };
-
-// init firebase backend
-// initFirebaseBackend(firebaseConfig);
 
 class App extends Component {
   constructor(props) {
@@ -66,27 +48,14 @@ class App extends Component {
     return layoutCls
   }
 
-  // onRoutechange() {
-  //   alert('hii')
-  //   setTimeout(() => {
-  //     if (document.getElementsByClassName("mm-active").length > 0) {
-  //       const currentPosition = document.getElementsByClassName("mm-active")[0]
-  //         .offsetTop
-  //       if (currentPosition > 500)
-  //         this.$refs.currentMenu.SimpleBar.getScrollElement().scrollTop =
-  //           currentPosition + 300
-  //     }
-  //   }, 300)
-  // }
-
   render() {
     const Layout = this.getLayout()
     if (!this.state.loginState && (this.state.accessToken.length == 0 || this.state.accessToken === null)) {
       console.log("LOADING")
     }
     else {
-      console.log("LOADED", this.state.loginState)
-      console.log("LOADED", this.state.accessToken)
+     // console.log("LOADED", this.state.loginState)
+     // console.log("LOADED", this.state.accessToken)
     }
 
     return (

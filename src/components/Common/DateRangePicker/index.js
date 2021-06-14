@@ -42,13 +42,6 @@ const DateRangePicker = ({
       .filter(day => day > -1)
   }
 
-  // useEffect(() => {
-  //   console.log(value)
-  //   if (onChange) {
-  //     onChange(value)
-  //   }
-  // }, [value])
-
   useEffect(() => {
     setValue(defaultValue || dateObjectTemplate)
   }, [defaultValue])

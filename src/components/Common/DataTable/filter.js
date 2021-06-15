@@ -32,7 +32,7 @@ const Example = React.memo(props => {
     if (dataFilter) {
       if (!isNull(dataFilter[dataKey]) && !isUndefined(dataFilter[dataKey])) {
         let alldata = []
-        dataFilter[dataKey].map((item, index) => {
+       typeof(dataFilter[dataKey]) === 'array' && dataFilter[dataKey].map((item, index) => {
           alldata.push({
             text: item,
             checked: checkedList.length > 0 ? checkedList.includes(item) : true,

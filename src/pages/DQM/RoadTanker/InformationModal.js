@@ -58,8 +58,8 @@ class InformationModal extends Component {
 
   onConfirmExit = () => {
     this.setState({ isConfirm: false });
-    if (this.props.onCancle()) {
-      this.props.onCancle()
+    if (this.props.onCancel()) {
+      this.props.onCancel()
     }
   }
 

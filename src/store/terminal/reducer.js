@@ -5,12 +5,12 @@ import {
   GET_TERMINAL_AUDITLOG_FAIL,
   GET_TERMINAL_TABLE_INFORMATION_FAIL,
   GET_TERMINAL_TABLE_INFORMATION_SUCCESS,
-  UPDATE_TABLE_INFORMATION_SUCCESS,
-  UPDATE_TABLE_INFORMATION_FAIL,
+  UPDATE_TERMINAL_TABLE_INFORMATION_SUCCESS,
+  UPDATE_TERMINAL_TABLE_INFORMATION_FAIL,
   GET_TERMINAL_FILTER_SUCCESS,
   GET_TERMINAL_FILTER_FAIL,
   GET_DOWNLOAD_TERMINAL_SUCCESS,
-  GET_DOWNLOAD_TERMINAL_FAIL,  
+  GET_DOWNLOAD_TERMINAL_FAIL,
 } from "./actionTypes"
 
 const initialState = {
@@ -73,7 +73,7 @@ const Terminal = (state = initialState, action) => {
         error: action.payload,
       }
 
-    case UPDATE_TABLE_INFORMATION_SUCCESS:
+    case UPDATE_TERMINAL_TABLE_INFORMATION_SUCCESS:
       return {
         ...state,
         address: state.events.map(event =>
@@ -83,7 +83,7 @@ const Terminal = (state = initialState, action) => {
         ),
       }
 
-    case UPDATE_TABLE_INFORMATION_FAIL:
+    case UPDATE_TERMINAL_TABLE_INFORMATION_FAIL:
       return {
         ...state,
         error: action.payload,

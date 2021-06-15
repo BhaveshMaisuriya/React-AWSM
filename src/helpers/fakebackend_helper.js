@@ -365,6 +365,7 @@ export const getSaleAndInventory = params =>
 export const getSlaItems = params => get(`${url.SLA_ITEMS}`)
 export const getSlaAuditLog = payload => get(url.GET_SLA_AUDITLOG, { payload })
 export const updateSlaItem = params => put(`${url.SLA_ITEMS}`)
+export const updateSlaSectionNote = notes => put(`${url.SLA_ITEMS}`, notes)
 
 export {
   getLoggedInUser,

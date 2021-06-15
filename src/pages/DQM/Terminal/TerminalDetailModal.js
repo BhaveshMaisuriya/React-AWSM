@@ -6,7 +6,6 @@ import { isScheduler } from "../../../helpers/auth_helper"
 import {
   getTableInformation,
   updateTableInformation,
-  getTerminalTableInformation,
 } from "../../../store/terminal/actions"
 import AddressTab from "./AddressTab"
 import ContactTab from "./ContactTab"
@@ -35,168 +34,6 @@ import {
   UncontrolledTooltip,
 } from "reactstrap"
 import ExitConfirmation from "../../../components/Common/ExitConfirmation"
-const tempData = {
-  code: "12345",
-  name: "TERMINAL 1",
-  remarks: "remark",
-  address:{
-    id: 1,
-    city: "Kuala Kangsar",
-    state: "Perak",
-    country: "MYS",
-    postcode: 33000,
-    latitude: 4.76007,
-    longitude: 100.926712,
-    region_name: "North 2",
-    region_group: "Northern",
-    address_1: "LOT 3311, JALAN SULTAN ISKANDAR SHAH KUALA KANGSAR 33000 PERAK",
-    address_2: "JLN SULTAN ISKANDAR SHAH",
-    address_3: ""
-  },
-  storage: {
-    loading_bay_no: 100,
-    max_volume_threshold: 10,
-    loading_time: 100,
-    turnaround_time: 100,
-    product_1: {
-      id: 1,
-      status_awsm: "active",
-      flow_rate: 100,
-      volume_capping_date_range: {
-        id: 1,
-        type: "every",
-        time_from: "00:00:00",
-        time_to: "23:59:00",
-        days: [
-          "Monday",
-          "Tuesday"
-        ],
-        date_from: null,
-        date_to: null
-      },
-      volume_capping_date_range_2: {
-        id: 2,
-        type: "daily",
-        time_from: "00:00:00",
-        time_to: "23:59:00",
-        days: "",
-        date_from: null,
-        date_to: null
-      },
-      volume_capping_volume: 100,
-      volume_capping_remarks: "remark 1",
-      volume_capping_volume_2: 100,
-      volume_capping_remarks_2: "remark 2",
-      terminal: "12345",
-      name: "FOC - PETRONAS SPRINTA F900 10W-40 1L X 6B",
-      code: "10000001"
-    }
-  },
-  status: {
-    status_awsm: "active",
-    inactive_date_range_1: {
-      id: 1,
-      type: "range",
-      time_from: "00:00:00",
-      time_to: "23:59:00",
-      date_from:  "2020-06-10",
-      date_to: "2020-07-10",
-      days: [
-        "Monday",
-        "Tuesday"
-      ]
-    },
-    terminal_operating_days_1: {
-      id: 2,
-      type: "range",
-      time_from: "00:00:00",
-      time_to: "23:59:00",
-      date_from: null,
-      date_to: null,
-      days: [
-        "Monday",
-        "Tuesday",
-        "Thursday"
-      ]
-    },
-    terminal_operation_hours_1: {
-      id: 3,
-      type: "range",
-      time_from: "00:00:00",
-      time_to: "23:59:00",
-      date_from: null,
-      date_to: null,
-      days: [
-        "Monday",
-        "Tuesday"
-      ]
-    },
-    no_delivery_interval_1: {
-      id: 4,
-      type: "range",
-      time_from: "00:00:00",
-      time_to: "23:59:00",
-      date_from:  "2020-06-10",
-      date_to: "2020-07-10",
-      days: [
-        "Monday",
-        "Tuesday"
-      ]
-    },
-    no_delivery_interval_2: {
-      id: 5,
-      type: "range",
-      time_from: "00:00:00",
-      time_to: "23:59:00",
-      date_from:  "2020-06-10",
-      date_to: "2020-07-10",
-      days: [
-        "Monday",
-        "Tuesday"
-      ]
-    },
-    no_delivery_interval_3: {
-      id: 6,
-      type: "range",
-      time_from: "00:00:00",
-      time_to: "23:59:00",
-      date_from: null,
-      date_to: null,
-      days: [
-        "Monday",
-        "Tuesday"
-      ]
-    },
-    no_delivery_interval_4: {
-      id: 7,
-      type: "range",
-      time_from: "00:00:00",
-      time_to: "23:59:00",
-      date_from: null,
-      date_to: null,
-      days: [
-        "Monday",
-        "Tuesday"
-      ]
-    }
-  },
-  contact: {
-    supervisor: {
-      id: 5,
-      name: "NOR AZAM BIN. ABD KARIM - STATION MANAGER",
-      number: "012-3937708",
-      email: "AZAM.KARIM@KOPETRO.COM.MY",
-      position: null
-    },
-    superintendant: {
-      id: 6,
-      name: "PN  ASNIDA BT ASKAR ALI",
-      number: "013-5805799",
-      email: "PSKK1@YAHOO.COM",
-      position: null
-    }
-  }
-}
 class TerminalDetailModal extends PureComponent {
   constructor(props) {
     super(props)
@@ -206,12 +43,13 @@ class TerminalDetailModal extends PureComponent {
       event: {},
       updateDictionary: {},
       isConfirm: false,
+      data:props.currentTerminal
     }
   }
 
   componentDidMount() {
-    const { getTerminalTableInformation, data } = this.props
-    getTerminalTableInformation(data)
+    const { fetchTableInformation, data } = this.props
+    fetchTableInformation(data.code)
   }
 
   handleUpdate(event) {
@@ -221,7 +59,15 @@ class TerminalDetailModal extends PureComponent {
         ship_to_party,
         body: this.state.updateDictionary,
       })
-    } else this.props.onCancel()
+    } else {
+      const { code } = this.props.data
+      const { data } = this.state
+      this.props.onUpdateTableInformation({
+        ship_to_party:code,
+        body: data,
+      })
+      // this.props.onCancel()
+    }
   }
   toggleTab = tab => {
     if (this.state.activeTab !== tab) {
@@ -231,8 +77,10 @@ class TerminalDetailModal extends PureComponent {
     }
   }
   onFieldChange = (key, value) => {
-    const newData = {...this.props.data}
+    const newData = {...this.state.data}
     newData[key] = value;
+    this.setState({data:newData})
+    console.log(newData);
   }
 
   onConfirmCancel = () => {
@@ -256,9 +104,10 @@ class TerminalDetailModal extends PureComponent {
     const { onCancel, visible, currentTerminal, data } = this.props
     const isDisabledField = isScheduler()
     return (
-      <Modal isOpen={visible} className="table-information modal-lg">
-        <ModalHeader toggle={this.toggleTI}>
-          <span
+      <Modal isOpen={visible} toggle={() =>  this.setState({isConfirm: true })} className="table-information modal-lg">
+        <ModalHeader toggle={() =>  this.setState({isConfirm: true })}>
+          <div className="header-content">
+          <div
             style={{
               height: "26px",
               color: "#000000",
@@ -267,18 +116,13 @@ class TerminalDetailModal extends PureComponent {
               lineHeight: "26px",
             }}
           >
-            TERMINAL CODE: {data.ship_to_party}
-          </span>
-          <span className="last-updated-sub-title">
+            TERMINAL CODE: {data.code}
+            <span className="last-updated-sub-title">
             Last Updated By: Nur Izzati on 3rd March 2021
           </span>
+          </div>
+          </div>
         </ModalHeader>
-        {this.state.isConfirm && (
-          <ExitConfirmation
-            onExit={this.onConfirmExit}
-            onCancel={this.onConfirmCancel}
-          />
-        )}
         <>
           {currentTerminal ? (
             <ModalBody>
@@ -292,12 +136,23 @@ class TerminalDetailModal extends PureComponent {
                 <div>
                   <div className="row">
                     <div className="col-md-6 form-group">
+                      <label>TERMINAL CODE</label>
+                      <input
+                        className="form-control"
+                        type="text"
+                        defaultValue={currentTerminal.code}
+                        disabled={true}
+                        onChange={(e) => this.onFieldChange("code", e.target.value)}
+                      />
+                    </div>
+                    <div className="col-md-6 form-group">
                       <label>TERMINAL NAME</label>
                       <input
                         className="form-control"
                         type="text"
-                        defaultValue={currentTerminal.product_name}
+                        defaultValue={currentTerminal.name}
                         disabled={true}
+                        onChange={(e) => this.onFieldChange("name", e.target.value)}
                       />
                     </div>
                   </div>
@@ -392,7 +247,7 @@ class TerminalDetailModal extends PureComponent {
                       overflowX: "hidden",
                     }}
                   >
-                    <AddressTab data={tempData.address} onChange={(value) => this.onFieldChange("address", value)}/>
+                    <AddressTab data={currentTerminal?.address} onChange={(value) => this.onFieldChange("address", value)}/>
                   </SimpleBar>
                 </TabPane>
                 <TabPane tabId="2">
@@ -403,7 +258,7 @@ class TerminalDetailModal extends PureComponent {
                       overflowX: "hidden",
                     }}
                   >
-                    <StorageTab data={tempData.storage} onChange={(value) => this.onFieldChange("storage", value)}/>
+                    <StorageTab data={currentTerminal?.storage} onChange={(value) => this.onFieldChange("storage", value)}/>
                   </SimpleBar>
                 </TabPane>
                 <TabPane tabId="3">
@@ -414,7 +269,7 @@ class TerminalDetailModal extends PureComponent {
                       overflowX: "hidden",
                     }}
                   >
-                    <StatusTab data={tempData.status} onChange={(value) => this.onFieldChange("status", value)}/>
+                    <StatusTab data={currentTerminal?.status} onChange={(value) => this.onFieldChange("status", value)}/>
                   </SimpleBar>
                 </TabPane>
                 <TabPane tabId="4">
@@ -425,7 +280,7 @@ class TerminalDetailModal extends PureComponent {
                       overflowX: "hidden",
                     }}
                   >
-                    <ContactTab data={tempData.contact} onChange={(value) => this.onFieldChange("contact", value)}/>
+                    <ContactTab data={currentTerminal?.contact} onChange={(value) => this.onFieldChange("contact", value)}/>
                   </SimpleBar>
                 </TabPane>
               </TabContent>
@@ -454,7 +309,7 @@ const mapStateToProps = ({ terminal }) => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  getTerminalTableInformation: params => dispatch(getTerminalTableInformation(params)),
+  fetchTableInformation: params => dispatch(getTableInformation(params)),
   onUpdateTableInformation: params => dispatch(updateTableInformation(params)),
 })
 

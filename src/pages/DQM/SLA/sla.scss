@@ -1,16 +1,95 @@
 .nav-sla {
-    margin-top: 32px;
+  margin-top: 32px;
 }
+
 .nav-sla .nav-item .nav-link.active {
-    background-color: transparent;
-    h4 {
-        color: #008F8A;
-    }
+  background-color: transparent;
+
+  h4 {
+    color: #008F8A;
+  }
 }
+
 .nav-sla-tab .nav-item .nav-link {
-    color: white;
+  color: white;
+
+  &.active {
+    color: #7F7F7F;
+  }
+
+  font-size: 14px;
+  font-family: Museo Sans, serif;
+  line-height: 17px;
 }
 
 .sla-tab-add {
-    color: #008F8A;
+  color: #008F8A;
+}
+
+.sla-title {
+  font-weight: 700;
+  color: #333333;
+  font-family: Museo Sans, serif;
+}
+
+
+.sla-tab-add-container {
+  .sla-tab-add-note {
+    h4 {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 96px;
+      color: #009E8E;
+      font-size: 18px;
+      font-family: Museo Sans, serif;
+      font-weight: 500;
+      background-color: #F9F9F9;
+      border: 1px dashed #00A19C;
+      border-radius: 7px;
+      cursor: pointer;
+    }
+
+    hr {
+      margin-bottom: 1.5rem;
+    }
+  }
+
+  .note-title {
+    h4 {
+      color: #333333;
+      font-size: 18px;
+      font-family: Museo Sans, serif;
+      font-weight: 700;
+    }
+
+    button {
+      color: #9EA0A5;
+    }
+  }
+
+  .add-note-content-container {
+    .ck-rounded-corners {
+      border: none !important;
+    }
+
+    .ck-toolbar {
+      border: none !important;
+    }
+
+
+    border: 1px solid #00A19C;
+    padding-bottom: 1.5rem;
+    background-color: rgb(240, 249, 249);
+
+    .ck-editor__editable {
+      background-color: rgb(240, 249, 249) !important;
+      border: none !important;
+      box-shadow: none !important;
+    }
+  }
+
+  .ck .ck-toolbar {
+    border: none !important;
+  }
 }

@@ -15,7 +15,7 @@
         <g
                 id="AWSM-Calendar"
                 transform="translate(-3.000000, -3.000000)"
-                fill="#999999"
+                fill="currentColor"
                 fill-rule="nonzero"
         >
             <g id="edit" transform="translate(3.000000, 3.000000)">

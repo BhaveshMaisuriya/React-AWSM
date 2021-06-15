@@ -4,7 +4,7 @@ import {
   GET_TERMINAL,
   GET_TERMINAL_AUDITLOG,
   GET_TERMINAL_TABLE_INFORMATION,
-  UPDATE_TABLE_INFORMATION,
+  UPDATE_TERMINAL_TABLE_INFORMATION,
   // GET_TERMINAL_FILTER,
   GET_DOWNLOAD_TERMINAL,
 } from "./actionTypes"
@@ -14,8 +14,8 @@ import {
   getTerminalFail,
   getTerminalAuditLogSuccess,
   getTerminalAuditLogFail,
-  getTerminalTableInformationSuccess,
-  getTerminalTableInformationFail,
+  getTableInformationSuccess,
+  getTableInformationFail,
   updateTableInformationSuccess,
   updateTableInformationFail,
   getTerminalFilterSuccess,
@@ -27,8 +27,9 @@ import {
 import {
   getTerminal,
   getTerminalAuditLog,
-  getTerminalTableInformation,
+  getTableInformation,
   updateTableInformation,
+  getTerminalTableInformation,
   getDownloadTerminal,
   // getTerminalFilter,
 } from "../../helpers/fakebackend_helper"
@@ -61,12 +62,12 @@ function* onGetTerminalAuditLog() {
   }
 }
 
-function* onGetTerminalTableInformation({ params }) {
+function* fetchTableInformation({ code }) {
   try {
-    const response = yield call(getTerminalTableInformation, params.code)
-    yield put(getTerminalTableInformationSuccess(response))
+    const response = yield call(getTerminalTableInformation, code)
+    yield put(getTableInformationSuccess(response))
   } catch (error) {
-    yield put(getTerminalTableInformationFail(error))
+    yield put(getTableInformationFail(error))
   }
 }
 
@@ -96,8 +97,8 @@ function* onUpdateTableInformation({ payload: event }) {
 function* terminalSaga() {
   yield takeLatest(GET_TERMINAL, onGetTerminal)
   yield takeLatest(GET_TERMINAL_AUDITLOG, onGetTerminalAuditLog)
-  yield takeLatest(GET_TERMINAL_TABLE_INFORMATION, onGetTerminalTableInformation)
-  yield takeEvery(UPDATE_TABLE_INFORMATION, onUpdateTableInformation)
+  yield takeLatest(GET_TERMINAL_TABLE_INFORMATION, fetchTableInformation)
+  yield takeEvery(UPDATE_TERMINAL_TABLE_INFORMATION, onUpdateTableInformation)
   yield takeEvery(GET_DOWNLOAD_TERMINAL, onGetDownloadTerminal)
   // yield takeLatest(GET_TERMINAL_FILTER, onGetTerminalFilter)
 }

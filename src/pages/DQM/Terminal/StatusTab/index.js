@@ -76,16 +76,20 @@ const TabStatus = props => {
     setData(newData)
   }
 
+  
   const onchangeOperationHandler = event => {
-    const index = openTime1.findIndex(item => item.name === event.target.name)
+    const index = openTime1.findIndex(e => e.name === event.name)
+    if (index < 0) {
+      return
+    }
     const newDays = [...openTime1]
-    newDays[index].checked = event.target.checked
+    newDays[index].checked = !newDays[index].checked
     setOpenTime1(() => newDays)
     setData({
       ...data,
       terminal_operating_days_1: {
         ...data.terminal_operating_days_1,
-        days: openTime1.filter(i => i.checked === true).map(i => i.name),
+        days: openTime1.filter(i => i.checked).map(i => i.name).join(","),
       },
     })
   }
@@ -100,7 +104,7 @@ const TabStatus = props => {
         <div className="col-12 col-sm-6">
           <label>STATUS IN AWSM</label>
           <AWSMDropdown
-            value={data.status_awsm}
+            value={data?.status_awsm}
             items={STATUS_IN_AWSM}
             onChange={value => onchangeHandler("status_awsm", value)}
             disabled={scheduler}
@@ -112,7 +116,7 @@ const TabStatus = props => {
           <DateRangePicker
             range={true}
             onChange={value => onchangeHandler("inactive_date_range_1", value)}
-            defaultValue={data.inactive_date_range_1}
+            defaultValue={data?.inactive_date_range_1}
             disabled={scheduler}
           />
         </div>
@@ -130,8 +134,8 @@ const TabStatus = props => {
                 type="text"
                 label="TERMINAL OPERATING DAY"
                 value={
-                  data.terminal_operating_days_1 &&
-                  data.terminal_operating_days_1.days.length !== 0
+                  data?.terminal_operating_days_1 &&
+                  data?.terminal_operating_days_1.days.length !== 0
                     ? actualOpenTime1.map(i => i.name)
                     : "Select day(s)"
                 }
@@ -149,7 +153,7 @@ const TabStatus = props => {
         <div className="col-12 col-sm-3">
           <label>OPERATION HOURS (FROM)</label>
           <TimePicker
-            value={data.terminal_operating_days_1.time_from}
+            value={data?.terminal_operating_days_1?.time_from}
             onChange={value =>
               onchangeHandler("terminal_operating_days_1.time_from", value)
             }
@@ -160,7 +164,7 @@ const TabStatus = props => {
         <div className="col-12 col-sm-3">
           <label>OPERATION HOURS (TO)</label>
           <TimePicker
-            value={data.terminal_operating_days_1.time_to}
+            value={data?.terminal_operating_days_1?.time_to}
             onChange={value =>
               onchangeHandler("terminal_operating_days_1.time_to", value)
             }
@@ -179,7 +183,7 @@ const TabStatus = props => {
               onChange={value =>
                 onchangeHandler("no_delivery_interval_1", value)
               }
-              defaultValue={data.no_delivery_interval_1}
+              defaultValue={data?.no_delivery_interval_1}
               disabled={scheduler}
             />
           </div>
@@ -190,7 +194,7 @@ const TabStatus = props => {
               onChange={value =>
                 onchangeHandler("no_delivery_interval_1.time_from", value)
               }
-              value={data.no_delivery_interval_1.time_from}
+              value={data?.no_delivery_interval_1?.time_from}
               disabled={scheduler}
             />
           </div>
@@ -201,7 +205,7 @@ const TabStatus = props => {
               onChange={value =>
                 onchangeHandler("no_delivery_interval_1.time_to", value)
               }
-              value={data.no_delivery_interval_1.time_to}
+              value={data?.no_delivery_interval_1?.time_to}
               disabled={scheduler}
             />
           </div>
@@ -214,7 +218,7 @@ const TabStatus = props => {
               onChange={value =>
                 onchangeHandler("no_delivery_interval_2", value)
               }
-              defaultValue={data.no_delivery_interval_2}
+              defaultValue={data?.no_delivery_interval_2}
               disabled={scheduler}
             />
           </div>
@@ -225,7 +229,7 @@ const TabStatus = props => {
               onChange={value =>
                 onchangeHandler("no_delivery_interval_2.time_from", value)
               }
-              value={data.no_delivery_interval_2.time_from}
+              value={data?.no_delivery_interval_2?.time_from}
               disabled={scheduler}
             />
           </div>
@@ -236,7 +240,7 @@ const TabStatus = props => {
               onChange={value =>
                 onchangeHandler("data.no_delivery_interval_2.time_to", value)
               }
-              value={data.no_delivery_interval_2.time_to}
+              value={data?.no_delivery_interval_2?.time_to}
               disabled={scheduler}
             />
           </div>

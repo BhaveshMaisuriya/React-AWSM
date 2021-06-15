@@ -4,6 +4,7 @@ import {
     GET_SLA_AUDITLOG,
     GET_SLA_ITEMS,
     UPDATE_SLA_DETAIL,
+    UPDATE_SLA_SECTION_NOTE,
 } from "./actionTypes"
 
 import {
@@ -13,12 +14,15 @@ import {
     getSlaAuditLogFail,
     updateSlaDetailSuccess,
     updateSlaDetailFail,
+    updateSlaSectionNoteSuccess,
+    updateSlaSectionNoteFail,
 } from "./actions"
 
 import {
   getSlaItems,
   getSlaAuditLog,
   updateSlaItem,
+  updateSlaSectionNote,
 } from "../../helpers/fakebackend_helper"
 
 function* onGetSLAAuditLog() {
@@ -49,10 +53,21 @@ function* onUpdateSLAItem(action) {
   }
 }
 
+function* onUpdateSLASectionNote({ params }) {
+  try {
+    console.log({params})
+    const response = yield call(updateSlaSectionNote, params)
+    yield put(updateSlaSectionNoteSuccess(response))
+  } catch (error) {
+    yield put(updateSlaSectionNoteFail(error))
+  }
+}
+
 function* SLASaga() {
   yield takeEvery(GET_SLA_AUDITLOG, onGetSLAAuditLog)
   yield takeEvery(GET_SLA_ITEMS, onGetSLAItems)
   yield takeEvery(UPDATE_SLA_DETAIL, onUpdateSLAItem)
+  yield takeEvery(UPDATE_SLA_SECTION_NOTE, onUpdateSLASectionNote)
 }
 
 export default SLASaga

@@ -1,0 +1,42 @@
+.awsm-button-option {
+  .awsm-button-option-icon {
+    border: none;
+    background-color: inherit;
+    position: relative;
+    svg {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      height: 16px;
+      color: gray;
+    }
+  }
+  .svg {
+    height: 16px;
+  }
+}
+
+.awsm-option-button-label {
+  border: none;
+  background-color: inherit;
+  position: relative;
+  svg {
+    height: 12px;
+    position: absolute;
+    bottom: 0;
+    color: inherit;
+  }
+}
+.awsm-option-button-content {
+  .awsm-option-button-content-item {
+    cursor: pointer;
+    color: #8D8D8D;
+    &:hover {
+      color: white;
+      background-color: #00A49D;
+      svg {
+        color: white !important;
+      }
+    }
+  }
+}

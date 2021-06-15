@@ -69,7 +69,7 @@ const StorageTab = ({ data, onChange }) => {
           <label>NO OF LOADING BAY</label>
           <AWSMInputNumber
             disabled={scheduler}
-            defaultValue={storageData.loading_bay_no}
+            defaultValue={storageData?.loading_bay_no}
             onChange={value => onFieldChange("loading_bay_no", value)}
           />
         </div>
@@ -77,7 +77,7 @@ const StorageTab = ({ data, onChange }) => {
           <label>MAX VOL THRESHOLD</label>
           <AWSMInputNumber
             disabled={scheduler}
-            defaultValue={storageData.max_volume_threshold}
+            defaultValue={storageData?.max_volume_threshold}
             onChange={value => onFieldChange("max_volume_threshold", value)}
           />
         </div>
@@ -87,7 +87,7 @@ const StorageTab = ({ data, onChange }) => {
           <label>LOADING TIME (MIN)</label>
           <AWSMInputNumber
             disabled={scheduler}
-            defaultValue={storageData.loading_time}
+            defaultValue={storageData?.loading_time}
             onChange={value => onFieldChange("loading_time", value)}
           />
         </div>
@@ -95,7 +95,7 @@ const StorageTab = ({ data, onChange }) => {
           <label>TURNAROUND TIME (MIN)</label>
           <AWSMInputNumber
             disabled={scheduler}
-            defaultValue={storageData.turnaround_time}
+            defaultValue={storageData?.turnaround_time}
             onChange={value => onFieldChange("turnaround_time", value)}
           />
         </div>

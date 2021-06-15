@@ -8,9 +8,9 @@ import {
   GET_TERMINAL_TABLE_INFORMATION,
   GET_TERMINAL_TABLE_INFORMATION_FAIL,
   GET_TERMINAL_TABLE_INFORMATION_SUCCESS,
-  UPDATE_TABLE_INFORMATION,
-  UPDATE_TABLE_INFORMATION_SUCCESS,
-  UPDATE_TABLE_INFORMATION_FAIL,
+  UPDATE_TERMINAL_TABLE_INFORMATION,
+  UPDATE_TERMINAL_TABLE_INFORMATION_SUCCESS,
+  UPDATE_TERMINAL_TABLE_INFORMATION_FAIL,
   GET_TERMINAL_FILTER,
   GET_TERMINAL_FILTER_SUCCESS,
   GET_TERMINAL_FILTER_FAIL,
@@ -63,33 +63,33 @@ export const getTerminalAuditLogFail = error => ({
   payload: error,
 })
 
-export const getTerminalTableInformation = params => ({
+export const getTableInformation = (code) => ({
   type: GET_TERMINAL_TABLE_INFORMATION,
-  params,
+  code,
 })
 
-export const getTerminalTableInformationSuccess = response => ({
+export const getTableInformationSuccess = response => ({
   type: GET_TERMINAL_TABLE_INFORMATION_SUCCESS,
   payload: response,
 })
 
-export const getTerminalTableInformationFail = error => ({
+export const getTableInformationFail = error => ({
   type: GET_TERMINAL_TABLE_INFORMATION_FAIL,
   payload: error,
 })
 
 export const updateTableInformation = event => ({
-  type: UPDATE_TABLE_INFORMATION,
+  type: UPDATE_TERMINAL_TABLE_INFORMATION,
   payload: event,
 })
 
 export const updateTableInformationSuccess = event => ({
-  type: UPDATE_TABLE_INFORMATION_SUCCESS,
+  type: UPDATE_TERMINAL_TABLE_INFORMATION_SUCCESS,
   payload: event,
 })
 
 export const updateTableInformationFail = error => ({
-  type: UPDATE_TABLE_INFORMATION_FAIL,
+  type: UPDATE_TERMINAL_TABLE_INFORMATION_FAIL,
   payload: error,
 })
 

@@ -29,7 +29,7 @@ const AddressTab = (props) => {
                   type="text"
                   id="address_1"
                   className="form-control"
-                  value={data.address_1}
+                  value={data?.address_1}
                   onChange={(e)=>handleOnChangeValue(e)}
                   disabled
                 />
@@ -40,7 +40,7 @@ const AddressTab = (props) => {
                   type="text"
                   id="city"
                   className="form-control"
-                  value={data.city}
+                  value={data?.city}
                   onChange={(e)=>handleOnChangeValue(e)}
                   disabled
                 />
@@ -53,7 +53,7 @@ const AddressTab = (props) => {
                   type="text"
                   id="postcode"
                   className="form-control"
-                  value={data.postcode}
+                  value={data?.postcode}
                   onChange={(e)=>handleOnChangeValue(e)}
                   disabled
                 />
@@ -64,7 +64,7 @@ const AddressTab = (props) => {
                   type="text"
                   id="state"
                   className="form-control"
-                  value={data.state}
+                  value={data?.state}
                   onChange={(e)=>handleOnChangeValue(e)}
                   disabled
                 />
@@ -77,7 +77,7 @@ const AddressTab = (props) => {
                   type="text"
                   id="region_name"
                   className="form-control"
-                  value={data.region_name}
+                  value={data?.region_name}
                   onChange={(e)=>handleOnChangeValue(e)}
                   disabled
                 />
@@ -88,7 +88,7 @@ const AddressTab = (props) => {
                   type="text"
                   id="country"
                   className="form-control"
-                  value={data.country}
+                  value={data?.country}
                   onChange={(e)=>handleOnChangeValue(e)}
                   disabled
                 />
@@ -101,7 +101,7 @@ const AddressTab = (props) => {
                   type="text"
                   id="latitude"
                   className="form-control"
-                  value={data.latitude}
+                  value={data?.latitude}
                   onChange={(e)=>handleOnChangeValue(e)}
                   disabled
                 />
@@ -112,7 +112,7 @@ const AddressTab = (props) => {
                   type="text"
                   id="longitude"
                   className="form-control"
-                  value={data.longitude}
+                  value={data?.longitude}
                   onChange={(e)=>handleOnChangeValue(e)}
                   disabled
                 />

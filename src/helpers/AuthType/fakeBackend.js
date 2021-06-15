@@ -835,6 +835,19 @@ const fakeBackend = () => {
     })
   })
 
+  mock.onPut(url.SLA_ITEMS).reply(() => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        if (slaData) {
+          // Passing fake JSON data as response
+          resolve([200, slaData])
+        } else {
+          reject([400, "Cannot get audit data"])
+        }
+      })
+    })
+  })
+
 mock
 .onPut(new RegExp(`${url.SLA_ITEMS}/*`))
 .reply(() => {

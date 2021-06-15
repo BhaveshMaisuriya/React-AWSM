@@ -31,7 +31,7 @@ const ContactTab = (props) => {
                   name="supervisor.name"
                   id="supervisorName"
                   className="form-control"
-                  value={props.values.supervisor.name}
+                  value={props?.values?.supervisor?.name}
                   placeholder="Type something here..."
                   disabled={isDisabledField}
                   onChange={props.handleChange}
@@ -46,7 +46,7 @@ const ContactTab = (props) => {
                   name="supervisor.number"
                   id="supervisorNumber"
                   className="form-control"
-                  value={props.values.supervisor.number}
+                  value={props?.values?.supervisor?.number}
                   onChange={props.handleChange}
                   placeholder="Numeric only"
                   disabled={isDisabledField}
@@ -62,7 +62,7 @@ const ContactTab = (props) => {
                   id="supervisorEmail"
                   name="supervisor.email"
                   className="form-control"
-                  value={props.values.supervisor.email}
+                  value={props?.values?.supervisor?.email}
                   onChange={props.handleChange}
                   placeholder="Type something here..."
                   disabled={isDisabledField}
@@ -81,7 +81,7 @@ const ContactTab = (props) => {
                   id="superintendantName"
                   name="superintendant.name"
                   className="form-control"
-                  value={props.values.superintendant.name}
+                  value={props?.values?.superintendant?.name}
                   onChange={props.handleChange}
                   placeholder="Type something here..."
                   disabled={isDisabledField}
@@ -96,7 +96,7 @@ const ContactTab = (props) => {
                   id="superintendantNumber"
                   name="superintendant.number"
                   className="form-control"
-                  value={props.values.superintendant.number}
+                  value={props?.values?.superintendant?.number}
                   onChange={props.handleChange}
                   placeholder="Numeric only"
                   disabled={isDisabledField}
@@ -116,7 +116,7 @@ const ContactTab = (props) => {
                   name="superintendant.email"
                   className="form-control"
                   placeholder="Type something here..."
-                  value={props.values.superintendant.email}
+                  value={props?.values?.superintendant?.email}
                   onChange={props.handleChange}
                   disabled={isDisabledField}
                 />

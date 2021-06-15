@@ -6,6 +6,7 @@ import { isScheduler } from "../../../helpers/auth_helper"
 import {
   getTableInformation,
   updateTableInformation,
+  getTerminalTableInformation,
 } from "../../../store/terminal/actions"
 import AddressTab from "./AddressTab"
 import ContactTab from "./ContactTab"
@@ -209,8 +210,8 @@ class TerminalDetailModal extends PureComponent {
   }
 
   componentDidMount() {
-    const { fetchTableInformation, data } = this.props
-    fetchTableInformation(data.ship_to_party)
+    const { getTerminalTableInformation, data } = this.props
+    getTerminalTableInformation(data)
   }
 
   handleUpdate(event) {
@@ -272,6 +273,12 @@ class TerminalDetailModal extends PureComponent {
             Last Updated By: Nur Izzati on 3rd March 2021
           </span>
         </ModalHeader>
+        {this.state.isConfirm && (
+          <ExitConfirmation
+            onExit={this.onConfirmExit}
+            onCancel={this.onConfirmCancel}
+          />
+        )}
         <>
           {currentTerminal ? (
             <ModalBody>
@@ -447,7 +454,7 @@ const mapStateToProps = ({ terminal }) => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  fetchTableInformation: params => dispatch(getTableInformation(params)),
+  getTerminalTableInformation: params => dispatch(getTerminalTableInformation(params)),
   onUpdateTableInformation: params => dispatch(updateTableInformation(params)),
 })
 

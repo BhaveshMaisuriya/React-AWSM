@@ -3,7 +3,7 @@ import Factory, { mergeFilterValues } from "./factory"
 import {
   GET_TERMINAL,
   GET_TERMINAL_AUDITLOG,
-  GET_TABLE_INFORMATION,
+  GET_TERMINAL_TABLE_INFORMATION,
   UPDATE_TABLE_INFORMATION,
   // GET_TERMINAL_FILTER,
   GET_DOWNLOAD_TERMINAL,
@@ -14,8 +14,8 @@ import {
   getTerminalFail,
   getTerminalAuditLogSuccess,
   getTerminalAuditLogFail,
-  getTableInformationSuccess,
-  getTableInformationFail,
+  getTerminalTableInformationSuccess,
+  getTerminalTableInformationFail,
   updateTableInformationSuccess,
   updateTableInformationFail,
   getTerminalFilterSuccess,
@@ -27,7 +27,7 @@ import {
 import {
   getTerminal,
   getTerminalAuditLog,
-  getTableInformation,
+  getTerminalTableInformation,
   updateTableInformation,
   getDownloadTerminal,
   // getTerminalFilter,
@@ -61,12 +61,12 @@ function* onGetTerminalAuditLog() {
   }
 }
 
-function* fetchTableInformation() {
+function* onGetTerminalTableInformation({ params }) {
   try {
-    const response = yield call(getTableInformation)
-    yield put(getTableInformationSuccess(response))
+    const response = yield call(getTerminalTableInformation, params.code)
+    yield put(getTerminalTableInformationSuccess(response))
   } catch (error) {
-    yield put(getTableInformationFail(error))
+    yield put(getTerminalTableInformationFail(error))
   }
 }
 
@@ -96,7 +96,7 @@ function* onUpdateTableInformation({ payload: event }) {
 function* terminalSaga() {
   yield takeLatest(GET_TERMINAL, onGetTerminal)
   yield takeLatest(GET_TERMINAL_AUDITLOG, onGetTerminalAuditLog)
-  yield takeLatest(GET_TABLE_INFORMATION, fetchTableInformation)
+  yield takeLatest(GET_TERMINAL_TABLE_INFORMATION, onGetTerminalTableInformation)
   yield takeEvery(UPDATE_TABLE_INFORMATION, onUpdateTableInformation)
   yield takeEvery(GET_DOWNLOAD_TERMINAL, onGetDownloadTerminal)
   // yield takeLatest(GET_TERMINAL_FILTER, onGetTerminalFilter)

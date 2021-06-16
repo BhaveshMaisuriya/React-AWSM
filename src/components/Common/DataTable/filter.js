@@ -22,6 +22,7 @@ const Example = React.memo(props => {
   const [count, setCount] = useState(10)
 
   const [hasMore, setHasMore] = useState(true)
+  const [hasRemark, setHasRemark] = useState(true)
   const [current, setCurrent] = useState([])
 
   var rowsPerLoad = 50
@@ -31,8 +32,9 @@ const Example = React.memo(props => {
   useEffect(() => {
     if (dataFilter) {
       if (!isNull(dataFilter[dataKey]) && !isUndefined(dataFilter[dataKey])) {
-        let alldata = []
-        dataFilter[dataKey].map((item, index) => {
+        let alldata = [];
+       
+       dataFilter[dataKey].map((item, index) => {
           alldata.push({
             text: item,
             checked: checkedList.length > 0 ? checkedList.includes(item) : true,
@@ -153,7 +155,7 @@ const Example = React.memo(props => {
 
   const toggle = () => {
     setPopoverOpen(!popoverOpen)
-    // if (popoverOpen === false) filterDropdownHandler(dataKey)
+    dataKey === 'remarks' ? setHasRemark(true) : setHasRemark(false);
   }
 
   const getMoreData = () => {
@@ -205,59 +207,61 @@ const Example = React.memo(props => {
               e.preventDefault()
             }}
           >
-            <SimpleBar
-              autoHide={false}
-              style={{ height: "150px", width: "100%", overflow: "auto" }}
-            >
-              {current.length > 0 && !isNull(current)
-                ? current.map((row, index) => {
-                    return (
-                      row.visibility && (
-                        <div
-                          key={row.text}
-                          className={`d-flex align-items-center ${
-                            row.checked || checkAll ? "item-checked" : ""
-                          }`}
-                        >
-                          <FormControlLabel
-                            key={`${row}${index}`}
-                            onChange={() => onInputChange(index)}
-                            checked={checkAll || row.checked}
-                            className="checkmark"
-                            control={
-                              <Checkbox
-                                icon={<CustomIcon />}
-                                checkedIcon={<CustomIcon2 />}
-                                style={{
-                                  height: "20px",
-                                  width: "5px",
-                                  marginLeft: "15px",
-                                  marginTop: "5px",
-                                }}
-                                name={isNull(row.text) ? "-" : row.text}
-                              />
-                            }
-                            label={isNull(row.text) ? "-" : row.text}
-                          />
-                        </div>
+            {!hasRemark &&
+            <Fragment>
+              <SimpleBar
+                autoHide={false}
+                style={{ height: "150px", width: "100%", overflow: "auto" }}
+              >
+                {current.length > 0 && !isNull(current)
+                  ? current.map((row, index) => {
+                      return (
+                        row.visibility && (
+                          <div
+                            key={row.text}
+                            className={`d-flex align-items-center ${
+                              row.checked || checkAll ? "item-checked" : ""
+                            }`}
+                          >
+                            <FormControlLabel
+                              key={`${row}${index}`}
+                              onChange={() => onInputChange(index)}
+                              checked={checkAll || row.checked}
+                              className="checkmark"
+                              control={
+                                <Checkbox
+                                  icon={<CustomIcon />}
+                                  checkedIcon={<CustomIcon2 />}
+                                  style={{
+                                    height: "20px",
+                                    width: "5px",
+                                    marginLeft: "15px",
+                                    marginTop: "5px",
+                                  }}
+                                  name={isNull(row.text) ? "-" : row.text}
+                                />
+                              }
+                              label={isNull(row.text) ? "-" : row.text}
+                            />
+                          </div>
+                        )
                       )
-                    )
-                  })
-                : ""}
-              {hasMore && (
-                <IconButton
-                  color="primary"
-                  aria-label="Load More"
-                  component="span"
-                  className="Loadmore_Filters"
-                  onClick={getMoreData}
-                >
-                  <ReplayIcon />
-                </IconButton>
-              )}
-            </SimpleBar>
+                    })
+                  : ""}
+                {hasMore && (
+                  <IconButton
+                    color="primary"
+                    aria-label="Load More"
+                    component="span"
+                    className="Loadmore_Filters"
+                    onClick={getMoreData}
+                  >
+                    <ReplayIcon />
+                  </IconButton>
+                )}
+              </SimpleBar>
             <p style={{ marginTop: "-10px" }}></p>
-
+           
             <Checkbox
               checked={checkAll}
               onChange={() => setCheckAll(!checkAll)}
@@ -281,6 +285,8 @@ const Example = React.memo(props => {
               Select All
             </label>
             <IconButton></IconButton>
+            </Fragment>
+}
             <Button
               type="submit"
               style={{

@@ -34,7 +34,7 @@ const StorageTab = ({ data, onChange }) => {
   }, [data])
 
   const onFieldChange = (key, value) => {
-    const newStorageData = { ...data }
+    const newStorageData = { ...storageData }
     newStorageData[key] = value
     setStorageData(newStorageData)
   }

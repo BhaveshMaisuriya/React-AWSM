@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react"
 import { ReactSVG } from "react-svg"
 import EditIcon from "../../../../assets/images/AWSM-Edit-Icon.svg"
 import TrashIcon from "../../../../assets/images/AWSM-Trash-Icon.svg"
-import createDOMPurify from 'dompurify'
+import createDOMPurify from "dompurify"
 import SLAModalDetail from "../EditModal/SLAModalDetail"
 
 import "./index.scss"
@@ -11,12 +11,12 @@ const tableMapping = {
   item: {
     label: "ITEM NO.",
     apiKey: "item",
-    columnSize: 1,
+    columnSize: "cell-text",
   },
   description: {
     label: "Description",
     apiKey: "description",
-    columnSize: 2,
+    columnSize: "cell-text-big",
   },
   kpi: {
     label: "KPI",
@@ -26,22 +26,22 @@ const tableMapping = {
   mitigation_plan: {
     label: "Mitigation Plan",
     apiKey: "mitigation_plan",
-    columnSize: 2,
+    columnSize: "cell-text-big",
   },
   action_by: {
     label: "Action By",
     apiKey: "action_by",
-    columnSize: 1,
+    columnSize: "cell-text",
   },
   module: {
     label: "Module",
     apiKey: "module",
-    columnSize: 1,
+    columnSize: "cell-text",
   },
   remarks: {
     label: "Remarks",
     apiKey: "remarks",
-    columnSize: 2,
+    columnSize: "cell-text-big",
   },
 }
 
@@ -62,16 +62,16 @@ const TDActionsComponent = ({ item, index, onEdit, onDelete, disabled }) => {
 
 const SLATable = ({ items, scheduler }) => {
   const [deleteItem, setDeleteItem] = useState(null)
-  const [modalDetail, setModalDetail]= useState({isShow:false,data:[]})
+  const [modalDetail, setModalDetail] = useState({ isShow: false, data: [] })
 
-  const handleCloseModalDetail = () =>{
-    setModalDetail({...modalDetail,isShow:false})
+  const handleCloseModalDetail = () => {
+    setModalDetail({ ...modalDetail, isShow: false })
   }
 
   const onEdit = (index, item) => {
     setModalDetail({
-      isShow:true,
-      data:item
+      isShow: true,
+      data: item,
     })
   }
 
@@ -83,9 +83,9 @@ const SLATable = ({ items, scheduler }) => {
   columns.push({
     label: "Actions",
     apiKey: null,
-    columnSize: 1,
+    columnSize: "cell-text",
     TDComponent: TDActionsComponent,
-    TDComponentProps: { onEdit, onDelete, disabled: scheduler},
+    TDComponentProps: { onEdit, onDelete, disabled: scheduler },
   })
 
   const totalColSizes = columns.reduce(
@@ -118,7 +118,14 @@ const SLATable = ({ items, scheduler }) => {
                       {...TDComponentProps}
                     />
                   ) : (
-                    <td className="ck ck-content" dangerouslySetInnerHTML={{ __html: createDOMPurify.sanitize(apiKey ? item[apiKey] || "" : "") }}/>
+                    <td
+                      className="ck ck-content"
+                      dangerouslySetInnerHTML={{
+                        __html: createDOMPurify.sanitize(
+                          apiKey ? item[apiKey] || "" : ""
+                        ),
+                      }}
+                    />
                   )
                 )}
               </tr>
@@ -143,7 +150,11 @@ const SLATable = ({ items, scheduler }) => {
           })}
         </tbody>
       </table>
-      <SLAModalDetail openModalDetail={modalDetail.isShow} data={modalDetail.data} handleCloseModal={handleCloseModalDetail}/>
+      <SLAModalDetail
+        openModalDetail={modalDetail.isShow}
+        data={modalDetail.data}
+        handleCloseModal={handleCloseModalDetail}
+      />
     </div>
   )
 }

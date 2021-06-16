@@ -14,6 +14,7 @@ import StorageTab from "./StorageTab"
 import "./TerminalDetailModal.scss"
 import classnames from "classnames"
 import SimpleBar from "simplebar-react"
+import {isEqual} from "lodash"
 
 import {
   Col,
@@ -52,6 +53,12 @@ class TerminalDetailModal extends PureComponent {
     fetchTableInformation(data.code)
   }
 
+  componentWillReceiveProps(prevProps){
+    if(isEqual(prevProps.currentTerminal,this.props.currentTerminal)){
+      this.setState({data:this.props.currentTerminal})
+    }
+  }
+
   handleUpdate(event) {
     if (Object.keys(this.state.updateDictionary).length > 0) {
       const { ship_to_party } = this.props.data
@@ -66,7 +73,7 @@ class TerminalDetailModal extends PureComponent {
         ship_to_party:code,
         body: data,
       })
-      // this.props.onCancel()
+      this.props.onCancel()
     }
   }
   toggleTab = tab => {
@@ -80,7 +87,6 @@ class TerminalDetailModal extends PureComponent {
     const newData = {...this.state.data}
     newData[key] = value;
     this.setState({data:newData})
-    console.log(newData);
   }
 
   onConfirmCancel = () => {

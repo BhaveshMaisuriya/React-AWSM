@@ -102,16 +102,9 @@ class Pages extends Component {
     await onGetCustomer(params)
   }
 
-  // getRetailFilterData = filterKey => {
-  //   const { onGetFilter, tableMapping } = this.props
-  //   const { q } = this.state
-  //   const params = {
-  //     q: transformObjectToStringSentence(q),
-  //     search_fields: tableMapping[filterKey].apiKey,
-  //   }
-
-  //   onGetFilter(params)
-  // }
+  resetPageNo = () => {
+    this.setState({ currentPage: 0 })
+  }
 
   handleChangePage = (event, currentPage) => {
     this.setState({ currentPage }, () => this.getCustomerData())
@@ -121,7 +114,12 @@ class Pages extends Component {
     this.setState({ searchTerm: searchedVal })
   }
 
+  handleSearchButton = () => {
+    this.setState({ currentPage: 0 }, () => this.getCustomerData())
+  }
+
   handleHeaderSort = (sortDir, sortField) => {
+    this.resetPageNo()
     this.setState({ sortField, sortDir }, () => this.getCustomerData())
   }
 
@@ -133,6 +131,7 @@ class Pages extends Component {
     } else if (type === "remove") {
       newQ = { ...filterObject(q, qValue) }
     }
+    this.resetPageNo()
     this.setState({ q: newQ }, () => this.getCustomerData())
   }
 
@@ -252,7 +251,7 @@ class Pages extends Component {
           data={this.props.tableData.list[this.state.selectedItem]}
           visible={modalTI}
           onCancel={this.toggleTI}
-        // mode={0}
+          // mode={0}
         />
       ) : null
     return modalContent
@@ -408,19 +407,20 @@ class Pages extends Component {
                       )}
                       <div className="d-flex justify-content-between align-items-center">
                         <SearchBar
-                          searchOnClickHandler={this.getCustomerData}
+                          searchOnClickHandler={this.handleSearchButton}
                           searchOnChangeHandler={this.handleSearchBox}
                         />
                       </div>
                       <div className="table-top-bar">
                         <div className="top-page-number">
                           <div className="enteriesText">
-                            {`${currentPage * rowsPerPage + 1} to ${tableData.total_rows -
-                              (currentPage * rowsPerPage + rowsPerPage) <
+                            {`${currentPage * rowsPerPage + 1} to ${
+                              tableData.total_rows -
+                                (currentPage * rowsPerPage + rowsPerPage) <
                               0
-                              ? tableData.total_rows
-                              : currentPage * rowsPerPage + rowsPerPage
-                              } of ${tableData.total_rows} enteries`}
+                                ? tableData.total_rows
+                                : currentPage * rowsPerPage + rowsPerPage
+                            } of ${tableData.total_rows} enteries`}
                           </div>
                         </div>
                         <div className="d-flex align-items-center">

@@ -14,47 +14,47 @@ const tableMapping = {
   vehicle: {
     label: "VEHICLE",
     apiKey: "vehicle",
-    columnSize: 1,
+    columnSize: "cell-text",
   },
   owner: {
     label: "OWNER",
     apiKey: "owner",
-    columnSize: 2,
+    columnSize: "cell-text-big",
   },
   capacity: {
     label: "RT CAPACITY",
     apiKey: "capacity",
-    columnSize: 1,
+    columnSize: "cell-text",
   },
   remarks: {
     label: "REMARKS",
     apiKey: "remarks",
-    columnSize: 2,
+    columnSize: "cell-text-big",
   },
   default_terminal: {
     label: "DEFAULT TERMINAL",
     apiKey: "default_terminal",
-    columnSize: 1,
+    columnSize: "cell-text",
   },
   shift_type: {
     label: "SHIFT TYPE",
     apiKey: "shift_type",
-    columnSize: 1,
+    columnSize: "cell-text",
   },
   daily_available_hours: {
     label: "DAILY AVAILABLE HOURS",
     apiKey: "daily_available_hours",
-    columnSize: 1,
+    columnSize: "cell-text",
   },
   status_sap: {
     label: "STATUS SAP",
     apiKey: "status_sap",
-    columnSize: 1,
+    columnSize: "cell-text",
   },
   status_awsm: {
     label: "STATUS AWSM",
     apiKey: "status_awsm",
-    columnSize: 2,
+    columnSize: "cell-text-big",
     type: "badge",
     getBadgeColor: value => {
       return value === "ACTIVE" ? "primary" : "secondary"
@@ -63,67 +63,67 @@ const tableMapping = {
   product_type_sap: {
     label: "PRODUCT TYPE SAP",
     apiKey: "product_type_sap",
-    columnSize: 1,
+    columnSize: "cell-text",
   },
   product_type_awsm: {
     label: "PRODUCT TYPE AWSM",
     apiKey: "product_type_awsm",
-    columnSize: 1,
+    columnSize: "cell-text",
   },
   temporary_product_date_range: {
     label: "TEMPORARY PRODUCT DATE RANGE",
     apiKey: "temporary_product_date_range",
-    columnSize: 2,
+    columnSize: "cell-text-big",
   },
   pump_type: {
     label: "PUMP TYPE",
     apiKey: "pump_type",
-    columnSize: 1,
+    columnSize: "cell-text",
   },
   chartering_type: {
     label: "CHARTERING TYPE",
     apiKey: "chartering_type",
-    columnSize: 1,
+    columnSize: "cell-text",
   },
   customer_type: {
     label: "CUSTOMER TYPE",
     apiKey: "customer_type",
-    columnSize: 1,
+    columnSize: "cell-text",
   },
   restriction: {
     label: "RT RESTRICTION",
     apiKey: "restriction",
-    columnSize: 2,
+    columnSize: "cell-text-big",
   },
   restriction_code: {
     label: "RT RESTRICTION CODE",
     apiKey: "restriction_code",
-    columnSize: 2,
+    columnSize: "cell-text-big",
   },
   weight: {
     label: "RT WEIGHT",
     apiKey: "weight",
-    columnSize: 1,
+    columnSize: "cell-text",
   },
   legal_weight: {
     label: "RT LEGAL WEIGHT ALLOWED",
     apiKey: "legal_weight",
-    columnSize: 1,
+    columnSize: "cell-text",
   },
   compartment_no: {
     label: "NO OF COMPARTMENT",
     apiKey: "",
-    columnSize: 1,
+    columnSize: "cell-text",
   },
   compartment_max_vol: {
     label: "MAX VOLUME PER COMPARTMENT",
     apiKey: "",
-    columnSize: 2,
+    columnSize: "cell-text-big",
   },
   offloading_duration: {
     label: "OFFLOADING DURATION (MINS)",
     apiKey: "offloading_duration",
-    columnSize: 1,
+    columnSize: "cell-text",
   },
 }
 const tableInformationModalDummyData = {

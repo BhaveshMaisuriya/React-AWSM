@@ -10,79 +10,78 @@ const tableColumns = [
   "sub_category",
   "uom",
   "density",
-  "remarks"
-  
+  "remarks",
 ]
 
 const tableMapping = {
   code: {
     label: "Code",
     apiKey: "code",
-    columnSize: 1,
+    columnSize: "cell-text",
   },
   name: {
     label: "Name",
     apiKey: "name",
-    columnSize: 2,
+    columnSize: "cell-text-big",
   },
   status_sap: {
     label: "Status in SAP",
     apiKey: "status_sap",
-    columnSize: 1,
+    columnSize: "cell-text",
     type: "badge",
-    getBadgeColor: (value) => {
+    getBadgeColor: value => {
       return value === "ACTIVE" ? "primary" : "secondary"
-    }
+    },
   },
   status_awsm: {
     label: "Status in AWSM",
     apiKey: "status_awsm",
-    columnSize: 1,
+    columnSize: "cell-text",
     type: "badge",
-    getBadgeColor: (value) => {
+    getBadgeColor: value => {
       return value === "ACTIVE" ? "primary" : "secondary"
-    }
+    },
   },
   division: {
     label: "Division",
     apiKey: "division",
-    columnSize: 1,
+    columnSize: "cell-text",
   },
   material_group: {
     label: "Material Group",
     apiKey: "material_group",
-    columnSize: 1,
+    columnSize: "cell-text",
   },
   product_group: {
     label: "Product Group",
     apiKey: "product_group",
-    columnSize: 2,
+    columnSize: "cell-text-big",
   },
   category: {
     label: "Category",
     apiKey: "category",
-    columnSize: 1,
+    columnSize: "cell-text",
   },
   sub_category: {
     label: "SubCategory",
     apiKey: "sub_category",
-    columnSize: 2,
+    columnSize: "cell-text-big",
   },
   uom: {
     label: "UOM",
     apiKey: "uom",
-    columnSize: 1,
+    columnSize: "cell-text",
   },
   density: {
     label: "Density",
     apiKey: "density",
-    columnSize: 1,
+    columnSize: "cell-text",
   },
   remarks: {
     label: "Remarks",
     apiKey: "remarks",
-    columnSize: 2,
-  }
+    columnSize: "cell-text-big",
+  },
 }
 
 export { tableMapping, tableColumns }

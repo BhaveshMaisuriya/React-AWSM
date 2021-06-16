@@ -272,6 +272,13 @@ export const updateTableInformation = event => {
     event
   )
 }
+export const updateTerminalDetail = event => {
+  return axios.put(
+    `https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/terminal/${event.ship_to_party}`,
+    event
+  )
+}
+
 // put(url.UPDATE_TABLE_INFORMATION, event)
 
 // get DQM Master Retail Cust Filter

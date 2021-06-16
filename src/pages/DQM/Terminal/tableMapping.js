@@ -5,8 +5,8 @@ const tableColumns = [
   "region_group",
   "status_awsm",
   "terminal_operating_days_1_value",
-  "no_delivery_interval_1_time_from",
-  "no_delivery_interval_1_time_to",
+  "terminal_operation_hours_1_time_from",
+  "terminal_operation_hours_1_time_to",
   "loading_bay_no",
   "turnaround_time",
   "remarks",
@@ -15,71 +15,71 @@ const tableColumns = [
 const tableMapping = {
   code: {
     label: "TERMINAL CODE",
-    columnSize: 1,
+    columnSize: "cell-text",
   },
   name: {
     label: "TERMINAL NAME",
-    columnSize: 2,
+    columnSize: "cell-text-big",
   },
   remarks: {
     label: "REMARKS",
-    columnSize: 2,
+    columnSize: "cell-text-big",
   },
   address_1: {
     label: "ADDRESS",
-    columnSize: 2,
+    columnSize: "cell-text-big",
   },
   city: {
     label: "CITY",
-    columnSize: 2,
+    columnSize: "cell-text-big",
   },
   state: {
     label: "STATE",
-    columnSize: 2,
+    columnSize: "cell-text-big",
   },
   region_group: {
     label: "REGION",
-    columnSize: 1,
+    columnSize: "cell-text",
   },
   country: {
     label: "COUNTRY",
-    columnSize: 1,
+    columnSize: "cell-text",
   },
   latitude: {
     label: "LATITUDE",
-    columnSize: 1,
+    columnSize: "cell-text",
   },
   longitude: {
     label: "LONGITUDE",
-    columnSize: 1,
+    columnSize: "cell-text",
   },
   supervisor_name: {
     label: "SUPERVISOR CONTACT NAME",
-    columnSize: 2,
+    columnSize: "cell-text-big",
   },
   supervisor_number: {
     label: "SUPERVISOR CONTACT NUMBER",
-    columnSize: 1,
+    columnSize: "cell-text",
   },
   supervisor_email: {
     label: "SUPERVISOR EMAIL",
-    columnSize: 2,
+    columnSize: "cell-text-big",
   },
   superintendant_name: {
     label: "SUPERINTENDANT CONTACT NAME",
-    columnSize: 2,
+    columnSize: "cell-text-big",
   },
   superintendant_number: {
     label: "SUPERINTENDANT CONTACT NUMBER",
-    columnSize: 1,
+    columnSize: "cell-text",
   },
   superintendant_email: {
     label: "SUPERINTENDANT EMAIL",
-    columnSize: 2,
+    columnSize: "cell-text-big",
   },
   status_awsm: {
     label: "TERMINAL STATUS IN AWSM",
-    columnSize: 1,
+    columnSize: "cell-text",
     type: "badge",
     getBadgeColor: value => {
       return value === "ACTIVE" ? "primary" : "secondary"
@@ -87,83 +87,83 @@ const tableMapping = {
   },
   inactive_date_range_1_value: {
     label: "INACTIVE DATE RANGE",
-    columnSize: 2,
+    columnSize: "cell-text-big",
   },
   terminal_operating_days_1_value: {
     label: "TERMINAL OPERATING DAYS",
-    columnSize: 2,
+    columnSize: "cell-text-big",
   },
   terminal_operation_hours_1_time_from: {
     label: "TERMINAL OPERATING HOURS FROM",
-    columnSize: 1,
+    columnSize: "cell-text",
   },
   terminal_operation_hours_1_time_to: {
     label: "TERMINAL OPERATING HOURS TO",
-    columnSize: 1,
+    columnSize: "cell-text",
   },
   no_delivery_interval_1_value: {
     label: "NO DELIVERY INTERVAL 1",
-    columnSize: 2,
+    columnSize: "cell-text-big",
   },
   no_delivery_interval_1_time_from: {
     label: "NO DELIVERY INTERVAL TIME FROM 1",
-    columnSize: 1,
+    columnSize: "cell-text",
   },
   no_delivery_interval_1_time_to: {
     label: "NO DELIVERY INTERVAL TIME TO 1",
-    columnSize: 1,
+    columnSize: "cell-text",
   },
   no_delivery_interval_2_value: {
     label: "NO DELIVERY INTERVAL 2",
-    columnSize: 2,
+    columnSize: "cell-text-big",
   },
   no_delivery_interval_2_time_from: {
     label: "NO DELIVERY INTERVAL TIME FROM 2",
-    columnSize: 1,
+    columnSize: "cell-text",
   },
   no_delivery_interval_2_time_to: {
     label: "NO DELIVERY INTERVAL TIME TO 2",
-    columnSize: 1,
+    columnSize: "cell-text",
   },
   no_delivery_interval_3_value: {
     label: "NO DELIVERY INTERVAL 3",
-    columnSize: 2,
+    columnSize: "cell-text-big",
   },
   no_delivery_interval_3_time_from: {
     label: "NO DELIVERY INTERVAL TIME FROM 3",
-    columnSize: 1,
+    columnSize: "cell-text",
   },
   no_delivery_interval_3_time_to: {
     label: "NO DELIVERY INTERVAL TIME TO 3",
-    columnSize: 1,
+    columnSize: "cell-text",
   },
   no_delivery_interval_4_value: {
     label: "NO DELIVERY INTERVAL 4",
-    columnSize: 2,
+    columnSize: "cell-text-big",
   },
   no_delivery_interval_4_time_from: {
     label: "NO DELIVERY INTERVAL TIME FROM 4",
-    columnSize: 1,
+    columnSize: "cell-text",
   },
   no_delivery_interval_4_time_to: {
     label: "NO DELIVERY INTERVAL TIME TO 4",
-    columnSize: 1,
+    columnSize: "cell-text",
   },
   loading_bay_no: {
     label: "NO OF LOADING BAY",
-    columnSize: 1,
+    columnSize: "cell-text",
   },
   max_volume_threshold: {
     label: "MAX VOLUME THRESHOLD",
-    columnSize: 1,
+    columnSize: "cell-text",
   },
   loading_time: {
     label: "LOADING TIME",
-    columnSize: 1,
+    columnSize: "cell-text",
   },
   turnaround_time: {
     label: "TURNAROUND TIME",
-    columnSize: 1,
+    columnSize: "cell-text",
   },
 }
 

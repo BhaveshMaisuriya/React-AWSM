@@ -83,7 +83,7 @@ class FixedCoulmnTable extends Component {
           to="#"
           data-index={parentIndex}
           onClick={modalPop}
-          className={config[e].columnSize === 1 ? "cell-text" : "cell-text-big"}
+          className={`${config[e].columnSize}`}
         >
           {arr[e]}
         </Link>

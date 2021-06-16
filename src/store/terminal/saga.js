@@ -31,6 +31,7 @@ import {
   updateTableInformation,
   getTerminalTableInformation,
   getDownloadTerminal,
+  updateTerminalDetail,
   // getTerminalFilter,
 } from "../../helpers/fakebackend_helper"
 
@@ -73,7 +74,7 @@ function* fetchTableInformation({ code }) {
 
 function* onUpdateTableInformation({ payload: event }) {
   try {
-    const response = yield call(updateTableInformation, event)
+    const response = yield call(updateTerminalDetail, event)
     yield put(updateTableInformationSuccess(response))
   } catch (error) {
     yield put(updateTableInformationFail(error))

@@ -380,7 +380,7 @@ class Pages extends Component {
                         <div className="d-flex align-items-center w-100 mt-4 mb-2">
                           <div className="col-4 p-0">
                             <label>DATE</label>
-                            <DatePicker />
+                            <DatePicker showButtons={true} isTypeFor='sales' />
                           </div>
                           <div className="col-6 p-0 ml-4">
                             <label>REGION & TERMINAL</label>

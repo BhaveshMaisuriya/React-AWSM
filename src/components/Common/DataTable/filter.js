@@ -19,13 +19,13 @@ const Example = React.memo(props => {
   const [checkedList, setCheckedList] = useState([])
   const [checkedCount, setCheckedCount] = useState(0)
 
-  const [count, setCount] = useState(10)
+  const [count, setCount] = useState(0)
 
   const [hasMore, setHasMore] = useState(true)
   const [hasRemark, setHasRemark] = useState(true)
   const [current, setCurrent] = useState([])
 
-  var rowsPerLoad = 50
+  var rowsPerLoad = 30
   /**
    * dataFilter should never be zero unless api fails or db has no data
    */
@@ -49,6 +49,7 @@ const Example = React.memo(props => {
             arr.push(item)
           }
         })
+        setCount(rowsPerLoad)
         setCurrent(arr)
         checkedList.length === 0
           ? updateCheckedCount("all")
@@ -56,6 +57,18 @@ const Example = React.memo(props => {
       }
     }
   }, [dataFilter])
+
+  useEffect(() => {
+    let alldata = [...data];
+    let arr = [];
+    alldata.map((item, index) => {
+      if (index < rowsPerLoad) {
+        arr.push(item)
+      }
+    })
+    arr.length <= rowsPerLoad ? setHasMore(false) : setHasMore(true);
+    setCurrent(arr)
+  }, [data])
 
   function updateCheckedCount(string) {
     switch (string) {
@@ -85,9 +98,10 @@ const Example = React.memo(props => {
    * @param index
    */
   function onInputChange(index) {
-    const newData = [...current]
+    
+    const newData = [...data]
     newData[index].checked = !newData[index].checked
-    setCurrent(newData)
+    setData(newData)
     if (checkAll) {
       setCheckAll(false)
     }
@@ -99,20 +113,22 @@ const Example = React.memo(props => {
    * @param event
    */
   function onSearchTextChange(event) {
-    const newData = [...data]
-    console.log(newData)
+    const newData = [...data];
     for (let i = 0; i < newData.length; i++) {
-      newData[i].visibility = newData[i].text
+      newData[i].visibility = newData[i].text !== null && newData[i].text
+        .toString()
+        .toLowerCase()
+        .includes(event.target.value)
+        newData[i].checked = newData[i].text !== null &&  newData[i].text
         .toString()
         .toLowerCase()
         .includes(event.target.value)
     }
     setData(newData)
-    setCurrent(newData)
   }
 
   function clickApply(e) {
-    const newData = [...current]
+    const newData = [...data]
     const checkedFilter = newData
       .filter(item => {
         return item.checked === true
@@ -133,9 +149,9 @@ const Example = React.memo(props => {
   }
 
   function selectAll(e) {
-    let newData = [...current]
+    let newData = [...data]
     newData = newData.map(item => ({ ...item, checked: !checkAll }))
-    setCurrent(newData)
+    setData(newData)
     setCheckAll(!checkAll)
 
     // handleClickReset(dataKey)
@@ -159,14 +175,14 @@ const Example = React.memo(props => {
     dataKey === 'remarks' ? setHasRemark(true) : setHasRemark(false);
   }
 
-  const getMoreData = () => {
-    if (current.length >= data.length) {
+  const getMoreData = () => {    
+    if (data.length <= count) {
       setHasMore(false)
       return
     } else {
-      let arr = [...current]
+      let arr = [...current];
       data.map((item, index) => {
-        if (index + 1 > count && index + 1 < count + rowsPerLoad) {
+        if (index + 1 > count + 1 && index - 1 < count + rowsPerLoad) {
           arr.push(item)
         }
       })

@@ -148,20 +148,22 @@ class FixedCoulmnTable extends Component {
     const { tableData } = this.props
     const { fixedHeaders, regularHeaders } = this.state
     return (
-      <div className="container" style={{ maxWidth: "100%" }}>
-        <table className="fixed">
-          <thead>
-            <tr>{this.addTd(fixedHeaders)}</tr>
-          </thead>
-          <tbody>{this.renderFrozenTr(tableData)}</tbody>
-        </table>
-        <div className="scroll">
-          <table className="scrollable">
+      <div className="table-container">
+        <div className="container" style={{ maxWidth: "100%" }}>
+          <table className="fixed">
             <thead>
-              <tr>{this.addTd(regularHeaders)}</tr>
+              <tr>{this.addTd(fixedHeaders)}</tr>
             </thead>
-            <tbody>{this.renderRegular(tableData)}</tbody>
+            <tbody>{this.renderFrozenTr(tableData)}</tbody>
           </table>
+          <div className="scroll">
+            <table className="scrollable">
+              <thead>
+                <tr>{this.addTd(regularHeaders)}</tr>
+              </thead>
+              <tbody>{this.renderRegular(tableData)}</tbody>
+            </table>
+          </div>
         </div>
       </div>
     )

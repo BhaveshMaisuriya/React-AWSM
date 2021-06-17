@@ -13,7 +13,8 @@ const config = {
     removePlugins : 'magicline,elementspath,liststyle,contextmenu,tabletools,tableselection',
     disableNativeSpellChecker : false,
     fullPage :false,
-    language :'en'
+    language :'en',
+    height:'25em'
 };
 
 

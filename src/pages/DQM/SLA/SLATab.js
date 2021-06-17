@@ -18,20 +18,94 @@ import { ReactSVG } from "react-svg"
 import { CKEditor } from "@ckeditor/ckeditor5-react"
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic"
 import AWSMButtonOption from "../../../components/Common/AWSMButtonOption"
-import { updateSlaSectionNote } from "../../../store/actions"
+import { updateSlaSectionNote,deleteSLADetail, addNewSectionTab, updateSectionTab, deleteSectionTab } from "../../../store/actions"
 
-const DeleteNoteConfirmation = ({ isOpen, onDelete, onCancel }) => {
+const DeleteNoteConfirmation = ({ isOpen, onDelete, onCancel, item }) => {
   return (
     <Modal isOpen={isOpen}>
       <ModalHeader toggle={onCancel}>
         Delete Confirmation
       </ModalHeader>
       <ModalBody>
-        <h6>Are you sure you want to delete this Notes?</h6>
+        <h6>Are you sure you want to delete this {item}?</h6>
         <hr/>
         <div className="d-flex align-items-center justify-content-end">
           <button onClick={onCancel} className="btn btn-outline-danger mr-2">Cancel</button>
           <button onClick={onDelete} className="btn btn-danger">Delete</button>
+        </div>
+      </ModalBody>
+    </Modal>
+  )
+}
+
+const AddNewSectionModal = ({ defaultValue, isOpen, onAdd, onCancel, type = "add" }) => {
+  const MAX_CHARS = 12
+  const inputRef = useRef(null)
+  const [onEditing, setOnEditing] = useState(false)
+  const [value, setValue] = useState(defaultValue)
+   const onCancelHandler = () =>{
+      setValue("")
+      onCancel()
+   }
+
+  useEffect(() => {
+    if (onEditing) {
+      inputRef.current?.focus()
+    }
+  }, [onEditing])
+
+  const isError = useMemo(() => {
+    return value.length > MAX_CHARS
+  }, [value])
+
+  const remainCharacters = useMemo(() => {
+    return MAX_CHARS - value.length
+  }, [value])
+
+  return (
+    <Modal isOpen={isOpen} className={"add-section"}>
+      <ModalHeader toggle={onCancel}>
+        { type == 'add' ? 'Add New' : 'Rename' } Section
+      </ModalHeader>
+      <ModalBody>
+        <div className="title">
+          { type == 'add' ? 'Please provide a name below if you wish to add a new section on this report.'
+          : 'Please enter a new name below and click update if u wish to rename this section.' }
+        </div>
+        <div className="sla-section-label-edit mt-3">
+          <div className="flex-grow-1 position-relative">
+            <input
+              onChange={e => setValue(e.target.value)}
+              className={`sla-section-input add-new-section ${isError ? "error" : ""}`}
+              onFocus={() => setOnEditing(true)}
+              onBlur={() => setOnEditing(false)}
+              value={value}
+              ref={inputRef}
+            />
+            {onEditing && (
+              <div className={`remain-character ${isError ? "error" : "valid"}`}>
+                {`${remainCharacters >= 0 ? "+" : ""}${remainCharacters}`}
+              </div>
+            )}
+          </div>
+          {isError && (
+            <div className="sla-section-error-message">Exceed character limit</div>
+          )}
+        </div>
+        <div className="d-flex align-items-center justify-content-end mt-3">
+          <button onClick={onCancelHandler} className="btn btn-outline-success mr-2">Cancel</button>
+          { type == 'add' ? <button 
+            onClick={onAdd} 
+            className="btn btn-success" 
+            disabled={remainCharacters < 0 || remainCharacters==MAX_CHARS}
+            >Add
+          </button> : <button 
+            onClick={onAdd} 
+            className="btn btn-success" 
+            disabled={remainCharacters < 0 || remainCharacters==MAX_CHARS}
+            >Update
+          </button> }
+          
         </div>
       </ModalBody>
     </Modal>
@@ -163,7 +237,6 @@ const SectionLabelEdit = ({ defaultValue, disabled, onChange }) => {
     }
     setOnEditing(false)
   }
-
   return (
     <div className="sla-section-label-edit">
       <div className="flex-grow-1 position-relative">
@@ -215,12 +288,20 @@ class SLATab extends Component {
     this.state = {
       activeTab: 0,
       deleteNoteModal: false,
+      addSectionModal:false,
+      renameSectionModal:false,
+      deleteSectionModal:false,
+      sectionNameSelected:""
     }
     this.toggle = this.toggle.bind(this)
     this.onNoteChange = this.onNoteChange.bind(this)
     this.onDeleteNote = this.onDeleteNote.bind(this)
+    this.onAddSectionHandler = this.onAddSectionHandler.bind(this)
+    this.onOptionClick = this.onOptionClick.bind(this)
+    this.onUpdateSectionHandler = this.onUpdateSectionHandler.bind(this)
+    this.onDeleteSectionHandler = this.onDeleteSectionHandler.bind(this)
   }
-
+e
   componentDidMount() {}
 
   toggle(index) {
@@ -230,8 +311,7 @@ class SLATab extends Component {
   }
 
   onAddSection(e) {
-    e.preventDefault()
-    e.stopPropagation()
+    this.setState({addSectionModal: true})
   }
 
   onSubtitleChange(value) {
@@ -251,8 +331,67 @@ class SLATab extends Component {
     this.setState({...this.state, deleteNoteModal: false})
   }
 
+  onOptionClick(option){
+    if (option.label === "Edit") {
+     this.setState({renameSectionModal:true,sectionNameSelected:option.title})
+    } else if (option.label === "Delete") {
+      this.setState({deleteSectionModal:true,sectionNameSelected:option.title})
+    }
+  }
+
+  onAddSectionHandler(){
+    this.props.addSectionTab()
+    this.setState({
+      addSectionModal:false
+    })
+  }
+
+  onUpdateSectionHandler(){
+    this.props.updateSectionTab()
+    this.setState({
+      renameSectionModal:false
+    })
+  }
+
+  onDeleteSectionHandler(){
+    this.props.deleteSectionTab()
+    this.setState({
+      deleteSectionModal:false
+    })
+  }
+
+  handleGenerateAddNewSection = () =>{
+    return(<AddNewSectionModal 
+      defaultValue={""}
+      isOpen={this.state.addSectionModal}
+      onAdd={this.onAddSectionHandler}
+      onCancel={() => this.setState({...this.state, addSectionModal: false})}
+     />)
+  }
+
+  handleGenerateEditSection = () =>{
+    const { renameSectionModal, sectionNameSelected } = this.state
+    return sectionNameSelected && (<AddNewSectionModal 
+      key={new Date()}
+      type={'edit'}
+      defaultValue={sectionNameSelected}
+      isOpen={renameSectionModal}
+      onAdd={this.onUpdateSectionHandler}
+      onCancel={() => this.setState({...this.state, renameSectionModal: false})}
+     />)
+  }
+  handleGenerateDeleteSection = () =>{
+    const { deleteSectionModal, sectionNameSelected } = this.state
+    return( <DeleteNoteConfirmation
+      isOpen={deleteSectionModal}
+      onDelete={this.onDeleteSectionHandler}
+      onCancel={() => this.setState({...this.state, deleteSectionModal: false})}
+      item={'Section'}
+    />)
+  }
+
   render() {
-    const { data } = this.props
+    const { data, deleteSLADetail } = this.props
     const { modalDetail } = this.state
     return (
       <Fragment>
@@ -269,10 +408,16 @@ class SLATab extends Component {
                     this.toggle(index)
                   }}
                 >
-                  <div className="d-flex justify-content-center">
+                  <div className="d-flex justify-content-center section-tab">
                     <div>{item.title}</div>
                     <button>
-                      <EllipsisIcon />
+                    <AWSMButtonOption
+                    optionClick={this.onOptionClick}
+                      options={[
+                        { icon: EditIcon, label: "Edit", title: item.title },
+                        { icon: TrashIcon, label: "Delete", title: item.title},
+                      ]}
+                    />
                     </button>
                   </div>
                 </NavLink>
@@ -284,7 +429,7 @@ class SLATab extends Component {
               key={data.length}
               style={{ cursor: "pointer" }}
               className="active sla-and-new-section"
-              onClick={this.onAddSection}
+              onClick={this.onAddSection.bind(this)}
             >
               + Add Section
             </NavLink>
@@ -302,8 +447,9 @@ class SLATab extends Component {
                     <SectionLabelEdit
                       defaultValue={item.subtitle}
                       onChange={this.onSubtitleChange}
+                      max_chars={120}
                     />
-                    <SLATable items={item.items} />
+                    <SLATable items={item.items} onDeleteSLADetail={deleteSLADetail}/>
                     <a className="sla-tab-add">+ Add Row</a>
                     <SLAAddNote
                       data={item}
@@ -320,14 +466,22 @@ class SLATab extends Component {
           isOpen={this.state.deleteNoteModal}
           onDelete={this.onDeleteNote}
           onCancel={() => this.setState({...this.state, deleteNoteModal: false})}
+          item={"Notes"}
         />
+        { this.handleGenerateAddNewSection() }
+        { this.handleGenerateEditSection() }
+        { this.handleGenerateDeleteSection() }
       </Fragment>
     )
   }
 }
 
 const mapDispatchToProps = dispatch => ({
-  updateSlaSectionNote: params => dispatch(updateSlaSectionNote(params))
+  updateSlaSectionNote: params => dispatch(updateSlaSectionNote(params)),
+  deleteSLADetail: params => dispatch(deleteSLADetail(params)),
+  addSectionTab: params => dispatch(addNewSectionTab(params)),
+  updateSectionTab: params => dispatch(updateSectionTab(params)),
+  deleteSectionTab: params => dispatch(deleteSectionTab(params)),
 })
 
 export default connect(null, mapDispatchToProps)(SLATab)

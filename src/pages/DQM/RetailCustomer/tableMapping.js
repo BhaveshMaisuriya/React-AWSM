@@ -3,10 +3,10 @@ const tableColumns = [
   "ship_to_company",
   "site_name",
   "site_id",
-  "cluster",
   "region_group",
+  "cluster",
   "status_awsm",
-  "sales_inventory_data_source",
+  "ordering_category_primax_95",
   "road_tanker_accessibility",
   "remarks",
 ]
@@ -51,6 +51,11 @@ const tableMapping = {
     label: "SITE NAME",
     apiKey: "site_name",
     columnSize: "cell-text-big",
+  },
+  ordering_category_primax_95: {
+    label: "ORDERING CATEGORY OF PRIMAX 95",
+    apiKey: "ordering_category_primax_95",
+    columnSize: "cell-text",
   },
   address_1: {
     label: "ADDRESS",

@@ -32,7 +32,7 @@ const Example = React.memo(props => {
   useEffect(() => {
     if (dataFilter) {
       if (!isNull(dataFilter[dataKey]) && !isUndefined(dataFilter[dataKey])) {
-        let alldata = [];
+        let alldata = []
        
        dataFilter[dataKey].map((item, index) => {
           alldata.push({
@@ -100,6 +100,7 @@ const Example = React.memo(props => {
    */
   function onSearchTextChange(event) {
     const newData = [...data]
+    console.log(newData)
     for (let i = 0; i < newData.length; i++) {
       newData[i].visibility = newData[i].text
         .toString()

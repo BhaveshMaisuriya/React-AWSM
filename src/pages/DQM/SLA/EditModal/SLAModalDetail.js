@@ -1,4 +1,4 @@
-import React,{ useState } from 'react'
+import React,{ useState,useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import ExitConfirmation from 'components/Common/ExitConfirmation'
@@ -11,9 +11,10 @@ import {
   } from "reactstrap"
 import CustomCKEditor from "./CustomCKEditor"
 import "./ModalDetail.scss"
+import { updateSLAItem } from 'store/actions'
 
 export const SLAModalDetail = ({...props}) => {
-  const { openModalDetail, handleCloseModal, data } = props;
+  const { openModalDetail, handleCloseModal, onUpdateSLAItem, data } = props;
  
   const [modalConfirm,setModalConfirm] = useState(false)
 
@@ -36,7 +37,7 @@ export const SLAModalDetail = ({...props}) => {
     let action_by = instance.getById("sla-td-5").$.innerHTML
     let module = instance.getById("sla-td-6").$.innerHTML
     let remarks = instance.getById("sla-td-7").$.innerHTML
-    console.log("ckeditor content",{
+    onUpdateSLAItem({
       item,
       description,
       kpi,
@@ -133,8 +134,8 @@ const mapStateToProps = (state) => ({
     
 })
 
-const mapDispatchToProps = {
-    
-}
+const mapDispatchToProps = dispatch => ({
+  onUpdateSLAItem: event => dispatch(updateSLAItem(event)),
+})
 
 export default connect(mapStateToProps, mapDispatchToProps)(SLAModalDetail)

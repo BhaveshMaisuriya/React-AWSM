@@ -32,7 +32,7 @@ const Example = React.memo(props => {
   useEffect(() => {
     if (dataFilter) {
       if (!isNull(dataFilter[dataKey]) && !isUndefined(dataFilter[dataKey])) {
-        let alldata = [];
+        let alldata = []
        
        dataFilter[dataKey].map((item, index) => {
           alldata.push({
@@ -67,7 +67,6 @@ const Example = React.memo(props => {
       }
     })
     arr.length <= rowsPerLoad ? setHasMore(false) : setHasMore(true);
-    console.log("alldata::", arr)
     setCurrent(arr)
   }, [data])
 

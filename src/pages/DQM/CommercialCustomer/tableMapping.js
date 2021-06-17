@@ -6,7 +6,7 @@ const tableColumns = [
   "cluster",
   "status_awsm",
   "delivery_open_time_1_time_from",
-  // "delivery_open_time_1_time_to",
+  "delivery_open_time_1_time_to",
   "road_tanker_requirement",
   "road_tanker_accessibility",
   "remarks",

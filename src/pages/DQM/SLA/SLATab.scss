@@ -58,6 +58,10 @@
       font-size: 16px;
     }
   }
+  .add-new-section{
+    border: 1px solid #9E9E9E;
+    border-radius: 4px;
+  }
   .remain-character {
     position: absolute;
     right: 5px;
@@ -89,5 +93,25 @@
 .sla-button-option-item {
   svg {
     height: 12px;
+  }
+}
+
+.section-tab{
+  svg{
+    width: 16px !important;
+  }
+}
+.add-section{
+  .title{
+    font-family: "Museo Sans";
+    font-weight: 500;
+    font-size: 14px;
+    color:#4A4A4A
+  }
+  .modal-header{
+    border-bottom: none;
+  }
+  .modal-body{
+    padding: 1.5rem;
   }
 }

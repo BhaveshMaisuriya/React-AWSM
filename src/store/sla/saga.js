@@ -5,6 +5,10 @@ import {
     GET_SLA_ITEMS,
     UPDATE_SLA_DETAIL,
     UPDATE_SLA_SECTION_NOTE,
+    DELETE_SLA_DETAIL,
+    ADD_NEW_SECTION_TAB,
+    UPDATE_SECTION_TAB,
+    DELETE_SECTION_TAB
 } from "./actionTypes"
 
 import {
@@ -16,6 +20,14 @@ import {
     updateSlaDetailFail,
     updateSlaSectionNoteSuccess,
     updateSlaSectionNoteFail,
+    deleteSLADetailSuccess,
+    deleteSLADetailFail,
+    addNewSectionTabSuccess,
+    addNewSectionTabFail,
+    updateSectionTabSuccess,
+    updateSectionTabFail,
+    deleteSectionTabSuccess,
+    deleteSectionTabFail
 } from "./actions"
 
 import {
@@ -63,11 +75,51 @@ function* onUpdateSLASectionNote({ params }) {
   }
 }
 
+function* onDeleteSLADetail(action){
+  try {
+    // const response = yield call(deleteSLADetail, action.params)
+    yield put(deleteSLADetailSuccess(response))
+  } catch (error) {
+    yield put(deleteSLADetailFail(error))
+  }
+}
+
+function* onAddNewSectionTab(action){
+  try {
+    // const response = yield call(deleteSLADetail, action.params)
+    yield put(addNewSectionTabSuccess())
+  } catch (error) {
+    yield put(addNewSectionTabFail(error))
+  }
+}
+
+function* onUpdateSectionTab(action){
+  try {
+    // const response = yield call(deleteSLADetail, action.params)
+    yield put(updateSectionTabSuccess())
+  } catch (error) {
+    yield put(updateSectionTabFail(error))
+  }
+}
+
+function* onDeleteSectionTab(action){
+  try {
+    // const response = yield call(deleteSLADetail, action.params)
+    yield put(deleteSectionTabSuccess())
+  } catch (error) {
+    yield put(deleteSectionTabFail(error))
+  }
+}
+
 function* SLASaga() {
   yield takeEvery(GET_SLA_AUDITLOG, onGetSLAAuditLog)
   yield takeEvery(GET_SLA_ITEMS, onGetSLAItems)
   yield takeEvery(UPDATE_SLA_DETAIL, onUpdateSLAItem)
   yield takeEvery(UPDATE_SLA_SECTION_NOTE, onUpdateSLASectionNote)
+  yield takeEvery(DELETE_SLA_DETAIL, onDeleteSLADetail)
+  yield takeEvery(ADD_NEW_SECTION_TAB, onAddNewSectionTab)
+  yield takeEvery(UPDATE_SECTION_TAB, onUpdateSectionTab)
+  yield takeEvery(DELETE_SECTION_TAB, onDeleteSectionTab)
 }
 
 export default SLASaga

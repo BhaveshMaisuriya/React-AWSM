@@ -4,7 +4,7 @@ import Filter from "../DataTable/filter"
 import { Link } from "react-router-dom"
 import "./style.scss"
 import { isEqual, isUndefined } from "lodash"
-import { Badge } from "reactstrap"
+import { Badge, Row, Col } from "reactstrap"
 
 class FixedCoulmnTable extends Component {
   constructor(props) {
@@ -149,25 +149,25 @@ class FixedCoulmnTable extends Component {
     const { fixedHeaders, regularHeaders } = this.state
     return (
       <div className="container" style={{ maxWidth: "100%" }}>
-        <div className="fixed_section">
-          <table className="fixed">
+      <div className="fixed_section">
+        <table className="fixed">
+          <thead>
+            <tr>{this.addTd(fixedHeaders)}</tr>
+          </thead>
+          <tbody>{this.renderFrozenTr(tableData)}</tbody>
+        </table>
+       </div>
+      <div className="scroll_section">
+        <div className="scroll">
+          <table className="scrollable">
             <thead>
-              <tr>{this.addTd(fixedHeaders)}</tr>
+              <tr>{this.addTd(regularHeaders)}</tr>
             </thead>
-            <tbody>{this.renderFrozenTr(tableData)}</tbody>
+            <tbody>{this.renderRegular(tableData)}</tbody>
           </table>
-         </div>
-        <div className="scroll_section">
-          <div className="scroll">
-            <table className="scrollable">
-              <thead>
-                <tr>{this.addTd(regularHeaders)}</tr>
-              </thead>
-              <tbody>{this.renderRegular(tableData)}</tbody>
-            </table>
-          </div>
         </div>
       </div>
+    </div>
     )
   }
 }

@@ -14,6 +14,15 @@
     UPDATE_SLA_SECTION_NOTE,
     UPDATE_SLA_SECTION_NOTE_SUCCESS,
     UPDATE_SLA_SECTION_NOTE_FAIL,
+    ADD_NEW_SECTION_TAB,
+    ADD_NEW_SECTION_TAB_SUCCESS,
+    ADD_NEW_SECTION_TAB_FAIL,
+    UPDATE_SECTION_TAB,
+    UPDATE_SECTION_TAB_SUCCESS,
+    UPDATE_SECTION_TAB_FAIL,
+    DELETE_SECTION_TAB,
+    DELETE_SECTION_TAB_SUCCESS,
+    DELETE_SECTION_TAB_FAIL
   } from "./actionTypes"
 
   export const getSLAItems = params => ({
@@ -67,13 +76,15 @@
   })
 
   export const deleteSLADetailSuccess = response => ({
-    type: DELETE_SLA_DETAIL,
+    type: DELETE_SLA_DETAIL_SUCCESS,
     payload : response
-})
-export const deleteSLADetailFail = error => ({
-  type: DELETE_SLA_DETAIL,
-  payload : error
-})
+  })
+
+  export const deleteSLADetailFail = error => ({
+    type: DELETE_SLA_DETAIL_FAIL,
+    payload : error
+  })
+
   export const updateSlaSectionNote = params => ({
     type: UPDATE_SLA_SECTION_NOTE,
     params,
@@ -86,5 +97,50 @@ export const deleteSLADetailFail = error => ({
 
   export const updateSlaSectionNoteFail = error => ({
     type: UPDATE_SLA_SECTION_NOTE_FAIL,
+    payload: error,
+  })
+
+  export const addNewSectionTab = params => ({
+    type: ADD_NEW_SECTION_TAB,
+    params,
+  })
+
+  export const addNewSectionTabSuccess = response => ({
+    type: ADD_NEW_SECTION_TAB_SUCCESS,
+    payload: response,
+  })
+
+  export const addNewSectionTabFail = error => ({
+    type: ADD_NEW_SECTION_TAB_FAIL,
+    payload: error,
+  })
+
+  export const updateSectionTab = params => ({
+    type: UPDATE_SECTION_TAB,
+    params,
+  })
+
+  export const updateSectionTabSuccess = response => ({
+    type: UPDATE_SECTION_TAB_SUCCESS,
+    payload: response,
+  })
+
+  export const updateSectionTabFail = error => ({
+    type: UPDATE_SECTION_TAB_FAIL,
+    payload: error,
+  })
+
+  export const deleteSectionTab = params => ({
+    type: DELETE_SECTION_TAB,
+    params,
+  })
+
+  export const deleteSectionTabSuccess = response => ({
+    type: DELETE_SECTION_TAB_SUCCESS,
+    payload: response,
+  })
+
+  export const deleteSectionTabFail = error => ({
+    type: DELETE_SECTION_TAB_FAIL,
     payload: error,
   })

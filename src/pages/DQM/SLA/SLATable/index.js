@@ -60,7 +60,7 @@ const TDActionsComponent = ({ item, index, onEdit, onDelete, disabled }) => {
   )
 }
 
-const SLATable = ({ items, scheduler }) => {
+const SLATable = ({ items, onDeleteSLADetail, scheduler }) => {
   const [deleteItem, setDeleteItem] = useState(null)
   const [modalDetail, setModalDetail] = useState({ isShow: false, data: [] })
 
@@ -94,8 +94,14 @@ const SLATable = ({ items, scheduler }) => {
     0
   )
 
+
   const getColSize = col => {
     return `${(((col.columnSize || 1) / totalColSizes) * 100).toFixed(2)}%`
+  }
+
+  const OnDeleteSLAHandler = () =>{
+    setDeleteItem(null)
+    onDeleteSLADetail(deleteItem)
   }
 
   return (
@@ -142,7 +148,7 @@ const SLATable = ({ items, scheduler }) => {
                     >
                       Cancel
                     </button>
-                    <button className="btn btn-danger">Delete</button>
+                    <button className="btn btn-danger" onClick={()=>OnDeleteSLAHandler()}>Delete</button>
                   </div>
                 </td>
               </tr>

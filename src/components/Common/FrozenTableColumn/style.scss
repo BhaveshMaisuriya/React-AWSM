@@ -10,6 +10,10 @@
   src: url("../../../assets/fonts/Inter/Inter-SemiBold.ttf") format("truetype");
 }
 
+.table-container {
+  height: 602px;
+}
+
 .container {
   display: flex;
   padding: 0px !important;
@@ -32,7 +36,7 @@
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.07);
   border: 1px solid #d9d9d9;
   border-radius: 5px;
-  height: auto;
+  height: 100%;
 }
 
 .fixed_section {
@@ -54,6 +58,10 @@
 .container thead tr {
   background-color: #f8f9fa;
   height: 64px;
+  td {
+    color: #000000;
+    font-weight: 600;
+  }
 }
 
 .scrollable {
@@ -68,21 +76,10 @@
   }
 }
 
-.container tbody tr {
-  height: 52px;
-}
-
-.container thead td {
-  // font-family: Inter;
-  color: #000000;
-  max-height: 64px;
-  font-weight: 600;
-}
-
 .container tbody td {
   font-family: Museo Sans;
   color: rgba(0, 0, 0, 0.75);
-  max-height: 52px;
+  height: 52px;
 }
 
 tbody td .cell-text {

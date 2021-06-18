@@ -234,7 +234,7 @@ class SLA extends Component {
 Finance Division (FDN) & Customer Experience Department"
                       />
                       <Row>
-                        <SLATab data={slaData.rbd} />
+                        <SLATab category="rbd" data={slaData.rbd} />
                       </Row>
                     </TabPane>
                     <TabPane tabId="1">
@@ -243,13 +243,13 @@ Finance Division (FDN) & Customer Experience Department"
 Finance Division (FDN) & Customer Experience Department"
                       />
                       <Row>
-                        <SLATab data={slaData.cbd} />
+                        <SLATab category="cbd" data={slaData.cbd} />
                       </Row>
                     </TabPane>
                     <TabPane tabId="2">
                       <Header title="Internal" />
                       <Row>
-                        <SLATab data={slaData.internal} />
+                        <SLATab category="internal" data={slaData.internal} />
                       </Row>
                     </TabPane>
                   </TabContent>

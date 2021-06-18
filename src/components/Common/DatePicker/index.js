@@ -23,8 +23,8 @@ const DatePicker = ({
   const open = Boolean(anchorEl)
   const id = Date.now().toString()
 
-  const minDate = isTypeFor === "sales" ? new Date(moment().subtract(30, 'days')) : '';
-  const maxDate = isTypeFor === "sales" ? new Date() : '';
+  const minDate = isTypeFor === "sales" ? new Date(moment().subtract(30, 'days')) : ''
+  const maxDate = isTypeFor === "sales" ? new Date() : ''
 
   const handleClick = event => {
     setAnchorEl(event.currentTarget)
@@ -47,20 +47,20 @@ const DatePicker = ({
   }
 
   const onDateChangeButton = (date) => {
-    setDate(date);
+    setDate(date)
   }
 
   const applyDate = () => {
     if (onChange) {
       onChange(date)
     }
-    setDateButton(date);
+    setDateButton(date)
     handleClose()
   }
 
   const handleCancel = () => {
     setDate(dateButton)
-    handleClose();
+    handleClose()
   }
 
   return (

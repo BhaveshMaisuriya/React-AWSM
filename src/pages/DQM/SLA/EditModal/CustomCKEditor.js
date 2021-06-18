@@ -25,13 +25,13 @@ export default function CustomCKEditor(props){
         <table class="sla-table-detail" style="width: 100%;">
         <tbody>
             <tr>
-                <td class="item sla-td-1" id="sla-td-1">${data?.item}</td>
-                <td class="item sla-td-2" id="sla-td-2">${data?.description}</td>
-                <td class="item sla-td-3" id="sla-td-3">${data?.kpi}</td>
-                <td class="item sla-td-4" id="sla-td-4">${data?.mitigation_plan}</td>
-                <td class="item sla-td-5" id="sla-td-5">${data?.action_by}</td>
-                <td class="item sla-td-6" id="sla-td-6">${data?.module}</td>
-                <td class="item sla-td-7" id="sla-td-7">${data?.remarks}</td>
+                <td class="item sla-td-1" id="sla-td-1">${data?.item || '&nbsp;'}</td>
+                <td class="item sla-td-2" id="sla-td-2">${data?.description || '&nbsp;'}</td>
+                <td class="item sla-td-3" id="sla-td-3">${data?.kpi || '&nbsp;'}</td>
+                <td class="item sla-td-4" id="sla-td-4">${data?.mitigation_plan || '&nbsp;'}</td>
+                <td class="item sla-td-5" id="sla-td-5">${data?.action_by || '&nbsp;'}</td>
+                <td class="item sla-td-6" id="sla-td-6">${data?.module || '&nbsp;'}</td>
+                <td class="item sla-td-7" id="sla-td-7">${data?.remarks || '&nbsp;'}</td>
             </tr>
         </tbody>
         </table>`

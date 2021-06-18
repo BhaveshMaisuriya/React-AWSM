@@ -24,6 +24,7 @@ const initialState = {
   updateSuccess: false,
   downloadretailCustomers: [],
 }
+import { notify } from "../../helpers/notify"
 
 const RetailCustomer = (state = initialState, action) => {
   switch (action.type) {
@@ -83,21 +84,21 @@ const RetailCustomer = (state = initialState, action) => {
         updateSuccess: false,
       }
 
-    case UPDATE_TABLE_INFORMATION_SUCCESS:
+    case UPDATE_TABLE_INFORMATION_SUCCESS: {
+      notify.success("Record Successfully Updated")
       return {
         ...state,
-        address: state.events.map(event =>
-          event.id.toString() === action.payload.id.toString()
-            ? { event, ...action.payload }
-            : event
-        ),
       }
+    }
 
-    case UPDATE_TABLE_INFORMATION_FAIL:
+
+    case UPDATE_TABLE_INFORMATION_FAIL: {
+      notify.error(action.payload)
       return {
         ...state,
         error: action.payload,
       }
+    }
 
     case GET_RETAIL_FILTER_SUCCESS:
       return {

@@ -18,7 +18,9 @@ import { ReactSVG } from "react-svg"
 import { CKEditor } from "@ckeditor/ckeditor5-react"
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic"
 import AWSMButtonOption from "../../../components/Common/AWSMButtonOption"
-import { updateSlaSectionNote,deleteSLADetail, addNewSectionTab, updateSectionTab, deleteSectionTab } from "../../../store/actions"
+import { updateSLASection } from "../../../store/actions"
+import { deleteSLADetail, addNewSectionTab, updateSectionTab, deleteSectionTab } from "../../../store/actions"
+import SLAModalDetail from "./EditModal/SLAModalDetail"
 
 const DeleteNoteConfirmation = ({ isOpen, onDelete, onCancel, item }) => {
   return (
@@ -94,25 +96,25 @@ const AddNewSectionModal = ({ defaultValue, isOpen, onAdd, onCancel, type = "add
         </div>
         <div className="d-flex align-items-center justify-content-end mt-3">
           <button onClick={onCancelHandler} className="btn btn-outline-success mr-2">Cancel</button>
-          { type == 'add' ? <button 
-            onClick={onAdd} 
-            className="btn btn-success" 
+          { type == 'add' ? <button
+            onClick={onAdd}
+            className="btn btn-success"
             disabled={remainCharacters < 0 || remainCharacters==MAX_CHARS}
             >Add
-          </button> : <button 
-            onClick={onAdd} 
-            className="btn btn-success" 
+          </button> : <button
+            onClick={onAdd}
+            className="btn btn-success"
             disabled={remainCharacters < 0 || remainCharacters==MAX_CHARS}
             >Update
           </button> }
-          
+
         </div>
       </ModalBody>
     </Modal>
   )
 }
 
-const SLAAddNote = ({ data, onChange, onDeleteNote }) => {
+const SLAAddNote = ({ data, onSubmit, onDeleteNote }) => {
   const [onEditing, setOnEditing] = useState(false)
   const [value, setValue] = useState(data.note || "");
   const [editor, setEditor] = useState(null)
@@ -126,8 +128,8 @@ const SLAAddNote = ({ data, onChange, onDeleteNote }) => {
     }
   }
   const onUpdate = () => {
-    if (onChange) {
-      onChange(value)
+    if (onSubmit) {
+      onSubmit(value)
     }
     setOnEditing(false)
   }
@@ -144,10 +146,10 @@ const SLAAddNote = ({ data, onChange, onDeleteNote }) => {
 
   return (
     <div className="sla-tab-add-container">
-      {!data.note && !onEditing ? (
-        <div className="sla-tab-add-note" onClick={() => setOnEditing(true)}>
+      {!data.notes && !onEditing ? (
+        <div className="sla-tab-add-note">
           <hr />
-          <h4>+ ADD NOTES</h4>
+          <h4 onClick={() => setOnEditing(true)}>+ ADD NOTES</h4>
         </div>
       ) : (
         <div className="d-flex align-items-center justify-content-between py-3 note-title">
@@ -178,7 +180,7 @@ const SLAAddNote = ({ data, onChange, onDeleteNote }) => {
               "|",
             ],
           }}
-          data={data.note}
+          data={data.notes}
           onChange={onEditorChange}
           onReady={editor => setEditor(editor)}
         />
@@ -191,14 +193,14 @@ const SLAAddNote = ({ data, onChange, onDeleteNote }) => {
           </button>
         </div>
       </div>
-      <div className={!onEditing && data.note ? "d-block" : "d-none"}>
+      <div className={!onEditing && data.notes ? "d-block" : "d-none"}>
         <CKEditor
           editor={ClassicEditor}
           config={{
             toolbar: [],
           }}
           disabled
-          data={data.note}
+          data={data.notes}
           onReady={editor => setViewEditor(editor)}
         />
       </div>
@@ -206,7 +208,7 @@ const SLAAddNote = ({ data, onChange, onDeleteNote }) => {
   )
 }
 
-const SectionLabelEdit = ({ defaultValue, disabled, onChange }) => {
+const SectionLabelEdit = ({ defaultValue, disabled, onSubmit }) => {
   const MAX_CHARS = 120
   const inputRef = useRef(null)
   const [onEditing, setOnEditing] = useState(false)
@@ -232,11 +234,12 @@ const SectionLabelEdit = ({ defaultValue, disabled, onChange }) => {
   }
 
   const onUpdate = () => {
-    if (onChange) {
-      onChange(value)
+    if (onSubmit) {
+      onSubmit(value)
     }
     setOnEditing(false)
   }
+
   return (
     <div className="sla-section-label-edit">
       <div className="flex-grow-1 position-relative">
@@ -287,6 +290,7 @@ class SLATab extends Component {
     super(props)
     this.state = {
       activeTab: 0,
+      addRowModal:false,
       deleteNoteModal: false,
       addSectionModal:false,
       renameSectionModal:false,
@@ -294,14 +298,15 @@ class SLATab extends Component {
       sectionNameSelected:""
     }
     this.toggle = this.toggle.bind(this)
-    this.onNoteChange = this.onNoteChange.bind(this)
+    this.onSubmitNote = this.onSubmitNote.bind(this)
     this.onDeleteNote = this.onDeleteNote.bind(this)
+    this.onSubmitSubtitle = this.onSubmitSubtitle.bind(this)
     this.onAddSectionHandler = this.onAddSectionHandler.bind(this)
     this.onOptionClick = this.onOptionClick.bind(this)
     this.onUpdateSectionHandler = this.onUpdateSectionHandler.bind(this)
     this.onDeleteSectionHandler = this.onDeleteSectionHandler.bind(this)
   }
-e
+
   componentDidMount() {}
 
   toggle(index) {
@@ -314,21 +319,24 @@ e
     this.setState({addSectionModal: true})
   }
 
-  onSubtitleChange(value) {
-    console.log(value)
+  onSubmitSubtitle(section, value) {
+    const { updateSlaSection, category } = this.props
+    updateSlaSection({ id: section.id, category: category, data: { subtitle: value } })
   }
 
-  onNoteChange(value) {
-    const { updateSlaSectionNote } = this.props
-    updateSlaSectionNote(value)
+  onSubmitNote(section, value) {
+    const { updateSlaSection, category } = this.props
+    updateSlaSection({ id: section.id, category: category, data: { notes: value } })
   }
 
   deleteNoteModal() {
-    updateSlaSectionNote(null)
+    updateSLASection(null)
   }
 
   onDeleteNote() {
-    this.setState({...this.state, deleteNoteModal: false})
+    const { updateSlaSection, category, data } = this.props
+    this.setState({ ...this.state, deleteNoteModal: false })
+    updateSlaSection({ id: data[this.state.activeTab].id, category: category, data: { notes: null } })
   }
 
   onOptionClick(option){
@@ -353,6 +361,10 @@ e
     })
   }
 
+  onHandleAddRow(){
+    this.setState({addRowModal:true})
+  }
+
   onDeleteSectionHandler(){
     this.props.deleteSectionTab()
     this.setState({
@@ -361,7 +373,7 @@ e
   }
 
   handleGenerateAddNewSection = () =>{
-    return(<AddNewSectionModal 
+    return(<AddNewSectionModal
       defaultValue={""}
       isOpen={this.state.addSectionModal}
       onAdd={this.onAddSectionHandler}
@@ -371,7 +383,7 @@ e
 
   handleGenerateEditSection = () =>{
     const { renameSectionModal, sectionNameSelected } = this.state
-    return sectionNameSelected && (<AddNewSectionModal 
+    return sectionNameSelected && (<AddNewSectionModal
       key={new Date()}
       type={'edit'}
       defaultValue={sectionNameSelected}
@@ -392,11 +404,11 @@ e
 
   render() {
     const { data, deleteSLADetail } = this.props
-    const { modalDetail } = this.state
+    const { modalDetail, addRowModal } = this.state
     return (
       <Fragment>
         <Nav tabs className="nav-sla-tab col-12 mx-3">
-          {data.map((item, index) => {
+          { data ? data.map((item, index) => {
             return (
               <NavItem key={index}>
                 <NavLink
@@ -423,10 +435,10 @@ e
                 </NavLink>
               </NavItem>
             )
-          })}
+          }) : null}
           <NavItem>
             <NavLink
-              key={data.length}
+              key={data ? data.length : 1}
               style={{ cursor: "pointer" }}
               className="active sla-and-new-section"
               onClick={this.onAddSection.bind(this)}
@@ -439,34 +451,45 @@ e
           activeTab={this.state.activeTab}
           className="p-3 text-muted col-12"
         >
-          {data.map((item, index) => {
-            return (
-              <TabPane key={index} tabId={index}>
-                <div>
-                  <div>
-                    <SectionLabelEdit
-                      defaultValue={item.subtitle}
-                      onChange={this.onSubtitleChange}
-                      max_chars={120}
-                    />
-                    <SLATable items={item.items} onDeleteSLADetail={deleteSLADetail}/>
-                    <a className="sla-tab-add">+ Add Row</a>
-                    <SLAAddNote
-                      data={item}
-                      onChange={this.onNoteChange}
-                      onDeleteNote={() => this.setState({...this.state, deleteNoteModal: true})}
-                    />
-                  </div>
-                </div>
-              </TabPane>
-            )
-          })}
+          {data ? data.map((item, index) => {
+                return (
+                  <TabPane key={index} tabId={index}>
+                    <div>
+                      <div>
+                        <SectionLabelEdit
+                          defaultValue={item.subtitle}
+                          onSubmit={value => this.onSubmitSubtitle(item, value)}
+                          max_chars={120}
+                        />
+                        <SLATable items={item.records} onDeleteSLADetail={deleteSLADetail} />
+                        <a className="sla-tab-add" onClick={this.onHandleAddRow.bind(this)}>+ Add Row</a>
+                        <SLAAddNote
+                          data={item}
+                          onSubmit={(value) => this.onSubmitNote(item, value)}
+                          onDeleteNote={() =>
+                            this.setState({
+                              ...this.state,
+                              deleteNoteModal: true,
+                            })
+                          }
+                        />
+                      </div>
+                    </div>
+                  </TabPane>
+                )
+              })
+            : null}
         </TabContent>
         <DeleteNoteConfirmation
           isOpen={this.state.deleteNoteModal}
           onDelete={this.onDeleteNote}
           onCancel={() => this.setState({...this.state, deleteNoteModal: false})}
           item={"Notes"}
+        />
+         <SLAModalDetail
+          openModalDetail={addRowModal}
+          type={'add'}
+          handleCloseModal={()=>this.setState({addRowModal:false})}
         />
         { this.handleGenerateAddNewSection() }
         { this.handleGenerateEditSection() }
@@ -477,7 +500,7 @@ e
 }
 
 const mapDispatchToProps = dispatch => ({
-  updateSlaSectionNote: params => dispatch(updateSlaSectionNote(params)),
+  updateSlaSection: params => dispatch(updateSLASection(params)),
   deleteSLADetail: params => dispatch(deleteSLADetail(params)),
   addSectionTab: params => dispatch(addNewSectionTab(params)),
   updateSectionTab: params => dispatch(updateSectionTab(params)),

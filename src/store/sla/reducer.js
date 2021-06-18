@@ -5,10 +5,12 @@ import {
   GET_SLA_AUDITLOG_FAIL,
   UPDATE_SLA_DETAIL_FAIL,
   UPDATE_SLA_DETAIL_SUCCESS,
-  UPDATE_SLA_SECTION_NOTE_SUCCESS,
+  UPDATE_SLA_SECTION_SUCCESS,
   ADD_NEW_SECTION_TAB_SUCCESS,
   UPDATE_SECTION_TAB_SUCCESS,
   DELETE_SECTION_TAB_SUCCESS,
+  CREATE_SLA_RECORD_SUCCESS,
+  CREATE_SLA_RECORD_FAIL
 } from "./actionTypes"
 
 const initialState = {
@@ -60,13 +62,15 @@ const SLA = (state = initialState, action) => {
         error: action.payload,
       }
 
-    case UPDATE_SLA_SECTION_NOTE_SUCCESS: {
-      return {
-        ...state,
-        data: action.payload,
+      case UPDATE_SLA_SECTION_SUCCESS: {
+        notify.success("SLA Section Updated!")
+        const newData = { ...state.data }
+        newData[action.payload.category] = action.payload.data
+        return {
+          ...state,
+          data: newData
+        }
       }
-    }
-
     case ADD_NEW_SECTION_TAB_SUCCESS:
       notify.success("New section has successfully added in Internal")
       return {
@@ -81,6 +85,12 @@ const SLA = (state = initialState, action) => {
 
     case DELETE_SECTION_TAB_SUCCESS:
       notify.success("New section has successfully deleted in Internal")
+      return {
+        ...state,
+      }
+
+    case CREATE_SLA_RECORD_SUCCESS:
+      notify.success("New row has successfully added in Section A, RBD")
       return {
         ...state,
       }

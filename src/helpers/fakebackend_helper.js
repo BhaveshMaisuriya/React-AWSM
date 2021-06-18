@@ -369,7 +369,23 @@ export const getSaleAndInventory = params =>
     { ...params }
   )
 
-export const getSlaItems = params => get(`${url.SLA_ITEMS}`)
+export const getSlaItems = params =>
+  axios
+    .get("https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/sla")
+    .then(response => response.data)
+
+export const updateSLASection = ({ category, id, data }) =>
+  axios
+    .put(
+      `https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/sla/${category}/section/${id}`,
+      data
+    )
+    .then(response => response.data)
+
+export const getSLASection = ({ category }) =>
+  axios.get(`https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/sla/${category}`)
+    .then(response => response.data)
+
 export const getSlaAuditLog = payload => get(url.GET_SLA_AUDITLOG, { payload })
 export const updateSlaItem = params => put(`${url.SLA_ITEMS}`)
 export const updateSlaSectionNote = notes => put(`${url.SLA_ITEMS}`, notes)

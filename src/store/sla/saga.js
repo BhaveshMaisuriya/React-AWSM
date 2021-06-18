@@ -4,11 +4,12 @@ import {
     GET_SLA_AUDITLOG,
     GET_SLA_ITEMS,
     UPDATE_SLA_DETAIL,
-    UPDATE_SLA_SECTION_NOTE,
+    UPDATE_SLA_SECTION,
     DELETE_SLA_DETAIL,
     ADD_NEW_SECTION_TAB,
     UPDATE_SECTION_TAB,
-    DELETE_SECTION_TAB
+    DELETE_SECTION_TAB,
+    CREATE_SLA_RECORD
 } from "./actionTypes"
 
 import {
@@ -18,8 +19,8 @@ import {
     getSlaAuditLogFail,
     updateSlaDetailSuccess,
     updateSlaDetailFail,
-    updateSlaSectionNoteSuccess,
-    updateSlaSectionNoteFail,
+    updateSLASectionSuccess,
+    updateSLASectionFail,
     deleteSLADetailSuccess,
     deleteSLADetailFail,
     addNewSectionTabSuccess,
@@ -27,14 +28,17 @@ import {
     updateSectionTabSuccess,
     updateSectionTabFail,
     deleteSectionTabSuccess,
-    deleteSectionTabFail
+    deleteSectionTabFail,
+    createSLARecordSuccess,
+    createSLARecordFail
 } from "./actions"
 
 import {
   getSlaItems,
   getSlaAuditLog,
   updateSlaItem,
-  updateSlaSectionNote,
+  updateSLASection,
+  getSLASection
 } from "../../helpers/fakebackend_helper"
 
 function* onGetSLAAuditLog() {
@@ -65,13 +69,13 @@ function* onUpdateSLAItem(action) {
   }
 }
 
-function* onUpdateSLASectionNote({ params }) {
+function* onUpdateSLASection({ params }) {
   try {
-    console.log({params})
-    const response = yield call(updateSlaSectionNote, params)
-    yield put(updateSlaSectionNoteSuccess(response))
+    yield call(updateSLASection, params)
+    const response = yield call(getSLASection, params)
+    yield put(updateSLASectionSuccess({ category: params.category, data: response }))
   } catch (error) {
-    yield put(updateSlaSectionNoteFail(error))
+    yield put(updateSLASectionFail(error))
   }
 }
 
@@ -111,15 +115,24 @@ function* onDeleteSectionTab(action){
   }
 }
 
+function* onCreateSLARecord(action){
+  try {
+    // const response = yield call(deleteSLADetail, action.params)
+    yield put(createSLARecordSuccess())
+  } catch (error) {
+    yield put(createSLARecordFail(error))
+  }
+}
+
 function* SLASaga() {
   yield takeEvery(GET_SLA_AUDITLOG, onGetSLAAuditLog)
   yield takeEvery(GET_SLA_ITEMS, onGetSLAItems)
   yield takeEvery(UPDATE_SLA_DETAIL, onUpdateSLAItem)
-  yield takeEvery(UPDATE_SLA_SECTION_NOTE, onUpdateSLASectionNote)
+  yield takeEvery(UPDATE_SLA_SECTION, onUpdateSLASection)
   yield takeEvery(DELETE_SLA_DETAIL, onDeleteSLADetail)
   yield takeEvery(ADD_NEW_SECTION_TAB, onAddNewSectionTab)
   yield takeEvery(UPDATE_SECTION_TAB, onUpdateSectionTab)
-  yield takeEvery(DELETE_SECTION_TAB, onDeleteSectionTab)
+  yield takeEvery(CREATE_SLA_RECORD, onCreateSLARecord)
 }
 
 export default SLASaga

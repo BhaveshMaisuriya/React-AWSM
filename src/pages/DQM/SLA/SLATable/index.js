@@ -157,6 +157,7 @@ const SLATable = ({ items, onDeleteSLADetail, scheduler }) => {
         </tbody>
       </table>
       <SLAModalDetail
+        type={'update'}
         openModalDetail={modalDetail.isShow}
         data={modalDetail.data}
         handleCloseModal={handleCloseModalDetail}

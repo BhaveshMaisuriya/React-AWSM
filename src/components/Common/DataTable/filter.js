@@ -113,7 +113,7 @@ const Example = React.memo(props => {
    * @param event
    */
   function onSearchTextChange(event) {
-    const newData = [...data];
+    const newData = [...data]
     for (let i = 0; i < newData.length; i++) {
       newData[i].visibility = newData[i].text !== null && newData[i].text
         .toString()
@@ -180,7 +180,7 @@ const Example = React.memo(props => {
       setHasMore(false)
       return
     } else {
-      let arr = [...current];
+      let arr = [...current]
       data.map((item, index) => {
         if (index + 1 > count + 1 && index - 1 < count + rowsPerLoad) {
           arr.push(item)

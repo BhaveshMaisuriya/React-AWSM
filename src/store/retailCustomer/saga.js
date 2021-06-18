@@ -69,7 +69,7 @@ function* onGetTableInformation({ params }) {
   }
 }
 
-function* onUpdateTableInformation(payload) {
+function* onUpdateTableInformation({ payload }) {
   try {
     const response = yield call(updateTableInformation, payload)
     yield put(updateTableInformationSuccess(response))

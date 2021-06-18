@@ -113,17 +113,11 @@ const Example = React.memo(props => {
    * @param event
    */
   function onSearchTextChange(event) {
-    const newData = [...data]
-    for (let i = 0; i < newData.length; i++) {
-      newData[i].visibility = newData[i].text !== null && newData[i].text
-        .toString()
-        .toLowerCase()
-        .includes(event.target.value)
-        newData[i].checked = newData[i].text !== null &&  newData[i].text
-        .toString()
-        .toLowerCase()
-        .includes(event.target.value)
-    }
+    const newData = [...data];
+    newData.map((item, index)=>{
+      item.visibility = item.text !== null && item.text.toString().toLowerCase().includes(event.target.value);
+      item.checked = item.text !== null && item.text.toString().toLowerCase().includes(event.target.value);
+    })
     setData(newData)
   }
 

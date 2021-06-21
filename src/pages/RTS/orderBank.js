@@ -18,6 +18,7 @@ import {
 import "./style.scss"
 import MoreVertIcon from "@material-ui/icons/MoreVert"
 import { IconButton, Menu, MenuItem } from "@material-ui/core"
+import awsmLogo from "../../assets/images/AWSM-logo-order-bank.png"
 
 function OrderBank() {
   const [activeTab, setActiveTab] = useState("1")
@@ -27,9 +28,9 @@ function OrderBank() {
 
   return (
     <React.Fragment>
-      <div className="page-content">
+      <div className="order-bank-page-content">
         <div className="container-fluid">
-          <Card>
+          <Card className="order_bank_main">
             <CardBody>
               <Row>
                 <Col lg={3} md={3} sm={12}>
@@ -54,7 +55,9 @@ function OrderBank() {
                     </Nav>
                   </div>
                 </Col>
-                <Col lg={9} md={9} sm={12}></Col>
+                <Col lg={9} md={9} sm={12} className="top_right_section">
+                  <img src={awsmLogo} />
+                </Col>
               </Row>
 
               <div>

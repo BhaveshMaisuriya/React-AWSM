@@ -1,3 +1,12 @@
+.order_bank_main {
+    margin-top: 15px;
+}
+.order-bank-page-content {
+    padding: 0;
+}
+.top_right_section {
+    text-align: right;
+}
 .nav-pills .nav-link.active{
     width: auto !important;
     height: auto !important;
@@ -6,7 +15,7 @@
     align-items: center;
 }
 .gantt_chart_main, .shipment_main {
-    height: 60vh;
+    height: 80vh;
     overflow-y: hidden;
 }
 .gantt_chart_first, .gantt_chart_second{

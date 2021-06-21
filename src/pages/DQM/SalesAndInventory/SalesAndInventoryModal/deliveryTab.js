@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-
+import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
+import Tooltip from '@material-ui/core/Tooltip';
 export default class DeliveryTab extends Component {
     constructor(props) {
         super(props)
@@ -30,14 +31,14 @@ export default class DeliveryTab extends Component {
     render() {
         return (
             <>
-                <h6>Past Delivery</h6>
-                <table className="table">
+                <b>Past Delivery</b>
+                <table className="table table-bordered">
                     <thead>
                         <tr>
-                            <th>DATE</th>
-                            <th>VOLUME (L)</th>
-                            <th>VOLUME ADJUSTMENT (L)</th>
-                            <th>TOTAL DELIVERY (L)</th>
+                            <th><b>DATE</b><Tooltip title="1 week historical data"><InfoOutlinedIcon /></Tooltip></th>
+                            <th><b>VOLUME (L)</b><Tooltip title="1 week historical data"><InfoOutlinedIcon /></Tooltip></th>
+                            <th><b>VOLUME ADJUSTMENT (L)</b><Tooltip title="1 week historical data taken from Yesterday Delivery Adjustment (L)"><InfoOutlinedIcon /></Tooltip></th>
+                            <th><b>TOTAL DELIVERY (L)</b><Tooltip title="1 week historical data taken Total Delivery = Past Delivery Volume + Past Delivery Volume Adjustment"><InfoOutlinedIcon /></Tooltip></th>
                         </tr>
                     </thead>
                     <tbody>

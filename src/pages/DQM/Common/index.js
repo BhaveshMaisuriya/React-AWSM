@@ -21,7 +21,6 @@ import eyeIcon from "../../../assets/images/auditlog-eye.svg"
 import customiseTableIcon from "../../../assets/images/AWSM-Customise-Table.svg"
 import AuditLog from "../../../components/Common/AuditLog"
 import FixedColumnTable from "../../../components/Common/FrozenTableColumn"
-// import { tableColumns, tableMapping } from "./tableMapping"
 import CustomizeTableModal from "../../../common/CustomizeTable"
 import InformationModal from "../RoadTanker/InformationModal"
 import {
@@ -297,6 +296,7 @@ class Pages extends Component {
       cardTitle,
       headerTitle,
       downloadtableData,
+      frozenColNum,
     } = this.props
 
     if (!tableData || tableData.length === 0) return ""
@@ -380,7 +380,7 @@ class Pages extends Component {
                         <div className="d-flex align-items-center w-100 mt-4 mb-2">
                           <div className="col-4 p-0">
                             <label>DATE</label>
-                            <DatePicker showButtons={true} isTypeFor='sales' />
+                            <DatePicker showButtons={true} isTypeFor="sales" />
                           </div>
                           <div className="col-6 p-0 ml-4">
                             <label>REGION & TERMINAL</label>
@@ -458,10 +458,9 @@ class Pages extends Component {
                         headers={searchFields}
                         config={tableMapping}
                         tableData={tableData.list}
-                        frozen={1}
+                        frozen={frozenColNum}
                         filterData={filter}
                         headerSortHandler={this.handleHeaderSort}
-                        // filterDropdownHandler={this.getRetailFilterData}
                         filterApplyHandler={this.handleQueryParameterChange}
                         modalPop={this.modalHandlerTI}
                       />
@@ -497,7 +496,6 @@ class Pages extends Component {
 Pages.propType = {
   onGetCustomer: PropTypes.func.isRequired,
   onGetAuditLog: PropTypes.func.isRequired,
-  // onGetFilter: PropTypes.func.isRequired,
   onGetTableInformation: PropTypes.func.isRequired,
   onUpdateTableInformation: PropTypes.func.isRequired,
   tableColumns: PropTypes.array.isRequired,
@@ -511,6 +509,11 @@ Pages.propType = {
   tableName: PropTypes.string.isRequired,
   modalComponent: PropTypes.element,
   onGetDownloadCustomer: PropTypes.func.isRequired,
+  frozenColNum: PropTypes.number,
+}
+
+Pages.defaultProps = {
+  frozenColNum: 1,
 }
 
 export default withStyles(styles)(Pages)

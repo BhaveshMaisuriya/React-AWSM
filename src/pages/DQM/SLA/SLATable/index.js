@@ -10,38 +10,38 @@ import "./index.scss"
 const tableMapping = {
   item: {
     label: "ITEM NO.",
-    apiKey: "item",
-    columnSize: "cell-text",
+    apiKey: "itemIdentifier",
+    columnSize: 0.5,
   },
   description: {
     label: "Description",
     apiKey: "description",
-    columnSize: "cell-text-big",
+    columnSize: 1,
   },
   kpi: {
     label: "KPI",
     apiKey: "kpi",
-    columnSize: 3,
+    columnSize: 2,
   },
   mitigation_plan: {
     label: "Mitigation Plan",
     apiKey: "mitigation_plan",
-    columnSize: "cell-text-big",
+    columnSize: 1,
   },
   action_by: {
     label: "Action By",
     apiKey: "action_by",
-    columnSize: "cell-text",
+    columnSize: 1,
   },
   module: {
     label: "Module",
     apiKey: "module",
-    columnSize: "cell-text",
+    columnSize: 1,
   },
   remarks: {
     label: "Remarks",
     apiKey: "remarks",
-    columnSize: "cell-text-big",
+    columnSize: 1,
   },
 }
 
@@ -60,7 +60,7 @@ const TDActionsComponent = ({ item, index, onEdit, onDelete, disabled }) => {
   )
 }
 
-const SLATable = ({ items, onDeleteSLADetail, scheduler }) => {
+const SLATable = ({ items, onDeleteSLADetail, scheduler, onUpdate }) => {
   const [deleteItem, setDeleteItem] = useState(null)
   const [modalDetail, setModalDetail] = useState({ isShow: false, data: [] })
 
@@ -76,14 +76,14 @@ const SLATable = ({ items, onDeleteSLADetail, scheduler }) => {
   }
 
   const onDelete = (index, item) => {
-    setDeleteItem(index)
+    setDeleteItem(item.id)
   }
 
   const columns = Object.keys(tableMapping).map(key => tableMapping[key])
   columns.push({
     label: "Actions",
     apiKey: null,
-    columnSize: "cell-text",
+    columnSize: 0.5,
     TDComponent: TDActionsComponent,
     TDComponentProps: { onEdit, onDelete, disabled: scheduler },
   })
@@ -114,7 +114,7 @@ const SLATable = ({ items, onDeleteSLADetail, scheduler }) => {
         </thead>
         <tbody>
           {items.map((item, index) => {
-            return index !== deleteItem ? (
+            return item.id !== deleteItem ? (
               <tr>
                 {columns.map(({ TDComponent, apiKey, TDComponentProps }) =>
                   TDComponent ? (
@@ -161,6 +161,7 @@ const SLATable = ({ items, onDeleteSLADetail, scheduler }) => {
         openModalDetail={modalDetail.isShow}
         data={modalDetail.data}
         handleCloseModal={handleCloseModalDetail}
+        onUpdateSLAItem={onUpdate}
       />
     </div>
   )

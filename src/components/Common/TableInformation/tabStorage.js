@@ -21,41 +21,9 @@ timeData.push(`23:59`)
 
 const TabStorage = ({ scheduler, data, onChange }) => {
   const [storageData, setStorageData] = useState(data.storage || {})
-  const [endOfDay, setEndOfDay] = useState(data.end_of_day)
   const [deleteItemKey, setDeleteItemKey] = useState(null)
   const [alert, setAlert] = useState(false)
-
-  const onStorageChange = newStorageData => {
-    if (onChange) {
-      onChange("storage", {
-        items: newStorageData,
-        end_of_day: endOfDay,
-      })
-    }
-  }
-
-  useEffect(() => {
-    if (onChange) {
-      
-      onChange("storage", {
-        items: storageData,
-        end_of_day: endOfDay,
-      })
-    }
-  }, [endOfDay])
-
   const pathName = window.location.pathname
-
-  /**
-   * Update duration value
-   * @param index: storage index item
-   * @param value: updated value
-   */
-  const onDurationChange = (index, value) => {
-    const newStorageData = [...storageData]
-    newStorageData[index].duration = value
-    onStorageChange(newStorageData)
-  }
 
   /**
    * Update end of day value

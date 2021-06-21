@@ -1,731 +1,203 @@
 const tableColumns = [
+  "record_id",
+  "override",
   "ship_to_party",
-  "ship_to_company",
-  "site_name",
-  "site_id",
-  "cluster",
-  "region_group",
-  "status_awsm",
-  "sales_inventory_data_source",
-  "road_tanker_accessibility",
+  "product",
+  "data_source",
+  "station_tank_status",
+  "sales_variance",
+  "sales_variance_percentage",
+  "inventory_variance",
   "remarks",
 ]
 
 const tableMapping = {
+  record_id: {
+    label: "RECORD ID",
+    columnSize: "cell-text",
+    type: "link",
+  },
   ship_to_party: {
     label: "SHIP TO PARTY",
-    apiKey: "ship_to_party",
     columnSize: "cell-text",
   },
-  ship_to_company: {
-    label: "SHIP TO COMPANY",
-    apiKey: "ship_to_company",
-    columnSize: "cell-text-big",
+  product: {
+    label: "PRODUCT",
+    columnSize: "cell-text",
+  },
+  override: {
+    label: "OVERRIDE ACTION",
+    columnSize: "cell-text",
+  },
+  data_source: {
+    label: "SOURCE OF DATA",
+    columnSize: "cell-text",
+  },
+  station_tank_status: {
+    label: "STATION TANK STATUS",
+    columnSize: "cell-text",
+  },
+  product_status: {
+    label: "PRODUCT STATUS",
+    columnSize: "cell-text",
+    type: "badge",
+    getBadgeColor: value => {
+      return value === "ACTIVE" ? "primary" : "secondary"
+    },
+  },
+  remarks: {
+    label: "REMARKS",
+    columnSize: "cell-text",
+  },
+  actual_sales: {
+    label: "ACTUAL SALES (L)",
+    columnSize: "cell-text",
+  },
+  expected_sales: {
+    label: "EXPECTED SALES (L)",
+    columnSize: "cell-text",
+  },
+  yesterday_sales_adjustment: {
+    label: "YESTERDAY'S SALES ADJUSTMENT REMARKS",
+    columnSize: "cell-text",
+  },
+  yesterday_sales_adjustment_remarks: {
+    label: "YESTERDAY SALES ADJUSTMENT REMARKS",
+    columnSize: "cell-text",
+  },
+  sales_final_figure: {
+    label: "SALES FINAL FIGURE (L)",
+    columnSize: "cell-text",
+  },
+  sales_variance: {
+    label: "SALES VARIANCE (L)",
+    columnSize: "cell-text",
     type: "color",
     getColor: value => {
       return value === "G" ? "green-text" : "red-text"
     },
   },
-  station_status_sap: {
-    label: "STATION STATUS IN SAP",
-    apiKey: "status_sap",
+  sales_variance_percentage: {
+    label: "SALES VARIANCE (%)",
     columnSize: "cell-text",
+    type: "color",
+    getColor: value => {
+      return value === "G" ? "green-text" : "red-text"
+    },
   },
-  remarks: {
-    label: "REMARKS",
-    apiKey: "remarks",
-    columnSize: "cell-text-big",
-  },
-  sold_to_party: {
-    label: "SOLD TO PARTY",
-    apiKey: "sold_to_party",
-    columnSize: "cell-text",
-  },
-  sold_to_company: {
-    label: "SOLD TO COMPANY",
-    apiKey: "sold_to_company",
-    columnSize: "cell-text-big",
-  },
-  site_id: {
-    label: "SITE ID",
-    apiKey: "site_id",
-    columnSize: "cell-text",
-  },
-  site_name: {
-    label: "SITE NAME",
-    apiKey: "site_name",
-    columnSize: "cell-text-big",
-  },
-  address_1: {
-    label: "ADDRESS",
-    apiKey: "address.address_1",
-    columnSize: "cell-text-big",
-  },
-  city: {
-    label: "CITY",
-    apiKey: "address.city",
-    columnSize: "cell-text-big",
-  },
-  state: {
-    label: "STATE",
-    apiKey: "address.state",
-    columnSize: "cell-text-big",
-  },
-  postcode: {
-    label: "POSTCODE",
-    apiKey: "address.postcode",
-    columnSize: "cell-text",
-  },
-  country: {
-    label: "COUNTRY",
-    apiKey: "address.country",
-    columnSize: "cell-text",
-  },
-  region_group: {
-    label: "REGION",
-    apiKey: "address.region_group",
-    columnSize: "cell-text",
-  },
-  latitude: {
-    label: "LATITUDE",
-    apiKey: "address.latitude",
-    columnSize: "cell-text",
-  },
-  longitude: {
-    label: "LONGITUDE",
-    apiKey: "address.longitude",
-    columnSize: "cell-text",
-  },
-  cluster: {
-    label: "CLUSTER",
-    apiKey: "cluster",
-    columnSize: "cell-text",
-  },
-  alternate_cluster: {
-    label: "ALTERNATE CLUSTER",
-    apiKey: "alternate_cluster",
-    columnSize: "cell-text",
-  },
-  cloud: {
-    label: "CLOUD",
-    apiKey: "cloud",
-    columnSize: "cell-text",
-  },
-  border_station: {
-    label: "BORDER STATION",
-    apiKey: "border_station",
-    columnSize: "cell-text",
-  },
-  speed: {
-    label: "SPEED (KM/Hr)",
-    apiKey: "speed",
-    columnSize: "cell-text",
-  },
-  contact_1_name: {
-    label: "CONTACT PERSON 1 EMAIL",
-    apiKey: "contact_1.name",
-    columnSize: "cell-text-big",
-  },
-  contact_1_number: {
-    label: "CONTACT PERSON 1 NAME",
-    apiKey: "contact_1.number",
-    columnSize: "cell-text",
-  },
-  contact_1_email: {
-    label: "CONTACT PERSON 1 EMAIL",
-    apiKey: "contact_1.email",
-    columnSize: "cell-text-big",
-  },
-  contact_1_position: {
-    label: "CONTACT PERSON 1 POSITION",
-    apiKey: "contact_1.position",
-    columnSize: "cell-text-big",
-  },
-  contact_2_name: {
-    label: "CONTACT PERSON 2 NAME",
-    apiKey: "contact_2.name",
-    columnSize: "cell-text-big",
-  },
-  contact_2_number: {
-    label: "CONTACT PERSON 2 NUMBER",
-    apiKey: "contact_2.number",
-    columnSize: "cell-text",
-  },
-  contact_2_email: {
-    label: "CONTACT PERSON 2 EMAIL",
-    apiKey: "contact_2.email",
-    columnSize: "cell-text-big",
-  },
-  contact_2_position: {
-    label: "CONTACT PERSON 2 POSITION",
-    apiKey: "contact_2.position",
-    columnSize: "cell-text-big",
-  },
-  contact_3_name: {
-    label: "CONTACT PERSON 3 NAME",
-    apiKey: "contact_3.name",
-    columnSize: "cell-text-big",
-  },
-  contact_3_number: {
-    label: "CONTACT PERSON 3 NUMBER",
-    apiKey: "contact_3.number",
-    columnSize: "cell-text",
-  },
-  contact_3_email: {
-    label: "CONTACT PERSON 3 EMAIL",
-    apiKey: "contact_3.email",
-    columnSize: "cell-text-big",
-  },
-  contact_3_position: {
-    label: "CONTACT PERSON 3 POSITION",
-    apiKey: "contact_3.position",
-    columnSize: "cell-text-big",
-  },
-  territory_manager_name: {
-    label: "TERRITORY MANAGER (FUEL)",
-    apiKey: "territory_manager.name",
-    columnSize: "cell-text-big",
-  },
-  territory_manager_number: {
-    label: "TERRITORY MANAGER NUMBER",
-    apiKey: "territory_manager.number",
-    columnSize: "cell-text",
-  },
-  territory_manager_email: {
-    label: "TERRITORY MANAGER EMAIL",
-    apiKey: "territory_manager.email",
-    columnSize: "cell-text-big",
-  },
-  retail_sales_manager_name: {
-    label: "RETAIL SALES MANAGER",
-    apiKey: "retail_sales_manager.name",
-    columnSize: "cell-text-big",
-  },
-  retail_sales_manager_number: {
-    label: "RETAIL SALES MANAGER NUMBER",
-    apiKey: "retail_sales_manager.number",
-    columnSize: "cell-text",
-  },
-  retail_sales_manager_email: {
-    label: "RETAIL SALES MANAGER EMAIL",
-    apiKey: "retail_sales_manager.email",
-    columnSize: "cell-text-big",
-  },
-  contact_last_updated: {
-    label: "CONTACT LAST UPDATE",
-    apiKey: "contact_last_updated",
-    columnSize: "cell-text-big",
-  },
-  status_awsm: {
-    label: "STATION STATUS IN AWSM",
-    apiKey: "status_awsm",
-    columnSize: "cell-text",
-  },
-  station_close_period_date_from: {
-    label: "CLOSE PERIOD FROM",
-    apiKey: "station_close_period.date_from",
-    columnSize: "cell-text-big",
-  },
-  station_close_period_date_to: {
-    label: "CLOSE PERIOD TO",
-    apiKey: "station_close_period.date_to",
-    columnSize: "cell-text-big",
-  },
-  sales_inventory_data_source: {
-    label: "SALES AND INVENTORY DATA SOURCE",
-    apiKey: "sales_inventory_data_source",
-    columnSize: "cell-text-big",
-  },
-  end_of_day: {
-    label: "END OF DAY",
-    apiKey: "end_of_day",
-    columnSize: "cell-text",
-  },
-  storage_1_product_code: {
-    label: "PRODUCT 1 CODE",
-    apiKey: "storage_1.product_code",
-    columnSize: "cell-text",
-  },
-  storage_1_product_name: {
-    label: "PRODUCT 1 NAME",
-    apiKey: "storage_1.product_name",
-    columnSize: "cell-text-big",
-  },
-  storage_1_tank_capacity: {
-    label: "PRODUCT 1 TANK CAPACITY",
-    apiKey: "storage_1.tank_capacity",
-    columnSize: "cell-text",
-  },
-  storage_1_active_product: {
-    label: "PRODUCT 1 STATUS",
-    apiKey: "storage_1.active_product",
-    columnSize: "cell-text",
-  },
-  storage_1_ordering_category: {
-    label: "PRODUCT 1 ORDERING CATEGORY",
-    apiKey: "storage_1.ordering_category",
-    columnSize: "cell-text",
-  },
-  storage_1_terminal: {
-    label: "PRODUCT 1 TERMINAL",
-    apiKey: "storage_1.terminal",
-    columnSize: "cell-text-big",
-  },
-  storage_1_distance: {
-    label: "PRODUCT 1 DISTANCE FROM TERMINAL(KM)",
-    apiKey: "storage_1.distance",
-    columnSize: "cell-text",
-  },
-  storage_1_duration: {
-    label: "PRODUCT 1 DURATION FROM TERMINAL(HRS)",
-    apiKey: "storage_1.duration",
-    columnSize: "cell-text",
-  },
-  storage_1_station_sales_category: {
-    label: "PRODUCT 1 SALES CATEGORY",
-    apiKey: "storage_1.station_sales_category",
-    columnSize: "cell-text",
-  },
-  storage_1_product_code_quota: {
-    label: "PRODUCT 1 MONTHLY FIXED QUOTA",
-    apiKey: "storage_1.product_code_quota",
-    columnSize: "cell-text",
-  },
-  storage_1_remarks: {
-    label: "PRODUCT 1 REMARKS",
-    apiKey: "storage_1.remarks",
-    columnSize: "cell-text-big",
-  },
-  storage_2_product_code: {
-    label: "PRODUCT 2 CODE",
-    apiKey: "storage_2.product_code",
-    columnSize: "cell-text",
-  },
-  storage_2_product_name: {
-    label: "PRODUCT 2 NAME",
-    apiKey: "storage_2.product_name",
-    columnSize: "cell-text-big",
-  },
-  storage_2_tank_capacity: {
-    label: "PRODUCT 2 TANK CAPACITY",
-    apiKey: "storage_2.tank_capacity",
-    columnSize: "cell-text",
-  },
-  storage_2_active_product: {
-    label: "PRODUCT 2 STATUS",
-    apiKey: "storage_2.active_product",
-    columnSize: "cell-text",
-  },
-  storage_2_ordering_category: {
-    label: "PRODUCT 2 ORDERING CATEGORY",
-    apiKey: "storage_2.ordering_category",
-    columnSize: "cell-text",
-  },
-  storage_2_terminal: {
-    label: "PRODUCT 2 TERMINAL",
-    apiKey: "storage_2.terminal",
-    columnSize: "cell-text-big",
-  },
-  storage_2_distance: {
-    label: "PRODUCT 2 DISTANCE FROM TERMINAL(KM)",
-    apiKey: "storage_2.distance",
-    columnSize: "cell-text",
-  },
-  storage_2_duration: {
-    label: "PRODUCT 2 DURATION FROM TERMINAL(HRS)",
-    apiKey: "storage_2.duration",
-    columnSize: "cell-text",
-  },
-  storage_2_station_sales_category: {
-    label: "PRODUCT 2 SALES CATEGORY",
-    apiKey: "storage_2.station_sales_category",
-    columnSize: "cell-text",
-  },
-  storage_2_product_code_quota: {
-    label: "PRODUCT 2 MONTHLY FIXED QUOTA",
-    apiKey: "storage_2.product_code_quota",
-    columnSize: "cell-text",
-  },
-  storage_2_remarks: {
-    label: "PRODUCT 2 REMARKS",
-    apiKey: "storage_2.remarks",
-    columnSize: "cell-text-big",
-  },
-  storage_3_product_code: {
-    label: "PRODUCT 3 CODE",
-    apiKey: "storage_3.product_code",
-    columnSize: "cell-text",
-  },
-  storage_3_product_name: {
-    label: "PRODUCT 3 NAME",
-    apiKey: "storage_3.product_name",
-    columnSize: "cell-text-big",
-  },
-  storage_3_tank_capacity: {
-    label: "PRODUCT 3 TANK CAPACITY",
-    apiKey: "storage_3.tank_capacity",
-    columnSize: "cell-text",
-  },
-  storage_3_active_product: {
-    label: "PRODUCT 3 STATUS",
-    apiKey: "storage_3.active_product",
-    columnSize: "cell-text",
-  },
-  storage_3_ordering_category: {
-    label: "PRODUCT 3 ORDERING CATEGORY",
-    apiKey: "storage_3.ordering_category",
-    columnSize: "cell-text",
-  },
-  storage_3_terminal: {
-    label: "PRODUCT 3 TERMINAL",
-    apiKey: "storage_3.terminal",
-    columnSize: "cell-text-big",
-  },
-  storage_3_distance: {
-    label: "PRODUCT 3 DISTANCE FROM TERMINAL(KM)",
-    apiKey: "storage_3.distance",
-    columnSize: "cell-text",
-  },
-  storage_3_duration: {
-    label: "PRODUCT 3 DURATION FROM TERMINAL(HRS)",
-    apiKey: "storage_3.duration",
-    columnSize: "cell-text",
-  },
-  storage_3_station_sales_category: {
-    label: "PRODUCT 3 SALES CATEGORY",
-    apiKey: "storage_3.station_sales_category",
-    columnSize: "cell-text",
-  },
-  storage_3_product_code_quota: {
-    label: "PRODUCT 3 MONTHLY FIXED QUOTA",
-    apiKey: "storage_3.product_code_quota",
-    columnSize: "cell-text",
-  },
-  storage_3_remarks: {
-    label: "PRODUCT 3 REMARKS",
-    apiKey: "storage_3.remarks",
-    columnSize: "cell-text-big",
-  },
-  storage_4_product_code: {
-    label: "PRODUCT 4 CODE",
-    apiKey: "storage_4.product_code",
-    columnSize: "cell-text",
-  },
-  storage_4_product_name: {
-    label: "PRODUCT 4 NAME",
-    apiKey: "storage_4.product_name",
-    columnSize: "cell-text-big",
-  },
-  storage_4_tank_capacity: {
-    label: "PRODUCT 4 TANK CAPACITY",
-    apiKey: "storage_4.tank_capacity",
-    columnSize: "cell-text",
-  },
-  storage_4_active_product: {
-    label: "PRODUCT 4 STATUS",
-    apiKey: "storage_4.active_product",
-    columnSize: "cell-text",
-  },
-  storage_4_ordering_category: {
-    label: "PRODUCT 4 ORDERING CATEGORY",
-    apiKey: "storage_4.ordering_category",
-    columnSize: "cell-text",
-  },
-  storage_4_terminal: {
-    label: "PRODUCT 4 TERMINAL",
-    apiKey: "storage_4.terminal",
-    columnSize: "cell-text-big",
-  },
-  storage_4_distance: {
-    label: "PRODUCT 4 DISTANCE FROM TERMINAL(KM)",
-    apiKey: "storage_4.distance",
-    columnSize: "cell-text",
-  },
-  storage_4_duration: {
-    label: "PRODUCT 4 DURATION FROM TERMINAL(HRS)",
-    apiKey: "storage_4.duration",
-    columnSize: "cell-text",
-  },
-  storage_4_station_sales_category: {
-    label: "PRODUCT 4 SALES CATEGORY",
-    apiKey: "storage_4.station_sales_category",
-    columnSize: "cell-text",
-  },
-  storage_4_product_code_quota: {
-    label: "PRODUCT 4 MONTHLY FIXED QUOTA",
-    apiKey: "storage_4.product_code_quota",
-    columnSize: "cell-text",
-  },
-  storage_4_remarks: {
-    label: "PRODUCT 4 REMARKS",
-    apiKey: "storage_4.remarks",
-    columnSize: "cell-text-big",
-  },
-  storage_5_product_code: {
-    label: "PRODUCT 5 CODE",
-    apiKey: "storage_5.product_code",
-    columnSize: "cell-text",
-  },
-  storage_5_product_name: {
-    label: "PRODUCT 5 NAME",
-    apiKey: "storage_5.product_name",
-    columnSize: "cell-text-big",
-  },
-  storage_5_tank_capacity: {
-    label: "PRODUCT 5 TANK CAPACITY",
-    apiKey: "storage_5.tank_capacity",
-    columnSize: "cell-text",
-  },
-  storage_5_active_product: {
-    label: "PRODUCT 5 STATUS",
-    apiKey: "storage_5.active_product",
-    columnSize: "cell-text",
-  },
-  storage_5_ordering_category: {
-    label: "PRODUCT 5 ORDERING CATEGORY",
-    apiKey: "storage_5.ordering_category",
-    columnSize: "cell-text",
-  },
-  storage_5_terminal: {
-    label: "PRODUCT 5 TERMINAL",
-    apiKey: "storage_5.terminal",
-    columnSize: "cell-text-big",
-  },
-  storage_5_distance: {
-    label: "PRODUCT 5 DISTANCE FROM TERMINAL(KM)",
-    apiKey: "storage_5.distance",
-    columnSize: "cell-text",
-  },
-  storage_5_duration: {
-    label: "PRODUCT 5 DURATION FROM TERMINAL(HRS)",
-    apiKey: "storage_5.duration",
-    columnSize: "cell-text",
-  },
-  storage_5_station_sales_category: {
-    label: "PRODUCT 5 SALES CATEGORY",
-    apiKey: "storage_5.station_sales_category",
-    columnSize: "cell-text",
-  },
-  storage_5_product_code_quota: {
-    label: "PRODUCT 5 MONTHLY FIXED QUOTA",
-    apiKey: "storage_5.product_code_quota",
-    columnSize: "cell-text",
-  },
-  storage_5_remarks: {
-    label: "PRODUCT 5 REMARKS",
-    apiKey: "storage_5.remarks",
-    columnSize: "cell-text-big",
-  },
-  storage_6_product_code: {
-    label: "PRODUCT 6 CODE",
-    apiKey: "storage_6.product_code",
-    columnSize: "cell-text",
-  },
-  storage_6_product_name: {
-    label: "PRODUCT 6 NAME",
-    apiKey: "storage_6.product_name",
-    columnSize: "cell-text-big",
-  },
-  storage_6_tank_capacity: {
-    label: "PRODUCT 6 TANK CAPACITY",
-    apiKey: "storage_6.tank_capacity",
+  dipping_value: {
+    label: "DIPPING VALUE (L)",
     columnSize: "cell-text",
   },
-  storage_6_active_product: {
-    label: "PRODUCT 6 STATUS",
-    apiKey: "storage_6.active_product",
+  dipping_timestamp: {
+    label: "DIPPING TIMESTAMP",
     columnSize: "cell-text",
   },
-  storage_6_ordering_category: {
-    label: "PRODUCT 6 ORDERING CATEGORY",
-    apiKey: "storage_6.ordering_category",
+  dipping_to_midnight_sales_volume: {
+    label: "DIPPING TO MIDNIGHT SALES VOLUME (L)",
     columnSize: "cell-text",
   },
-  storage_6_terminal: {
-    label: "PRODUCT 6 TERMINAL",
-    apiKey: "storage_6.terminal",
-    columnSize: "cell-text-big",
-  },
-  storage_6_distance: {
-    label: "PRODUCT 6 DISTANCE FROM TERMINAL(KM)",
-    apiKey: "storage_6.distance",
-    columnSize: "cell-text",
-  },
-  storage_6_duration: {
-    label: "PRODUCT 6 DURATION FROM TERMINAL(HRS)",
-    apiKey: "storage_6.duration",
-    columnSize: "cell-text",
-  },
-  storage_6_station_sales_category: {
-    label: "PRODUCT 6 SALES CATEGORY",
-    apiKey: "storage_6.station_sales_category",
-    columnSize: "cell-text",
-  },
-  storage_6_product_code_quota: {
-    label: "PRODUCT 6 MONTHLY FIXED QUOTA",
-    apiKey: "storage_6.product_code_quota",
-    columnSize: "cell-text",
-  },
-  storage_6_remarks: {
-    label: "PRODUCT 6 REMARKS",
-    apiKey: "storage_6.remarks",
-    columnSize: "cell-text-big",
-  },
-  road_tanker_requirement: {
-    label: "ROAD TANKER REQUIREMENT",
-    apiKey: "road_tanker_requirement",
-    columnSize: "cell-text-big",
-  },
-  road_tanker_accessibility: {
-    label: "ROAD TANKER ACCESSIBILITY",
-    apiKey: "road_tanker_accessibility",
+  dipping_to_midnight_delivery: {
+    label: "DIPPING TO MIDNIGHT DELIVERY (L)",
     columnSize: "cell-text",
   },
-  delivery_open_time_1_days: {
-    label: "DELIVERY OPEN DAY 1",
-    apiKey: "delivery_open_time_1.days",
-    columnSize: "cell-text-big",
-  },
-  delivery_open_time_1_time_from: {
-    label: "DELIVERY OPEN TIME FROM 1",
-    apiKey: "delivery_open_time_1.time_from",
+  dipping_to_midnight_diversion: {
+    label: "DIPPING TO MIDNIGHT DIVERSION (L)",
     columnSize: "cell-text",
   },
-  delivery_open_time_1_time_to: {
-    label: "DELIVERY OPEN TIME TO 1",
-    apiKey: "delivery_open_time_1.time_to",
+  dipping_to_midnight_diversion_remarks: {
+    label: "DIPPING TO MIDNIGHT DIVERSION (L) REMARKS",
     columnSize: "cell-text",
   },
-  actual_open_time_1_days: {
-    label: "ACTUAL OPEN DAY 1",
-    apiKey: "actual_open_time_1.days",
-    columnSize: "cell-text-big",
-  },
-  actual_open_time_1_time_from: {
-    label: "ACTUAL OPEN TIME FROM 1",
-    apiKey: "actual_open_time_1.time_from",
+  dipping_adjustment: {
+    label: "DIPPING ADJUSTMENT (L)",
     columnSize: "cell-text",
   },
-  actual_open_time_1_time_to: {
-    label: "ACTUAL OPEN TIME TO 1",
-    apiKey: "actual_open_time_1.time_to",
+  dipping_adjustment_remarks: {
+    label: "DIPPING ADJUSTMENT (L)",
     columnSize: "cell-text",
-  },
-  actual_open_time_2_days: {
-    label: "ACTUAL OPEN DAY 2",
-    apiKey: "actual_open_time_2.days",
-    columnSize: "cell-text-big",
   },
-  actual_open_time_2_time_from: {
-    label: "ACTUAL OPEN TIME FROM 2",
-    apiKey: "actual_open_time_2.time_from",
+  delivery_adjustment: {
+    label: "DELIVERY ADJUSTMENT (L)",
     columnSize: "cell-text",
   },
-  actual_open_time_2_time_to: {
-    label: "ACTUAL OPEN TIME TO 2",
-    apiKey: "actual_open_time_2.time_to",
+  delivery_adjustment_remarks: {
+    label: "DELIVERY ADJUSTMENT (L) REMARKS",
     columnSize: "cell-text",
   },
-  actual_open_time_3_days: {
-    label: "ACTUAL OPEN DAY 3",
-    apiKey: "actual_open_time_3.days",
-    columnSize: "cell-text-big",
-  },
-  actual_open_time_3_time_from: {
-    label: "ACTUAL OPEN TIME FROM 3",
-    apiKey: "actual_open_time_3.time_from",
+  opening_inventory: {
+    label: "OPENING INVENTORY @12AM (L)",
     columnSize: "cell-text",
   },
-  actual_open_time_3_time_to: {
-    label: "ACTUAL OPEN TIME TO 3",
-    apiKey: "actual_open_time_3.time_to",
+  yesterday_opening_inventory: {
+    label: "OPENING INVENTORY @12AM (L)",
     columnSize: "cell-text",
   },
-  no_delivery_interval_1_value: {
-    label: "NO DELIVERY INTERVAL 1",
-    apiKey: "no_delivery_interval_1.value",
-    columnSize: "cell-text-big",
-  },
-  no_delivery_interval_1_time_from: {
-    label: "NO DELIVERY INTERVAL TIME FROM 1",
-    apiKey: "no_delivery_interval_1.time_from",
+  yesterday_final_sales_figure: {
+    label: "YESTERDAY'S SALES FINAL FIGURE (L)",
     columnSize: "cell-text",
   },
-  no_delivery_interval_1_time_to: {
-    label: "NO DELIVERY INTERVAL TIME TO 1",
-    apiKey: "no_delivery_interval_1.time_to",
+  yesterday_delivery: {
+    label: "YESTERDAY DELIVERY (L)",
     columnSize: "cell-text",
-  },
-  no_delivery_interval_2_value: {
-    label: "NO DELIVERY INTERVAL 2",
-    apiKey: "no_delivery_interval_2.value",
-    columnSize: "cell-text-big",
   },
-  no_delivery_interval_2_time_from: {
-    label: "NO DELIVERY INTERVAL TIME FROM 2",
-    apiKey: "no_delivery_interval_2.time_from",
+  yesterday_diversion: {
+    label: "YESTERDAY DIVERSION (L)",
     columnSize: "cell-text",
   },
-  no_delivery_interval_2_time_to: {
-    label: "NO DELIVERY INTERVAL TIME TO 2",
-    apiKey: "no_delivery_interval_2.time_to",
+  yesterday_diversion_remarks: {
+    label: "YESTERDAY DIVERSION (L) REMARKS",
     columnSize: "cell-text",
   },
-  no_delivery_interval_3_value: {
-    label: "NO DELIVERY INTERVAL 3",
-    apiKey: "no_delivery_interval_3.value",
-    columnSize: "cell-text-big",
-  },
-  no_delivery_interval_3_time_from: {
-    label: "NO DELIVERY INTERVAL TIME FROM 3",
-    apiKey: "no_delivery_interval_3.time_from",
+  yesterday_delivery_adjustment: {
+    label: "YESTERDAY DELIVERY ADJUSTMENT (L)",
     columnSize: "cell-text",
   },
-  no_delivery_interval_3_time_to: {
-    label: "NO DELIVERY INTERVAL TIME TO 3",
-    apiKey: "no_delivery_interval_3.time_to",
+  yesterday_delivery_adjustment_remarks: {
+    label: "YESTERDAY DELIVERY ADJUSTMENT REMARKS",
     columnSize: "cell-text",
   },
-  no_delivery_interval_4_value: {
-    label: "NO DELIVERY INTERVAL 4",
-    apiKey: "no_delivery_interval_4.value",
-    columnSize: "cell-text-big",
-  },
-  no_delivery_interval_4_time_from: {
-    label: "NO DELIVERY INTERVAL TIME FROM 4",
-    apiKey: "no_delivery_interval_4.time_from",
+  calculated_inventory: {
+    label: "CALCULATED INVENTORY @12AM (L)",
     columnSize: "cell-text",
   },
-  no_delivery_interval_4_time_to: {
-    label: "NO DELIVERY INTERVAL TIME TO 4",
-    apiKey: "no_delivery_interval_4.time_to",
+  inventory_final_figure: {
+    label: "INVENTORY FINAL FIGURE (L)",
     columnSize: "cell-text",
-  },
-  no_delivery_interval_5_value: {
-    label: "NO DELIVERY INTERVAL 5",
-    apiKey: "no_delivery_interval_5.value",
-    columnSize: "cell-text-big",
   },
-  no_delivery_interval_5_time_from: {
-    label: "NO DELIVERY INTERVAL TIME FROM 5",
-    apiKey: "no_delivery_interval_5.time_from",
+  inventory_variance: {
+    label: "INVENTORY VARIANCE (L)",
     columnSize: "cell-text",
+    type: "color",
+    getColor: value => {
+      return value === "G" ? "green-text" : "red-text"
+    },
   },
-  no_delivery_interval_5_time_to: {
-    label: "NO DELIVERY INTERVAL TIME TO 5",
-    apiKey: "no_delivery_interval_5.time_to",
+  inventory_variance_percentage: {
+    label: "INVENTORY VARIANCE (%)",
     columnSize: "cell-text",
-  },
-  close_period_1_time_from: {
-    label: "STATION CLOSE FROM",
-    apiKey: "close_period_1.time_from",
-    columnSize: "cell-text-big",
-  },
-  close_period_1_time_to: {
-    label: "STATION CLOSE TO",
-    apiKey: "close_period_1.time_to",
-    columnSize: "cell-text-big",
-  },
+    type: "color",
+    getColor: value => {
+      return value === "G" ? "green-text" : "red-text"
+    },
+  },
+  // total_delivery: {
+  //   label: "",
+  //   columnSize: "cell-text",
+  // },
+  inventory_correction_volume: {
+    label: "INVENTORY CORRECTION VOLUME",
+    columnSize: "cell-text",
+  },
+  inventory_correction_remarks: {
+    label: "INVENTORY CORRECTION REMARKS",
+    columnSize: "cell-text",
+  },
+  // region: {
+  //   label: "",
+  //   columnSize: "cell-text",
+  // },
+  // terminal: [],
 }
 
 export { tableMapping, tableColumns }

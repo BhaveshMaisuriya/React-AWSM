@@ -25,7 +25,7 @@ export default function CustomCKEditor(props){
         <table class="sla-table-detail" style="width: 100%;">
         <tbody>
             <tr>
-                <td class="item sla-td-1" id="sla-td-1">${data?.item || '&nbsp;'}</td>
+                <td class="item sla-td-1" id="sla-td-1">${data?.itemIdentifier || '&nbsp;'}</td>
                 <td class="item sla-td-2" id="sla-td-2">${data?.description || '&nbsp;'}</td>
                 <td class="item sla-td-3" id="sla-td-3">${data?.kpi || '&nbsp;'}</td>
                 <td class="item sla-td-4" id="sla-td-4">${data?.mitigation_plan || '&nbsp;'}</td>

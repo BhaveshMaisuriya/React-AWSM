@@ -18,6 +18,7 @@ const tableMapping = {
     label: "Code",
     apiKey: "code",
     columnSize: "cell-text",
+    type: "link",
   },
   name: {
     label: "Name",

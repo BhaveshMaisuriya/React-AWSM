@@ -33,8 +33,8 @@ const Example = React.memo(props => {
     if (dataFilter) {
       if (!isNull(dataFilter[dataKey]) && !isUndefined(dataFilter[dataKey])) {
         let alldata = []
-       
-       dataFilter[dataKey].map((item, index) => {
+
+        dataFilter[dataKey].map((item, index) => {
           alldata.push({
             text: item,
             checked: checkedList.length > 0 ? checkedList.includes(item) : true,
@@ -171,7 +171,7 @@ const Example = React.memo(props => {
     dataKey === 'remarks' ? setHasRemark(true) : setHasRemark(false);
   }
 
-  const getMoreData = () => {    
+  const getMoreData = () => {
     if (data.length <= count) {
       setHasMore(false)
       return
@@ -221,20 +221,19 @@ const Example = React.memo(props => {
             }}
           >
             {!hasRemark &&
-            <Fragment>
-              <SimpleBar
-                autoHide={false}
-                style={{ height: "150px", width: "100%", overflow: "auto" }}
-              >
-                {current.length > 0 && !isNull(current)
-                  ? current.map((row, index) => {
+              <Fragment>
+                <SimpleBar
+                  autoHide={false}
+                  style={{ height: "150px", width: "100%", overflow: "auto" }}
+                >
+                  {current.length > 0 && !isNull(current)
+                    ? current.map((row, index) => {
                       return (
                         row.visibility && (
                           <div
                             key={row.text}
-                            className={`d-flex align-items-center ${
-                              row.checked || checkAll ? "item-checked" : ""
-                            }`}
+                            className={`d-flex align-items-center ${row.checked || checkAll ? "item-checked" : ""
+                              }`}
                           >
                             <FormControlLabel
                               key={`${row}${index}`}
@@ -260,46 +259,46 @@ const Example = React.memo(props => {
                         )
                       )
                     })
-                  : ""}
-                {hasMore && (
-                  <IconButton
-                    color="primary"
-                    aria-label="Load More"
-                    component="span"
-                    className="Loadmore_Filters"
-                    onClick={getMoreData}
-                  >
-                    <ReplayIcon />
-                  </IconButton>
-                )}
-              </SimpleBar>
-            <p style={{ marginTop: "-10px" }}></p>
-           
-            <Checkbox
-              checked={checkAll}
-              onChange={() => setCheckAll(!checkAll)}
-              icon={<CustomIcon3 />}
-              checkedIcon={<CustomIcon2 />}
-              onClick={selectAll}
-              style={{
-                height: "20px",
-                width: "5px",
-                marginLeft: "5px",
-                marginTop: "5px",
-              }}
-            />
-            <label
-              style={{
-                color: "#008F8A",
-                marginLeft: "12px",
-                fontFamily: "Museo Sans",
-              }}
-            >
-              Select All
-            </label>
-            <IconButton></IconButton>
-            </Fragment>
-}
+                    : ""}
+                  {hasMore && (
+                    <IconButton
+                      color="primary"
+                      aria-label="Load More"
+                      component="span"
+                      className="Loadmore_Filters"
+                      onClick={getMoreData}
+                    >
+                      <ReplayIcon />
+                    </IconButton>
+                  )}
+                </SimpleBar>
+                <p style={{ marginTop: "-10px" }}></p>
+
+                <Checkbox
+                  checked={checkAll}
+                  onChange={() => setCheckAll(!checkAll)}
+                  icon={<CustomIcon3 />}
+                  checkedIcon={<CustomIcon2 />}
+                  onClick={selectAll}
+                  style={{
+                    height: "20px",
+                    width: "5px",
+                    marginLeft: "5px",
+                    marginTop: "5px",
+                  }}
+                />
+                <label
+                  style={{
+                    color: "#008F8A",
+                    marginLeft: "12px",
+                    fontFamily: "Museo Sans",
+                  }}
+                >
+                  Select All
+                </label>
+                <IconButton></IconButton>
+              </Fragment>
+            }
             <Button
               type="submit"
               style={{
@@ -342,8 +341,8 @@ const Example = React.memo(props => {
 })
 
 Example.defaultProps = {
-  handleClickApply: () => {},
-  handleClickReset: () => {},
+  handleClickApply: () => { },
+  handleClickReset: () => { },
 }
 
 export default Example

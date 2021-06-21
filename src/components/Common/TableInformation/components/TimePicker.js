@@ -8,6 +8,7 @@ import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown"
  * @param onChange
  * @param disabled
  * @param defaultEmpty
+ * @param value
  * @returns {JSX.Element}
  * @constructor
  */
@@ -32,10 +33,6 @@ const AWSMDropdown = ({
     }
   }
 
-  const formatdValueHandler = (data) =>{
-    return typeof(data) == "string" ? data.substring(0,5) :data
-  }
-
   return (
     <Dropdown isOpen={dropdownOpen} toggle={toggle}>
       <DropdownToggle
@@ -46,7 +43,7 @@ const AWSMDropdown = ({
         disabled={disabled}
       >
         <div className={`awsm-select-toggle p-2 position-relative ${disabled ? "disabled" : ""}`}>
-          <div>{formatdValueHandler(itemSelected)}</div>
+          <div>{value ? value.toString().substring(0,5) : "Select time"}</div>
           <ArrowDropDownIcon className="awsm-dropdown-arrow"/>
         </div>
       </DropdownToggle>
@@ -58,7 +55,7 @@ const AWSMDropdown = ({
               onClick={() => onValueChange(item)}
               className="awsm-select-item"
             >
-              {formatdValueHandler(item)}
+              {item}
             </div>
           ))}
       </DropdownMenu>

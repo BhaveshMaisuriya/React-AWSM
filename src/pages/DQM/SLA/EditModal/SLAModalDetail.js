@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from "react"
 import PropTypes from "prop-types"
-import { connect } from "react-redux"
 import ExitConfirmation from "components/Common/ExitConfirmation"
 import { XIcon } from "common/CustomizeTable/icons"
 import { Button, Modal, ModalBody, Table } from "reactstrap"
 import CustomCKEditor from "./CustomCKEditor"
 import "./ModalDetail.scss"
-import { updateSLAItem, createSLARecord } from "store/actions"
 
 export const SLAModalDetail = ({ ...props }) => {
   const { openModalDetail, handleCloseModal, onUpdateSLAItem, data, type, onCreateSLARecord  } = props
@@ -35,7 +33,7 @@ export const SLAModalDetail = ({ ...props }) => {
     let remarks = instance.getById("sla-td-7").$.innerHTML
     if(type == 'add'){
       onCreateSLARecord({
-        item,
+        itemIdentifier:item,
         description,
         kpi,
         mitigation_plan,
@@ -45,14 +43,17 @@ export const SLAModalDetail = ({ ...props }) => {
       })
     }
     else{
-      onUpdateSLAItem({
-        item,
-        description,
-        kpi,
-        mitigation_plan,
-        action_by,
-        module,
-        remarks,
+      onUpdateSLAItem({ 
+        itemId : data.id,
+        recordValue: { 
+          itemIdentifier:item,
+          description,
+          kpi,
+          mitigation_plan,
+          action_by,
+          module,
+          remarks
+        }
       })
     }
     handleCloseModal()
@@ -144,11 +145,4 @@ SLAModalDetail.propTypes = {
   type: PropTypes.string,
 }
 
-const mapStateToProps = state => ({})
-
-const mapDispatchToProps = dispatch => ({
-  onUpdateSLAItem: event => dispatch(updateSLAItem(event)),
-  onCreateSLARecord: event => dispatch(createSLARecord(event)),
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(SLAModalDetail)
+export default SLAModalDetail

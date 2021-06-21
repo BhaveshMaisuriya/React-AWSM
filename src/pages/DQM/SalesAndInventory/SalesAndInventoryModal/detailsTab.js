@@ -34,23 +34,29 @@ export default class DetailsTab extends Component {
                     <div className="col-md-6 form-group">
                         <label>SHIP TO PARTY</label>
                         <input defaultValue="Eshah Filling Station"
-                            className="form-control"></input>
+                            className="form-control"
+                            disabled={true}></input>
                     </div>
                     <div className="col-md-6 form-group">
                         <label>PRODUCT</label>
                         <input defaultValue="Primax 95 Premeum"
-                            className="form-control"></input>
+                            className="form-control"
+                            disabled={true}></input>
                     </div>
                 </div>
 
                 <div className="row">
                     <div className="col-md-6 form-group">
                         <label>DATA SOURCE</label>
-                        <input defaultValue="Operation" className="form-control"></input>
+                        <input defaultValue="Operation"
+                            className="form-control"
+                            disabled={true}></input>
                     </div>
                     <div className="col-md-6 form-group">
                         <label>STATION RANK STATUS</label>
-                        <input defaultValue="LV1" className="form-control"></input>
+                        <input defaultValue="LV1"
+                            className="form-control"
+                            disabled={true}></input>
                     </div>
                 </div>
 

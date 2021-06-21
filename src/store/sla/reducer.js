@@ -5,12 +5,17 @@ import {
   GET_SLA_AUDITLOG_FAIL,
   UPDATE_SLA_DETAIL_FAIL,
   UPDATE_SLA_DETAIL_SUCCESS,
+  CREATE_SLA_SECTION_SUCCESS,
+  CREATE_SLA_SECTION_FAIL,
   UPDATE_SLA_SECTION_SUCCESS,
-  ADD_NEW_SECTION_TAB_SUCCESS,
+  UPDATE_SLA_SECTION_FAIL,
+  DELETE_SLA_SECTION_SUCCESS,
+  DELETE_SLA_SECTION_FAIL,
   UPDATE_SECTION_TAB_SUCCESS,
-  DELETE_SECTION_TAB_SUCCESS,
+  DELETE_SLA_RECORD_SUCCESS,
+  DELETE_SLA_RECORD_FAIL,
   CREATE_SLA_RECORD_SUCCESS,
-  CREATE_SLA_RECORD_FAIL
+  CREATE_SLA_RECORD_FAIL,
 } from "./actionTypes"
 
 const initialState = {
@@ -48,11 +53,15 @@ const SLA = (state = initialState, action) => {
         error: action.payload,
       }
 
-    case UPDATE_SLA_DETAIL_SUCCESS:
-      notify.success("SLA Item Updated!")
-      return {
-        ...state,
-        updateStatus: action.payload,
+    case UPDATE_SLA_DETAIL_SUCCESS:{
+        const { payload } = action
+        notify.success(`${payload.category.toUpperCase()} Item Updated!`)
+        const newData = { ...state.data }
+        newData[payload.category] = payload.data
+        return {
+          ...state,
+          data: newData,
+        }
       }
 
     case UPDATE_SLA_DETAIL_FAIL:
@@ -62,20 +71,72 @@ const SLA = (state = initialState, action) => {
         error: action.payload,
       }
 
-      case UPDATE_SLA_SECTION_SUCCESS: {
-        notify.success("SLA Section Updated!")
-        const newData = { ...state.data }
-        newData[action.payload.category] = action.payload.data
-        return {
-          ...state,
-          data: newData
-        }
-      }
-    case ADD_NEW_SECTION_TAB_SUCCESS:
-      notify.success("New section has successfully added in Internal")
+    case UPDATE_SLA_SECTION_SUCCESS: {
+      notify.success("SLA Section Updated!")
+      const newData = { ...state.data }
+      newData[action.payload.category] = action.payload.data
       return {
         ...state,
+        data: newData,
       }
+    }
+
+    case UPDATE_SLA_SECTION_FAIL: {
+      notify.error(action.payload)
+      return state
+    }
+
+    case CREATE_SLA_SECTION_SUCCESS: {
+      notify.success(
+        `${
+          action.payload.title
+        } has successfully added in ${action.payload.category.toUpperCase()}`
+      )
+      const newData = { ...state.data }
+      newData[action.payload.category] = action.payload.data
+      return {
+        ...state,
+        data: newData,
+      }
+    }
+
+    case CREATE_SLA_SECTION_FAIL: {
+      notify.error(action.payload)
+      return state
+    }
+
+    case DELETE_SLA_SECTION_SUCCESS:
+      notify.success(
+        `${
+          action.payload.title
+        } has successfully deleted in ${action.payload.category.toUpperCase()}`
+      )
+      const newData = { ...state.data }
+      newData[action.payload.category] = action.payload.data
+      return {
+        ...state,
+        data: newData,
+      }
+
+    case DELETE_SLA_SECTION_FAIL: {
+      notify.error(action.payload)
+      return state
+    }
+
+    case DELETE_SLA_RECORD_SUCCESS: {
+      notify.success(`Data in ${action.payload.title}, ${action.payload.category.toUpperCase()} has successfully updated`)
+      const newData = { ...state.data }
+      newData[action.payload.category] = action.payload.data
+      return {
+        ...state,
+        data: newData
+      }
+    }
+
+    case  DELETE_SLA_RECORD_FAIL: {
+      notify.error(action.payload)
+      return state
+    }
 
     case UPDATE_SECTION_TAB_SUCCESS:
       notify.success("New section has successfully updated in Internal")
@@ -83,17 +144,17 @@ const SLA = (state = initialState, action) => {
         ...state,
       }
 
-    case DELETE_SECTION_TAB_SUCCESS:
-      notify.success("New section has successfully deleted in Internal")
+    case CREATE_SLA_RECORD_SUCCESS:{
+      const { payload, } = action
+      notify.success(`New row has successfully added in ${payload.tabName}, ${payload.category.toUpperCase()}`)
+      const newData = { ...state.data }
+      newData[payload.category] = payload.data
       return {
         ...state,
+        data: newData,
       }
-
-    case CREATE_SLA_RECORD_SUCCESS:
-      notify.success("New row has successfully added in Section A, RBD")
-      return {
-        ...state,
-      }
+    }
+      
 
     default:
       return state

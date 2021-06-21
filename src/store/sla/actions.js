@@ -8,25 +8,23 @@ import {
   UPDATE_SLA_DETAIL,
   UPDATE_SLA_DETAIL_FAIL,
   UPDATE_SLA_DETAIL_SUCCESS,
-  DELETE_SLA_DETAIL,
-  DELETE_SLA_DETAIL_SUCCESS,
-  DELETE_SLA_DETAIL_FAIL,
   UPDATE_SLA_SECTION,
+  CREATE_SLA_SECTION,
+  CREATE_SLA_SECTION_SUCCESS,
+  CREATE_SLA_SECTION_FAIL,
   UPDATE_SLA_SECTION_SUCCESS,
   UPDATE_SLA_SECTION_FAIL,
   DELETE_SLA_SECTION,
-  ADD_NEW_SECTION_TAB,
-  ADD_NEW_SECTION_TAB_SUCCESS,
-  ADD_NEW_SECTION_TAB_FAIL,
   UPDATE_SECTION_TAB,
   UPDATE_SECTION_TAB_SUCCESS,
   UPDATE_SECTION_TAB_FAIL,
-  DELETE_SECTION_TAB,
-  DELETE_SECTION_TAB_SUCCESS,
-  DELETE_SECTION_TAB_FAIL,
   CREATE_SLA_RECORD,
   CREATE_SLA_RECORD_SUCCESS,
-  CREATE_SLA_SECTION_FAIL
+  DELETE_SLA_SECTION_SUCCESS,
+  DELETE_SLA_SECTION_FAIL,
+  DELETE_SLA_RECORD,
+  DELETE_SLA_RECORD_SUCCESS,
+  DELETE_SLA_RECORD_FAIL
 } from "./actionTypes"
 
 export const getSLAItems = params => ({
@@ -73,17 +71,17 @@ export const updateSlaDetailFail = error => ({
   payload: error,
 })
 
-export const deleteSLADetail = params => ({
-  type: DELETE_SLA_DETAIL,
-  payload: params,
+export const deleteSLARecord = params => ({
+  type: DELETE_SLA_RECORD,
+  params,
 })
 
-export const deleteSLADetailSuccess = response => ({
-  type: DELETE_SLA_DETAIL,
+export const deleteSLARecordSuccess = response => ({
+  type: DELETE_SLA_RECORD_SUCCESS,
   payload: response,
 })
-export const deleteSLADetailFail = error => ({
-  type: DELETE_SLA_DETAIL,
+export const deleteSLARecordFail = error => ({
+  type: DELETE_SLA_RECORD_FAIL,
   payload: error,
 })
 export const updateSLASection = params => ({
@@ -101,18 +99,18 @@ export const updateSLASectionFail = error => ({
   payload: error,
 })
 
-  export const addNewSectionTab = params => ({
-    type: ADD_NEW_SECTION_TAB,
+  export const createSLASection = params => ({
+    type: CREATE_SLA_SECTION,
     params,
   })
 
-  export const addNewSectionTabSuccess = response => ({
-    type: ADD_NEW_SECTION_TAB_SUCCESS,
+  export const createSLASectionSuccess = response => ({
+    type: CREATE_SLA_SECTION_SUCCESS,
     payload: response,
   })
 
-  export const addNewSectionTabFail = error => ({
-    type: ADD_NEW_SECTION_TAB_FAIL,
+  export const createSLASectionFail = error => ({
+    type: CREATE_SLA_SECTION_FAIL,
     payload: error,
   })
 
@@ -131,18 +129,18 @@ export const updateSLASectionFail = error => ({
     payload: error,
   })
 
-  export const deleteSectionTab = params => ({
-    type: DELETE_SECTION_TAB,
+  export const deleteSLASection = params => ({
+    type: DELETE_SLA_SECTION,
     params,
   })
 
-  export const deleteSectionTabSuccess = response => ({
-    type: DELETE_SECTION_TAB_SUCCESS,
+  export const deleteSLASectionSuccess = response => ({
+    type: DELETE_SLA_SECTION_SUCCESS,
     payload: response,
   })
 
-  export const deleteSectionTabFail = error => ({
-    type: DELETE_SECTION_TAB_FAIL,
+  export const deleteSLASectionFail = error => ({
+    type: DELETE_SLA_SECTION_FAIL,
     payload: error,
   })
 

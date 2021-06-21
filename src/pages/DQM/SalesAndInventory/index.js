@@ -71,7 +71,7 @@ class SalesInventory extends Component {
       address,
     } = this.props
     const { searchFields } = this.state
-    if (!saleAndInventory || saleAndInventory.length === 0) return (<Loader />)
+    if (!saleAndInventory || saleAndInventory.length === 0) return <Loader />
     return (
       <Fragment>
         <Page
@@ -91,6 +91,7 @@ class SalesInventory extends Component {
           cardTitle="Sales & Inventory List"
           modalComponent={SalesAndInventoryModal}
           onGetDownloadCustomer={this.GetonDownload}
+          frozenColNum={2}
         />
       </Fragment>
     )

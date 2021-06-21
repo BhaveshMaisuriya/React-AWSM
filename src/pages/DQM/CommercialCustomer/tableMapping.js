@@ -17,6 +17,7 @@ const tableMapping = {
     label: "SHIP TO PARTY",
     apiKey: "ship_to_party",
     columnSize: "cell-text",
+    type: "link",
   },
   ship_to_company: {
     label: "SHIP TO COMPANY",

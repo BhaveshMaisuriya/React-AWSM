@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useMemo } from "react"
 import { Col, Row } from "reactstrap"
 import { AvForm, AvField } from "availity-reactstrap-validation"
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown"
@@ -53,6 +53,22 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
 
   useEffect(() => {
     setDeliveryData(data.delivery)
+    if (data.delivery.actual_open_time_1 && data.delivery.actual_open_time_1.days) {
+      setOpenTime1(
+        [...openTime1].map(item => ({
+          ...item,
+          checked: data.delivery.actual_open_time_1.days.includes(item.name),
+        }))
+      )
+    }
+    if (data.delivery.actual_open_time_2 && data.delivery.actual_open_time_2.days) {
+      setOpenTime2(
+        [...openTime2].map(item => ({
+          ...item,
+          checked: data.delivery.actual_open_time_2.days.includes(item.name),
+        }))
+      )
+    }
   }, [data])
 
   useEffect(() => {
@@ -105,8 +121,8 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
   const actualOpenTime = {
     "id": null,
     "type": "every",
-    "time_from": "00:00:00",
-    "time_to": "23:59:00",
+    "time_from": null,
+    "time_to": null,
     "date_from": null,
     "date_to": null,
     "days": []
@@ -124,9 +140,11 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
     onFieldChange("actual_open_time_1", { ...actualOpenTime1, days: openTime1.filter(i => i.checked).map(i => i.name).join(",")})
   }
 
-  const actualOpenTime1 = openTime1.filter(item => {
-    return item.checked === true
-  })
+  const actualOpenTime1 = useMemo(() => {
+    return openTime1.filter(item => {
+      return item.checked === true
+    })
+  }, [deliveryData, openTime1]);
 
   const handleActualTime2 = item => {
     const index = openTime2.findIndex(e => e.name === item.name)
@@ -140,9 +158,11 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
     onFieldChange("actual_open_time_2", { ...actualOpenTime2, days: openTime2.filter(i => i.checked).map(i => i.name).join(",")})
   }
 
-  const actualOpenTime2 = openTime2.filter(item => {
-    return item.checked === true
-  })
+  const actualOpenTime2 = useMemo(() => {
+    return openTime2.filter(item => {
+      return item.checked === true
+    })
+  }, [deliveryData, openTime2]);
 
   return (
     <div
@@ -210,7 +230,7 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
                 type="text"
                 label="DAY(S)"
                 value={
-                  deliveryData.actual_open_time_1 && deliveryData.actual_open_time_1.length !== 0
+                  actualOpenTime1.length > 0
                     ? actualOpenTime1.map(i => i.name)
                     : "Select day(s)"
                 }
@@ -246,7 +266,7 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
             disabled={scheduler}
             value={
               deliveryData.actual_open_time_1
-                ? deliveryData.actual_open_time_1.to || ""
+                ? deliveryData.actual_open_time_1.time_to || ""
                 : ""
             }
             onChange={value => onFieldChange("actual_open_time_1", { ...actualOpenTime ,...deliveryData.actual_open_time_1, time_to: value})}
@@ -267,7 +287,7 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
                     type="text"
                     label="DAY(S)"
                     value={
-                      actualOpenTime2.length !== 0
+                      actualOpenTime2.length > 0
                         ? actualOpenTime2.map(i => i.name)
                         : "Select day(s)"
                     }

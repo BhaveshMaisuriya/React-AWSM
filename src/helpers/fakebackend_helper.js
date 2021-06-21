@@ -386,6 +386,41 @@ export const getSLASection = ({ category }) =>
   axios.get(`https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/sla/${category}`)
     .then(response => response.data)
 
+export const deleteSLASection = ({ category, id }) =>
+  axios
+    .delete(`https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/sla/${category}/section/${id}`)
+    .then(response => response.data)
+
+export const createSLASection = ({ category, data }) =>
+  axios
+    .post(
+      `https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/sla/${category}/section`,
+      data
+    )
+    .then(response => response.data)
+
+export const createSLATableRecord = (data) =>
+  axios
+    .post(
+      `https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/sla/${data.category}/section/${data.sectionId}/record`,
+      data.recordValue
+    )
+    .then(response => response.data)
+  
+export const deleteSLARecord = ({category, id, recordId}) => {
+  axios
+    .delete(`https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/sla/${category}/section/${id}/record/${recordId}`)
+    .then(response => response.data)
+}
+
+export const updateSLARecord = (data) =>
+  axios
+    .put(
+      `https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/sla/${data.category}/section/${data.sectionId}/record/${data.recordId}`,
+      data.recordValue
+    )
+    .then(response => response.data)
+
 export const getSlaAuditLog = payload => get(url.GET_SLA_AUDITLOG, { payload })
 export const updateSlaItem = params => put(`${url.SLA_ITEMS}`)
 export const updateSlaSectionNote = notes => put(`${url.SLA_ITEMS}`, notes)

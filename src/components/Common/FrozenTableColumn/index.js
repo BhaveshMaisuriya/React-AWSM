@@ -4,7 +4,7 @@ import Filter from "../DataTable/filter"
 import { Link } from "react-router-dom"
 import "./style.scss"
 import { isEqual, isUndefined } from "lodash"
-import { Badge, Row, Col } from "reactstrap"
+import { Badge } from "reactstrap"
 
 class FixedCoulmnTable extends Component {
   constructor(props) {
@@ -75,20 +75,9 @@ class FixedCoulmnTable extends Component {
     ))
   }
   renderFrozenTd = (arr, parentIndex) => {
-    const { headers, config, modalPop } = this.props
+    const { headers } = this.props
     const sliceArr = headers.slice(0, this.state.fixedHeaders.length)
-    return sliceArr.map((e, index) => (
-      <td key={index}>
-        <Link
-          to="#"
-          data-index={parentIndex}
-          onClick={modalPop}
-          className={`${config[e].columnSize}`}
-        >
-          {arr[e]}
-        </Link>
-      </td>
-    ))
+    return this.getTdType(sliceArr, arr, parentIndex)
   }
 
   renderFrozenTr = arr => {
@@ -99,8 +88,19 @@ class FixedCoulmnTable extends Component {
   }
 
   renderRegularTd = arr => {
-    const { headers, config } = this.props
+    const { headers } = this.props
     const sliceArr = headers.slice(this.state.fixedHeaders.length, arr.length)
+    return this.getTdType(sliceArr, arr)
+  }
+  renderRegular = arr => {
+    if (!arr) return null
+    return arr.length === 0 ? <p>Data Not Found!.</p> : arr.map((e, index) => {
+      return <tr key={index}>{this.renderRegularTd(e)}</tr>
+    })
+  }
+
+  getTdType = (sliceArr, arr, parentIndex = 0) => {
+    const { config, modalPop } = this.props
     return sliceArr.map((e, index) => {
       switch (config[e] && config[e].type) {
         case "badge":
@@ -121,8 +121,21 @@ class FixedCoulmnTable extends Component {
           return (
             <td key={index}>
               <div className={`${config[e].getColor(arr[`${e}_color`])}`}>
-                {arr[e]}
+                {isUndefined(arr[e]) ? "-" : arr[e]}
               </div>
+            </td>
+          )
+        case "link":
+          return (
+            <td key={index}>
+              <Link
+                to="#"
+                data-index={parentIndex}
+                onClick={modalPop}
+                className={`${config[e].columnSize}`}
+              >
+                {arr[e]}
+              </Link>
             </td>
           )
         default:
@@ -161,10 +174,18 @@ class FixedCoulmnTable extends Component {
         <div className="scroll">
           <table className="scrollable">
             <thead>
-              <tr>{this.addTd(regularHeaders)}</tr>
+              <tr>{this.addTd(fixedHeaders)}</tr>
             </thead>
-            <tbody>{this.renderRegular(tableData)}</tbody>
+            <tbody>{this.renderFrozenTr(tableData)}</tbody>
           </table>
+          <div className="scroll">
+            <table className="scrollable">
+              <thead>
+                <tr>{this.addTd(regularHeaders)}</tr>
+              </thead>
+              <tbody>{this.renderRegular(tableData)}</tbody>
+            </table>
+          </div>
         </div>
     </div>
     )

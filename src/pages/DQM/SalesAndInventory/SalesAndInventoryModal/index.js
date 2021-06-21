@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Modal, ModalBody, Nav, NavLink, NavItem, TabContent, TabPane } from 'reactstrap';
+import { Modal, ModalBody, ModalFooter, Nav, NavLink, NavItem, TabContent, TabPane } from 'reactstrap';
 import './index.scss';
 import DetailsTab from "./detailsTab"
 import SalesTab from "./salesTab"
@@ -106,10 +106,14 @@ export default class SalesAndInventoryTableInformation extends Component {
                             </Nav>
                             <TabContent activeTab={activeTab}>
                                 <TabPane tabId="1">
-                                    <DetailsTab />
+                                    <div className="simple-bar">
+                                        <DetailsTab />
+                                    </div>
                                 </TabPane>
                                 <TabPane tabId="2">
-                                    <SalesTab />
+                                    <div className="simple-bar">
+                                        <SalesTab />
+                                    </div>
                                 </TabPane>
                                 <TabPane tabId="3">
                                     <div className="simple-bar">
@@ -117,16 +121,19 @@ export default class SalesAndInventoryTableInformation extends Component {
                                     </div>
                                 </TabPane>
                                 <TabPane tabId="4">
-                                    <DeliveryTab />
+                                    <div className="simple-bar">
+                                        <DeliveryTab />
+                                    </div>
                                 </TabPane>
                             </TabContent>
                         </div>
                     </ModalBody>
-
-                    <div className="d-flex align-items-center justify-content-end mt-4 mb-4 px-4">
-                        <button className="btn btn-outline-primary px-4">Cancel</button>
-                        <button className="btn btn-primary ml-4 px-4">Update</button>
-                    </div>
+                    <ModalFooter>
+                        <div className="d-flex align-items-center justify-content-end mt-4 mb-4 px-4">
+                            <button className="btn btn-outline-primary px-4">Cancel</button>
+                            <button className="btn btn-primary ml-4 px-4">Update</button>
+                        </div>
+                    </ModalFooter>
                 </Modal>
             </>
         )

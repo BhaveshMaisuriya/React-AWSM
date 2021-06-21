@@ -81,7 +81,7 @@ class FixedCoulmnTable extends Component {
   }
   renderFrozenTr = arr => {
     if (!arr) return null
-    return arr.map((e, index) => {
+    return arr.length === 0 ? <tr><td></td></tr> : arr.map((e, index) => {
       return <tr key={index}>{this.renderFrozenTd(e, index)}</tr>
     })
   }
@@ -92,7 +92,7 @@ class FixedCoulmnTable extends Component {
   }
   renderRegular = arr => {
     if (!arr) return null
-    return arr.map((e, index) => {
+    return arr.length === 0 ? <p>Data Not Found!.</p> : arr.map((e, index) => {
       return <tr key={index}>{this.renderRegularTd(e)}</tr>
     })
   }

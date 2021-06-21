@@ -10,9 +10,6 @@
   src: url("../../../assets/fonts/Inter/Inter-SemiBold.ttf") format("truetype");
 }
 
-.table-container {
-  height: 602px;
-}
 
 .container {
   display: flex;
@@ -37,22 +34,6 @@
   border: 1px solid #d9d9d9;
   border-radius: 5px;
   height: 100%;
-}
-
-.fixed_section {
-  flex: 0 0 10%;
-  max-width: 12%;
-  padding: 0;
-  position: relative;
-  width: 100%;
-}
-
-.scroll_section {
-  flex: 0 0 90%;
-  max-width: 88%;
-  padding: 0;
-  position: relative;
-  width: 100%;
 }
 
 .container thead tr {

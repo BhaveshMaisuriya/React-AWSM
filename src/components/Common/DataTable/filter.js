@@ -97,8 +97,7 @@ const Example = React.memo(props => {
    * Update check status of row
    * @param index
    */
-  function onInputChange(index) {
-    
+  function onInputChange(index) {    
     const newData = [...data]
     newData[index].checked = !newData[index].checked
     setData(newData)
@@ -114,11 +113,14 @@ const Example = React.memo(props => {
    */
   function onSearchTextChange(event) {
     const newData = [...data];
+    let checked = [];
     newData.map((item, index)=>{
       item.visibility = item.text !== null && item.text.toString().toLowerCase().includes(event.target.value);
       item.checked = item.text !== null && item.text.toString().toLowerCase().includes(event.target.value);
+      item.checked === true && checked.push(item);
     })
-    setData(newData)
+    setCheckedCount(checked.length);
+    setData(newData)    
   }
 
   function clickApply(e) {

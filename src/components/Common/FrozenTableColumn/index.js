@@ -90,12 +90,14 @@ class FixedCoulmnTable extends Component {
       </td>
     ))
   }
+
   renderFrozenTr = arr => {
     if (!arr) return null
-    return arr.map((e, index) => {
+    return arr.length === 0 ? <tr><td></td></tr> : arr.map((e, index) => {
       return <tr key={index}>{this.renderFrozenTd(e, index)}</tr>
     })
   }
+
   renderRegularTd = arr => {
     const { headers, config } = this.props
     const sliceArr = headers.slice(this.state.fixedHeaders.length, arr.length)
@@ -137,9 +139,10 @@ class FixedCoulmnTable extends Component {
       }
     })
   }
+  
   renderRegular = arr => {
     if (!arr) return null
-    return arr.map((e, index) => {
+    return arr.length === 0 ? <p>Data is not available.</p> : arr.map((e, index) => {
       return <tr key={index}>{this.renderRegularTd(e)}</tr>
     })
   }
@@ -149,15 +152,12 @@ class FixedCoulmnTable extends Component {
     const { fixedHeaders, regularHeaders } = this.state
     return (
       <div className="container" style={{ maxWidth: "100%" }}>
-      <div className="fixed_section">
         <table className="fixed">
           <thead>
             <tr>{this.addTd(fixedHeaders)}</tr>
           </thead>
           <tbody>{this.renderFrozenTr(tableData)}</tbody>
         </table>
-       </div>
-      <div className="scroll_section">
         <div className="scroll">
           <table className="scrollable">
             <thead>
@@ -166,7 +166,6 @@ class FixedCoulmnTable extends Component {
             <tbody>{this.renderRegular(tableData)}</tbody>
           </table>
         </div>
-      </div>
     </div>
     )
   }

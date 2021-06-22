@@ -67,7 +67,8 @@ class Header extends Component {
   render() {
     return (
       <React.Fragment>
-        <header id="page-topbar" style={{ boxShadow: "none !important" }}>
+        {window.location.pathname !== '/orderbank' &&
+          <header id="page-topbar" style={{ boxShadow: "none !important" }}>
           <div className="navbar-header">
             <div className="d-flex">
               <div className="navbar-brand-box" style={{ padding: 0 }}>
@@ -383,7 +384,15 @@ class Header extends Component {
             <img src={awsmLogo} alt="AWSM Logo" className="vertical-hr-left"/>
           </div>
         </header>
-      </React.Fragment>
+        }
+        {window.location.pathname === '/orderbank' &&
+          <div className="navbar-brand-box p-fixed" style={{ padding: 0 }}>
+          <div className="sideBar_profile">
+            <ProfileMenu sidebar={true} />
+          </div>
+        </div>
+        }
+     </React.Fragment>
     )
   }
 }

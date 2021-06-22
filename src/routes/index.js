@@ -45,6 +45,7 @@ import Product from "../pages/DQM/ProductList"
 import Terminal from "../pages/DQM/Terminal"
 import SalesAndInventory from "../pages/DQM/SalesAndInventory"
 import SLA from "../pages/DQM/SLA"
+import OrderBank from "../pages/RTS/orderBank"
 
 const authProtectedRoutes = [
   { path: "/dashboard", component: Dashboard },
@@ -62,7 +63,8 @@ const authProtectedRoutes = [
   { path: "/order-forecast", component: Calendar },
   { path: "/highcharts", component: HighCharts },
   { path: "/bryntum", component: Bryntum },
-  { path: "/rts", component: RTS },
+  { path: "/orderbank", component: OrderBank },
+  { path: "/rts", component: RTS },  
 
   { path: "/dashboard/2", component: DashboardSaas },
   { path: "/chat", component: Chat },

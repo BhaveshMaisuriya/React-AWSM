@@ -120,6 +120,7 @@ class SidebarContent extends Component {
                   {/* <Link to="/dashboard/2">Dashboard2</Link> */}
                   <Link to="/highcharts">HighCharts</Link>
                   <Link to="/bryntum">Bryntum</Link>
+                  <Link to="/orderbank">Order Bank</Link>
                 </li>
               </ul>
             </li>

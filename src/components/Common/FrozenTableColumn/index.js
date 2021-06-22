@@ -152,13 +152,6 @@ class FixedCoulmnTable extends Component {
       }
     })
   }
-  
-  renderRegular = arr => {
-    if (!arr) return null
-    return arr.length === 0 ? <p>Data is not available.</p> : arr.map((e, index) => {
-      return <tr key={index}>{this.renderRegularTd(e)}</tr>
-    })
-  }
 
   render() {
     const { tableData } = this.props
@@ -171,13 +164,6 @@ class FixedCoulmnTable extends Component {
           </thead>
           <tbody>{this.renderFrozenTr(tableData)}</tbody>
         </table>
-        <div className="scroll">
-          <table className="scrollable">
-            <thead>
-              <tr>{this.addTd(fixedHeaders)}</tr>
-            </thead>
-            <tbody>{this.renderFrozenTr(tableData)}</tbody>
-          </table>
           <div className="scroll">
             <table className="scrollable">
               <thead>
@@ -186,7 +172,6 @@ class FixedCoulmnTable extends Component {
               <tbody>{this.renderRegular(tableData)}</tbody>
             </table>
           </div>
-        </div>
     </div>
     )
   }

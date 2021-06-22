@@ -12,19 +12,37 @@ import {
   TabContent,
   ButtonDropdown,
   DropdownItem,
-  DropdownToggle,
-  DropdownMenu,
+  Dropdown, DropdownMenu, DropdownToggle 
 } from "reactstrap"
 import "./style.scss"
 import MoreVertIcon from "@material-ui/icons/MoreVert"
 import { IconButton, Menu, MenuItem } from "@material-ui/core"
 import awsmLogo from "../../assets/images/AWSM-logo-order-bank.png"
+import NewOrderModal from "./NewOrderModal"
 
 function OrderBank() {
   const [activeTab, setActiveTab] = useState("1")
   const [dropdownOpen, setOpen] = useState(false)
-
+  const [showNewOrder, setShowNewOrder] = useState(false)
   const toggle = () => setOpen(!dropdownOpen)
+
+  let orderBankSettings = [
+    {'value': 'newOrder', 'label': 'Add New Order', 'icon' : '' },
+    {'value': 'customizeCol', 'label': 'Customize Column', 'icon' : '' },
+    {'value': 'RefreshDN', 'label': 'Refresh Blocked DN', 'icon' : '' },
+    {'value': 'CrossTerminal', 'label': 'Cross Terminal', 'icon' : '' },
+    {'value': 'SendDN', 'label': 'Send Multiple for DN', 'icon' : '' },
+];
+
+const onSettingClick = (val) => {
+  if(val === 'newOrder'){
+    setShowNewOrder(true);
+  }
+}
+
+const onCloseNewOrder = () => {
+  setShowNewOrder(false);
+}
 
   return (
     <React.Fragment>
@@ -76,11 +94,12 @@ function OrderBank() {
                               141 orders, 3.2m ASR, 1.2m SMP, 1m Comm. Total
                               5.4m
                             </span>
-                            {/* <ButtonDropdown
-                              isOpen={dropdownOpen}
-                              toggle={toggle}
-                            >
-                              <DropdownToggle caret> */}
+                            <Dropdown isOpen={dropdownOpen} toggle={toggle}>
+                              <DropdownToggle
+                                data-toggle="dropdown"
+                                tag="div"
+                                aria-expanded={dropdownOpen}
+                              >
                                 <IconButton
                                   color="primary"
                                   aria-label="Setting"
@@ -89,29 +108,27 @@ function OrderBank() {
                                   fontSize="large"
                                   style={{ color: "rgba(0,0,0,0.5)" }}
                                   aria-haspopup="true"
-                                //   onClick={settingClick}
-                                > 
-                                <MoreVertIcon />
-                               </IconButton>
-                              {/* </DropdownToggle>
-                              <DropdownMenu>
-                                <DropdownItem className="awsm-select-menu w-100">
-                                  Add New Order
-                                </DropdownItem>
-                                <DropdownItem className="awsm-select-menu w-100">
-                                  Customize Column
-                                </DropdownItem>
-                                <DropdownItem className="awsm-select-menu w-100">
-                                  Refresh Blocked DN
-                                </DropdownItem>
-                                <DropdownItem disabled>
-                                  Cross Terminal
-                                </DropdownItem>
-                                <DropdownItem disabled>
-                                  Send Multiple for DN
-                                </DropdownItem>
+                                >
+                                  <MoreVertIcon />
+                                </IconButton>
+                              </DropdownToggle>
+                              <DropdownMenu
+                                right
+                                className="awsm-option-button-content"
+                              >
+                                {orderBankSettings.map((option, index) => (
+                                  <div
+                                    className="d-flex align-items-center p-2 awsm-option-button-content-item"
+                                    onClick={() => onSettingClick(option.value)}
+                                  >
+                                    {option.icon && <img src={option.icon} />}
+                                    <div className="pl-2" key={index}>
+                                      {option.label}
+                                    </div>
+                                  </div>
+                                ))}
                               </DropdownMenu>
-                            </ButtonDropdown> */}
+                            </Dropdown>
                           </div>
                         </div>
                       </div>
@@ -123,6 +140,10 @@ function OrderBank() {
                 </TabContent>
               </div>
             </CardBody>
+            <NewOrderModal
+              open={showNewOrder}
+              onCancel={onCloseNewOrder}
+            />
           </Card>
         </div>
       </div>

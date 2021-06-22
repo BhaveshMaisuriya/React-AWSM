@@ -113,14 +113,14 @@ const Example = React.memo(props => {
    */
   function onSearchTextChange(event) {
     const newData = [...data];
-    let checked = [];
+    // let checked = [];
     newData.map((item, index)=>{
       item.visibility = item.text !== null && item.text.toString().toLowerCase().includes(event.target.value);
       item.checked = item.text !== null && item.text.toString().toLowerCase().includes(event.target.value);
-      item.checked === true && checked.push(item);
+      // item.checked === true && checked.push(item);
     })
     setCheckedCount(checked.length);
-    setData(newData)    
+    // setData(newData)    
   }
 
   function clickApply(e) {

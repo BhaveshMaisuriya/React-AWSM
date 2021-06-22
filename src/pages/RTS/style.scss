@@ -33,7 +33,59 @@
 }
 .gantt_chart_left {
     flex: 0 0 68%;
+    max-width: 68%;
 }
 .gantt_chart_right {
     flex: 0 0 33%;
+    max-width: 33%;
+    display: flex;
+    align-items: center;
 }
+.h-280 {
+    height: 280px;
+}
+.bg-grey {
+    background-color: #F9F9F9;
+}
+.bg-grey p{
+    color: #D4D4D4;
+}
+.bg-loading {
+    background-color: #EFF9F9;
+    border: 1px solid #00A19C; 
+}
+.bg-loading p{
+    color: #00A19C;
+}
+.bg-err {
+    background-color: #F9F9F9;
+    border: 1px solid #D50000;
+}
+.bg-err p{
+    color: #D50000;
+}
+.relative {
+    position: relative;
+}
+.top-40 {
+   top: 40%; 
+}
+.text-18 {
+    font-size: 18px;
+}
+.mt-27 {
+    margin-top: 27px;
+}
+.new-order-modal {
+    max-width: 900px !important;
+}
+.table {
+    display: table;
+}
+.table_cell {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+
+

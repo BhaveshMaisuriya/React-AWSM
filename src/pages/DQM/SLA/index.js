@@ -169,7 +169,7 @@ class SLA extends Component {
                       this.toggleTabs("0")
                     }}
                   >
-                    <h5 className="d-none d-sm-block mb-0">
+                    <h5 className="d-none d-sm-block">
                       RETAIL BUSINESS DIVISION (RBD)
                     </h5>
                   </NavLink>

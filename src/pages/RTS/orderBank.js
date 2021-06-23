@@ -19,6 +19,8 @@ import MoreVertIcon from "@material-ui/icons/MoreVert"
 import { IconButton, Menu, MenuItem } from "@material-ui/core"
 import awsmLogo from "../../assets/images/AWSM-logo-order-bank.png"
 import NewOrderModal from "./addOrderBankModal"
+import DateRangePicker from "../../components/Common/DateRangePicker"
+import AWSMDropdown from "../../components/Common/Dropdown"
 
 function OrderBank() {
   const [activeTab, setActiveTab] = useState("1")
@@ -85,9 +87,19 @@ const onCloseNewOrder = () => {
                       <div className="gantt_chart_first"></div>
                       <hr />
                       <div className="gantt_chart_second">
-                        <div className="d-flex">
-                          <div className="gantt_chart_left">
-                            <h3>Order Bank</h3>
+                        <div className="order-bank-bar">
+                          <div className="d-flex flex-grow-1 align-items-center">
+                            <h3 className="m-0 order-bank-label">Order Bank</h3>
+                            <div className="order-bank-shift-date">
+                              <DateRangePicker types={["single", "range"]} startDate={null}/>
+                            </div>
+                            <h5 className="order-bank-region-label">REGION & TERMINAL</h5>
+                            <div className="order-bank-region">
+                              <AWSMDropdown items={["Central"]}/>
+                            </div>
+                            <div className="order-bank-region ml-2">
+                              <AWSMDropdown items={["KVDT"]}/>
+                            </div>
                           </div>
                           <div className="gantt_chart_right">
                             <span className="right_setting_text">
@@ -135,7 +147,7 @@ const onCloseNewOrder = () => {
                     </div>
                   </TabPane>
                   <TabPane tabId="2">
-                    <div class="shipment_main"></div>
+                    <div className="shipment_main"/>
                   </TabPane>
                 </TabContent>
               </div>

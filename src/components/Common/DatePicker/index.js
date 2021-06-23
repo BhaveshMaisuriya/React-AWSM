@@ -17,7 +17,7 @@ const DatePicker = ({
   showButtons,
   isTypeFor,
 }) => {
-  const [date, setDate] = useState(value ? new Date(value) : new Date())
+  const [date, setDate] = useState(value ? new Date(value) : null)
   const [anchorEl, setAnchorEl] = React.useState(null)
   const [dateButton, setDateButton] = useState(value ? new Date(value) : new Date())
   const open = Boolean(anchorEl)
@@ -35,7 +35,7 @@ const DatePicker = ({
   }
 
   const label = useMemo(() => {
-    return moment(date).format(format)
+    return date ? moment(date).format(format) : ""
   }, [date])
 
   const onDateChange = date => {
@@ -99,7 +99,7 @@ const DatePicker = ({
             weekdayDisplayFormat="EEEEEE"
             minDate={minDate}
             maxDate={maxDate}
-          /> : 
+          /> :
           <Calendar
             showMonthAndYearPickers={false}
             date={date}
@@ -109,7 +109,7 @@ const DatePicker = ({
         }
         </div>
         {showButtons && (
-          <div className="apply_buttons">            
+          <div className="apply_buttons">
             <Button color={"danger"} onClick={() => handleCancel()}>
               Cancel
             </Button>

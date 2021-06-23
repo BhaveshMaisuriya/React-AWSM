@@ -1,0 +1,106 @@
+.sla-editor {
+  // border: 3px solid #AAAAAA;
+  //padding: 0.5rem;
+  .sla-editor-header {
+    padding: 1rem 10px;
+    border-bottom: 3px solid #AAAAAA;
+  }
+
+  .ck-rounded-corners {
+    border: none !important;
+  }
+
+  .ck-toolbar {
+    border: none !important;
+  }
+
+  .ck-toolbar_grouping {
+    border-bottom: 3px solid #AAAAAA !important;
+  }
+
+
+  .ck-editor__editable {
+    //background-color: rgb(240, 249, 249) !important;
+    box-shadow: none !important;
+
+    &:not(td) {
+      border: none !important;
+    }
+  }
+
+  .ck {
+    td {
+      border-spacing: 10px !important;
+      //width: 25%;
+    }
+
+    table {
+      border-spacing: 10px 0 !important;
+      border-collapse: separate !important;
+      border: none !important;
+      margin: 1rem 0;
+      padding: 0 !important;
+      table-layout: fixed;
+    }
+  }
+
+  .sla-header {
+    width: 100%;
+    table-layout: fixed;
+
+    thead {
+      th {
+        padding: 10px;
+      }
+    }
+  }
+
+
+  .ck-widget {
+    border: none !important;
+    outline: none !important;
+    margin: 0 !important;
+  }
+
+  .ck .ck-toolbar {
+    border: none !important;
+  }
+
+  .ck.ck-editor__editable_inline {
+    padding: 0 !important;
+  }
+
+  .ck-widget__type-around__button_after, .ck-widget__type-around__button_before, .ck-widget__selection-handle {
+    display: none !important;
+  }
+
+  .ck-widget_with-selection-handle {
+    box-shadow: none !important;
+  }
+  .ck-content .table table td{
+    padding:5px !important;
+    overflow-wrap: anywhere;
+    p{
+      margin-bottom: 0;
+    }
+  }
+
+  .ck-content .table table td:nth-child(1) {
+    width: 45px
+  }
+  .ck-content .table table td:nth-child(2) {
+    width: 20%
+  }
+  .ck-content .table table td:nth-child(3) {
+    width: 24%;
+  }
+  .ck-content .table table td:nth-child(4) {
+    width: 13%;
+  }
+  .ck-content .table table td:nth-child(5) {
+    width: 12%;
+  }
+  .ck-content .table table td:nth-child(6) {
+    width: 7%;
+  }
+}

@@ -117,10 +117,9 @@ class SidebarContent extends Component {
               <ul className="sub-menu" aria-expanded="false">
                 <li>
                   <Link to="/rts">Dashboard</Link>
-                  {/* <Link to="/dashboard/2">Dashboard2</Link> */}
+                  <Link to="/orderbank">Order Bank</Link>
                   <Link to="/highcharts">HighCharts</Link>
                   <Link to="/bryntum">Bryntum</Link>
-                  <Link to="/orderbank">Order Bank</Link>
                 </li>
               </ul>
             </li>

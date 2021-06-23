@@ -81,7 +81,7 @@ const SLATable = ({ items, onDeleteSLADetail, scheduler, onUpdate }) => {
 
   const columns = Object.keys(tableMapping).map(key => tableMapping[key])
   columns.push({
-    label: "Actions",
+    label: "Action",
     apiKey: null,
     columnSize: 0.5,
     TDComponent: TDActionsComponent,

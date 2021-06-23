@@ -46,16 +46,25 @@ const AddNewSectionModal = ({ defaultValue, isOpen, onAdd, onCancel, type = "add
   const inputRef = useRef(null)
   const [onEditing, setOnEditing] = useState(false)
   const [value, setValue] = useState(defaultValue)
-   const onCancelHandler = () =>{
-      setValue("")
-      onCancel()
-   }
+  const onCancelHandler = () =>{
+    setValue("")
+    onCancel()
+  }
+
+  useEffect(() => {
+    setValue(defaultValue)
+  }, [defaultValue])
 
   const handleValidatorData = () =>{
     let item = listTabIsExist.filter((e)=>e.title === value)
     return !!item.length
   }
 
+  const HandleSubmitData = () =>{
+    onAdd(value)
+    setValue("")
+  }
+  
   useEffect(() => {
     if (onEditing) {
       inputRef.current?.focus()
@@ -102,18 +111,13 @@ const AddNewSectionModal = ({ defaultValue, isOpen, onAdd, onCancel, type = "add
         </div>
         <div className="d-flex align-items-center justify-content-end mt-3">
           <button onClick={onCancelHandler} className="btn btn-outline-success mr-2">Cancel</button>
-          { type == 'add' ? <button
-            onClick={() => onAdd(value)}
+          <button
+            onClick={HandleSubmitData}
             className="btn btn-success"
             disabled={remainCharacters < 0 || remainCharacters==MAX_CHARS || handleValidatorData()}
-            >Add
-          </button> : <button
-            onClick={() => onAdd(value)}
-            className="btn btn-success"
-            disabled={remainCharacters < 0 || (remainCharacters==MAX_CHARS) || handleValidatorData()}
-            >Update
-          </button> }
-
+          >
+            {type == 'add' ? 'Add' : 'Update' }
+          </button>
         </div>
       </ModalBody>
     </Modal>
@@ -153,10 +157,10 @@ const SLAAddNote = ({ data, onSubmit, onDeleteNote, disabled }) => {
   return (
     <div className="sla-tab-add-container">
       {!data.notes && !onEditing ? (
-        <div className="sla-tab-add-note">
+        !disabled ? <div className="sla-tab-add-note">
           <hr />
           <h4 onClick={() => setOnEditing(true)}>+ ADD NOTES</h4>
-        </div>
+        </div> : null
       ) : (
         <div className="d-flex align-items-center justify-content-between py-3 note-title">
           <h4>Notes</h4>

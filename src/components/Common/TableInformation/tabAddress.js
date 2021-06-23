@@ -7,6 +7,15 @@ const TabAddress = ({ scheduler, data, onChange }) => {
   const addressData = useMemo(() => {
     return data.address || {};
   }, [data]);
+
+  const onFieldChange = (key, value) => {
+    const newAddressData = {...addressData}
+    newAddressData[key] = value
+    if (onChange) {
+      onChange("address", newAddressData)
+    }
+  }
+
   return (
     <div className="dqm-address-container" id="dqm-address-container">
       <div>
@@ -58,28 +67,32 @@ const TabAddress = ({ scheduler, data, onChange }) => {
           <div className="col col-12 col-sm-6 col-lg-6">
             <div className="input-header mb-2">ALTERNATIVE CLUSTER</div>
             <AWSMInput
-              value={data.alternative_cluster || ""}
-              onChange={value => onChange("alternative_cluster", value)}
+              value={addressData.alternative_cluster || ""}
+              onChange={value => onFieldChange("alternative_cluster", value)}
               disabled={scheduler}
             />
           </div>
           <div className="col col-12 col-sm-6 col-lg-6">
             <div className="input-header mb-2">CLUSTER</div>
             <AWSMInput
-              value={data.cluster || ""}
-              onChange={value => onChange("cluster", value)}
+              value={addressData.cluster || ""}
+              onChange={value => onFieldChange("cluster", value)}
               disabled={scheduler}
             />
           </div>
           <div className="col col-12 col-sm-6 col-lg-6">
             <div className="input-header mb-2">SPEED (KM/Hr)</div>
-            <AWSMInput value={addressData.address ? addressData.address.speed || "" : ""} disabled />
+            <AWSMInput
+              value={addressData.speed || ""}
+              disabled={scheduler}
+              onChange={value => onFieldChange("speed", value)}
+            />
           </div>
           <div className="col col-12 col-sm-6 col-lg-6">
             <div className="input-header mb-2">CLOUD</div>
             <AWSMInput
-              value={data.cloud || ""}
-              onChange={value => onChange("cloud", value)}
+              value={addressData.cloud || ""}
+              onChange={value => onFieldChange("cloud", value)}
               disabled={scheduler}
             />
           </div>

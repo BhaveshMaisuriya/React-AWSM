@@ -5,10 +5,13 @@ import { XIcon } from "common/CustomizeTable/icons"
 import { Button, Modal, ModalBody, Table } from "reactstrap"
 import CustomCKEditor from "./CustomCKEditor"
 import "./ModalDetail.scss"
+import { updateSLAItem, createSLARecord } from "store/actions"
+import SLARecordEditor from "./CustomCKEditor5"
 
 export const SLAModalDetail = ({ ...props }) => {
   const { openModalDetail, handleCloseModal, onUpdateSLAItem, data, type, onCreateSLARecord  } = props
   const [modalConfirm, setModalConfirm] = useState(false)
+  const [dataSubmitted,setDataSubmitted] = useState(null)
 
   const handleCancelModalConfirm = () => {
     setModalConfirm(false)
@@ -16,48 +19,43 @@ export const SLAModalDetail = ({ ...props }) => {
 
   const handleExitModalConfirm = () => {
     setModalConfirm(false)
+    setDataSubmitted(null)
     handleCloseModal()
   }
 
+  const ValidateDataHandler = () =>{
+    if(!dataSubmitted && type !== "add") return false
+    else if(!dataSubmitted) return true
+    else{
+      let keys = Object.keys(dataSubmitted)
+      for(let i = 0;i< keys.length;i++){
+        if(!dataSubmitted[keys[i]] || dataSubmitted[keys[i]] == '&nbsp;'){
+          return true
+        }
+      }
+      return false
+    }
+  }
 
   const handleOnUpdateClick = () => {
-    
-    // var data = CKEDITOR.instances['sla-detail'].getData()
-    let instance = CKEDITOR.instances["sla-detail"].document
-    let item = instance.getById("sla-td-1").$.innerHTML
-    let description = instance.getById("sla-td-2").$.innerHTML
-    let kpi = instance.getById("sla-td-3").$.innerHTML
-    let mitigation_plan = instance.getById("sla-td-4").$.innerHTML
-    let action_by = instance.getById("sla-td-5").$.innerHTML
-    let module = instance.getById("sla-td-6").$.innerHTML
-    let remarks = instance.getById("sla-td-7").$.innerHTML
     if(type == 'add'){
-      onCreateSLARecord({
-        itemIdentifier:item,
-        description,
-        kpi,
-        mitigation_plan,
-        action_by,
-        module,
-        remarks,
+      onCreateSLARecord(dataSubmitted || {
+        itemIdentifier:'',
+        description:'',
+        kpi:'',
+        mitigation_plan:'',
+        action_by:'',
+        module:'',
+        remarks:'',
       })
     }
     else{
-      onUpdateSLAItem({ 
+      onUpdateSLAItem({
         itemId : data.id,
-        recordValue: { 
-          itemIdentifier:item,
-          description,
-          kpi,
-          mitigation_plan,
-          action_by,
-          module,
-          remarks
-        }
+        recordValue:dataSubmitted || data
       })
     }
     handleCloseModal()
-
   }
 
   return (
@@ -90,7 +88,7 @@ export const SLAModalDetail = ({ ...props }) => {
                 <Table className="sla-detail-table">
                   <thead>
                     <tr>
-                      <th className="header hd_1">itemno.</th>
+                      <th className="header hd_1">item no.</th>
                       <th className="header hd_2">description</th>
                       <th className="header hd_3">kpi</th>
                       <th className="header hd_4">mitigation plan</th>
@@ -102,7 +100,8 @@ export const SLAModalDetail = ({ ...props }) => {
                   <tbody>
                     <tr className="ck-content">
                       <td className="" colSpan={7}>
-                        <CustomCKEditor data={data} />
+                        {/* <CustomCKEditor data={data} /> */}
+                        <SLARecordEditor onChange={(v)=>setDataSubmitted(v)} data={data}/>
                       </td>
                     </tr>
                   </tbody>
@@ -116,21 +115,13 @@ export const SLAModalDetail = ({ ...props }) => {
                 >
                   Cancel
                 </button>
-                {type == "add" ? (
                   <button
-                    className="btn btn-primary ml-4 px-4"
-                    onClick={handleOnUpdateClick}
-                  >
-                    Add
-                  </button>
-                ) : (
-                  <button
-                    className="btn btn-primary ml-4 px-4"
-                    onClick={handleOnUpdateClick}
-                  >
-                    Update
-                  </button>
-                )}
+                  disabled={ValidateDataHandler()}
+                  className="btn btn-primary ml-4 px-4"
+                  onClick={handleOnUpdateClick}
+                >
+                  { type == "add" ? 'Add' : 'Update' }
+                </button>
               </div>
             </div>
           </ModalBody>

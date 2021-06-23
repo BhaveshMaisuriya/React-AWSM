@@ -18,11 +18,11 @@ import ExitConfirmation from "../../components/Common/ExitConfirmation"
 import AWSMInput from "../../components/Common/Input"
 import FileCopyIcon from "@material-ui/icons/FileCopy"
 
-const NewOrderModal = props => {
+const NewOrderBankModal = props => {
   const { open, onCancel } = props
 
   const [isConfirm, setIsConfirm] = useState(false)
-  const [currentState, setCurrentState] = useState("search")
+  const [currentState, setCurrentState] = useState("")
 
   useEffect(() => {}, [currentState])
 
@@ -93,9 +93,16 @@ const NewOrderModal = props => {
           </div>
         </div>
         <hr />
-        <div
+
+        {currentState === 'search' &&
+          <div className='h-280 w-100'>
+
+          </div>
+        }
+        {currentState !== 'search' &&
+          <div
           className={`text-center h-280 w-100 table ${
-            currentState === "search"
+            currentState === ""
               ? "bg-grey"
               : currentState === "error"
               ? "bg-err"
@@ -105,7 +112,7 @@ const NewOrderModal = props => {
           <div className="relative table_cell h-100">
             <FileCopyIcon />
             <p className='text-18'>
-              {currentState === "search"
+              {currentState === ""
                 ? "No Data Available, Please Search Your Order"
                 : currentState === "error"
                 ? "Details Not Found, Try Again"
@@ -113,7 +120,7 @@ const NewOrderModal = props => {
             </p>
           </div>
         </div>
-
+        }
         <ModalFooter>
           <Button color="primary" outline onClick={() => setIsConfirm(true)}>
             Cancel
@@ -131,4 +138,4 @@ const mapStateToProps = ({}) => ({})
 
 const mapDispatchToProps = dispatch => ({})
 
-export default connect(mapStateToProps, mapDispatchToProps)(NewOrderModal)
+export default connect(mapStateToProps, mapDispatchToProps)(NewOrderBankModal)

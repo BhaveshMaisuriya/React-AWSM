@@ -26,6 +26,17 @@ const TabStatus = ({ scheduler, data, onChange }) => {
   const onFieldChange = (key, subKey, value) => {
     const newStatusData = {...statusData}
     if (subKey) {
+      if (key === "close_period" && !newStatusData[key]) {
+        newStatusData[key] = {
+          id: null,
+          type: "range",
+          days: "",
+          date_from: null,
+          date_to: null,
+          time_from: null,
+          time_to: null,
+        }
+      }
       newStatusData[key][subKey] = value
     } else {
       newStatusData[key] = value;
@@ -50,7 +61,7 @@ const TabStatus = ({ scheduler, data, onChange }) => {
           <AWSMDropdown
             items={STATUS_IN_AWSM}
             onChange={value => onFieldChange("status_awsm", null, value)}
-            value="Active"
+            value={statusData.status_awsm}
             disabled={scheduler}
           />
         </div>

@@ -18,7 +18,7 @@ import "./style.scss"
 import MoreVertIcon from "@material-ui/icons/MoreVert"
 import { IconButton, Menu, MenuItem } from "@material-ui/core"
 import awsmLogo from "../../assets/images/AWSM-logo-order-bank.png"
-import NewOrderModal from "./NewOrderModal"
+import NewOrderModal from "./addOrderBankModal"
 
 function OrderBank() {
   const [activeTab, setActiveTab] = useState("1")

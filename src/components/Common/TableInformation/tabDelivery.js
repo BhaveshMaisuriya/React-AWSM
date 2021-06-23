@@ -175,7 +175,7 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
         <Col className="col-6 mb-3">
           <DropdownInput
             title="ROAD TANKER REQUIREMENT"
-            disabled={true}
+            disabled={scheduler}
             items={tanker}
             onAddItem={handleAddTanker}
             value={tanker.filter(i => i.checked === true).map(i => i.name).join(",")}
@@ -212,7 +212,7 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
           <h6>DELIVERY OPEN TIME (TO)</h6>
           <TimePicker
             items={timeData}
-            disabled={scheduler}
+            disabled
             value={deliveryData.delivery_open_time_1.time_to}
             onChange={value => onFieldChange("delivery_open_time_1", { ...deliveryData.delivery_open_time_1, time_to: value})}
           />
@@ -291,7 +291,7 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
                         ? actualOpenTime2.map(i => i.name)
                         : "Select day(s)"
                     }
-                    disabled
+                    disabled={scheduler}
                     className={`${styles.field} ${
                       scheduler ? styles.disabled : undefined
                     }`}
@@ -353,7 +353,7 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
               <Col className="col-3">
                 <TimePicker
                   items={timeData}
-                  disabled={scheduler}
+                  disabled={index < 3 ? true : scheduler}
                   value={deliveryData[subKey].time_from}
                   onChange={value => {
                     setDeliveryData({
@@ -376,7 +376,7 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
               <Col className="col-3">
                 <TimePicker
                   items={timeData}
-                  disabled={scheduler}
+                  disabled={index < 3 ? true : scheduler}
                   value={deliveryData[subKey].time_to}
                   onChange={value => {
                     setDeliveryData({

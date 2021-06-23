@@ -69,14 +69,14 @@ class Header extends Component {
       <React.Fragment>
         {window.location.pathname !== '/orderbank' &&
           <header id="page-topbar" style={{ boxShadow: "none !important" }}>
-          <div className="navbar-header">
-            <div className="d-flex">
-              <div className="navbar-brand-box" style={{ padding: 0 }}>
-                <div className="sideBar_profile">
-                  <ProfileMenu sidebar={true} />
+            <div className="navbar-header">
+              <div className="d-flex">
+                <div className="navbar-brand-box" style={{ padding: 0 }}>
+                  <div className="sideBar_profile">
+                    <ProfileMenu sidebar={true} />
+                  </div>
                 </div>
-              </div>
-              {/* <button
+                {/* <button
                 type="button"
                 onClick={this.toggleMenu}
                 className="btn btn-sm px-3 font-size-16 header-item waves-effect"
@@ -251,9 +251,9 @@ class Header extends Component {
                   </Row>
                 </DropdownMenu>
               </Dropdown>  */}
-            </div>
-            
-            {/*<div className="d-flex">
+              </div>
+
+              {/*<div className="d-flex">
               <div className="dropdown d-inline-block d-lg-none ml-2">
                 <button
                   onClick={() => {
@@ -381,18 +381,18 @@ class Header extends Component {
                 </button>
               </div> 
             </div>*/}
-            <img src={awsmLogo} alt="AWSM Logo" className="vertical-hr-left"/>
-          </div>
-        </header>
+              <img src={awsmLogo} alt="AWSM Logo" className="vertical-hr-left" />
+            </div>
+          </header>
         }
         {window.location.pathname === '/orderbank' &&
           <div className="navbar-brand-box p-fixed" style={{ padding: 0 }}>
-          <div className="sideBar_profile">
-            <ProfileMenu sidebar={true} />
+            <div className="sideBar_profile">
+              <ProfileMenu sidebar={true} />
+            </div>
           </div>
-        </div>
         }
-     </React.Fragment>
+      </React.Fragment>
     )
   }
 }

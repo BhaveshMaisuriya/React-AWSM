@@ -12,7 +12,7 @@
     padding: 1rem;
     border-radius: 0 !important;
     font-weight: 600;
-    &.DayPicker-Day--before {
+    &.DayPicker-Day--outRange {
       background-color: white !important;
       color: #DDDDDD !important;
     }
@@ -107,5 +107,10 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+
+  .btn-date-range {
+    border-radius: 22px;
+    padding: 0.25rem 1.25rem;
   }
 }

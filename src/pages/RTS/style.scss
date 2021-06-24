@@ -22,11 +22,7 @@
     height: 50%;
     overflow-y: auto;
 }
-.right_setting_text{
-    padding-right: 10px;
-    color: rgba(0,0,0,0.5);
-    border-right: 1px solid rgba(0,0,0,0.5);
-}
+
 .gantt_chart_second .setting_icon {
     padding: 0 !important;
     background-color: transparent !important;
@@ -52,7 +48,7 @@
 }
 .bg-loading {
     background-color: #EFF9F9;
-    border: 1px solid #00A19C; 
+    border: 1px solid #00A19C;
 }
 .bg-loading p{
     color: #00A19C;
@@ -68,7 +64,7 @@
     position: relative;
 }
 .top-40 {
-   top: 40%; 
+   top: 40%;
 }
 .text-18 {
     font-size: 18px;
@@ -77,7 +73,7 @@
     margin-top: 27px;
 }
 .new-order-modal {
-    max-width: 900px !important;
+    max-width: 80% !important;
 }
 .table {
     display: table;
@@ -90,18 +86,28 @@
 .order-bank-bar {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-
+    >h4 {
+        font-weight: 700;
+    }
     .order-bank-label {
         margin: 0;
         padding-right: 10px;
         border-right: 1px solid #D9D9D9;
-        font-weight: bold;
     }
 
     .order-bank-shift-date {
-        width: 200px;
-        margin-left: 1.5rem;
+        width: 250px;
+        display: flex;
+        margin-left: 10px;
+        align-items: center;
+        >div:first-child {
+            margin-right: 10px;
+            color: #333333;
+            font-size: 15px ;
+        }
+        >div:not(:first-child) {
+            flex-grow: 1;
+        }
     }
 
     .order-bank-region-label {
@@ -142,6 +148,7 @@
     background-color: #EEEEEE;
     padding: 20px;
     width: 99%;
+    margin: 0px !important;
 }
 .order_details_box p{
     color: #333333;
@@ -154,4 +161,30 @@
 }
 .h-80v {
     height: 80vh;
+}
+.pl-30 {
+    padding-left: 30px !important;
+}
+.light-primary.p-1320 {
+    border-color: #CBEFED !important;
+    color: #00A19C !important;
+    padding: 10px 30px !important;
+}
+.p-1320 {
+    padding: 10px 40px !important;
+}
+.order-setting-options {
+    width: 200px;
+}
+.order-setting-options:before {
+    content: "";
+    position: absolute;
+    right: 5px;
+    top: -10px;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 10px 10px 10px;
+    border-color: transparent transparent #fff transparent;
+    z-index: 9999;
 }

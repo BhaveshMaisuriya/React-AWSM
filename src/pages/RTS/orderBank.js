@@ -1,4 +1,4 @@
-import React, { Component, useState } from "react"
+import React, { Component, useMemo, useState } from "react"
 import {
   Row,
   Col,
@@ -12,7 +12,7 @@ import {
   TabContent,
   ButtonDropdown,
   DropdownItem,
-  Dropdown, DropdownMenu, DropdownToggle 
+  Dropdown, DropdownMenu, DropdownToggle
 } from "reactstrap"
 import "./style.scss"
 import MoreVertIcon from "@material-ui/icons/MoreVert"
@@ -21,19 +21,58 @@ import awsmLogo from "../../assets/images/AWSM-logo-order-bank.png"
 import NewOrderModal from "./addOrderBankModal"
 import DateRangePicker from "../../components/Common/DateRangePicker"
 import AWSMDropdown from "../../components/Common/Dropdown"
+import OrderBankTable from './OrderBankTable'
+import customiseTableIcon from "../../assets/images/AWSM-Customise-Table.svg"
+
+const REGION_TERMINAL = [
+  {
+    region: "Central",
+    terminal: ["KVDT"]
+  },
+  {
+    region: "Eastern",
+    terminal: ["Kerteh", "Kuantan"]
+  },
+  {
+    region: "Nothern",
+    terminal: ["Langkawi", "Lumut", "Prai"]
+  },
+  {
+    region: "Southern",
+    terminal: ["Melaka", "Pasir Gudang"]
+  },
+  {
+    region: "Sabah",
+    terminal: ["Labuan", "Sanadakan", "Sepanggar Bay", "Tawau JV"]
+  },
+  {
+    region: "Sarawak",
+    terminal: ["Bintulu Jv", "Miri", "Senari IOT", "Tg Manis CODT"]
+  },
+  {
+    region: "Special Product",
+    terminal: ["Melaka", "Prai", "Kerteh", "Sepanggar Bay", "Labuan", "Sandakan", " Bintulu JV", "Senari IOT"]
+  }
+]
 
 function OrderBank() {
   const [activeTab, setActiveTab] = useState("1")
   const [dropdownOpen, setOpen] = useState(false)
   const [showNewOrder, setShowNewOrder] = useState(false)
+  const [region, setRegion] = useState(null)
+  const [terminal, setTerminal] = useState(null)
   const toggle = () => setOpen(!dropdownOpen)
+  const terminalList = useMemo(() => {
+    const currentRegion = REGION_TERMINAL.find(e => e.region === region)
+    return currentRegion ? currentRegion.terminal : []
+  }, [region]);
 
   let orderBankSettings = [
-    {'value': 'newOrder', 'label': 'Add New Order', 'icon' : '' },
-    {'value': 'customizeCol', 'label': 'Customize Column', 'icon' : '' },
-    {'value': 'RefreshDN', 'label': 'Refresh Blocked DN', 'icon' : '' },
-    {'value': 'CrossTerminal', 'label': 'Cross Terminal', 'icon' : '' },
-    {'value': 'SendDN', 'label': 'Send Multiple for DN', 'icon' : '' },
+    {'value': 'newOrder', 'label': 'Add New Order', 'icon' : customiseTableIcon },
+    {'value': 'customizeCol', 'label': 'Customize Column', 'icon' : customiseTableIcon },
+    {'value': 'RefreshDN', 'label': 'Refresh Blocked DN', 'icon' : customiseTableIcon },
+    {'value': 'CrossTerminal', 'label': 'Cross Terminal', 'icon' : customiseTableIcon },
+    {'value': 'SendDN', 'label': 'Send Multiple for DN', 'icon' : customiseTableIcon },
 ];
 
 const onSettingClick = (val) => {
@@ -88,21 +127,29 @@ const onCloseNewOrder = () => {
                       <hr />
                       <div className="gantt_chart_second">
                         <Row>
-                          <Col lg={8} className='order-bank-bar'>
+                          <Col lg={9} className='order-bank-bar'>
                             <h4 className="m-0 order-bank-label">Order Bank</h4>
                             <div className="order-bank-shift-date">
+                              <div>DATE</div>
                               <DateRangePicker types={["single", "range"]} startDate={null}/>
                             </div>
                             <p className="order-bank-region-label">REGION & TERMINAL</p>
                             <div className="order-bank-region">
-                              <AWSMDropdown items={["Central"]}/>
+                              <AWSMDropdown
+                                value={region}
+                                onChange={value => {
+                                  setRegion(value)
+                                  setTerminal(null)
+                                }}
+                                items={REGION_TERMINAL.map(e => e.region)}
+                              />
                             </div>
                             <div className="order-bank-region ml-2">
-                              <AWSMDropdown items={["KVDT"]}/>
+                              <AWSMDropdown value={terminal} onChange={value => setTerminal(value)} items={terminalList}/>
                             </div>
                           </Col>
-                          <Col lg={4} className='d-flex align-item-center'>
-                            <span className="right_setting_text">
+                          <Col lg={3} className='order-bank-bar'>
+                            <span className="m-0 order-bank-label">
                               141 orders, 3.2m ASR, 1.2m SMP, 1m Comm. Total
                               5.4m
                             </span>
@@ -130,7 +177,7 @@ const onCloseNewOrder = () => {
                               >
                                 {orderBankSettings.map((option, index) => (
                                   <div
-                                    className="d-flex align-items-center p-2 awsm-option-button-content-item"
+                                    className="d-flex align-items-center p-2 awsm-option-button-content-item order-setting-options"
                                     onClick={() => onSettingClick(option.value)}
                                   >
                                     {option.icon && <img src={option.icon} />}
@@ -143,6 +190,7 @@ const onCloseNewOrder = () => {
                             </Dropdown>
                           </Col>
                       </Row>
+                      <OrderBankTable/>
                       </div>
                     </div>
                   </TabPane>

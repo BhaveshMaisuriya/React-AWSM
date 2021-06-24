@@ -122,7 +122,7 @@ const RetailCustomerModal = props => {
                   />
                 </div>
               </div>
-              <label className="mt-3">REMARK</label>
+              <label className="mt-3">REMARKS</label>
               <AWSMInput
                 defaultValue={currentRetailDetail.remarks}
                 onChange={value => onFieldValueChange("remarks", value)}

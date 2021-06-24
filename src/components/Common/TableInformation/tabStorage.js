@@ -44,6 +44,9 @@ const TabStorage = ({ scheduler, data, onChange }) => {
    * Add new storage
    */
   const onAddStorage = () => {
+    if (scheduler) {
+      return
+    }
     const lastStorage = Object.keys(storageData).reduce(
       (previousValue, currentValue) => {
         if (currentValue > previousValue) {
@@ -106,6 +109,9 @@ const TabStorage = ({ scheduler, data, onChange }) => {
    * @param item
    */
   const onSetDeleteItem = item => {
+    if (scheduler) {
+      return
+    }
     setDeleteItemKey(item)
   }
 
@@ -170,6 +176,7 @@ const TabStorage = ({ scheduler, data, onChange }) => {
                 <AWSMInput
                   defaultValue={storageData[key] ? storageData[key].code || "" : ""}
                   onChange={value => onUpdateField(key, "code", value)}
+                  disabled={scheduler}
                 />
               </div>
               <div className="col col-12 col-sm-6 col-lg-3">
@@ -199,6 +206,7 @@ const TabStorage = ({ scheduler, data, onChange }) => {
                     onUpdateField(key, "ordering_category", value)
                   }
                   onAddItem={(value) => onAddOrderingCategory(key, value)}
+                  disabled={scheduler}
                 />
                 <AWSMAlert
                   status="success"
@@ -214,6 +222,7 @@ const TabStorage = ({ scheduler, data, onChange }) => {
                   onChange={value =>
                     onUpdateField(key, "terminal", value)
                   }
+                  disabled={scheduler}
                 />
               </div>
               <div className="col col-12 col-sm-6 col-lg-3">
@@ -223,6 +232,7 @@ const TabStorage = ({ scheduler, data, onChange }) => {
                   onChange={value =>
                     onUpdateField(key, "distance", value)
                   }
+                  disabled={scheduler}
                 />
               </div>
               <div className="col col-12 col-sm-6 col-lg-3">
@@ -243,6 +253,7 @@ const TabStorage = ({ scheduler, data, onChange }) => {
                   onChange={value =>
                     onUpdateField(key, "sale_category", value)
                   }
+                  disabled={scheduler}
                 />
               </div>
               {pathName === "/commercial-customer" ? (

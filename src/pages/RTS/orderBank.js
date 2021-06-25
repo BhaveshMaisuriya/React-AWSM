@@ -22,6 +22,7 @@ import NewOrderModal from "./addOrderBankModal"
 import DateRangePicker from "../../components/Common/DateRangePicker"
 import AWSMDropdown from "../../components/Common/Dropdown"
 import OrderBankTable from './OrderBankTable'
+import customiseTableIcon from "../../assets/images/AWSM-Customise-Table.svg"
 
 const REGION_TERMINAL = [
   {
@@ -67,11 +68,11 @@ function OrderBank() {
   }, [region]);
 
   let orderBankSettings = [
-    {'value': 'newOrder', 'label': 'Add New Order', 'icon' : '' },
-    {'value': 'customizeCol', 'label': 'Customize Column', 'icon' : '' },
-    {'value': 'RefreshDN', 'label': 'Refresh Blocked DN', 'icon' : '' },
-    {'value': 'CrossTerminal', 'label': 'Cross Terminal', 'icon' : '' },
-    {'value': 'SendDN', 'label': 'Send Multiple for DN', 'icon' : '' },
+    {'value': 'newOrder', 'label': 'Add New Order', 'icon' : customiseTableIcon },
+    {'value': 'customizeCol', 'label': 'Customize Column', 'icon' : customiseTableIcon },
+    {'value': 'RefreshDN', 'label': 'Refresh Blocked DN', 'icon' : customiseTableIcon },
+    {'value': 'CrossTerminal', 'label': 'Cross Terminal', 'icon' : customiseTableIcon },
+    {'value': 'SendDN', 'label': 'Send Multiple for DN', 'icon' : customiseTableIcon },
 ];
 
 const onSettingClick = (val) => {
@@ -176,7 +177,7 @@ const onCloseNewOrder = () => {
                               >
                                 {orderBankSettings.map((option, index) => (
                                   <div
-                                    className="d-flex align-items-center p-2 awsm-option-button-content-item"
+                                    className="d-flex align-items-center p-2 awsm-option-button-content-item order-setting-options"
                                     onClick={() => onSettingClick(option.value)}
                                   >
                                     {option.icon && <img src={option.icon} />}

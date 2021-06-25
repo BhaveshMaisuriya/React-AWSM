@@ -73,7 +73,7 @@
     margin-top: 27px;
 }
 .new-order-modal {
-    max-width: 900px !important;
+    max-width: 80% !important;
 }
 .table {
     display: table;
@@ -121,7 +121,7 @@
 }
 .scroll {
     overflow-y: auto;
-    overflow-x: auto;
+    overflow-x: hidden;
 }
 .text-red {
     color: red;
@@ -148,6 +148,7 @@
     background-color: #EEEEEE;
     padding: 20px;
     width: 99%;
+    margin: 0px !important;
 }
 .order_details_box p{
     color: #333333;
@@ -160,4 +161,30 @@
 }
 .h-80v {
     height: 80vh;
+}
+.pl-30 {
+    padding-left: 30px !important;
+}
+.light-primary.p-1320 {
+    border-color: #CBEFED !important;
+    color: #00A19C !important;
+    padding: 10px 30px !important;
+}
+.p-1320 {
+    padding: 10px 40px !important;
+}
+.order-setting-options {
+    width: 200px;
+}
+.order-setting-options:before {
+    content: "";
+    position: absolute;
+    right: 5px;
+    top: -10px;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 10px 10px 10px;
+    border-color: transparent transparent #fff transparent;
+    z-index: 9999;
 }

@@ -18,6 +18,7 @@ import ExitConfirmation from "../../components/Common/ExitConfirmation"
 import AWSMInput from "../../components/Common/Input"
 import FileCopyIcon from "@material-ui/icons/FileCopy"
 import AWSMDropdown from "../../components/Common/Dropdown"
+import { orderDetails } from "./newOrderData"
 
 const ORDER_REGION = ["Center", "Center"]
 const ORDER_TERMINAL = ["KVDT", "KVDT 1"]
@@ -30,12 +31,15 @@ const NewOrderBankModal = props => {
 
   const [isConfirm, setIsConfirm] = useState(false)
   const [currentState, setCurrentState] = useState("")
-  const [orderData, setOrderData] = useState([])
+  const [orderData, setOrderData] = useState({})
+  const [shiptoNo, setShiptoNo] = useState(0)
+  const [progress, setProgress] = useState(0)
 
-  useEffect(() => { }, [currentState])
+  useEffect(() => {}, [currentState])
 
   const onConfirmCancel = () => {
     setIsConfirm(false)
+    setCurrentState("")
   }
 
   const handleUpdate = () => {
@@ -44,6 +48,7 @@ const NewOrderBankModal = props => {
 
   const onConfirmExit = () => {
     setIsConfirm(false)
+    setCurrentState("")
     if (onCancel) {
       onCancel()
     }
@@ -59,13 +64,35 @@ const NewOrderBankModal = props => {
     setOrderData(newOrderData)
   }
 
+  const onSearchOrder = async () => {
+    setCurrentState("loading")
+    let searchedData = []
+    orderDetails.map((item, index) => {
+      if (item.shipNo === shiptoNo) {
+        searchedData.push(item)
+      }
+    })
+    if (searchedData.length !== 0) {
+      setTimeout(function () {
+        Object.keys(searchedData[0]).map(function (key) {
+          orderData[key] = searchedData[0][key]
+        })
+        setCurrentState("search")
+      }, 10000)
+    } else {
+      setTimeout(function () {
+        setCurrentState("error")
+      }, 1000)
+    }
+  }
+
   return (
     <Modal isOpen={open} className="new-order-modal">
       <ModalHeader toggle={toggle}>
         <span className="modal-title">Add New order</span>
       </ModalHeader>
 
-      <ModalBody className="position-relative h-70v scroll">
+      <ModalBody className="position-relative h-70v scroll pl-30">
         {isConfirm && (
           <ExitConfirmation onExit={onConfirmExit} onCancel={onConfirmCancel} />
         )}
@@ -84,36 +111,23 @@ const NewOrderBankModal = props => {
                   type="number"
                   defaultValue=""
                   placeholder="Numeric Only"
+                  onChange={val => setShiptoNo(val)}
                 />
               </div>
               <div className="col-4 p-0">
                 <Button
                   color="primary"
-                  className="mt-27 ml-3"
-                  onClick={() => setCurrentState("search")}
+                  className="mt-27 ml-3 p-1320"
+                  onClick={() => onSearchOrder()}
                 >
                   Search
-                </Button>
-                <Button
-                  color="warning"
-                  className="mt-27 ml-3"
-                  onClick={() => setCurrentState("loading")}
-                >
-                  Loading
-                </Button>
-                <Button
-                  color="danger"
-                  className="mt-27 ml-3"
-                  onClick={() => setCurrentState("error")}
-                >
-                  Error
                 </Button>
               </div>
             </div>
             <hr />
             {currentState === "search" && (
               <div className="w-100">
-                <h4>Ship To: XXXXXX</h4>
+                <h4>Ship To: {orderData.shipNo}</h4>
                 <div className="d-flex justify-content-between mt-4">
                   <div className="w-50 mr-4">
                     <label className="text-upper">Region & Terminal</label>
@@ -121,18 +135,16 @@ const NewOrderBankModal = props => {
                       <div className="w-50 mr-2">
                         <AWSMDropdown
                           items={ORDER_REGION}
-                          onChange={value =>
-                            onFieldChange("region_order", "Center")
-                          }
-                          value={orderData.region_order}
+                          onChange={value => onFieldChange("region", "Center")}
+                          value={orderData.region}
                           disabled={true}
                         />
                       </div>
                       <div className="w-50 mr-2">
                         <AWSMDropdown
                           items={ORDER_TERMINAL}
-                          onChange={value => onFieldChange("terminal_order", value)}
-                          value={orderData.terminal_order}
+                          onChange={value => onFieldChange("terminal", value)}
+                          value={orderData.terminal}
                           disabled={false}
                         />
                       </div>
@@ -147,8 +159,8 @@ const NewOrderBankModal = props => {
                         <AWSMInput
                           type="number"
                           placeholder="Numeric Only"
-                          onChange={value => onFieldChange("volume_order", value)}
-                          value={orderData.volume_order}
+                          onChange={value => onFieldChange("volume", value)}
+                          value={orderData.volume}
                         />
                       </div>
                     </div>
@@ -163,8 +175,10 @@ const NewOrderBankModal = props => {
                       <div className="w-100">
                         <AWSMDropdown
                           items={ORDER_TERMINAL}
-                          onChange={value => onFieldChange("product_order", value)}
-                          value={orderData.product_order}
+                          onChange={value =>
+                            onFieldChange("product_name", value)
+                          }
+                          value={orderData.product_name}
                           disabled={false}
                           placeholder="select"
                         />
@@ -176,8 +190,10 @@ const NewOrderBankModal = props => {
                     <div className="d-flex">
                       <div className="w-70">
                         <AWSMInput
-                          onChange={value => onFieldChange("product_order", value)}
-                          value={orderData.product_order}
+                          onChange={value =>
+                            onFieldChange("product_code", value)
+                          }
+                          value={orderData.product_code}
                           disabled={true}
                           placeholder="Lorem ipsum"
                         />
@@ -196,10 +212,8 @@ const NewOrderBankModal = props => {
                       <div className="w-100">
                         <AWSMDropdown
                           items={ORDER_LOAD_TIME}
-                          onChange={value =>
-                            onFieldChange("load_time_order", value)
-                          }
-                          value={orderData.load_time_order}
+                          onChange={value => onFieldChange("load_time", value)}
+                          value={orderData.load_time}
                           disabled={false}
                           placeholder="select load time"
                         />
@@ -212,8 +226,8 @@ const NewOrderBankModal = props => {
                       <div className="w-70">
                         <AWSMDropdown
                           items={ORDER_ETA}
-                          onChange={value => onFieldChange("eta_order", value)}
-                          value={orderData.eta_order}
+                          onChange={value => onFieldChange("eta", value)}
+                          value={orderData.eta}
                           disabled={false}
                           placeholder="select"
                         />
@@ -227,7 +241,9 @@ const NewOrderBankModal = props => {
                     <div className="d-flex">
                       <div className="w-85">
                         <AWSMInput
-                          onChange={value => onFieldChange("remark_order", value)}
+                          onChange={value =>
+                            onFieldChange("remark_order", value)
+                          }
                           value={orderData.remark_order}
                           placeholder="Type Something here..."
                         />
@@ -242,7 +258,9 @@ const NewOrderBankModal = props => {
                       <div className="w-100">
                         <AWSMDropdown
                           items={ORDER_PRIORITY}
-                          onChange={value => onFieldChange("priority_order", value)}
+                          onChange={value =>
+                            onFieldChange("priority_order", value)
+                          }
                           value={orderData.priority_order}
                           disabled={false}
                           placeholder="select priority"
@@ -251,7 +269,9 @@ const NewOrderBankModal = props => {
                     </div>
                   </div>
                   <div className="w-50 mr-4">
-                    <label className="text-upper">Special Request Remarks</label>
+                    <label className="text-upper">
+                      Special Request Remarks
+                    </label>
                     <div className="d-flex">
                       <div className="w-100">
                         <AWSMInput
@@ -272,8 +292,8 @@ const NewOrderBankModal = props => {
                     <div className="d-flex">
                       <div className="w-100">
                         <AWSMInput
-                          onChange={value => onFieldChange("retain_order", value)}
-                          value={orderData.retain_order}
+                          onChange={value => onFieldChange("retain", value)}
+                          value={orderData.retain}
                           disabled={true}
                           placeholder="Lorem ipsum"
                         />
@@ -285,8 +305,8 @@ const NewOrderBankModal = props => {
                     <div className="d-flex">
                       <div className="w-70">
                         <AWSMInput
-                          onChange={value => onFieldChange("runout_order", value)}
-                          value={orderData.runout_order}
+                          onChange={value => onFieldChange("runout", value)}
+                          value={orderData.runout}
                           disabled={true}
                           placeholder="Lorem ipsum"
                         />
@@ -294,7 +314,6 @@ const NewOrderBankModal = props => {
                     </div>
                   </div>
                 </div>
-
                 <Row className="order_details_box mt-4">
                   <Col lg={4} sm={6} xs={12}>
                     <p>Name: IDAMO Enterprise</p>
@@ -350,11 +369,10 @@ const NewOrderBankModal = props => {
                     </div>
                   </div>
                 </div>
-
                 <div className="d-flex justify-content-between mt-4 mb-4">
                   <div className="w-100 mr-4">
                     <label className="text-upper">my Remarks 1</label>
-                    <div className="w-25">
+                    <div className="w-100">
                       <AWSMInput
                         onChange={value => onFieldChange("myremark1", value)}
                         value={orderData.myremark1}
@@ -364,7 +382,7 @@ const NewOrderBankModal = props => {
                   </div>
                   <div className="w-100 mr-4">
                     <label className="text-upper">my Remarks 2</label>
-                    <div className="w-25">
+                    <div className="w-100">
                       <AWSMInput
                         onChange={value => onFieldChange("myremark2", value)}
                         value={orderData.myremark2}
@@ -387,21 +405,24 @@ const NewOrderBankModal = props => {
             )}
             {currentState !== "search" && (
               <div
-                className={`text-center h-340 w-100 table ${currentState === ""
+                className={`text-center h-340 w-100 table ${
+                  currentState === ""
                     ? "bg-grey"
                     : currentState === "error"
-                      ? "bg-err"
-                      : "bg-loading"
-                  }`}
+                    ? "bg-err"
+                    : "bg-loading"
+                }`}
               >
                 <div className="relative table_cell h-100">
                   <FileCopyIcon />
                   <p className="text-18">
-                    {currentState === ""
-                      ? "No Data Available, Please Search Your Order"
-                      : currentState === "error"
-                        ? "Details Not Found, Try Again"
-                        : "Please wait, Loading Details.. 85%"}
+                    {currentState === "" ? (
+                      "No Data Available, Please Search Your Order"
+                    ) : currentState === "error" ? (
+                      "Details Not Found, Try Again"
+                    ) : (
+                      <Fragment> Please wait, Loading Details.. </Fragment>
+                    )}
                   </p>
                 </div>
               </div>
@@ -412,10 +433,15 @@ const NewOrderBankModal = props => {
 
       {!isConfirm && (
         <ModalFooter>
-          <Button color="primary" outline onClick={() => setIsConfirm(true)}>
+          <Button
+            color="light-primary"
+            className="light-primary p-1320"
+            outline
+            onClick={() => setIsConfirm(true)}
+          >
             Cancel
           </Button>
-          <Button color="primary" onClick={handleUpdate}>
+          <Button color="primary" className="p-1320" onClick={handleUpdate}>
             Add
           </Button>
         </ModalFooter>
@@ -424,7 +450,7 @@ const NewOrderBankModal = props => {
   )
 }
 
-const mapStateToProps = ({ }) => ({})
+const mapStateToProps = ({}) => ({})
 
 const mapDispatchToProps = dispatch => ({})
 

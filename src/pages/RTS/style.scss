@@ -15,14 +15,21 @@
     align-items: center;
 }
 .gantt_chart_main, .shipment_main {
-    height: 80vh;
+    height: 78vh;
     overflow-y: hidden;
 }
-.gantt_chart_first, .gantt_chart_second{
-    height: 50%;
+.rts-table-container {
     overflow-y: auto;
+    overflow-x: hidden;
+    height: inherit;
 }
-
+.gantt_chart_first {
+    height: 40%;
+}
+.gantt_chart_second{
+    height: 68%;
+    overflow: hidden;
+}
 .gantt_chart_second .setting_icon {
     padding: 0 !important;
     background-color: transparent !important;
@@ -123,6 +130,9 @@
     overflow-y: auto;
     overflow-x: hidden;
 }
+.order-scroll {
+    height: 75%;
+}
 .text-red {
     color: red;
 }
@@ -187,4 +197,82 @@
     border-width: 0 10px 10px 10px;
     border-color: transparent transparent #fff transparent;
     z-index: 9999;
+}
+
+.order-setting-options-left:before {
+    right: 0px !important;
+    left: 5px !important;
+}
+
+.container-orderbank {
+    display: flex;
+    padding: 0px !important;
+    margin: 14px 0px 19px 0px !important;
+    max-width: 100% !important;
+    height: auto;
+  }
+
+  .container-orderbank thead tr {
+    background-color: #f8f9fa;
+    height: 64px;
+    td {
+      color: #000000;
+      font-weight: 600;
+    }
+  }
+
+  .container-orderbank tbody td {
+    font-family: Museo Sans;
+    color: rgba(0, 0, 0, 0.75);
+    height: 52px;
+  }
+
+  .container-orderbank td {
+    min-width: 98px !important;
+    max-width: 212px !important;
+    border-bottom: 1px solid #d9d9d9;
+    padding-left: 10px;
+    padding-right: 4px;
+    font-size: 12px;
+    box-sizing: border-box;
+  }
+  .deleteModal {
+      .modal-header {
+        border-bottom: unset;
+      }
+      h6{
+          margin-bottom: 3em;
+      }
+      height: 92%;
+    top: 30%;
+  }
+  .border-tab {
+    border-bottom: 1px solid #EEEEEE;
+    ul {
+        width: 80%;
+        border-bottom: unset;
+    }
+  }
+.remove_text {
+    float: right;
+    cursor: pointer;
+}
+.border-red {
+    border: 1px solid #D50000;
+    border-radius: 5px;
+}
+.confirm-main {
+    position: absolute;
+    width: 100%;
+    top: 10px;
+    text-align: right;
+    font-size: 12px;
+    color: #D50000;
+    span{
+        cursor: pointer;
+        padding: 0 5px;
+    }
+    .confirm-text.text-red {
+        border-right: 1px solid #495057;
+    }
 }

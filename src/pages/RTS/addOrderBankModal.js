@@ -19,6 +19,7 @@ import AWSMInput from "../../components/Common/Input"
 import FileCopyIcon from "@material-ui/icons/FileCopy"
 import AWSMDropdown from "../../components/Common/Dropdown"
 import { orderDetails } from "./newOrderData"
+import AWSMAlert from "../../components/Common/AWSMAlert"
 
 const ORDER_REGION = ["Center", "Center"]
 const ORDER_TERMINAL = ["KVDT", "KVDT 1"]
@@ -34,6 +35,7 @@ const NewOrderBankModal = props => {
   const [orderData, setOrderData] = useState({})
   const [shiptoNo, setShiptoNo] = useState(0)
   const [progress, setProgress] = useState(0)
+  const [showAlert, setShowAlert] = useState(false)
 
   useEffect(() => {}, [currentState])
 
@@ -73,12 +75,16 @@ const NewOrderBankModal = props => {
       }
     })
     if (searchedData.length !== 0) {
-      setTimeout(function () {
+      setTimeout(async function () {
+        await setShowAlert(true);
+
         Object.keys(searchedData[0]).map(function (key) {
           orderData[key] = searchedData[0][key]
         })
+        
         setCurrentState("search")
-      }, 10000)
+        
+      }, 1000)
     } else {
       setTimeout(function () {
         setCurrentState("error")
@@ -446,6 +452,14 @@ const NewOrderBankModal = props => {
           </Button>
         </ModalFooter>
       )}
+      {showAlert &&
+      <AWSMAlert
+            status="success"
+            message='Order Details has successfully load'
+            openAlert={showAlert}
+            closeAlert={() => setShowAlert(false)}
+          />
+      }
     </Modal>
   )
 }

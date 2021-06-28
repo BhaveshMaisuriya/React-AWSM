@@ -85,6 +85,7 @@ export const GET_PRODUCT_DETAILS = "/product/details/"
 export const GET_ROADTANKER = "/road-tanker"
 export const GET_ROADTANKER_AUDITLOG = "/road-tanker_audit"
 export const GET_ROADTANKER_FILTER = "/road-tanker/filter"
+export const GET_ROADTANKER_DETAIL = "/road-tanker/detail"
 
 //TERMINAL
 export const GET_TERMINAL = "/terminal"

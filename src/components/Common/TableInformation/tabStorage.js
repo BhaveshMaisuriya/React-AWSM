@@ -8,8 +8,8 @@ import { Col } from "reactstrap"
 
 import AWSMAlert from "../AWSMAlert"
 
-const ACTIVE_PRODUCTS = ["Active", "None"]
-const SALES_CATEGORY = ["Yes", "No"]
+const ACTIVE_PRODUCTS = ["ACTIVE", "INACTIVE"]
+const SALES_CATEGORY = ["LV1", "LV2", "Normal", "TC", "LD"]
 const ORDERING_CATEGORY = ["SMP"]
 
 const timeData = []

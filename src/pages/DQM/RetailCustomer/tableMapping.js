@@ -23,7 +23,7 @@ const tableMapping = {
     apiKey: "ship_to_company",
     columnSize: "cell-text-big",
   },
-  station_status_sap: {
+  status_sap: {
     label: "STATION STATUS IN SAP",
     apiKey: "status_sap",
     columnSize: "cell-text",

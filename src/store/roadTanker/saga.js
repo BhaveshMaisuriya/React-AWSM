@@ -6,7 +6,8 @@ import {
   GET_ROADTANKER_FILTER,
   GET_TABLE_INFORMATION,
   UPDATE_TABLE_INFORMATION,
-  GET_ROAD_TANKER
+  GET_ROAD_TANKER,
+  GET_ROAD_TANKER_DETAIL
 } from "./actionTypes"
 
 import {
@@ -22,6 +23,8 @@ import {
   // getRoadTankerFilterFail,
   getDownloadRoadTankerSuccess,
   getDownloadRoadTankerFail,
+  getRoadTankeDetailSuccess,
+  getRoadTankerDetailFail
 } from "./actions"
 
 import {
@@ -30,7 +33,7 @@ import {
   getTableInformation,
   updateTableInformation,
   getDownloadRoadTanker,
-  // getRoadTankerFilter,
+  getRoadTankerDetail
 } from "../../helpers/fakebackend_helper"
 
 function* onGetRoadTanker({ params = {} }) {
@@ -79,18 +82,14 @@ function* onUpdateTableInformation({ payload: event }) {
   }
 }
 
-// function* onGetRoadTankerFilter({ params = {} }) {
-//   try {
-//     const response = yield call(getRoadTankerFilter, params)
-//     yield put(
-//       getRoadTankerFilterSuccess(
-//         mergeFilterValues(response, params.search_fields)
-//       )
-//     )
-//   } catch (error) {
-//     yield put(getRoadTankerFilterFail(error))
-//   }
-// }
+function* onGetRoadTankerDetail({ params }) {
+  try {
+    const response = yield call(getRoadTankerDetail, params)
+    yield put(getRoadTankeDetailSuccess(response))
+  } catch (error) {
+    yield put(getRoadTankerDetailFail(error))
+  }
+}
 
 //last function
 function* roadTankerSaga() {
@@ -100,6 +99,7 @@ function* roadTankerSaga() {
   yield takeEvery(UPDATE_TABLE_INFORMATION, onUpdateTableInformation)
   // yield takeLatest(GET_ROADTANKER_FILTER, onGetRoadTankerFilter)
   yield takeLatest(GET_DOWNLOAD_ROAD_TANKER, onGetDownloadRoadTanker)
+  yield takeLatest(GET_ROAD_TANKER_DETAIL, onGetRoadTankerDetail)
 }
 
 export default roadTankerSaga

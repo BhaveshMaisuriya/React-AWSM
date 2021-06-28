@@ -23,7 +23,7 @@ import {
   customerPayload,
 } from "./commercialCustomer"
 import { retailCustomers, audits, address, filter } from "./retailCustomer"
-import { roadTanker, auditsRoadTanker, filterRoadTanker } from "./roadTanker"
+import { roadTanker, auditsRoadTanker, filterRoadTanker, currentRoadTanker } from "./roadTanker"
 import { terminal, auditsTerminal, filterTerminal } from "./terminal"
 import { productList } from "./product"
 import { varianceControl } from "./salesAndInventory"
@@ -62,6 +62,7 @@ export {
   auditsRoadTanker,
   roadTanker,
   filterRoadTanker,
+  currentRoadTanker,
   productList,
   terminal,
   auditsTerminal,

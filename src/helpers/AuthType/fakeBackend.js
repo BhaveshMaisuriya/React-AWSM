@@ -17,6 +17,7 @@ import {
   orders,
   productsData,
   projects,
+  currentRoadTanker,
   recentProducts,
   shops,
   tasks,
@@ -231,6 +232,19 @@ const fakeBackend = () => {
             400,
             "Username and password are invalid. Please enter correct username and password",
           ])
+        }
+      })
+    })
+  })
+
+  mock.onGet(url.GET_ROADTANKER_DETAIL).reply(() => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        if (currentRoadTanker) {
+          resolve([200, currentRoadTanker])
+        }
+        else {
+          reject([400, "Cannot get products"])
         }
       })
     })
@@ -848,33 +862,33 @@ const fakeBackend = () => {
     })
   })
 
-mock
-.onPut(new RegExp(`${url.SLA_ITEMS}/*`))
-.reply(() => {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      if (true) {
-        // Passing fake JSON data as response
-        resolve([200, true])
-      } else {
-        reject([400, "Failed to get Product Details"])
-      }
-    }, 500)
-  })
-})
+  mock
+    .onPut(new RegExp(`${url.SLA_ITEMS}/*`))
+    .reply(() => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          if (true) {
+            // Passing fake JSON data as response
+            resolve([200, true])
+          } else {
+            reject([400, "Failed to get Product Details"])
+          }
+        }, 500)
+      })
+    })
 
-mock.onGet(url.GET_SLA_AUDITLOG).reply(() => {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      if (auditsTerminal) {
-        // Passing fake JSON data as response
-        resolve([200, auditsTerminal])
-      } else {
-        reject([400, "Cannot get audit data"])
-      }
+  mock.onGet(url.GET_SLA_AUDITLOG).reply(() => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        if (auditsTerminal) {
+          // Passing fake JSON data as response
+          resolve([200, auditsTerminal])
+        } else {
+          reject([400, "Cannot get audit data"])
+        }
+      })
     })
   })
-})
 
   mock.onGet(url.GET_TERMINAL_AUDITLOG).reply(() => {
     return new Promise((resolve, reject) => {

@@ -15,18 +15,18 @@ const tableColumns = [
 
 const tableMapping = {
   code: {
-    label: "Code",
+    label: "CODE",
     apiKey: "code",
     columnSize: "cell-text",
     type: "link",
   },
   name: {
-    label: "Name",
+    label: "NAME",
     apiKey: "name",
     columnSize: "cell-text-big",
   },
   status_sap: {
-    label: "Status in SAP",
+    label: "STATUS IN SAP",
     apiKey: "status_sap",
     columnSize: "cell-text",
     type: "badge",
@@ -35,7 +35,7 @@ const tableMapping = {
     },
   },
   status_awsm: {
-    label: "Status in AWSM",
+    label: "STATUS IN AWSM",
     apiKey: "status_awsm",
     columnSize: "cell-text",
     type: "badge",
@@ -44,27 +44,27 @@ const tableMapping = {
     },
   },
   division: {
-    label: "Division",
+    label: "DIVISION",
     apiKey: "division",
     columnSize: "cell-text",
   },
   material_group: {
-    label: "Material Group",
+    label: "MATERIAL GROUP",
     apiKey: "material_group",
     columnSize: "cell-text",
   },
   product_group: {
-    label: "Product Group",
+    label: "PRODUCT GROUP",
     apiKey: "product_group",
     columnSize: "cell-text-big",
   },
   category: {
-    label: "Category",
+    label: "CATEGORY",
     apiKey: "category",
     columnSize: "cell-text",
   },
   sub_category: {
-    label: "SubCategory",
+    label: "SUBCATEGORY",
     apiKey: "sub_category",
     columnSize: "cell-text-big",
   },
@@ -74,12 +74,12 @@ const tableMapping = {
     columnSize: "cell-text",
   },
   density: {
-    label: "Density",
+    label: "DENSITY",
     apiKey: "density",
     columnSize: "cell-text",
   },
   remarks: {
-    label: "Remarks",
+    label: "REMARKS",
     apiKey: "remarks",
     columnSize: "cell-text-big",
   },

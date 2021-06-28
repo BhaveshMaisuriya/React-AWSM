@@ -119,16 +119,12 @@ const tabContact = ({ scheduler, data, onChange }) => {
             <AvForm>
               <AvField
                 name="contact_phone"
-                type="number"
                 placeholder="Contact No. (etc: 011-234556799)"
                 value={data.territory_manager ? data.territory_manager.number || "" : ""}
                 disabled={!!scheduler}
                 className={scheduler ? "disabledField" : ""}
                 validate={{
-                  max: {
-                    value: 10000000,
-                    errorMessage: "Maximum quota within 10,000,000 only",
-                  },
+                  pattern:{ value: '^[0-9-]+$' },
                 }}
               />
             </AvForm>
@@ -167,16 +163,12 @@ const tabContact = ({ scheduler, data, onChange }) => {
             <AvForm>
               <AvField
                 name="contact_phone"
-                type="number"
                 placeholder="Contact No. (etc: 011-234556799)"
                 value={data.retail_sales_manager ? data.retail_sales_manager.number || "" : ""}
                 disabled={!!scheduler}
                 className={scheduler ? "disabledField" : ""}
                 validate={{
-                  max: {
-                    value: 10000000,
-                    errorMessage: "Maximum quota within 10,000,000 only",
-                  },
+                  pattern:{ value: '^[0-9-]+$' },
                 }}
               />
             </AvForm>

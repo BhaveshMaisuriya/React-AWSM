@@ -16,15 +16,11 @@ import SpecificationTab from "./SpecificationTab"
 import TrailerTab from "./TrailerTab"
 import "./InformationModal.scss"
 import { MODE } from "./constants"
-import { tableInformationModalDummyData as data } from "./tableMapping"
+import { tableInformationModalDummyData as data2 } from "./tableMapping"
 import AWSMAlert from "../../../components/Common/AWSMAlert/index"
 
 import {
-  getRoadTanker,
-  getRoadTankerAuditLog,
-  getRoadTankerFilter,
-  getTableInformation,
-  updateTableInformation,
+  getRoadTankerDetail
 } from "../../../store/actions"
 import { connect } from "react-redux"
 import ExitConfirmation from "../../../components/Common/ExitConfirmation"
@@ -42,14 +38,17 @@ class InformationModal extends Component {
         scheduler: false,
       },
       updateSuccess: false,
-      data: data,
+      data: data2,
       isConfirm: false,
     }
   }
 
   componentDidMount() {
-    const { mode } = this.props ? this.props : MODE.VIEW_AND_AMEND
-    this.setState({ mode: mode })
+    const { mode } = this.props
+    let modalMode = mode ? mode : MODE.VIEW_AND_AMEND
+    this.setState({ mode: modalMode })
+    const { onGetRoadTankerDetail, data } = this.props
+    onGetRoadTankerDetail(data.vehicle)
   }
 
   onConfirmCancel = () => {
@@ -64,20 +63,20 @@ class InformationModal extends Component {
   }
 
   render() {
-    const {
-      // onGetRoadTanker,
-      // onGetRoadTankerAuditLog,
-      // onGetRoadTankerFilter,
-      // onGetTableInformation,
+    const { visible,
+      currentRoadTanker,
+      onCancel,
       onUpdateTableInformation,
     } = this.props
     const { activeTab, mode, showAlert, data } = this.state
     const { scheduler } = this.state.userRole
+
     const toggle = tab => {
       if (activeTab !== tab) {
         this.setState({ activeTab: tab })
       }
     }
+
     const handleUpdate = e => {
       e.preventDefault()
       onUpdateTableInformation(data)
@@ -87,12 +86,12 @@ class InformationModal extends Component {
     const toggleAlert = () => {
       this.setState({ showAlert: !showAlert })
     }
+
     const onFieldValueChange = (fieldName, value) => {
       const newData = { ...data }
       newData[fieldName] = value
       this.setState({ data: newData })
     }
-    const { onCancel, visible } = this.props
     const modalFooter = () => {
       const footer =
         mode === MODE.VIEW_AND_AMEND ? (
@@ -128,7 +127,7 @@ class InformationModal extends Component {
       >
         <ModalHeader toggle={() => this.setState({ isConfirm: true })}>
           <h5 className="modal-title">
-            VEHICLE ID: {data.vehical_id}
+            VEHICLE ID: {currentRoadTanker?.vehicle}
             <span className="sub-title">
               Last Updated By: Nur Izzati on 3rd March 2021
             </span>
@@ -157,7 +156,7 @@ class InformationModal extends Component {
                   <input
                     className="form-control"
                     type="text"
-                    defaultValue={data.vehical_owner}
+                    defaultValue={currentRoadTanker?.owner}
                     disabled={true}
                   />
                 </div>
@@ -166,7 +165,7 @@ class InformationModal extends Component {
                   <input
                     className="form-control"
                     type="text"
-                    defaultValue={data.status_in_sap}
+                    defaultValue={currentRoadTanker?.status_sap}
                     disabled={true}
                   />
                 </div>
@@ -177,7 +176,16 @@ class InformationModal extends Component {
                   <input
                     className="form-control"
                     type="text"
-                    defaultValue={data.rt_capacity}
+                    defaultValue={data?.rt_capacity}
+                    disabled={true}
+                  />
+                </div>
+                <div className="col-md-6 form-group">
+                  <label>MAX VOLUME</label>
+                  <input
+                    className="form-control"
+                    type="text"
+                    defaultValue={currentRoadTanker?.max_volume}
                     disabled={true}
                   />
                 </div>
@@ -188,7 +196,7 @@ class InformationModal extends Component {
                   <input
                     className="form-control"
                     type="text"
-                    defaultValue={data.remarks}
+                    defaultValue={currentRoadTanker?.remarks}
                     disabled={
                       (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
                     }
@@ -233,7 +241,7 @@ class InformationModal extends Component {
                     <AvailabilityTab
                       mode={mode}
                       scheduler={scheduler}
-                      data={data.availability}
+                      data={currentRoadTanker?.availability}
                       onChange={onFieldValueChange}
                     />
                   </TabPane>
@@ -241,7 +249,7 @@ class InformationModal extends Component {
                     <SpecificationTab
                       mode={mode}
                       scheduler={scheduler}
-                      data={data.specification}
+                      data={currentRoadTanker?.specification}
                       toggle={() => {
                         toggleAlert()
                       }}
@@ -252,7 +260,7 @@ class InformationModal extends Component {
                     <TrailerTab
                       mode={mode}
                       scheduler={scheduler}
-                      data={data.trailer}
+                      data={currentRoadTanker?.trailer}
                       onChange={onFieldValueChange}
                     />
                   </TabPane>
@@ -269,18 +277,11 @@ class InformationModal extends Component {
 }
 
 const mapStateToProps = ({ roadTanker }) => ({
-  // roadTanker: roadTanker.roadTanker,
-  // auditsRoadTanker: roadTanker.auditsRoadTanker,
-  // filterRoadTanker: roadTanker.filterRoadTanker,
-  // address: retailCustomer.address,
+  currentRoadTanker: roadTanker.currentRoadTanker?.data,
 })
 
 const mapDispatchToProps = dispatch => ({
-  onGetRoadTanker: params => dispatch(getRoadTanker(params)),
-  onGetRoadTankerAuditLog: payload => dispatch(getRoadTankerAuditLog(payload)),
-  onGetRoadTankerFilter: payload => dispatch(getRoadTankerFilter(payload)),
-  onGetTableInformation: () => dispatch(getTableInformation()),
-  onUpdateTableInformation: event => dispatch(updateTableInformation(event)),
+  onGetRoadTankerDetail: params => dispatch(getRoadTankerDetail(params)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(InformationModal)

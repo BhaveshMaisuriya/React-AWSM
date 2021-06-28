@@ -212,6 +212,11 @@ export const getRoadTanker = params =>
     { ...params }
   )
 
+export const getRoadTankerDetail = vehical_id =>
+  axios.get(
+    `https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/road-tanker/${vehical_id}`,
+  )
+
 export const getDownloadRoadTanker = params =>
   axios.post(
     "https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/road-tanker",
@@ -406,8 +411,8 @@ export const createSLATableRecord = (data) =>
       data.recordValue
     )
     .then(response => response.data)
-  
-export const deleteSLARecord = ({category, id, recordId}) => {
+
+export const deleteSLARecord = ({ category, id, recordId }) => {
   axios
     .delete(`https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/sla/${category}/section/${id}/record/${recordId}`)
     .then(response => response.data)

@@ -10,7 +10,9 @@ import {
   GET_ROADTANKER_FILTER_SUCCESS,
   GET_ROADTANKER_FILTER_FAIL,
   GET_DOWNLOAD_ROAD_TANKER_SUCCESS,
-  GET_DOWNLOAD_ROAD_TANKER_FAIL
+  GET_DOWNLOAD_ROAD_TANKER_FAIL,
+  GET_ROAD_TANKER_DETAIL_SUCCESS,
+  GET_ROAD_TANKER_DETAIL_FAIL,
 } from "./actionTypes"
 
 const initialState = {
@@ -20,6 +22,7 @@ const initialState = {
   address: [],
   filterRoadTanker: [],
   downloadRoadTanker: [],
+  currentRoadTanker: {}
 }
 
 const RoadTanker = (state = initialState, action) => {
@@ -99,6 +102,18 @@ const RoadTanker = (state = initialState, action) => {
         ...state,
         error: action.payload,
       }
+    case GET_ROAD_TANKER_DETAIL_SUCCESS:
+      return {
+        ...state,
+        currentRoadTanker: action.payload
+      }
+
+    case GET_ROAD_TANKER_DETAIL_FAIL:
+      return {
+        ...state,
+        error: action.payload
+      }
+
 
     default:
       return state

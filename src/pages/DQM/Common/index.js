@@ -38,6 +38,7 @@ import TankStatusModal from "../SalesAndInventory/TankStatusModal/TankStatusModa
 import VarianceIcon from "../../../assets/images/AWSM-Variance-Control.svg"
 import AWSMDropdown from "../../../components/Common/Dropdown"
 import DatePicker from "../../../components/Common/DatePicker"
+import REGION_TERMINAL from "../../../common/data/regionAndTerminal"
 
 const styles = {
   headerText: {
@@ -78,6 +79,8 @@ class Pages extends Component {
       DownloadTableData: false,
       varianceControl: false,
       tankStatusModal: false,
+      region: null,
+      terminal: null,
     }
     this.toggle = this.toggle.bind(this)
     this.toggleTI = this.toggleTI.bind(this)
@@ -387,19 +390,17 @@ class Pages extends Component {
                             <div className="d-flex">
                               <div className="col-4 p-0">
                                 <AWSMDropdown
-                                  items={[
-                                    "Northern",
-                                    "Southern",
-                                    "Central",
-                                    "Eastern",
-                                    "Sabah",
-                                    "Sarawak",
-                                  ]}
-                                  value="Northern"
+                                  items={REGION_TERMINAL.map(e => e.region)}
+                                  value={this.state.region}
+                                  onChange={value => this.setState({ ...this.state, region: value, terminal: null})}
                                 />
                               </div>
                               <div className="col-8 p-0 ml-2">
-                                <AWSMDropdown items={["KVDT"]} value="KVDT" />
+                                <AWSMDropdown
+                                  items={REGION_TERMINAL.find(e => e.region === this.state.region)?.terminal}
+                                  value={this.state.terminal}
+                                  onChange={value => this.setState({ ...this.state, terminal: value })}
+                                />
                               </div>
                             </div>
                           </div>

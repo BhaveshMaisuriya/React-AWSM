@@ -13,6 +13,7 @@ class AvailabilityTab extends PureComponent {
 
   render() {
     const { mode, scheduler, data, onChange } = this.props
+
     return (
       <div className="availability">
         <form>
@@ -22,7 +23,7 @@ class AvailabilityTab extends PureComponent {
               <input
                 className="form-control"
                 type="text"
-                defaultValue={data.default_terminal}
+                defaultValue={data?.default_terminal}
                 disabled={true}
                 onChange={e => onChange("default_terminal", e.target.value)}
               />
@@ -32,13 +33,13 @@ class AvailabilityTab extends PureComponent {
               <select
                 className="form-control"
                 type="text"
-                defaultValue={"0"}
+                defaultValue={data?.shift_type}
                 onChange={e => onChange("shift_type", e.target.value)}
               >
-                <option value="0">Double</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
+                {data?.shift_type_dropdown.map((value, index) => {
+                  return <option value={index}>{value}</option>
+                })}
+
               </select>
             </div>
           </div>
@@ -48,7 +49,7 @@ class AvailabilityTab extends PureComponent {
               <input
                 className="form-control"
                 type="text"
-                defaultValue={data.daily_available_hours}
+                defaultValue={data?.daily_available_hours}
                 disabled={true}
                 onChange={e =>
                   onChange("daily_available_hours", e.target.value)
@@ -60,13 +61,14 @@ class AvailabilityTab extends PureComponent {
             <div className="col-md-6 form-group">
               <label> STATUS IN AWSM </label>
               <select
-                defaultValue="Inactive"
+                defaultValue={data?.status_awsm}
                 className="form-control"
                 type="text"
                 onChange={e => onChange("status_in_awsm", e.target.value)}
               >
-                <option value="inactive">Inactive</option>
-                <option value="active">Active</option>
+                {data?.status_awsm_dropdown?.map((value, index) => {
+                  return <option value={index}>{value}</option>
+                })}
               </select>
             </div>
             <div className="col-md-6 form-group">
@@ -74,7 +76,7 @@ class AvailabilityTab extends PureComponent {
               <PopOverCalendar
                 className="form-control"
                 selected={new Date()}
-                selected={data.date}
+                selected={data?.date}
                 disabled={
                   (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
                 }
@@ -89,7 +91,7 @@ class AvailabilityTab extends PureComponent {
               <label>DATE 1</label>
               <PopOverCalendar
                 className="form-control"
-                selected={data.date1}
+                selected={data?.date1}
                 onChange={date => this.setState({ date: date })}
                 disabled={
                   (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler

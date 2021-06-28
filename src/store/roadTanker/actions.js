@@ -16,7 +16,10 @@ import {
   GET_ROADTANKER_FILTER_FAIL,
   GET_DOWNLOAD_ROAD_TANKER,
   GET_DOWNLOAD_ROAD_TANKER_SUCCESS,
-  GET_DOWNLOAD_ROAD_TANKER_FAIL
+  GET_DOWNLOAD_ROAD_TANKER_FAIL,
+  GET_ROAD_TANKER_DETAIL_FAIL,
+  GET_ROAD_TANKER_DETAIL_SUCCESS,
+  GET_ROAD_TANKER_DETAIL
 } from "./actionTypes"
 
 export const getRoadTanker = params => ({
@@ -105,4 +108,19 @@ export const getRoadTankerFilterSuccess = response => ({
 export const getRoadTankerFilterFail = error => ({
   type: GET_ROADTANKER_FILTER_FAIL,
   payload: error,
+})
+
+export const getRoadTankerDetail = params => ({
+  type: GET_ROAD_TANKER_DETAIL,
+  params
+})
+
+export const getRoadTankeDetailSuccess = response => ({
+  type: GET_ROAD_TANKER_DETAIL_SUCCESS,
+  payload: response
+})
+
+export const getRoadTankerDetailFail = error => ({
+  type: GET_ROAD_TANKER_DETAIL_FAIL,
+  payload: error
 })

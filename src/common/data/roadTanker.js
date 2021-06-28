@@ -388,4 +388,39 @@ const filterRoadTanker = [
   },
 ]
 
-export { roadTanker, auditsRoadTanker, filterRoadTanker, address }
+const currentRoadTanker = {
+  vehical_id: "RYD0287",
+  vehical_owner: "Eshah Filling Station",
+  status_in_sap: "Operational",
+  rt_capacity: "Operational",
+  remarks: "Shaziman only",
+  availability: {
+    default_terminal: "Lorem ipsum",
+    shift_type: "double",
+    daily_available_hours: "RYD0287",
+    status_in_awsm: "active",
+    date: "30/04/2021",
+    date1: "07/05/2021",
+    mobilized_terminal_name_1: "One",
+  },
+  specification: {
+    product_type_in_sap: "Lorem ipsum",
+    pump_type: "Lorem ipsum",
+    product_type_in_ASWM: "Multiproduct",
+    date: "06/05/2021",
+    chartering_type: "Lorem ipsum",
+    customer_type: "active",
+    rt_restriction: "new restriction",
+    restrict_code: "1001",
+  },
+  trailer: {
+    rt_weight: "012345",
+    legal_weight_allowed: "Lorem ipsum",
+    no_of_comp: "012345",
+    max_volume_per_comp: "Lorem_ipsum",
+    prod_weight_hse_copmp: "012345",
+    offloading_duration_mins: "Lorem ipsum",
+  },
+}
+
+export { roadTanker, auditsRoadTanker, filterRoadTanker, address, currentRoadTanker }

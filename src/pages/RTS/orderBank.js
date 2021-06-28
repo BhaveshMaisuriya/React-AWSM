@@ -22,38 +22,8 @@ import NewOrderModal from "./addOrderBankModal"
 import DateRangePicker from "../../components/Common/DateRangePicker"
 import AWSMDropdown from "../../components/Common/Dropdown"
 import OrderBankTable from './OrderBankTable'
+import REGION_TERMINAL from "../../common/data/regionAndTerminal"
 import customiseTableIcon from "../../assets/images/AWSM-Customise-Table.svg"
-
-const REGION_TERMINAL = [
-  {
-    region: "Central",
-    terminal: ["KVDT"]
-  },
-  {
-    region: "Eastern",
-    terminal: ["Kerteh", "Kuantan"]
-  },
-  {
-    region: "Nothern",
-    terminal: ["Langkawi", "Lumut", "Prai"]
-  },
-  {
-    region: "Southern",
-    terminal: ["Melaka", "Pasir Gudang"]
-  },
-  {
-    region: "Sabah",
-    terminal: ["Labuan", "Sanadakan", "Sepanggar Bay", "Tawau JV"]
-  },
-  {
-    region: "Sarawak",
-    terminal: ["Bintulu Jv", "Miri", "Senari IOT", "Tg Manis CODT"]
-  },
-  {
-    region: "Special Product",
-    terminal: ["Melaka", "Prai", "Kerteh", "Sepanggar Bay", "Labuan", "Sandakan", " Bintulu JV", "Senari IOT"]
-  }
-]
 
 function OrderBank() {
   const [activeTab, setActiveTab] = useState("1")

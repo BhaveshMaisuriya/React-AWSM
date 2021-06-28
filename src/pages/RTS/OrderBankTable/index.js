@@ -1,31 +1,124 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import PropTypes from 'prop-types';
 import Filter from "../../../components/Common/DataTable/filter"
 import { tableColumns, tableMapping, tempData } from './tableMapping'
 import { CustomInput } from 'reactstrap';
 import MoreVertIcon from "@material-ui/icons/MoreVert"
 import DragIndicatorIcon from '@material-ui/icons/DragIndicator';
-import IndeterminateCheckBoxIcon from '@material-ui/icons/IndeterminateCheckBox';
 import { IconButton, Menu, MenuItem } from "@material-ui/core"
+import selectAllIcon from "../../../assets/images/AWSM-Select-all-Checkbox.svg"
+import selectAllIcon2 from "../../../assets/images/AWSM-Checked-box.svg"
+import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from "reactstrap"
+import { ReactSVG } from "react-svg"
+import EditIcon from "../../../assets/images/AWSM-Edit-Icon.svg"
+import TrashIcon from "../../../assets/images/AWSM-Trash-Icon.svg"
+import { isArray } from "lodash"
 import "./index.scss"
 
+class TableGroupEvent extends React.Component {
+    constructor(props){
+        super(props);
+        this.state = {
+            openDropDown: false,
+        }
+    }
+    
+    toggle = () => {
+        this.setState({openDropDown: !this.state.openDropDown})
+    }
+
+    OnClickEditHandler = () =>{
+        console.log("edit")
+    }
+
+    OnClickRemoveHandler = () =>{
+        console.log("remove")
+    }
+
+    onChangeCheckBox(e){
+        const { Onchange, index } = this.props
+        Onchange(e.target.checked,index)
+    }
+    
+    render(){
+        const { openDropDown } = this.state 
+        const { index, isChecked } = this.props
+        return(<>
+        <DragIndicatorIcon style={{ color: "#D9D9D9",transform:'translateX(5px)' }} />
+                <Dropdown isOpen={openDropDown} toggle={this.toggle}>
+                <DropdownToggle
+                    data-toggle="dropdown"
+                    tag="div"
+                    aria-expanded={openDropDown}
+                >
+                <IconButton
+                color="primary"
+                aria-label="Setting"
+                component="span"
+                className="setting_icon"
+                fontSize="large"
+                style={{ color: "rgba(0,0,0,0.5)" }}
+                aria-haspopup="true"
+                >
+                <MoreVertIcon />
+                </IconButton>
+            </DropdownToggle>
+            <DropdownMenu>
+                <DropdownItem><div className='event-content' onClick={this.OnClickEditHandler}><ReactSVG className="mr-2" src={EditIcon} />View/Edit Details</div></DropdownItem>
+                <DropdownItem><div className='event-content' onClick={this.OnClickRemoveHandler}><ReactSVG className="mr-2" src={TrashIcon} />Delete Order</div></DropdownItem>
+            </DropdownMenu>
+            </Dropdown>
+        <CustomInput type="checkbox" id={`customRadio${index}`} name={`customRadio${index}`} checked={isChecked} onChange={this.onChangeCheckBox.bind(this)} />
+        </>
+        )
+    }
+}
 class index extends Component {
     constructor(props) {
         super(props);
         this.state={
-            fixedHeaders:['id'],
-            filterData:{}
+            fixedHeaders:['name'],
+            filterData:null,
+            dataSource: tempData,
+            selectedAllItem:false
         }
+    }
+
+    componentDidMount(){
+        let data = {}
+        const { dataSource } = this.state
+        tableColumns.forEach((v)=>{
+            data[v] = []
+            dataSource.forEach((a)=>{
+                if(isArray(a[v])){
+                    data[v] = [ ...data[v],...a[v]]
+                }
+                else{
+                    data[v].push(a[v])
+                }
+            })
+            data[v] = [...new Set(data[v])]
+        })
+        this.setState({
+            filterData:data
+        })
     }
 
     headerTableConfiguration = () =>{
         const { fixedHeaders,filterData } = this.state
         return tableColumns.map((v)=>{
-            return (<th>{tableMapping[v].label.toUpperCase()} <Filter dataFilter={filterData} dataKey={fixedHeaders[0]}/></th>)
+            return (<th>{tableMapping[v].label.toUpperCase()} 
+                <Filter 
+                    dataFilter = { filterData } 
+                    dataKey = { v }
+                    handleClickReset = { this.ResetDataFilterHandler }
+                    handleClickApply = { this.ApplyFilterHandler }
+                />
+            </th>)
         })
     }
 
-    bodyTableConfiguration = (data) =>{
+    bodyTableConfiguration = (data) => {
         return tableColumns.map((v)=>{
             let typeOfColumn = tableMapping[v].type
             switch (typeOfColumn) {
@@ -43,35 +136,57 @@ class index extends Component {
         })
     }
 
-    DataOfTableFixed = () =>{
-        return ['1','2','3','4','5','6','7'].map((v)=><tr><td>
-        <DragIndicatorIcon 
-         style={{ color: "#D9D9D9" }}
-        />
-        <IconButton
-          color="primary"
-          aria-label="Setting"
-          component="span"
-          className="setting_icon"
-          fontSize="large"
-          style={{ color: "rgba(0,0,0,0.5)" }}
-          aria-haspopup="true"
-        //   onClick={settingClick}
-        > 
-        <MoreVertIcon />
-       </IconButton>{<CustomInput type="checkbox" id={`customRadio${v}`} name={`customRadio${v}`} />}</td></tr>)
+    DataOfTableFixed = () => {
+        const { dataSource } = this.state
+        return dataSource.map((v,i)=>{
+            return <tr key={i}>
+                <th>
+                <TableGroupEvent index={i} isChecked={v.isChecked} Onchange={this.OnChangeCheckBoxHandler}/>
+                </th>
+           </tr>
+        })
+    }
+
+    ResetDataFilterHandler = () =>{
+        console.log("reset")
+    }
+
+    ApplyFilterHandler = () =>{
+        console.log("apply")
+    }
+
+    OnChangeCheckBoxHandler = ( status, i) =>{
+        const { dataSource,selectedAllItem } = this.state
+        let data = [...dataSource]
+        data[i].isChecked = status
+        let temp = data.filter((v)=>v.isChecked)
+        this.setState({ dataSource:data,selectedAllItem : temp != data.length ? false :true   })
+    }
+
+    OnSelectedAllItems = () =>{
+        const { selectedAllItem, dataSource } = this.state
+        let data = [...dataSource]
+        data = data.map((v)=>{
+            return { ...v,isChecked:selectedAllItem ? false : true }
+        }) 
+        this.setState({ selectedAllItem:!selectedAllItem, dataSource:data })
     }
 
     render() {
+        const { dataSource, selectedAllItem } = this.state
         return (
             <div className="rts-table-container">
             <div className="container" style={{ maxWidth: "100%" }}>
                 <table className="fixed">
                     <thead>
-                        <tr><th> <CustomInput type="checkbox" id="customRadio" name="customRadio" /></th></tr>
+                        <tr>
+                            <th>
+                            <img src={ selectedAllItem ? selectAllIcon2 : selectAllIcon} className={'header-select-icon'} onClick={this.OnSelectedAllItems} alt="icon" />
+                            </th>
+                        </tr>
                     </thead>
                     <tbody>
-                       {this.DataOfTableFixed()}
+                        {this.DataOfTableFixed()}
                     </tbody>
                 </table>
                 <div className="scroll">
@@ -80,7 +195,7 @@ class index extends Component {
                         <tr>{this.headerTableConfiguration()}</tr>
                     </thead>
                     <tbody>
-                        { tempData.map((v)=>{
+                        { dataSource.map((v)=>{
                             return <tr>{this.bodyTableConfiguration(v)}</tr>
                         }) }
                     </tbody>

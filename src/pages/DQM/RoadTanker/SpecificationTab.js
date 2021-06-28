@@ -153,7 +153,7 @@ class SpecificationTab extends PureComponent {
             className="form-control"
             id="restriction"
             type="text"
-            defaultValue={data.rt_restriction}
+            defaultValue={data?.rt_restriction}
             onChange={onValueChange}
             disabled={disabled}
           />
@@ -179,7 +179,7 @@ class SpecificationTab extends PureComponent {
             <input
               className="form-control"
               type="text"
-              defaultValue={data.product_type_in_sap}
+              defaultValue={data?.product_type_sap}
               disabled={true}
             />
           </div>
@@ -188,7 +188,7 @@ class SpecificationTab extends PureComponent {
             <input
               className="form-control"
               type="text"
-              defaultValue={data.pump_type}
+              defaultValue={data?.pump_type}
               disabled={true}
             />
           </div>
@@ -201,13 +201,14 @@ class SpecificationTab extends PureComponent {
               disabled={
                 (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
               }
-              defaultValue={data.product_type_in_aswm}
+              defaultValue={data?.product_type_awsm}
               onChange={e => {
                 onChange("product_type_in_ASWM", e.target.value)
               }}
             >
-              <option value="Multiproduct">Multiproduct</option>
-              <option value="Singleproduct">Singleproduct</option>
+              {data?.product_type_awsm_dropdown?.map((value, indev) => {
+
+              })}
             </select>
           </div>
           <div className="col-md-6 form-group">
@@ -217,7 +218,7 @@ class SpecificationTab extends PureComponent {
               disabled={
                 (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
               }
-              selected={data.date}
+              selected={data?.temporary_product_date_range}
             ></PopOverCalendar>
           </div>
         </div>
@@ -228,7 +229,7 @@ class SpecificationTab extends PureComponent {
             <input
               className="form-control"
               disabled={true}
-              defaultValue={data.chartering_type}
+              defaultValue={data?.chartering_type}
             ></input>
           </div>
           <div className="col-md-6 form-group">
@@ -238,8 +239,10 @@ class SpecificationTab extends PureComponent {
               disabled={
                 (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
               }
-              value={data.customer_type}
+              value={data?.customer_type}
             >
+
+              {data?.customer_type_dropdown}
               <option value="active">Active</option>
             </select>
           </div>
@@ -262,7 +265,7 @@ class SpecificationTab extends PureComponent {
             <input
               className="form-control"
               disabled={true}
-              defaultValue={data.restrict_code}
+              defaultValue={data?.restriction_code}
             ></input>
           </div>
         </div>

@@ -13,18 +13,18 @@ class TrailerTab extends PureComponent {
       <div className="trailer">
         <div className="row">
           <div className="col-md-6 form-group">
-            <label>RT WEIGHT</label>
+            <label>RT UNLADEN WEIGHT</label>
             <input
               className="form-control"
-              defaultValue={data.rt_weight}
+              defaultValue={data?.unladen_weight}
               disabled={true}
             ></input>
           </div>
           <div className="col-md-6 form-group">
-            <label>LEGAL WEIGHT ALLOWED</label>
+            <label>RT MAX WEIGHT</label>
             <input
               className="form-control"
-              defaultValue={data.legal_weight_allowed}
+              defaultValue={data?.max_weight}
               disabled
             ></input>
           </div>
@@ -32,34 +32,25 @@ class TrailerTab extends PureComponent {
 
         <div className="row">
           <div className="col-md-6 form-group">
-            <label>NO OF COMP</label>
+            <label>NO OF COMPARTMENT</label>
             <input
               className="form-control"
               disabled={true}
-              defaultValue={data.no_of_comp}
+              defaultValue={data?.compartment_no}
             ></input>
           </div>
 
           <div className="col-md-6 form-group">
-            <label>MAX VOLUME PER COMP</label>
+            <label>MAX VOLUME PER COMPARTMENT</label>
             <input
               className="form-control"
               disabled={true}
-              defaultValue={data.max_volume_per_comp}
+              defaultValue={data?.compartment_max_vol}
             ></input>
           </div>
         </div>
 
         <div className="row">
-          <div className="col-md-6 form-group">
-            <label>PROD WEIGHT (HSE COMP)</label>
-            <input
-              className="form-control"
-              disabled={true}
-              defaultValue={data.prod_weight_hse_copmp}
-            ></input>
-          </div>
-
           <div className="col-md-6 form-group">
             <label>OFFLOADING DURATION (MINS)</label>
             <input
@@ -68,7 +59,7 @@ class TrailerTab extends PureComponent {
               disabled={
                 (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
               }
-              defaultValue={data.offloading_duration_mins}
+              defaultValue={data?.offloading_duration}
               onChange={e =>
                 onChange("offloading_duration_mins", e.target.value)
               }

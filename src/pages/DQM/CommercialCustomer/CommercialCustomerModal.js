@@ -121,7 +121,7 @@ const CommercialCustomerModal = props => {
                   <label>STATUS IN SAP</label>
                   <AWSMInput
                     disabled
-                    defaultValue={currentCommercialDetail.station_status_sap}
+                    defaultValue={currentCommercialDetail.status_sap}
                   />
                 </div>
               </div>

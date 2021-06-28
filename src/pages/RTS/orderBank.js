@@ -10,8 +10,6 @@ import {
   Nav,
   TabPane,
   TabContent,
-  ButtonDropdown,
-  DropdownItem,
   Dropdown, DropdownMenu, DropdownToggle
 } from "reactstrap"
 import "./style.scss"

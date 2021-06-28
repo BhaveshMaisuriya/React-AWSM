@@ -1,25 +1,42 @@
 import React, { Component, useState } from 'react';
 import PropTypes from 'prop-types';
 import Filter from "../../../components/Common/DataTable/filter"
-import { tableColumns, tableMapping, tempData } from './tableMapping'
-import { CustomInput } from 'reactstrap';
+import { tableColumns, tableMapping, tempData } from "./tableMapping"
+import {
+  CustomInput,
+  Dropdown,
+  DropdownMenu,
+  DropdownToggle,
+  DropdownItem,
+  Modal,
+  ModalHeader,
+  ModalBody,
+} from "reactstrap"
 import MoreVertIcon from "@material-ui/icons/MoreVert"
 import DragIndicatorIcon from '@material-ui/icons/DragIndicator';
 import { IconButton, Menu, MenuItem } from "@material-ui/core"
 import selectAllIcon from "../../../assets/images/AWSM-Select-all-Checkbox.svg"
 import selectAllIcon2 from "../../../assets/images/AWSM-Checked-box.svg"
-import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from "reactstrap"
 import { ReactSVG } from "react-svg"
-import EditIcon from "../../../assets/images/AWSM-Edit-Icon.svg"
-import TrashIcon from "../../../assets/images/AWSM-Trash-Icon.svg"
 import { isArray } from "lodash"
 import "./index.scss"
+import EditIcon from "../../../assets/images/AWSM-Edit-Icon.svg"
+import TrashIcon from "../../../assets/images/AWSM-Trash-Icon.svg"
+import DeleteNoteConfirmation from "../DeleteNoteConfirmation"
+import EditOrderBankModal from "../EditOrderBankModal"
+
+let orderBankSettings = [
+  { value: "edit", label: "View/Edit Details", icon: EditIcon },
+  { value: "delete", label: "Delete Order", icon: TrashIcon },
+];
 
 class TableGroupEvent extends React.Component {
     constructor(props){
         super(props);
         this.state = {
             openDropDown: false,
+            isOpenDeleteModal: false,
+            isOpenEditModal: false,
         }
     }
     
@@ -28,16 +45,20 @@ class TableGroupEvent extends React.Component {
     }
 
     OnClickEditHandler = () =>{
-        console.log("edit")
+      this.setState({isOpenEditModal: true})
     }
 
     OnClickRemoveHandler = () =>{
-        console.log("remove")
+      this.setState({isOpenDeleteModal: true})
     }
 
     onChangeCheckBox(e){
         const { Onchange, index } = this.props
         Onchange(e.target.checked,index)
+    }
+
+    deleteOrder = () => {
+      this.setState({isOpenDeleteModal: false})
     }
     
     render(){
@@ -69,20 +90,36 @@ class TableGroupEvent extends React.Component {
             </DropdownMenu>
             </Dropdown>
         <CustomInput type="checkbox" id={`customRadio${index}`} name={`customRadio${index}`} checked={isChecked} onChange={this.onChangeCheckBox.bind(this)} />
+
+        {this.state.isOpenDeleteModal && 
+            <DeleteNoteConfirmation
+                isOpen={true}
+                onDelete={this.deleteOrder.bind(this)}
+                onCancel={() => this.setState({isOpenDeleteModal: false})}
+            />
+        }
+        {this.state.isOpenEditModal && 
+            <EditOrderBankModal
+                open={true}
+                onCancel={() => this.setState({isOpenEditModal: false})}
+            />
+        }
+
         </>
         )
     }
 }
 class index extends Component {
-    constructor(props) {
-        super(props);
-        this.state={
-            fixedHeaders:['name'],
-            filterData:null,
-            dataSource: tempData,
-            selectedAllItem:false
-        }
+  constructor(props) {
+    super(props)
+    this.state = {
+      fixedHeaders: ["id"],
+      filterData: {},
+      dropdownOpen: [],
+      dataSource: tempData,
+      selectedAllItem:false
     }
+  }
 
     componentDidMount(){
         let data = {}
@@ -117,6 +154,15 @@ class index extends Component {
             </th>)
         })
     }
+
+     onSettingClick = async(val, ) => {
+        if(val === 'delete') {
+          await this.setState({isOpenDeleteModal: true})
+        } else {
+          await this.setState({isOpenEditModal: true})
+        }
+    }
+  
 
     bodyTableConfiguration = (data) => {
         return tableColumns.map((v)=>{
@@ -176,7 +222,7 @@ class index extends Component {
         const { dataSource, selectedAllItem } = this.state
         return (
             <div className="rts-table-container">
-            <div className="container" style={{ maxWidth: "100%" }}>
+            <div className="container-orderbank" style={{ maxWidth: "100%" }}>
                 <table className="fixed">
                     <thead>
                         <tr>
@@ -202,13 +248,11 @@ class index extends Component {
                     </table>
                 </div>
             </div>
-        </div>
-        );
-    }
+          </div>
+    )
+  }
 }
 
-index.propTypes = {
+index.propTypes = {}
 
-};
-
-export default index;
+export default index

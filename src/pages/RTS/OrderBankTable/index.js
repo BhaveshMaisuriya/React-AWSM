@@ -25,11 +25,6 @@ import TrashIcon from "../../../assets/images/AWSM-Trash-Icon.svg"
 import DeleteNoteConfirmation from "../DeleteNoteConfirmation"
 import EditOrderBankModal from "../EditOrderBankModal"
 
-let orderBankSettings = [
-  { value: "edit", label: "View/Edit Details", icon: EditIcon },
-  { value: "delete", label: "Delete Order", icon: TrashIcon },
-];
-
 class TableGroupEvent extends React.Component {
     constructor(props){
         super(props);
@@ -113,8 +108,8 @@ class index extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      fixedHeaders: ["id"],
-      filterData: {},
+    fixedHeaders:['name'],
+    filterData:null,
       dropdownOpen: [],
       dataSource: tempData,
       selectedAllItem:false
@@ -153,16 +148,7 @@ class index extends Component {
                 />
             </th>)
         })
-    }
-
-     onSettingClick = async(val, ) => {
-        if(val === 'delete') {
-          await this.setState({isOpenDeleteModal: true})
-        } else {
-          await this.setState({isOpenEditModal: true})
-        }
-    }
-  
+    }  
 
     bodyTableConfiguration = (data) => {
         return tableColumns.map((v)=>{
@@ -221,7 +207,7 @@ class index extends Component {
     render() {
         const { dataSource, selectedAllItem } = this.state
         return (
-            <div className="rts-table-container">
+            <div className="rts-table-container scroll">
             <div className="container-orderbank" style={{ maxWidth: "100%" }}>
                 <table className="fixed">
                     <thead>

@@ -372,6 +372,624 @@ const EditOrderBankModal = props => {
                   
                   </div>
                 </TabPane>
+                <TabPane tabId="2">
+                  <div className="w-100">
+                    <div className="d-flex justify-content-between mt-4">
+                      <div className="w-30 mr-4">
+                        <label className="text-upper">RT Req</label>
+                        <div className="d-flex">
+                          <div className="w-100">
+                            <AWSMInput value="Lorem ipsum" disabled={true}  />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="w-30 mr-4">
+                        <label className="text-upper">Accessibility</label>
+                        <div className="d-flex">
+                          <div className="w-100">
+                            <AWSMInput value="Lorem ipsum" disabled={true}  />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="w-30 mr-4">
+                        <label className="text-upper">Duration</label>
+                        <div className="d-flex">
+                          <div className="w-100">
+                            <AWSMInput value="XX" disabled={true}  />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="d-flex justify-content-between mt-4">
+                      <div className="w-30 mr-4">
+                        <label className="text-upper">Distance</label>
+                        <div className="d-flex">
+                          <div className="w-100">
+                            <AWSMInput value="XX" disabled={true}  />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="w-30 mr-4">
+                        <label className="text-upper">Delivery Open Time (From)</label>
+                        <div className="d-flex">
+                          <div className="w-100">
+                            <AWSMInput value="Central" disabled={true}  />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="w-30 mr-4">
+                        <label className="text-upper">Delivery Open Time (To)</label>
+                        <div className="d-flex">
+                          <div className="w-100">
+                            <AWSMInput value="Central" disabled={true}  />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <h5 className='text-bold mt-3 mb-3'>Actual Open Time</h5>
+                    <div className="d-flex justify-content-between mt-4">
+                      <div className="w-31 mr-4">
+                        <label className="text-upper">Days 1</label>
+                        <div className="d-flex">
+                          <div className="w-100">
+                            <AWSMInput value="Monday, Tuesday, Wednesday" disabled={true}  />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="w-15 ml-4">
+                        <label className="text-upper">time (From) 1</label>
+                        <div className="d-flex">
+                          <div className="w-100">
+                            <AWSMInput value="XX:XX" disabled={true}  />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="w-15 ml-2">
+                        <label className="text-upper">Time (To) 1</label>
+                        <div className="d-flex">
+                          <div className="w-100">
+                            <AWSMInput value="XX:XX" disabled={true}  />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="w-30 mr-4"></div>
+                    </div>
+                    <div className="d-flex justify-content-between mt-4">
+                      <div className="w-31 mr-4">
+                        <label className="text-upper">Days 2</label>
+                        <div className="d-flex">
+                          <div className="w-100">
+                            <AWSMInput value="-" disabled={true}  />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="w-15 ml-4">
+                        <label className="text-upper">time (From) 2</label>
+                        <div className="d-flex">
+                          <div className="w-100">
+                            <AWSMInput value="-" disabled={true}  />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="w-15 ml-2">
+                        <label className="text-upper">Time (To) 2</label>
+                        <div className="d-flex">
+                          <div className="w-100">
+                            <AWSMInput value="-" disabled={true}  />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="w-30 mr-4"></div>
+                    </div>
+                    <div className="d-flex justify-content-between mt-4">
+                      <div className="w-31 mr-4">
+                        <label className="text-upper">Days 3</label>
+                        <div className="d-flex">
+                          <div className="w-100">
+                            <AWSMInput value="-" disabled={true}  />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="w-15 ml-4">
+                        <label className="text-upper">time (From) 3</label>
+                        <div className="d-flex">
+                          <div className="w-100">
+                            <AWSMInput value="-" disabled={true}  />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="w-15 ml-2">
+                        <label className="text-upper">Time (To) 3</label>
+                        <div className="d-flex">
+                          <div className="w-100">
+                            <AWSMInput value="-" disabled={true}  />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="w-30 mr-4"></div>
+                    </div>
+                    <h5 className='text-bold mt-3 mb-3'>No Delivery Interval</h5>
+                    <div className="d-flex justify-content-between mt-4">
+                      <div className="w-31 mr-4">
+                        <label className="text-upper">Days</label>
+                        <div className="d-flex">
+                          <div className="w-100">
+                            <AWSMInput value="-" disabled={true}  />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="w-15 ml-4">
+                        <label className="text-upper">time (From)</label>
+                        <div className="d-flex">
+                          <div className="w-100">
+                            <AWSMInput value="-" disabled={true}  />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="w-15 ml-2">
+                        <label className="text-upper">Time (To)</label>
+                        <div className="d-flex">
+                          <div className="w-100">
+                            <AWSMInput value="-" disabled={true}  />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="w-30 mr-4"></div>
+                    </div>
+                    <div className="d-flex justify-content-between mt-4">
+                      <div className="w-31 mr-4">
+                        <div className="d-flex">
+                          <div className="w-100">
+                            <AWSMInput value="-" disabled={true}  />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="w-15 ml-4">
+                        <div className="d-flex">
+                          <div className="w-100">
+                            <AWSMInput value="-" disabled={true}  />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="w-15 ml-2">
+                        <div className="d-flex">
+                          <div className="w-100">
+                            <AWSMInput value="-" disabled={true}  />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="w-30 mr-4"></div>
+                    </div>
+                  </div>
+                </TabPane>
+                <TabPane tabId="3">
+                  <div className="w-100">
+                    <div className="d-flex justify-content-between mt-4">
+                      <div className="w-30 mr-4">
+                        <label className="text-upper">Site Name</label>
+                        <div className="d-flex">
+                          <div className="w-100">
+                            <AWSMInput value="Lorem ipsum" disabled={true}  />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="w-30 mr-4">
+                        <label className="text-upper">site ID</label>
+                        <div className="d-flex">
+                          <div className="w-100">
+                            <AWSMInput value="Lorem ipsum" disabled={true}  />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="w-30 mr-4"></div>
+                    </div>
+                    <div className="d-flex justify-content-between mt-4">
+                      <div className="w-64 mr-4">
+                        <label className="text-upper">Remarks</label>
+                        <div className="d-flex">
+                          <div className="w-100">
+                            <AWSMInput value="Lorem ipsum" disabled={true}  />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <h5 className='text-bold mt-3 mb-3'>DN Information</h5>
+                    <div className="d-flex justify-content-between mt-4">
+                      <div className="w-30 mr-4">
+                        <label className="text-upper">DN No.</label>
+                        <div className="d-flex">
+                          <div className="w-100">
+                            <AWSMInput value="XXX" disabled={true} />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="w-30 mr-4">
+                        <label className="text-upper">DN Status</label>
+                        <div className="d-flex">
+                          <div className="w-100">
+                            <AWSMInput value="Lorem ipsum" disabled={true} />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="w-30 mr-4">
+                        <label className="text-upper">DN Date</label>
+                        <div className="d-flex">
+                          <div className="w-100">
+                            <AWSMInput value="XX XXX XXXX" disabled={true} />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="d-flex justify-content-between mt-4">
+                      <div className="w-30 mr-4">
+                        <label className="text-upper">DN Time Creation.</label>
+                        <div className="d-flex">
+                          <div className="w-100">
+                            <AWSMInput value="XX:XX" disabled={true} />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="w-30 mr-4">
+                        <label className="text-upper">DN Created By</label>
+                        <div className="d-flex">
+                          <div className="w-100">
+                            <AWSMInput value="Lorem ipsum" disabled={true} />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="w-30 mr-4">
+                        <label className="text-upper">Sales Order No</label>
+                        <div className="d-flex">
+                          <div className="w-100">
+                            <AWSMInput value="XXXXXXXXX" disabled={true} />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    
+                  </div>
+                </TabPane>
+                <TabPane tabId="4">
+                  <div className="w-100">
+                    <div className="d-flex justify-content-between mt-4">
+                      <div className="w-30 mr-4">
+                        <label className="text-upper">Opening Stock Days</label>
+                        <div className="d-flex">
+                          <div className="w-100">
+                            <AWSMInput value="Lorem ipsum" disabled={true}  />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="w-30 mr-4">
+                        <label className="text-upper">Closing Stock Days</label>
+                        <div className="d-flex">
+                          <div className="w-100">
+                            <AWSMInput value="Lorem ipsum" disabled={true}  />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="w-30 mr-4">
+                        <label className="text-upper">Current Stock Days</label>
+                        <div className="d-flex">
+                          <div className="w-100">
+                            <AWSMInput value="Lorem ipsum" disabled={true}  />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="d-flex justify-content-between mt-4">
+                      <div className="w-30 mr-4">
+                        <label className="text-upper">Ullage (L)</label>
+                        <div className="d-flex">
+                          <div className="w-100">
+                            <AWSMInput value="Lorem ipsum" disabled={true}  />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="w-30 mr-4">
+                        <label className="text-upper">Out of Stock</label>
+                        <div className="d-flex">
+                          <div className="w-100">
+                            <AWSMInput value="Lorem ipsum" disabled={true}  />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="w-30 mr-4">
+                        <label className="text-upper">Max Stock Days</label>
+                        <div className="d-flex">
+                          <div className="w-100">
+                            <AWSMInput value="Lorem ipsum" disabled={true}  />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="d-flex justify-content-between mt-4">
+                      <div className="w-30 mr-4">
+                        <label className="text-upper">Monthly Fixed Quota</label>
+                        <div className="d-flex">
+                          <div className="w-100">
+                            <AWSMInput value="XX" disabled={true}  />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <h5 className='text-bold mt-3 mb-3'>Contact</h5>
+                    <div className="d-flex justify-content-between mt-4">
+                      <div className="w-30 mr-4">
+                        <label className="text-upper">Contact Name 1</label>
+                        <div className="d-flex">
+                          <div className="w-100">
+                            <AWSMInput value="Lorem ipsum" disabled={true}  />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="w-30 mr-4">
+                        <label className="text-upper">Contact Number 1</label>
+                        <div className="d-flex">
+                          <div className="w-100">
+                            <AWSMInput value="XXXXXXX" disabled={true}  />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="w-30 mr-4"></div>
+                    </div>
+                    <div className="d-flex justify-content-between mt-4">
+                      <div className="w-30 mr-4">
+                        <label className="text-upper">Contact Name 2</label>
+                        <div className="d-flex">
+                          <div className="w-100">
+                            <AWSMInput value="Lorem ipsum" disabled={true}  />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="w-30 mr-4">
+                        <label className="text-upper">Contact Number 2</label>
+                        <div className="d-flex">
+                          <div className="w-100">
+                            <AWSMInput value="XXXXXXX" disabled={true}  />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="w-30 mr-4"></div>
+                    </div>
+                    <div className="d-flex justify-content-between mt-4">
+                      <div className="w-30 mr-4">
+                        <label className="text-upper">Contact Name 3</label>
+                        <div className="d-flex">
+                          <div className="w-100">
+                            <AWSMInput value="Lorem ipsum" disabled={true}  />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="w-30 mr-4">
+                        <label className="text-upper">Contact Number 3</label>
+                        <div className="d-flex">
+                          <div className="w-100">
+                            <AWSMInput value="XXXXXXX" disabled={true}  />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="w-30 mr-4"></div>
+                    </div>
+                    <div className="d-flex justify-content-between mt-4">
+                      <div className="w-30 mr-4">
+                        <label className="text-upper">TM Name</label>
+                        <div className="d-flex">
+                          <div className="w-100">
+                            <AWSMInput value="Lorem ipsum" disabled={true}  />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="w-30 mr-4">
+                        <label className="text-upper">Tm Number</label>
+                        <div className="d-flex">
+                          <div className="w-100">
+                            <AWSMInput value="XXXXXXX" disabled={true}  />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="w-30 mr-4"></div>
+                    </div>
+                    <div className="d-flex justify-content-between mt-4">
+                      <div className="w-30 mr-4">
+                        <label className="text-upper">TM Name</label>
+                        <div className="d-flex">
+                          <div className="w-100">
+                            <AWSMInput value="Lorem ipsum" disabled={true}  />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="w-30 mr-4">
+                        <label className="text-upper">Tm Number</label>
+                        <div className="d-flex">
+                          <div className="w-100">
+                            <AWSMInput value="XXXXXXX" disabled={true}  />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="w-30 mr-4"></div>
+                    </div>
+                    <div className="d-flex justify-content-between mt-4">
+                      <div className="w-30 mr-4">
+                        <label className="text-upper">TM Name</label>
+                        <div className="d-flex">
+                          <div className="w-100">
+                            <AWSMInput value="Lorem ipsum" disabled={true}  />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="w-30 mr-4">
+                        <label className="text-upper">Tm Number</label>
+                        <div className="d-flex">
+                          <div className="w-100">
+                            <AWSMInput value="XXXXXXX" disabled={true}  />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="w-30 mr-4"></div>
+                    </div>
+                   </div>
+                </TabPane>
+                <TabPane tabId="5">
+                  <div className="w-100">
+                    <div className="d-flex justify-content-between mt-4">
+                      <div className="w-30 mr-4">
+                        <label className="text-upper">Delivery Address</label>
+                        <div className="d-flex">
+                          <div className="w-100">
+                            <AWSMInput value="Lorem ipsum" disabled={true}  />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="w-30 mr-4">
+                        <label className="text-upper">City</label>
+                        <div className="d-flex">
+                          <div className="w-100">
+                            <AWSMInput value="Lorem ipsum" disabled={true}  />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="w-30 mr-4">
+                        <label className="text-upper">Postcode</label>
+                        <div className="d-flex">
+                          <div className="w-100">
+                            <AWSMInput value="Lorem ipsum" disabled={true}  />
+                          </div>
+                        </div>
+                      </div>
+                    </div> 
+                  </div>
+                  <div className="w-100">
+                    <div className="d-flex justify-content-between mt-4">
+                      <div className="w-30 mr-4">
+                        <label className="text-upper">state</label>
+                        <div className="d-flex">
+                          <div className="w-100">
+                            <AWSMInput value="Lorem ipsum" disabled={true}  />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="w-30 mr-4">
+                        <label className="text-upper">Latitude</label>
+                        <div className="d-flex">
+                          <div className="w-100">
+                            <AWSMInput value="Lorem ipsum" disabled={true}  />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="w-30 mr-4">
+                        <label className="text-upper">Longitude</label>
+                        <div className="d-flex">
+                          <div className="w-100">
+                            <AWSMInput value="Lorem ipsum" disabled={true}  />
+                          </div>
+                        </div>
+                      </div>
+                    </div> 
+                  </div>
+                  <div className="w-100">
+                    <div className="d-flex justify-content-between mt-4">
+                      <div className="w-30 mr-4">
+                        <label className="text-upper">Country</label>
+                        <div className="d-flex">
+                          <div className="w-100">
+                            <AWSMInput value="Lorem ipsum" disabled={true}  />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="w-30 mr-4">
+                        <label className="text-upper">Cluster</label>
+                        <div className="d-flex">
+                          <div className="w-100">
+                            <AWSMInput value="Lorem ipsum" disabled={true}  />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="w-30 mr-4">
+                        <label className="text-upper">Alt Cluster</label>
+                        <div className="d-flex">
+                          <div className="w-100">
+                            <AWSMInput value="Lorem ipsum" disabled={true}  />
+                          </div>
+                        </div>
+                      </div>
+                    </div> 
+                  </div>
+                  <div className="w-100">
+                    <div className="d-flex justify-content-between mt-4">
+                      <div className="w-30 mr-4">
+                        <label className="text-upper">Cloud</label>
+                        <div className="d-flex">
+                          <div className="w-100">
+                            <AWSMInput value="Lorem ipsum" disabled={true}  />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="w-30 mr-4">
+                        <label className="text-upper">Border Station</label>
+                        <div className="d-flex">
+                          <div className="w-100">
+                            <AWSMInput value="Lorem ipsum" disabled={true}  />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="w-30 mr-4"></div>
+                    </div> 
+                  </div>
+                  <h5 className='text-bold'>Trip Information</h5>
+                  <div className="w-100">
+                    <div className="d-flex justify-content-between mt-4">
+                      <div className="w-30 mr-4">
+                        <label className="text-upper">Route ID</label>
+                        <div className="d-flex">
+                          <div className="w-100">
+                            <AWSMInput value="-" disabled={true}  />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="w-30 mr-4">
+                        <label className="text-upper">Split ID</label>
+                        <div className="d-flex">
+                          <div className="w-100">
+                            <AWSMInput value="-" disabled={true}  />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="w-30 mr-4">
+                        <label className="text-upper">Vehicle</label>
+                        <div className="d-flex">
+                          <div className="w-100">
+                            <AWSMInput value="-" disabled={true}  />
+                          </div>
+                        </div>
+                      </div>
+                    </div> 
+                  </div>
+                  <div className="w-100">
+                    <div className="d-flex justify-content-between mt-4">
+                      <div className="w-30 mr-4">
+                        <label className="text-upper">Shipment</label>
+                        <div className="d-flex">
+                          <div className="w-100">
+                            <AWSMInput value="-" disabled={true}  />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="w-30 mr-4">
+                        <label className="text-upper">Trip No.</label>
+                        <div className="d-flex">
+                          <div className="w-100">
+                            <AWSMInput value="1" disabled={true}  />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="w-30 mr-4"></div>
+                    </div> 
+                  </div>
+                </TabPane>
+
+             
               </TabContent>
             </div>
           </>

@@ -174,6 +174,7 @@ class index extends Component {
                     type="checkbox"
                     id="customRadio"
                     name="customRadio"
+                    className='pr-3'
                   />
                 </th>
               </tr>
@@ -183,7 +184,7 @@ class index extends Component {
           <div className="scroll">
             <table className="scrollable">
               <thead>
-                <tr>{this.headerTableConfiguration()}</tr>
+                <tr className='pl-3'>{this.headerTableConfiguration()}</tr>
               </thead>
               <tbody>
                 {tempData.map(v => {

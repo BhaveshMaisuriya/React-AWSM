@@ -22,20 +22,32 @@ import FileCopyIcon from "@material-ui/icons/FileCopy"
 import AWSMDropdown from "../../components/Common/Dropdown"
 import { orderDetails } from "./newOrderData"
 import AWSMAlert from "../../components/Common/AWSMAlert"
+import {getOrderBankDetail} from  "../../store/actions"
 
 const ORDER_REGION = ["Center", "Center"]
 const ORDER_TERMINAL = ["KVDT", "KVDT 1"]
-const ORDER_LOAD_TIME = ["00", "01"]
-const ORDER_ETA = ["00", "01"]
-const ORDER_PRIORITY = ["High Priority", "Low Priority"]
 
 const EditOrderBankModal = props => {
   const { open, onCancel } = props
 
   const [isConfirm, setIsConfirm] = useState(false)
+  const [editOrderData, setEditOrderData] = useState(null)
   const [orderData, setOrderData] = useState({})
   const [showAlert, setShowAlert] = useState(false)
   const [activeTab, setActiveTab] = useState("1")
+
+  useEffect(async()=>{
+    const { onGetOrderBankDetails } = props
+    await onGetOrderBankDetails('11111')
+  },[]);
+
+  useEffect(async () => {
+    console.log("here::12")
+    if (props.currentOrderDetail !== null) {
+      console.log("here::1",props.currentOrderDetail)
+        setEditOrderData(props.currentOrderDetail);
+    }
+  }, [props.currentOrderDetail])
 
   const onConfirmCancel = () => {
     setIsConfirm(false)
@@ -75,15 +87,15 @@ const EditOrderBankModal = props => {
         {isConfirm && (
           <ExitConfirmation onExit={onConfirmExit} onCancel={onConfirmCancel} />
         )}
-        {!isConfirm && (
+        {console.log("here::", editOrderData)}
+        {(!isConfirm && editOrderData !== null)&&  (
           <>
             <div className="d-flex justify-content-between align-item-baseline">
               <div className="col-4 p-0">
                 <label>SHIFT DATE</label>
                 <AWSMInput
                   type="text"
-                  defaultValue=""
-                  placeholder="Lorem Ipsum"
+                  value={editOrderData.shiftDate}
                   disabled={true}
                 />
               </div>
@@ -93,15 +105,15 @@ const EditOrderBankModal = props => {
                   <div className="col-3">
                     <AWSMDropdown
                       items={ORDER_REGION}
-                      value={"Central"}
+                      value={editOrderData.region}
                       disabled={true}
                     />
                   </div>
                   <div className="col-3">
                     <AWSMDropdown
                       items={ORDER_TERMINAL}
-                      onChange={value => onFieldChange("product_name", value)}
-                      value={orderData.product_name}
+                      onChange={value => onFieldChange("terminal", value)}
+                      value={orderData.terminal}
                       disabled={false}
                     />
                   </div>
@@ -165,7 +177,7 @@ const EditOrderBankModal = props => {
                         <label className="text-upper">Ship To</label>
                         <div className="d-flex">
                           <div className="w-100">
-                            <AWSMInput value="XXXXXXX" disabled={true} />
+                            <AWSMInput value={editOrderData.order.shipTo} disabled={true} />
                           </div>
                         </div>
                       </div>
@@ -173,7 +185,7 @@ const EditOrderBankModal = props => {
                         <label className="text-upper">name</label>
                         <div className="d-flex">
                           <div className="w-100">
-                            <AWSMInput value="Lorem ipsum" disabled={true} />
+                            <AWSMInput value={editOrderData.order.name} disabled={true} />
                           </div>
                         </div>
                       </div>
@@ -191,7 +203,7 @@ const EditOrderBankModal = props => {
                         <label className="text-upper">Volume (L)</label>
                         <div className="d-flex">
                           <div className="w-100">
-                            <AWSMInput value="XXXXXXX" disabled={false} onChange={value => onFieldChange("volume", value)} />
+                            <AWSMInput value={editOrderData.order.volume} disabled={false} onChange={value => onFieldChange("volume", value)} />
                           </div>
                         </div>
                       </div>
@@ -379,7 +391,7 @@ const EditOrderBankModal = props => {
                         <label className="text-upper">RT Req</label>
                         <div className="d-flex">
                           <div className="w-100">
-                            <AWSMInput value="Lorem ipsum" disabled={true}  />
+                            <AWSMInput value={editOrderData.delivery.rt} disabled={true}  />
                           </div>
                         </div>
                       </div>
@@ -387,7 +399,7 @@ const EditOrderBankModal = props => {
                         <label className="text-upper">Accessibility</label>
                         <div className="d-flex">
                           <div className="w-100">
-                            <AWSMInput value="Lorem ipsum" disabled={true}  />
+                            <AWSMInput value={editOrderData.delivery.accessibility} disabled={true}  />
                           </div>
                         </div>
                       </div>
@@ -395,7 +407,7 @@ const EditOrderBankModal = props => {
                         <label className="text-upper">Duration</label>
                         <div className="d-flex">
                           <div className="w-100">
-                            <AWSMInput value="XX" disabled={true}  />
+                            <AWSMInput value={editOrderData.delivery.duration} disabled={true}  />
                           </div>
                         </div>
                       </div>
@@ -569,7 +581,7 @@ const EditOrderBankModal = props => {
                         <label className="text-upper">Site Name</label>
                         <div className="d-flex">
                           <div className="w-100">
-                            <AWSMInput value="Lorem ipsum" disabled={true}  />
+                            <AWSMInput value={editOrderData.site.name} disabled={true}  />
                           </div>
                         </div>
                       </div>
@@ -577,7 +589,7 @@ const EditOrderBankModal = props => {
                         <label className="text-upper">site ID</label>
                         <div className="d-flex">
                           <div className="w-100">
-                            <AWSMInput value="Lorem ipsum" disabled={true}  />
+                            <AWSMInput value={editOrderData.site.id} disabled={true}  />
                           </div>
                         </div>
                       </div>
@@ -588,7 +600,7 @@ const EditOrderBankModal = props => {
                         <label className="text-upper">Remarks</label>
                         <div className="d-flex">
                           <div className="w-100">
-                            <AWSMInput value="Lorem ipsum" disabled={true}  />
+                            <AWSMInput value={editOrderData.site.remark} disabled={true}  />
                           </div>
                         </div>
                       </div>
@@ -657,7 +669,7 @@ const EditOrderBankModal = props => {
                         <label className="text-upper">Opening Stock Days</label>
                         <div className="d-flex">
                           <div className="w-100">
-                            <AWSMInput value="Lorem ipsum" disabled={true}  />
+                            <AWSMInput value={editOrderData.indication.open} disabled={true}  />
                           </div>
                         </div>
                       </div>
@@ -665,7 +677,7 @@ const EditOrderBankModal = props => {
                         <label className="text-upper">Closing Stock Days</label>
                         <div className="d-flex">
                           <div className="w-100">
-                            <AWSMInput value="Lorem ipsum" disabled={true}  />
+                            <AWSMInput value={editOrderData.indication.close} disabled={true}  />
                           </div>
                         </div>
                       </div>
@@ -673,7 +685,7 @@ const EditOrderBankModal = props => {
                         <label className="text-upper">Current Stock Days</label>
                         <div className="d-flex">
                           <div className="w-100">
-                            <AWSMInput value="Lorem ipsum" disabled={true}  />
+                            <AWSMInput value={editOrderData.indication.current} disabled={true}  />
                           </div>
                         </div>
                       </div>
@@ -838,7 +850,7 @@ const EditOrderBankModal = props => {
                         <label className="text-upper">Delivery Address</label>
                         <div className="d-flex">
                           <div className="w-100">
-                            <AWSMInput value="Lorem ipsum" disabled={true}  />
+                            <AWSMInput value={editOrderData.address.address} disabled={true}  />
                           </div>
                         </div>
                       </div>
@@ -846,7 +858,7 @@ const EditOrderBankModal = props => {
                         <label className="text-upper">City</label>
                         <div className="d-flex">
                           <div className="w-100">
-                            <AWSMInput value="Lorem ipsum" disabled={true}  />
+                            <AWSMInput value={editOrderData.address.city} disabled={true}  />
                           </div>
                         </div>
                       </div>
@@ -854,7 +866,7 @@ const EditOrderBankModal = props => {
                         <label className="text-upper">Postcode</label>
                         <div className="d-flex">
                           <div className="w-100">
-                            <AWSMInput value="Lorem ipsum" disabled={true}  />
+                            <AWSMInput value={editOrderData.address.pincode} disabled={true}  />
                           </div>
                         </div>
                       </div>
@@ -987,9 +999,7 @@ const EditOrderBankModal = props => {
                       <div className="w-30 mr-4"></div>
                     </div> 
                   </div>
-                </TabPane>
-
-             
+                </TabPane>            
               </TabContent>
             </div>
           </>
@@ -1023,8 +1033,12 @@ const EditOrderBankModal = props => {
   )
 }
 
-const mapStateToProps = ({}) => ({})
+const mapStateToProps = ({orderBank}) => ({
+  currentOrderDetail: orderBank.currentOrderDetail,
+})
 
-const mapDispatchToProps = dispatch => ({})
+const mapDispatchToProps = dispatch => ({
+  onGetOrderBankDetails: params => dispatch(getOrderBankDetail(params)),
+})
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditOrderBankModal)

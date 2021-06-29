@@ -29,6 +29,9 @@ export const ADD_MESSAGE = "/add/messages"
 //ORDERS
 export const GET_ORDERS = "/orders"
 
+// GET_ORDERBANK
+// export const GET_ORDERBANK = "/orderbank"
+
 //CART DATA
 export const GET_CART_DATA = "/cart"
 

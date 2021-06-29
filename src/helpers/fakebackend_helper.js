@@ -1,6 +1,7 @@
 import axios from "axios"
 import { del, get, post, put } from "./api_helper"
 import * as url from "./url_helper"
+import {orderDetails, viewOrderDetails} from "../pages/RTS/newOrderData"
 
 // Gets the logged in user data from local session
 const getLoggedInUser = () => {
@@ -174,6 +175,12 @@ export const getTasks = () => get(url.GET_TASKS)
 export const getUsers = () => get(url.GET_USERS)
 
 export const getUserProfile = () => get(url.GET_USER_PROFILE)
+
+// get order bank
+export const getOrderBank = (params) => orderDetails
+
+// get single order bank
+export const getOrderBankDetail = (params) => viewOrderDetails
 
 // get retail customer
 export const getRetailCustomer = params =>

@@ -46,4 +46,36 @@ const orderDetails = [
     },
 ];
 
-export {orderDetails};
+const viewOrderDetails =  {
+    shiftDate: '29th june, 2020',
+    region: 'Central',
+    terminal: 'KVDT',
+    order: {
+        shipTo: '1234556',
+        name: 'abcd',
+        volume: 'ABCDXX'
+    },
+    delivery:{
+        rt: '1234556',
+        accessibility: 'abcd',
+        duration: '02'
+    },
+    site:{
+        name: 'abc',
+        id: 'a123bcd',
+        remark: 'abcd'
+    },
+    indication:{
+        open: 'moday, tuesday',
+        close: 'sunday',
+        current: 'friday'
+    },
+    address:{
+        address: 'c-12, abc',
+        city: 'XYZ',
+        pincode: '238564'
+    },
+}
+
+
+export {orderDetails, viewOrderDetails};

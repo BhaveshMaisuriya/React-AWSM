@@ -18,11 +18,6 @@
     height: 78vh;
     overflow-y: hidden;
 }
-.rts-table-container {
-    overflow-y: auto;
-    overflow-x: hidden;
-    height: inherit;
-}
 .gantt_chart_first {
     height: 40%;
 }
@@ -144,6 +139,12 @@
 }
 .w-30 {
     width: 30%;
+}
+.w-31 {
+    width: 31%;
+}
+.w-64 {
+    width: 64%;
 }
 .w-85 {
     width: 85%;

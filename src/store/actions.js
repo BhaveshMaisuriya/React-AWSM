@@ -51,3 +51,5 @@ export * from "./roadTanker/actions"
 export * from "./salesAndInventory/actions"
 
 export * from "./sla/actions"
+
+export * from "./orderBank/actions"

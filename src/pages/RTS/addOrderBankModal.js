@@ -20,6 +20,7 @@ import FileCopyIcon from "@material-ui/icons/FileCopy"
 import AWSMDropdown from "../../components/Common/Dropdown"
 import { orderDetails } from "./newOrderData"
 import AWSMAlert from "../../components/Common/AWSMAlert"
+import { getOrderBank } from "../../store/actions"
 
 const ORDER_REGION = ["Center", "Center"]
 const ORDER_TERMINAL = ["KVDT", "KVDT 1"]
@@ -36,8 +37,6 @@ const NewOrderBankModal = props => {
   const [shiptoNo, setShiptoNo] = useState(0)
   const [progress, setProgress] = useState(0)
   const [showAlert, setShowAlert] = useState(false)
-
-  useEffect(() => {}, [currentState])
 
   const onConfirmCancel = () => {
     setIsConfirm(false)
@@ -68,29 +67,25 @@ const NewOrderBankModal = props => {
 
   const onSearchOrder = async () => {
     setCurrentState("loading")
-    let searchedData = []
-    orderDetails.map((item, index) => {
-      if (item.shipNo === shiptoNo) {
-        searchedData.push(item)
-      }
-    })
-    if (searchedData.length !== 0) {
-      setTimeout(async function () {
-        await setShowAlert(true);
-
-        Object.keys(searchedData[0]).map(function (key) {
-          orderData[key] = searchedData[0][key]
-        })
-        
-        setCurrentState("search")
-        
-      }, 1000)
-    } else {
-      setTimeout(function () {
-        setCurrentState("error")
-      }, 1000)
-    }
+    const { onGetOrderBank } = props
+    await onGetOrderBank(shiptoNo)
   }
+
+  useEffect(async () => {
+    if (props.orderBankData !== null) {
+      if (props.orderBankData.length > 0) {
+        setTimeout(async function () {
+        await setShowAlert(true)
+        await setOrderData(props.orderBankData[0])
+        await setCurrentState("search")
+      }, 1000)
+      } else {
+        setTimeout(function () {
+        setCurrentState("error")
+      }, 500)
+      }
+    }
+  }, [props.orderBankData])
 
   return (
     <Modal isOpen={open} className="new-order-modal">
@@ -452,20 +447,24 @@ const NewOrderBankModal = props => {
           </Button>
         </ModalFooter>
       )}
-      {showAlert &&
-      <AWSMAlert
-            status="success"
-            message='Order Details has successfully load'
-            openAlert={showAlert}
-            closeAlert={() => setShowAlert(false)}
-          />
-      }
+      {showAlert && (
+        <AWSMAlert
+          status="success"
+          message="Order Details has successfully load"
+          openAlert={showAlert}
+          closeAlert={() => setShowAlert(false)}
+        />
+      )}
     </Modal>
   )
 }
 
-const mapStateToProps = ({}) => ({})
+const mapStateToProps = ({ orderBank }) => ({
+  orderBankData: orderBank.orderBankData,
+})
 
-const mapDispatchToProps = dispatch => ({})
+const mapDispatchToProps = dispatch => ({
+  onGetOrderBank: params => dispatch(getOrderBank(params)),
+})
 
 export default connect(mapStateToProps, mapDispatchToProps)(NewOrderBankModal)

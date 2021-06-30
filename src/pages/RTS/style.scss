@@ -252,6 +252,9 @@
     ul {
         width: 80%;
         border-bottom: unset;
+        li{
+            flex: 0 0 auto !important;
+        }
     }
   }
 .remove_text {

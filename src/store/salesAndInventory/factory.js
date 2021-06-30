@@ -34,6 +34,8 @@ export default function factory(data) {
         getValueFromObj(d, "address_1", "-") +
         getValueFromObj(d, "address_2", " ") +
         getValueFromObj(d, "address_3", " ")
+
+      mainTableObj["record_id"] = "mock_record_id"
       finalData.push(mainTableObj)
       mainTableObj = cloneobj
     })

@@ -22,8 +22,8 @@
 .scroll {
   width: 100% !important;
   overflow-x: auto;
-  border-right: 1px solid #d9d9d9;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.07);
+  //border-right: 1px solid #d9d9d9;
+  //box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.07);
   border-radius: 5px;
   height: 100%;
 }
@@ -49,6 +49,7 @@
   width: 100% !important;
   border-spacing: 0;
   border-top: 1px solid #d9d9d9;
+  border-right: 1px solid #d9d9d9;
   height: auto;
   td .table_text_ellipsis {
     white-space: nowrap;
@@ -91,7 +92,7 @@ tbody td .cell-text-big {
   }
 }
 
-// new css
+// CSS for Scrollbar
 .scroll::-webkit-scrollbar-thumb {
   background-color: #ccc;
   border-radius: 20px;

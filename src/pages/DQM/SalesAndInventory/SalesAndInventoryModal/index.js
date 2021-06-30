@@ -5,7 +5,10 @@ import DetailsTab from "./detailsTab"
 import SalesTab from "./salesTab"
 import InventoryTab from "./inventoryTab"
 import DeliveryTab from "./deliveryTab"
-export default class SalesAndInventoryTableInformation extends Component {
+import { getDetailsSales, getSaleAndInventory } from "../../../../store/salesAndInventory/actions";
+import { connect } from "react-redux"
+
+class SalesAndInventoryTableInformation extends Component {
     constructor(props) {
         super(props)
 
@@ -17,7 +20,8 @@ export default class SalesAndInventoryTableInformation extends Component {
     }
 
     componentDidMount() {
-
+        const { onGetSalesAndInventoryDetail, data } = this.props
+        onGetSalesAndInventoryDetail()
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) { if (prevState.name !== this.state.name) { this.handler() } }
@@ -33,7 +37,7 @@ export default class SalesAndInventoryTableInformation extends Component {
     handler = () => { this.setState() }
 
     render() {
-        const { onCancel, visible } = this.props
+        const { onCancel, visible, currentSalesAndInventory } = this.props
         const { activeTab } = this.state
         const toggle = tab => {
             if (activeTab !== tab) {
@@ -107,22 +111,22 @@ export default class SalesAndInventoryTableInformation extends Component {
                             <TabContent activeTab={activeTab}>
                                 <TabPane tabId="1">
                                     <div className="simple-bar">
-                                        <DetailsTab />
+                                        <DetailsTab data={currentSalesAndInventory?.details} />
                                     </div>
                                 </TabPane>
                                 <TabPane tabId="2">
                                     <div className="simple-bar">
-                                        <SalesTab />
+                                        <SalesTab data={currentSalesAndInventory?.sales} />
                                     </div>
                                 </TabPane>
                                 <TabPane tabId="3">
                                     <div className="simple-bar">
-                                        <InventoryTab />
+                                        <InventoryTab data={currentSalesAndInventory?.inventory} />
                                     </div>
                                 </TabPane>
                                 <TabPane tabId="4">
                                     <div className="simple-bar">
-                                        <DeliveryTab />
+                                        <DeliveryTab data={currentSalesAndInventory?.delivery} />
                                     </div>
                                 </TabPane>
                             </TabContent>
@@ -139,3 +143,13 @@ export default class SalesAndInventoryTableInformation extends Component {
         )
     }
 }
+
+const mapStateToProps = ({ saleAndInventory }) => ({
+    currentSalesAndInventory: saleAndInventory?.currentSalesAndInventory
+})
+
+const mapDispatchToProps = dispatch => ({
+    onGetSalesAndInventoryDetail: params => dispatch(getDetailsSales(params)),
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(SalesAndInventoryTableInformation)

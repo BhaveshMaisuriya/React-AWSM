@@ -40,7 +40,9 @@ import {
   terminal,
   auditsTerminal,
   varianceControl,
-  slaData
+  currentSaleAndInventory,
+  slaData,
+  orderBank,
 } from "../../common/data"
 
 import { axiosApi } from "../api_helper"
@@ -931,6 +933,19 @@ const fakeBackend = () => {
     })
   })
 
+  mock.onGet(url.GET_SALES_AND_INVENTORY_DETAIL).reply(() => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        if (currentSaleAndInventory) {
+          // Passing fake JSON data as response
+          resolve([200, currentSaleAndInventory])
+        } else {
+          reject([400, "Cannot get detail data"])
+        }
+      })
+    })
+  })
+
   mock.onPut(url.GET_SALES_AND_INVENTORY_VARIANCE_CONTROL).reply(() => {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
@@ -941,6 +956,14 @@ const fakeBackend = () => {
           reject([400, "Cannot get audit data"])
         }
       })
+    })
+  })
+
+  mock.onGet(url.GET_RTS_ORDER_BANK).reply(() => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve([200, orderBank])
+      }, 500)
     })
   })
 }

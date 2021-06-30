@@ -11,7 +11,7 @@ const tabContact = ({ scheduler, data, onChange }) => {
     }
     for (const key in data.contact) {
       if (data.contact.hasOwnProperty(key) && /^contact_[1,2,3]$/.test(key)) {
-        contactList.push({ data: data.contact[key] || {}, key: key, disabled: data.contact[key] != null});
+        contactList.push({ data: data.contact[key] || {}, key: key, disabled: data.contact[key] != null && data.contact[key].id });
       }
     }
     return [0, 1, 2].map(item => {

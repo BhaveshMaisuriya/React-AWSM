@@ -51,6 +51,7 @@ import saleAndInventory from "./salesAndInventory/reducer"
 
 import sla from "./sla/reducer"
 
+//RTS Order bank
 import orderBank from "./orderBank/reducer"
 
 const rootReducer = combineReducers({

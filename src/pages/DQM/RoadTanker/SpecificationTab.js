@@ -100,8 +100,11 @@ class SpecificationTab extends PureComponent {
     }
 
     const onValueChange = event => {
+      let newData = {...data}
+      newData['rt_restriction'] = event.target.value
       this.setState({ restriction: event.target.value }, () => {
-        setClass()
+        setClass();
+        onChange('specification',newData)
       })
     }
 

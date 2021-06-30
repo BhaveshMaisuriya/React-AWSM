@@ -11,6 +11,8 @@ import {
   GET_SALES_AUDITLOG_FAIL,
   GET_DOWNLOAD_SALES_SUCCESS,
   GET_DOWNLOAD_SALES_FAIL,
+  GET_DETAIL_SALES_SUCCESS,
+  GET_DETAIL_SALES_FAIL
 } from "./actionTypes"
 
 const initialState = {
@@ -21,6 +23,7 @@ const initialState = {
   tankStatusModalError: null,
   auditsCom: [],
   downloadtableData: [],
+  currentSalesAndInventory: {}
 }
 
 const SaleAndInventory = (state = initialState, action) => {
@@ -82,6 +85,16 @@ const SaleAndInventory = (state = initialState, action) => {
         downloadtableData: action.payload,
       }
     case GET_DOWNLOAD_SALES_FAIL:
+      return {
+        ...state,
+        error: action.payload,
+      }
+    case GET_DETAIL_SALES_SUCCESS:
+      return {
+        ...state,
+        currentSalesAndInventory: action.payload,
+      }
+    case GET_DETAIL_SALES_FAIL:
       return {
         ...state,
         error: action.payload,

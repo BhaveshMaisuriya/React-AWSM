@@ -79,14 +79,13 @@ const TabStatus = ({ scheduler, data, onChange }) => {
         )}
         {pathName === "/retail-customer" ? (
           <div className="col-12 col-sm-6">
-            <div className="input-header">SALES AND INVENTORY DATA SOURCE</div>
-            <AWSMDropdown
+            <DropdownInput
+              title="SALES AND INVENTORY DATA SOURCE"
               value={statusData.sales_inventory_data_source}
-              onChange={value =>
-                onFieldChange("sales_inventory_data_source", null, value)
-              }
-              items={SALES_AND_INVENTORY}
+              onChange={value => onFieldChange("sales_inventory_data_source", null, value)}
               disabled={scheduler}
+              items={statusData.sales_inventory_data_source_items || []}
+              onAddItem={onAddDataSource}
             />
           </div>
         ) : (

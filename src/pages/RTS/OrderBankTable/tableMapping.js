@@ -1,5 +1,6 @@
 const tableColumns = [
     "priority",
+    "search",
     "ship_to",
     "name",
     "cloud",
@@ -17,13 +18,13 @@ const tableColumns = [
     "remarks",
   ]
 const tempData=[
-  {priority:['hp','sr'],name:'test1',cloud:'test',trip:'test',delivery_date:'test',product:'test',volume:'test',retain:'test',runout:'test',product_category:'1234',dn_status:['Send'],split_id:'test',order_type:'test',ship_to:'test',accessibility:'test',remarks:'test'},
-  {priority:[],name:'test2',cloud:'test',trip:'test',delivery_date:'test',product:'test',volume:'test',retain:'test',runout:'test',product_category:'1234',dn_status:['Blocked'],split_id:'test',order_type:'test',ship_to:'test',accessibility:'test',remarks:'test'},
-  {priority:['sr'],name:'test3',cloud:'test',trip:'test',delivery_date:'test',product:'test',volume:'test',retain:'test',runout:'test',product_category:'1234',dn_status:['Unblock'],split_id:'test',order_type:'test',ship_to:'test',accessibility:'test',remarks:'test'},
-  {priority:['hp'],name:'test',cloud:'test',trip:'test',delivery_date:'test',product:'test',volume:'test',retain:'test',runout:'test',product_category:'1234',dn_status:['Clear'],split_id:'test',order_type:'test',ship_to:'test',accessibility:'test',remarks:'test'},
-  {priority:['hp'],name:'test',cloud:'test',trip:'test',delivery_date:'test',product:'test',volume:'test',retain:'test',runout:'test',product_category:'1234',dn_status:['Send'],split_id:'test',order_type:'test',ship_to:'test',accessibility:'test',remarks:'test'},
-  {priority:['hp','sr'],name:'test1',cloud:'test',trip:'test',delivery_date:'test',product:'test',volume:'test',retain:'test',runout:'test',product_category:'1234',dn_status:['Send'],split_id:'test',order_type:'test',ship_to:'test',accessibility:'test',remarks:'test'},
-  {priority:['sr','hp'],name:'test5',cloud:'test',trip:'test',delivery_date:'test',product:'test',volume:'test',retain:'test',runout:'test',product_category:'1234',dn_status:['Send'],split_id:'test',order_type:'test',ship_to:'test',accessibility:'test',remarks:'test'},
+  {priority:['hp','sr'],search:'Shaziman only',name:'test1',cloud:'test',trip:'test',delivery_date:'test',product:'test',volume:'test',retain:'test',runout:'test',product_category:'1234',dn_status:['Send For DN'],split_id:'test',order_type:'test',ship_to:'test',accessibility:'test',remarks:'test'},
+  {priority:[],search:'Shaziman only',name:'test2',cloud:'test',trip:'test',delivery_date:'test',product:'test',volume:'test',retain:'test',runout:'test',product_category:'1234',dn_status:['Blocked DN'],split_id:'test',order_type:'test',ship_to:'test',accessibility:'test',remarks:'test'},
+  {priority:['sr'],search:'Shaziman only',name:'test3',cloud:'test',trip:'test',delivery_date:'test',product:'test',volume:'test',retain:'test',runout:'test',product_category:'1234',dn_status:['Late Unblock'],split_id:'test',order_type:'test',ship_to:'test',accessibility:'test',remarks:'test'},
+  {priority:['hp'],search:'Shaziman only',name:'test',cloud:'test',trip:'test',delivery_date:'test',product:'test',volume:'test',retain:'test',runout:'test',product_category:'1234',dn_status:['Clear DN'],split_id:'test',order_type:'test',ship_to:'test',accessibility:'test',remarks:'test'},
+  {priority:['hp'],search:'Shaziman only',name:'test',cloud:'test',trip:'test',delivery_date:'test',product:'test',volume:'test',retain:'test',runout:'test',product_category:'1234',dn_status:['Send For DN'],split_id:'test',order_type:'test',ship_to:'test',accessibility:'test',remarks:'test'},
+  {priority:['hp','sr'],search:'Shaziman only',name:'test1',cloud:'test',trip:'test',delivery_date:'test',product:'test',volume:'test',retain:'test',runout:'test',product_category:'1234',dn_status:['Send For DN'],split_id:'test',order_type:'test',ship_to:'test',accessibility:'test',remarks:'test'},
+  {priority:['sr','hp'],search:'Shaziman only',name:'test5',cloud:'test',trip:'test',delivery_date:'test',product:'test',volume:'test',retain:'test',runout:'test',product_category:'1234',dn_status:['Send For DN'],split_id:'test',order_type:'test',ship_to:'test',accessibility:'test',remarks:'test'},
 ]
 
 const fixedTableTempData = {
@@ -35,6 +36,10 @@ const fixedTableTempData = {
       label: "priority",
       columnSize: "cell-text",
       type:'priority_type'
+    },
+    search:{
+      label: "",
+      columnSize: "cell-text",
     },
     name: {
       label: "name",
@@ -59,10 +64,6 @@ const fixedTableTempData = {
     volume: {
       label: "volume (i)",
       columnSize: "cell-text",
-      type: "badge",
-      getBadgeColor: value => {
-        return value === "ACTIVE" ? "primary" : "secondary"
-      },
     },
     retain: {
       label: "retain",

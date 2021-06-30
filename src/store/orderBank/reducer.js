@@ -16,7 +16,7 @@ const initialState = {
 
 import { notify } from "../../helpers/notify"
 
-const CommercialCustomer = (state = initialState, action) => {
+const OrderBank = (state = initialState, action) => {
   switch (action.type) {
     case GET_ORDERBANK_SUCCESS:
       return {
@@ -58,4 +58,4 @@ const CommercialCustomer = (state = initialState, action) => {
   }
 }
 
-export default CommercialCustomer
+export default OrderBank

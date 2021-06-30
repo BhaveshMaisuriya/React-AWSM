@@ -87,7 +87,6 @@ const EditOrderBankModal = props => {
         {isConfirm && (
           <ExitConfirmation onExit={onConfirmExit} onCancel={onConfirmCancel} />
         )}
-        {console.log("here::", editOrderData)}
         {(!isConfirm && editOrderData !== null)&&  (
           <>
             <div className="d-flex justify-content-between align-item-baseline">

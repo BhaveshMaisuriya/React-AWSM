@@ -75,14 +75,14 @@ const NewOrderBankModal = props => {
     if (props.orderBankData !== null) {
       if (props.orderBankData.length > 0) {
         setTimeout(async function () {
-        await setShowAlert(true)
-        await setOrderData(props.orderBankData[0])
-        await setCurrentState("search")
-      }, 1000)
+          await setShowAlert(true)
+          await setOrderData(props.orderBankData[0])
+          await setCurrentState("search")
+        }, 1000)
       } else {
         setTimeout(function () {
-        setCurrentState("error")
-      }, 500)
+          setCurrentState("error")
+        }, 500)
       }
     }
   }, [props.orderBankData])
@@ -406,13 +406,12 @@ const NewOrderBankModal = props => {
             )}
             {currentState !== "search" && (
               <div
-                className={`text-center h-340 w-100 table ${
-                  currentState === ""
+                className={`text-center h-340 w-100 table ${currentState === ""
                     ? "bg-grey"
                     : currentState === "error"
-                    ? "bg-err"
-                    : "bg-loading"
-                }`}
+                      ? "bg-err"
+                      : "bg-loading"
+                  }`}
               >
                 <div className="relative table_cell h-100">
                   <FileCopyIcon />

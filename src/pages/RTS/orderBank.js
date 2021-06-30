@@ -1,4 +1,5 @@
-import React, { Component, useMemo, useState } from "react"
+import React, { Component, useMemo, useState, useEffect } from "react"
+import { connect } from "react-redux"
 import {
   Row,
   Col,
@@ -10,6 +11,8 @@ import {
   Nav,
   TabPane,
   TabContent,
+  ButtonDropdown,
+  DropdownItem,
   Dropdown, DropdownMenu, DropdownToggle, Button
 } from "reactstrap"
 import "./style.scss"
@@ -26,15 +29,21 @@ import customiseTableIcon from "../../assets/images/AWSM-Customise-Table.svg"
 import { Link } from "react-router-dom"
 import CustomizeTableModal from "../../common/CustomizeTable"
 import { tableColumns, tableMapping } from "./OrderBankTable/tableMapping"
+import { format } from "date-fns";
+import { getRTSOrderBankTableData } from "../../store/orderBank/actions"
 
-function OrderBank() {
+function OrderBank({ getRTSOrderBankTableData, orderBankTableData }) {
   const [activeTab, setActiveTab] = useState("1")
   const [dropdownOpen, setOpen] = useState(false)
   const [showNewOrder, setShowNewOrder] = useState(false)
   const [showCustomize, setShowCustomize] = useState(false)
-  const [region, setRegion] = useState(null)
-  const [terminal, setTerminal] = useState(null)
   const [searchFields, setSearchFields] = useState(tableColumns);
+  const [region, setRegion] = useState(REGION_TERMINAL[0].region)
+  const [terminal, setTerminal] = useState(REGION_TERMINAL[0].terminal[0])
+  const [shiftDate, setShiftDate] = useState({
+    type: "single",
+    days: [format(Date.now(), "yyyy-MM-dd")],
+  })
 
   const toggle = () => setOpen(!dropdownOpen)
   const terminalList = useMemo(() => {
@@ -64,6 +73,10 @@ const onCloseCustomize = () => {
 const onCloseNewOrder = () => {
   setShowNewOrder(false);
 }
+
+useEffect(() => {
+  getRTSOrderBankTableData({region, terminal, shiftDate});
+}, [region, terminal, shiftDate])
 
 const onTableColumnsChange = columns => {
   setSearchFields(columns);
@@ -122,7 +135,12 @@ const onTableColumnsChange = columns => {
                             <h4 className="m-0 order-bank-label">Order Bank</h4>
                             <div className="order-bank-shift-date">
                               <div>DATE</div>
-                              <DateRangePicker types={["single", "range"]} startDate={null}/>
+                              <DateRangePicker
+                                types={["single", "range"]}
+                                startDate={null}
+                                defaultValue={shiftDate}
+                                onChange={value => setShiftDate(value)}
+                              />
                             </div>
                             <p className="order-bank-region-label">REGION & TERMINAL</p>
                             <div className="order-bank-region">
@@ -181,7 +199,7 @@ const onTableColumnsChange = columns => {
                             </Dropdown>
                           </Col>
                       </Row>
-                      <OrderBankTable/>
+                      <OrderBankTable dataSource={orderBankTableData || []}/>
                       </div>
                     </div>
                   </TabPane>
@@ -212,4 +230,12 @@ const onTableColumnsChange = columns => {
   )
 }
 
-export default OrderBank
+const mapDispatchToProps = dispatch => ({
+  getRTSOrderBankTableData: params => dispatch(getRTSOrderBankTableData(params))
+})
+
+const mapStateToProps = ({ orderBank }) => ({
+  orderBankTableData: orderBank.orderBankTableData,
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(OrderBank)

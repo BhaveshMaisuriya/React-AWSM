@@ -60,6 +60,14 @@ const RetailCustomerModal = props => {
     setAlert(true)
   }
 
+  const handleClose = () => {
+    if (scheduler) {
+      onCancel()
+    } else {
+      setIsConfirm(true)
+    }
+  }
+
   useEffect(async () => {
     await getTableInformation(data)
     return () => {
@@ -92,7 +100,7 @@ const RetailCustomerModal = props => {
     <Modal isOpen={visible} className="retail-customer-modal modal-lg">
       {currentRetailDetail ? (
         <div>
-          <ModalHeader>
+          <ModalHeader toggle={handleClose}>
             <span className="modal-title">SHIP TO PARTY: {currentRetailDetail.ship_to_party}</span>
             <span className="last-updated-sub-title">
               Last Updated By: Nur Izzati on 3rd March 2021
@@ -126,6 +134,7 @@ const RetailCustomerModal = props => {
               <AWSMInput
                 defaultValue={currentRetailDetail.remarks}
                 onChange={value => onFieldValueChange("remarks", value)}
+                disabled={scheduler}
               />
             </>
             <div className="mt-4">
@@ -250,12 +259,12 @@ const RetailCustomerModal = props => {
       )}
       {!isConfirm && (
       <ModalFooter>
-        <button onClick={() => setIsConfirm(true)} className="btn-sec">
+        <button onClick={handleClose} className="btn-sec">
           Cancel
         </button>
-        <Button type="submit" color="primary" onClick={handleUpdate}>
+        {!scheduler && <Button type="submit" color="primary" onClick={handleUpdate}>
           Update
-        </Button>
+        </Button>}
         <AWSMAlert
           status="success"
           message="Update success!"

@@ -19,7 +19,10 @@ import {
   GET_DOWNLOAD_ROAD_TANKER_FAIL,
   GET_ROAD_TANKER_DETAIL_FAIL,
   GET_ROAD_TANKER_DETAIL_SUCCESS,
-  GET_ROAD_TANKER_DETAIL
+  GET_ROAD_TANKER_DETAIL,
+  UPDATE_ROAD_TANKER_DETAIL,
+  UPDATE_ROAD_TANKER_DETAIL_SUCCESS,
+  UPDATE_ROAD_TANKER_DETAIL_FAIL
 } from "./actionTypes"
 
 export const getRoadTanker = params => ({
@@ -122,5 +125,20 @@ export const getRoadTankeDetailSuccess = response => ({
 
 export const getRoadTankerDetailFail = error => ({
   type: GET_ROAD_TANKER_DETAIL_FAIL,
+  payload: error
+})
+
+export const updateRoadTankerDetail = params => ({
+  type: UPDATE_ROAD_TANKER_DETAIL,
+  params
+})
+
+export const updateRoadTankerDetailSuccess = response => ({
+  type: UPDATE_ROAD_TANKER_DETAIL_SUCCESS,
+  payload: response
+})
+
+export const updateRoadTankerDetailFail = error => ({
+  type: UPDATE_ROAD_TANKER_DETAIL_FAIL,
   payload: error
 })

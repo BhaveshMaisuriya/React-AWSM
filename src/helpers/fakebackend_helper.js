@@ -224,6 +224,14 @@ export const getRoadTankerDetail = vehical_id =>
     `https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/road-tanker/${vehical_id}`,
   )
 
+export const updateRoadTankerDetail = payload =>{
+  return axios.put(
+    `https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/road-tanker/${payload?.vehicle_name}`,
+    payload.data
+  )
+}
+  
+
 export const getDownloadRoadTanker = params =>
   axios.post(
     "https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/road-tanker",
@@ -370,7 +378,10 @@ export const getSaleAndInventoryVarianceControl = () =>
   get(`${url.GET_SALES_AND_INVENTORY_VARIANCE_CONTROL}`)
 export const updateSaleAndInventoryVarianceControl = () =>
   put(`${url.GET_SALES_AND_INVENTORY_VARIANCE_CONTROL}`)
-
+  
+  export const getSaleAndInventoryDetail = () =>
+  get(`${url.GET_SALES_AND_INVENTORY_DETAIL}`)
+  
 // update tank status modal
 export const updateSaleAndInventoryTankStatusModal = () =>
   put(`/sales_and_inventory_tank_status_modal`)
@@ -436,6 +447,10 @@ export const updateSLARecord = (data) =>
 export const getSlaAuditLog = payload => get(url.GET_SLA_AUDITLOG, { payload })
 export const updateSlaItem = params => put(`${url.SLA_ITEMS}`)
 export const updateSlaSectionNote = notes => put(`${url.SLA_ITEMS}`, notes)
+
+export const getRTSOderBank = params => {
+  return get(url.GET_RTS_ORDER_BANK, { params: params })
+}
 
 export {
   getLoggedInUser,

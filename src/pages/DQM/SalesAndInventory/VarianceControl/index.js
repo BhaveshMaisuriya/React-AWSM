@@ -138,10 +138,6 @@ const VarianceControl = ({ open, scheduler, closeDialog, onChange, getSalesAndIn
     }
   }, [open])
 
-  useEffect(() => {
-    console.log({ data })
-  }, [data])
-
   const showConfirm = () => {
     if (scheduler && closeDialog) {
       return closeDialog()

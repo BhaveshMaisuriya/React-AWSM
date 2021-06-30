@@ -23,6 +23,7 @@
 .vertical-collpsed {
     .footer {
         left: $sidebar-collapsed-width;
+        z-index: 9999;
     }
 }
 

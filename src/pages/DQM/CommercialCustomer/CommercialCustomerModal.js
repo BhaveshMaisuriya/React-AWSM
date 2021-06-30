@@ -60,6 +60,14 @@ const CommercialCustomerModal = props => {
     setAlert(true)
   }
 
+  const handleClose = () => {
+    if (scheduler) {
+      onCancel()
+    } else {
+      setIsConfirm(true)
+    }
+  }
+
   useEffect(() => {
     getCommercialTableInformation(data)
     return () => {
@@ -92,7 +100,7 @@ const CommercialCustomerModal = props => {
     <Modal isOpen={visible} className="commercial-customer-modal modal-lg">
       {currentCommercialDetail ? (
         <div>
-          <ModalHeader>
+          <ModalHeader toggle={handleClose}>
             <span className="modal-title">
               SHIP TO PARTY: {currentCommercialDetail.ship_to_party}
             </span>
@@ -129,6 +137,7 @@ const CommercialCustomerModal = props => {
               <AWSMInput
                 defaultValue={currentCommercialDetail.remarks}
                 onChange={value => onFieldValueChange("remarks", value)}
+                disabled={scheduler}
               />
             </>
             <div className="mt-4">
@@ -245,12 +254,12 @@ const CommercialCustomerModal = props => {
               </TabContent>
             </div>
             <ModalFooter>
-              <button onClick={() => setIsConfirm(true)} className="btn-sec">
+              <button onClick={handleClose} className="btn-sec">
                 Cancel
               </button>
-              <Button type="submit" color="primary" onClick={handleUpdate}>
+              {!scheduler && <Button type="submit" color="primary" onClick={handleUpdate}>
                 Update
-              </Button>
+              </Button>}
               <AWSMAlert
                 status="success"
                 message="Update success!"

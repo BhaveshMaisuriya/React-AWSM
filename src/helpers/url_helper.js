@@ -29,9 +29,6 @@ export const ADD_MESSAGE = "/add/messages"
 //ORDERS
 export const GET_ORDERS = "/orders"
 
-// GET_ORDERBANK
-// export const GET_ORDERBANK = "/orderbank"
-
 //CART DATA
 export const GET_CART_DATA = "/cart"
 
@@ -94,7 +91,13 @@ export const GET_ROADTANKER_DETAIL = "/road-tanker/detail"
 export const GET_TERMINAL = "/terminal"
 export const GET_TERMINAL_AUDITLOG = "/terminal_audit"
 export const GET_TERMINAL_FILTER = "/terminal/filter"
+
+//SALES AND INVENTORY
 export const GET_SALES_AND_INVENTORY_VARIANCE_CONTROL = "/sales_and_inventory_variance_control"
+export const GET_SALES_AND_INVENTORY_DETAIL = "/sales_and_inventory_detail"
 
 export const SLA_ITEMS = "/sla"
 export const GET_SLA_AUDITLOG = "/sla_audit_log"
+
+// RTS Order bank
+export const GET_RTS_ORDER_BANK = "/rts_oder_bank"

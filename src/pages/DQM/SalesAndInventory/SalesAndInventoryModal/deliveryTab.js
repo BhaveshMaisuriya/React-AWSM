@@ -29,6 +29,8 @@ export default class DeliveryTab extends Component {
     handler = () => { this.setState() }
 
     render() {
+
+        const { data } = this.props
         return (
             <>
                 <b>Past Delivery</b>
@@ -42,36 +44,15 @@ export default class DeliveryTab extends Component {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>25 apr 2021</td>
-                            <td>1000</td>
-                            <td>900</td>
-                            <td>1900</td>
-                        </tr>
-                        <tr>
-                            <td>25 apr 2021</td>
-                            <td>1000</td>
-                            <td>900</td>
-                            <td>1900</td>
-                        </tr>
-                        <tr>
-                            <td>25 apr 2021</td>
-                            <td>1000</td>
-                            <td>900</td>
-                            <td>1900</td>
-                        </tr>
-                        <tr>
-                            <td>25 apr 2021</td>
-                            <td>1000</td>
-                            <td>900</td>
-                            <td>1900</td>
-                        </tr>
-                        <tr>
-                            <td>25 apr 2021</td>
-                            <td>1000</td>
-                            <td>900</td>
-                            <td>1900</td>
-                        </tr>
+                        {data?.map(record => {
+                            return <tr>
+                                <td>{record?.date}</td>
+                                <td>{record?.volume}</td>
+                                <td>{record?.volume_adjustment}</td>
+                                <td>{record?.total_delivery}</td>
+                            </tr>
+                        }
+                        )}
 
                     </tbody>
                 </table>

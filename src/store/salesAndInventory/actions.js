@@ -19,6 +19,9 @@ import {
   GET_DOWNLOAD_SALES,
   GET_DOWNLOAD_SALES_SUCCESS,
   GET_DOWNLOAD_SALES_FAIL,
+  GET_DETAIL_SALES,
+  GET_DETAIL_SALES_SUCCESS,
+  GET_DETAIL_SALES_FAIL
 } from "./actionTypes"
 
 export const getSalesAndInventoryVarianceControl = date => {
@@ -138,3 +141,19 @@ export const getDownloadSalesFail = error => ({
   type: GET_DOWNLOAD_SALES_FAIL,
   payload: error,
 })
+
+export const getDetailsSales = params => ({
+  type: GET_DETAIL_SALES,
+  params,
+})
+
+export const getDetailsSalesSuccess = response => ({
+  type: GET_DETAIL_SALES_SUCCESS,
+  payload: response,
+})
+
+export const getDetailsSalesFail = error => ({
+  type: GET_DETAIL_SALES_FAIL,
+  payload: error,
+})
+

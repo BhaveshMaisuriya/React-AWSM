@@ -4,8 +4,12 @@ import {
   GET_ORDERBANK,
   GET_ORDERBANK_TABLE_INFORMATION,
   UPDATE_ORDERBANK_TABLE_INFORMATION,
+  GET_RTS_ORDER_BANK_TABLE_DATA
 } from "./actionTypes"
+
 import {
+  getRTSOrderBankTableDataSuccess,
+  getRTSOrderBankTableDataFail,
   getOrderBankSuccess,
   getOrderBankFail,
   getOrderBankDetailFail,
@@ -16,6 +20,7 @@ import {
 import {
   getOrderBank,
   getOrderBankDetail,
+  getRTSOderBank,
   putOrderbankDetail,
 } from "../../helpers/fakebackend_helper"
 
@@ -30,10 +35,19 @@ function* onGetOrderbank({ params = {} }) {
 
 function* onGetOrderbankTableInformation({ params }) {
   try {
-    const response = yield call(getOrderBankDetail, params)    
+    const response = yield call(getOrderBankDetail, params)
     yield put(getOrderBankDetailSuccess(response))
   } catch (error) {
     yield put(getOrderBankDetailFail(error))
+  }
+}
+
+function* onGetRTSOrderBank({ params = {} }) {
+  try {
+    const response = yield call(getRTSOderBank, params)
+    yield put(getRTSOrderBankTableDataSuccess(response))
+  } catch (error) {
+    yield put(getRTSOrderBankTableDataFail(error))
   }
 }
 
@@ -48,6 +62,7 @@ function* onGetOrderbankTableInformation({ params }) {
 
 function* orderBankSaga() {
   yield takeLatest(GET_ORDERBANK, onGetOrderbank)
+  yield takeLatest(GET_RTS_ORDER_BANK_TABLE_DATA, onGetRTSOrderBank)
   yield takeLatest(
     GET_ORDERBANK_TABLE_INFORMATION,
     onGetOrderbankTableInformation

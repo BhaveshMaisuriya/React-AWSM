@@ -7,6 +7,13 @@ class TrailerTab extends PureComponent {
     this.state = {}
   }
 
+  OnChangHandler = ( field, value ) => {
+    const {  data, onChange } = this.props
+    let newData = {...data}
+    newData[field] = value
+    onChange("trailer", newData)
+  }
+
   render() {
     const { mode, scheduler, data, onChange } = this.props
     return (
@@ -60,9 +67,7 @@ class TrailerTab extends PureComponent {
                 (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
               }
               defaultValue={data?.offloading_duration}
-              onChange={e =>
-                onChange("offloading_duration_mins", e.target.value)
-              }
+              onChange={e => this.OnChangHandler("offloading_duration_mins",e.target.value)}
             ></input>
           </div>
         </div>

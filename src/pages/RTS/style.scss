@@ -30,6 +30,11 @@
     height: 78vh;
     overflow-y: hidden;
 }
+.rts-table-container {
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: inherit;
+}
 .gantt_chart_first {
     height: 40%;
 }
@@ -133,10 +138,6 @@
         width: 150px;
     }
 }
-.scroll {
-    overflow-y: auto;
-    overflow-x: hidden;
-}
 .order-scroll {
     height: 75%;
 }
@@ -219,10 +220,10 @@
 
 .container-orderbank {
     display: flex;
-    padding: 0px !important;
-    margin: 14px 0px 19px 0px !important;
-    max-width: 100% !important;
-    height: auto;
+    //padding: 0px !important;
+    //margin: 14px 0px 19px 0px !important;
+    //max-width: 100% !important;
+    //height: auto;
   }
 
   .container-orderbank thead tr {

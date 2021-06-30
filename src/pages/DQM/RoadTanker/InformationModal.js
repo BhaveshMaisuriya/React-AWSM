@@ -20,7 +20,8 @@ import { tableInformationModalDummyData as data2 } from "./tableMapping"
 import AWSMAlert from "../../../components/Common/AWSMAlert/index"
 
 import {
-  getRoadTankerDetail
+  getRoadTankerDetail,
+  updateRoadTankerDetail
 } from "../../../store/actions"
 import { connect } from "react-redux"
 import ExitConfirmation from "../../../components/Common/ExitConfirmation"
@@ -67,6 +68,7 @@ class InformationModal extends Component {
       currentRoadTanker,
       onCancel,
       onUpdateTableInformation,
+      onUpdateRoadTankerDetail
     } = this.props
     const { activeTab, mode, showAlert, data } = this.state
     const { scheduler } = this.state.userRole
@@ -79,7 +81,7 @@ class InformationModal extends Component {
 
     const handleUpdate = e => {
       e.preventDefault()
-      onUpdateTableInformation(data)
+      onUpdateRoadTankerDetail(data)
       this.setState({ updateSuccess: true })
     }
 
@@ -282,6 +284,7 @@ const mapStateToProps = ({ roadTanker }) => ({
 
 const mapDispatchToProps = dispatch => ({
   onGetRoadTankerDetail: params => dispatch(getRoadTankerDetail(params)),
+  onUpdateRoadTankerDetail: params =>dispatch(updateRoadTankerDetail(params))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(InformationModal)

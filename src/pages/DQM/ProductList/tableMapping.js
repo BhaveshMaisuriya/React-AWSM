@@ -15,18 +15,18 @@ const tableColumns = [
 
 const tableMapping = {
   code: {
-    label: "CODE",
+    label: "PRODUCT CODE",
     apiKey: "code",
     columnSize: "cell-text",
     type: "link",
   },
   name: {
-    label: "NAME",
+    label: "PRODUCT NAME",
     apiKey: "name",
     columnSize: "cell-text-big",
   },
   status_sap: {
-    label: "STATUS IN SAP",
+    label: "PRODUCT STATUS IN SAP",
     apiKey: "status_sap",
     columnSize: "cell-text",
     type: "badge",
@@ -35,7 +35,7 @@ const tableMapping = {
     },
   },
   status_awsm: {
-    label: "STATUS IN AWSM",
+    label: "PRODUCT STATUS IN AWSM",
     apiKey: "status_awsm",
     columnSize: "cell-text",
     type: "badge",
@@ -44,7 +44,7 @@ const tableMapping = {
     },
   },
   division: {
-    label: "DIVISION",
+    label: "PRODUCT DIVISION",
     apiKey: "division",
     columnSize: "cell-text",
   },
@@ -59,12 +59,12 @@ const tableMapping = {
     columnSize: "cell-text-big",
   },
   category: {
-    label: "CATEGORY",
+    label: "PRODUCT CATEGORY",
     apiKey: "category",
     columnSize: "cell-text",
   },
   sub_category: {
-    label: "SUBCATEGORY",
+    label: "PRODUCT SUB CATEGORY",
     apiKey: "sub_category",
     columnSize: "cell-text-big",
   },
@@ -74,7 +74,7 @@ const tableMapping = {
     columnSize: "cell-text",
   },
   density: {
-    label: "DENSITY",
+    label: "PRODUCT DENSITY",
     apiKey: "density",
     columnSize: "cell-text",
   },

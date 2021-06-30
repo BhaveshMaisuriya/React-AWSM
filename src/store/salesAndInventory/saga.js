@@ -5,6 +5,7 @@ import {
   GET_SALES_AND_INVENTORY,
   GET_SALES_AUDITLOG,
   GET_DOWNLOAD_SALES,
+  GET_DETAIL_SALES
 } from "./actionTypes"
 import Factory, { DownloadData } from "./factory"
 import {
@@ -21,6 +22,8 @@ import {
   getSalesAuditLogFail,
   getDownloadSalesSuccess,
   getDownloadSalesFail,
+  getDetailsSalesSuccess,
+  getDetailsSalesFail
 } from "./actions"
 import { call, put, takeLatest } from "redux-saga/effects"
 import {
@@ -30,6 +33,7 @@ import {
   getSaleAndInventory,
   getSalesAuditLog,
   getDownloadSales,
+  getSaleAndInventoryDetail
 } from "../../helpers/fakebackend_helper"
 
 function* onGetSalesAndInventory({ params = {} }) {
@@ -39,6 +43,15 @@ function* onGetSalesAndInventory({ params = {} }) {
     yield put(getSaleAndInventoryFilterSuccess(response.data.filters))
   } catch (error) {
     yield put(getSaleAndInventoryFail(error))
+  }
+}
+
+function* onGetSalesAndInventoryDetail({ params }) {
+  try {
+    const response = yield call(getSaleAndInventoryDetail, params)
+    yield put(getDetailsSalesSuccess(response))
+  } catch (error) {
+    yield put(getDetailsSalesFail(error))
   }
 }
 
@@ -103,6 +116,8 @@ function* saleAndInventorySaga() {
   yield takeLatest(GET_SALES_AUDITLOG, onGetSalesAuditLog)
   yield takeLatest(GET_DOWNLOAD_SALES, onGetDownloadSales)
   yield takeLatest(GET_SALES_AND_INVENTORY, onGetSalesAndInventory)
+  yield takeLatest(GET_DETAIL_SALES, onGetSalesAndInventoryDetail)
+
 }
 
 export default saleAndInventorySaga

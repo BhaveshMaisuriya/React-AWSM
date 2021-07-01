@@ -13,11 +13,12 @@ import {
   TabContent,
   ButtonDropdown,
   DropdownItem,
-  Dropdown, DropdownMenu, DropdownToggle
+  Dropdown, DropdownMenu, DropdownToggle, Button
 } from "reactstrap"
 import "./style.scss"
 import MoreVertIcon from "@material-ui/icons/MoreVert"
 import { IconButton, Menu, MenuItem } from "@material-ui/core"
+import eyeIcon from "../../assets/images/auditlog-eye.svg"
 import awsmLogo from "../../assets/images/AWSM-logo-order-bank.png"
 import NewOrderModal from "./addOrderBankModal"
 import DateRangePicker from "../../components/Common/DateRangePicker"
@@ -25,6 +26,9 @@ import AWSMDropdown from "../../components/Common/Dropdown"
 import OrderBankTable from './OrderBankTable'
 import REGION_TERMINAL from "../../common/data/regionAndTerminal"
 import customiseTableIcon from "../../assets/images/AWSM-Customise-Table.svg"
+import { Link } from "react-router-dom"
+import CustomizeTableModal from "../../common/CustomizeTable"
+import { tableColumns, tableMapping } from "./OrderBankTable/tableMapping"
 import { format } from "date-fns";
 import { getRTSOrderBankTableData } from "../../store/orderBank/actions"
 
@@ -32,12 +36,15 @@ function OrderBank({ getRTSOrderBankTableData, orderBankTableData }) {
   const [activeTab, setActiveTab] = useState("1")
   const [dropdownOpen, setOpen] = useState(false)
   const [showNewOrder, setShowNewOrder] = useState(false)
+  const [showCustomize, setShowCustomize] = useState(false)
+  const [searchFields, setSearchFields] = useState(tableColumns);
   const [region, setRegion] = useState(REGION_TERMINAL[0].region)
   const [terminal, setTerminal] = useState(REGION_TERMINAL[0].terminal[0])
   const [shiftDate, setShiftDate] = useState({
     type: "single",
     days: [format(Date.now(), "yyyy-MM-dd")],
   })
+
   const toggle = () => setOpen(!dropdownOpen)
   const terminalList = useMemo(() => {
     const currentRegion = REGION_TERMINAL.find(e => e.region === region)
@@ -55,7 +62,12 @@ function OrderBank({ getRTSOrderBankTableData, orderBankTableData }) {
 const onSettingClick = (val) => {
   if(val === 'newOrder'){
     setShowNewOrder(true);
+  } else if (val === 'customizeCol'){
+    setShowCustomize(true);
   }
+}
+const onCloseCustomize = () => {
+  setShowCustomize(false);
 }
 
 const onCloseNewOrder = () => {
@@ -66,6 +78,11 @@ useEffect(() => {
   getRTSOrderBankTableData({region, terminal, shiftDate});
 }, [region, terminal, shiftDate])
 
+const onTableColumnsChange = columns => {
+  setSearchFields(columns);
+  // getCustomerData();
+}
+
   return (
     <React.Fragment>
       <div className="order-bank-page-content">
@@ -74,7 +91,7 @@ useEffect(() => {
             <CardBody>
               <Row>
                 <Col lg={3} md={3} sm={12}>
-                  <div>
+                  <div className='h-100'>
                     <Nav pills justified>
                       <NavItem>
                         <NavLink
@@ -96,7 +113,13 @@ useEffect(() => {
                   </div>
                 </Col>
                 <Col lg={9} md={9} sm={12} className="top_right_section">
-                  <img src={awsmLogo} />
+                  <div className='d-flex align-item-right '>                    
+                    <Link to="#" className='border-before'><img src={awsmLogo} height='25px' width='80px' className='ml-3' /></Link>
+                    <Link to="#" className='border-before'><i className="bx bx-fullscreen ml-3"></i> Fullscreen</Link>
+                    <Link to="#" className='border-before'><img src={eyeIcon} alt="info" className='ml-3' /> View Audit Log</Link>
+                    <span className='bl-1-grey-half plr-15'><Button color={'primary'}>Run Auto Schedule</Button></span>
+                    <span className='bl-1-grey-half plr-15'><Button disabled >Send Bulk Shipment</Button></span>
+                  </div>
                 </Col>
               </Row>
 
@@ -189,6 +212,16 @@ useEffect(() => {
             <NewOrderModal
               open={showNewOrder}
               onCancel={onCloseNewOrder}
+            />
+            <CustomizeTableModal
+              open={showCustomize}
+              onCancel={onCloseCustomize}
+              tableName='Order Bank'
+              onChange={onTableColumnsChange}
+              open={showCustomize}
+              closeDialog={onCloseCustomize}
+              availableMetric={tableMapping}
+              defaultMetric={searchFields}
             />
           </Card>
         </div>

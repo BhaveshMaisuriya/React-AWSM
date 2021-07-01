@@ -24,8 +24,8 @@ import { isArray } from "lodash"
 import "./index.scss"
 import EditIcon from "../../../assets/images/AWSM-Edit-Icon.svg"
 import TrashIcon from "../../../assets/images/AWSM-Trash-Icon.svg"
-import DeleteOrderBankConfirmation from "../deleteOrderBankModal"
-import EditOrderBankModal from "../editOrderBankModal"
+import DeleteOrderBankConfirmation from "../DeleteNoteConfirmation"
+import EditOrderBankModal from "../EditOrderBankModal"
 
 class TableGroupEvent extends React.Component {
     constructor(props){

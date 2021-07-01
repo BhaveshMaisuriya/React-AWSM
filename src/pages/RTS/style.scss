@@ -1,11 +1,23 @@
 .order_bank_main {
     margin-top: 15px;
+    .row {
+        border-bottom: 1px solid #EEEEEE;
+        .nav-pills {
+            border-bottom: unset !important;
+        }
+    }
 }
 .order-bank-page-content {
     padding: 0;
 }
 .top_right_section {
     text-align: right;
+    div {
+        position: relative;
+        top: -10px;
+        align-items: center;
+        flex-direction: row-reverse;
+    }
 }
 .nav-pills .nav-link.active{
     width: auto !important;
@@ -253,9 +265,9 @@
     ul {
         width: 80%;
         border-bottom: unset;
-        li{
-            flex: 0 0 auto !important;
-        }
+        // li{
+        //     flex: 0 0 auto !important;
+        // }
     }
   }
 .remove_text {
@@ -280,4 +292,25 @@
     .confirm-text.text-red {
         border-right: 1px solid #495057;
     }
+}
+
+.bl-1-grey-half {
+    border-left: 1px solid #EEEEEE !important;
+}
+.mlr-15 {
+    margin: 0 15px;
+}
+.plr-15 {
+    padding: 0 15px;
+}
+.border-before {
+    margin: 0 10px;
+}
+.border-before::before{
+    content: ' ';
+    border-left: 1px solid #EEEEEE;
+    position: absolute;
+    bottom: -10px;
+    width: 100%;
+    height: 57px;
 }

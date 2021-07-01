@@ -12,6 +12,9 @@
 }
 
 .nav-pills {
+  .nav-item {
+    flex: 0 0 auto !important;
+  }
   > a {
       color: $gray-700;  
       font-weight: $font-weight-medium;

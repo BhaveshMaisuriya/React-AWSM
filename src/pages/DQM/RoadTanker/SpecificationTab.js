@@ -1,5 +1,6 @@
 import React, { PureComponent } from "react"
-import PopOverCalendar from "../../../components/Common/TableInformation/components/PopOverCalendar"
+import DatePicker from "../../../components/Common/DatePicker"
+
 import MultipleSelect from "./MultipleSelect"
 import { MODE } from "./constants"
 class SpecificationTab extends PureComponent {
@@ -21,6 +22,13 @@ class SpecificationTab extends PureComponent {
       ],
       idDeleteBtnShow: true
     }
+  }
+
+  onChangeHandler = (value,key) => {
+    const {  data, onChange } = this.props
+    let newData = {...data}
+    newData[key] = value
+    onChange("specification", newData)
   }
 
   render() {
@@ -82,7 +90,7 @@ class SpecificationTab extends PureComponent {
       if (document.getElementById("restriction") != null) {
         let rtRestriction = document.getElementById("restriction").value
         this.setState({ names: [...names, rtRestriction] })
-        onChange("rt_restriction", names)
+        // onChange("rt_restriction", names)
       }
 
       this.setState(
@@ -97,15 +105,6 @@ class SpecificationTab extends PureComponent {
       )
 
       toggle()
-    }
-
-    const onValueChange = event => {
-      let newData = {...data}
-      newData['rt_restriction'] = event.target.value
-      this.setState({ restriction: event.target.value }, () => {
-        setClass();
-        onChange('specification',newData)
-      })
     }
 
     const onAutoFillBtnClick = () => {
@@ -149,7 +148,9 @@ class SpecificationTab extends PureComponent {
           isDeleteBtnShow={isDeleteBtnShow}
           onDeleteBtnClick={onDeleteBtnClick}
           onConfirmClick={onConfirmClick}
-          onNoClick={onNoClick} />
+          onNoClick={onNoClick}
+          onChange = {e => this.onChangeHandler(e,"rt_restriction")}
+          />
       ) : (
         <div className="input-group add-restriction">
           <input
@@ -157,7 +158,6 @@ class SpecificationTab extends PureComponent {
             id="restriction"
             type="text"
             defaultValue={data?.rt_restriction}
-            onChange={onValueChange}
             disabled={disabled}
           />
           <div className="input-group-append">
@@ -183,6 +183,7 @@ class SpecificationTab extends PureComponent {
               className="form-control"
               type="text"
               defaultValue={data?.product_type_sap}
+              onChange={e => this.onChangeHandler(e.target.value,"product_type_sap")}
               disabled={true}
             />
           </div>
@@ -192,7 +193,8 @@ class SpecificationTab extends PureComponent {
               className="form-control"
               type="text"
               defaultValue={data?.pump_type}
-              disabled={true}
+              onChange={e => this.onChangeHandler(e.target.value,"pump_type")}
+              // disabled={true}
             />
           </div>
         </div>
@@ -205,24 +207,23 @@ class SpecificationTab extends PureComponent {
                 (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
               }
               defaultValue={data?.product_type_awsm}
-              onChange={e => {
-                onChange("product_type_in_ASWM", e.target.value)
-              }}
+              onChange={e => this.onChangeHandler(e.target.value,"product_type_awsm")}
             >
-              {data?.product_type_awsm_dropdown?.map((value, indev) => {
-
+              {data?.product_type_awsm_dropdown?.map((value, index) => {
+                  return <option value={index}>{value}</option>
               })}
             </select>
           </div>
           <div className="col-md-6 form-group">
             <label>DATE</label>
-            <PopOverCalendar
+            <DatePicker
               className="form-control"
               disabled={
                 (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
               }
-              selected={data?.temporary_product_date_range}
-            ></PopOverCalendar>
+              value={data?.temporary_product_date_range}
+              onChange={v => this.onChangeHandler(v,"temporary_product_date_range")}
+            />
           </div>
         </div>
 
@@ -233,6 +234,7 @@ class SpecificationTab extends PureComponent {
               className="form-control"
               disabled={true}
               defaultValue={data?.chartering_type}
+              onChange={e => this.onChangeHandler(e.target.value,"chartering_type")}
             ></input>
           </div>
           <div className="col-md-6 form-group">
@@ -243,6 +245,7 @@ class SpecificationTab extends PureComponent {
                 (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
               }
               value={data?.customer_type}
+              onChange={e => this.onChangeHandler(e.target.value,"customer_type")}
             >
 
               {data?.customer_type_dropdown}
@@ -269,6 +272,7 @@ class SpecificationTab extends PureComponent {
               className="form-control"
               disabled={true}
               defaultValue={data?.restriction_code}
+              onChange={e => this.onChangeHandler(e.target.value,"restriction_code")}
             ></input>
           </div>
         </div>

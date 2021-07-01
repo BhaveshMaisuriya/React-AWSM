@@ -27,7 +27,7 @@ import {
   getRoadTankeDetailSuccess,
   getRoadTankerDetailFail,
   updateRoadTankerDetailSuccess,
-  updateRoadTankerDetailFail
+  updateRoadTankerDetailFail,
 } from "./actions"
 
 import {

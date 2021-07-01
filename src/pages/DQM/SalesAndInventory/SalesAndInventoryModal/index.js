@@ -7,18 +7,30 @@ import InventoryTab from "./inventoryTab"
 import DeliveryTab from "./deliveryTab"
 import { getDetailsSales, getSaleAndInventory } from "../../../../store/salesAndInventory/actions";
 import { connect } from "react-redux"
+import ExitConfirmation from "../../../../components/Common/ExitConfirmation"
 
 class SalesAndInventoryTableInformation extends Component {
     constructor(props) {
         super(props)
 
         this.state = {
-            activeTab: "1"
+            activeTab: "1",
+            isConfirm: false,
+
         }
 
         this.handleEvent = this.handleEvent.bind(this)
     }
+    onConfirmCancel = () => {
+        this.setState({ isConfirm: false });
+    }
 
+    onConfirmExit = () => {
+        this.setState({ isConfirm: false });
+        if (this.props.onCancel()) {
+            this.props.onCancel()
+        }
+    }
     componentDidMount() {
         const { onGetSalesAndInventoryDetail, data } = this.props
         onGetSalesAndInventoryDetail()
@@ -60,11 +72,17 @@ class SalesAndInventoryTableInformation extends Component {
                             </span>
                         </h5>
 
-                        <button type="button" onClick={onCancel} className="close">
+                        <button type="button" onClick={() => this.setState({ isConfirm: true })} className="close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <ModalBody>
+                        {this.state.isConfirm && (
+                            <ExitConfirmation
+                                onExit={this.onConfirmExit}
+                                onCancel={this.onConfirmCancel}
+                            />
+                        )}
                         <div>
                             <Nav tabs>
                                 <NavItem
@@ -134,7 +152,7 @@ class SalesAndInventoryTableInformation extends Component {
                     </ModalBody>
                     <ModalFooter>
                         <div className="d-flex align-items-center justify-content-end mt-4 mb-4 px-4">
-                            <button className="btn btn-outline-primary px-4">Cancel</button>
+                            <button className="btn btn-outline-primary px-4" onClick={() => this.setState({ isConfirm: true })}>Cancel</button>
                             <button className="btn btn-primary ml-4 px-4">Update</button>
                         </div>
                     </ModalFooter>

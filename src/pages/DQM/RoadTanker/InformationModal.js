@@ -25,6 +25,7 @@ import {
 } from "../../../store/actions"
 import { connect } from "react-redux"
 import ExitConfirmation from "../../../components/Common/ExitConfirmation"
+import { isEqual } from "lodash"
 
 // Information Modal
 class InformationModal extends Component {
@@ -38,8 +39,8 @@ class InformationModal extends Component {
       userRole: {
         scheduler: false,
       },
-      updateSuccess: false,
-      data: data2,
+      updateSuccess: props.isUpdateSuccess,
+      data: props.currentRoadTanker,
       isConfirm: false,
     }
   }
@@ -50,6 +51,17 @@ class InformationModal extends Component {
     this.setState({ mode: modalMode })
     const { onGetRoadTankerDetail, data } = this.props
     onGetRoadTankerDetail(data.vehicle)
+  }
+
+  componentWillReceiveProps(nextProps){
+    if(!isEqual(nextProps.currentRoadTanker,this.props.currentRoadTanker)){
+      this.setState({data:nextProps.currentRoadTanker,updateSuccess:nextProps.isUpdateSuccess})
+      return
+    }
+    if((this.props.isUpdateSuccess != nextProps.isUpdateSuccess)){
+      this.setState({updateSuccess:nextProps.isUpdateSuccess})
+      return
+    }
   }
 
   onConfirmCancel = () => {
@@ -67,7 +79,6 @@ class InformationModal extends Component {
     const { visible,
       currentRoadTanker,
       onCancel,
-      onUpdateTableInformation,
       onUpdateRoadTankerDetail
     } = this.props
     const { activeTab, mode, showAlert, data } = this.state
@@ -81,7 +92,7 @@ class InformationModal extends Component {
 
     const handleUpdate = e => {
       e.preventDefault()
-      onUpdateRoadTankerDetail(data)
+      onUpdateRoadTankerDetail({ vehicle_name:data.vehicle,data})
       this.setState({ updateSuccess: true })
     }
 
@@ -154,31 +165,34 @@ class InformationModal extends Component {
             <div>
               <div className="row">
                 <div className="col-md-6 form-group">
-                  <label> VEHICAL OWNER</label>
+                  <label> VEHICAL ID</label>
                   <input
                     className="form-control"
                     type="text"
-                    defaultValue={currentRoadTanker?.owner}
+                    defaultValue={data?.vehicle}
+                    onChange={e => onFieldValueChange("vehicle",e.target.value)}
                     disabled={true}
                   />
                 </div>
                 <div className="col-md-6 form-group">
-                  <label>STATUS IN SAP</label>
+                  <label>VEHICAL OWNER</label>
                   <input
                     className="form-control"
                     type="text"
-                    defaultValue={currentRoadTanker?.status_sap}
+                    defaultValue={data?.owner}
+                    onChange={e => onFieldValueChange("owner",e.target.value)}
                     disabled={true}
                   />
                 </div>
               </div>
               <div className="row">
                 <div className="col-md-6 form-group">
-                  <label>RT CAPACITY</label>
+                  <label>RT STATUS IN SAP</label>
                   <input
                     className="form-control"
                     type="text"
-                    defaultValue={data?.rt_capacity}
+                    defaultValue={data?.status_sap}
+                    onChange={e => onFieldValueChange("status_sap",e.target.value)}
                     disabled={true}
                   />
                 </div>
@@ -187,7 +201,8 @@ class InformationModal extends Component {
                   <input
                     className="form-control"
                     type="text"
-                    defaultValue={currentRoadTanker?.max_volume}
+                    defaultValue={data?.max_volume}
+                    onChange={e => onFieldValueChange("max_volume",e.target.value)}
                     disabled={true}
                   />
                 </div>
@@ -198,7 +213,8 @@ class InformationModal extends Component {
                   <input
                     className="form-control"
                     type="text"
-                    defaultValue={currentRoadTanker?.remarks}
+                    defaultValue={data?.remarks}
+                    onChange={e => onFieldValueChange("remarks",e.target.value)}
                     disabled={
                       (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
                     }
@@ -243,7 +259,7 @@ class InformationModal extends Component {
                     <AvailabilityTab
                       mode={mode}
                       scheduler={scheduler}
-                      data={currentRoadTanker?.availability}
+                      data={data?.availability}
                       onChange={onFieldValueChange}
                     />
                   </TabPane>
@@ -251,7 +267,7 @@ class InformationModal extends Component {
                     <SpecificationTab
                       mode={mode}
                       scheduler={scheduler}
-                      data={currentRoadTanker?.specification}
+                      data={data?.specification}
                       toggle={() => {
                         toggleAlert()
                       }}
@@ -262,7 +278,7 @@ class InformationModal extends Component {
                     <TrailerTab
                       mode={mode}
                       scheduler={scheduler}
-                      data={currentRoadTanker?.trailer}
+                      data={data?.trailer}
                       onChange={onFieldValueChange}
                     />
                   </TabPane>
@@ -280,6 +296,7 @@ class InformationModal extends Component {
 
 const mapStateToProps = ({ roadTanker }) => ({
   currentRoadTanker: roadTanker.currentRoadTanker?.data,
+  isUpdateSuccess:  roadTanker.currentRoadTanker?.isUpdateSuccess,
 })
 
 const mapDispatchToProps = dispatch => ({

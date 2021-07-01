@@ -21,7 +21,9 @@ export default class MultipleSelect extends Component {
     } = this.state;
 
     const handleChange = (event) => {
-      this.setState({ personName: event.target.value });
+      const { onChange } = this.props;
+      this.setState({ personName: event.target.value },
+        ()=>onChange(this.state.personName));
     };
 
     const showDeleteBtn = (_name) => {

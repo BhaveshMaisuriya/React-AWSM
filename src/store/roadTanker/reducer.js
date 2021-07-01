@@ -13,6 +13,8 @@ import {
   GET_DOWNLOAD_ROAD_TANKER_FAIL,
   GET_ROAD_TANKER_DETAIL_SUCCESS,
   GET_ROAD_TANKER_DETAIL_FAIL,
+  UPDATE_ROAD_TANKER_DETAIL_SUCCESS,
+  UPDATE_ROAD_TANKER_DETAIL_FAIL
 } from "./actionTypes"
 
 const initialState = {
@@ -22,7 +24,8 @@ const initialState = {
   address: [],
   filterRoadTanker: [],
   downloadRoadTanker: [],
-  currentRoadTanker: {}
+  currentRoadTanker: {},
+  isUpdateSuccess:false
 }
 
 const RoadTanker = (state = initialState, action) => {
@@ -113,8 +116,21 @@ const RoadTanker = (state = initialState, action) => {
         ...state,
         error: action.payload
       }
-
-
+    case UPDATE_ROAD_TANKER_DETAIL_SUCCESS:
+      let newRoadTanker = {...state.roadTanker}
+      let newData = newRoadTanker.list
+      const index = newData.findIndex((v)=>v.vehicle === action?.payload?.data?.vehicle)
+      newData[index] = action?.payload?.data
+      return {
+        ...state,
+        roadTanker : newRoadTanker,
+        isUpdateSuccess: true
+      }
+    case UPDATE_ROAD_TANKER_DETAIL_FAIL:
+      return {
+        ...state,
+        error: action.payload
+      }
     default:
       return state
   }

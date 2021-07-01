@@ -25,6 +25,7 @@ class TrailerTab extends PureComponent {
               className="form-control"
               defaultValue={data?.unladen_weight}
               disabled={true}
+              onChange={e => this.OnChangHandler("unladen_weight",e.target.value)}
             ></input>
           </div>
           <div className="col-md-6 form-group">
@@ -33,6 +34,7 @@ class TrailerTab extends PureComponent {
               className="form-control"
               defaultValue={data?.max_weight}
               disabled
+              onChange={e => this.OnChangHandler("max_weight",e.target.value)}
             ></input>
           </div>
         </div>
@@ -44,6 +46,7 @@ class TrailerTab extends PureComponent {
               className="form-control"
               disabled={true}
               defaultValue={data?.compartment_no}
+              onChange={e => this.OnChangHandler("compartment_no",e.target.value)}
             ></input>
           </div>
 
@@ -53,6 +56,7 @@ class TrailerTab extends PureComponent {
               className="form-control"
               disabled={true}
               defaultValue={data?.compartment_max_vol}
+              onChange={e => this.OnChangHandler("compartment_max_vol",e.target.value)}
             ></input>
           </div>
         </div>

@@ -2,19 +2,19 @@ import React, { Component } from 'react';
 import PopOverCalendar from "../../../../components/Common/TableInformation/components/PopOverCalendar";
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 import Tooltip from '@material-ui/core/Tooltip';
+import DatePicker from "../../../../components/Common/DatePicker"
+
 export default class InventoryTab extends Component {
     constructor(props) {
         super(props)
 
         this.state = {
-
         }
 
         this.handleEvent = this.handleEvent.bind(this)
     }
 
     componentDidMount() {
-
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) { if (prevState.name !== this.state.name) { this.handler() } }
@@ -80,33 +80,33 @@ export default class InventoryTab extends Component {
                 <div className="row">
                     <div className="col-md-6 form-group">
                         <label>DIPPING TO MIDNIGHT DIVERSION (L)<span className="extra-lbl">D-1</span></label>
-                        <PopOverCalendar className="form-control" selected={data?.dipping_to_midnight_deversion}></PopOverCalendar>
+                        <input className="form-control" defaultValue={data?.dipping_to_midnight_deversion}></input>
                     </div>
                     <div className="col-md-6 form-group">
                         <label>DIPPING TO MIDNIGHT DIVERSION REMARKS(L)</label>
-                        <PopOverCalendar className="form-control" selected={data?.dipping_to_midnight_deversion_remarks} ></PopOverCalendar>
+                        <input className="form-control" defaultValue={data?.dipping_to_midnight_deversion_remarks} ></input>
                     </div>
                 </div>
 
                 <div className="row">
                     <div className="col-md-6 form-group">
                         <label>DIPPING ADJUSTMENT (L)<span className="extra-lbl">D-1</span></label>
-                        <PopOverCalendar className="form-control" selected={data?.dipping_adjustment}></PopOverCalendar>
+                        <input className="form-control" defaultValue={data?.dipping_adjustment}></input>
                     </div>
                     <div className="col-md-6 form-group">
                         <label>DIPPING ADJUSTMENT REMARKS</label>
-                        <PopOverCalendar className="form-control" selected={data?.dipping_adjustment_remarks} />
+                        <input className="form-control" selected={data?.dipping_adjustment_remarks} ></input>
                     </div>
                 </div>
 
                 <div className="row">
                     <div className="col-md-6 form-group">
                         <label>DELIVERY ADJUSTMENT (L)<span className="extra-lbl">D-1</span></label>
-                        <PopOverCalendar className="form-control" selected={data?.delivery_adjustment} />
+                        <input className="form-control" defaultValue={data?.delivery_adjustment} />
                     </div>
                     <div className="col-md-6 form-group">
                         <label>DELIVERY ADJUSTMENT REMARKS</label>
-                        <PopOverCalendar className="form-control" selected={data?.delivery_adjustment_remark} />
+                        <input className="form-control" defaultValue={data?.delivery_adjustment_remark} />
                     </div>
                 </div>
 
@@ -140,21 +140,21 @@ export default class InventoryTab extends Component {
                 <div className="row">
                     <div className="col-md-6 form-group">
                         <label>YESTERDAY DIVERSION (L)<span className="extra-lbl">D-1</span></label>
-                        <PopOverCalendar className="form-control" selected={data?.yesterday_diversion} />
+                        <input className="form-control" defaultValue={data?.yesterday_diversion} />
                     </div>
                     <div className="col-md-6 form-group">
                         <label>YESTERDAY DIVERSION REMARKS</label>
-                        <PopOverCalendar className="form-control" defaultValue={data?.yesterday_diversion_remarks} />
+                        <input className="form-control" defaultValue={data?.yesterday_diversion_remarks} />
                     </div>
                 </div>
                 <div className="row">
                     <div className="col-md-6 form-group">
                         <label>YESTERDAY DELIVERY ADJUSTMENT (L)<span className="extra-lbl">D-1</span></label>
-                        <PopOverCalendar className="form-control" selected={data?.yesterday_delivery_adjustment} />
+                        <input className="form-control" defaultValue={data?.yesterday_delivery_adjustment} />
                     </div>
                     <div className="col-md-6 form-group">
                         <label>YESTERDAY DELIVERY ADJUSTMENT REMARKS</label>
-                        <PopOverCalendar className="form-control" defaultValue={data?.yesterday_delivery_adjustment_remarks} />
+                        <input className="form-control" defaultValue={data?.yesterday_delivery_adjustment_remarks} />
                     </div>
                 </div>
 
@@ -171,14 +171,13 @@ export default class InventoryTab extends Component {
                 <div className="row">
                     <div className="col-md-6 form-group">
                         <label>INVENTORY CORRECTION (L)</label>
-                        <PopOverCalendar className="form-control" selected={data?.inventory_correction} />
+                        <input className="form-control" defaultValue={data?.inventory_correction} />
                     </div>
                     <div className="col-md-6 form-group">
                         <label>INVENTORY CORRECTION REMARKS</label>
-                        <input className="form-control" selected={data?.inventory_correction_remarks}></input>
+                        <input className="form-control" defaultValue={data?.inventory_correction_remarks}></input>
                     </div>
                 </div>
-
             </>
         )
     }

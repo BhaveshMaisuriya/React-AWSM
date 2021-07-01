@@ -10,7 +10,10 @@ import {
   UPDATE_ORDERBANK_TABLE_INFORMATION_FAIL,
   GET_ORDERBANK_TABLE_INFORMATION,
   GET_ORDERBANK_TABLE_INFORMATION_SUCCESS,
-  GET_ORDERBANK_TABLE_INFORMATION_FAIL
+  GET_ORDERBANK_TABLE_INFORMATION_FAIL,
+  DELETE_ORDERBANK_TABLE_INFORMATION,
+  DELETE_ORDERBANK_TABLE_INFORMATION_SUCCESS,
+  DELETE_ORDERBANK_TABLE_INFORMATION_FAIL,
 } from "./actionTypes"
 
 export const getRTSOrderBankTableData = (params) => ({
@@ -72,5 +75,20 @@ export const updateOrderbankTableInformationSuccess = event => ({
 
 export const updateOrderbankTableInformationFail = error => ({
   type: UPDATE_ORDERBANK_TABLE_INFORMATION_FAIL,
+  payload: error
+})
+
+export const deleteOrderbankTableInformation = data => ({
+  type: DELETE_ORDERBANK_TABLE_INFORMATION,
+  data,
+})
+
+export const deleteOrderbankTableInformationSuccess = event => ({
+  type: DELETE_ORDERBANK_TABLE_INFORMATION_SUCCESS,
+  payload: event,
+})
+
+export const deleteOrderbankTableInformationFail = error => ({
+  type: DELETE_ORDERBANK_TABLE_INFORMATION_FAIL,
   payload: error
 })

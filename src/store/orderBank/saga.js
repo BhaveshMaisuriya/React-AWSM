@@ -14,6 +14,8 @@ import {
   getOrderBankFail,
   getOrderBankDetailFail,
   getOrderBankDetailSuccess,
+  deleteOrderBankDetailFail,
+  deleteOrderBankDetailSuccess,
   updateOrderbankTableInformationSuccess,
   updateOrderbankTableInformationFail,
 } from "./actions"
@@ -22,6 +24,7 @@ import {
   getOrderBankDetail,
   getRTSOderBank,
   putOrderbankDetail,
+  deleteOrderBankDetail,
 } from "../../helpers/fakebackend_helper"
 
 function* onGetOrderbank({ params = {} }) {
@@ -39,6 +42,15 @@ function* onGetOrderbankTableInformation({ params }) {
     yield put(getOrderBankDetailSuccess(response))
   } catch (error) {
     yield put(getOrderBankDetailFail(error))
+  }
+}
+
+function* onDeleteOrderbankTableInformation({ params }) {
+  try {
+    const response = yield call(deleteOrderBankDetail, params)
+    yield put(deleteOrderBankDetailSuccess(response))
+  } catch (error) {
+    yield put(deleteOrderBankDetailFail(error))
   }
 }
 
@@ -66,6 +78,10 @@ function* orderBankSaga() {
   yield takeLatest(
     GET_ORDERBANK_TABLE_INFORMATION,
     onGetOrderbankTableInformation
+  )
+  yield takeLatest(
+    DELETE_ORDERBANK_TABLE_INFORMATION,
+    onDeleteOrderbankTableInformation
   )
   // yield takeLatest(
   //   UPDATE_ORDERBANK_TABLE_INFORMATION,

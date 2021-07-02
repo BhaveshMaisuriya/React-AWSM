@@ -7,6 +7,8 @@ import {
   GET_ORDERBANK_TABLE_INFORMATION_FAIL,
   UPDATE_ORDERBANK_TABLE_INFORMATION_SUCCESS,
   UPDATE_ORDERBANK_TABLE_INFORMATION_FAIL,
+  DELETE_ORDERBANK_DETAIL_SUCCESS,
+  DELETE_ORDERBANK_DETAIL_FAIL
 } from "./actionTypes"
 
 const initialState = {
@@ -64,6 +66,20 @@ const RTSOrderBank = (state = initialState, action) => {
       }
     }
     case UPDATE_ORDERBANK_TABLE_INFORMATION_FAIL:
+      return {
+        ...state,
+        error: action.payload,
+      }
+    case DELETE_ORDERBANK_DETAIL_SUCCESS: {
+      notify.success("Record Successfully Deleted")
+      return {
+        ...state,
+        currentOrderDetail: null,
+        error: null,
+        updateSuccess: true,
+      }
+    }
+    case DELETE_ORDERBANK_DETAIL_FAIL:
       return {
         ...state,
         error: action.payload,

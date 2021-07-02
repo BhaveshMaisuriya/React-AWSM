@@ -182,6 +182,8 @@ export const getOrderBank = (params) => orderDetails
 // get single order bank
 export const getOrderBankDetail = (params) => viewOrderDetails
 
+export const deleteOrderBankDetail = (params) => params
+
 // get retail customer
 export const getRetailCustomer = params =>
   axios.post(

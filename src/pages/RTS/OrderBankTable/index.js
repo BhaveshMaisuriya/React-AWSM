@@ -31,7 +31,7 @@ import NoDataIcon from "../../../assets/images/AWSM-No-Data-Available.svg"
 import DeleteOrderBankConfirmation from "../deleteOrderBankModal"
 import EditOrderBankModal from "../editOrderBankModal"
 import { isEqual } from "lodash"
-import { updateOrderBankTableData } from "../../../store/actions"
+import { updateOrderBankTableData, deleteOrderBankDetail } from "../../../store/actions"
 
 class TableGroupEvent extends React.Component {
   constructor(props) {
@@ -60,8 +60,9 @@ class TableGroupEvent extends React.Component {
     Onchange(e.target.checked, index)
   }
 
-  deleteOrder = () => {
-    this.setState({ isOpenDeleteModal: false })
+  deleteOrder = async() => {
+    this.setState({ isOpenDeleteModal: false });
+    this.props.deleteRecords(this.props.allData);
   }
 
   render() {
@@ -100,7 +101,7 @@ class TableGroupEvent extends React.Component {
             <DropdownItem>
               <div
                 className="event-content"
-                onClick={this.OnClickRemoveHandler}
+                onClick={() => this.OnClickRemoveHandler()}
               >
                 <ReactSVG className="mr-2" src={TrashIcon} />
                 Delete Order
@@ -266,22 +267,26 @@ class index extends Component {
         })
     }
 
+    OnDeleteRecords = async(allData) => {
+      const { onGetDeleteOrderBankDetail } = this.props
+      console.log("allDats::", this.props.allData);
+      await onGetDeleteOrderBankDetail(allData.name);
+    }
+
     DataOfTableFixed = () => {
         const { dataSource } = this.state
         return dataSource.map((v,i)=>{
             return <tr key={i}>
                 <th>
-                <TableGroupEvent index={i} isChecked={v.isChecked} Onchange={this.OnChangeCheckBoxHandler}/>
+                <TableGroupEvent index={i} allData={v} isChecked={v.isChecked} Onchange={this.OnChangeCheckBoxHandler} deleteRecords={this.OnDeleteRecords} />
                 </th>
            </tr>
         })
     }
 
-
     ResetDataFilterHandler = column => {
         console.log(`reset:${column}`)
     }
-
 
     ApplyFilterHandler = (data, key) => {
       const { dataSource } = this.props
@@ -379,6 +384,7 @@ class index extends Component {
 
 index.propTypes = {}
 const mapDispatchToProp = dispatch => ({
-  updateOrderBankTableData: payload => dispatch(updateOrderBankTableData(payload))
+  updateOrderBankTableData: payload => dispatch(updateOrderBankTableData(payload)),
+  onGetDeleteOrderBankDetail: params => dispatch(deleteOrderBankDetail(params)),
 })
 export default connect(null, mapDispatchToProp)(index)

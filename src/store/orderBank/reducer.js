@@ -57,7 +57,7 @@ const RTSOrderBank = (state = initialState, action) => {
         ...state,
         error: action.payload,
       }
-    case UPDATE_ORDERBANK_TABLE_INFORMATION_SUCCESS: {
+    case UPDATE_ORDERBANK_TABLE_INFORMATION_SUCCESS: {      
       notify.success("Record Successfully Updated")
       return {
         ...state,

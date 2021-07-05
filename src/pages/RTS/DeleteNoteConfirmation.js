@@ -16,6 +16,6 @@ const DeleteNoteConfirmation = ({ isOpen, onDelete, onCancel }) => {
         </ModalBody>
       </Modal>
     )
-  }
+}
 
 export default DeleteNoteConfirmation;

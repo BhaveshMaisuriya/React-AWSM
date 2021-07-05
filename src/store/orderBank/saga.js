@@ -4,7 +4,7 @@ import {
   GET_ORDERBANK,
   GET_ORDERBANK_TABLE_INFORMATION,
   UPDATE_ORDERBANK_TABLE_INFORMATION,
-  DELETE_ORDERBANK_TABLE_INFORMATION,
+  DELETE_ORDERBANK_DETAIL,
   GET_RTS_ORDER_BANK_TABLE_DATA,
   SEND_ORDER_BANK_DN,
   REFRESH_ORDER_BANK_DN,
@@ -107,7 +107,7 @@ function* orderBankSaga() {
     onGetOrderbankTableInformation
   )
   yield takeLatest(
-    DELETE_ORDERBANK_TABLE_INFORMATION,
+    DELETE_ORDERBANK_DETAIL,
     onDeleteOrderbankTableInformation
   )
   // yield takeLatest(

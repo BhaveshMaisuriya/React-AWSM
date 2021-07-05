@@ -454,6 +454,13 @@ export const getRTSOderBank = params => {
   return get(url.GET_RTS_ORDER_BANK, { params: params })
 }
 
+export const refreshRTSOrderBank = params => {
+  return put(url.GET_RTS_ORDER_BANK, params)
+}
+
+export const sendRTSOrderBank = params => {
+  return put(url.GET_RTS_ORDER_BANK, params)
+}
 export {
   getLoggedInUser,
   isUserAuthenticated,

@@ -1,4 +1,5 @@
 import React, { Component, useState } from 'react';
+import { connect } from "react-redux"
 import PropTypes from 'prop-types';
 import Filter from "../../../components/Common/DataTable/filter"
 import { tableColumns, tableMapping } from "./tableMapping"
@@ -30,6 +31,7 @@ import NoDataIcon from "../../../assets/images/AWSM-No-Data-Available.svg"
 import DeleteOrderBankConfirmation from "../deleteOrderBankModal"
 import EditOrderBankModal from "../editOrderBankModal"
 import { isEqual } from "lodash"
+import { updateOrderBankTableData } from "../../../store/actions"
 
 class TableGroupEvent extends React.Component {
   constructor(props) {
@@ -140,6 +142,11 @@ class index extends Component {
             selectedAllItem:false,
             expandSearch:false,
             dataSource: props.dataSource,
+            filterCondition: [],
+            currentSort: {
+              key: null,
+              asc: false,
+            }
         }
     }
 
@@ -165,12 +172,34 @@ class index extends Component {
 
     onSearchTextChange(e) {}
 
+    onSorting(col) {
+      let newDataSource = [...this.state.dataSource]
+      let newSort = { ...this.state.currentSort }
+      if (newSort.key === col) {
+        newSort.asc = !newSort.asc
+      } else {
+        newSort = { key: col, asc: true }
+      }
+      newDataSource = newDataSource.sort((a, b) => {
+        if (a[col] < b[col]) {
+          return newSort.asc ? -1 : 1;
+        }
+        if (a[col] > b[col]) {
+          return newSort.asc ? 1 : -1;
+        }
+        return 0;
+      })
+      this.setState({ dataSource: newDataSource, currentSort: newSort })
+    }
+
     headerTableConfiguration = () => {
         const { fixedHeaders, filterData, expandSearch } = this.state
         return tableColumns.map(v => {
           return v != "search" ? (
             <th>
-              {tableMapping[v].label.toUpperCase()}
+              <span onClick={() => this.onSorting(v)}>
+                {tableMapping[v].label.toUpperCase()}
+              </span>
               <Filter
                 dataFilter={filterData}
                 dataKey={v}
@@ -253,11 +282,41 @@ class index extends Component {
         console.log(`reset:${column}`)
     }
 
+
+    ApplyFilterHandler = (data, key) => {
+      const { dataSource } = this.props
+      if (!dataSource) {
+        return
+      }
+      const newFilterCondition = [...this.state.filterCondition]
+      const index = newFilterCondition.findIndex(e => e.key === key)
+      if (index >= 0) {
+        newFilterCondition[index] = { key, data }
+      } else {
+        newFilterCondition.push({ key, data })
+      }
+      const newData = dataSource.filter(item =>
+        newFilterCondition.every(condition => {
+          if (condition.key === "dn_status" ||  condition.key === "priority") {
+            return isArray(item[condition.key]) && item[condition.key].some(e => condition.data.includes(e))
+          } else if (condition.key === "remarks") {
+            // TODO update remarks logic when filter component updated
+            return true
+          } else {
+            return condition.data.includes(item[condition.key])
+          }
+        })
+      )
+      this.setState({ filterCondition: newFilterCondition, dataSource: newData })
+    }
+
     OnChangeCheckBoxHandler = ( status, i) =>{
         const { dataSource } = this.state
+        const { updateOrderBankTableData } = this.props
         let data = [...dataSource]
         data[i].isChecked = status
         let temp = data.filter((v)=>v.isChecked)
+        updateOrderBankTableData(data)
         this.setState({ dataSource:data,selectedAllItem : temp.length == data.length ? true :false   })
     }
 
@@ -299,7 +358,7 @@ class index extends Component {
                           {
                             dataSource && dataSource.length ? dataSource.map((v) => {
                               return <tr>{this.bodyTableConfiguration(v)}</tr>
-                          }) : 
+                          }) :
                             (<tr><td colSpan={18} className={'rts-table-nodata'}>
                               <div>
                                 <img
@@ -319,5 +378,7 @@ class index extends Component {
 }
 
 index.propTypes = {}
-
-export default index
+const mapDispatchToProp = dispatch => ({
+  updateOrderBankTableData: payload => dispatch(updateOrderBankTableData(payload))
+})
+export default connect(null, mapDispatchToProp)(index)

@@ -4,7 +4,10 @@ import {
   GET_ORDERBANK,
   GET_ORDERBANK_TABLE_INFORMATION,
   UPDATE_ORDERBANK_TABLE_INFORMATION,
-  GET_RTS_ORDER_BANK_TABLE_DATA
+  DELETE_ORDERBANK_TABLE_INFORMATION,
+  GET_RTS_ORDER_BANK_TABLE_DATA,
+  SEND_ORDER_BANK_DN,
+  REFRESH_ORDER_BANK_DN,
 } from "./actionTypes"
 
 import {
@@ -18,12 +21,18 @@ import {
   deleteOrderBankDetailSuccess,
   updateOrderbankTableInformationSuccess,
   updateOrderbankTableInformationFail,
+  sendOrderBankDNFail,
+  sendOrderBankDNSuccess,
+  refreshOderBankDNFail,
+  refreshOderBankDNSuccess,
 } from "./actions"
 import {
   getOrderBank,
   getOrderBankDetail,
   getRTSOderBank,
   putOrderbankDetail,
+  sendRTSOrderBank,
+  refreshRTSOrderBank,
   deleteOrderBankDetail,
 } from "../../helpers/fakebackend_helper"
 
@@ -72,6 +81,24 @@ function* onGetRTSOrderBank({ params = {} }) {
 //   }
 // }
 
+function* onRefreshOrderBankDN({ params = {}}) {
+  try {
+    const response = yield call(refreshRTSOrderBank, params)
+    yield put(refreshOderBankDNSuccess(response))
+  } catch (error) {
+    yield put(refreshOderBankDNFail(error))
+  }
+}
+
+function* onSendOrderBankDN({ params = {}}) {
+  try {
+    const response = yield call(sendRTSOrderBank, params)
+    yield put(sendOrderBankDNSuccess(response))
+  } catch (error) {
+    yield put(sendOrderBankDNFail(error))
+  }
+}
+
 function* orderBankSaga() {
   yield takeLatest(GET_ORDERBANK, onGetOrderbank)
   yield takeLatest(GET_RTS_ORDER_BANK_TABLE_DATA, onGetRTSOrderBank)
@@ -87,6 +114,8 @@ function* orderBankSaga() {
   //   UPDATE_ORDERBANK_TABLE_INFORMATION,
   //   onPutOrderbankTableInformation
   // )
+  yield takeLatest(REFRESH_ORDER_BANK_DN, onRefreshOrderBankDN)
+  yield takeLatest(SEND_ORDER_BANK_DN, onSendOrderBankDN)
 }
 
 export default orderBankSaga

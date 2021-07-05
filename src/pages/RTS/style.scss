@@ -1,9 +1,9 @@
 .order_bank_main {
     margin-top: 15px;
     .row {
-        border-bottom: 1px solid #EEEEEE;
-        .nav-pills {
-            border-bottom: unset !important;
+        border-bottom: 1px solid #EEEEEE; 
+        .nav-pills { 
+             border-bottom: unset !important;
         }
     }
 }
@@ -182,6 +182,7 @@
 }
 .h-70v {
     height: 70vh;
+    overflow-x: hidden;
 }
 .h-80v {
     height: 80vh;

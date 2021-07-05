@@ -11,6 +11,13 @@ import {
   GET_ORDERBANK_TABLE_INFORMATION,
   GET_ORDERBANK_TABLE_INFORMATION_SUCCESS,
   GET_ORDERBANK_TABLE_INFORMATION_FAIL,
+  REFRESH_ORDER_BANK_DN,
+  REFRESH_ORDER_BANK_SUCCESS,
+  REFRESH_ORDER_BANK_DN_FAIL,
+  SEND_ORDER_BANK_DN,
+  SEND_ORDER_BANK_DN_SUCCESS,
+  SEND_ORDER_BANK_DN_FAIL,
+  UPDATE_ORDER_BANK_TABLE_DATA,
   DELETE_ORDERBANK_DETAIL,
   DELETE_ORDERBANK_DETAIL_SUCCESS,
   DELETE_ORDERBANK_DETAIL_FAIL,
@@ -76,6 +83,42 @@ export const updateOrderbankTableInformationSuccess = event => ({
 export const updateOrderbankTableInformationFail = error => ({
   type: UPDATE_ORDERBANK_TABLE_INFORMATION_FAIL,
   payload: error
+})
+
+export const refreshOderBankDN = (params) => ({
+  type: REFRESH_ORDER_BANK_DN,
+  params,
+})
+
+export const refreshOderBankDNSuccess = (response) => ({
+  type: REFRESH_ORDER_BANK_SUCCESS,
+  payload: response,
+})
+
+
+export const refreshOderBankDNFail = (error) => ({
+  type: REFRESH_ORDER_BANK_DN_FAIL,
+  payload: error,
+})
+
+export const sendOrderBankDN = (params) => ({
+  type: SEND_ORDER_BANK_DN,
+  params,
+})
+
+export const sendOrderBankDNSuccess = (response) => ({
+  type: SEND_ORDER_BANK_DN_SUCCESS,
+  payload: response,
+})
+
+export const sendOrderBankDNFail = (error) => ({
+  type: SEND_ORDER_BANK_DN_FAIL,
+  payload: error,
+})
+
+export const updateOrderBankTableData = (payload) => ({
+  type: UPDATE_ORDER_BANK_TABLE_DATA,
+  payload,
 })
 
 export const deleteOrderBankDetail = data => ({

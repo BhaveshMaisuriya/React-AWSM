@@ -30,9 +30,10 @@ import { Link } from "react-router-dom"
 import CustomizeTableModal from "../../common/CustomizeTable"
 import { tableColumns, tableMapping } from "./OrderBankTable/tableMapping"
 import { format } from "date-fns";
-import { getRTSOrderBankTableData } from "../../store/orderBank/actions"
+import { getRTSOrderBankTableData, sendOrderBankDN, refreshOderBankDN } from "../../store/orderBank/actions"
+import OrderBankActionModal from "./OrderBankActionModal"
 
-function OrderBank({ getRTSOrderBankTableData, orderBankTableData }) {
+function OrderBank({ getRTSOrderBankTableData, orderBankTableData, sendOrderBankDN, refreshOderBankDN}) {
   const [activeTab, setActiveTab] = useState("1")
   const [dropdownOpen, setOpen] = useState(false)
   const [showNewOrder, setShowNewOrder] = useState(false)
@@ -40,6 +41,8 @@ function OrderBank({ getRTSOrderBankTableData, orderBankTableData }) {
   const [searchFields, setSearchFields] = useState(tableColumns);
   const [region, setRegion] = useState(REGION_TERMINAL[0].region)
   const [terminal, setTerminal] = useState(REGION_TERMINAL[0].terminal[0])
+  const [refreshDNModal, setRefreshDNModal] = useState(false);
+  const [sendDNModal, setSendDNModal] = useState(false);
   const [shiftDate, setShiftDate] = useState({
     type: "single",
     days: [format(Date.now(), "yyyy-MM-dd")],
@@ -64,6 +67,10 @@ const onSettingClick = (val) => {
     setShowNewOrder(true);
   } else if (val === 'customizeCol'){
     setShowCustomize(true);
+  } else if (val === 'RefreshDN') {
+    setRefreshDNModal(true)
+  } else if (val === 'SendDN') {
+    setSendDNModal(true)
   }
 }
 const onCloseCustomize = () => {
@@ -81,6 +88,14 @@ useEffect(() => {
 const onTableColumnsChange = columns => {
   setSearchFields(columns);
   // getCustomerData();
+}
+
+const onSendOrderBankDN = () => {
+  sendOrderBankDN(orderBankTableData.filter(e => e.isChecked))
+}
+
+const onRefreshOrderBankDN = () => {
+  refreshOderBankDN(orderBankTableData.filter(e => e.isChecked))
 }
 
   return (
@@ -113,7 +128,7 @@ const onTableColumnsChange = columns => {
                   </div>
                 </Col>
                 <Col lg={9} md={9} sm={12} className="top_right_section">
-                  <div className='d-flex align-item-right '>                    
+                  <div className='d-flex align-item-right '>
                     <Link to="#" className='border-before'><img src={awsmLogo} height='25px' width='80px' className='ml-3' /></Link>
                     <Link to="#" className='border-before'><i className="bx bx-fullscreen ml-3"></i> Fullscreen</Link>
                     <Link to="#" className='border-before'><img src={eyeIcon} alt="info" className='ml-3' /> View Audit Log</Link>
@@ -223,6 +238,22 @@ const onTableColumnsChange = columns => {
               availableMetric={tableMapping}
               defaultMetric={searchFields}
             />
+            <OrderBankActionModal
+              open={sendDNModal}
+              title="Send Multiple for DN"
+              subTitle="This action cannot be undone, are you sure you want to send this multiple orders for DN Creation? "
+              onClose={() => setSendDNModal(false)}
+              onSubmit={onSendOrderBankDN}
+              type="SendDN"
+            />
+            <OrderBankActionModal
+              open={refreshDNModal}
+              title="Refresh Blocked DN"
+              subTitle="This action cannot be undone, are you sure you want to refresh all Blocked DN? "
+              onClose={() => setRefreshDNModal(false)}
+              onSubmit={onRefreshOrderBankDN}
+              type="RefreshDN"
+            />
           </Card>
         </div>
       </div>
@@ -231,7 +262,9 @@ const onTableColumnsChange = columns => {
 }
 
 const mapDispatchToProps = dispatch => ({
-  getRTSOrderBankTableData: params => dispatch(getRTSOrderBankTableData(params))
+  getRTSOrderBankTableData: params => dispatch(getRTSOrderBankTableData(params)),
+  refreshOderBankDN: params => dispatch(refreshOderBankDN(params)),
+  sendOrderBankDN: params => dispatch(sendOrderBankDN(params)),
 })
 
 const mapStateToProps = ({ orderBank }) => ({

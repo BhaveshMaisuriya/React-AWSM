@@ -324,11 +324,12 @@ class index extends Component {
         this.setState({ dataSource:data,selectedAllItem : temp.length == data.length ? true :false   })
         let checkedData = [];
         data.map((item, index)=>{
-          if(item.isChecked === true){
+          if(item.isChecked === true){            
             checkedData.push(item);
           }
         })
-        let checkCross = checkedData.filter((v)=>(v.product_category === "ASR" || v.product_category === "SMP"))
+        
+        let checkCross = checkedData.filter((v)=>(v.product_category === "ASR" || v.product_category === "SMP"))        
         this.props.enabledCross(checkCross.length);
     }
 

@@ -57,7 +57,7 @@ class TableGroupEvent extends React.Component {
 
   onChangeCheckBox(e) {
     const { Onchange, index } = this.props
-    Onchange(e.target.checked, index)
+    Onchange(e.target.checked, index)    
   }
 
   deleteOrder = async() => {
@@ -269,7 +269,6 @@ class index extends Component {
 
     OnDeleteRecords = async(allData) => {
       const { onGetDeleteOrderBankDetail } = this.props
-      console.log("allDats::", this.props.allData);
       await onGetDeleteOrderBankDetail(allData.name);
     }
 
@@ -323,6 +322,14 @@ class index extends Component {
         let temp = data.filter((v)=>v.isChecked)
         updateOrderBankTableData(data)
         this.setState({ dataSource:data,selectedAllItem : temp.length == data.length ? true :false   })
+        let checkedData = [];
+        data.map((item, index)=>{
+          if(item.isChecked === true){
+            checkedData.push(item);
+          }
+        })
+        let checkCross = checkedData.filter((v)=>(v.product_category === "ASR" || v.product_category === "SMP"))
+        this.props.enabledCross(checkCross.length);
     }
 
     OnSelectedAllItems = () =>{

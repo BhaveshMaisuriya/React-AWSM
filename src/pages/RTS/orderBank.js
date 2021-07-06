@@ -12,7 +12,6 @@ import {
   TabPane,
   TabContent,
   ButtonDropdown,
-  DropdownItem,
   Dropdown, DropdownMenu, DropdownToggle, Button
 } from "reactstrap"
 import "./style.scss"
@@ -32,10 +31,21 @@ import { tableColumns, tableMapping } from "./OrderBankTable/tableMapping"
 import { format } from "date-fns";
 import { getRTSOrderBankTableData, sendOrderBankDN, refreshOderBankDN } from "../../store/orderBank/actions"
 import OrderBankActionModal from "./OrderBankActionModal"
+import CrossTerminalModal from "./crossTerminalModal"
 
 function OrderBank({ getRTSOrderBankTableData, orderBankTableData, sendOrderBankDN, refreshOderBankDN}) {
+
+  let orderBankSettings = [
+    {disabled: false, 'value': 'newOrder', 'label': 'Add New Order', 'icon' : customiseTableIcon },
+    {disabled: false, 'value': 'customizeCol', 'label': 'Customize Column', 'icon' : customiseTableIcon },
+    // {disabled: false, 'value': 'RefreshDN', 'label': 'Refresh Blocked DN', 'icon' : customiseTableIcon },
+    {disabled: true, 'value': 'CrossTerminal', 'label': 'Cross Terminal', 'icon' : customiseTableIcon },
+    {disabled: true, 'value': 'SendDN', 'label': 'Send Multiple for DN', 'icon' : customiseTableIcon },
+];
+
   const [activeTab, setActiveTab] = useState("1")
   const [dropdownOpen, setOpen] = useState(false)
+  const [crossTerminal, setCrossTerminal] = useState(false)
   const [showNewOrder, setShowNewOrder] = useState(false)
   const [showCustomize, setShowCustomize] = useState(false)
   const [searchFields, setSearchFields] = useState(tableColumns);
@@ -47,20 +57,13 @@ function OrderBank({ getRTSOrderBankTableData, orderBankTableData, sendOrderBank
     type: "single",
     days: [format(Date.now(), "yyyy-MM-dd")],
   })
+  const [orderBankSetting, setOrderBankSetting] = useState(orderBankSettings);
 
   const toggle = () => setOpen(!dropdownOpen)
   const terminalList = useMemo(() => {
     const currentRegion = REGION_TERMINAL.find(e => e.region === region)
     return currentRegion ? currentRegion.terminal : []
   }, [region]);
-
-  let orderBankSettings = [
-    {'value': 'newOrder', 'label': 'Add New Order', 'icon' : customiseTableIcon },
-    {'value': 'customizeCol', 'label': 'Customize Column', 'icon' : customiseTableIcon },
-    {'value': 'RefreshDN', 'label': 'Refresh Blocked DN', 'icon' : customiseTableIcon },
-    {'value': 'CrossTerminal', 'label': 'Cross Terminal', 'icon' : customiseTableIcon },
-    {'value': 'SendDN', 'label': 'Send Multiple for DN', 'icon' : customiseTableIcon },
-];
 
 const onSettingClick = (val) => {
   if(val === 'newOrder'){
@@ -71,14 +74,32 @@ const onSettingClick = (val) => {
     setRefreshDNModal(true)
   } else if (val === 'SendDN') {
     setSendDNModal(true)
+  } else if (val === 'CrossTerminal'){
+    setCrossTerminal(true);
   }
 }
 const onCloseCustomize = () => {
   setShowCustomize(false);
 }
 
+const onCloseCrossTerminal = () => {
+  setCrossTerminal(false);
+}
+
 const onCloseNewOrder = () => {
   setShowNewOrder(false);
+}
+
+const enabledCross = (val) => {  
+  if(val > 0){
+    let temp = [...orderBankSetting];
+    temp.map(function(item, index) {      
+      if((item.value === 'CrossTerminal') || (item.value === 'SendDN')){             
+        item.disabled = false;        
+      }
+    })
+    setOrderBankSetting(temp);
+  }
 }
 
 useEffect(() => {
@@ -199,22 +220,23 @@ const onRefreshOrderBankDN = () => {
                                 right
                                 className="awsm-option-button-content"
                               >
-                                {orderBankSettings.map((option, index) => (
-                                  <div
-                                    className="d-flex align-items-center p-2 awsm-option-button-content-item order-setting-options"
-                                    onClick={() => onSettingClick(option.value)}
-                                  >
-                                    {option.icon && <img src={option.icon} />}
-                                    <div className="pl-2" key={index}>
-                                      {option.label}
-                                    </div>
-                                  </div>
-                                ))}
+                                {orderBankSetting.map((option, index) => {
+                                  return(
+                                    <MenuItem disabled={option.disabled}
+                                      onClick={() => onSettingClick(option.value)}
+                                    >
+                                      {option.icon && <img src={option.icon} />}
+                                      <div className="pl-2" disabled key={index}>
+                                        {option.label}
+                                      </div>
+                                    </MenuItem>
+                                  )
+                                })}
                               </DropdownMenu>
                             </Dropdown>
                           </Col>
                       </Row>
-                      <OrderBankTable dataSource={orderBankTableData || []}/>
+                      <OrderBankTable dataSource={orderBankTableData || []} enabledCross={enabledCross} />
                       </div>
                     </div>
                   </TabPane>
@@ -227,6 +249,11 @@ const onRefreshOrderBankDN = () => {
             <NewOrderModal
               open={showNewOrder}
               onCancel={onCloseNewOrder}
+            />
+            <CrossTerminalModal
+              open={crossTerminal}
+              onCancel={onCloseCrossTerminal}
+              onSave={onCloseCrossTerminal}
             />
             <CustomizeTableModal
               open={showCustomize}

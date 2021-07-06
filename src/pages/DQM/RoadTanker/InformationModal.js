@@ -21,7 +21,8 @@ import AWSMAlert from "../../../components/Common/AWSMAlert/index"
 
 import {
   getRoadTankerDetail,
-  updateRoadTankerDetail
+  updateRoadTankerDetail,
+  resetCurrentRoadTankerData
 } from "../../../store/actions"
 import { connect } from "react-redux"
 import ExitConfirmation from "../../../components/Common/ExitConfirmation"
@@ -35,7 +36,7 @@ class InformationModal extends Component {
     this.state = {
       activeTab: "1",
       mode: MODE.VIEW_AND_AMEND,
-      showAlert: true,
+      showAlert: false,
       userRole: {
         scheduler: false,
       },
@@ -43,6 +44,10 @@ class InformationModal extends Component {
       data: props.currentRoadTanker,
       isConfirm: false,
     }
+  }
+
+  componentWillUnmount(){
+    this.props.onResetCurrentRoadTankerDetail()
   }
 
   componentDidMount() {
@@ -55,12 +60,7 @@ class InformationModal extends Component {
 
   componentWillReceiveProps(nextProps){
     if(!isEqual(nextProps.currentRoadTanker,this.props.currentRoadTanker)){
-      this.setState({data:nextProps.currentRoadTanker,updateSuccess:nextProps.isUpdateSuccess})
-      return
-    }
-    if((this.props.isUpdateSuccess != nextProps.isUpdateSuccess)){
-      this.setState({updateSuccess:nextProps.isUpdateSuccess})
-      return
+      this.setState({data:nextProps.currentRoadTanker})
     }
   }
 
@@ -93,7 +93,7 @@ class InformationModal extends Component {
     const handleUpdate = e => {
       e.preventDefault()
       onUpdateRoadTankerDetail({ vehicle_name:data.vehicle,data})
-      this.setState({ updateSuccess: true })
+      this.onConfirmExit()
     }
 
     const toggleAlert = () => {
@@ -119,14 +119,14 @@ class InformationModal extends Component {
             >
               Update
             </Button>{" "}
-            <AWSMAlert
+            {/* <AWSMAlert
               status="success"
               message="Update Success !"
               openAlert={this.state.updateSuccess}
               closeAlert={() => {
                 this.setState({ updateSuccess: false })
               }}
-            />
+            /> */}
           </ModalFooter>
         ) : null
       return footer
@@ -301,7 +301,8 @@ const mapStateToProps = ({ roadTanker }) => ({
 
 const mapDispatchToProps = dispatch => ({
   onGetRoadTankerDetail: params => dispatch(getRoadTankerDetail(params)),
-  onUpdateRoadTankerDetail: params =>dispatch(updateRoadTankerDetail(params))
+  onUpdateRoadTankerDetail: params =>dispatch(updateRoadTankerDetail(params)),
+  onResetCurrentRoadTankerDetail: () => dispatch(resetCurrentRoadTankerData())
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(InformationModal)

@@ -1,13 +1,14 @@
 .table-information {
   border-radius: 4px;
-  box-shadow: 0 2px 10px 0 rgba(0,0,0,0.05);
-  .form-control:disabled, .form-control[readonly] {
-      border: 1px solid #D9D9D9;
-      background-color: #EEEEEE;
+  box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.05);
+  .form-control:disabled,
+  .form-control[readonly] {
+    border: 1px solid #d9d9d9;
+    background-color: #eeeeee;
   }
 }
 
-.modalTIContainer{
+.modalTIContainer {
   height: 100% !important;
 }
 
@@ -32,7 +33,6 @@
   line-height: 16px;
   margin: 0px 0px 5px 5px;
   padding: 0px 0px 5px 5px;
-
 }
 
 .modal-title {
@@ -50,17 +50,17 @@
 
 .modal-lg {
   button {
-    height:40px;
+    height: 40px;
     width: 120px;
   }
 
   .btn-sec {
     box-sizing: border-box;
-    border: 1px solid #CBEFED;
+    border: 1px solid #cbefed;
     border-radius: 4px;
     background-color: white;
-    color: #00A19C !important;
-    :hover{
+    color: #00a19c !important;
+    :hover {
       background-color: white;
     }
   }
@@ -70,9 +70,9 @@
   border-radius: 4px 4px 0px 0px;
   .nav-link {
     span {
-        color: white;
+      color: white;
     }
-    background-color: #00A19C;
+    background-color: #00a19c;
   }
 }
 
@@ -83,12 +83,12 @@
 }
 
 #done {
-  color: #BDBDBD;
+  color: #bdbdbd;
   font-size: 12px;
 }
 
 .active-btn {
-  color:#00A19C !important;
+  color: #00a19c !important;
 }
 
 .trailer {
@@ -103,23 +103,19 @@
   margin-top: 20px;
 }
 
-.Mui-selected{
-  background-color: #E0F4F3 !important;
+.Mui-selected {
+  background-color: #e0f4f3 !important;
 }
 
 .MuiOutlinedInput-root .form-control {
-  border: 1px #E0F4F3 solid !important;
+  border: 1px #e0f4f3 solid !important;
 }
 
-.Mui-focused {
-  border: 1px #E0F4F3 solid !important;
+fieldset {
+  border-color: white !important;
 }
 
-fieldset{
-  border-color:white !important;
-}
-
-.delete-btn{
+.delete-btn {
   color: red;
   position: absolute;
   right: 0px;
@@ -130,28 +126,28 @@ ul {
   }
 }
 
-.MuiSelect-root{
+.MuiSelect-root {
   font-size: 12px !important;
 }
 
-.add-restriction{
-  border: #00A19C solid 1px;
+.add-restriction {
+  border: #00a19c solid 1px;
   input {
     border-right: 0px;
   }
 }
 
 .btn-auto-fill {
-  color: #00A19C !important;
+  color: #00a19c !important;
   border-left: 0px !important;
 }
 
 #restriction {
-  color: #00A19C;
+  color: #00a19c;
 }
 
-.Mui-checked{
-  color: #00A19C !important;
+.Mui-checked {
+  color: #00a19c !important;
 }
 
 ul li div span {
@@ -163,11 +159,11 @@ ul li div span {
 
 .MuiSvgIcon-root {
   border-radius: 4px;
-  border: #CBEFED none;
+  border: #cbefed none;
 }
 
-.PrivateSwitchBase-input{
-  border: #CBEFED none;
+.PrivateSwitchBase-input {
+  border: #cbefed none;
   border-radius: 4px;
 }
 
@@ -178,14 +174,13 @@ ul li div span {
 .MuiListItem-root {
   line-height: 1 !important;
 }
-.collapse{
+.collapse {
   display: flex;
 }
 
 .alert {
   width: fit-content;
-  border: 0.5px solid #4CAF50;
-
+  border: 0.5px solid #4caf50;
 }
 
 .yes-noBtn {
@@ -193,7 +188,6 @@ ul li div span {
   a {
     color: red;
   }
-  
 }
 
 // input[type="checkbox"] {

@@ -21,7 +21,8 @@ import {
   GET_DOWNLOAD_SALES_FAIL,
   GET_DETAIL_SALES,
   GET_DETAIL_SALES_SUCCESS,
-  GET_DETAIL_SALES_FAIL
+  GET_DETAIL_SALES_FAIL,
+  OVERRIDE_STATUS_IN_ACTION_COLUMN
 } from "./actionTypes"
 
 export const getSalesAndInventoryVarianceControl = date => {
@@ -45,9 +46,10 @@ export const getSalesAndInventoryVarianceControlFailed = error => {
   }
 }
 
-export const updateSalesAndInventoryVarianceControl = () => {
+export const updateSalesAndInventoryVarianceControl = (data) => {
   return {
     type: UPDATE_SALES_AND_INVENTORY_VARIANCE_CONTROL,
+    data,
   }
 }
 export const updateSaleAndInventoryVarianceControlSuccess = data => {
@@ -155,5 +157,10 @@ export const getDetailsSalesSuccess = response => ({
 export const getDetailsSalesFail = error => ({
   type: GET_DETAIL_SALES_FAIL,
   payload: error,
+})
+
+export const overrideStatusInActionColumn = params => ({
+  type: OVERRIDE_STATUS_IN_ACTION_COLUMN,
+  payload: params,
 })
 

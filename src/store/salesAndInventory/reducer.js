@@ -12,7 +12,10 @@ import {
   GET_DOWNLOAD_SALES_SUCCESS,
   GET_DOWNLOAD_SALES_FAIL,
   GET_DETAIL_SALES_SUCCESS,
-  GET_DETAIL_SALES_FAIL
+  GET_DETAIL_SALES_FAIL,
+  UPDATE_SALES_AND_INVENTORY_VARIANCE_CONTROL_SUCCESS,
+  UPDATE_SALES_AND_INVENTORY_VARIANCE_CONTROL_FAILED,
+  OVERRIDE_STATUS_IN_ACTION_COLUMN
 } from "./actionTypes"
 
 const initialState = {
@@ -98,6 +101,26 @@ const SaleAndInventory = (state = initialState, action) => {
       return {
         ...state,
         error: action.payload,
+      }
+    case UPDATE_SALES_AND_INVENTORY_VARIANCE_CONTROL_SUCCESS:
+      return {
+        ...state,
+        varianceControlData: action.payload,
+        varianceControlError: null,
+      }
+    case UPDATE_SALES_AND_INVENTORY_VARIANCE_CONTROL_FAILED:
+      return {
+        ...state,
+        varianceControlData: null,
+        varianceControlError: action.payload,
+      }
+    case OVERRIDE_STATUS_IN_ACTION_COLUMN:
+      const listData = state.mainTableData
+      const newData = [...listData.list]
+      newData[action.payload].overrideAction = true
+      return {
+        ...state,
+        mainTableData: listData
       }
     default:
       return state

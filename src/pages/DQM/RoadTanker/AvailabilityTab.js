@@ -20,7 +20,6 @@ class AvailabilityTab extends PureComponent {
 
   render() {
     const { mode, scheduler, data, onChange } = this.props
-
     return (
       <div className="availability">
         <form>

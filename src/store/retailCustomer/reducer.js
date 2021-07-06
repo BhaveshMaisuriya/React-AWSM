@@ -1,6 +1,7 @@
 import {
   GET_RETAIL_CUSTOMER_FAIL,
   GET_RETAIL_CUSTOMER_SUCCESS,
+  GET_RETAIL_CUSTOMER,
   GET_RETAIL_AUDITLOG_SUCCESS,
   GET_RETAIL_AUDITLOG_FAIL,
   GET_TABLE_INFORMATION_FAIL,
@@ -11,7 +12,7 @@ import {
   GET_RETAIL_FILTER_SUCCESS,
   GET_RETAIL_FILTER_FAIL,
   GET_DOWNLOAD_RETAIL_CUSTOMER_SUCCESS,
-  GET_DOWNLOAD_RETAIL_CUSTOMER_FAIL
+  GET_DOWNLOAD_RETAIL_CUSTOMER_FAIL,
 } from "./actionTypes"
 
 const initialState = {
@@ -23,21 +24,29 @@ const initialState = {
   currentRetailDetail: null,
   updateSuccess: false,
   downloadretailCustomers: [],
+  isLoading: false,
 }
 import { notify } from "../../helpers/notify"
 
 const RetailCustomer = (state = initialState, action) => {
   switch (action.type) {
+    case GET_RETAIL_CUSTOMER:
+      return {
+        ...state,
+        isLoading: true,
+      }
     case GET_RETAIL_CUSTOMER_SUCCESS:
       return {
         ...state,
         retailCustomers: action.payload,
+        isLoading: false,
       }
 
     case GET_RETAIL_CUSTOMER_FAIL:
       return {
         ...state,
         retailCustomers: action.payload,
+        isLoading: false,
       }
 
     case GET_DOWNLOAD_RETAIL_CUSTOMER_SUCCESS:
@@ -90,7 +99,6 @@ const RetailCustomer = (state = initialState, action) => {
         ...state,
       }
     }
-
 
     case UPDATE_TABLE_INFORMATION_FAIL: {
       notify.error(action.payload)

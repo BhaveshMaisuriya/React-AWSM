@@ -67,7 +67,7 @@ function* onGetSalesAndInventoryVarianceControl({ date }) {
 function* onUpdateSalesAndInventoryVarianceControl({ data }) {
   try {
     const response = yield call(updateSaleAndInventoryVarianceControl, data)
-    yield put(updateSalesAndInventoryTankStatusModalSuccess(response))
+    yield put(updateSalesAndInventoryTankStatusModalSuccess(data))
   } catch (error) {
     yield put(updateSalesAndInventoryVarianceControlFailed(error))
   }

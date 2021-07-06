@@ -14,8 +14,10 @@ import {
   GET_ROAD_TANKER_DETAIL_SUCCESS,
   GET_ROAD_TANKER_DETAIL_FAIL,
   UPDATE_ROAD_TANKER_DETAIL_SUCCESS,
-  UPDATE_ROAD_TANKER_DETAIL_FAIL
+  UPDATE_ROAD_TANKER_DETAIL_FAIL,
+  RESET_CURRENT_ROAD_TANKER_DATA
 } from "./actionTypes"
+import { notify } from "../../helpers/notify"
 
 const initialState = {
   roadTanker: [],
@@ -110,13 +112,18 @@ const RoadTanker = (state = initialState, action) => {
         ...state,
         currentRoadTanker: action.payload
       }
-
+    case RESET_CURRENT_ROAD_TANKER_DATA:
+      return {
+        ...state,
+        currentRoadTanker: {}
+      }
     case GET_ROAD_TANKER_DETAIL_FAIL:
       return {
         ...state,
         error: action.payload
       }
     case UPDATE_ROAD_TANKER_DETAIL_SUCCESS:
+      notify.success("Record Successfully Updated")
       let newRoadTanker = {...state.roadTanker}
       let newData = newRoadTanker.list
       const index = newData.findIndex((v)=>v.vehicle === action?.payload?.data?.vehicle)

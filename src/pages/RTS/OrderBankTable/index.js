@@ -61,8 +61,8 @@ class TableGroupEvent extends React.Component {
   }
 
   deleteOrder = async() => {
-    this.setState({ isOpenDeleteModal: false });
-    this.props.deleteRecords(this.props.allData);
+    this.setState({ isOpenDeleteModal: false })
+    this.props.deleteRecords(this.props.allData)
   }
 
   render() {
@@ -143,6 +143,7 @@ class index extends Component {
             selectedAllItem:false,
             expandSearch:false,
             dataSource: props.dataSource,
+            searchText:"",
             filterCondition: [],
             currentSort: {
               key: null,
@@ -171,7 +172,17 @@ class index extends Component {
         }
     }
 
-    onSearchTextChange(e) {}
+    onSearchTextChange(e) {
+      this.setState({searchText:e.target.value})
+    }
+
+    applyExpandSearchHandler = () =>{
+      let { searchText } = this.state
+      const { dataSource } = this.props
+      let newData = [...dataSource].filter((e)=>e.search.includes(searchText))
+      this.setState({ dataSource : newData })
+
+    }
 
     onSorting(col) {
       let newDataSource = [...this.state.dataSource]
@@ -194,7 +205,7 @@ class index extends Component {
     }
 
     headerTableConfiguration = () => {
-        const { fixedHeaders, filterData, expandSearch } = this.state
+        const { fixedHeaders, filterData, expandSearch, searchText  } = this.state
         return tableColumns.map(v => {
           return v != "search" ? (
             <th>
@@ -227,6 +238,7 @@ class index extends Component {
                   <Input
                     placeholder="Search"
                     onChange={this.onSearchTextChange.bind(this)}
+                    defaultValue={searchText}
                     style={{
                       fontFamily: "Museo Sans",
                     }}
@@ -235,6 +247,7 @@ class index extends Component {
                     className="position-absolute search-icon"
                     src={searchIcon}
                     alt="search"
+                    onClick={this.applyExpandSearchHandler}
                   />
                 </div>
               </th>
@@ -269,7 +282,7 @@ class index extends Component {
 
     OnDeleteRecords = async(allData) => {
       const { onGetDeleteOrderBankDetail } = this.props
-      await onGetDeleteOrderBankDetail(allData.name);
+      await onGetDeleteOrderBankDetail(allData.name)
     }
 
     DataOfTableFixed = () => {
@@ -283,22 +296,8 @@ class index extends Component {
         })
     }
 
-    ResetDataFilterHandler = column => {
-        console.log(`reset:${column}`)
-    }
-
-    ApplyFilterHandler = (data, key) => {
+    ChangeFilterCondition = (newFilterCondition) => {
       const { dataSource } = this.props
-      if (!dataSource) {
-        return
-      }
-      const newFilterCondition = [...this.state.filterCondition]
-      const index = newFilterCondition.findIndex(e => e.key === key)
-      if (index >= 0) {
-        newFilterCondition[index] = { key, data }
-      } else {
-        newFilterCondition.push({ key, data })
-      }
       const newData = dataSource.filter(item =>
         newFilterCondition.every(condition => {
           if (condition.key === "dn_status" ||  condition.key === "priority") {
@@ -311,7 +310,33 @@ class index extends Component {
           }
         })
       )
-      this.setState({ filterCondition: newFilterCondition, dataSource: newData })
+      this.setState({ dataSource: newData, filterCondition: newFilterCondition })
+    }
+
+    ResetDataFilterHandler = (key) => {
+      const { filterCondition } = this.state
+      const index = filterCondition.findIndex(e => e.key === key)
+      let newFilterCondition = [...filterCondition]
+      if (index >= 0) {
+        newFilterCondition.splice(index, 1)
+      }
+      this.ChangeFilterCondition(newFilterCondition)
+    }
+
+
+      ApplyFilterHandler = (data, key) => {
+      const { dataSource } = this.props
+      if (!dataSource) {
+        return
+      }
+      const newFilterCondition = [...this.state.filterCondition]
+      const index = newFilterCondition.findIndex(e => e.key === key)
+      if (index >= 0) {
+        newFilterCondition[index] = { key, data }
+      } else {
+        newFilterCondition.push({ key, data })
+      }
+      this.ChangeFilterCondition(newFilterCondition)
     }
 
     OnChangeCheckBoxHandler = ( status, i) =>{

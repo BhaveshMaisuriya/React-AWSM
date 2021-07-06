@@ -124,7 +124,7 @@ const VarianceTable = ({ headers = [], items = [], scheduler, onChange, rowKey="
   )
 }
 
-const VarianceControl = ({ open, scheduler, closeDialog, onChange, getSalesAndInventoryVarianceControl, varianceControlData }) => {
+const VarianceControl = ({ open, scheduler, closeDialog, onChange, getSalesAndInventoryVarianceControl, varianceControlData, updateSalesAndInventoryVarianceControl }) => {
   const [data, setData] = useState({ ...varianceControlData, date: format(new Date(), "yyyy-MM-dd")});
   const [isConfirm, setIsConfirm] = useState(false);
 
@@ -160,6 +160,7 @@ const VarianceControl = ({ open, scheduler, closeDialog, onChange, getSalesAndIn
     if (onChange) {
       onChange()
     }
+    updateSalesAndInventoryVarianceControl(data)
     if (closeDialog) {
       closeDialog()
     }

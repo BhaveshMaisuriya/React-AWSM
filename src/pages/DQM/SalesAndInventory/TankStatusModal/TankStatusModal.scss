@@ -5,8 +5,6 @@
 }
 .item{
     vertical-align: middle !important;
-    border-bottom:2px solid #D9D9D9 !important;
-    border-top:2px solid #D9D9D9 !important;
     box-sizing: border-box;
     font-family: "Museo Sans";
     font-weight: 500;
@@ -32,7 +30,7 @@
         padding:1.5rem 1.5rem 0 1.5rem;
         margin-left: -15px;
         margin-right: -15px;
-        border-top:2px solid rgba(0,0,0,0.05);
+        border-top:2px solid rgba(0,0,0,0.05);  
     }
     .capacity{
         .capacity-title{
@@ -56,6 +54,13 @@
         text-transform: uppercase;
         color: #000000;
         font-weight: 700;
+        border-bottom:2px solid #D9D9D9 !important;
+        border-top:2px solid #D9D9D9 !important;
+    }
+    tbody{
+        tr{
+            border-bottom:2px solid #D9D9D9 !important;
+        }
     }
  }
 .tank_status{

@@ -3,8 +3,8 @@ const varianceControl = {
   sales: [
     {
       station_tank_status: "LV1",
-      variance_value: "123",
-      variance_percentage: "50",
+      variance_value: "50000",
+      variance_percentage: "20000",
     },
     {
       station_tank_status: "LV2",
@@ -25,7 +25,7 @@ const varianceControl = {
   inventory: [
     {
       station_tank_status: "LV1",
-      variance_value: "123",
+      variance_value: "50000",
       variance_percentage: "50",
     },
     {

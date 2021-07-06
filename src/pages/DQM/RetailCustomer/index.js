@@ -7,7 +7,7 @@ import {
   // getRetailFilter,
   getTableInformation,
   updateTableInformation,
-  getDownloadRetailCustomer
+  getDownloadRetailCustomer,
 } from "../../../store/actions"
 import { tableColumns, tableMapping } from "./tableMapping"
 import { transformArrayToString, getCookieByKey } from "../Common/helper"
@@ -53,21 +53,21 @@ class RetailCustomer extends Component {
     // onGetTableInformation()
   }
 
-  GetonDownload = async(currentPage) => {
+  GetonDownload = async currentPage => {
     const downloadParams = {
       limit: 10,
       page: currentPage,
-      search_fields: '*',
+      search_fields: "*",
     }
-    const { onGetDownloadRetailCustomer } = this.props;
-    await onGetDownloadRetailCustomer(downloadParams);
+    const { onGetDownloadRetailCustomer } = this.props
+    await onGetDownloadRetailCustomer(downloadParams)
   }
 
   render() {
     const {
       onGetRetailCustomer,
       onGetRetailAuditLog,
-      // onGetRetailFilter,
+      retailCustomerIsLoading,
       onGetTableInformation,
       onUpdateTableInformation,
       retailCustomer,
@@ -77,14 +77,14 @@ class RetailCustomer extends Component {
       downloadretailCustomer,
     } = this.props
     const { searchFields } = this.state
-    if (!retailCustomer || retailCustomer.length === 0) return (<Loader />)
+    if (!retailCustomer || retailCustomer.length === 0) return <Loader />
     return (
       <Fragment>
+        {retailCustomerIsLoading ? <Loader /> : ""}
         <Page
           tableName={RetailTableName}
           onGetCustomer={onGetRetailCustomer}
           onGetAuditLog={onGetRetailAuditLog}
-          // onGetFilter={onGetRetailFilter}
           onGetTableInformation={onGetTableInformation}
           onUpdateTableInformation={onUpdateTableInformation}
           tableColumns={searchFields}
@@ -106,6 +106,7 @@ class RetailCustomer extends Component {
 
 const mapStateToProps = ({ retailCustomer }) => ({
   retailCustomer: retailCustomer.retailCustomers,
+  retailCustomerIsLoading: retailCustomer.isLoading,
   audits: retailCustomer.audits,
   filter: retailCustomer.filter,
   address: retailCustomer.address,
@@ -118,7 +119,8 @@ const mapDispatchToProps = dispatch => ({
   // onGetRetailFilter: payload => dispatch(getRetailFilter(payload)),
   onGetTableInformation: () => dispatch(getTableInformation()),
   onUpdateTableInformation: event => dispatch(updateTableInformation(event)),
-  onGetDownloadRetailCustomer: params => dispatch(getDownloadRetailCustomer(params)),
+  onGetDownloadRetailCustomer: params =>
+    dispatch(getDownloadRetailCustomer(params)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(RetailCustomer)

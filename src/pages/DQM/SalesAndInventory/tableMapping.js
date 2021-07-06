@@ -28,6 +28,7 @@ const tableMapping = {
   override: {
     label: "OVERRIDE ACTION",
     columnSize: "cell-text",
+    type:"override"
   },
   data_source: {
     label: "SOURCE OF DATA",
@@ -73,16 +74,16 @@ const tableMapping = {
     label: "SALES VARIANCE (L)",
     columnSize: "cell-text",
     type: "color",
-    getColor: value => {
-      return value === "G" ? "green-text" : "red-text"
+    getColor: (value, threshold) => {
+      return Math.abs(value) <= threshold ? "green-text" : "red-text"
     },
   },
   sales_variance_percentage: {
     label: "SALES VARIANCE (%)",
     columnSize: "cell-text",
     type: "color",
-    getColor: value => {
-      return value === "G" ? "green-text" : "red-text"
+    getColor: (value, threshold) => {
+      return Math.abs(value) <= threshold ? "green-text" : "red-text"
     },
   },
   dipping_value: {
@@ -169,16 +170,16 @@ const tableMapping = {
     label: "INVENTORY VARIANCE (L)",
     columnSize: "cell-text",
     type: "color",
-    getColor: value => {
-      return value === "G" ? "green-text" : "red-text"
+    getColor: (value, threshold) => {
+      return Math.abs(value) <= threshold ? "green-text" : "red-text"
     },
   },
   inventory_variance_percentage: {
     label: "INVENTORY VARIANCE (%)",
     columnSize: "cell-text",
     type: "color",
-    getColor: value => {
-      return value === "G" ? "green-text" : "red-text"
+    getColor: (value, threshold) => {
+      return Math.abs(value) <= threshold ? "green-text" : "red-text"
     },
   },
   // total_delivery: {

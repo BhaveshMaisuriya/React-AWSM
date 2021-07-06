@@ -5,6 +5,22 @@
     format("truetype");
 }
 
+.page-header {
+  height: 24px;
+  color: #333333;
+  font-family: "Museo Sans";
+  font-weight: 700;
+  font-size: 24px;
+  margin-bottom: 23px !important;
+  letter-spacing: 0.25px;
+  line-height: 24px;
+  padding-left: 0.5em;
+}
+
+.card-content {
+  padding: 23px 29px 30px 30px !important;
+}
+
 .table-header {
   height: 24px;
   color: #333333;
@@ -173,7 +189,7 @@
   }
 }
 .Download-excel {
-  border-right: 1px solid #D9D9D9;
+  border-right: 1px solid #d9d9d9;
   button {
     background: #fff;
     border: unset;
@@ -186,7 +202,7 @@
 }
 
 .vertical-hr-right {
-  border-right: 1px solid #D9D9D9;
+  border-right: 1px solid #d9d9d9;
   button {
     background: #fff;
     border: unset;
@@ -196,7 +212,7 @@
 }
 
 .vertical-hr-left {
-  border-left: 1px solid #D9D9D9;
+  border-left: 1px solid #d9d9d9;
 }
 
 .Confirmation-box {
@@ -207,11 +223,11 @@
     text-align: center;
     top: 40%;
   }
-  h3{
+  h3 {
     color: #000;
     margin-bottom: 15px;
   }
-  p{
+  p {
     margin-bottom: 25px;
   }
   button {
@@ -224,7 +240,7 @@
   margin: 0 1rem;
   width: 1px;
   height: 40px;
-  background-color: #EEEEEE;
+  background-color: #eeeeee;
 }
 .modal-button {
   height: 40px;

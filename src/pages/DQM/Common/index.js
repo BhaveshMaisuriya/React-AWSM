@@ -101,6 +101,7 @@ class Pages extends Component {
       sort_field: sortField,
     }
     if (params.q.length < 1) delete params.q
+    window.scrollTo(0, 0)
     await onGetCustomer(params)
   }
 
@@ -300,6 +301,8 @@ class Pages extends Component {
       headerTitle,
       downloadtableData,
       frozenColNum,
+      varianceControlData,
+      overrideActionColumn
     } = this.props
 
     if (!tableData || tableData.length === 0) return ""
@@ -343,7 +346,7 @@ class Pages extends Component {
         <div className="page-content">
           <div className="container-fluid">
             <div className={classes.modalHeader}>
-              <Header title={headerTitle} />
+              <div className="page-header">{headerTitle} </div>
               <div
                 className={`${classes.headerText} d-flex justify-content-between align-items-center`}
               >
@@ -374,7 +377,7 @@ class Pages extends Component {
               <Col>
                 <Card>
                   {
-                    <CardBody>
+                    <CardBody className="card-content">
                       <CardTitle className="table-header">
                         {cardTitle}
                       </CardTitle>
@@ -392,14 +395,29 @@ class Pages extends Component {
                                 <AWSMDropdown
                                   items={REGION_TERMINAL.map(e => e.region)}
                                   value={this.state.region}
-                                  onChange={value => this.setState({ ...this.state, region: value, terminal: null})}
+                                  onChange={value =>
+                                    this.setState({
+                                      ...this.state,
+                                      region: value,
+                                      terminal: null,
+                                    })
+                                  }
                                 />
                               </div>
                               <div className="col-8 p-0 ml-2">
                                 <AWSMDropdown
-                                  items={REGION_TERMINAL.find(e => e.region === this.state.region)?.terminal}
+                                  items={
+                                    REGION_TERMINAL.find(
+                                      e => e.region === this.state.region
+                                    )?.terminal
+                                  }
                                   value={this.state.terminal}
-                                  onChange={value => this.setState({ ...this.state, terminal: value })}
+                                  onChange={value =>
+                                    this.setState({
+                                      ...this.state,
+                                      terminal: value,
+                                    })
+                                  }
                                 />
                               </div>
                             </div>
@@ -464,6 +482,8 @@ class Pages extends Component {
                         headerSortHandler={this.handleHeaderSort}
                         filterApplyHandler={this.handleQueryParameterChange}
                         modalPop={this.modalHandlerTI}
+                        varianceControlData={varianceControlData}
+                        overrideActionColumn={overrideActionColumn}
                       />
                       <TablePagination
                         count={tableData.total_rows}
@@ -511,6 +531,8 @@ Pages.propType = {
   modalComponent: PropTypes.element,
   onGetDownloadCustomer: PropTypes.func.isRequired,
   frozenColNum: PropTypes.number,
+  varianceControlData: PropTypes.object,
+  overrideActionColumn: PropTypes.func
 }
 
 Pages.defaultProps = {

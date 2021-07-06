@@ -13,6 +13,7 @@ import ExitConfirmation from "../../../../components/Common/ExitConfirmation/ind
 import "./TankStatusModal.scss"
 import { updateSalesAndInventoryTankStatusModal } from "store/actions"
 import { XIcon } from "common/CustomizeTable/icons"
+import { isScheduler } from "helpers/auth_helper"
 
 const mockDataOfTankStatus = {
   date: "2020-02-06",
@@ -46,6 +47,7 @@ const mockDataOfTankStatus = {
 }
 
 const TankStatusModal = props => {
+  const scheduler = isScheduler()
   const {
     modalTitle,
     open,
@@ -127,6 +129,7 @@ const TankStatusModal = props => {
                                   TextOnChangeValue={handleOnchangeValueData}
                                   index={i}
                                   fieldName={"lower_value"}
+                                  isEdit={!scheduler}
                                 />
                               </td>
                               <td className="item">
@@ -135,6 +138,7 @@ const TankStatusModal = props => {
                                   TextOnChangeValue={handleOnchangeValueData}
                                   index={i}
                                   fieldName={"upper_value"}
+                                  isEdit={!scheduler}
                                 />
                               </td>
                               <td className="item last-item">
@@ -143,6 +147,7 @@ const TankStatusModal = props => {
                                   TextOnChangeValue={handleOnchangeValueData}
                                   index={i}
                                   fieldName={"percentage"}
+                                  isEdit={!scheduler}
                                 />
                               </td>
                             </tr>
@@ -160,8 +165,8 @@ const TankStatusModal = props => {
                     value={capacity}
                     inputType={`baseInput`}
                     TextOnChangeValue={v => setCapacity(v)}
-                    isEdit={false}
-                    disable
+                    isEdit={!scheduler}
+                    disable={scheduler}
                   />
                 </div>
                 <div className="d-flex align-items-center justify-content-end mt-5 mb-3 tank-status-footer">

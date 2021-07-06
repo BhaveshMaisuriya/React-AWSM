@@ -1,9 +1,8 @@
 .order_bank_main {
     margin-top: 15px;
     height: 95vh;
-    margin-bottom: 0px !important;
     .row {
-        padding-bottom: 10px;
+        border-bottom: 1px solid #EEEEEE; 
         .nav-pills { 
              border-bottom: unset !important;
         }
@@ -29,7 +28,7 @@
     align-items: center;
 }
 .gantt_chart_main, .shipment_main {
-    height: 83vh;
+    height: 90vh;
     overflow-y: hidden;
 }
 .rts-table-container {
@@ -184,7 +183,7 @@
 }
 .h-70v {
     height: 70vh;
-    overflow: hidden;
+    overflow-x: hidden;
 }
 .h-80v {
     height: 80vh;

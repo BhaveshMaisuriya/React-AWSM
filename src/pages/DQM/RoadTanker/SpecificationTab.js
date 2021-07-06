@@ -194,7 +194,7 @@ class SpecificationTab extends PureComponent {
               type="text"
               defaultValue={data?.pump_type}
               onChange={e => this.onChangeHandler(e.target.value,"pump_type")}
-              // disabled={true}
+              disabled={true}
             />
           </div>
         </div>

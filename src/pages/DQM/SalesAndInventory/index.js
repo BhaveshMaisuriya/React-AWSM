@@ -13,6 +13,7 @@ import { transformArrayToString, getCookieByKey } from "../Common/helper"
 import SalesAndInventoryModal from "./SalesAndInventoryModal"
 import RetailCustomerModal from "../RetailCustomer/RetailCustomerModal"
 import Loader from "../../../components/Common/Loader"
+import { getSalesAndInventoryVarianceControl, overrideStatusInActionColumn } from "../../../store/actions"
 
 const tableName = "salesinventory-table"
 
@@ -27,7 +28,7 @@ class SalesInventory extends Component {
   }
 
   componentDidMount() {
-    const { onGetSaleAndInventory, onGetSalesAuditLog } = this.props
+    const { onGetSaleAndInventory, onGetSalesAuditLog, getSalesAndInventoryVarianceControl } = this.props
     const { searchFields } = this.state
     const params = {
       limit: 10,
@@ -45,6 +46,7 @@ class SalesInventory extends Component {
     }
     onGetSaleAndInventory(params)
     onGetSalesAuditLog(payload)
+    getSalesAndInventoryVarianceControl()
   }
 
   GetonDownload = async currentPage => {
@@ -69,6 +71,8 @@ class SalesInventory extends Component {
       audits,
       filter,
       address,
+      varianceControlData,
+      overrideStatusInActionColumn
     } = this.props
     const { searchFields } = this.state
     if (!saleAndInventory || saleAndInventory.length === 0) return <Loader />
@@ -92,6 +96,8 @@ class SalesInventory extends Component {
           modalComponent={SalesAndInventoryModal}
           onGetDownloadCustomer={this.GetonDownload}
           frozenColNum={2}
+          varianceControlData={varianceControlData}
+          overrideActionColumn={overrideStatusInActionColumn}
         />
       </Fragment>
     )
@@ -104,6 +110,7 @@ const mapStateToProps = ({ retailCustomer, saleAndInventory }) => ({
   downloadtableData: saleAndInventory.downloadtableData,
   filter: saleAndInventory.filter,
   address: retailCustomer.address,
+  varianceControlData: saleAndInventory.varianceControlData,
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -112,6 +119,8 @@ const mapDispatchToProps = dispatch => ({
   onUpdateTableInformation: event => dispatch(updateTableInformation(event)),
   onGetSalesAuditLog: payload => dispatch(getSalesAuditLog(payload)),
   onGetDownloadSales: params => dispatch(getDownloadSales(params)),
+  getSalesAndInventoryVarianceControl: () => dispatch(getSalesAndInventoryVarianceControl()),
+  overrideStatusInActionColumn: (params) => dispatch(overrideStatusInActionColumn(params))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(SalesInventory)

@@ -232,7 +232,7 @@ export const updateRoadTankerDetail = payload =>{
     payload.data
   )
 }
-  
+
 
 export const getDownloadRoadTanker = params =>
   axios.post(
@@ -380,17 +380,17 @@ export const getSaleAndInventoryVarianceControl = () =>
   get(`${url.GET_SALES_AND_INVENTORY_VARIANCE_CONTROL}`)
 export const updateSaleAndInventoryVarianceControl = () =>
   put(`${url.GET_SALES_AND_INVENTORY_VARIANCE_CONTROL}`)
-  
+
   export const getSaleAndInventoryDetail = () =>
   get(`${url.GET_SALES_AND_INVENTORY_DETAIL}`)
-  
+
 // update tank status modal
 export const updateSaleAndInventoryTankStatusModal = () =>
   put(`/sales_and_inventory_tank_status_modal`)
 // get sales and inventory table data
 export const getSaleAndInventory = params =>
-  axios.post(
-    "https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/retail-customer",
+  axios.get(
+    "https://6073f3f2066e7e0017e78a3d.mockapi.io/api/v1/sales",
     { ...params }
   )
 

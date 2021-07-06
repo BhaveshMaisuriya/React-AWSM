@@ -222,7 +222,7 @@ const Example = React.memo(props => {
               <Fragment>
                 <SimpleBar
                   autoHide={false}
-                  style={{ height: "150px", width: "100%", overflow: "auto" }}
+                  style={{ maxHeight: "150px", width: "100%", overflow: "auto" }}
                 >
                   {current.length > 0 && !isNull(current)
                     ? current.map((row, index) => {

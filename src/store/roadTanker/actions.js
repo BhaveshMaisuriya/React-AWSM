@@ -22,7 +22,8 @@ import {
   GET_ROAD_TANKER_DETAIL,
   UPDATE_ROAD_TANKER_DETAIL,
   UPDATE_ROAD_TANKER_DETAIL_SUCCESS,
-  UPDATE_ROAD_TANKER_DETAIL_FAIL
+  UPDATE_ROAD_TANKER_DETAIL_FAIL,
+  RESET_CURRENT_ROAD_TANKER_DATA
 } from "./actionTypes"
 
 export const getRoadTanker = params => ({
@@ -141,4 +142,8 @@ export const updateRoadTankerDetailSuccess = response => ({
 export const updateRoadTankerDetailFail = error => ({
   type: UPDATE_ROAD_TANKER_DETAIL_FAIL,
   payload: error
+})
+
+export const resetCurrentRoadTankerData = () => ({
+  type: RESET_CURRENT_ROAD_TANKER_DATA,
 })

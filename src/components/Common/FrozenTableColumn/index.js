@@ -5,6 +5,8 @@ import { Link } from "react-router-dom"
 import "./style.scss"
 import { isEqual, isUndefined } from "lodash"
 import { Badge } from "reactstrap"
+import OverrideIcon from "../../../assets/images/AWSM-success-alert.svg"
+import { ReactSVG } from "react-svg"
 
 class FixedCoulmnTable extends Component {
   constructor(props) {
@@ -81,9 +83,15 @@ class FixedCoulmnTable extends Component {
   }
   renderFrozenTr = arr => {
     if (!arr) return null
-    return arr.length === 0 ? <tr><td></td></tr> : arr.map((e, index) => {
-      return <tr key={index}>{this.renderFrozenTd(e, index)}</tr>
-    })
+    return arr.length === 0 ? (
+      <tr>
+        <td></td>
+      </tr>
+    ) : (
+      arr.map((e, index) => {
+        return <tr key={index}>{this.renderFrozenTd(e, index)}</tr>
+      })
+    )
   }
   renderRegularTd = arr => {
     const { headers } = this.props
@@ -92,37 +100,101 @@ class FixedCoulmnTable extends Component {
   }
   renderRegular = arr => {
     if (!arr) return null
-    return arr.length === 0 ? <p>Data Not Found!.</p> : arr.map((e, index) => {
-      return <tr key={index}>{this.renderRegularTd(e)}</tr>
-    })
+    return arr.length === 0 ? (
+      <p>Data Not Found!.</p>
+    ) : (
+      arr.map((e, index) => {
+        return <tr key={index}>{this.renderRegularTd(e)}</tr>
+      })
+    )
+  }
+
+  AddConditionalForActionColumn = (salesValue, inventoryValue, data, index) =>{
+    const { overrideActionColumn } = this.props
+    let result;
+    if(Math.abs(data.sales_variance) > salesValue.variance_value
+      || Math.abs(data.inventory_variance) > inventoryValue.variance_value
+      || Math.abs(data.sales_variance_percentage) > salesValue.variance_percentage){
+        result = (<div onClick={()=>overrideActionColumn(index)}>
+          { data?.overrideAction ? <ReactSVG className="d-inline-block mr-2" src={OverrideIcon} />
+          : <span className="accurate d-inline-block mr-2"></span> }
+        <span className={`d-inline-block override-text ${data?.overrideAction ? 'green' : ''}`}>Override</span></div>)
+      }
+    else{
+      result = (<><ReactSVG className="d-inline-block mr-2" src={OverrideIcon} />
+      <span className="accurate-text">Accurate</span></>)
+    }
+    return(<div className="action-status">{result}</div>)
   }
 
   getTdType = (sliceArr, arr, parentIndex = 0) => {
-    const { config, modalPop } = this.props
+    const pathName = window.location.pathname;
+    const { config, modalPop, varianceControlData } = this.props
     return sliceArr.map((e, index) => {
       switch (config[e] && config[e].type) {
         case "badge":
           return (
             <td key={index}>
-              <div className="text-center">
-                <Badge
-                  className="font-weight-semibold"
-                  color={config[e].getBadgeColor(arr[e])}
-                  pill
-                >
-                  {arr[e]}
-                </Badge>
-              </div>
+              <Badge
+                className="font-weight-semibold"
+                color={config[e].getBadgeColor(arr[e])}
+                pill
+              >
+                {arr[e]}
+              </Badge>
             </td>
           )
+        case "override":
         case "color":
-          return (
-            <td key={index}>
-              <div className={`${config[e].getColor(arr[`${e}_color`])}`}>
-                {isUndefined(arr[e]) ? "-" : arr[e]}
-              </div>
-            </td>
-          )
+        {
+          if(pathName === "/sales-inventory") {
+            let threshold;
+            const salesValue = varianceControlData.sales.find(e => e.station_tank_status === arr.station_tank_status)
+            const inventoryValue = varianceControlData.inventory.find(e => e.station_tank_status === arr.station_tank_status)
+            switch (e) {
+              case "sales_variance":
+              {
+                threshold = salesValue?.variance_value
+                break
+              }
+              case "sales_variance_percentage":
+              {
+                threshold = salesValue?.variance_percentage
+                break
+              }
+              case "inventory_variance": {
+                threshold = inventoryValue?.variance_value
+                break
+              }
+              case "inventory_variance_percentage": {
+                threshold = inventoryValue?.variance_percentage
+                break
+              }
+            }
+            if(config[e].type == "override"){
+              return (
+                <td key={index}>
+                  {this.AddConditionalForActionColumn(salesValue, inventoryValue, arr, parentIndex)}
+                </td>
+              )
+            }
+            return (
+              <td key={index}>
+                <div className={`${config[e].getColor(arr[e], threshold)}`}>
+                  {isUndefined(arr[e]) ? "-" : arr[e]}
+                </div>
+              </td>
+            )
+          } else {
+            return (
+              <td key={index}>
+                <div className={`${config[e].getColor(arr[`${e}_color`])}`}>
+                  {isUndefined(arr[e]) ? "-" : arr[e]}
+                </div>
+              </td>
+            )
+          }
+        }
         case "link":
           return (
             <td key={index}>
@@ -150,7 +222,7 @@ class FixedCoulmnTable extends Component {
       }
     })
   }
-  
+
   render() {
     const { tableData } = this.props
     const { fixedHeaders, regularHeaders } = this.state
@@ -163,14 +235,14 @@ class FixedCoulmnTable extends Component {
           <tbody>{this.renderFrozenTr(tableData)}</tbody>
         </table>
         <div className="scroll">
-            <table className="scrollable">
-              <thead>
-                <tr>{this.addTd(regularHeaders)}</tr>
-              </thead>
-              <tbody>{this.renderRegular(tableData)}</tbody>
-            </table>
-          </div>
+          <table className="scrollable">
+            <thead>
+              <tr>{this.addTd(regularHeaders)}</tr>
+            </thead>
+            <tbody>{this.renderRegular(tableData)}</tbody>
+          </table>
         </div>
+      </div>
     )
   }
 }

@@ -1,8 +1,9 @@
 .order_bank_main {
     margin-top: 15px;
     height: 95vh;
+    margin-bottom: 0px !important;
     .row {
-        border-bottom: 1px solid #EEEEEE; 
+        border-bottom: 1px solid #E8E8E8;
         .nav-pills { 
              border-bottom: unset !important;
         }

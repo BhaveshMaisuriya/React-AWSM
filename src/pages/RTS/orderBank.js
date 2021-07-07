@@ -153,24 +153,23 @@ function OrderBank({
     setShowNewOrder(false)
   }
 
-  const enabledCross = val => {
-    if (val !== 0) {
-      let temp = [...orderBankSetting]
-      temp.map(function (item, index) {
-        if (item.value === "CrossTerminal" || item.value === "SendDN") {
-          item.disabled = false
-        }
-      })
-      setOrderBankSetting(temp)
-    } else {
-      let temp = [...orderBankSetting]
-      temp.map(function (item, index) {
-        if (item.value === "CrossTerminal" || item.value === "SendDN") {
-          item.disabled = true
-        }
-      })
-      setOrderBankSetting(temp)
-    }
+const enabledCross = (val) => {  
+  if(val !== 0){
+    let temp = [...orderBankSetting];
+    temp.map(function(item, index) {      
+      if((item.value === 'CrossTerminal') || (item.value === 'SendDN')){
+        item.disabled = false;        
+      }
+    })
+    setOrderBankSetting(temp);
+  } else {
+    let temp = [...orderBankSetting]
+    temp.map(function(item, index) {      
+      if((item.value === 'CrossTerminal') || (item.value === 'SendDN')){
+        item.disabled = true;
+      }
+    })
+    setOrderBankSetting(temp)
   }
 
   useEffect(() => {
@@ -251,8 +250,8 @@ function OrderBank({
                   <TabPane tabId="1">
                     <div class="gantt_chart_main">
                       <div className="gantt_chart_first">
-                        <Row className="remove_border">
-                          <Col lg={6} className="order-bank-bar">
+                      <Row className='remove_border'>
+                          <Col lg={6} className='order-bank-bar'>
                             <div className="order-bank-shift-date">
                               <div>DATE</div>
                               <DateRangePicker
@@ -262,9 +261,7 @@ function OrderBank({
                                 onChange={value => setShiftDate(value)}
                               />
                             </div>
-                            <p className="order-bank-region-label">
-                              REGION & TERMINAL
-                            </p>
+                            <p className="order-bank-region-label">REGION & TERMINAL</p>
                             <div className="order-bank-region">
                               <AWSMDropdown
                                 value={region}
@@ -276,49 +273,44 @@ function OrderBank({
                               />
                             </div>
                             <div className="order-bank-region ml-2">
-                              <AWSMDropdown
-                                value={terminal}
-                                onChange={value => setTerminal(value)}
-                                items={terminalList}
-                              />
+                              <AWSMDropdown value={terminal} onChange={value => setTerminal(value)} items={terminalList}/>
                             </div>
                           </Col>
-                          <Col lg={6} className="order-bank-bar">
+                          <Col lg={6} className='order-bank-bar'>
                             <span className="m-0 order-bank-label">
-                              141 DNs, 3 shipments, 3 special request, 5 high
-                              priority
+                              141 DNs, 3 shipments, 3 special request, 5 high priority
                             </span>
-                            <div className="radio_option m-0 order-bank-label">
+                            <div className='radio_option m-0 order-bank-label'>
                               <input
                                 type="radio"
                                 id="radioBackLog"
                                 name="radioWidth"
                                 value="BackLog"
                                 checked={false}
-                                className="mr-1 ml-2"
+                                className='mr-1 ml-2'
                                 // onChange={this.changeLayoutWidth}
                               />
-                              <span className="mr-1">BackLog</span>
+                              <span className='mr-1'>BackLog</span>
                               <input
                                 type="radio"
                                 id="radioFuture"
                                 name="radioWidth"
                                 value="BackLog"
                                 checked={false}
-                                className="mr-1"
+                                className='mr-1'
                                 // onChange={this.changeLayoutWidth}
                               />
-                              <span className="mr-1">Future</span>
+                              <span className='mr-1'>Future</span>
                               <input
                                 type="radio"
                                 id="radiorequest"
                                 name="radioWidth"
                                 value="BackLog"
-                                className="mr-1"
+                                className='mr-1'
                                 checked={false}
                                 // onChange={this.changeLayoutWidth}
                               />
-                              <span className="mr-1">Special Request</span>
+                              <span className='mr-1'>Special Request</span> 
                               <input
                                 type="radio"
                                 id="radioPriority"

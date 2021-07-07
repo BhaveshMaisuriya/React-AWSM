@@ -41,10 +41,10 @@
     height: inherit;
 }
 .gantt_chart_first {
-    height: 40%;
+    height: 45%;
 }
 .gantt_chart_second{
-    height: 55%;
+    height: 50%;
     overflow: hidden;
 }
 .gantt_chart_second .setting_icon {
@@ -360,7 +360,7 @@
 }
 .square_border {
     border: 1px solid #EEEEEE;
-    padding: 5px;
+    padding: 10px;
     display: flex;
-    width: auto;
+    width: 60%;
 }

@@ -141,4 +141,9 @@ button.filter-button {
     color:#4CAF50;
     transform: translateY(1px);
   }
+  .cursor-pointer{
+    &:hover{
+      cursor: pointer;
+    }
+  }
 }

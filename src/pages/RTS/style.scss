@@ -1,12 +1,17 @@
 .order_bank_main {
     margin-top: 15px;
     height: 95vh;
+    margin-bottom: 0px !important;
     .row {
-        border-bottom: 1px solid #EEEEEE; 
+        border-bottom: 1px solid #E8E8E8;
         .nav-pills { 
              border-bottom: unset !important;
         }
     }
+}
+.remove_border {
+    padding-bottom: 10px;
+    border-bottom: unset !important;
 }
 .order-bank-page-content {
     padding: 0;
@@ -29,7 +34,7 @@
 }
 .gantt_chart_main, .shipment_main {
     height: 90vh;
-    overflow-y: hidden;
+    overflow: hidden;
 }
 .rts-table-container {
     overflow-y: auto;
@@ -318,4 +323,45 @@
 }
 .h-250 {
     height: 250px;
+}
+.right_border {
+    border-left: 1px solid #d9d9d9;
+}
+.pto_tag {
+    color: #FF8800;
+    padding: 5px;
+    background-color: #FFEBB4;
+    border-radius: 15px;
+}
+.square {
+    height: 15px;
+    width: 15px;
+    border-radius: 3px;
+}
+.light-sky {
+    background-color: #DBE5F0;
+}
+.dark-sky {
+    background-color: #84B0E9;
+}
+.lavendar {
+    background-color: #9F79B7;
+}
+.blue {
+    background-color: #615E9B;
+}
+.grey {
+    background-color: #BDBDBD;
+}
+.light-red {
+    background-color: #E45E5E;
+}
+.yellow {
+    background-color: #FECE66;
+}
+.square_border {
+    border: 1px solid #EEEEEE;
+    padding: 5px;
+    display: flex;
+    width: auto;
 }

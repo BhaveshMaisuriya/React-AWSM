@@ -115,7 +115,7 @@ class FixedCoulmnTable extends Component {
     if(Math.abs(data.sales_variance) > salesValue.variance_value
       || Math.abs(data.inventory_variance) > inventoryValue.variance_value
       || Math.abs(data.sales_variance_percentage) > salesValue.variance_percentage){
-        result = (<div onClick={()=>overrideActionColumn(index)}>
+        result = (<div className="cursor-pointer" onClick={()=>overrideActionColumn(index)}>
           { data?.overrideAction ? <ReactSVG className="d-inline-block mr-2" src={OverrideIcon} />
           : <span className="accurate d-inline-block mr-2"></span> }
         <span className={`d-inline-block override-text ${data?.overrideAction ? 'green' : ''}`}>Override</span></div>)

@@ -32,6 +32,7 @@ import { format } from "date-fns";
 import { getRTSOrderBankTableData, sendOrderBankDN, refreshOderBankDN } from "../../store/orderBank/actions"
 import OrderBankActionModal from "./OrderBankActionModal"
 import CrossTerminalModal from "./crossTerminalModal"
+import GanttChartTable from "./OrderBankTable/GanttChartTable"
 
 function OrderBank({ getRTSOrderBankTableData, orderBankTableData, sendOrderBankDN, refreshOderBankDN}) {
 
@@ -91,14 +92,22 @@ const onCloseNewOrder = () => {
 }
 
 const enabledCross = (val) => {  
-  if(val > 0){
+  if(val !== 0){
     let temp = [...orderBankSetting];
     temp.map(function(item, index) {      
-      if((item.value === 'CrossTerminal') || (item.value === 'SendDN')){             
+      if((item.value === 'CrossTerminal') || (item.value === 'SendDN')){
         item.disabled = false;        
       }
     })
     setOrderBankSetting(temp);
+  } else {
+    let temp = [...orderBankSetting]
+    temp.map(function(item, index) {      
+      if((item.value === 'CrossTerminal') || (item.value === 'SendDN')){
+        item.disabled = true;
+      }
+    })
+    setOrderBankSetting(temp)
   }
 }
 
@@ -163,10 +172,87 @@ const onRefreshOrderBankDN = () => {
                 <TabContent activeTab={activeTab} className="pt-4">
                   <TabPane tabId="1">
                     <div class="gantt_chart_main">
-                      <div className="gantt_chart_first"></div>
+                      <div className="gantt_chart_first">
+                      <Row className='remove_border'>
+                          <Col lg={6} className='order-bank-bar'>
+                            <div className="order-bank-shift-date">
+                              <div>DATE</div>
+                              <DateRangePicker
+                                types={["single", "range"]}
+                                startDate={null}
+                                defaultValue={shiftDate}
+                                onChange={value => setShiftDate(value)}
+                              />
+                            </div>
+                            <p className="order-bank-region-label">REGION & TERMINAL</p>
+                            <div className="order-bank-region">
+                              <AWSMDropdown
+                                value={region}
+                                onChange={value => {
+                                  setRegion(value)
+                                  setTerminal(null)
+                                }}
+                                items={REGION_TERMINAL.map(e => e.region)}
+                              />
+                            </div>
+                            <div className="order-bank-region ml-2">
+                              <AWSMDropdown value={terminal} onChange={value => setTerminal(value)} items={terminalList}/>
+                            </div>
+                          </Col>
+                          <Col lg={6} className='order-bank-bar'>
+                            <span className="m-0 order-bank-label">
+                              141 DNs, 3 shipments, 3 special request, 5 high priority
+                            </span>
+                            <div className='radio_option m-0 order-bank-label'>
+                              <input
+                                type="radio"
+                                id="radioBackLog"
+                                name="radioWidth"
+                                value="BackLog"
+                                checked={false}
+                                className='mr-1 ml-2'
+                                // onChange={this.changeLayoutWidth}
+                              />
+                              <span className='mr-1'>BackLog</span>
+                              <input
+                                type="radio"
+                                id="radioFuture"
+                                name="radioWidth"
+                                value="BackLog"
+                                checked={false}
+                                className='mr-1'
+                                // onChange={this.changeLayoutWidth}
+                              />
+                              <span className='mr-1'>Future</span>
+                              <input
+                                type="radio"
+                                id="radiorequest"
+                                name="radioWidth"
+                                value="BackLog"
+                                className='mr-1'
+                                checked={false}
+                                // onChange={this.changeLayoutWidth}
+                              />
+                              <span className='mr-1'>Special Request</span> 
+                              <input
+                                type="radio"
+                                id="radioPriority"
+                                name="radioWidth"
+                                value="BackLog"
+                                checked={false}
+                                className='mr-1'
+                                // onChange={this.changeLayoutWidth}
+                              />
+                              <span className='mr-1'>High Priority</span> 
+                            </div>
+                            <img src={customiseTableIcon} className='ml-2' /> 
+                          </Col>
+                      </Row>
+                      <GanttChartTable />
+                      </div>
                       <hr />
                       <div className="gantt_chart_second">
-                        <Row>
+                        <Row className='remove_border'>
                           <Col lg={9} className='order-bank-bar'>
                             <h4 className="m-0 order-bank-label">Order Bank</h4>
                             <div className="order-bank-shift-date">

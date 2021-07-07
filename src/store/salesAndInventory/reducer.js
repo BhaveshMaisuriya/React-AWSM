@@ -115,7 +115,7 @@ const SaleAndInventory = (state = initialState, action) => {
         varianceControlError: action.payload,
       }
     case OVERRIDE_STATUS_IN_ACTION_COLUMN:
-      const listData = state.mainTableData
+      const listData = {...state.mainTableData}
       const newData = [...listData.list]
       newData[action.payload].overrideAction = true
       return {

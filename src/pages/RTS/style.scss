@@ -38,7 +38,7 @@
 }
 .rts-table-container {
     overflow-y: auto;
-    overflow-x: hidden;
+    overflow-x: auto;
     height: inherit;
 }
 .gantt_chart_first {
@@ -106,6 +106,9 @@
 .table_cell {
     display: table-cell;
     vertical-align: middle;
+}
+.order-bank-bar.right {
+    flex-direction: row-reverse;
 }
 
 .order-bank-bar {
@@ -363,5 +366,5 @@
     border: 1px solid #EEEEEE;
     padding: 10px;
     display: flex;
-    width: 60%;
+    width: 100%;
 }

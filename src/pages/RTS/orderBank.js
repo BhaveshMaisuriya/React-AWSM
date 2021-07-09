@@ -171,6 +171,7 @@ const enabledCross = (val) => {
     })
     setOrderBankSetting(temp)
   }
+}
 
   useEffect(() => {
     getRTSOrderBankTableData({ region, terminal, shiftDate })
@@ -246,7 +247,7 @@ const enabledCross = (val) => {
               </Row>
 
               <div>
-                <TabContent activeTab={activeTab} className="pt-4">
+                <TabContent activeTab={activeTab} className="pt-1">
                   <TabPane tabId="1">
                     <div class="gantt_chart_main">
                       <div className="gantt_chart_first">
@@ -276,31 +277,19 @@ const enabledCross = (val) => {
                               <AWSMDropdown value={terminal} onChange={value => setTerminal(value)} items={terminalList}/>
                             </div>
                           </Col>
-                          <Col lg={6} className='order-bank-bar'>
-                            <span className="m-0 order-bank-label">
-                              141 DNs, 3 shipments, 3 special request, 5 high priority
-                            </span>
+                          <Col lg={6} className='order-bank-bar right'>                           
+                            <img src={customiseTableIcon} className="ml-2" />
                             <div className='radio_option m-0 order-bank-label'>
                               <input
                                 type="radio"
-                                id="radioBackLog"
+                                id="radioPriority"
                                 name="radioWidth"
                                 value="BackLog"
                                 checked={false}
-                                className='mr-1 ml-2'
+                                className="mr-1 ml-1"
                                 // onChange={this.changeLayoutWidth}
                               />
-                              <span className='mr-1'>BackLog</span>
-                              <input
-                                type="radio"
-                                id="radioFuture"
-                                name="radioWidth"
-                                value="BackLog"
-                                checked={false}
-                                className='mr-1'
-                                // onChange={this.changeLayoutWidth}
-                              />
-                              <span className='mr-1'>Future</span>
+                              <span className="mr-1">High Priority</span>
                               <input
                                 type="radio"
                                 id="radiorequest"
@@ -313,16 +302,28 @@ const enabledCross = (val) => {
                               <span className='mr-1'>Special Request</span> 
                               <input
                                 type="radio"
-                                id="radioPriority"
+                                id="radioFuture"
                                 name="radioWidth"
                                 value="BackLog"
                                 checked={false}
-                                className="mr-1"
+                                className='mr-1'
                                 // onChange={this.changeLayoutWidth}
                               />
-                              <span className="mr-1">High Priority</span>
+                              <span className='mr-1'>Future</span>
+                              <input
+                                type="radio"
+                                id="radioBackLog"
+                                name="radioWidth"
+                                value="BackLog"
+                                checked={false}
+                                className='mr-1 ml-2'
+                                // onChange={this.changeLayoutWidth}
+                              />
+                              <span className='mr-1'>BackLog</span>
                             </div>
-                            <img src={customiseTableIcon} className="ml-2" />
+                            <span className="m-0 order-bank-label">
+                              141 DNs, 3 shipments, 3 special request, 5 high priority
+                            </span>
                           </Col>
                         </Row>
                         <GanttChartTable />
@@ -374,11 +375,7 @@ const enabledCross = (val) => {
                               />
                             </div>
                           </Col>
-                          <Col lg={3} className="order-bank-bar">
-                            <span className="m-0 order-bank-label">
-                              141 orders, 3.2m ASR, 1.2m SMP, 1m Comm. Total
-                              5.4m
-                            </span>
+                          <Col lg={3} className="order-bank-bar right">
                             <Dropdown isOpen={dropdownOpen} toggle={toggle}>
                               <DropdownToggle
                                 data-toggle="dropdown"
@@ -422,6 +419,10 @@ const enabledCross = (val) => {
                                 })}
                               </DropdownMenu>
                             </Dropdown>
+                            <span className="m-0 order-bank-label">
+                              141 orders, 3.2m ASR, 1.2m SMP, 1m Comm. Total
+                              5.4m
+                            </span>
                           </Col>
                         </Row>
                         <OrderBankTable

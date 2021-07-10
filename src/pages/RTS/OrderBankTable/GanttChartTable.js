@@ -11,11 +11,11 @@ import "./index.scss"
 
 function GanttChartTable(props) {
   return (
-    <div className="rts-table-container scroll right_border" id="scrollableDiv">
+    <div className="rts-table-container scroll" id="scrollableDiv">
       <div className="container-orderbank" style={{ maxWidth: "100%" }}>
         <Row className='w-100'>
           <Col lg={5}>
-            <table className={`scrollable`}>
+            <table className={`scrollable right_border mb-2`}>
               <thead>
                 <tr>
                   {ganttChartTableColumns.map(v => {

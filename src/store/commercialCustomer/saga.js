@@ -33,9 +33,13 @@ import {
 
 function* onGetCommercialCustomer({ params = {} }) {
   try {
-    const response = yield call(getCommercialCustomer, params)
-    yield put(getCommercialCustomerSuccess(Factory(response)))
-    yield put(getCommercialFilterSuccess(response.data.filters))
+    if(params.q && params.q === "()"){
+      yield put(getCommercialCustomerSuccess('Data is not available'))
+    } else {
+      const response = yield call(getCommercialCustomer, params)
+      yield put(getCommercialCustomerSuccess(Factory(response)))
+      yield put(getCommercialFilterSuccess(response.data.filters))
+    }
   } catch (error) {
     yield put(getCommercialCustomerFail(error))
   }

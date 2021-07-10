@@ -103,6 +103,12 @@ class Pages extends Component {
     if (params.q.length < 1) delete params.q
     window.scrollTo(0, 0)
     await onGetCustomer(params)
+    const keys = Object.keys(q);
+    var isWrong = false;
+    for (let [index, key] of keys.entries()) {
+      isWrong = q[key].length === 0 && true;
+    }
+    isWrong === true && this.setState({ q: {} });
   }
 
   resetPageNo = () => {
@@ -476,7 +482,7 @@ class Pages extends Component {
                       <FixedColumnTable
                         headers={searchFields}
                         config={tableMapping}
-                        tableData={tableData.list}
+                        tableData={tableData.list ? tableData.list : tableData}
                         frozen={frozenColNum}
                         filterData={filter}
                         headerSortHandler={this.handleHeaderSort}

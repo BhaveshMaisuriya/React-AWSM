@@ -14,6 +14,7 @@ class FixedCoulmnTable extends Component {
     this.state = {
       order: "asc",
       orderBy: "ship_to_party",
+      tableDatas: this.props.tableData,
       fixedHeaders: this.props.headers.slice(0, this.props.frozen),
       regularHeaders: this.props.headers.slice(
         this.props.frozen,
@@ -30,6 +31,13 @@ class FixedCoulmnTable extends Component {
         this.props.headers.length
       )
       this.setState({ fixedHeaders, regularHeaders })
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.tableData !== prevProps.tableData) {
+      console.log("arr::", this.props.tableData, prevProps.tableData)
+      this.setState({tableDatas: this.props.tableData});
     }
   }
 
@@ -83,10 +91,8 @@ class FixedCoulmnTable extends Component {
   }
   renderFrozenTr = arr => {
     if (!arr) return null
-    return arr.length === 0 ? (
-      <tr>
-        <td></td>
-      </tr>
+    return typeof arr === 'string' ? (
+      <tr><td></td></tr>
     ) : (
       arr.map((e, index) => {
         return <tr key={index}>{this.renderFrozenTd(e, index)}</tr>
@@ -99,9 +105,9 @@ class FixedCoulmnTable extends Component {
     return this.getTdType(sliceArr, arr)
   }
   renderRegular = arr => {
-    if (!arr) return null
-    return arr.length === 0 ? (
-      <p>Data Not Found!.</p>
+    if (!arr) return null    
+    return typeof arr === 'string' ? (
+      <tr><td>{arr}</td></tr>
     ) : (
       arr.map((e, index) => {
         return <tr key={index}>{this.renderRegularTd(e)}</tr>
@@ -225,6 +231,7 @@ class FixedCoulmnTable extends Component {
 
   render() {
     const { tableData } = this.props
+    
     const { fixedHeaders, regularHeaders } = this.state
     return (
       <div className="container" style={{ maxWidth: "100%" }}>
@@ -232,14 +239,14 @@ class FixedCoulmnTable extends Component {
           <thead>
             <tr>{this.addTd(fixedHeaders)}</tr>
           </thead>
-          <tbody>{this.renderFrozenTr(tableData)}</tbody>
+          <tbody>{this.renderFrozenTr(this.state.tableDatas)}</tbody>
         </table>
         <div className="scroll">
           <table className="scrollable">
             <thead>
               <tr>{this.addTd(regularHeaders)}</tr>
             </thead>
-            <tbody>{this.renderRegular(tableData)}</tbody>
+            <tbody>{this.renderRegular(this.state.tableDatas)}</tbody>
           </table>
         </div>
       </div>

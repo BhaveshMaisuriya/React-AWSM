@@ -57,13 +57,16 @@ function* onGetSLAAuditLog() {
 
 function* onGetSLAItems({ params = {} }) {
   try {
-    const response = yield call(getSlaItems, params)
-    yield put(getSlaItemsSuccess(factory(response)))
+    if(params.q && params.q === "()"){
+      yield put(getSlaItemsSuccess('Data is not available'))
+    } else {
+      const response = yield call(getSlaItems, params)
+      yield put(getSlaItemsSuccess(factory(response)))
+    }
   } catch (error) {
     yield put(getSlaItemsFail(error))
   }
 }
-
 
 function* onUpdateSLAItem(action) {
   try {

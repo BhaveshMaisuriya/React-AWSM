@@ -115,6 +115,8 @@ function OrderBank({
   const [region, setRegion] = useState(REGION_TERMINAL[0].region)
   const [terminal, setTerminal] = useState(REGION_TERMINAL[0].terminal[0])
   const [refreshDNModal, setRefreshDNModal] = useState(false)
+  const [ganttChartAllRadio, setGanttChartAllRadio] = useState('');
+  // {high:false, request: false, future: false, backlog: false}
   const [sendDNModal, setSendDNModal] = useState(false)
   const [shiftDate, setShiftDate] = useState({
     type: "single",
@@ -190,13 +192,23 @@ const enabledCross = (val) => {
     refreshOderBankDN(orderBankTableData.filter(e => e.isChecked))
   }
 
+  const changeGanttChartOption = async(e, val) => {
+    console.log("::s", val)
+    let temp = {...ganttChartAllRadio};
+    Object.keys(temp).map(function(keyName, keyIndex) {
+      console.log("::e", val, keyName)
+      temp[keyName] = (keyName === val) ? e.target.checked : false;
+    })
+    await setGanttChartAllRadio(temp);
+  }
+
   return (
     <React.Fragment>
       <div className="order-bank-page-content">
         <div className="container-fluid">
           <Card className="order_bank_main">
             <CardBody>
-              <Row>
+              <Row className='border_btm'>
                 <Col lg={3} md={3} sm={12}>
                   <div className="h-100">
                     <Nav pills justified>
@@ -279,47 +291,48 @@ const enabledCross = (val) => {
                           </Col>
                           <Col lg={6} className='order-bank-bar right'>                           
                             <img src={customiseTableIcon} className="ml-2" />
+                            {console.log("::", ganttChartAllRadio)}
                             <div className='radio_option m-0 order-bank-label'>
                               <input
                                 type="radio"
-                                id="radioPriority"
+                                id="high"
                                 name="radioWidth"
-                                value="BackLog"
-                                checked={false}
-                                className="mr-1 ml-1"
-                                // onChange={this.changeLayoutWidth}
+                                value="high"
+                                checked={ganttChartAllRadio === 'high' ? true : false}
+                                className="mr-1 ml-1 pointer"
+                                onChange={() => setGanttChartAllRadio('high')}
                               />
-                              <span className="mr-1">High Priority</span>
+                              <label for='high' className="mr-1 pointer">High Priority</label>
                               <input
                                 type="radio"
-                                id="radiorequest"
+                                id="request"
                                 name="radioWidth"
-                                value="BackLog"
-                                className='mr-1'
-                                checked={false}
-                                // onChange={this.changeLayoutWidth}
+                                value="request"
+                                className='mr-1 pointer'
+                                checked={ganttChartAllRadio === 'request' ? true : false}
+                                onChange={() => setGanttChartAllRadio('request')}
                               />
-                              <span className='mr-1'>Special Request</span> 
+                              <label for='request' className='mr-1 pointer'>Special Request</label>
                               <input
                                 type="radio"
-                                id="radioFuture"
+                                id="future"
                                 name="radioWidth"
-                                value="BackLog"
-                                checked={false}
-                                className='mr-1'
-                                // onChange={this.changeLayoutWidth}
+                                value="future"
+                                checked={ganttChartAllRadio === 'future' ? true : false}
+                                className='mr-1 pointer'
+                                onChange={() => setGanttChartAllRadio('future')}
                               />
-                              <span className='mr-1'>Future</span>
+                              <label for='future' className='mr-1 pointer'>Future</label>
                               <input
                                 type="radio"
-                                id="radioBackLog"
+                                id="backlog"
                                 name="radioWidth"
-                                value="BackLog"
-                                checked={false}
-                                className='mr-1 ml-2'
-                                // onChange={this.changeLayoutWidth}
+                                value="backlog"
+                                checked={ganttChartAllRadio === 'backlog' ? true : false}
+                                className='mr-1 pointer'
+                                onChange={() => setGanttChartAllRadio('backlog')}
                               />
-                              <span className='mr-1'>BackLog</span>
+                              <label for='backlog' className='mr-1 pointer'>Back Log</label>
                             </div>
                             <span className="m-0 order-bank-label">
                               141 DNs, 3 shipments, 3 special request, 5 high priority

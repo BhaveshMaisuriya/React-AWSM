@@ -50,9 +50,13 @@ function* onGetDownloadProducts({ params = {} }) {
 
 function* onGetProducts({ params = {} }) {
   try {
-    const response = yield call(getProducts, params)
-    yield put(getProductSuccess(factory(response)))
-    yield put(getProductFilterSuccess(response.data.filters))
+    if(params.q && params.q === "()"){
+      yield put(getProductSuccess('Data is not available'))
+    } else {
+      const response = yield call(getProducts, params)
+      yield put(getProductSuccess(factory(response)))
+      yield put(getProductFilterSuccess(response.data.filters))
+    }
   } catch (error) {
     yield put(getProductFail(error))
   }

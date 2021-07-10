@@ -75,7 +75,7 @@ class SalesInventory extends Component {
       overrideStatusInActionColumn
     } = this.props
     const { searchFields } = this.state
-    if (!saleAndInventory || saleAndInventory.length === 0) return <Loader />
+    if (!saleAndInventory) return <Loader />
     return (
       <Fragment>
         <Page

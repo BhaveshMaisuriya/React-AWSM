@@ -78,7 +78,7 @@ class RoadTanker extends Component {
     } = this.props
 
     const { searchFields, isRoadTankerTIVisible } = this.state
-    if (!roadTanker || roadTanker.length === 0) return (<Loader />)
+    if (!roadTanker) return (<Loader />)
 
     return (
       <Fragment>

@@ -74,7 +74,7 @@ class Product extends Component {
       downloadProduct,
     } = this.props
     const { searchFields } = this.state
-    if (!products || products.length === 0) return (<Loader />)
+    if (!products) return (<Loader />)
     return (
       <Fragment>
         <Page

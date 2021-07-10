@@ -75,7 +75,7 @@ class CommercialCustomer extends Component {
     return (
       <Fragment>
         {(commercialCustomer && commercialCustomer.length === 0) && <Loader /> }
-        {commercialCustomer && commercialCustomer.list && 
+        {commercialCustomer &&  
           <Page
             onGetCustomer={onGetCommercialCustomer}
             onGetAuditLog={onGetCommercialAuditLog}

@@ -31,9 +31,9 @@ const Example = React.memo(props => {
    */
   useEffect(() => {
     if (dataFilter) {
-      if (!isNull(dataFilter[dataKey]) && !isUndefined(dataFilter[dataKey])) {
+      if (!isNull(dataFilter[dataKey]) && !isUndefined(dataFilter[dataKey]) && typeof dataFilter[dataKey] === 'array') {
         let alldata = []
-
+        console.log("::", dataFilter[dataKey])
         dataFilter[dataKey].map((item, index) => {
           alldata.push({
             text: item,
@@ -308,7 +308,7 @@ const Example = React.memo(props => {
                 fontFamily: "Museo Sans",
               }}
               onClick={clickApply}
-              disabled={checkedCount === 0 ? true : false}
+              // disabled={checkedCount === 0 ? true : false}
             >
               Apply
             </Button>

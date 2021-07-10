@@ -42,9 +42,13 @@ import {
 
 function* onGetRoadTanker({ params = {} }) {
   try {
-    const response = yield call(getRoadTanker, params)
-    yield put(getRoadTankerSuccess(response.data))
-    yield put(getRoadTankerFilterSuccess(response.data.filters))
+    if(params.q && params.q === "()"){
+      yield put(getRoadTankerSuccess('Data is not available'))
+    } else {
+      const response = yield call(getRoadTanker, params)
+      yield put(getRoadTankerSuccess(response.data))
+      yield put(getRoadTankerFilterSuccess(response.data.filters))
+    }
   } catch (error) {
     yield put(getRoadTankerFail(error))
   }

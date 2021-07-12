@@ -1,7 +1,7 @@
 import axios from "axios"
 import { del, get, post, put } from "./api_helper"
 import * as url from "./url_helper"
-import {orderDetails, viewOrderDetails} from "../pages/RTS/newOrderData"
+import { orderDetails, viewOrderDetails } from "../pages/RTS/newOrderData"
 
 // Gets the logged in user data from local session
 const getLoggedInUser = () => {
@@ -226,7 +226,7 @@ export const getRoadTankerDetail = vehical_id =>
     `https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/road-tanker/${vehical_id}`,
   )
 
-export const updateRoadTankerDetail = payload =>{
+export const updateRoadTankerDetail = payload => {
   return axios.put(
     `https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/road-tanker/${payload?.vehicle_name}`,
     payload.data
@@ -381,12 +381,16 @@ export const getSaleAndInventoryVarianceControl = () =>
 export const updateSaleAndInventoryVarianceControl = () =>
   put(`${url.GET_SALES_AND_INVENTORY_VARIANCE_CONTROL}`)
 
-  export const getSaleAndInventoryDetail = () =>
+export const getSaleAndInventoryDetail = () =>
   get(`${url.GET_SALES_AND_INVENTORY_DETAIL}`)
 
 // update tank status modal
 export const updateSaleAndInventoryTankStatusModal = () =>
   put(`/sales_and_inventory_tank_status_modal`)
+
+export const updateSaleAndInventoryDetail = () =>
+  put(`/sales_and_inventory_detail`)
+
 // get sales and inventory table data
 export const getSaleAndInventory = params =>
   axios.get(

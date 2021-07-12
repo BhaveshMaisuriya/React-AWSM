@@ -1,4 +1,5 @@
 import {
+  GET_TERMINAL,
   GET_TERMINAL_FAIL,
   GET_TERMINAL_SUCCESS,
   GET_TERMINAL_AUDITLOG_SUCCESS,
@@ -21,20 +22,28 @@ const initialState = {
   filterTerminal: [],
   currentTerminal: null,
   downloadTerminal: [],
+  isLoading: false,
 }
 
 const Terminal = (state = initialState, action) => {
   switch (action.type) {
+    case GET_TERMINAL:
+      return {
+        ...state,
+        isLoading: true,
+      }
     case GET_TERMINAL_SUCCESS:
       return {
         ...state,
         terminal: action.payload,
+        isLoading: false,
       }
 
     case GET_TERMINAL_FAIL:
       return {
         ...state,
         error: action.payload,
+        isLoading: false,
       }
 
     case GET_DOWNLOAD_TERMINAL_SUCCESS:

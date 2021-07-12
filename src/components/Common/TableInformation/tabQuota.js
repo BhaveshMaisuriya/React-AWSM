@@ -40,10 +40,10 @@ const tabQuota = ({ scheduler, data, onChange }) => {
           <Col className="col-6">
             <AvForm>
               <AvField
-                name="monthly_quota"
+                name="monthly_fixed_quota"
                 type="number"
                 label="MONTHLY FIXED QUOTA"
-                value={storageData[key] ? storageData[key].product_code_quota || "" : ""}
+                value={storageData[key] ? storageData[key].monthly_fixed_quota || "" : ""}
                 placeholder="Quota (etc: 10,000,000)"
                 validate={{
                   max: {
@@ -53,7 +53,7 @@ const tabQuota = ({ scheduler, data, onChange }) => {
                 }}
                 className={scheduler ? "disabledField" : null}
                 disabled={scheduler}
-                onChange={(e) => onUpdateField(key, "product_code_quota", e.target.value)}
+                onChange={(e) => onUpdateField(key, "monthly_fixed_quota", e.target.value)}
               />
             </AvForm>
           </Col>

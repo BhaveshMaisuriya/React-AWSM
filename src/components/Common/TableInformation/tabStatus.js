@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useMemo, useState } from "react"
 import "./tabStatus.scss"
 import AWSMDropdown from "../Dropdown"
 import DatePicker from "../../Common/DatePicker"
@@ -6,8 +6,6 @@ import { format } from "date-fns"
 import DropdownInput from "../DropdownInput"
 
 const STATUS_IN_AWSM = ["Active", "Temporarily Closed", "Inactive"]
-const SALES_AND_INVENTORY = ["Sentinal", "ABC"]
-const SALES_CATEGORY = ["Yes", "No"]
 
 const timeData = []
 for (let i = 0; i < 24; i++) {
@@ -52,6 +50,15 @@ const TabStatus = ({ scheduler, data, onChange }) => {
     newDataSourceItems.push(value);
     onFieldChange("sales_inventory_data_source_items", null, newDataSourceItems);
   }
+
+  const errorMessage = useMemo(() => {
+    if (statusData.status_awsm === "Temporarily Closed") {
+      if (!statusData.close_period || !(statusData.close_period.date_from && statusData.close_period.date_to && statusData.close_period.time_from && statusData.close_period.time_to)) {
+        return "Close period is required!"
+      }
+    }
+    return null
+  }, [statusData])
 
   return (
     <div className="dqm-status-container">
@@ -98,7 +105,7 @@ const TabStatus = ({ scheduler, data, onChange }) => {
           <div className="col-3">
             <div className="input-header">CLOSE (FROM)</div>
             <DatePicker
-              disabled={scheduler || statusData.status_awsm !== 'Inactive'}
+              disabled={scheduler || statusData.status_awsm === "Inactive"}
               value={statusData.close_period ? statusData.close_period.date_from || "" : ""}
               onChange={value =>
                 onFieldChange(
@@ -117,14 +124,14 @@ const TabStatus = ({ scheduler, data, onChange }) => {
               onChange={value =>
                 onFieldChange("close_period", "time_from", value)
               }
-              disabled={scheduler || statusData.status_awsm !== 'Inactive'}
+              disabled={scheduler || statusData.status_awsm === "Inactive"}
               required
             />
           </div>
           <div className="col-3">
             <div className="input-header">CLOSE (TO)</div>
             <DatePicker
-              disabled={scheduler || statusData.status_awsm !== 'Inactive'}
+              disabled={scheduler || statusData.status_awsm === "Inactive"}
               value={statusData.close_period ? statusData.close_period.date_to || "" : ""}
               onChange={value =>
                 onFieldChange(
@@ -143,11 +150,12 @@ const TabStatus = ({ scheduler, data, onChange }) => {
               onChange={value =>
                 onFieldChange("close_period", "time_to", value)
               }
-              disabled={scheduler || statusData.status_awsm !== 'Inactive'}
+              disabled={scheduler || statusData.status_awsm === "Inactive"}
               required
             />
           </div>
         </div>
+        {errorMessage && <p className="error">{errorMessage}</p>}
       </div>
       {pathName === "/commercial-customer" && (
         <div className="row">

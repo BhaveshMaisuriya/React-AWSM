@@ -5,7 +5,8 @@ import {
   GET_SALES_AND_INVENTORY,
   GET_SALES_AUDITLOG,
   GET_DOWNLOAD_SALES,
-  GET_DETAIL_SALES
+  GET_DETAIL_SALES,
+  UPDATE_SALES_AND_INVENTORY_DETAIL
 } from "./actionTypes"
 import Factory, { DownloadData } from "./factory"
 import {
@@ -15,6 +16,8 @@ import {
   updateSalesAndInventoryVarianceControlFailed,
   updateSalesAndInventoryTankStatusModalFailed,
   updateSalesAndInventoryTankStatusModalSuccess,
+  updateSalesAndInventoryDetailSuccess,
+  updateSalesAndInventoryDetailFail,
   getSaleAndInventoryFail,
   getSaleAndInventorySuccess,
   getSaleAndInventoryFilterSuccess,
@@ -33,7 +36,8 @@ import {
   getSaleAndInventory,
   getSalesAuditLog,
   getDownloadSales,
-  getSaleAndInventoryDetail
+  getSaleAndInventoryDetail,
+  updateSaleAndInventoryDetail
 } from "../../helpers/fakebackend_helper"
 
 function* onGetSalesAndInventory({ params = {} }) {
@@ -93,10 +97,19 @@ function* onGetSalesAuditLog() {
 
 function* onGetDownloadSales({ params = {} }) {
   try {
-    const response = yield call(getDownloadSales, params)
+    const response = yield call(updateSaleAndInventoryDetails, params)
     yield put(getDownloadSalesSuccess(response.data))
   } catch (error) {
     yield put(getDownloadSalesFail(error))
+  }
+}
+
+function* onUpdateSalesAndInventoryDetail({ params = {} }) {
+  try {
+    const response = yield call(updateSalesAndInventoryDetail, params)
+    yield put(updateSalesAndInventoryDetailSuccess(response.data))
+  } catch (error) {
+    yield put(updateSalesAndInventoryDetailFail(error))
   }
 }
 
@@ -117,6 +130,7 @@ function* saleAndInventorySaga() {
   yield takeLatest(GET_DOWNLOAD_SALES, onGetDownloadSales)
   yield takeLatest(GET_SALES_AND_INVENTORY, onGetSalesAndInventory)
   yield takeLatest(GET_DETAIL_SALES, onGetSalesAndInventoryDetail)
+  yield takeLatest(UPDATE_SALES_AND_INVENTORY_DETAIL, onUpdateSalesAndInventoryDetail)
 
 }
 

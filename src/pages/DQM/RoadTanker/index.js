@@ -15,7 +15,7 @@ import { transformArrayToString, getCookieByKey } from "./../Common/helper"
 import { auditsRoadTanker, address } from "../../../common/data/roadTanker"
 import Loader from "../../../components/Common/Loader"
 
-const RoadTankerTableName = 'road-tanker-table'
+const RoadTankerTableName = "road-tanker-table"
 class RoadTanker extends Component {
   constructor(props) {
     super(props)
@@ -23,7 +23,7 @@ class RoadTanker extends Component {
       searchFields: getCookieByKey(RoadTankerTableName)
         ? JSON.parse(getCookieByKey(RoadTankerTableName))
         : tableColumns,
-      isRoadTankerTIVisible: true
+      isRoadTankerTIVisible: true,
     }
   }
 
@@ -53,14 +53,14 @@ class RoadTanker extends Component {
     //onGetTableInformation()
   }
 
-  GetonDownload = async (currentPage) => {
+  GetonDownload = async currentPage => {
     const downloadParams = {
       limit: 10,
       page: 0,
-      search_fields: '*',
+      search_fields: "*",
     }
-    const { onGetDownloadRoadTanker } = this.props;
-    await onGetDownloadRoadTanker(downloadParams);
+    const { onGetDownloadRoadTanker } = this.props
+    await onGetDownloadRoadTanker(downloadParams)
   }
 
   render() {
@@ -75,17 +75,18 @@ class RoadTanker extends Component {
       downloadRoadTanker,
       // address,
       roadTanker,
+      roadTankerIsLoading,
     } = this.props
 
     const { searchFields, isRoadTankerTIVisible } = this.state
-    if (!roadTanker || roadTanker.length === 0) return (<Loader />)
 
     return (
       <Fragment>
-        {(roadTanker && roadTanker.length === 0) && <Loader />}
-        {roadTanker &&
+        {roadTanker && roadTanker.length === 0 && <Loader />}
+        {roadTankerIsLoading ? <Loader /> : ""}
+        {roadTanker && (
           <Page
-            onGetCustomer={onGetRoadTanker}
+            onGetMainTable={onGetRoadTanker}
             onGetAuditLog={onGetRoadTankerAuditLog}
             // onGetFilter={onGetRoadTankerFilter}
             onGetTableInformation={onGetTableInformation}
@@ -103,7 +104,7 @@ class RoadTanker extends Component {
             modalComponent={InformationModal}
             onGetDownloadCustomer={this.GetonDownload}
           />
-        }
+        )}
       </Fragment>
     )
   }
@@ -111,6 +112,7 @@ class RoadTanker extends Component {
 
 const mapStateToProps = ({ roadTanker }) => ({
   roadTanker: roadTanker.roadTanker,
+  roadTankerIsLoading: roadTanker.isLoading,
   // auditsRoadTanker: roadTanker.auditsRoadTanker,
   filterRoadTanker: roadTanker.filterRoadTanker,
   downloadRoadTanker: roadTanker.downloadRoadTanker,

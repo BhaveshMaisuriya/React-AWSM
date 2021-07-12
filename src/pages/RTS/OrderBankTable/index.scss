@@ -51,27 +51,38 @@
                             background: orange;
                         }
                         .status{
-                            display: inline-block;
-                            text-align: center;
+                            display: flex;
                             height: 20px;
                             width: 84px;
                             border-radius: 22px;
+                            font-size: 10px;
+                            align-items: center;
+                            justify-content: center;
                         }
                         .Send{
                             color:#00A19C;
                             border:1px solid #00A19C;
-                        }
+                            &:hover{
+                                cursor: pointer;
+                            }
+                            }
                         .Blocked{
                             color:#D50000;
                             background: #F2B2B2;
+                            box-sizing: border-box;
                         }
-                        .Unblock{
+                        .Late{
                             color:#763F98;
                             background: #D6C5E0;
                         }
                         .Clear{
                             color:#4CAF50;
                             background: #D5FBD6;
+                        }
+                        .Unblocked{
+                            color:#763F98;
+                            background: #D6C5E0;
+                            font-weight: 700;
                         }
                     }
                     .rts-table-nodata{

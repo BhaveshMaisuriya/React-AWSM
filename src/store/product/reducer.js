@@ -1,4 +1,5 @@
 import {
+  GET_PRODUCTS,
   GET_PRODUCT_FAIL,
   GET_PRODUCT_SUCCESS,
   GET_PRODUCT_AUDITLOG_SUCCESS,
@@ -10,7 +11,7 @@ import {
   UPDATE_PRODUCT_DETAIL_SUCCESS,
   UPDATE_PRODUCT_DETAIL_FAIL,
   GET_DOWNLOAD_PRODUCTS_SUCCESS,
-  GET_DOWNLOAD_PRODUCTS_FAIL
+  GET_DOWNLOAD_PRODUCTS_FAIL,
 } from "./actionTypes"
 
 const initialState = {
@@ -21,28 +22,36 @@ const initialState = {
   currentProduct: null,
   updateStatus: null,
   downloadProducts: [],
+  isLoading: false,
 }
 
 import { notify } from "../../helpers/notify"
 
 const Product = (state = initialState, action) => {
   switch (action.type) {
+    case GET_PRODUCTS:
+      return {
+        ...state,
+        isLoading: true,
+      }
     case GET_PRODUCT_SUCCESS:
       return {
         ...state,
-        dataList: action.payload
+        dataList: action.payload,
+        isLoading: false,
       }
 
     case GET_PRODUCT_FAIL:
       return {
         ...state,
         dataList: action.payload,
+        isLoading: false,
       }
 
     case GET_DOWNLOAD_PRODUCTS_SUCCESS:
       return {
         ...state,
-        downloadProducts: action.payload
+        downloadProducts: action.payload,
       }
 
     case GET_DOWNLOAD_PRODUCTS_FAIL:
@@ -90,12 +99,12 @@ const Product = (state = initialState, action) => {
       }
 
     case UPDATE_PRODUCT_DETAIL_SUCCESS:
-      notify.success('Product Detail Updated!')
+      notify.success("Product Detail Updated!")
       return {
         ...state,
         updateStatus: action.payload,
       }
-  
+
     case UPDATE_PRODUCT_DETAIL_FAIL:
       notify.error(action.payload)
       return {

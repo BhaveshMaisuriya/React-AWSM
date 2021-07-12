@@ -4,52 +4,30 @@ import ArrowLeft from "../../../assets/images/arrow-left.png"
 import ArrowLeftG from "../../../assets/images/arrow-left-grey.png"
 import ArrowRight from "../../../assets/images/arrow-right.png"
 import ArrowRightG from "../../../assets/images/arrow-right-grey.png"
-import { withStyles } from "@material-ui/styles"
 import { Pagination, PaginationItem, PaginationLink } from "reactstrap"
 import { Divider } from "@material-ui/core"
-import "./datatable.scss"
-
-const styles = {
-  // root: {
-  //   padding: '2px 4px',
-  //   display: 'flex',
-  //   alignItems: 'center',
-  //   width: 400,
-  // },
-  // input: {
-  //   marginLeft: 8,
-  //   flex: 1,
-  // },
-  // iconButton: {
-  //   padding: 10,
-  // },
-  divider: {
-    width: 1,
-    height: 28,
-    marginTop: 4,
-    marginBottom: 4,
-  },
-}
+import "./tablePagination.scss"
 
 class TablePaginationActions extends Component {
-  // handleFirstPageButtonClick = event => {
-  //   this.props.onChangePage(event, 0)
-  // }
-
   handleBackButtonClick = event => {
-    this.props.onChangePage(event, this.props.currentPage - 1)
+    const { decrement } = this.props
+    const firstPage = 0
+    const pageDecrement = this.props.currentPage - decrement
+    this.props.onChangePage(
+      event,
+      pageDecrement < firstPage ? firstPage : pageDecrement
+    )
   }
 
   handleNextButtonClick = event => {
-    this.props.onChangePage(event, this.props.currentPage + 1)
+    const { count, rowsPerPage, increment } = this.props
+    const lastPage = Math.floor(count / rowsPerPage)
+    const pageIncrement = this.props.currentPage + increment
+    this.props.onChangePage(
+      event,
+      pageIncrement > lastPage ? lastPage : pageIncrement
+    )
   }
-
-  // handleLastPageButtonClick = event => {
-  //   this.props.onChangePage(
-  //     event,
-  //     Math.max(0, Math.ceil(this.props.count / this.props.rowsPerPage) - 1)
-  //   )
-  // }
 
   handlePageNumClick = event => {
     this.props.onChangePage(event, event.target.value - 1)
@@ -62,7 +40,7 @@ class TablePaginationActions extends Component {
     for (let i = 1; i <= Math.ceil(count / rowsPerPage); i++) {
       pageNumbers.push(i)
     }
-    const newpageNumbers = pageNumbers.splice(currentPage, 5)
+    const newpageNumbers = pageNumbers.splice(currentPage, 20)
     return (
       <Pagination>
         <div className="Pagination-Container">
@@ -70,6 +48,7 @@ class TablePaginationActions extends Component {
             <PaginationLink
               onClick={this.handleBackButtonClick}
               aria-label="Previous Page"
+              className="Pagination-Button Pagination-First-Button"
             >
               <img
                 src={currentPage === 0 ? ArrowLeftG : ArrowLeft}
@@ -78,7 +57,12 @@ class TablePaginationActions extends Component {
               />
             </PaginationLink>
           </PaginationItem>
-          <Divider className={classes.divider} />
+          <Divider
+            orientation="vertical"
+            flexItem
+            light
+            className="Pagination-Divider"
+          />
           {newpageNumbers.map(number => (
             <PaginationItem
               active={number - 1 === currentPage}
@@ -93,13 +77,19 @@ class TablePaginationActions extends Component {
               </PaginationLink>
             </PaginationItem>
           ))}
-          <Divider className={classes.divider} />
+          <Divider
+            orientation="vertical"
+            flexItem
+            light
+            className="Pagination-Divider"
+          />
           <PaginationItem
             disabled={currentPage >= Math.ceil(count / rowsPerPage) - 1}
           >
             <PaginationLink
               onClick={this.handleNextButtonClick}
               aria-label="Next Page"
+              className="Pagination-Button"
             >
               <img
                 src={
@@ -124,6 +114,13 @@ TablePaginationActions.propTypes = {
   onChangePage: PropTypes.func.isRequired,
   currentPage: PropTypes.number.isRequired,
   rowsPerPage: PropTypes.number.isRequired,
+  increment: PropTypes.number,
+  decrement: PropTypes.number,
 }
 
-export default withStyles(styles)(TablePaginationActions)
+TablePaginationActions.defaultProps = {
+  increment: 1,
+  decrement: -1,
+}
+
+export default TablePaginationActions

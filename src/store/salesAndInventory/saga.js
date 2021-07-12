@@ -42,9 +42,13 @@ import {
 
 function* onGetSalesAndInventory({ params = {} }) {
   try {
-    const response = yield call(getSaleAndInventory, params)
-    yield put(getSaleAndInventorySuccess(Factory(response)))
-    yield put(getSaleAndInventoryFilterSuccess(response.data.filters))
+    if(params.q && params.q === "()"){
+      yield put(getSaleAndInventorySuccess('Data is not available'))
+    } else {
+      const response = yield call(getSaleAndInventory, params)
+      yield put(getSaleAndInventorySuccess(Factory(response)))
+      yield put(getSaleAndInventoryFilterSuccess(response.data.filters))
+    }
   } catch (error) {
     yield put(getSaleAndInventoryFail(error))
   }

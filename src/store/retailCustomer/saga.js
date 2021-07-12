@@ -33,9 +33,13 @@ import {
 
 function* onGetRetailCustomer({ params = {} }) {
   try {
-    const response = yield call(getRetailCustomer, params)
-    yield put(getRetailCustomerSuccess(Factory(response)))
-    yield put(getRetailFilterSuccess(response.data.filters))
+    if(params.q && params.q === "()"){
+      yield put(getRetailCustomerSuccess('Data is not available'))
+    } else {
+      const response = yield call(getRetailCustomer, params)
+      yield put(getRetailCustomerSuccess(Factory(response)))
+      yield put(getRetailFilterSuccess(response.data.filters))
+    }
   } catch (error) {
     yield put(getRetailCustomerFail(error))
   }

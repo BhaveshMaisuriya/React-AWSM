@@ -37,9 +37,13 @@ import {
 
 function* onGetTerminal({ params = {} }) {
   try {
-    const response = yield call(getTerminal, params)
-    yield put(getTerminalSuccess(Factory(response)))
-    yield put(getTerminalFilterSuccess(response.data.filters))
+    if(params.q && params.q === "()"){
+      yield put(getTerminalSuccess('Data is not available'))
+    } else {
+      const response = yield call(getTerminal, params)
+      yield put(getTerminalSuccess(Factory(response)))
+      yield put(getTerminalFilterSuccess(response.data.filters))
+    }
   } catch (error) {
     yield put(getTerminalFail(error))
   }

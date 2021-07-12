@@ -477,7 +477,7 @@ class Pages extends Component {
                       <FixedColumnTable
                         headers={searchFields}
                         config={tableMapping}
-                        tableData={tableData.list}
+                        tableData={tableData.list ? tableData.list : tableData}
                         frozen={frozenColNum}
                         filterData={filter}
                         headerSortHandler={this.handleHeaderSort}

@@ -75,18 +75,21 @@ class Terminal extends Component {
       <Fragment>
         {terminalTable && terminalTable.length === 0 && <Loader />}
         {terminalTableIsLoading ? <Loader /> : ""}
-        {terminalTable && terminalTable.list && (
+        {terminalTable && (
           <Page
             headerTitle="Terminal"
             cardTitle="Terminal List"
             tableName={TerminalTableName}
             onGetMainTable={onGetTerminal}
             onGetAuditLog={onGetTerminalAuditLog}
-            // onGetFilter={onGetTerminalFilter}
             onGetTableInformation={onGetTableInformation}
             onUpdateTableInformation={onUpdateTableInformation}
             tableColumns={searchFields}
             tableMapping={tableMapping}
+            headerTitle="Terminal"
+            cardTitle="Terminal List"
+            tableName={TerminalTableName}
+            // onGetFilter={onGetTerminalFilter}
             tableData={terminalTable}
             audits={auditsTerminal}
             downloadtableData={downloadTerminal}

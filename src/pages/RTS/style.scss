@@ -2,8 +2,10 @@
     margin-top: 15px;
     height: 95vh;
     margin-bottom: 0px !important;
-    .row {
+    .border_btm {
         border-bottom: 1px solid #E8E8E8;
+    }
+    .row {
         .nav-pills { 
              border-bottom: unset !important;
         }
@@ -367,4 +369,7 @@
     padding: 10px;
     display: flex;
     width: 100%;
+}
+.pointer {
+    cursor: pointer;
 }

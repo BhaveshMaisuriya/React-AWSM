@@ -78,7 +78,7 @@ class Product extends Component {
       <Fragment>
         {products && products.length === 0 && <Loader />}
         {productsIsLoading ? <Loader /> : ""}
-        {products && products.list && (
+        {products && (
           <Page
             headerTitle="Product"
             cardTitle="Product List"

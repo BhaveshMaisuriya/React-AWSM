@@ -312,7 +312,7 @@ const Example = React.memo(props => {
                 type="submit"
                 className="filter-popover-button filter-popover-button-apply"
                 onClick={clickApply}
-                disabled={checkedCount === 0 || hasRemark ? true : false}
+                // disabled={checkedCount === 0 || hasRemark ? true : false}
               >
                 Apply
               </Button>

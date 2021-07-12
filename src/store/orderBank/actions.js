@@ -21,6 +21,9 @@ import {
   DELETE_ORDERBANK_DETAIL,
   DELETE_ORDERBANK_DETAIL_SUCCESS,
   DELETE_ORDERBANK_DETAIL_FAIL,
+  SEND_DN_STATUS_REQUEST,
+  SEND_DN_STATUS_REQUEST_SUCCESS,
+  SEND_DN_STATUS_REQUEST_FAIL
 } from "./actionTypes"
 
 export const getRTSOrderBankTableData = (params) => ({
@@ -133,5 +136,20 @@ export const deleteOrderBankDetailSuccess = event => ({
 
 export const deleteOrderBankDetailFail = error => ({
   type: DELETE_ORDERBANK_DETAIL_FAIL,
+  payload: error
+})
+
+export const sendDNStatusRequest = params => ({
+  type: SEND_DN_STATUS_REQUEST,
+  params,
+})
+
+export const sendDNStatusRequestSuccess = event => ({
+  type: SEND_DN_STATUS_REQUEST_SUCCESS,
+  payload: event,
+})
+
+export const sendDNStatusRequestFail = error => ({
+  type: SEND_DN_STATUS_REQUEST_FAIL,
   payload: error
 })

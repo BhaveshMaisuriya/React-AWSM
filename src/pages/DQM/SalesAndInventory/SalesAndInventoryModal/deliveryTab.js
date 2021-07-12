@@ -6,7 +6,6 @@ export default class DeliveryTab extends Component {
         super(props)
 
         this.state = {
-
         }
 
         this.handleEvent = this.handleEvent.bind(this)

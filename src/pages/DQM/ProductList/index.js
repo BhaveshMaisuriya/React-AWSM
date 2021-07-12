@@ -7,7 +7,7 @@ import {
   // getProductFilter,
   getTableInformation,
   updateTableInformation,
-  getDownloadProducts
+  getDownloadProducts,
 } from "../../../store/actions"
 import { tableColumns, tableMapping } from "./tableMapping"
 import { transformArrayToString, getCookieByKey } from "../Common/helper"
@@ -51,50 +51,53 @@ class Product extends Component {
     //onGetTableInformation()
   }
 
-  GetonDownload = async(currentPage) => {
+  GetonDownload = async currentPage => {
     const downloadParams = {
       limit: 10,
       page: currentPage,
-      search_fields: '*',
+      search_fields: "*",
     }
-    const { onGetDownloadProducts } = this.props;
-    await onGetDownloadProducts(downloadParams);
+    const { onGetDownloadProducts } = this.props
+    await onGetDownloadProducts(downloadParams)
   }
 
   render() {
     const {
       onGetProducts,
       onGetProductAuditLog,
-      // onGetProductFilter,
       onGetTableInformation,
       onUpdateTableInformation,
       products,
       audits,
       filter,
       downloadProduct,
+      productsIsLoading,
     } = this.props
     const { searchFields } = this.state
-    if (!products) return (<Loader />)
     return (
       <Fragment>
-        <Page
-          headerTitle="Product"
-          cardTitle="Product List"
-          tableName={ProductTableName}
-          onGetCustomer={onGetProducts}
-          onGetAuditLog={onGetProductAuditLog}
-          // onGetFilter={onGetProductFilter}
-          onGetTableInformation={onGetTableInformation}
-          onUpdateTableInformation={onUpdateTableInformation}
-          tableColumns={searchFields}
-          tableMapping={tableMapping}
-          tableData={products}
-          downloadtableData={downloadProduct}
-          audits={audits}
-          filter={filter}
-          modalComponent={ProductDetailModal}
-          onGetDownloadCustomer={this.GetonDownload}
-        />
+        {products && products.length === 0 && <Loader />}
+        {productsIsLoading ? <Loader /> : ""}
+        {products && products.list && (
+          <Page
+            headerTitle="Product"
+            cardTitle="Product List"
+            tableName={ProductTableName}
+            onGetMainTable={onGetProducts}
+            onGetAuditLog={onGetProductAuditLog}
+            // onGetFilter={onGetProductFilter}
+            onGetTableInformation={onGetTableInformation}
+            onUpdateTableInformation={onUpdateTableInformation}
+            tableColumns={searchFields}
+            tableMapping={tableMapping}
+            tableData={products}
+            downloadtableData={downloadProduct}
+            audits={audits}
+            filter={filter}
+            modalComponent={ProductDetailModal}
+            onGetDownloadCustomer={this.GetonDownload}
+          />
+        )}
       </Fragment>
     )
   }
@@ -102,6 +105,7 @@ class Product extends Component {
 
 const mapStateToProps = ({ products }) => ({
   products: products.dataList,
+  productsIsLoading: products.isLoading,
   audits: products.productAuditLog,
   filter: products.productFilter,
   downloadProduct: products.downloadProducts,

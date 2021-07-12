@@ -9,9 +9,6 @@ import {
   DropdownMenu,
   DropdownToggle,
   DropdownItem,
-  Modal,
-  ModalHeader,
-  ModalBody,
   Input,
 } from "reactstrap"
 import MoreVertIcon from "@material-ui/icons/MoreVert"
@@ -30,8 +27,10 @@ import TrashIcon from "../../../assets/images/AWSM-Trash-Icon.svg"
 import NoDataIcon from "../../../assets/images/AWSM-No-Data-Available.svg"
 import DeleteOrderBankConfirmation from "../deleteOrderBankModal"
 import EditOrderBankModal from "../editOrderBankModal"
+import ConfirmDNStatusModal from "./confirmDNStatusModal"
 import { isEqual } from "lodash"
-import { updateOrderBankTableData, deleteOrderBankDetail } from "../../../store/actions"
+import { updateOrderBankTableData, deleteOrderBankDetail, sendDNStatusRequest } from "../../../store/actions"
+
 
 class TableGroupEvent extends React.Component {
   constructor(props) {
@@ -116,7 +115,6 @@ class TableGroupEvent extends React.Component {
           checked={isChecked}
           onChange={this.onChangeCheckBox.bind(this)}
         />
-
         {this.state.isOpenDeleteModal && (
           <DeleteOrderBankConfirmation
             isOpen={true}
@@ -144,6 +142,10 @@ class index extends Component {
             expandSearch:false,
             dataSource: props.dataSource,
             searchText:"",
+            DNStatus: {
+              data:{},
+              isOpenConfirmModal:false
+            },
             filterCondition: [],
             currentSort: {
               key: null,
@@ -179,7 +181,7 @@ class index extends Component {
     applyExpandSearchHandler = () =>{
       let { searchText } = this.state
       const { dataSource } = this.props
-      let newData = [...dataSource].filter((e)=>e.search.includes(searchText))
+      let newData = [...dataSource].filter((e)=>e.notes.includes(searchText))
       this.setState({ dataSource : newData })
 
     }
@@ -207,7 +209,7 @@ class index extends Component {
     headerTableConfiguration = () => {
         const { fixedHeaders, filterData, expandSearch, searchText  } = this.state
         return tableColumns.map(v => {
-          return v != "search" ? (
+          return v != "notes" ? (
             <th>
               <span onClick={() => this.onSorting(v)}>
                 {tableMapping[v].label.toUpperCase()}
@@ -257,7 +259,7 @@ class index extends Component {
       }
 
     bodyTableConfiguration = (data) => {
-        const { fixedHeaders, filterData, expandSearch } = this.state
+        const { expandSearch } = this.state
         return tableColumns.map((v)=> {
             let typeOfColumn = tableMapping[v].type
             let result;
@@ -269,14 +271,14 @@ class index extends Component {
                             break
                 case "dn_status":
                     result = <td>{data[v] && data[v].map((e)=>{
-                        return (<span className={`status ${e}`}>{e}</span>)})}
+                        return (<span className={`status ${e}`} onClick={this.DNStatusOnClickHandler.bind(this,data,e)}>{e}</span>)})}
                             </td>
                              break
                 default:
                     result =  <td>{data[v]}</td>;
                     break
             }
-            return (v != "search" || expandSearch) && result
+            return (v != "notes" || expandSearch) && result
         })
     }
 
@@ -324,7 +326,7 @@ class index extends Component {
     }
 
 
-      ApplyFilterHandler = (data, key) => {
+    ApplyFilterHandler = (data, key) => {
       const { dataSource } = this.props
       if (!dataSource) {
         return
@@ -349,12 +351,11 @@ class index extends Component {
         this.setState({ dataSource:data,selectedAllItem : temp.length == data.length ? true :false   })
         let checkedData = [];
         data.map((item, index)=>{
-          if(item.isChecked === true){            
+          if(item.isChecked === true){
             checkedData.push(item);
           }
         })
-        
-        let checkCross = checkedData.filter((v)=>(v.product_category === "ASR" || v.product_category === "SMP"))        
+        let checkCross = checkedData.filter((v)=>(v.product_category === "ASR" || v.product_category === "SMP"))
         this.props.enabledCross(checkCross.length);
     }
 
@@ -368,8 +369,22 @@ class index extends Component {
         this.setState({ selectedAllItem:!selectedAllItem, dataSource:data })
     }
 
+    DNStatusOnClickHandler( data, key ){
+      if(key === 'Send For DN'){
+        this.setState({ DNStatus: { isOpenConfirmModal:true,data }})
+      }
+    }
+
+    //DN-Status
+    onSendRequestOnDNStatusHandler(){
+      const { DNStatus } = this.state
+      const { onSendDNStatusRequest } = this.props
+      onSendDNStatusRequest(DNStatus.data)
+      this.setState({DNStatus: { isOpenConfirmModal:false }})
+    }
+
     render() {
-        const { selectedAllItem, expandSearch } = this.state
+        const { selectedAllItem, expandSearch, DNStatus } = this.state
         const { dataSource } = this.state
         return (
           <div className="rts-table-container scroll" id="scrollableDiv">
@@ -410,6 +425,14 @@ class index extends Component {
                       </table>
                   </div>
               </div>
+              { DNStatus.isOpenConfirmModal && (
+                <ConfirmDNStatusModal 
+                isOpen={DNStatus.isOpenConfirmModal}
+                onSend={this.onSendRequestOnDNStatusHandler.bind(this)}
+                onCancel={() => this.setState({ DNStatus: { isOpenConfirmModal:false }} )}
+                />
+                )
+              }
           </div>
     )
   }
@@ -419,5 +442,6 @@ index.propTypes = {}
 const mapDispatchToProp = dispatch => ({
   updateOrderBankTableData: payload => dispatch(updateOrderBankTableData(payload)),
   onGetDeleteOrderBankDetail: params => dispatch(deleteOrderBankDetail(params)),
+  onSendDNStatusRequest: params => dispatch(sendDNStatusRequest(params)),
 })
 export default connect(null, mapDispatchToProp)(index)

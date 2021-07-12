@@ -8,6 +8,7 @@ import {
   GET_RTS_ORDER_BANK_TABLE_DATA,
   SEND_ORDER_BANK_DN,
   REFRESH_ORDER_BANK_DN,
+  SEND_DN_STATUS_REQUEST
 } from "./actionTypes"
 
 import {
@@ -25,6 +26,8 @@ import {
   sendOrderBankDNSuccess,
   refreshOderBankDNFail,
   refreshOderBankDNSuccess,
+  sendDNStatusRequestSuccess,
+  sendDNStatusRequestFail
 } from "./actions"
 import {
   getOrderBank,
@@ -99,6 +102,15 @@ function* onSendOrderBankDN({ params = {}}) {
   }
 }
 
+function* onSendDNStatusRequest({ params }) {
+  try {
+    // const response = yield call(sendRTSOrderBank, params)
+    yield put(sendDNStatusRequestSuccess())
+  } catch (error) {
+    yield put(sendDNStatusRequestFail(error))
+  }
+}
+
 function* orderBankSaga() {
   yield takeLatest(GET_ORDERBANK, onGetOrderbank)
   yield takeLatest(GET_RTS_ORDER_BANK_TABLE_DATA, onGetRTSOrderBank)
@@ -116,6 +128,8 @@ function* orderBankSaga() {
   // )
   yield takeLatest(REFRESH_ORDER_BANK_DN, onRefreshOrderBankDN)
   yield takeLatest(SEND_ORDER_BANK_DN, onSendOrderBankDN)
+  yield takeLatest(SEND_DN_STATUS_REQUEST, onSendDNStatusRequest)
+  
 }
 
 export default orderBankSaga

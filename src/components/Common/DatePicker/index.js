@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react"
+import React, { useState, useMemo, useEffect } from "react"
 import { Calendar } from "react-date-range"
 import "react-date-range/dist/styles.css"
 import "react-date-range/dist/theme/default.css"
@@ -62,6 +62,10 @@ const DatePicker = ({
     setDate(dateButton)
     handleClose()
   }
+
+  useEffect(() => {
+    setDate(value ? new Date(value) : null)
+  }, [value])
 
   return (
     <div className="awsm-date-picker-container">

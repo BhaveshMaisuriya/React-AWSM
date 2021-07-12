@@ -24,7 +24,6 @@ const Example = React.memo(props => {
   const [hasMore, setHasMore] = useState(true)
   const [hasRemark, setHasRemark] = useState(true)
   const [current, setCurrent] = useState([])
-
   var rowsPerLoad = 30
   /**
    * dataFilter should never be zero unless api fails or db has no data
@@ -59,14 +58,14 @@ const Example = React.memo(props => {
   }, [dataFilter])
 
   useEffect(() => {
-    let alldata = [...data];
-    let arr = [];
+    let alldata = [...data]
+    let arr = []
     alldata.map((item, index) => {
       if (index < rowsPerLoad) {
         arr.push(item)
       }
     })
-    arr.length <= rowsPerLoad ? setHasMore(false) : setHasMore(true);
+    arr.length <= rowsPerLoad ? setHasMore(false) : setHasMore(true)
     setCurrent(arr)
   }, [data])
 
@@ -98,7 +97,6 @@ const Example = React.memo(props => {
    * @param index
    */
   function onInputChange(index) {
-
     const newData = [...data]
     newData[index].checked = !newData[index].checked
     setData(newData)
@@ -115,8 +113,12 @@ const Example = React.memo(props => {
   function onSearchTextChange(event) {
     const newData = [...data]
     newData.map((item, index) => {
-      item.visibility = item.text !== null && item.text.toString().toLowerCase().includes(event.target.value)
-      item.checked = item.text !== null && item.text.toString().toLowerCase().includes(event.target.value)
+      item.visibility =
+        item.text !== null &&
+        item.text.toString().toLowerCase().includes(event.target.value)
+      item.checked =
+        item.text !== null &&
+        item.text.toString().toLowerCase().includes(event.target.value)
     })
     setData(newData)
   }
@@ -166,7 +168,7 @@ const Example = React.memo(props => {
 
   const toggle = () => {
     setPopoverOpen(!popoverOpen)
-    dataKey === 'remarks' ? setHasRemark(true) : setHasRemark(false);
+    dataKey === "remarks" ? setHasRemark(true) : setHasRemark(false)
   }
 
   const getMoreData = () => {
@@ -196,6 +198,7 @@ const Example = React.memo(props => {
         target={dataKey}
         toggle={toggle}
         trigger="legacy"
+        style={{ width: "auto" }}
       >
         <PopoverBody className="filter-container">
           <div className="position-relative">
@@ -204,12 +207,16 @@ const Example = React.memo(props => {
               onChange={onSearchTextChange}
               style={{
                 fontFamily: "Museo Sans",
+                fontSize: "12px",
               }}
             />
             <img
               className="position-absolute search-icon"
               src={searchIcon}
               alt="search"
+              style={{
+                paddingRight: "8px",
+              }}
             />
           </div>
           <form
@@ -218,45 +225,50 @@ const Example = React.memo(props => {
               e.preventDefault()
             }}
           >
-            {!hasRemark &&
+            {!hasRemark && (
               <Fragment>
                 <SimpleBar
                   autoHide={false}
-                  style={{ maxHeight: "150px", width: "100%", overflow: "auto" }}
+                  style={{
+                    maxHeight: "160px",
+                    width: "100%",
+                    overflow: "auto",
+                  }}
                 >
                   {current.length > 0 && !isNull(current)
                     ? current.map((row, index) => {
-                      return (
-                        row.visibility && (
-                          <div
-                            key={row.text}
-                            className={`d-flex align-items-center ${row.checked || checkAll ? "item-checked" : ""
+                        return (
+                          row.visibility && (
+                            <div
+                              key={row.text}
+                              className={`d-flex align-items-center filter-selection ${
+                                row.checked || checkAll ? "item-checked" : ""
                               }`}
-                          >
-                            <FormControlLabel
-                              key={`${row}${index}`}
-                              onChange={() => onInputChange(index)}
-                              checked={checkAll || row.checked}
-                              className="checkmark"
-                              control={
-                                <Checkbox
-                                  icon={<CustomIcon />}
-                                  checkedIcon={<CustomIcon2 />}
-                                  style={{
-                                    height: "20px",
-                                    width: "5px",
-                                    marginLeft: "15px",
-                                    marginTop: "5px",
-                                  }}
-                                  name={isNull(row.text) ? "-" : row.text}
-                                />
-                              }
-                              label={isNull(row.text) ? "-" : row.text}
-                            />
-                          </div>
+                            >
+                              <FormControlLabel
+                                key={`${row}${index}`}
+                                onChange={() => onInputChange(index)}
+                                checked={checkAll || row.checked}
+                                className="checkmark"
+                                control={
+                                  <Checkbox
+                                    icon={<CustomIcon />}
+                                    checkedIcon={<CustomIcon2 />}
+                                    style={{
+                                      height: "20px",
+                                      width: "5px",
+                                      marginLeft: "16px",
+                                      marginTop: "8px",
+                                    }}
+                                    name={isNull(row.text) ? "-" : row.text}
+                                  />
+                                }
+                                label={isNull(row.text) ? "-" : row.text}
+                              />
+                            </div>
+                          )
                         )
-                      )
-                    })
+                      })
                     : ""}
                   {hasMore && (
                     <IconButton
@@ -271,66 +283,50 @@ const Example = React.memo(props => {
                   )}
                 </SimpleBar>
                 <p style={{ marginTop: "-10px" }}></p>
-
-                <Checkbox
-                  checked={checkAll}
-                  onChange={() => setCheckAll(!checkAll)}
-                  icon={<CustomIcon3 />}
-                  checkedIcon={<CustomIcon2 />}
-                  onClick={selectAll}
-                  style={{
-                    height: "20px",
-                    width: "5px",
-                    marginLeft: "5px",
-                    marginTop: "5px",
-                  }}
-                />
-                <label
-                  style={{
-                    color: "#008F8A",
-                    marginLeft: "12px",
-                    fontFamily: "Museo Sans",
-                  }}
-                >
-                  Select All
-                </label>
-                <IconButton></IconButton>
               </Fragment>
-            }
-            <Button
-              type="submit"
-              style={{
-                borderRadius: "12px",
-                padding: "2px 12px",
-                fontSize: "12px",
-                backgroundColor: "#008F8A",
-                float: "right",
-                fontFamily: "Museo Sans",
-              }}
-              onClick={clickApply}
-              // disabled={checkedCount === 0 ? true : false}
-            >
-              Apply
-            </Button>
-            <Button
-              type="button"
-              outline
-              color="#008F8A"
-              style={{
-                borderRadius: "12px",
-                padding: "2px 12px",
-                fontSize: "12px",
-                backgroundColor: "white",
-                float: "right",
-                border: "2px solid #e0f4f3",
-                color: "#008F8A",
-                marginRight: "5px",
-                fontFamily: "Museo Sans",
-              }}
-              onClick={clickReset}
-            >
-              Reset
-            </Button>
+            )}
+            <div style={{ height: "25px" }}>
+              <Checkbox
+                checked={checkAll}
+                onChange={() => setCheckAll(!checkAll)}
+                icon={<CustomIcon3 />}
+                checkedIcon={<CustomIcon2 />}
+                onClick={selectAll}
+                style={{
+                  height: "20px",
+                  width: "5px",
+                  marginLeft: "5px",
+                  marginTop: "-1px",
+                }}
+              />
+              <label
+                style={{
+                  color: "#008F8A",
+                  fontFamily: "Museo Sans",
+                  margin: "3px auto auto 8px",
+                }}
+              >
+                Select All
+              </label>
+              <Button
+                type="submit"
+                className="filter-popover-button filter-popover-button-apply"
+                onClick={clickApply}
+                disabled={checkedCount === 0 || hasRemark ? true : false}
+              >
+                Apply
+              </Button>
+              <Button
+                type="button"
+                outline
+                color="#008F8A"
+                onClick={clickReset}
+                className="filter-popover-button filter-popover-button-reset"
+                disabled={hasRemark ? true : false}
+              >
+                Reset
+              </Button>
+            </div>
           </form>
         </PopoverBody>
       </Popover>
@@ -339,8 +335,8 @@ const Example = React.memo(props => {
 })
 
 Example.defaultProps = {
-  handleClickApply: () => { },
-  handleClickReset: () => { },
+  handleClickApply: () => {},
+  handleClickReset: () => {},
 }
 
 export default Example

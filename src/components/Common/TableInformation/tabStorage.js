@@ -248,10 +248,10 @@ const TabStorage = ({ scheduler, data, onChange }) => {
               <div className="col col-12 col-sm-6 col-lg-3">
                 <div className="input-header mb-2">SALE CATEGORY</div>
                 <AWSMDropdown
-                  value={storageData[key] ? storageData[key].sale_category || "" : ""}
+                  value={storageData[key] ? storageData[key].sales_category || "" : ""}
                   items={SALES_CATEGORY}
                   onChange={value =>
-                    onUpdateField(key, "sale_category", value)
+                    onUpdateField(key, "sales_category", value)
                   }
                   disabled={scheduler}
                 />

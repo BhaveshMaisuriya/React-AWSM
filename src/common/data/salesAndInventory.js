@@ -57,8 +57,8 @@ const currentSaleAndInventory = {
   sales: {
     actual_sales: 123123,
     expected_sales: 123123,
-    yesterday_sales_adjustment: "12 mar 2021",
-    yesterday_sales_adjustment_remarks: "12 mar 2021",
+    yesterday_sales_adjustment: 123,
+    yesterday_sales_adjustment_remarks: "string",
     sales_final_figure: 123123,
     sales_variance: 12341234,
     sales_variance_percent: 23

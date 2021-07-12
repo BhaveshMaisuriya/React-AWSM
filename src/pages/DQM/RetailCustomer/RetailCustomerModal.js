@@ -33,6 +33,7 @@ import {
 import AWSMAlert from "../../../components/Common/AWSMAlert"
 import { isScheduler } from "../../../helpers/auth_helper"
 import ExitConfirmation from "../../../components/Common/ExitConfirmation"
+import { runValidation } from "../Common/helper"
 
 const RetailCustomerModal = props => {
   const {
@@ -55,9 +56,10 @@ const RetailCustomerModal = props => {
 
   const handleUpdate = e => {
     e.preventDefault()
-    updateTableInformation(currentRetailDetail)
-    onCancel()
-    setAlert(true)
+    if (runValidation(currentRetailDetail)) {
+      updateTableInformation(currentRetailDetail)
+      onCancel()
+    }
   }
 
   const handleClose = () => {

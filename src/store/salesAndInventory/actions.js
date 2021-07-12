@@ -22,6 +22,9 @@ import {
   GET_DETAIL_SALES,
   GET_DETAIL_SALES_SUCCESS,
   GET_DETAIL_SALES_FAIL,
+  UPDATE_SALES_AND_INVENTORY_DETAIL,
+  UPDATE_SALES_AND_INVENTORY_DETAIL_SUCCESS,
+  UPDATE_SALES_AND_INVENTORY_DETAIL_FAIL,
   OVERRIDE_STATUS_IN_ACTION_COLUMN
 } from "./actionTypes"
 
@@ -156,6 +159,21 @@ export const getDetailsSalesSuccess = response => ({
 
 export const getDetailsSalesFail = error => ({
   type: GET_DETAIL_SALES_FAIL,
+  payload: error,
+})
+
+export const updateSalesAndInventoryDetail = data => ({
+  type: UPDATE_SALES_AND_INVENTORY_DETAIL,
+  payload: data,
+})
+
+export const updateSalesAndInventoryDetailSuccess = data => ({
+  type: UPDATE_SALES_AND_INVENTORY_DETAIL_SUCCESS,
+  payload: data,
+})
+
+export const updateSalesAndInventoryDetailFail = error => ({
+  type: UPDATE_SALES_AND_INVENTORY_DETAIL_FAIL,
   payload: error,
 })
 

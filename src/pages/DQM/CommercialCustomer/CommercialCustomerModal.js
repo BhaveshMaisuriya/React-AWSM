@@ -33,6 +33,7 @@ import {
 } from "../../../store/commercialCustomer/actions"
 import AWSMAlert from "../../../components/Common/AWSMAlert"
 import { isScheduler } from "../../../helpers/auth_helper"
+import { runValidation } from "../Common/helper"
 
 const CommercialCustomerModal = props => {
   const {
@@ -55,9 +56,10 @@ const CommercialCustomerModal = props => {
 
   const handleUpdate = e => {
     e.preventDefault()
-    updateCommercialTableInformation(currentCommercialDetail)
-    onCancel()
-    setAlert(true)
+    if (runValidation(currentCommercialDetail)) {
+      updateCommercialTableInformation(currentCommercialDetail)
+      onCancel()
+    }
   }
 
   const handleClose = () => {

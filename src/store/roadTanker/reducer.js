@@ -1,4 +1,5 @@
 import {
+  GET_ROAD_TANKER,
   GET_ROAD_TANKER_FAIL,
   GET_ROAD_TANKER_SUCCESS,
   GET_ROADTANKER_AUDITLOG_SUCCESS,
@@ -15,7 +16,7 @@ import {
   GET_ROAD_TANKER_DETAIL_FAIL,
   UPDATE_ROAD_TANKER_DETAIL_SUCCESS,
   UPDATE_ROAD_TANKER_DETAIL_FAIL,
-  RESET_CURRENT_ROAD_TANKER_DATA
+  RESET_CURRENT_ROAD_TANKER_DATA,
 } from "./actionTypes"
 import { notify } from "../../helpers/notify"
 
@@ -27,21 +28,29 @@ const initialState = {
   filterRoadTanker: [],
   downloadRoadTanker: [],
   currentRoadTanker: {},
-  isUpdateSuccess:false
+  isUpdateSuccess: false,
+  isLoading: false,
 }
 
 const RoadTanker = (state = initialState, action) => {
   switch (action.type) {
+    case GET_ROAD_TANKER:
+      return {
+        ...state,
+        isLoading: true,
+      }
     case GET_ROAD_TANKER_SUCCESS:
       return {
         ...state,
         roadTanker: action.payload,
+        isLoading: false,
       }
 
     case GET_ROAD_TANKER_FAIL:
       return {
         ...state,
         roadTanker: action.payload,
+        isLoading: false,
       }
 
     case GET_DOWNLOAD_ROAD_TANKER_SUCCESS:
@@ -110,33 +119,35 @@ const RoadTanker = (state = initialState, action) => {
     case GET_ROAD_TANKER_DETAIL_SUCCESS:
       return {
         ...state,
-        currentRoadTanker: action.payload
+        currentRoadTanker: action.payload,
       }
     case RESET_CURRENT_ROAD_TANKER_DATA:
       return {
         ...state,
-        currentRoadTanker: {}
+        currentRoadTanker: {},
       }
     case GET_ROAD_TANKER_DETAIL_FAIL:
       return {
         ...state,
-        error: action.payload
+        error: action.payload,
       }
     case UPDATE_ROAD_TANKER_DETAIL_SUCCESS:
       notify.success("Record Successfully Updated")
-      let newRoadTanker = {...state.roadTanker}
+      let newRoadTanker = { ...state.roadTanker }
       let newData = newRoadTanker.list
-      const index = newData.findIndex((v)=>v.vehicle === action?.payload?.data?.vehicle)
+      const index = newData.findIndex(
+        v => v.vehicle === action?.payload?.data?.vehicle
+      )
       newData[index] = action?.payload?.data
       return {
         ...state,
-        roadTanker : newRoadTanker,
-        isUpdateSuccess: true
+        roadTanker: newRoadTanker,
+        isUpdateSuccess: true,
       }
     case UPDATE_ROAD_TANKER_DETAIL_FAIL:
       return {
         ...state,
-        error: action.payload
+        error: action.payload,
       }
     default:
       return state

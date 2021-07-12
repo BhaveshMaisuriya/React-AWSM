@@ -1,4 +1,4 @@
-import React, { useMemo } from "react"
+import React, { useEffect, useMemo } from "react"
 import { AvField, AvForm } from "availity-reactstrap-validation"
 import { Col, Row } from "reactstrap"
 import "./tabContact.scss"
@@ -34,6 +34,14 @@ const tabContact = ({ scheduler, data, onChange }) => {
     }
   }
 
+  const onParentFieldChange = (key, subKey, value) => {
+    const newData = { ...data[key] }
+    newData[subKey] = value
+    if (onChange) {
+      onChange(key, newData)
+    }
+  }
+
   return (
     <>
       {contactList.map((item, index) => {
@@ -63,10 +71,7 @@ const tabContact = ({ scheduler, data, onChange }) => {
                       className={item.disabled || scheduler ? "disabledField" : ""}
                       onChange={e => onFieldChange(index, "number", e.target.value)}
                       validate={{
-                        max: {
-                          value: 10000000,
-                          errorMessage: "Maximum quota within 10,000,000 only",
-                        },
+                        pattern:{value: '^\\+?[0-9- ]+$'},
                       }}
                     />
                   </AvForm>
@@ -112,6 +117,7 @@ const tabContact = ({ scheduler, data, onChange }) => {
                 value={data.territory_manager ? data.territory_manager.name || "" : ""}
                 disabled={!!scheduler}
                 className={scheduler ? "disabledField" : ""}
+                onChange={e => onParentFieldChange("territory_manager", "name", e.target.value)}
               />
             </AvForm>
           </Col>
@@ -124,8 +130,9 @@ const tabContact = ({ scheduler, data, onChange }) => {
                 disabled={!!scheduler}
                 className={scheduler ? "disabledField" : ""}
                 validate={{
-                  pattern:{ value: '^[0-9-]+$' },
+                  pattern:{ value: '^\\+?[0-9- ]+$' },
                 }}
+                onChange={e => onParentFieldChange("territory_manager", "number", e.target.value)}
               />
             </AvForm>
           </Col>
@@ -139,6 +146,7 @@ const tabContact = ({ scheduler, data, onChange }) => {
                 value={data.territory_manager ? data.territory_manager.email || "" : ""}
                 disabled={!!scheduler}
                 className={scheduler ? "disabledField" : ""}
+                onChange={e => onParentFieldChange("territory_manager", "email", e.target.value)}
               />
             </AvForm>
           </Col>
@@ -156,6 +164,7 @@ const tabContact = ({ scheduler, data, onChange }) => {
                 value={data.retail_sales_manager ? data.retail_sales_manager.name || "" : ""}
                 disabled={!!scheduler}
                 className={scheduler ? "disabledField" : ""}
+                onChange={e => onParentFieldChange("retail_sales_manager", "name", e.target.value)}
               />
             </AvForm>
           </Col>
@@ -168,8 +177,9 @@ const tabContact = ({ scheduler, data, onChange }) => {
                 disabled={!!scheduler}
                 className={scheduler ? "disabledField" : ""}
                 validate={{
-                  pattern:{ value: '^[0-9-]+$' },
+                  pattern:{ value: '^\\+?[0-9- ]+$' },
                 }}
+                onChange={e => onParentFieldChange("retail_sales_manager", "number", e.target.value)}
               />
             </AvForm>
           </Col>
@@ -183,6 +193,7 @@ const tabContact = ({ scheduler, data, onChange }) => {
                 value={data.retail_sales_manager ? data.retail_sales_manager.email || "" : ""}
                 disabled={!!scheduler}
                 className={scheduler ? "disabledField" : ""}
+                onChange={e => onParentFieldChange("retail_sales_manager", "email", e.target.value)}
               />
             </AvForm>
           </Col>

@@ -47,14 +47,14 @@ class Terminal extends Component {
     onGetTerminalAuditLog(payload)
   }
 
-  GetonDownload = async (currentPage) => {
+  GetonDownload = async currentPage => {
     const downloadParams = {
       limit: 10,
       page: currentPage,
-      search_fields: '*',
+      search_fields: "*",
     }
-    const { onGetDownloadTerminal } = this.props;
-    await onGetDownloadTerminal(downloadParams);
+    const { onGetDownloadTerminal } = this.props
+    await onGetDownloadTerminal(downloadParams)
   }
 
   render() {
@@ -68,15 +68,19 @@ class Terminal extends Component {
       auditsTerminal,
       downloadTerminal,
       filterTerminal,
+      terminalTableIsLoading,
     } = this.props
     const { searchFields } = this.state
-    if (!terminalTable || terminalTable.length === 0) return ""
     return (
       <Fragment>
-        {(terminalTable && terminalTable.length === 0) && <Loader />}
-        {terminalTable &&
+        {terminalTable && terminalTable.length === 0 && <Loader />}
+        {terminalTableIsLoading ? <Loader /> : ""}
+        {terminalTable && (
           <Page
-            onGetCustomer={onGetTerminal}
+            headerTitle="Terminal"
+            cardTitle="Terminal List"
+            tableName={TerminalTableName}
+            onGetMainTable={onGetTerminal}
             onGetAuditLog={onGetTerminalAuditLog}
             onGetTableInformation={onGetTableInformation}
             onUpdateTableInformation={onUpdateTableInformation}
@@ -93,7 +97,7 @@ class Terminal extends Component {
             modalComponent={TerminalDetailModal}
             onGetDownloadCustomer={this.GetonDownload}
           />
-        }
+        )}
       </Fragment>
     )
   }
@@ -101,6 +105,7 @@ class Terminal extends Component {
 
 const mapStateToProps = ({ terminal }) => ({
   terminalTable: terminal.terminal,
+  terminalTableIsLoading: terminal.isLoading,
   auditsTerminal: terminal.auditsTerminal,
   filterTerminal: terminal.filterTerminal,
   downloadTerminal: terminal.downloadTerminal,

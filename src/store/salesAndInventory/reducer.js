@@ -3,6 +3,7 @@ import {
   GET_SALES_AND_INVENTORY_VARIANCE_CONTROL_SUCCESS,
   GET_SALES_AND_INVENTORY_TANK_STATUS_MODAL_SUCCESS,
   GET_SALES_AND_INVENTORY_TANK_STATUS_MODAL_FAILED,
+  GET_SALES_AND_INVENTORY,
   GET_SALES_AND_INVENTORY_SUCCESS,
   GET_SALES_AND_INVENTORY_FAIL,
   GET_SALES_AND_INVENTORY_FILTER_FAIL,
@@ -15,8 +16,11 @@ import {
   GET_DETAIL_SALES_FAIL,
   UPDATE_SALES_AND_INVENTORY_VARIANCE_CONTROL_SUCCESS,
   UPDATE_SALES_AND_INVENTORY_VARIANCE_CONTROL_FAILED,
+  UPDATE_SALES_AND_INVENTORY_DETAIL_SUCCESS,
+  UPDATE_SALES_AND_INVENTORY_DETAIL_FAIL,
   OVERRIDE_STATUS_IN_ACTION_COLUMN
 } from "./actionTypes"
+import { notify } from "../../helpers/notify"
 
 const initialState = {
   varianceControlData: null,
@@ -26,11 +30,18 @@ const initialState = {
   tankStatusModalError: null,
   auditsCom: [],
   downloadtableData: [],
-  currentSalesAndInventory: {}
+  currentSalesAndInventory: {},
+  isUpdateSuccess: false,
+  isLoading: false,
 }
 
 const SaleAndInventory = (state = initialState, action) => {
   switch (action.type) {
+    case GET_SALES_AND_INVENTORY:
+      return {
+        ...state,
+        isLoading: true,
+      }
     case GET_SALES_AND_INVENTORY_VARIANCE_CONTROL_SUCCESS:
       return {
         ...state,
@@ -56,11 +67,13 @@ const SaleAndInventory = (state = initialState, action) => {
       return {
         ...state,
         mainTableData: action.payload,
+        isLoading: false,
       }
     case GET_SALES_AND_INVENTORY_FAIL:
       return {
         ...state,
         mainTableData: action.payload,
+        isLoading: false,
       }
     case GET_SALES_AND_INVENTORY_FILTER_SUCCESS:
       return {
@@ -114,8 +127,27 @@ const SaleAndInventory = (state = initialState, action) => {
         varianceControlData: null,
         varianceControlError: action.payload,
       }
+
+    case UPDATE_SALES_AND_INVENTORY_DETAIL_SUCCESS:
+      notify.success("Record Successfully Updated")
+      let newSaleAndInventory = { ...state.mainTableData }
+      let newData2 = newSaleAndInventory.list
+      const index = newSaleAndInventory.findIndex((v) => v.record_id === action?.payload?.data?.record_id)
+      newData2[index] = action?.payload?.data
+      return {
+        ...state,
+        mainTableData: newSaleAndInventory,
+        isUpdateSuccess: true
+      }
+
+    case UPDATE_SALES_AND_INVENTORY_DETAIL_FAIL:
+      return {
+        ...state,
+        error: action.payload
+      }
+
     case OVERRIDE_STATUS_IN_ACTION_COLUMN:
-      const listData = {...state.mainTableData}
+      const listData = { ...state.mainTableData }
       const newData = [...listData.list]
       newData[action.payload].overrideAction = true
       return {

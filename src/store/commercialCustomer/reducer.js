@@ -1,4 +1,5 @@
 import {
+  GET_COMMERCIAL_CUSTOMER,
   GET_COMMERCIAL_CUSTOMER_FAIL,
   GET_COMMERCIAL_CUSTOMER_SUCCESS,
   GET_DOWNLOAD_COMMERCIAL_CUSTOMER_FAIL,
@@ -22,21 +23,29 @@ const initialState = {
   currentCommercialDetail: null,
   updateSuccess: false,
   downloadCommercialCustomer: [],
+  isLoading: false,
 }
 
 import { notify } from "../../helpers/notify"
 
 const CommercialCustomer = (state = initialState, action) => {
   switch (action.type) {
+    case GET_COMMERCIAL_CUSTOMER:
+      return {
+        ...state,
+        isLoading: true,
+      }
     case GET_COMMERCIAL_CUSTOMER_SUCCESS:
       return {
         ...state,
         commercialCustomers: action.payload,
+        isLoading: false,
       }
     case GET_COMMERCIAL_CUSTOMER_FAIL:
       return {
         ...state,
         commercialCustomers: action.payload,
+        isLoading: false,
       }
 
     case GET_DOWNLOAD_COMMERCIAL_CUSTOMER_SUCCESS:
@@ -75,15 +84,15 @@ const CommercialCustomer = (state = initialState, action) => {
       }
 
     case GET_COMMERCIAL_TABLE_INFORMATION_SUCCESS:
-      return  {
+      return {
         ...state,
-        currentCommercialDetail: action.payload
+        currentCommercialDetail: action.payload,
       }
 
     case GET_COMMERCIAL_TABLE_INFORMATION_FAIL:
       return {
         ...state,
-        error: action.payload
+        error: action.payload,
       }
 
     case RESET_COMMERCIAL_TABLE_INFORMATION:

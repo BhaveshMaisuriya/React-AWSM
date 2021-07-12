@@ -77,28 +77,30 @@ class RetailCustomer extends Component {
       downloadretailCustomer,
     } = this.props
     const { searchFields } = this.state
-    if (!retailCustomer || retailCustomer.length === 0) return <Loader />
     return (
       <Fragment>
+        {retailCustomer && retailCustomer.length === 0 && <Loader />}
         {retailCustomerIsLoading ? <Loader /> : ""}
-        <Page
-          tableName={RetailTableName}
-          onGetCustomer={onGetRetailCustomer}
-          onGetAuditLog={onGetRetailAuditLog}
-          onGetTableInformation={onGetTableInformation}
-          onUpdateTableInformation={onUpdateTableInformation}
-          tableColumns={searchFields}
-          tableMapping={tableMapping}
-          tableData={retailCustomer}
-          downloadtableData={downloadretailCustomer}
-          audits={audits}
-          filter={filter}
-          address={address}
-          headerTitle="Retail Customer"
-          cardTitle="Retail Customer List"
-          modalComponent={RetailCustomerModal}
-          onGetDownloadCustomer={this.GetonDownload}
-        />
+        {retailCustomer && retailCustomer.list && (
+          <Page
+            tableName={RetailTableName}
+            onGetMainTable={onGetRetailCustomer}
+            onGetAuditLog={onGetRetailAuditLog}
+            onGetTableInformation={onGetTableInformation}
+            onUpdateTableInformation={onUpdateTableInformation}
+            tableColumns={searchFields}
+            tableMapping={tableMapping}
+            tableData={retailCustomer}
+            downloadtableData={downloadretailCustomer}
+            audits={audits}
+            filter={filter}
+            address={address}
+            headerTitle="Retail Customer"
+            cardTitle="Retail Customer List"
+            modalComponent={RetailCustomerModal}
+            onGetDownloadCustomer={this.GetonDownload}
+          />
+        )}
       </Fragment>
     )
   }

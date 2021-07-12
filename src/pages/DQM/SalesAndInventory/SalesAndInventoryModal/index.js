@@ -16,7 +16,8 @@ class SalesAndInventoryTableInformation extends Component {
         this.state = {
             activeTab: "1",
             isConfirm: false,
-
+            updateSuccess: false,
+            data: props.currentSalesAndInventory,
         }
 
         this.handleEvent = this.handleEvent.bind(this)
@@ -31,9 +32,14 @@ class SalesAndInventoryTableInformation extends Component {
             this.props.onCancel()
         }
     }
+
     componentDidMount() {
-        const { onGetSalesAndInventoryDetail, data } = this.props
-        onGetSalesAndInventoryDetail()
+        const { onGetSalesAndInventoryDetail, currentSalesAndInventory } = this.props
+        if (onGetSalesAndInventoryDetail()) {
+            this.setState({
+                data: currentSalesAndInventory
+            })
+        }
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) { if (prevState.name !== this.state.name) { this.handler() } }
@@ -49,13 +55,32 @@ class SalesAndInventoryTableInformation extends Component {
     handler = () => { this.setState() }
 
     render() {
-        const { onCancel, visible, currentSalesAndInventory } = this.props
-        const { activeTab } = this.state
+        const {
+            onCancel,
+            visible,
+            onUpdateSalesAndInventoryModal
+        } = this.props
+
+        const { activeTab, data } = this.state
+
         const toggle = tab => {
             if (activeTab !== tab) {
                 this.setState({ activeTab: tab })
             }
         }
+
+        const onFieldValueChange = (fieldName, value) => {
+            const newData = { ...data }
+            newData[fieldName] = value
+            this.setState({ data: newData })
+        }
+
+        const handleUpdate = (event) => {
+            e.preventDefault()
+            onUpdateSalesAndInventoryDetail(data)
+            this.onConfirmExit()
+        }
+
         return (
             <>
                 <Modal isOpen={visible}
@@ -129,22 +154,22 @@ class SalesAndInventoryTableInformation extends Component {
                             <TabContent activeTab={activeTab}>
                                 <TabPane tabId="1">
                                     <div className="simple-bar">
-                                        <DetailsTab data={currentSalesAndInventory?.details} />
+                                        <DetailsTab data={data?.details} onChange={onFieldValueChange} />
                                     </div>
                                 </TabPane>
                                 <TabPane tabId="2">
                                     <div className="simple-bar">
-                                        <SalesTab data={currentSalesAndInventory?.sales} />
+                                        <SalesTab data={data?.sales} onChange={onFieldValueChange} />
                                     </div>
                                 </TabPane>
                                 <TabPane tabId="3">
                                     <div className="simple-bar">
-                                        <InventoryTab data={currentSalesAndInventory?.inventory} />
+                                        <InventoryTab data={data?.inventory} onChange={onFieldValueChange} />
                                     </div>
                                 </TabPane>
                                 <TabPane tabId="4">
                                     <div className="simple-bar">
-                                        <DeliveryTab data={currentSalesAndInventory?.delivery} />
+                                        <DeliveryTab data={data?.delivery} onChange={onFieldValueChange} />
                                     </div>
                                 </TabPane>
                             </TabContent>
@@ -153,7 +178,7 @@ class SalesAndInventoryTableInformation extends Component {
                     <ModalFooter>
                         <div className="d-flex align-items-center justify-content-end mt-4 mb-4 px-4">
                             <button className="btn btn-outline-primary px-4" onClick={() => this.setState({ isConfirm: true })}>Cancel</button>
-                            <button className="btn btn-primary ml-4 px-4">Update</button>
+                            <button className="btn btn-primary ml-4 px-4" onClick={(e) => handleUpdate(e)}>Update</button>
                         </div>
                     </ModalFooter>
                 </Modal>
@@ -163,11 +188,14 @@ class SalesAndInventoryTableInformation extends Component {
 }
 
 const mapStateToProps = ({ saleAndInventory }) => ({
-    currentSalesAndInventory: saleAndInventory?.currentSalesAndInventory
+    currentSalesAndInventory: saleAndInventory?.currentSalesAndInventory,
+    isUpdateSuccess: saleAndInventory.currentSalesAndInventory?.isUpdateSuccess,
 })
 
 const mapDispatchToProps = dispatch => ({
     onGetSalesAndInventoryDetail: params => dispatch(getDetailsSales(params)),
+    onUpdateSalesAndInventoryDetail: params => dispatch(updateSalesAndInventoryDetail(params)),
+    onResetSalesAndInventoryDetail: () => dispatch(resetCurrentSalesAndInventoryData())
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(SalesAndInventoryTableInformation)

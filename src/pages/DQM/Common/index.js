@@ -88,7 +88,7 @@ class Pages extends Component {
   }
 
   getCustomerData = async () => {
-    const { onGetCustomer } = this.props
+    const { onGetMainTable } = this.props
     const { currentPage, searchTerm, sortField } = this.state
     const { sortDir, searchFields, q } = this.state
     const params = {
@@ -102,13 +102,7 @@ class Pages extends Component {
     }
     if (params.q.length < 1) delete params.q
     window.scrollTo(0, 0)
-    await onGetCustomer(params)
-    const keys = Object.keys(q);
-    var isWrong = false;
-    for (let [index, key] of keys.entries()) {
-      isWrong = q[key].length === 0 && true;
-    }
-    isWrong === true && this.setState({ q: {} });
+    await onGetMainTable(params)
   }
 
   resetPageNo = () => {
@@ -260,6 +254,7 @@ class Pages extends Component {
           data={this.props.tableData.list[this.state.selectedItem]}
           visible={modalTI}
           onCancel={this.toggleTI}
+          refreshMainTable={this.getCustomerData}
           // mode={0}
         />
       ) : null
@@ -308,7 +303,7 @@ class Pages extends Component {
       downloadtableData,
       frozenColNum,
       varianceControlData,
-      overrideActionColumn
+      overrideActionColumn,
     } = this.props
 
     if (!tableData || tableData.length === 0) return ""
@@ -496,6 +491,8 @@ class Pages extends Component {
                         rowsPerPage={rowsPerPage}
                         currentPage={currentPage}
                         onChangePage={this.handleChangePage}
+                        increment={10}
+                        decrement={-10}
                       />
                     </CardBody>
                   }
@@ -521,7 +518,7 @@ class Pages extends Component {
 }
 
 Pages.propType = {
-  onGetCustomer: PropTypes.func.isRequired,
+  onGetMainTable: PropTypes.func.isRequired,
   onGetAuditLog: PropTypes.func.isRequired,
   onGetTableInformation: PropTypes.func.isRequired,
   onUpdateTableInformation: PropTypes.func.isRequired,
@@ -538,7 +535,7 @@ Pages.propType = {
   onGetDownloadCustomer: PropTypes.func.isRequired,
   frozenColNum: PropTypes.number,
   varianceControlData: PropTypes.object,
-  overrideActionColumn: PropTypes.func
+  overrideActionColumn: PropTypes.func,
 }
 
 Pages.defaultProps = {

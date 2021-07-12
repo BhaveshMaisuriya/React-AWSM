@@ -74,3 +74,40 @@ export function getCookieByKey(key) {
     return null
   }
 }
+
+export const  runValidation = (data) => {
+  if (data.storage) {
+    const validateStorage = Object.keys(data.storage).every(key => {
+      if (key.startsWith("storage_") && data.storage[key]) {
+        return data.storage[key].monthly_fixed_quota <= 10000000
+      }
+      return  true
+    })
+    if (!validateStorage) {
+      return validateStorage
+    }
+  }
+  if(data.contact) {
+    const validateContact = Object.keys(data.contact).every(key => {
+      if (key.startsWith("contact_") && data.contact[key]) {
+        return /^\+?[0-9- ]+$/.test(data.contact[key].number)
+      }
+      return true
+    })
+    if (!validateContact) {
+      return validateContact
+    }
+  }
+  if (data.status && data.status.status_awsm === "Temporarily Closed") {
+    if (!data.status.close_period || !(data.status.close_period.date_from && data.status.close_period.date_to && data.status.close_period.time_from && data.status.close_period.time_to)) {
+      return false
+    }
+  }
+  if (data.territory_manager && !/^\+?[0-9- ]+$/.test(data.territory_manager.number)) {
+    return false
+  }
+  if (data.retail_sales_manager && !/^\+?[0-9- ]+$/.test(data.retail_sales_manager.number)) {
+    return false
+  }
+  return true
+}

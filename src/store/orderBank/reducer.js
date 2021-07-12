@@ -9,7 +9,8 @@ import {
   UPDATE_ORDERBANK_TABLE_INFORMATION_FAIL,
   UPDATE_ORDER_BANK_TABLE_DATA,
   DELETE_ORDERBANK_DETAIL_SUCCESS,
-  DELETE_ORDERBANK_DETAIL_FAIL
+  DELETE_ORDERBANK_DETAIL_FAIL,
+  SEND_DN_STATUS_REQUEST_SUCCESS
 } from "./actionTypes"
 
 const initialState = {
@@ -89,6 +90,11 @@ const RTSOrderBank = (state = initialState, action) => {
       return {
         ...state,
         error: action.payload,
+      }
+    case SEND_DN_STATUS_REQUEST_SUCCESS:
+      notify.success("An order has been successfully sent for DN Creation")
+      return {
+        ...state
       }
     default:
       return state

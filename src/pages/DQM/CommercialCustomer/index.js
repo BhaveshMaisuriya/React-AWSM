@@ -24,11 +24,8 @@ class CommercialCustomer extends Component {
     }
   }
 
-  componentDidMount = async() => {
-    const {
-      onGetCommercialCustomer,
-      onGetCommercialAuditLog,
-    } = this.props
+  componentDidMount = async () => {
+    const { onGetCommercialCustomer, onGetCommercialAuditLog } = this.props
     const { searchFields } = this.state
     const params = {
       limit: 10,
@@ -48,14 +45,14 @@ class CommercialCustomer extends Component {
     await onGetCommercialAuditLog(payload)
   }
 
-  GetonDownload = async (currentPage) => {
+  GetonDownload = async currentPage => {
     const downloadParams = {
       limit: 10,
       page: currentPage,
-      search_fields: '*',
+      search_fields: "*",
     }
-    const { onGetDownloadCommercialCustomer } = this.props;
-    await onGetDownloadCommercialCustomer(downloadParams);
+    const { onGetDownloadCommercialCustomer } = this.props
+    await onGetDownloadCommercialCustomer(downloadParams)
   }
 
   render() {
@@ -69,15 +66,16 @@ class CommercialCustomer extends Component {
       auditsCom,
       filterCom,
       address,
+      commercialCustomerIsLoading,
     } = this.props
     const { searchFields } = this.state
-    if (!commercialCustomer) return ""
     return (
       <Fragment>
-        {(commercialCustomer && commercialCustomer.length === 0) && <Loader /> }
-        {commercialCustomer &&  
+        {commercialCustomer && commercialCustomer.length === 0 && <Loader />}
+        {commercialCustomerIsLoading ? <Loader /> : ""}
+        {commercialCustomer && (
           <Page
-            onGetCustomer={onGetCommercialCustomer}
+            onGetMainTable={onGetCommercialCustomer}
             onGetAuditLog={onGetCommercialAuditLog}
             onGetTableInformation={onGetTableInformation}
             onUpdateTableInformation={onUpdateTableInformation}
@@ -94,7 +92,7 @@ class CommercialCustomer extends Component {
             modalComponent={CommercialCustomerModal}
             onGetDownloadCustomer={this.GetonDownload}
           />
-        }
+        )}
       </Fragment>
     )
   }
@@ -102,6 +100,7 @@ class CommercialCustomer extends Component {
 
 const mapStateToProps = ({ commercialCustomer, retailCustomer }) => ({
   commercialCustomer: commercialCustomer.commercialCustomers,
+  commercialCustomerIsLoading: commercialCustomer.isLoading,
   auditsCom: commercialCustomer.auditsCom,
   filterCom: commercialCustomer.filterCom,
   address: retailCustomer.address,
@@ -113,7 +112,8 @@ const mapDispatchToProps = dispatch => ({
   onGetCommercialAuditLog: payload => dispatch(getCommercialAuditLog(payload)),
   onGetTableInformation: () => dispatch(getTableInformation()),
   onUpdateTableInformation: event => dispatch(updateTableInformation(event)),
-  onGetDownloadCommercialCustomer: params => dispatch(getDownloadCommercialCustomer(params)),
+  onGetDownloadCommercialCustomer: params =>
+    dispatch(getDownloadCommercialCustomer(params)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(CommercialCustomer)

@@ -81,7 +81,7 @@ class RetailCustomer extends Component {
       <Fragment>
         {retailCustomer && retailCustomer.length === 0 && <Loader />}
         {retailCustomerIsLoading ? <Loader /> : ""}
-        {retailCustomer && retailCustomer.list && (
+        {retailCustomer && (
           <Page
             tableName={RetailTableName}
             onGetMainTable={onGetRetailCustomer}

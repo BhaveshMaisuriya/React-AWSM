@@ -27,12 +27,31 @@ const initialState = {
 
 import { notify } from "../../helpers/notify"
 
+function sortSLA(data) {
+  const sortedData = { ... data }
+  Object.keys(data).forEach(e => {
+    sortedData[e] = data[e]?.sort?.((a, b) => {
+      const _a = a.title?.toLowerCase().trim()
+      const _b = b.title?.toLowerCase().trim()
+      if (!_a) return 1
+      if (!_b) return -1
+      if (_a > _b) {
+        return 1
+      } else if (_a < _b) {
+        return -1
+      }
+      return 0
+    }) ?? sortedData[e]
+  })
+  return sortedData
+}
+
 const SLA = (state = initialState, action) => {
   switch (action.type) {
     case GET_SLA_ITEMS_SUCCESS:
       return {
         ...state,
-        data: action.payload,
+        data: sortSLA(action.payload),
       }
 
     case GET_SLA_ITEMS_FAIL:
@@ -60,7 +79,7 @@ const SLA = (state = initialState, action) => {
         newData[payload.category] = payload.data
         return {
           ...state,
-          data: newData,
+          data: sortSLA(newData),
         }
       }
 
@@ -77,7 +96,7 @@ const SLA = (state = initialState, action) => {
       newData[action.payload.category] = action.payload.data
       return {
         ...state,
-        data: newData,
+        data: sortSLA(newData),
       }
     }
 
@@ -96,7 +115,7 @@ const SLA = (state = initialState, action) => {
       newData[action.payload.category] = action.payload.data
       return {
         ...state,
-        data: newData,
+        data: sortSLA(newData),
       }
     }
 
@@ -115,7 +134,7 @@ const SLA = (state = initialState, action) => {
       newData[action.payload.category] = action.payload.data
       return {
         ...state,
-        data: newData,
+        data: sortSLA(newData),
       }
 
     case DELETE_SLA_SECTION_FAIL: {
@@ -129,7 +148,7 @@ const SLA = (state = initialState, action) => {
       newData[action.payload.category] = action.payload.data
       return {
         ...state,
-        data: newData
+        data: sortSLA(newData),
       }
     }
 
@@ -151,10 +170,10 @@ const SLA = (state = initialState, action) => {
       newData[payload.category] = payload.data
       return {
         ...state,
-        data: newData,
+        data: sortSLA(newData),
       }
     }
-      
+
 
     default:
       return state

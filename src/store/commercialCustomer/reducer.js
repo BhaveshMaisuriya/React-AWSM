@@ -21,7 +21,7 @@ const initialState = {
   auditsCom: [],
   filterCom: [],
   currentCommercialDetail: null,
-  updateSuccess: false,
+  updateSuccess: null,
   downloadCommercialCustomer: [],
   isLoading: false,
 }
@@ -87,12 +87,14 @@ const CommercialCustomer = (state = initialState, action) => {
       return {
         ...state,
         currentCommercialDetail: action.payload,
+        updateSuccess: null,
       }
 
     case GET_COMMERCIAL_TABLE_INFORMATION_FAIL:
       return {
         ...state,
         error: action.payload,
+        updateSuccess: null,
       }
 
     case RESET_COMMERCIAL_TABLE_INFORMATION:
@@ -100,7 +102,7 @@ const CommercialCustomer = (state = initialState, action) => {
         ...state,
         currentCommercialDetail: null,
         error: null,
-        updateSuccess: false,
+        updateSuccess: null,
       }
 
     case UPDATE_COMMERCIAL_TABLE_INFORMATION_SUCCESS: {
@@ -113,11 +115,15 @@ const CommercialCustomer = (state = initialState, action) => {
       }
     }
 
-    case UPDATE_COMMERCIAL_TABLE_INFORMATION_FAIL:
+    case UPDATE_COMMERCIAL_TABLE_INFORMATION_FAIL: {
+      notify.error(action.payload?.message)
       return {
         ...state,
         error: action.payload,
+        updateSuccess: false,
       }
+    }
+
     default:
       return state
   }

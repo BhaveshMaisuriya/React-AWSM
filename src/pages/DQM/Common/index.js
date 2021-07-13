@@ -39,6 +39,7 @@ import VarianceIcon from "../../../assets/images/AWSM-Variance-Control.svg"
 import AWSMDropdown from "../../../components/Common/Dropdown"
 import DatePicker from "../../../components/Common/DatePicker"
 import REGION_TERMINAL from "../../../common/data/regionAndTerminal"
+import CloseButton from "../../../components/Common/CloseButton"
 
 const styles = {
   headerText: {
@@ -194,7 +195,10 @@ class Pages extends Component {
         id="auditLog-modal"
         contentClassName="modalContainer"
       >
-        <ModalHeader toggle={this.toggle}>
+        <ModalHeader
+          toggle={this.toggle}
+          close={<CloseButton handleClose={this.toggle} />}
+        >
           <h3>Audit Log</h3>
         </ModalHeader>
         <AuditLog
@@ -246,19 +250,18 @@ class Pages extends Component {
   runTableInformation = () => {
     const { modalTI } = this.state
     const ModalComponent = this.props.modalComponent
-    const { headerTitle } = this.props
+    const pathName = window.location.pathname
 
-    const modalContent =
-      modalTI && ModalComponent ? (
-        <ModalComponent
-          data={this.props.tableData.list[this.state.selectedItem]}
-          visible={modalTI}
-          onCancel={this.toggleTI}
-          refreshMainTable={this.getCustomerData}
-          // mode={0}
-        />
-      ) : null
-    return modalContent
+    return (modalTI && ModalComponent) ||
+      pathName === "/retail-customer" ||
+      pathName === "/commercial-customer" ? (
+      <ModalComponent
+        data={this.props.tableData.list[this.state.selectedItem]}
+        visible={modalTI}
+        onCancel={this.toggleTI}
+        refreshMainTable={this.getCustomerData}
+      />
+    ) : null
   }
 
   downloadExcel = async () => {

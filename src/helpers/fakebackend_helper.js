@@ -436,11 +436,11 @@ export const createSLATableRecord = (data) =>
     )
     .then(response => response.data)
 
-export const deleteSLARecord = ({ category, id, recordId }) => {
+export const deleteSLARecord = ({ category, id, recordId }) =>
   axios
     .delete(`https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/sla/${category}/section/${id}/record/${recordId}`)
     .then(response => response.data)
-}
+
 
 export const updateSLARecord = (data) =>
   axios

@@ -90,7 +90,7 @@ export const  runValidation = (data) => {
   if(data.contact) {
     const validateContact = Object.keys(data.contact).every(key => {
       if (key.startsWith("contact_") && data.contact[key]) {
-        return /^\+?[0-9- ]+$/.test(data.contact[key].number)
+        return !data.contact[key].number || /^\+?[0-9- ]+$/.test(data.contact[key].number)
       }
       return true
     })
@@ -103,10 +103,10 @@ export const  runValidation = (data) => {
       return false
     }
   }
-  if (data.territory_manager && !/^\+?[0-9- ]+$/.test(data.territory_manager.number)) {
+  if (data.territory_manager && data.territory_manager.number && !/^\+?[0-9- ]+$/.test(data.territory_manager.number)) {
     return false
   }
-  if (data.retail_sales_manager && !/^\+?[0-9- ]+$/.test(data.retail_sales_manager.number)) {
+  if (data.retail_sales_manager && data.retail_sales_manager.number &&  !/^\+?[0-9- ]+$/.test(data.retail_sales_manager.number)) {
     return false
   }
   return true

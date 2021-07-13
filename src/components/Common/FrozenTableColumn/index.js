@@ -239,14 +239,14 @@ class FixedCoulmnTable extends Component {
           <thead>
             <tr>{this.addTd(fixedHeaders)}</tr>
           </thead>
-          <tbody>{this.renderFrozenTr(tableData)}</tbody>
+          <tbody>{this.renderFrozenTr(this.state.tableDatas)}</tbody>
         </table>
         <div className="scroll">
           <table className="scrollable">
             <thead>
               <tr>{this.addTd(regularHeaders)}</tr>
             </thead>
-            <tbody>{this.renderRegular(tableData)}</tbody>
+            <tbody>{this.renderRegular(this.state.tableDatas)}</tbody>
           </table>
         </div>
       </div>

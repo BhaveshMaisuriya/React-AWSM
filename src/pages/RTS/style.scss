@@ -137,6 +137,7 @@
         }
         >div:not(:first-child) {
             flex-grow: 1;
+            max-width: 200px;
         }
     }
 

@@ -21,7 +21,7 @@ import TabDelivery from "../../../components/Common/TableInformation/tabDelivery
 import TabContact from "../../../components/Common/TableInformation/tabContact"
 import TabStorage from "../../../components/Common/TableInformation/tabStorage"
 import TabQuota from "../../../components/Common/TableInformation/tabQuota"
-
+import CloseButton from "../../../components/Common/CloseButton"
 //CSS
 import "./RetailCustomerModal.scss"
 import { Skeleton } from "@material-ui/core"
@@ -31,6 +31,7 @@ import {
   updateTableInformation,
 } from "../../../store/actions"
 import AWSMAlert from "../../../components/Common/AWSMAlert"
+import closeIcon from "../../../assets/images/AWSM-Cancel-Icon.svg"
 import { isScheduler } from "../../../helpers/auth_helper"
 import ExitConfirmation from "../../../components/Common/ExitConfirmation"
 import { runValidation } from "../Common/helper"
@@ -45,6 +46,8 @@ const RetailCustomerModal = props => {
     currentRetailError,
     resetRetailTableInformation,
     updateTableInformation,
+    updateSuccess,
+    refreshMainTable,
   } = props
   const [currentRetailDetail, setCurrentRetailDetail] = useState(
     props.currentRetailDetail
@@ -52,7 +55,13 @@ const RetailCustomerModal = props => {
   const [activeTab, setActiveTab] = useState("1")
   const scheduler = isScheduler()
   const [alert, setAlert] = useState(false)
-  const [isConfirm, setIsConfirm] = useState(false);
+  const [isConfirm, setIsConfirm] = useState(false)
+
+  useEffect(() => {
+    if (updateSuccess && refreshMainTable) {
+      refreshMainTable()
+    }
+  }, [updateSuccess])
 
   const handleUpdate = e => {
     e.preventDefault()
@@ -98,15 +107,21 @@ const RetailCustomerModal = props => {
     }
   }
 
+  if (!data) {
+    return null
+  }
+
   return (
     <Modal isOpen={visible} className="retail-customer-modal modal-lg">
       {currentRetailDetail ? (
         <div>
-          <ModalHeader toggle={handleClose}>
-            <span className="modal-title">SHIP TO PARTY: {currentRetailDetail.ship_to_party}</span>
+          <ModalHeader close={<CloseButton handleClose={handleClose} />}>
+            <span className="modal-title">
+              Ship To Party: {currentRetailDetail.ship_to_party}
+            </span>
             <span className="last-updated-sub-title">
               Last Updated By: Nur Izzati on 3rd March 2021
-        </span>
+            </span>
           </ModalHeader>
           <ModalBody>
             {isConfirm && (
@@ -260,20 +275,22 @@ const RetailCustomerModal = props => {
         <Skeleton variant="rect" width={800} height={300} />
       )}
       {!isConfirm && (
-      <ModalFooter>
-        <button onClick={handleClose} className="btn-sec">
-          Cancel
-        </button>
-        {!scheduler && <Button type="submit" color="primary" onClick={handleUpdate}>
-          Update
-        </Button>}
-        <AWSMAlert
-          status="success"
-          message="Update success!"
-          openAlert={alert}
-          closeAlert={() => setAlert(false)}
-        />
-      </ModalFooter>
+        <ModalFooter>
+          <button onClick={handleClose} className="btn-sec">
+            Cancel
+          </button>
+          {!scheduler && (
+            <Button type="submit" color="primary" onClick={handleUpdate}>
+              Update
+            </Button>
+          )}
+          <AWSMAlert
+            status="success"
+            message="Update success!"
+            openAlert={alert}
+            closeAlert={() => setAlert(false)}
+          />
+        </ModalFooter>
       )}
     </Modal>
   )
@@ -282,6 +299,7 @@ const RetailCustomerModal = props => {
 const mapStateToProps = ({ retailCustomer }) => ({
   currentRetailDetail: retailCustomer.currentRetailDetail,
   currentRetailError: retailCustomer.error,
+  updateSuccess: retailCustomer.updateSuccess,
 })
 
 const mapDispatchToProps = dispatch => ({

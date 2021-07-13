@@ -14,8 +14,8 @@ import StorageTab from "./StorageTab"
 import "./TerminalDetailModal.scss"
 import classnames from "classnames"
 import SimpleBar from "simplebar-react"
-import {isEqual} from "lodash"
-
+import { isEqual } from "lodash"
+import CloseButton from "../../../components/Common/CloseButton"
 import {
   Col,
   Field,
@@ -44,7 +44,7 @@ class TerminalDetailModal extends PureComponent {
       event: {},
       updateDictionary: {},
       isConfirm: false,
-      data:props.currentTerminal
+      data: props.currentTerminal,
     }
   }
 
@@ -53,9 +53,9 @@ class TerminalDetailModal extends PureComponent {
     fetchTableInformation(data.code)
   }
 
-  componentWillReceiveProps(prevProps){
-    if(isEqual(prevProps.currentTerminal,this.props.currentTerminal)){
-      this.setState({data:this.props.currentTerminal})
+  componentWillReceiveProps(prevProps) {
+    if (isEqual(prevProps.currentTerminal, this.props.currentTerminal)) {
+      this.setState({ data: this.props.currentTerminal })
     }
   }
 
@@ -70,7 +70,7 @@ class TerminalDetailModal extends PureComponent {
       const { code } = this.props.data
       const { data } = this.state
       this.props.onUpdateTableInformation({
-        ship_to_party:code,
+        ship_to_party: code,
         body: data,
       })
       this.props.onCancel()
@@ -84,20 +84,20 @@ class TerminalDetailModal extends PureComponent {
     }
   }
   onFieldChange = (key, value) => {
-    const newData = {...this.state.data}
-    newData[key] = value;
-    this.setState({data:newData})
+    const newData = { ...this.state.data }
+    newData[key] = value
+    this.setState({ data: newData })
   }
 
   onConfirmCancel = () => {
-    this.setState({isConfirm: false });
+    this.setState({ isConfirm: false })
   }
 
   onConfirmExit = () => {
-    this.setState({isConfirm: false });
-      if (this.props.onCancel()) {
-        this.props.onCancel()
-      }
+    this.setState({ isConfirm: false })
+    if (this.props.onCancel()) {
+      this.props.onCancel()
+    }
   }
 
   render() {
@@ -110,24 +110,18 @@ class TerminalDetailModal extends PureComponent {
     const { onCancel, visible, currentTerminal, data } = this.props
     const isDisabledField = isScheduler()
     return (
-      <Modal isOpen={visible} toggle={() =>  this.setState({isConfirm: true })} className="table-information modal-lg">
-        <ModalHeader toggle={() =>  this.setState({isConfirm: true })}>
-          <div className="header-content">
-          <div
-            style={{
-              height: "26px",
-              color: "#000000",
-              fontFamily: "Museo Sans",
-              letterSpacing: "0",
-              lineHeight: "26px",
-            }}
-          >
-            TERMINAL CODE: {data.code}
-            <span className="last-updated-sub-title">
+      <Modal isOpen={visible} className="commercial-customer-modal modal-lg">
+        <ModalHeader
+          close={
+            <CloseButton
+              handleClose={() => this.setState({ isConfirm: true })}
+            />
+          }
+        >
+          <span className="modal-title">Terminal Code: {data.code}</span>
+          <span className="last-updated-sub-title">
             Last Updated By: Nur Izzati on 3rd March 2021
           </span>
-          </div>
-          </div>
         </ModalHeader>
         <>
           {currentTerminal ? (
@@ -148,7 +142,9 @@ class TerminalDetailModal extends PureComponent {
                         type="text"
                         defaultValue={currentTerminal.code}
                         disabled={true}
-                        onChange={(e) => this.onFieldChange("code", e.target.value)}
+                        onChange={e =>
+                          this.onFieldChange("code", e.target.value)
+                        }
                       />
                     </div>
                     <div className="col-md-6 form-group">
@@ -158,7 +154,9 @@ class TerminalDetailModal extends PureComponent {
                         type="text"
                         defaultValue={currentTerminal.name}
                         disabled={true}
-                        onChange={(e) => this.onFieldChange("name", e.target.value)}
+                        onChange={e =>
+                          this.onFieldChange("name", e.target.value)
+                        }
                       />
                     </div>
                   </div>
@@ -245,58 +243,76 @@ class TerminalDetailModal extends PureComponent {
 
                 {/* tab content */}
                 <TabContent activeTab={this.state.activeTab} className="py-4">
-                <TabPane tabId="1">
-                  <SimpleBar
-                    style={{
-                      height: "350px",
-                      width: "100%",
-                      overflowX: "hidden",
-                    }}
-                  >
-                    <AddressTab data={currentTerminal?.address} onChange={(value) => this.onFieldChange("address", value)}/>
-                  </SimpleBar>
-                </TabPane>
-                <TabPane tabId="2">
-                  <SimpleBar
-                    style={{
-                      height: "350px",
-                      width: "100%",
-                      overflowX: "hidden",
-                    }}
-                  >
-                    <StorageTab data={currentTerminal?.storage} onChange={(value) => this.onFieldChange("storage", value)}/>
-                  </SimpleBar>
-                </TabPane>
-                <TabPane tabId="3">
-                  <SimpleBar
-                    style={{
-                      height: "350px",
-                      width: "100%",
-                      overflowX: "hidden",
-                    }}
-                  >
-                    <StatusTab data={currentTerminal?.status} onChange={(value) => this.onFieldChange("status", value)}/>
-                  </SimpleBar>
-                </TabPane>
-                <TabPane tabId="4">
-                  <SimpleBar
-                    style={{
-                      height: "350px",
-                      width: "100%",
-                      overflowX: "hidden",
-                    }}
-                  >
-                    <ContactTab data={currentTerminal?.contact} onChange={(value) => this.onFieldChange("contact", value)}/>
-                  </SimpleBar>
-                </TabPane>
-              </TabContent>
+                  <TabPane tabId="1">
+                    <SimpleBar
+                      style={{
+                        height: "350px",
+                        width: "100%",
+                        overflowX: "hidden",
+                      }}
+                    >
+                      <AddressTab
+                        data={currentTerminal?.address}
+                        onChange={value => this.onFieldChange("address", value)}
+                      />
+                    </SimpleBar>
+                  </TabPane>
+                  <TabPane tabId="2">
+                    <SimpleBar
+                      style={{
+                        height: "350px",
+                        width: "100%",
+                        overflowX: "hidden",
+                      }}
+                    >
+                      <StorageTab
+                        data={currentTerminal?.storage}
+                        onChange={value => this.onFieldChange("storage", value)}
+                      />
+                    </SimpleBar>
+                  </TabPane>
+                  <TabPane tabId="3">
+                    <SimpleBar
+                      style={{
+                        height: "350px",
+                        width: "100%",
+                        overflowX: "hidden",
+                      }}
+                    >
+                      <StatusTab
+                        data={currentTerminal?.status}
+                        onChange={value => this.onFieldChange("status", value)}
+                      />
+                    </SimpleBar>
+                  </TabPane>
+                  <TabPane tabId="4">
+                    <SimpleBar
+                      style={{
+                        height: "350px",
+                        width: "100%",
+                        overflowX: "hidden",
+                      }}
+                    >
+                      <ContactTab
+                        data={currentTerminal?.contact}
+                        onChange={value => this.onFieldChange("contact", value)}
+                      />
+                    </SimpleBar>
+                  </TabPane>
+                </TabContent>
               </Fragment>
               <ModalFooter>
-                <button className="btn-sec" onClick={() =>  this.setState({isConfirm: true })}>
+                <button
+                  className="btn-sec"
+                  onClick={() => this.setState({ isConfirm: true })}
+                >
                   Cancel
                 </button>
                 {!isDisabledField && currentTerminal ? (
-                  <Button onClick={this.handleUpdate.bind(this)} color="primary">
+                  <Button
+                    onClick={this.handleUpdate.bind(this)}
+                    color="primary"
+                  >
                     Update
                   </Button>
                 ) : null}

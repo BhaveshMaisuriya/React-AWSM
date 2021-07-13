@@ -34,6 +34,7 @@ import {
 import AWSMAlert from "../../../components/Common/AWSMAlert"
 import { isScheduler } from "../../../helpers/auth_helper"
 import { runValidation } from "../Common/helper"
+import CloseButton from "../../../components/Common/CloseButton"
 
 const CommercialCustomerModal = props => {
   const {
@@ -45,6 +46,8 @@ const CommercialCustomerModal = props => {
     currentCommercialError,
     resetCommercialTableInformation,
     updateCommercialTableInformation,
+    updateSuccess,
+    refreshMainTable,
   } = props
   const [currentCommercialDetail, setCurrentCommercialDetail] = useState(
     props.currentCommercialDetail
@@ -52,9 +55,15 @@ const CommercialCustomerModal = props => {
   const [activeTab, setActiveTab] = useState("1")
   const scheduler = isScheduler()
   const [alert, setAlert] = useState(false)
-  const [isConfirm, setIsConfirm] = useState(false);
+  const [isConfirm, setIsConfirm] = useState(false)
 
-  const handleUpdate = e => {
+  useEffect(() => {
+    if (updateSuccess && refreshMainTable) {
+      refreshMainTable()
+    }
+  }, [updateSuccess])
+
+  const handleUpdate = async e => {
     e.preventDefault()
     if (runValidation(currentCommercialDetail)) {
       updateCommercialTableInformation(currentCommercialDetail)
@@ -71,11 +80,13 @@ const CommercialCustomerModal = props => {
   }
 
   useEffect(() => {
-    getCommercialTableInformation(data)
+    if (data) {
+      getCommercialTableInformation(data)
+    }
     return () => {
       resetCommercialTableInformation()
     }
-  }, [])
+  }, [data])
 
   useEffect(() => {
     setCurrentCommercialDetail(props.currentCommercialDetail)
@@ -98,13 +109,17 @@ const CommercialCustomerModal = props => {
     }
   }
 
+  if (!data) {
+    return null
+  }
+
   return (
     <Modal isOpen={visible} className="commercial-customer-modal modal-lg">
       {currentCommercialDetail ? (
         <div>
-          <ModalHeader toggle={handleClose}>
+          <ModalHeader close={<CloseButton handleClose={handleClose} />}>
             <span className="modal-title">
-              SHIP TO PARTY: {currentCommercialDetail.ship_to_party}
+              Ship To Party: {currentCommercialDetail.ship_to_party}
             </span>
             <span className="last-updated-sub-title">
               Last Updated By: Nur Izzati on 3rd March 2021
@@ -259,9 +274,11 @@ const CommercialCustomerModal = props => {
               <button onClick={handleClose} className="btn-sec">
                 Cancel
               </button>
-              {!scheduler && <Button type="submit" color="primary" onClick={handleUpdate}>
-                Update
-              </Button>}
+              {!scheduler && (
+                <Button type="submit" color="primary" onClick={handleUpdate}>
+                  Update
+                </Button>
+              )}
               <AWSMAlert
                 status="success"
                 message="Update success!"
@@ -283,6 +300,7 @@ const CommercialCustomerModal = props => {
 const mapStateToProps = ({ commercialCustomer }) => ({
   currentCommercialDetail: commercialCustomer.currentCommercialDetail,
   currentCommercialError: commercialCustomer.error,
+  updateSuccess: commercialCustomer.updateSuccess,
 })
 
 const mapDispatchToProps = dispatch => ({

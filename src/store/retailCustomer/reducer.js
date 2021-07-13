@@ -22,7 +22,7 @@ const initialState = {
   address: [],
   filter: [],
   currentRetailDetail: null,
-  updateSuccess: false,
+  updateSuccess: null,
   downloadretailCustomers: [],
   isLoading: false,
 }
@@ -77,12 +77,14 @@ const RetailCustomer = (state = initialState, action) => {
       return {
         ...state,
         currentRetailDetail: action.payload,
+        updateSuccess: null,
       }
 
     case GET_TABLE_INFORMATION_FAIL:
       return {
         ...state,
         error: action.payload,
+        updateSuccess: null,
       }
 
     case RESET_RETAIL_TABLE_INFORMATION:
@@ -90,13 +92,14 @@ const RetailCustomer = (state = initialState, action) => {
         ...state,
         currentRetailDetail: null,
         error: null,
-        updateSuccess: false,
+        updateSuccess: null,
       }
 
     case UPDATE_TABLE_INFORMATION_SUCCESS: {
       notify.success("Record Successfully Updated")
       return {
         ...state,
+        updateSuccess: true,
       }
     }
 
@@ -105,6 +108,7 @@ const RetailCustomer = (state = initialState, action) => {
       return {
         ...state,
         error: action.payload,
+        updateSuccess: false,
       }
     }
 

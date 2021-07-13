@@ -86,9 +86,6 @@ class Terminal extends Component {
             onUpdateTableInformation={onUpdateTableInformation}
             tableColumns={searchFields}
             tableMapping={tableMapping}
-            headerTitle="Terminal"
-            cardTitle="Terminal List"
-            tableName={TerminalTableName}
             // onGetFilter={onGetTerminalFilter}
             tableData={terminalTable}
             audits={auditsTerminal}

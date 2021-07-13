@@ -5,6 +5,7 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd"
 // Components
 import AWSMCheckBox from "../CheckBox"
 import { XIcon, AlertIcon, EllipsisIcon, RefreshDotIcon } from "./icons"
+import CloseButton from "../../components/Common/CloseButton"
 // Css
 import "./customizeTable.scss"
 import { Modal, ModalBody, ModalHeader } from "reactstrap"
@@ -19,12 +20,17 @@ const ItemSelect = ({ item, onChange }) => {
   const onCheckChange = () => {
     onChange({
       ...item,
-      checked: !item.checked
+      checked: !item.checked,
     })
   }
   return (
     <div className="d-flex align-items-center">
-      <AWSMCheckBox disabled={item.disabled} onChange={onCheckChange} checked={item.checked} color="primary" />
+      <AWSMCheckBox
+        disabled={item.disabled}
+        onChange={onCheckChange}
+        checked={item.checked}
+        color="primary"
+      />
       <div className="">{item.label}</div>
     </div>
   )
@@ -39,7 +45,6 @@ const ItemSelect = ({ item, onChange }) => {
  * @constructor
  */
 const DragContainer = ({ items, onChange, onUpdateOne }) => {
-
   // a little function to help us with reordering the result
   const reOrder = (list, startIndex, endIndex) => {
     const result = [...list]
@@ -48,7 +53,7 @@ const DragContainer = ({ items, onChange, onUpdateOne }) => {
     return result
   }
 
-  const onDragEnd = (result) => {
+  const onDragEnd = result => {
     // dropped outside the list
     if (!result.destination) {
       return
@@ -61,21 +66,18 @@ const DragContainer = ({ items, onChange, onUpdateOne }) => {
     onChange(newItems)
   }
 
-  const onRemoveItem = (item) => {
+  const onRemoveItem = item => {
     onUpdateOne({
       ...item,
-      checked: false
+      checked: false,
     })
   }
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <Droppable droppableId="droppable">
-        {(provided) => (
-          <div
-            {...provided.droppableProps}
-            ref={provided.innerRef}
-          >
+        {provided => (
+          <div {...provided.droppableProps} ref={provided.innerRef}>
             {items.map((item, index) => (
               <Draggable key={item.id} draggableId={item.id} index={index}>
                 {(provided, snapshot) => (
@@ -83,18 +85,21 @@ const DragContainer = ({ items, onChange, onUpdateOne }) => {
                     ref={provided.innerRef}
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
-                    className={`drag-content ${snapshot.isDragging ? "drag-content-dragging" : ""}`}
+                    className={`drag-content ${
+                      snapshot.isDragging ? "drag-content-dragging" : ""
+                    }`}
                   >
                     <div className="d-flex">
                       <div className="drag-content-start-icon">
                         <EllipsisIcon />
                         <EllipsisIcon />
                       </div>
-                      <div className="drag-content-label">
-                        {item.label}
-                      </div>
+                      <div className="drag-content-label">{item.label}</div>
                     </div>
-                    <div className="drag-content-x-icon" onClick={() => onRemoveItem(item)}>
+                    <div
+                      className="drag-content-x-icon"
+                      onClick={() => onRemoveItem(item)}
+                    >
                       <XIcon />
                     </div>
                   </div>
@@ -116,7 +121,9 @@ const DragContainer = ({ items, onChange, onUpdateOne }) => {
  * @param expires
  */
 function setCookie(name, value, expires) {
-  document.cookie = [`${name}=${value}`, `expires=${expires}`, "path=/"].join(" ;")
+  document.cookie = [`${name}=${value}`, `expires=${expires}`, "path=/"].join(
+    " ;"
+  )
 }
 
 /**
@@ -129,7 +136,8 @@ function getCookieByKey(key) {
     if (!document.cookie) {
       return null
     }
-    return document.cookie.split("; ")
+    return document.cookie
+      .split("; ")
       .find(row => row.startsWith(key))
       .split("=")[1]
   } catch (err) {
@@ -151,30 +159,34 @@ function getCookieByKey(key) {
  * @constructor
  */
 const CustomizeTableModal = ({
-                               open,
-                               onChange,
-                               closeDialog,
-                               tableName,
-                               defaultMetric = [],
-                               availableMetric = {},
-                               metricArray = false,
-                               metricKey = "id"
-                             }) => {
+  open,
+  onChange,
+  closeDialog,
+  tableName,
+  defaultMetric = [],
+  availableMetric = {},
+  metricArray = false,
+  metricKey = "id",
+}) => {
   // State
-  const [initMetric, setInitMetric] = useState(getCookieByKey(tableName) ? JSON.parse(getCookieByKey(tableName)) : defaultMetric)
+  const [initMetric, setInitMetric] = useState(
+    getCookieByKey(tableName)
+      ? JSON.parse(getCookieByKey(tableName))
+      : defaultMetric
+  )
   let availableMetricTransform = []
   if (metricArray) {
     availableMetricTransform = availableMetric.map(item => ({
       ...item,
       id: item[metricKey],
-      checked: initMetric.includes(item[metricKey])
+      checked: initMetric.includes(item[metricKey]),
     }))
   } else {
     for (const key in availableMetric) {
       availableMetricTransform.push({
         ...availableMetric[key],
         id: key,
-        checked: initMetric.includes(key)
+        checked: initMetric.includes(key),
       })
     }
   }
@@ -186,7 +198,9 @@ const CustomizeTableModal = ({
   useEffect(() => {
     const newItemToDrag = []
     for (let i = 0; i < initMetric.length; i++) {
-      const indexItem = itemToSelect.findIndex(item => item.id === initMetric[i])
+      const indexItem = itemToSelect.findIndex(
+        item => item.id === initMetric[i]
+      )
       if (indexItem >= 0) {
         newItemToDrag.push(itemToSelect[indexItem])
       }
@@ -194,15 +208,22 @@ const CustomizeTableModal = ({
     setItemToDrag(newItemToDrag)
   }, [])
   // Function handler
-  const onItemSelectChange = (item) => {
+  const onItemSelectChange = item => {
     // Remove item when number of selected item is less or equal 10 will set all selected item to disabled and display error message
     if (itemToDrag.length <= 10 && !item.checked) {
-      setItemToSelect(itemToSelect.map(item => item.checked ? { ...item, disabled: true } : item))
+      setItemToSelect(
+        itemToSelect.map(item =>
+          item.checked ? { ...item, disabled: true } : item
+        )
+      )
       return setError("Must not be less than 10 metrics")
     }
 
     // Update drag item list
-    const newItemToDrag = [...itemToDrag].map(item => ({ ...item, disabled: false }))
+    const newItemToDrag = [...itemToDrag].map(item => ({
+      ...item,
+      disabled: false,
+    }))
     const dragIndex = newItemToDrag.findIndex(element => element.id === item.id)
     if (item.checked && dragIndex < 0) {
       newItemToDrag.push(item)
@@ -212,8 +233,13 @@ const CustomizeTableModal = ({
     setItemToDrag(newItemToDrag)
 
     // Update select item list
-    const newItemToSelect = [...itemToSelect].map(item => ({ ...item, disabled: false }))
-    const selectIndex = newItemToSelect.findIndex(element => element.id === item.id)
+    const newItemToSelect = [...itemToSelect].map(item => ({
+      ...item,
+      disabled: false,
+    }))
+    const selectIndex = newItemToSelect.findIndex(
+      element => element.id === item.id
+    )
     if (selectIndex >= 0) {
       newItemToSelect[selectIndex] = item
     }
@@ -225,7 +251,7 @@ const CustomizeTableModal = ({
    * Update current drag items
    * @param items
    */
-  const onItemOderChange = (items) => {
+  const onItemOderChange = items => {
     setItemToDrag(items)
   }
 
@@ -248,10 +274,17 @@ const CustomizeTableModal = ({
    * Revert to default
    */
   const onRevertToDefault = () => {
-    setItemToSelect(availableMetricTransform.map(item => ({ ...item, checked: initMetric.includes(item.id) })))
+    setItemToSelect(
+      availableMetricTransform.map(item => ({
+        ...item,
+        checked: initMetric.includes(item.id),
+      }))
+    )
     const newItemToDrag = []
     for (let i = 0; i < initMetric.length; i++) {
-      const indexItem = itemToSelect.findIndex(item => item.id === initMetric[i])
+      const indexItem = itemToSelect.findIndex(
+        item => item.id === initMetric[i]
+      )
       if (indexItem >= 0) {
         newItemToDrag.push(itemToSelect[indexItem])
       }
@@ -263,37 +296,57 @@ const CustomizeTableModal = ({
   return (
     <div>
       <Modal isOpen={open} toggle={closeDialog} id="customize_popup">
-        <ModalHeader toggle={closeDialog}>
+        <ModalHeader
+          toggle={closeDialog}
+          close={<CloseButton handleClose={closeDialog} />}
+        >
           <h3>Customise Column</h3>
         </ModalHeader>
         <ModalBody className="customize-table-container">
           <div className="customize-table-content">
             <div className="col-5">
               <h5>Available Metrics</h5>
-              {itemToSelect.map((item) => <ItemSelect key={item.id} onChange={onItemSelectChange} item={item} />)}
+              {itemToSelect.map(item => (
+                <ItemSelect
+                  key={item.id}
+                  onChange={onItemSelectChange}
+                  item={item}
+                />
+              ))}
             </div>
             <div className="col-7 ">
               <h5>Column Arrangement</h5>
-              <DragContainer onUpdateOne={onItemSelectChange} items={itemToDrag}
-                              onChange={onItemOderChange} />
+              <DragContainer
+                onUpdateOne={onItemSelectChange}
+                items={itemToDrag}
+                onChange={onItemOderChange}
+              />
             </div>
           </div>
           <div className="customize-table-footer">
             <div className="customize-table-footer-error">
-              {error && <>
-                <AlertIcon />
-                <div>{error}</div>
-              </>}
+              {error && (
+                <>
+                  <AlertIcon />
+                  <div>{error}</div>
+                </>
+              )}
             </div>
             <div className="d-flex align-items-center justify-content-between mt-4">
-              <button onClick={onRevertToDefault} className="btn btn-outline-primary px-4">
+              <button
+                onClick={onRevertToDefault}
+                className="btn btn-outline-primary px-4"
+              >
                 <div className="btn-pre-icon">
                   <RefreshDotIcon />
                   <div>Default</div>
                 </div>
               </button>
               <div className="d-flex align-items-center">
-                <button onClick={closeDialog} className="btn btn-outline-primary px-4 mr-2">
+                <button
+                  onClick={closeDialog}
+                  className="btn btn-outline-primary px-4 mr-2"
+                >
                   Cancel
                 </button>
                 <button onClick={onSave} className="btn btn-primary px-4">

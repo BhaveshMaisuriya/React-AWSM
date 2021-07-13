@@ -30,9 +30,8 @@ const Example = React.memo(props => {
    */
   useEffect(() => {
     if (dataFilter) {
-      if (!isNull(dataFilter[dataKey]) && !isUndefined(dataFilter[dataKey]) && typeof dataFilter[dataKey] === 'array') {
+      if (!isNull(dataFilter[dataKey]) && !isUndefined(dataFilter[dataKey])) {
         let alldata = []
-        console.log("::", dataFilter[dataKey])
         dataFilter[dataKey].map((item, index) => {
           alldata.push({
             text: item,
@@ -312,7 +311,7 @@ const Example = React.memo(props => {
                 type="submit"
                 className="filter-popover-button filter-popover-button-apply"
                 onClick={clickApply}
-                // disabled={checkedCount === 0 || hasRemark ? true : false}
+                disabled={checkedCount === 0 ? true : false}
               >
                 Apply
               </Button>
@@ -322,7 +321,6 @@ const Example = React.memo(props => {
                 color="#008F8A"
                 onClick={clickReset}
                 className="filter-popover-button filter-popover-button-reset"
-                disabled={hasRemark ? true : false}
               >
                 Reset
               </Button>

@@ -18,11 +18,12 @@ import "./InformationModal.scss"
 import { MODE } from "./constants"
 import { tableInformationModalDummyData as data2 } from "./tableMapping"
 import AWSMAlert from "../../../components/Common/AWSMAlert/index"
+import CloseButton from "../../../components/Common/CloseButton"
 
 import {
   getRoadTankerDetail,
   updateRoadTankerDetail,
-  resetCurrentRoadTankerData
+  resetCurrentRoadTankerData,
 } from "../../../store/actions"
 import { connect } from "react-redux"
 import ExitConfirmation from "../../../components/Common/ExitConfirmation"
@@ -46,7 +47,7 @@ class InformationModal extends Component {
     }
   }
 
-  componentWillUnmount(){
+  componentWillUnmount() {
     this.props.onResetCurrentRoadTankerDetail()
   }
 
@@ -58,28 +59,29 @@ class InformationModal extends Component {
     onGetRoadTankerDetail(data.vehicle)
   }
 
-  componentWillReceiveProps(nextProps){
-    if(!isEqual(nextProps.currentRoadTanker,this.props.currentRoadTanker)){
-      this.setState({data:nextProps.currentRoadTanker})
+  componentWillReceiveProps(nextProps) {
+    if (!isEqual(nextProps.currentRoadTanker, this.props.currentRoadTanker)) {
+      this.setState({ data: nextProps.currentRoadTanker })
     }
   }
 
   onConfirmCancel = () => {
-    this.setState({ isConfirm: false });
+    this.setState({ isConfirm: false })
   }
 
   onConfirmExit = () => {
-    this.setState({ isConfirm: false });
+    this.setState({ isConfirm: false })
     if (this.props.onCancel()) {
       this.props.onCancel()
     }
   }
 
   render() {
-    const { visible,
+    const {
+      visible,
       currentRoadTanker,
       onCancel,
-      onUpdateRoadTankerDetail
+      onUpdateRoadTankerDetail,
     } = this.props
     const { activeTab, mode, showAlert, data } = this.state
     const { scheduler } = this.state.userRole
@@ -92,7 +94,7 @@ class InformationModal extends Component {
 
     const handleUpdate = e => {
       e.preventDefault()
-      onUpdateRoadTankerDetail({ vehicle_name:data.vehicle,data})
+      onUpdateRoadTankerDetail({ vehicle_name: data.vehicle, data })
       this.onConfirmExit()
     }
 
@@ -109,7 +111,10 @@ class InformationModal extends Component {
       const footer =
         mode === MODE.VIEW_AND_AMEND ? (
           <ModalFooter>
-            <button className="btn-sec" onClick={() => this.setState({ isConfirm: true })}>
+            <button
+              className="btn-sec"
+              onClick={() => this.setState({ isConfirm: true })}
+            >
               Cancel
             </button>
             <Button
@@ -135,16 +140,22 @@ class InformationModal extends Component {
     return (
       <Modal
         isOpen={visible}
-        className="table-information modal-lg"
-        contentClassName="modalTIContainer"
+        className="commercial-customer-modal modal-lg"
+        // contentClassName="modalTIContainer"
       >
-        <ModalHeader toggle={() => this.setState({ isConfirm: true })}>
-          <h5 className="modal-title">
-            VEHICLE ID: {currentRoadTanker?.vehicle}
-            <span className="sub-title">
-              Last Updated By: Nur Izzati on 3rd March 2021
-            </span>
-          </h5>
+        <ModalHeader
+          close={
+            <CloseButton
+              handleClose={() => this.setState({ isConfirm: true })}
+            />
+          }
+        >
+          <span className="modal-title">
+            Vehicle ID: {currentRoadTanker?.vehicle}
+          </span>
+          <span className="last-updated-sub-title">
+            Last Updated By: Nur Izzati on 3rd March 2021
+          </span>
         </ModalHeader>
         <AWSMAlert
           status="success"
@@ -170,7 +181,9 @@ class InformationModal extends Component {
                     className="form-control"
                     type="text"
                     defaultValue={data?.vehicle}
-                    onChange={e => onFieldValueChange("vehicle",e.target.value)}
+                    onChange={e =>
+                      onFieldValueChange("vehicle", e.target.value)
+                    }
                     disabled={true}
                   />
                 </div>
@@ -180,7 +193,7 @@ class InformationModal extends Component {
                     className="form-control"
                     type="text"
                     defaultValue={data?.owner}
-                    onChange={e => onFieldValueChange("owner",e.target.value)}
+                    onChange={e => onFieldValueChange("owner", e.target.value)}
                     disabled={true}
                   />
                 </div>
@@ -192,7 +205,9 @@ class InformationModal extends Component {
                     className="form-control"
                     type="text"
                     defaultValue={data?.status_sap}
-                    onChange={e => onFieldValueChange("status_sap",e.target.value)}
+                    onChange={e =>
+                      onFieldValueChange("status_sap", e.target.value)
+                    }
                     disabled={true}
                   />
                 </div>
@@ -202,7 +217,9 @@ class InformationModal extends Component {
                     className="form-control"
                     type="text"
                     defaultValue={data?.max_volume}
-                    onChange={e => onFieldValueChange("max_volume",e.target.value)}
+                    onChange={e =>
+                      onFieldValueChange("max_volume", e.target.value)
+                    }
                     disabled={true}
                   />
                 </div>
@@ -214,7 +231,9 @@ class InformationModal extends Component {
                     className="form-control"
                     type="text"
                     defaultValue={data?.remarks}
-                    onChange={e => onFieldValueChange("remarks",e.target.value)}
+                    onChange={e =>
+                      onFieldValueChange("remarks", e.target.value)
+                    }
                     disabled={
                       (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
                     }
@@ -288,7 +307,6 @@ class InformationModal extends Component {
           </Fragment>
           {modalFooter()}
         </ModalBody>
-
       </Modal>
     )
   }
@@ -296,13 +314,13 @@ class InformationModal extends Component {
 
 const mapStateToProps = ({ roadTanker }) => ({
   currentRoadTanker: roadTanker.currentRoadTanker?.data,
-  isUpdateSuccess:  roadTanker.currentRoadTanker?.isUpdateSuccess,
+  isUpdateSuccess: roadTanker.currentRoadTanker?.isUpdateSuccess,
 })
 
 const mapDispatchToProps = dispatch => ({
   onGetRoadTankerDetail: params => dispatch(getRoadTankerDetail(params)),
-  onUpdateRoadTankerDetail: params =>dispatch(updateRoadTankerDetail(params)),
-  onResetCurrentRoadTankerDetail: () => dispatch(resetCurrentRoadTankerData())
+  onUpdateRoadTankerDetail: params => dispatch(updateRoadTankerDetail(params)),
+  onResetCurrentRoadTankerDetail: () => dispatch(resetCurrentRoadTankerData()),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(InformationModal)

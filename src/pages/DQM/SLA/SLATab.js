@@ -64,7 +64,7 @@ const AddNewSectionModal = ({ defaultValue, isOpen, onAdd, onCancel, type = "add
     onAdd(value)
     setValue("")
   }
-  
+
   useEffect(() => {
     if (onEditing) {
       inputRef.current?.focus()
@@ -226,6 +226,10 @@ const SectionLabelEdit = ({ defaultValue, disabled, onSubmit }) => {
   const [value, setValue] = useState(defaultValue)
 
   useEffect(() => {
+    setValue(defaultValue)
+  }, [defaultValue])
+
+  useEffect(() => {
     if (onEditing) {
       inputRef.current?.focus()
     }
@@ -328,9 +332,22 @@ class SLATab extends Component {
 
   componentDidMount() {}
 
-  toggle(index) {
+  componentDidUpdate(prevProps) {
+    if (this.props.data && prevProps.data !== this.props.data) {
+      const { activeItem } = this.state
+      const index = activeItem ? this.props.data.findIndex(e => e.id === activeItem.id) : -1
+      if (activeItem && index >= 0) {
+        this.setState({ activeTab: index })
+      } else {
+        this.setState({ activeItem: prevProps.data[0], activeTab: 0 })
+      }
+    }
+  }
+
+  toggle(index, item) {
     this.setState({
       activeTab: index,
+      activeItem: item,
     })
   }
 
@@ -468,7 +485,7 @@ class SLATab extends Component {
                     active: this.state.activeTab !== index,
                   })}
                   onClick={() => {
-                    this.toggle(index)
+                    this.toggle(index, item)
                   }}
                 >
                   <div className="d-flex justify-content-center section-tab">

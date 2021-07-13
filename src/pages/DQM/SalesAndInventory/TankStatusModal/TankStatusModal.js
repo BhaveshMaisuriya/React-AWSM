@@ -13,6 +13,7 @@ import ExitConfirmation from "../../../../components/Common/ExitConfirmation/ind
 import "./TankStatusModal.scss"
 import { updateSalesAndInventoryTankStatusModal } from "store/actions"
 import { XIcon } from "common/CustomizeTable/icons"
+import CloseButton from "../../../../components/Common/CloseButton"
 import { isScheduler } from "helpers/auth_helper"
 
 const mockDataOfTankStatus = {
@@ -83,17 +84,17 @@ const TankStatusModal = props => {
       <div className={`tank_status`}>
         <Modal isOpen={open} size={`lg`} className="tank-status-modal">
           <div className="variance-control-container">
-            <div className="d-flex align-items-center justify-content-between px-4 pt-4 pb-2">
-              <h3 className="variance-label">{modalTitle}</h3>
-              <div className="d-flex align-items-center">
-                <button
-                  className="variance-close-button"
-                  onClick={() => setModalConfirm(true)}
-                >
-                  <XIcon />
-                </button>
-              </div>
+            {/* <div className="d-flex align-items-center justify-content-between px-4 pt-4 pb-2">
+            <h3 className="variance-label">{modalTitle}</h3>
+            <div className="d-flex align-items-center">
+            <CloseButton handleClose={() => setModalConfirm(true)} />
             </div>
+            </div> */}
+            <ModalHeader
+              close={<CloseButton handleClose={() => setModalConfirm(true)} />}
+            >
+              <h3>{modalTitle}</h3>
+            </ModalHeader>
             <ModalBody className="variance-control-content position-relative">
               {modalConfirm && (
                 <ExitConfirmation

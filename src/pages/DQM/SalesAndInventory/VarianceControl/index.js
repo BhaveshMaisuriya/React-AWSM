@@ -3,10 +3,14 @@ import { connect } from "react-redux"
 import "./VarianceControl.scss"
 import { Modal, ModalBody, ModalHeader } from "reactstrap"
 import ExitConfirmation from "../../../../components/Common/ExitConfirmation"
-import { getSalesAndInventoryVarianceControl, updateSalesAndInventoryVarianceControl } from "../../../../store/salesAndInventory/actions"
+import {
+  getSalesAndInventoryVarianceControl,
+  updateSalesAndInventoryVarianceControl,
+} from "../../../../store/salesAndInventory/actions"
 import AWSMEditIcon from "../../../../assets/images/AWSM-Edit-Icon.svg"
 import { ReactSVG } from "react-svg"
 import { format } from "date-fns"
+import CloseButton from "../../../../components/Common/CloseButton"
 
 const headers = [
   { label: "STATION TANK STATUS", value: "station_tank_status" },
@@ -42,8 +46,8 @@ const VarianceInput = ({ value, disabled, onChange }) => {
   }
 
   const onPress = event => {
-    if(event.key === 'Enter'){
-      inputRef.current.blur();
+    if (event.key === "Enter") {
+      inputRef.current.blur()
     }
     const theEvent = event || window.event
     let key = theEvent.keyCode || theEvent.which
@@ -76,18 +80,24 @@ const VarianceInput = ({ value, disabled, onChange }) => {
         disabled={disabled}
         onClick={onEditButtonClick}
       >
-        <ReactSVG src={AWSMEditIcon}/>
+        <ReactSVG src={AWSMEditIcon} />
       </button>
     </div>
   )
 }
 
-const VarianceTable = ({ headers = [], items = [], scheduler, onChange, rowKey="id" }) => {
+const VarianceTable = ({
+  headers = [],
+  items = [],
+  scheduler,
+  onChange,
+  rowKey = "id",
+}) => {
   const onValueChange = (index, key, value) => {
-    const newItems = [...items];
-    newItems[index][key] = value;
+    const newItems = [...items]
+    newItems[index][key] = value
     if (onChange) {
-      onChange(newItems);
+      onChange(newItems)
     }
   }
   return (
@@ -111,7 +121,9 @@ const VarianceTable = ({ headers = [], items = [], scheduler, onChange, rowKey="
                     <VarianceInput
                       disabled={scheduler}
                       value={item[header.value] || ""}
-                      onChange={(value) => onValueChange(row, header.value, value)}
+                      onChange={value =>
+                        onValueChange(row, header.value, value)
+                      }
                     />
                   )}
                 </td>
@@ -124,12 +136,23 @@ const VarianceTable = ({ headers = [], items = [], scheduler, onChange, rowKey="
   )
 }
 
-const VarianceControl = ({ open, scheduler, closeDialog, onChange, getSalesAndInventoryVarianceControl, varianceControlData, updateSalesAndInventoryVarianceControl }) => {
-  const [data, setData] = useState({ ...varianceControlData, date: format(new Date(), "yyyy-MM-dd")});
-  const [isConfirm, setIsConfirm] = useState(false);
+const VarianceControl = ({
+  open,
+  scheduler,
+  closeDialog,
+  onChange,
+  getSalesAndInventoryVarianceControl,
+  varianceControlData,
+  updateSalesAndInventoryVarianceControl,
+}) => {
+  const [data, setData] = useState({
+    ...varianceControlData,
+    date: format(new Date(), "yyyy-MM-dd"),
+  })
+  const [isConfirm, setIsConfirm] = useState(false)
 
   useEffect(() => {
-    setData({ ...varianceControlData, date: format(new Date(), "yyyy-MM-dd")})
+    setData({ ...varianceControlData, date: format(new Date(), "yyyy-MM-dd") })
   }, [varianceControlData])
 
   useEffect(() => {
@@ -142,7 +165,7 @@ const VarianceControl = ({ open, scheduler, closeDialog, onChange, getSalesAndIn
     if (scheduler && closeDialog) {
       return closeDialog()
     }
-    setIsConfirm(true);
+    setIsConfirm(true)
   }
 
   const onCancel = () => {
@@ -168,13 +191,18 @@ const VarianceControl = ({ open, scheduler, closeDialog, onChange, getSalesAndIn
   return (
     <Modal isOpen={open} className="variance-control-modal">
       <div className="variance-control-container">
-        <ModalHeader toggle={showConfirm}>
+        <ModalHeader
+          // toggle={showConfirm}
+          close={<CloseButton handleClose={showConfirm} />}
+        >
           <h3>Variance Control</h3>
-          <span className="last-updated-sub-title flex-grow-1">Last Updated: Nur Izzati on 17 Mar 2021</span>
+          <span className="last-updated-sub-title flex-grow-1">
+            Last Updated: Nur Izzati on 17 Mar 2021
+          </span>
         </ModalHeader>
         <ModalBody className="variance-control-content position-relative">
           {isConfirm && (
-            <ExitConfirmation onExit={onExit} onCancel={onCancel}/>
+            <ExitConfirmation onExit={onExit} onCancel={onCancel} />
           )}
           <div className="w-100">
             <div>
@@ -194,13 +222,15 @@ const VarianceControl = ({ open, scheduler, closeDialog, onChange, getSalesAndIn
                 <label className="variance-table-label">
                   Inventory Variance
                 </label>
-                {data && <VarianceTable
+                {data && (
+                  <VarianceTable
                     items={data.inventory}
                     headers={headers}
                     scheduler={scheduler}
                     rowKey="station_tank_status"
                     onChange={value => setData({ ...data, inventory: value })}
-                  />}
+                  />
+                )}
               </div>
             </div>
             <div className="d-flex align-items-center justify-content-end mt-4 mb-4 px-4">
@@ -228,17 +258,16 @@ const VarianceControl = ({ open, scheduler, closeDialog, onChange, getSalesAndIn
   )
 }
 
-const mapStateToProps = ({saleAndInventory}) => ({
+const mapStateToProps = ({ saleAndInventory }) => ({
   varianceControlData: saleAndInventory.varianceControlData,
   varianceControlError: saleAndInventory.varianceControlError,
 })
 
 const mapDispatchToProps = dispatch => ({
-  getSalesAndInventoryVarianceControl: date => dispatch(getSalesAndInventoryVarianceControl(date)),
-  updateSalesAndInventoryVarianceControl: data => dispatch(updateSalesAndInventoryVarianceControl(data)),
+  getSalesAndInventoryVarianceControl: date =>
+    dispatch(getSalesAndInventoryVarianceControl(date)),
+  updateSalesAndInventoryVarianceControl: data =>
+    dispatch(updateSalesAndInventoryVarianceControl(data)),
 })
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(VarianceControl)
+export default connect(mapStateToProps, mapDispatchToProps)(VarianceControl)

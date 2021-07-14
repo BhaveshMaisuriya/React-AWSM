@@ -11,9 +11,9 @@ class AvailabilityTab extends PureComponent {
     }
   }
 
-  onChangeHandler = (value,key) => {
-    const {  data, onChange } = this.props
-    let newData = {...data}
+  onChangeHandler = (value, key) => {
+    const { data, onChange } = this.props
+    let newData = { ...data }
     newData[key] = value
     onChange("availability", newData)
   }
@@ -31,7 +31,7 @@ class AvailabilityTab extends PureComponent {
                 type="text"
                 defaultValue={data?.default_terminal}
                 disabled={true}
-                onChange={e => this.onChangeHandler(e.target.value,"default_terminal")}
+                onChange={e => this.onChangeHandler(e.target.value, "default_terminal")}
               />
             </div>
             <div className="col-md-6 form-group">
@@ -40,10 +40,13 @@ class AvailabilityTab extends PureComponent {
                 className="form-control"
                 type="text"
                 defaultValue={data?.shift_type}
-                onChange={e => this.onChangeHandler(e.target.value,"shift_type")}
+                onChange={e => this.onChangeHandler(e.target.value, "shift_type")}
+                disabled={
+                  (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
+                }
               >
                 {data?.shift_type_dropdown.map((value, index) => {
-                  return <option value={index}>{value}</option>
+                  return <option value={value}>{value}</option>
                 })}
 
               </select>
@@ -57,46 +60,34 @@ class AvailabilityTab extends PureComponent {
                 type="text"
                 defaultValue={data?.daily_available_hours}
                 disabled={true}
-                onChange={e => this.onChangeHandler(e.target.value,"daily_available_hours")}
+                onChange={e => this.onChangeHandler(e.target.value, "daily_available_hours")}
               />
             </div>
-          </div>
-          <div className="row">
             <div className="col-md-6 form-group">
               <label> STATUS IN AWSM </label>
               <select
                 defaultValue={data?.status_awsm}
                 className="form-control"
                 type="text"
-                onChange={e => this.onChangeHandler(e.target.value,"status_in_awsm")}
-              >
-                {data?.status_awsm_dropdown?.map((value, index) => {
-                  return <option value={index}>{value}</option>
-                })}
-              </select>
-            </div>
-            <div className="col-md-6 form-group">
-              <label>DATE</label>
-              <DatePicker
-                className="form-control"
-                value={data?.date}
-                onChange={e => this.onChangeHandler(e,"date")}
+                onChange={e => this.onChangeHandler(e.target.value, "status_in_awsm")}
                 disabled={
                   (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
                 }
-              />
+              >
+                {data?.status_awsm_dropdown?.map((value) => {
+                  return <option value={value}>{value}</option>
+                })}
+              </select>
             </div>
           </div>
+
           <div>
             <b>OTHER TERMINAL MOBILIZATION</b>
           </div>
           <div className="row">
             <div className="col-md-6 form-group">
-              <label>DATE 1</label>
+              <label>DATE </label>
               <DatePicker
-                className="form-control"
-                selected={data?.date1}
-                onChange={e => this.onChangeHandler(e,"date1")}
                 disabled={
                   (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
                 }
@@ -107,12 +98,15 @@ class AvailabilityTab extends PureComponent {
               <select
                 className="form-control"
                 type="text"
-                defaultValue={"three"}
-                onChange={e => this.onChangeHandler(e.target.value,"mobilized_terminal_name_1")}
+                value={data?.default_terminal}
+                onChange={e => this.onChangeHandler(e.target.value, "default_terminal")}
+                disabled={
+                  (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
+                }
               >
-                <option value="one">One</option>
-                <option value="two">Two</option>
-                <option value="three">Three</option>
+                {data?.terminal_dropdown?.map((value) => {
+                  return <option value={value}>{value}</option>
+                })}
               </select>
             </div>
           </div>

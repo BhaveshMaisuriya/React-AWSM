@@ -297,7 +297,7 @@ export const updateTableInformation = event => {
 export const updateTerminalDetail = event => {
   return axios.put(
     `https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/terminal/${event.ship_to_party}`,
-    event
+    event.body
   )
 }
 

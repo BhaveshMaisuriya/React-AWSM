@@ -24,9 +24,9 @@ class SpecificationTab extends PureComponent {
     }
   }
 
-  onChangeHandler = (value,key) => {
-    const {  data, onChange } = this.props
-    let newData = {...data}
+  onChangeHandler = (value, key) => {
+    const { data, onChange } = this.props
+    let newData = { ...data }
     newData[key] = value
     onChange("specification", newData)
   }
@@ -149,8 +149,8 @@ class SpecificationTab extends PureComponent {
           onDeleteBtnClick={onDeleteBtnClick}
           onConfirmClick={onConfirmClick}
           onNoClick={onNoClick}
-          onChange = {e => this.onChangeHandler(e,"rt_restriction")}
-          />
+          onChange={e => this.onChangeHandler(e, "rt_restriction")}
+        />
       ) : (
         <div className="input-group add-restriction">
           <input
@@ -183,7 +183,7 @@ class SpecificationTab extends PureComponent {
               className="form-control"
               type="text"
               defaultValue={data?.product_type_sap}
-              onChange={e => this.onChangeHandler(e.target.value,"product_type_sap")}
+              onChange={e => this.onChangeHandler(e.target.value, "product_type_sap")}
               disabled={true}
             />
           </div>
@@ -193,7 +193,7 @@ class SpecificationTab extends PureComponent {
               className="form-control"
               type="text"
               defaultValue={data?.pump_type}
-              onChange={e => this.onChangeHandler(e.target.value,"pump_type")}
+              onChange={e => this.onChangeHandler(e.target.value, "pump_type")}
               disabled={true}
             />
           </div>
@@ -207,10 +207,10 @@ class SpecificationTab extends PureComponent {
                 (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
               }
               defaultValue={data?.product_type_awsm}
-              onChange={e => this.onChangeHandler(e.target.value,"product_type_awsm")}
+              onChange={e => this.onChangeHandler(e.target.value, "product_type_awsm")}
             >
               {data?.product_type_awsm_dropdown?.map((value, index) => {
-                  return <option value={index}>{value}</option>
+                return <option value={index}>{value}</option>
               })}
             </select>
           </div>
@@ -222,7 +222,7 @@ class SpecificationTab extends PureComponent {
                 (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
               }
               value={data?.temporary_product_date_range}
-              onChange={v => this.onChangeHandler(v,"temporary_product_date_range")}
+              onChange={v => this.onChangeHandler(v, "temporary_product_date_range")}
             />
           </div>
         </div>
@@ -234,7 +234,7 @@ class SpecificationTab extends PureComponent {
               className="form-control"
               disabled={true}
               defaultValue={data?.chartering_type}
-              onChange={e => this.onChangeHandler(e.target.value,"chartering_type")}
+              onChange={e => this.onChangeHandler(e.target.value, "chartering_type")}
             ></input>
           </div>
           <div className="col-md-6 form-group">
@@ -244,8 +244,8 @@ class SpecificationTab extends PureComponent {
               disabled={
                 (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
               }
-              value={data?.customer_type}
-              onChange={e => this.onChangeHandler(e.target.value,"customer_type")}
+              defaultValue={data?.customer_type}
+              onChange={e => this.onChangeHandler(e.target.value, "customer_type")}
             >
 
               {data?.customer_type_dropdown}
@@ -272,7 +272,7 @@ class SpecificationTab extends PureComponent {
               className="form-control"
               disabled={true}
               defaultValue={data?.restriction_code}
-              onChange={e => this.onChangeHandler(e.target.value,"restriction_code")}
+              onChange={e => this.onChangeHandler(e.target.value, "restriction_code")}
             ></input>
           </div>
         </div>

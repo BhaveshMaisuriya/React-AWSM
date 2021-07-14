@@ -12,7 +12,9 @@ import {
   GET_TERMINAL_FILTER_FAIL,
   GET_DOWNLOAD_TERMINAL_SUCCESS,
   GET_DOWNLOAD_TERMINAL_FAIL,
+  RESET_CURRENT_TERMINAL_DETAIL
 } from "./actionTypes"
+import { notify } from "../../helpers/notify"
 
 const initialState = {
   terminal: [],
@@ -83,6 +85,7 @@ const Terminal = (state = initialState, action) => {
       }
 
     case UPDATE_TERMINAL_TABLE_INFORMATION_SUCCESS:
+      notify.success("Update successfully")
       return {
         ...state,
         address: state.events.map(event =>
@@ -109,7 +112,11 @@ const Terminal = (state = initialState, action) => {
         ...state,
         error: action.payload,
       }
-
+    case RESET_CURRENT_TERMINAL_DETAIL:
+      return {
+        ...state,
+        currentTerminal: null,
+      }
     default:
       return state
   }

@@ -22,7 +22,7 @@
 //   }
 // }
 
-.sub-title {
+.last-updated-sub-title {
   height: 16px;
   width: 350px;
   color: #757575;
@@ -41,24 +41,6 @@
   font-size: 24px;
   letter-spacing: 0;
   line-height: 26px;
-}
-
-.modal-lg {
-  button {
-    height: 40px;
-    width: 120px;
-  }
-
-  .btn-sec {
-    box-sizing: border-box;
-    border: 1px solid #cbefed;
-    border-radius: 4px;
-    background-color: white;
-    color: #00a19c !important;
-    :hover {
-      background-color: white;
-    }
-  }
 }
 
 .active {
@@ -138,7 +120,7 @@ ul {
 }
 
 #restriction {
-  color: #00a19c;
+  // color: #00a19c;
 }
 
 .Mui-checked {
@@ -184,45 +166,3 @@ ul li div span {
     color: red;
   }
 }
-
-// input[type="checkbox"] {
-//   position: relative;
-//   cursor: pointer;
-// }
-
-// input[type="checkbox"]:before {
-//   content: "";
-//   display: block;
-//   position: absolute;
-//   width: 15px;
-//   height: 15px;
-//   top: 0;
-//   left: 0;
-//   background-color:#e9e9e9;
-// }
-
-// input[type="checkbox"]:checked:before {
-//   content: "";
-//   display: block;
-//   position: absolute;
-//   width: 15px;
-//   height: 15px;
-//   top: 0;
-//   left: 0;
-//   background-color:#00A19C !important
-// }
-
-// input[type="checkbox"]:checked:after {
-//   content: "";
-//   display: block;
-//   width: 5px;
-//   height: 10px;
-//   border: solid white;
-//   border-width: 0 2px 2px 0;
-//   -webkit-transform: rotate(45deg);
-//   -ms-transform: rotate(45deg);
-//   transform: rotate(45deg);
-//   position: absolute;
-//   top: 2px;
-//   left: 5px;
-// }

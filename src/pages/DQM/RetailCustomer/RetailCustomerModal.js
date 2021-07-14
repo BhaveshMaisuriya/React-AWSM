@@ -80,11 +80,16 @@ const RetailCustomerModal = props => {
   }
 
   useEffect(async () => {
-    await getTableInformation(data)
+    if (data && visible) {
+      await getTableInformation(data)
+      setActiveTab("1")
+    } else if (!visible) {
+      resetRetailTableInformation()
+    }
     return () => {
       resetRetailTableInformation()
     }
-  }, [data])
+  }, [data, visible])
 
   useEffect(() => {
     setCurrentRetailDetail(props.currentRetailDetail)

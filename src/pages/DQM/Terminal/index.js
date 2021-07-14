@@ -8,6 +8,7 @@ import {
   getTableInformation,
   getDownloadTerminal,
   updateTableInformation,
+  resetCurrentTerminalDetail
 } from "../../../store/actions"
 import { tableColumns, tableMapping } from "./tableMapping"
 import { transformArrayToString, getCookieByKey } from "../Common/helper"
@@ -69,6 +70,7 @@ class Terminal extends Component {
       downloadTerminal,
       filterTerminal,
       terminalTableIsLoading,
+      resetCurrentTerminalDetail
     } = this.props
     const { searchFields } = this.state
     return (
@@ -93,6 +95,7 @@ class Terminal extends Component {
             filter={filterTerminal}
             modalComponent={TerminalDetailModal}
             onGetDownloadCustomer={this.GetonDownload}
+            resetCurrentTerminalDetail = {resetCurrentTerminalDetail}
           />
         )}
       </Fragment>
@@ -115,6 +118,8 @@ const mapDispatchToProps = dispatch => ({
   onGetTableInformation: () => dispatch(getTableInformation()),
   onUpdateTableInformation: event => dispatch(updateTableInformation(event)),
   onGetDownloadTerminal: params => dispatch(getDownloadTerminal(params)),
+  resetCurrentTerminalDetail : () => dispatch(resetCurrentTerminalDetail())
+
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Terminal)

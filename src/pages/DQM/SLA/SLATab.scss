@@ -3,8 +3,6 @@
     font-weight: 600;
     border-top-left-radius: 1rem !important;
     border-top-right-radius: 1rem !important;
-    height: 42px;
-    line-height: 42px;
     font-size: 15px;
     &.active:not(.sla-and-new-section) {
       border: none;
@@ -15,7 +13,6 @@
       border: none;
       background-color:inherit;
       color: inherit;
-      padding-left: 1.5rem;
       svg {
         width: 0.4rem;
       }
@@ -26,7 +23,7 @@
     background-color: #F9F9F9 !important;
     color: #00A49D !important;
     cursor: pointer;
-    margin-left: 0.3rem;
+    margin-left: 0.2rem;
   }
 }
 

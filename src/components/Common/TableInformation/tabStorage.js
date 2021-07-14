@@ -32,7 +32,11 @@ const TabStorage = ({ scheduler, data, onChange }) => {
   const onEndOfDayChange = value => {
     const newStorageData = {
       ...storageData,
-      end_of_day: value,
+      end_of_day: {
+        type: "daily",
+        ...storageData.end_of_day,
+        time_to: value,
+      },
     }
     setStorageData(newStorageData)
     if (onChange) {
@@ -136,7 +140,7 @@ const TabStorage = ({ scheduler, data, onChange }) => {
           onChange={onEndOfDayChange}
           items={timeData}
           disabled={scheduler}
-          value={storageData.end_of_day || ""}
+          value={storageData.end_of_day?.time_to || ""}
         />
       </div>
       {Object.keys(storageData).map((key, index) => key.startsWith("storage_") ? (

@@ -230,6 +230,9 @@ class Pages extends Component {
    * Handling the modal state
    */
   toggleTI() {
+    if (this.props.resetCurrentTerminalDetail) {
+      this.props.resetCurrentTerminalDetail()
+    }
     this.setState(prevState => ({
       modalTI: !prevState.modalTI,
     }))
@@ -256,7 +259,7 @@ class Pages extends Component {
       pathName === "/retail-customer" ||
       pathName === "/commercial-customer" ? (
       <ModalComponent
-        data={this.props.tableData.list[this.state.selectedItem]}
+        data={this.props.tableData && this.props.tableData.list ? this.props.tableData.list[this.state.selectedItem] : null}
         visible={modalTI}
         onCancel={this.toggleTI}
         refreshMainTable={this.getCustomerData}

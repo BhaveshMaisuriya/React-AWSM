@@ -80,13 +80,16 @@ const CommercialCustomerModal = props => {
   }
 
   useEffect(() => {
-    if (data) {
+    if (data && visible) {
       getCommercialTableInformation(data)
+      setActiveTab("1")
+    } else if (!visible) {
+      resetCommercialTableInformation()
     }
     return () => {
       resetCommercialTableInformation()
     }
-  }, [data])
+  }, [data, visible])
 
   useEffect(() => {
     setCurrentCommercialDetail(props.currentCommercialDetail)

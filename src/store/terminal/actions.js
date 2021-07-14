@@ -16,7 +16,8 @@ import {
   GET_TERMINAL_FILTER_FAIL,
   GET_DOWNLOAD_TERMINAL,
   GET_DOWNLOAD_TERMINAL_SUCCESS,
-  GET_DOWNLOAD_TERMINAL_FAIL
+  GET_DOWNLOAD_TERMINAL_FAIL,
+  RESET_CURRENT_TERMINAL_DETAIL
 } from "./actionTypes"
 
 export const getTerminal = params => ({
@@ -106,4 +107,8 @@ export const getTerminalFilterSuccess = response => ({
 export const getTerminalFilterFail = error => ({
   type: GET_TERMINAL_FILTER_FAIL,
   payload: error,
+})
+
+export const resetCurrentTerminalDetail = () => ({
+  type: RESET_CURRENT_TERMINAL_DETAIL,
 })

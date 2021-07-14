@@ -44,7 +44,7 @@ class TerminalDetailModal extends PureComponent {
       event: {},
       updateDictionary: {},
       isConfirm: false,
-      data: props.currentTerminal,
+      dataSource:props.currentTerminal
     }
   }
 
@@ -53,28 +53,20 @@ class TerminalDetailModal extends PureComponent {
     fetchTableInformation(data.code)
   }
 
-  componentWillReceiveProps(prevProps) {
-    if (isEqual(prevProps.currentTerminal, this.props.currentTerminal)) {
-      this.setState({ data: this.props.currentTerminal })
+  componentWillReceiveProps(nextProps){
+    if(!isEqual(nextProps.currentTerminal,this.props.currentTerminal)){
+      this.setState({dataSource:nextProps.currentTerminal})
     }
   }
 
   handleUpdate(event) {
-    if (Object.keys(this.state.updateDictionary).length > 0) {
-      const { ship_to_party } = this.props.data
-      this.props.onUpdateTableInformation({
-        ship_to_party,
-        body: this.state.updateDictionary,
-      })
-    } else {
-      const { code } = this.props.data
-      const { data } = this.state
-      this.props.onUpdateTableInformation({
-        ship_to_party: code,
-        body: data,
-      })
-      this.props.onCancel()
-    }
+    const { code } = this.props.data
+    const { dataSource } = this.state
+    this.props.onUpdateTableInformation({
+      ship_to_party:code,
+      body: dataSource,
+    })
+    this.props.onCancel()
   }
   toggleTab = tab => {
     if (this.state.activeTab !== tab) {
@@ -84,9 +76,9 @@ class TerminalDetailModal extends PureComponent {
     }
   }
   onFieldChange = (key, value) => {
-    const newData = { ...this.state.data }
-    newData[key] = value
-    this.setState({ data: newData })
+    const newData = {...this.state.dataSource}
+    newData[key] = value;
+    this.setState({dataSource:newData})
   }
 
   onConfirmCancel = () => {
@@ -170,14 +162,7 @@ class TerminalDetailModal extends PureComponent {
                         type="text"
                         defaultValue={currentTerminal.remarks}
                         disabled={isDisabledField}
-                        onChange={ev => {
-                          this.setState({
-                            updateDictionary: {
-                              ...this.state.updateDictionary,
-                              ...{ remarks: ev.target.value },
-                            },
-                          })
-                        }}
+                        onChange={(e) => this.onFieldChange("remarks", e.target.value)}
                       />
                     </div>
                   </div>

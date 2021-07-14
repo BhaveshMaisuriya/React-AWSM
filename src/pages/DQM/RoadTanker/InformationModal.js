@@ -16,8 +16,8 @@ import SpecificationTab from "./SpecificationTab"
 import TrailerTab from "./TrailerTab"
 import "./InformationModal.scss"
 import { MODE } from "./constants"
-import { tableInformationModalDummyData as data2 } from "./tableMapping"
 import AWSMAlert from "../../../components/Common/AWSMAlert/index"
+import { isScheduler } from "../../../helpers/auth_helper"
 import CloseButton from "../../../components/Common/CloseButton"
 
 import {
@@ -39,7 +39,7 @@ class InformationModal extends Component {
       mode: MODE.VIEW_AND_AMEND,
       showAlert: false,
       userRole: {
-        scheduler: false,
+        scheduler: isScheduler(),
       },
       updateSuccess: props.isUpdateSuccess,
       data: props.currentRoadTanker,
@@ -117,13 +117,14 @@ class InformationModal extends Component {
             >
               Cancel
             </button>
-            <Button
+            {this.state.scheduler && <Button
               color="primary"
               type="submit"
               onClick={e => handleUpdate(e)}
             >
               Update
-            </Button>{" "}
+            </Button>}
+            {" "}
             {/* <AWSMAlert
               status="success"
               message="Update Success !"
@@ -140,19 +141,10 @@ class InformationModal extends Component {
     return (
       <Modal
         isOpen={visible}
-        className="commercial-customer-modal modal-lg"
-        // contentClassName="modalTIContainer"
+        className="table-information modal-lg"
       >
-        <ModalHeader
-          close={
-            <CloseButton
-              handleClose={() => this.setState({ isConfirm: true })}
-            />
-          }
-        >
-          <span className="modal-title">
-            Vehicle ID: {currentRoadTanker?.vehicle}
-          </span>
+        <ModalHeader toggle={() => this.setState({ isConfirm: true })}>
+          <span className="modal-title"> VEHICLE ID: {currentRoadTanker?.vehicle}</span>
           <span className="last-updated-sub-title">
             Last Updated By: Nur Izzati on 3rd March 2021
           </span>
@@ -240,35 +232,29 @@ class InformationModal extends Component {
                   />
                 </div>
               </div>
-              <div>
-                <Nav tabs>
-                  <NavItem
-                    className={activeTab === "1" ? "active" : null}
-                    onClick={() => {
-                      toggle("1")
-                    }}
-                  >
-                    <NavLink>
+              <div className="mt-4">
+                <Nav pills justified>
+                  <NavItem>
+                    <NavLink className={activeTab === "1" ? "active" : null}
+                      onClick={() => {
+                        toggle("1")
+                      }}>
                       <span>Availability</span>
                     </NavLink>
                   </NavItem>
-                  <NavItem
-                    className={activeTab === "2" ? "active" : null}
-                    onClick={() => {
-                      toggle("2")
-                    }}
-                  >
-                    <NavLink>
+                  <NavItem>
+                    <NavLink className={activeTab === "2" ? "active" : null}
+                      onClick={() => {
+                        toggle("2")
+                      }}>
                       <span>Specification</span>
                     </NavLink>
                   </NavItem>
-                  <NavItem
-                    className={activeTab === "3" ? "active" : null}
-                    onClick={() => {
-                      toggle("3")
-                    }}
-                  >
-                    <NavLink>
+                  <NavItem>
+                    <NavLink className={activeTab === "3" ? "active" : null}
+                      onClick={() => {
+                        toggle("3")
+                      }}>
                       <span>Trailer</span>
                     </NavLink>
                   </NavItem>
@@ -320,7 +306,7 @@ const mapStateToProps = ({ roadTanker }) => ({
 const mapDispatchToProps = dispatch => ({
   onGetRoadTankerDetail: params => dispatch(getRoadTankerDetail(params)),
   onUpdateRoadTankerDetail: params => dispatch(updateRoadTankerDetail(params)),
-  onResetCurrentRoadTankerDetail: () => dispatch(resetCurrentRoadTankerData()),
+  onResetCurrentRoadTankerDetail: () => dispatch(resetCurrentRoadTankerData())
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(InformationModal)

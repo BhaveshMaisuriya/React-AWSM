@@ -105,6 +105,20 @@ function OrderBank({
       icon: customiseTableIcon,
     },
   ]
+  let orderBankStatus = [
+    {
+      value: "unscheduled",
+      label: "Unscheduled"
+    },
+    {
+      value: "scheduled",
+      label: "Scheduled"
+    },
+    {
+      value: "all",
+      label: "All",
+    }
+  ]
 
   const [activeTab, setActiveTab] = useState("1")
   const [dropdownOpen, setOpen] = useState(false)
@@ -118,6 +132,7 @@ function OrderBank({
   const [ganttChartAllRadio, setGanttChartAllRadio] = useState('');
   // {high:false, request: false, future: false, backlog: false}
   const [sendDNModal, setSendDNModal] = useState(false)
+  const [status, setStatusDropdown] = useState("Unscheduled")
   const [shiftDate, setShiftDate] = useState({
     type: "single",
     days: [format(Date.now(), "yyyy-MM-dd")],
@@ -175,9 +190,10 @@ const enabledCross = (val) => {
   }
 }
 
+
   useEffect(() => {
-    getRTSOrderBankTableData({ region, terminal, shiftDate })
-  }, [region, terminal, shiftDate])
+    getRTSOrderBankTableData({ region, terminal, shiftDate, status })
+  }, [region, terminal, shiftDate, status])
 
   const onTableColumnsChange = columns => {
     setSearchFields(columns)
@@ -385,6 +401,16 @@ const enabledCross = (val) => {
                                 value={terminal}
                                 onChange={value => setTerminal(value)}
                                 items={terminalList}
+                              />
+                            </div>
+                            <p className="order-bank-region-label">
+                              STATUS
+                            </p>
+                            <div className="order-bank-region">
+                              <AWSMDropdown
+                                value={status}
+                                onChange={value => setStatusDropdown(value)}
+                                items={orderBankStatus.map(e => e.label)}
                               />
                             </div>
                           </Col>

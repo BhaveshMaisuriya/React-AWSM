@@ -7,6 +7,7 @@ import { isEqual, isUndefined } from "lodash"
 import { Badge } from "reactstrap"
 import OverrideIcon from "../../../assets/images/AWSM-success-alert.svg"
 import { ReactSVG } from "react-svg"
+import NoDataIcon from "../../../assets/images/AWSM-No-Data-Available.svg"
 
 class FixedCoulmnTable extends Component {
   constructor(props) {
@@ -92,7 +93,7 @@ class FixedCoulmnTable extends Component {
   renderFrozenTr = arr => {
     if (!arr) return null
     return typeof arr === 'string' ? (
-      <tr><td></td></tr>
+      <tr><td className='h-145'></td></tr>
     ) : (
       arr.map((e, index) => {
         return <tr key={index}>{this.renderFrozenTd(e, index)}</tr>
@@ -107,7 +108,7 @@ class FixedCoulmnTable extends Component {
   renderRegular = arr => {
     if (!arr) return null    
     return typeof arr === 'string' ? (
-      <tr><td>{arr}</td></tr>
+      <tr><td colSpan='0' className='no-data-svg'><ReactSVG src={NoDataIcon} /></td></tr>
     ) : (
       arr.map((e, index) => {
         return <tr key={index}>{this.renderRegularTd(e)}</tr>

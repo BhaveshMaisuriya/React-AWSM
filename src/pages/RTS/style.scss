@@ -367,10 +367,16 @@
 }
 .square_border {
     border: 1px solid #EEEEEE;
-    padding: 10px;
+    padding: 5px 10px;
     display: flex;
     width: 100%;
 }
 .pointer {
     cursor: pointer;
+}
+.pb-0 {
+    padding-bottom: 0;
+}
+.radio_option label {
+    margin-bottom: 0;
 }

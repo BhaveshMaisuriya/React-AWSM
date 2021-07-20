@@ -36,10 +36,12 @@ import {
   getRTSOrderBankTableData,
   sendOrderBankDN,
   refreshOderBankDN,
+  getOrderBankAuditLog,
 } from "../../store/orderBank/actions"
 import OrderBankActionModal from "./OrderBankActionModal"
 import CrossTerminalModal from "./crossTerminalModal"
 import GanttChartTable from "./OrderBankTable/GanttChartTable"
+import OrderBankAuditModal from "./OrderBankAuditModal"
 
 const GanttChartBottom = [
   {
@@ -77,6 +79,7 @@ function OrderBank({
   orderBankTableData,
   sendOrderBankDN,
   refreshOderBankDN,
+  onGetOrderBankAuditLog,
 }) {
   let orderBankSettings = [
     {
@@ -138,6 +141,7 @@ function OrderBank({
     days: [format(Date.now(), "yyyy-MM-dd")],
   })
   const [orderBankSetting, setOrderBankSetting] = useState(orderBankSettings)
+  const [showAuditModal, setShowAuditModal] = useState(false)
 
   const toggle = () => setOpen(!dropdownOpen)
   const terminalList = useMemo(() => {
@@ -190,9 +194,19 @@ const enabledCross = (val) => {
   }
 }
 
+  useEffect(()=>{
+    const payload = {
+      limit: 6,
+      pagination: 0,
+      sort_dir: "desc",
+      sort_field: "created",
+      q: "commercial_customer",
+    };
+    onGetOrderBankAuditLog(payload);
+  })
 
   useEffect(() => {
-    getRTSOrderBankTableData({ region, terminal, shiftDate, status })
+    getRTSOrderBankTableData({ region, terminal, shiftDate, status })    
   }, [region, terminal, shiftDate, status])
 
   const onTableColumnsChange = columns => {
@@ -209,13 +223,47 @@ const enabledCross = (val) => {
   }
 
   const changeGanttChartOption = async(e, val) => {
-    console.log("::s", val)
     let temp = {...ganttChartAllRadio};
     Object.keys(temp).map(function(keyName, keyIndex) {
-      console.log("::e", val, keyName)
       temp[keyName] = (keyName === val) ? e.target.checked : false;
     })
     await setGanttChartAllRadio(temp);
+  }
+
+  const istoggle = () => {
+    setShowAuditModal(!showAuditModal);
+  }
+
+  const CloseModal = () => {
+    setShowAuditModal(false);
+  }
+
+  const onFullScreen = () => {
+    console.log("here::")
+    if (
+      !document.fullscreenElement &&
+      /* alternative standard method */ !document.mozFullScreenElement &&
+      !document.webkitFullscreenElement
+    ) {
+      // current working methods
+      if (document.documentElement.requestFullscreen) {
+        document.documentElement.requestFullscreen()
+      } else if (document.documentElement.mozRequestFullScreen) {
+        document.documentElement.mozRequestFullScreen()
+      } else if (document.documentElement.webkitRequestFullscreen) {
+        document.documentElement.webkitRequestFullscreen(
+          Element.ALLOW_KEYBOARD_INPUT
+        )
+      }
+    } else {
+      if (document.cancelFullScreen) {
+        document.cancelFullScreen()
+      } else if (document.mozCancelFullScreen) {
+        document.mozCancelFullScreen()
+      } else if (document.webkitCancelFullScreen) {
+        document.webkitCancelFullScreen()
+      }
+    }
   }
 
   return (
@@ -249,21 +297,21 @@ const enabledCross = (val) => {
                 </Col>
                 <Col lg={9} md={9} sm={12} className="top_right_section">
                   <div className="d-flex align-item-right ">
-                    <Link to="#" className="border-before">
+                    <a className="border-before">
                       <img
                         src={awsmLogo}
                         height="25px"
                         width="80px"
                         className="ml-3"
                       />
-                    </Link>
-                    <Link to="#" className="border-before">
+                    </a>
+                    <a className="border-before" onClick={onFullScreen}>
                       <i className="bx bx-fullscreen ml-3"></i> Fullscreen
-                    </Link>
-                    <Link to="#" className="border-before">
+                    </a>
+                    <a className="border-before" onClick={istoggle}>
                       <img src={eyeIcon} alt="info" className="ml-3" /> View
                       Audit Log
-                    </Link>
+                    </a>
                     <span className="bl-1-grey-half plr-15">
                       <Button color={"primary"}>Run Auto Schedule</Button>
                     </span>
@@ -307,7 +355,6 @@ const enabledCross = (val) => {
                           </Col>
                           <Col lg={6} className='order-bank-bar right'>                           
                             <img src={customiseTableIcon} className="ml-2" />
-                            {console.log("::", ganttChartAllRadio)}
                             <div className='radio_option m-0 order-bank-label'>
                               <input
                                 type="radio"
@@ -509,6 +556,11 @@ const enabledCross = (val) => {
               onSubmit={onRefreshOrderBankDN}
               type="RefreshDN"
             />
+            {showAuditModal && <OrderBankAuditModal
+              open={showAuditModal}
+              istoggle={istoggle}
+              CloseModal={CloseModal}
+            />}
           </Card>
         </div>
       </div>
@@ -521,10 +573,12 @@ const mapDispatchToProps = dispatch => ({
     dispatch(getRTSOrderBankTableData(params)),
   refreshOderBankDN: params => dispatch(refreshOderBankDN(params)),
   sendOrderBankDN: params => dispatch(sendOrderBankDN(params)),
+  onGetOrderBankAuditLog: payload => dispatch(getOrderBankAuditLog(payload)),
 })
 
 const mapStateToProps = ({ orderBank }) => ({
   orderBankTableData: orderBank.orderBankTableData,
+  auditsCom: orderBank.auditsCom,
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(OrderBank)

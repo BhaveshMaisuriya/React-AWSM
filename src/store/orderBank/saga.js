@@ -8,7 +8,8 @@ import {
   GET_RTS_ORDER_BANK_TABLE_DATA,
   SEND_ORDER_BANK_DN,
   REFRESH_ORDER_BANK_DN,
-  SEND_DN_STATUS_REQUEST
+  SEND_DN_STATUS_REQUEST,
+  GET_ORDER_BANK_AUDITLOG,
 } from "./actionTypes"
 
 import {
@@ -27,7 +28,9 @@ import {
   refreshOderBankDNFail,
   refreshOderBankDNSuccess,
   sendDNStatusRequestSuccess,
-  sendDNStatusRequestFail
+  sendDNStatusRequestFail,
+  getOrderBankAuditLogSuccess,
+  getOrderBankAuditLogFail
 } from "./actions"
 import {
   getOrderBank,
@@ -37,6 +40,7 @@ import {
   sendRTSOrderBank,
   refreshRTSOrderBank,
   deleteOrderBankDetail,
+  getOrderBankAuditLog,
 } from "../../helpers/fakebackend_helper"
 
 function* onGetOrderbank({ params = {} }) {
@@ -111,6 +115,15 @@ function* onSendDNStatusRequest({ params }) {
   }
 }
 
+function* onGetOrderBankAuditLog() {
+  try {
+    const response = yield call(getOrderBankAuditLog)
+    yield put(getOrderBankAuditLogSuccess(response))
+  } catch (error) {
+    yield put(getOrderBankAuditLogFail(error))
+  }
+}
+
 function* orderBankSaga() {
   yield takeLatest(GET_ORDERBANK, onGetOrderbank)
   yield takeLatest(GET_RTS_ORDER_BANK_TABLE_DATA, onGetRTSOrderBank)
@@ -129,7 +142,7 @@ function* orderBankSaga() {
   yield takeLatest(REFRESH_ORDER_BANK_DN, onRefreshOrderBankDN)
   yield takeLatest(SEND_ORDER_BANK_DN, onSendOrderBankDN)
   yield takeLatest(SEND_DN_STATUS_REQUEST, onSendDNStatusRequest)
-  
+  yield takeLatest(GET_ORDER_BANK_AUDITLOG, onGetOrderBankAuditLog)
 }
 
 export default orderBankSaga

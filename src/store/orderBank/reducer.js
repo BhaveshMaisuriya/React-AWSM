@@ -10,7 +10,9 @@ import {
   UPDATE_ORDER_BANK_TABLE_DATA,
   DELETE_ORDERBANK_DETAIL_SUCCESS,
   DELETE_ORDERBANK_DETAIL_FAIL,
-  SEND_DN_STATUS_REQUEST_SUCCESS
+  SEND_DN_STATUS_REQUEST_SUCCESS,
+  GET_ORDER_BANK_AUDITLOG_SUCCESS,
+  GET_ORDER_BANK_AUDITLOG_FAIL,
 } from "./actionTypes"
 
 const initialState = {
@@ -19,6 +21,7 @@ const initialState = {
   error: null,
   currentOrderDetail: null,
   updateSuccess: false,
+  auditsCom: null
 }
 
 import { notify } from "../../helpers/notify"
@@ -95,6 +98,17 @@ const RTSOrderBank = (state = initialState, action) => {
       notify.success("An order has been successfully sent for DN Creation")
       return {
         ...state
+      }
+    case GET_ORDER_BANK_AUDITLOG_SUCCESS:
+      return {
+        ...state,
+        auditsCom: action.payload,
+      }
+
+    case GET_ORDER_BANK_AUDITLOG_FAIL:
+      return {
+        ...state,
+        error: action.payload,
       }
     default:
       return state

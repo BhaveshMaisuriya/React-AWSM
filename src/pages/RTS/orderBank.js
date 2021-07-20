@@ -279,7 +279,7 @@ const enabledCross = (val) => {
                   <TabPane tabId="1">
                     <div class="gantt_chart_main">
                       <div className="gantt_chart_first">
-                      <Row className='remove_border'>
+                      <Row className='remove_border pb-0'>
                           <Col lg={6} className='order-bank-bar'>
                             <div className="order-bank-shift-date">
                               <div>DATE</div>
@@ -356,7 +356,7 @@ const enabledCross = (val) => {
                           </Col>
                         </Row>
                         <GanttChartTable />
-                        <div className="square_border mb-2 mt-2">
+                        <div className="square_border">
                           {GanttChartBottom.map((item, index) => {
                             return (
                               <div className="d-flex align-items-center mr-2">
@@ -369,7 +369,7 @@ const enabledCross = (val) => {
                           })}
                         </div>
                       </div>
-                      <hr />
+                      <hr className='mb-2' />
                       <div className="gantt_chart_second">
                         <Row className="remove_border">
                           <Col lg={9} className="order-bank-bar">

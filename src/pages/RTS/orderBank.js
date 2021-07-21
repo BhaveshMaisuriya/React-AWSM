@@ -239,7 +239,6 @@ const enabledCross = (val) => {
   }
 
   const onFullScreen = () => {
-    console.log("here::")
     if (
       !document.fullscreenElement &&
       /* alternative standard method */ !document.mozFullScreenElement &&
@@ -326,7 +325,7 @@ const enabledCross = (val) => {
                 <TabContent activeTab={activeTab} className="pt-1">
                   <TabPane tabId="1">
                     <div class="gantt_chart_main">
-                      <div className="gantt_chart_first">
+                      <div className="gantt_chart_first pb-3">
                       <Row className='remove_border pb-0'>
                           <Col lg={6} className='order-bank-bar'>
                             <div className="order-bank-shift-date">
@@ -416,8 +415,7 @@ const enabledCross = (val) => {
                           })}
                         </div>
                       </div>
-                      <hr className='mb-2' />
-                      <div className="gantt_chart_second">
+                      <div className="gantt_chart_second pt-2">
                         <Row className="remove_border">
                           <Col lg={9} className="order-bank-bar">
                             <h4 className="m-0 order-bank-label">Order Bank</h4>

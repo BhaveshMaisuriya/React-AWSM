@@ -23,7 +23,10 @@ import {
   DELETE_ORDERBANK_DETAIL_FAIL,
   SEND_DN_STATUS_REQUEST,
   SEND_DN_STATUS_REQUEST_SUCCESS,
-  SEND_DN_STATUS_REQUEST_FAIL
+  SEND_DN_STATUS_REQUEST_FAIL,
+  GET_ORDER_BANK_AUDITLOG,
+  GET_ORDER_BANK_AUDITLOG_SUCCESS,
+  GET_ORDER_BANK_AUDITLOG_FAIL,
 } from "./actionTypes"
 
 export const getRTSOrderBankTableData = (params) => ({
@@ -152,4 +155,18 @@ export const sendDNStatusRequestSuccess = event => ({
 export const sendDNStatusRequestFail = error => ({
   type: SEND_DN_STATUS_REQUEST_FAIL,
   payload: error
+})
+
+export const getOrderBankAuditLog = () => ({
+  type: GET_ORDER_BANK_AUDITLOG,
+})
+
+export const getOrderBankAuditLogSuccess = response => ({
+  type: GET_ORDER_BANK_AUDITLOG_SUCCESS,
+  payload: response,
+})
+
+export const getOrderBankAuditLogFail = error => ({
+  type: GET_ORDER_BANK_AUDITLOG_FAIL,
+  payload: error,
 })

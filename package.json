@@ -4,6 +4,8 @@
   "private": true,
   "dependencies": {
     "@azure/msal-browser": "^2.14.2",
+    "@bryntum/schedulerpro": "npm:@bryntum/schedulerpro-trial",
+    "@bryntum/schedulerpro-react": "^4.2.1",
     "@ckeditor/ckeditor5-build-classic": "^28.0.0",
     "@ckeditor/ckeditor5-react": "^3.0.2",
     "@date-io/date-fns": "1.3.13",
@@ -30,7 +32,6 @@
     "axios": "^0.21.0",
     "axios-mock-adapter": "^1.19.0",
     "bootstrap": "^4.5.3",
-    "bryntum-schedulerpro": "^1.0.1",
     "chart.js": "^2.9.4",
     "chartist": "^0.11.4",
     "ckeditor4-react": "^1.4.2",

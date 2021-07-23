@@ -118,6 +118,7 @@ const ganttChartTableMapping = {
 
 const ganttChartTableData = [
   {
+    id: 1,
     vehicle: 'WA 5559V',
     pto: 'PTO',
     hours: '13.36',
@@ -126,6 +127,7 @@ const ganttChartTableData = [
     type: '1003'
   },
   {
+    id: 2,
     vehicle: 'WA 5559V',
     hours: '13.36',
     status: 'On 1',
@@ -133,14 +135,7 @@ const ganttChartTableData = [
     type: '1003'
   },
   {
-    vehicle: 'WA 5559V',
-    pto: 'PTO',
-    hours: '13.36',
-    status: 'On 1',
-    size: '21840',
-    type: '1003'
-  },
-  {
+    id: 3,
     vehicle: 'WA 5559V',
     pto: 'PTO',
     hours: '13.36',
@@ -149,6 +144,16 @@ const ganttChartTableData = [
     type: '1003'
   },
   {
+    id: 4,
+    vehicle: 'WA 5559V',
+    pto: 'PTO',
+    hours: '13.36',
+    status: 'On 1',
+    size: '21840',
+    type: '1003'
+  },
+  {
+    id: 5,
     vehicle: 'WA 5559V',
     hours: '13.36',
     status: 'On 1',

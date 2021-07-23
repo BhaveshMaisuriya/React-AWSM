@@ -1,7 +1,9 @@
 import React, { useState } from "react"
 import { Dropdown, DropdownMenu, DropdownToggle } from "reactstrap"
 import "./dropdown.scss"
-import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown"
+// import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown"
+import { ReactSVG } from "react-svg"
+import ArrowDropDownIcon from "../../../assets/images/AWSM-Dropdown.svg"
 
 /**
  * Dropdown menu
@@ -12,7 +14,13 @@ import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown"
  * @returns {JSX.Element}
  * @constructor
  */
-const AWSMDropdown = ({ items, value, onChange, disabled = false, RowComponent = null}) => {
+const AWSMDropdown = ({
+  items,
+  value,
+  onChange,
+  disabled = false,
+  RowComponent = null,
+}) => {
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const toggle = () => setDropdownOpen(prevState => !prevState)
 
@@ -20,9 +28,9 @@ const AWSMDropdown = ({ items, value, onChange, disabled = false, RowComponent =
    * Close dropdown then call to onChange event
    * @param item
    */
-  const onValueChange = (item) => {
+  const onValueChange = item => {
     setDropdownOpen(false)
-    if (onChange) {
+    if (onChange && item !== null) {
       onChange(item)
     }
   }
@@ -35,16 +43,25 @@ const AWSMDropdown = ({ items, value, onChange, disabled = false, RowComponent =
         aria-expanded={dropdownOpen}
         disabled={disabled}
       >
-        <div className={`awsm-select-toggle p-2 position-relative ${disabled ? "disabled" : ""}`}>
+        <div
+          className={`awsm-select-toggle p-2 position-relative ${
+            disabled ? "disabled" : ""
+          }`}
+        >
           <div>{value}</div>
-          <ArrowDropDownIcon className="awsm-dropdown-arrow"/>
+          <ReactSVG src={ArrowDropDownIcon} className="awsm-dropdown-arrow" />
         </div>
       </DropdownToggle>
       <DropdownMenu className="awsm-select-menu w-100">
         {items &&
           items.map((item, index) =>
             RowComponent ? (
-              <RowComponent key={index} onChange={() => onChange(item)} item={item} index={index}/>
+              <RowComponent
+                key={index}
+                onChange={() => onChange(item)}
+                item={item}
+                index={index}
+              />
             ) : (
               <div
                 key={index}

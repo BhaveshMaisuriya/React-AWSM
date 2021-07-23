@@ -10,20 +10,31 @@ export default class MultipleSelect extends Component {
     super(props)
 
     this.state = {
-      personName: ["Multiproduct", "Long Haul"],
+      RtRestrictionSelected: [],
     }
   }
 
+  componentDidMount() {
+    const { rtRestrictionSelected } = this.props
+    this.setState({ RtRestrictionSelected: rtRestrictionSelected })
+  }
+
   render() {
-    const { names, isDeleteBtnShow, onConfirmClick, onDeleteBtnClick, onNoClick } = this.props;
     const {
-      personName,
+      names,
+      isDeleteBtnShow,
+      onConfirmClick,
+      onDeleteBtnClick,
+      onNoClick,
+    } = this.props;
+    const {
+      RtRestrictionSelected,
     } = this.state;
 
     const handleChange = (event) => {
       const { onChange } = this.props;
-      this.setState({ personName: event.target.value },
-        ()=>onChange(this.state.personName));
+      this.setState({ RtRestrictionSelected: event.target.value },
+        () => onChange(this.state.RtRestrictionSelected));
     };
 
     const showDeleteBtn = (_name) => {
@@ -37,7 +48,7 @@ export default class MultipleSelect extends Component {
               id="delete"
               role="button"
             > Delete
-          </a>
+            </a>
           </div>) :
         (<div className="yes-noBtn">
           <a
@@ -54,7 +65,7 @@ export default class MultipleSelect extends Component {
             onClick={() => onNoClick()}
             className="No">
             No
-            </a>
+          </a>
         </div>)
 
       return deleteBtn
@@ -64,15 +75,15 @@ export default class MultipleSelect extends Component {
       <Select
         className="form-control popup"
         multiple
-        value={personName}
+        value={RtRestrictionSelected}
         onChange={handleChange}
         renderValue={(selected) => selected.join(', ')}
       >
-        {names.map((name) => (
+        {names?.map((name) => (
           <MenuItem key={name} value={name}>
             <ListItemIcon>
               <Checkbox
-                checked={personName.indexOf(name) !== -1}
+                checked={RtRestrictionSelected.indexOf(name) !== -1}
               />
             </ListItemIcon>
             <ListItemText id={name} primary={name} />

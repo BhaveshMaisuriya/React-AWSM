@@ -1,7 +1,10 @@
 import React, { useState, useEffect, useMemo } from "react"
 import { Col, Row } from "reactstrap"
 import { AvForm, AvField } from "availity-reactstrap-validation"
-import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown"
+// import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown"import { ReactSVG } from "react-svg"
+import { ReactSVG } from "react-svg"
+import ArrowDropDownIcon from "../../../assets/images/AWSM-Dropdown.svg"
+
 import styles from "./tabDelivery.module.css"
 import SimplePopover from "./components/SimplePopOver"
 import TimePicker from "./components/TimePicker"
@@ -29,7 +32,11 @@ const ACTUAL_OPEN_TIME = [
 
 const RowComponent = ({ onChange, item }) => {
   return (
-    <div className={`d-flex align-items-center ${item.checked ? styles.dropdownChecked : ""}`}>
+    <div
+      className={`d-flex align-items-center ${
+        item.checked ? styles.dropdownChecked : ""
+      }`}
+    >
       <Checkbox
         checked={item.checked}
         onChange={() => onChange(item)}
@@ -44,8 +51,12 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
   const pathName = window.location.pathname
   const [tanker, setTanker] = useState([])
   const [deliveryData, setDeliveryData] = useState(data.delivery)
-  const [openTime1, setOpenTime1] = useState(JSON.parse(JSON.stringify(ACTUAL_OPEN_TIME)))
-  const [openTime2, setOpenTime2] = useState(JSON.parse(JSON.stringify(ACTUAL_OPEN_TIME)))
+  const [openTime1, setOpenTime1] = useState(
+    JSON.parse(JSON.stringify(ACTUAL_OPEN_TIME))
+  )
+  const [openTime2, setOpenTime2] = useState(
+    JSON.parse(JSON.stringify(ACTUAL_OPEN_TIME))
+  )
 
   const no_interval_array = Object.keys(deliveryData).filter(item =>
     item.includes("no_delivery_interval")
@@ -53,7 +64,10 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
 
   useEffect(() => {
     setDeliveryData(data.delivery)
-    if (data.delivery.actual_open_time_1 && data.delivery.actual_open_time_1.days) {
+    if (
+      data.delivery.actual_open_time_1 &&
+      data.delivery.actual_open_time_1.days
+    ) {
       setOpenTime1(
         [...openTime1].map(item => ({
           ...item,
@@ -61,7 +75,10 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
         }))
       )
     }
-    if (data.delivery.actual_open_time_2 && data.delivery.actual_open_time_2.days) {
+    if (
+      data.delivery.actual_open_time_2 &&
+      data.delivery.actual_open_time_2.days
+    ) {
       setOpenTime2(
         [...openTime2].map(item => ({
           ...item,
@@ -72,11 +89,17 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
   }, [data])
 
   useEffect(() => {
-    if (deliveryData && deliveryData.road_tanker_requirement_items && Array.isArray(deliveryData.road_tanker_requirement_items)) {
+    if (
+      deliveryData &&
+      deliveryData.road_tanker_requirement_items &&
+      Array.isArray(deliveryData.road_tanker_requirement_items)
+    ) {
       setTanker(
         deliveryData.road_tanker_requirement_items.map(item => ({
           name: item,
-          checked: deliveryData.road_tanker_requirement && deliveryData.road_tanker_requirement.includes(item),
+          checked:
+            deliveryData.road_tanker_requirement &&
+            deliveryData.road_tanker_requirement.includes(item),
         }))
       )
     }
@@ -103,8 +126,9 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
       ...deliveryData,
       road_tanker_requirement: newTanker
         .filter(i => i.checked === true)
-        .map(i => i.name).join(","),
-      road_tanker_requirement_items: newTanker.map(e => e.name)
+        .map(i => i.name)
+        .join(","),
+      road_tanker_requirement_items: newTanker.map(e => e.name),
     }
     onChange("delivery", newDeliveryData)
   }
@@ -115,17 +139,17 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
       name: value,
       checked: false,
     })
-    setTanker(newTanker);
+    setTanker(newTanker)
   }
 
   const actualOpenTime = {
-    "id": null,
-    "type": "every",
-    "time_from": null,
-    "time_to": null,
-    "date_from": null,
-    "date_to": null,
-    "days": []
+    id: null,
+    type: "every",
+    time_from: null,
+    time_to: null,
+    date_from: null,
+    date_to: null,
+    days: [],
   }
 
   const handleActualTime1 = item => {
@@ -137,14 +161,20 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
     newDays[index].checked = !newDays[index].checked
     setOpenTime1(newDays)
     const actualOpenTime1 = deliveryData.actual_open_time_1 || actualOpenTime
-    onFieldChange("actual_open_time_1", { ...actualOpenTime1, days: openTime1.filter(i => i.checked).map(i => i.name).join(",")})
+    onFieldChange("actual_open_time_1", {
+      ...actualOpenTime1,
+      days: openTime1
+        .filter(i => i.checked)
+        .map(i => i.name)
+        .join(","),
+    })
   }
 
   const actualOpenTime1 = useMemo(() => {
     return openTime1.filter(item => {
       return item.checked === true
     })
-  }, [deliveryData, openTime1]);
+  }, [deliveryData, openTime1])
 
   const handleActualTime2 = item => {
     const index = openTime2.findIndex(e => e.name === item.name)
@@ -155,14 +185,20 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
     newDays[index].checked = !newDays[index].checked
     setOpenTime2(newDays)
     const actualOpenTime2 = deliveryData.actual_open_time_2 || actualOpenTime
-    onFieldChange("actual_open_time_2", { ...actualOpenTime2, days: openTime2.filter(i => i.checked).map(i => i.name).join(",")})
+    onFieldChange("actual_open_time_2", {
+      ...actualOpenTime2,
+      days: openTime2
+        .filter(i => i.checked)
+        .map(i => i.name)
+        .join(","),
+    })
   }
 
   const actualOpenTime2 = useMemo(() => {
     return openTime2.filter(item => {
       return item.checked === true
     })
-  }, [deliveryData, openTime2]);
+  }, [deliveryData, openTime2])
 
   return (
     <div
@@ -178,14 +214,19 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
             disabled={scheduler}
             items={tanker}
             onAddItem={handleAddTanker}
-            value={tanker.filter(i => i.checked === true).map(i => i.name).join(",")}
+            value={tanker
+              .filter(i => i.checked === true)
+              .map(i => i.name)
+              .join(",")}
             RowComponent={RowComponent}
             onChange={handleChangeTanker}
           />
         </Col>
-        {pathName === "/commercial-customer" && <Col className="col-6"/>}
+        {pathName === "/commercial-customer" && <Col className="col-6" />}
         <Col className="col-6 mb-3">
-          <div className="input-header mb-2" style={{marginTop: "0.75rem"}}>ROAD TANKER ACCESSIBILITY</div>
+          <div className="input-header mb-2" style={{ marginTop: "0.75rem" }}>
+            ROAD TANKER ACCESSIBILITY
+          </div>
           <AWSMInput
             value={deliveryData.road_tanker_accessibilty || ""}
             disabled
@@ -193,19 +234,34 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
         </Col>
         {pathName === "/commercial-customer" && (
           <Col className="col-6">
-            <div className="input-header mb-2" style={{marginTop: "0.75rem"}}>PUMP TYPE</div>
-            <AWSMInput placeholder="Type something here..." disabled value={deliveryData.pump_type}/>
+            <div className="input-header mb-2" style={{ marginTop: "0.75rem" }}>
+              PUMP TYPE
+            </div>
+            <AWSMInput
+              placeholder="Type something here..."
+              disabled
+              value={deliveryData.pump_type}
+            />
           </Col>
         )}
 
         <Col className="col-6">
           <h6>DELIVERY OPEN TIME (FROM)</h6>
           <TimePicker
-            value={deliveryData.delivery_open_time_1 ? deliveryData.delivery_open_time_1.time_from : ""}
+            value={
+              deliveryData.delivery_open_time_1
+                ? deliveryData.delivery_open_time_1.time_from
+                : ""
+            }
             items={timeData}
             disabled
             className={styles.disabled}
-            onChange={value => onFieldChange("delivery_open_time_1", { ...deliveryData.delivery_open_time_1, time_from: value})}
+            onChange={value =>
+              onFieldChange("delivery_open_time_1", {
+                ...deliveryData.delivery_open_time_1,
+                time_from: value,
+              })
+            }
           />
         </Col>
         <Col className="col-6">
@@ -214,7 +270,12 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
             items={timeData}
             disabled
             value={deliveryData.delivery_open_time_1.time_to}
-            onChange={value => onFieldChange("delivery_open_time_1", { ...deliveryData.delivery_open_time_1, time_to: value})}
+            onChange={value =>
+              onFieldChange("delivery_open_time_1", {
+                ...deliveryData.delivery_open_time_1,
+                time_to: value,
+              })
+            }
           />
         </Col>
         <Col className="col-12 mt-3">
@@ -223,7 +284,11 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
           </h6>
         </Col>
         <Col className="col-6">
-          <SimplePopover handleChange={handleActualTime1} data={openTime1} disabled={!!scheduler}>
+          <SimplePopover
+            handleChange={handleActualTime1}
+            data={openTime1}
+            disabled={!!scheduler}
+          >
             <AvForm>
               <AvField
                 name="days1"
@@ -241,7 +306,7 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
                 style={{ height: "40px", marginTop: "-4px", cursor: "pointer" }}
               />
               <div className={styles.arrow}>
-                <ArrowDropDownIcon />
+                <ReactSVG src={ArrowDropDownIcon} />
               </div>
             </AvForm>
           </SimplePopover>
@@ -256,7 +321,13 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
                 ? deliveryData.actual_open_time_1.time_from
                 : ""
             }
-            onChange={value => onFieldChange("actual_open_time_1", { ...actualOpenTime ,...deliveryData.actual_open_time_1, time_from: value})}
+            onChange={value =>
+              onFieldChange("actual_open_time_1", {
+                ...actualOpenTime,
+                ...deliveryData.actual_open_time_1,
+                time_from: value,
+              })
+            }
           />
         </Col>
         <Col className="col-3">
@@ -269,7 +340,13 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
                 ? deliveryData.actual_open_time_1.time_to || ""
                 : ""
             }
-            onChange={value => onFieldChange("actual_open_time_1", { ...actualOpenTime ,...deliveryData.actual_open_time_1, time_to: value})}
+            onChange={value =>
+              onFieldChange("actual_open_time_1", {
+                ...actualOpenTime,
+                ...deliveryData.actual_open_time_1,
+                time_to: value,
+              })
+            }
           />
         </Col>
         {pathName === "/retail-customer" ? (
@@ -280,7 +357,11 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
               </h6>
             </Col>
             <Col className="col-6">
-              <SimplePopover handleChange={handleActualTime2} data={openTime2} disabled={scheduler}>
+              <SimplePopover
+                handleChange={handleActualTime2}
+                data={openTime2}
+                disabled={scheduler}
+              >
                 <AvForm>
                   <AvField
                     name="openTime2"
@@ -298,7 +379,7 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
                     style={{ height: "40px", marginTop: "-4px" }}
                   />
                   <div className={styles.arrow}>
-                    <ArrowDropDownIcon />
+                    <ReactSVG src={ArrowDropDownIcon} />
                   </div>
                 </AvForm>
               </SimplePopover>
@@ -313,7 +394,13 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
                     ? deliveryData.actual_open_time_2.time_from || ""
                     : ""
                 }
-                onChange={value => onFieldChange("actual_open_time_2", { ...actualOpenTime ,...deliveryData.actual_open_time_2, time_from: value})}
+                onChange={value =>
+                  onFieldChange("actual_open_time_2", {
+                    ...actualOpenTime,
+                    ...deliveryData.actual_open_time_2,
+                    time_from: value,
+                  })
+                }
               />
             </Col>
             <Col className="col-3">
@@ -326,7 +413,13 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
                     ? deliveryData.actual_open_time_2.time_to || ""
                     : ""
                 }
-                onChange={value => onFieldChange("actual_open_time_2", { ...actualOpenTime ,...deliveryData.actual_open_time_2, time_to: value})}
+                onChange={value =>
+                  onFieldChange("actual_open_time_2", {
+                    ...actualOpenTime,
+                    ...deliveryData.actual_open_time_2,
+                    time_to: value,
+                  })
+                }
               />
             </Col>
           </React.Fragment>
@@ -346,7 +439,7 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
               <Col className="col-6 mb-3">
                 <DateRangePicker
                   defaultValue={deliveryData[subKey]}
-                  onChange={(value) => onFieldChange(subKey, value)}
+                  onChange={value => onFieldChange(subKey, value)}
                   disabled={index < 3 ? true : scheduler}
                 />
               </Col>

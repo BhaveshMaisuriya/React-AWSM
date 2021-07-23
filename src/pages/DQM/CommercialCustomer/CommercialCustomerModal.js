@@ -128,7 +128,12 @@ const CommercialCustomerModal = props => {
               Last Updated By: Nur Izzati on 3rd March 2021
             </span>
           </ModalHeader>
-
+          <AWSMAlert
+            status="success"
+            message="Update success!"
+            openAlert={alert}
+            closeAlert={() => setAlert(false)}
+          />
           <ModalBody className="position-relative">
             {isConfirm && (
               <ExitConfirmation
@@ -273,23 +278,17 @@ const CommercialCustomerModal = props => {
                 </TabPane>
               </TabContent>
             </div>
+          </ModalBody>
+          {!scheduler && (
             <ModalFooter>
               <button onClick={handleClose} className="btn-sec">
                 Cancel
               </button>
-              {!scheduler && (
-                <Button type="submit" color="primary" onClick={handleUpdate}>
-                  Update
-                </Button>
-              )}
-              <AWSMAlert
-                status="success"
-                message="Update success!"
-                openAlert={alert}
-                closeAlert={() => setAlert(false)}
-              />
+              <Button type="submit" color="primary" onClick={handleUpdate}>
+                Update
+              </Button>
             </ModalFooter>
-          </ModalBody>
+          )}
         </div>
       ) : currentCommercialError ? (
         <div>{currentCommercialError.message}</div>

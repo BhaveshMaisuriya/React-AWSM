@@ -1,3 +1,5 @@
+import { tagColors } from "../Common/helper"
+
 const tableColumns = [
   "code",
   "name",
@@ -31,7 +33,7 @@ const tableMapping = {
     columnSize: "cell-text",
     type: "badge",
     getBadgeColor: value => {
-      return value === "ACTIVE" ? "primary" : "secondary"
+      return tagColors[`${value.toUpperCase()}`] || "secondary"
     },
   },
   status_awsm: {
@@ -40,7 +42,7 @@ const tableMapping = {
     columnSize: "cell-text",
     type: "badge",
     getBadgeColor: value => {
-      return value === "ACTIVE" ? "primary" : "secondary"
+      return tagColors[`${value.toUpperCase()}`] || "secondary"
     },
   },
   division: {

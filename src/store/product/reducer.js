@@ -12,6 +12,7 @@ import {
   UPDATE_PRODUCT_DETAIL_FAIL,
   GET_DOWNLOAD_PRODUCTS_SUCCESS,
   GET_DOWNLOAD_PRODUCTS_FAIL,
+  RESET_PRODUCT_DETAIL
 } from "./actionTypes"
 
 const initialState = {
@@ -39,6 +40,7 @@ const Product = (state = initialState, action) => {
         ...state,
         dataList: action.payload,
         isLoading: false,
+        updateStatus: false,
       }
 
     case GET_PRODUCT_FAIL:
@@ -102,7 +104,7 @@ const Product = (state = initialState, action) => {
       notify.success("Product Detail Updated!")
       return {
         ...state,
-        updateStatus: action.payload,
+        updateStatus: true,
       }
 
     case UPDATE_PRODUCT_DETAIL_FAIL:
@@ -112,6 +114,11 @@ const Product = (state = initialState, action) => {
         error: action.payload,
       }
 
+    case RESET_PRODUCT_DETAIL:
+      return {
+        ...state,
+        currentProduct: {}
+      }
     default:
       return state
   }

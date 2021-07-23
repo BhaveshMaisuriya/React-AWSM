@@ -128,6 +128,12 @@ const RetailCustomerModal = props => {
               Last Updated By: Nur Izzati on 3rd March 2021
             </span>
           </ModalHeader>
+          <AWSMAlert
+            status="success"
+            message="Update success!"
+            openAlert={alert}
+            closeAlert={() => setAlert(false)}
+          />
           <ModalBody>
             {isConfirm && (
               <ExitConfirmation
@@ -279,22 +285,14 @@ const RetailCustomerModal = props => {
       ) : (
         <Skeleton variant="rect" width={800} height={300} />
       )}
-      {!isConfirm && (
+      {!scheduler && (
         <ModalFooter>
           <button onClick={handleClose} className="btn-sec">
             Cancel
           </button>
-          {!scheduler && (
-            <Button type="submit" color="primary" onClick={handleUpdate}>
-              Update
-            </Button>
-          )}
-          <AWSMAlert
-            status="success"
-            message="Update success!"
-            openAlert={alert}
-            closeAlert={() => setAlert(false)}
-          />
+          <Button type="submit" color="primary" onClick={handleUpdate}>
+            Update
+          </Button>
         </ModalFooter>
       )}
     </Modal>

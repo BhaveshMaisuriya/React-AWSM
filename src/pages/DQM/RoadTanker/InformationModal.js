@@ -92,6 +92,25 @@ class InformationModal extends Component {
       }
     }
 
+    const handleClose = () => {
+      if (scheduler) {
+        onCancel()
+      } else {
+        this.setState({ isConfirm: true })
+      }
+    }
+
+    const handleExitConfirmation = () => {
+      if (!isEqual(this.state.data, this.props.currentRoadTanker))
+        return (
+          <ExitConfirmation
+            onExit={this.onConfirmExit}
+            onCancel={this.onConfirmCancel}
+          />
+        )
+      else this.onConfirmExit()
+    }
+
     const handleUpdate = e => {
       e.preventDefault()
       onUpdateRoadTankerDetail({ vehicle_name: data.vehicle, data })
@@ -109,7 +128,7 @@ class InformationModal extends Component {
     }
     const modalFooter = () => {
       const footer =
-        mode === MODE.VIEW_AND_AMEND ? (
+        !scheduler && !this.state.isConfirm ? (
           <ModalFooter>
             <button
               className="btn-sec"
@@ -117,14 +136,15 @@ class InformationModal extends Component {
             >
               Cancel
             </button>
-            {this.state.scheduler && <Button
-              color="primary"
-              type="submit"
-              onClick={e => handleUpdate(e)}
-            >
-              Update
-            </Button>}
-            {" "}
+            {!scheduler && (
+              <Button
+                color="primary"
+                type="submit"
+                onClick={e => handleUpdate(e)}
+              >
+                Update
+              </Button>
+            )}{" "}
             {/* <AWSMAlert
               status="success"
               message="Update Success !"
@@ -139,12 +159,12 @@ class InformationModal extends Component {
     }
 
     return (
-      <Modal
-        isOpen={visible}
-        className="table-information modal-lg"
-      >
-        <ModalHeader toggle={() => this.setState({ isConfirm: true })}>
-          <span className="modal-title"> VEHICLE ID: {currentRoadTanker?.vehicle}</span>
+      <Modal isOpen={visible} className="table-information modal-lg">
+        <ModalHeader close={<CloseButton handleClose={handleClose} />}>
+          <span className="modal-title">
+            {" "}
+            VEHICLE ID: {currentRoadTanker?.vehicle}
+          </span>
           <span className="last-updated-sub-title">
             Last Updated By: Nur Izzati on 3rd March 2021
           </span>
@@ -158,12 +178,7 @@ class InformationModal extends Component {
           }}
         />
         <ModalBody>
-          {this.state.isConfirm && (
-            <ExitConfirmation
-              onExit={this.onConfirmExit}
-              onCancel={this.onConfirmCancel}
-            />
-          )}
+          {this.state.isConfirm ? handleExitConfirmation() : ""}
           <Fragment>
             <div>
               <div className="row">
@@ -232,29 +247,35 @@ class InformationModal extends Component {
                   />
                 </div>
               </div>
-              <div className="mt-4">
+              <>
                 <Nav pills justified>
                   <NavItem>
-                    <NavLink className={activeTab === "1" ? "active" : null}
+                    <NavLink
+                      className={activeTab === "1" ? "active" : null}
                       onClick={() => {
                         toggle("1")
-                      }}>
+                      }}
+                    >
                       <span>Availability</span>
                     </NavLink>
                   </NavItem>
                   <NavItem>
-                    <NavLink className={activeTab === "2" ? "active" : null}
+                    <NavLink
+                      className={activeTab === "2" ? "active" : null}
                       onClick={() => {
                         toggle("2")
-                      }}>
+                      }}
+                    >
                       <span>Specification</span>
                     </NavLink>
                   </NavItem>
                   <NavItem>
-                    <NavLink className={activeTab === "3" ? "active" : null}
+                    <NavLink
+                      className={activeTab === "3" ? "active" : null}
                       onClick={() => {
                         toggle("3")
-                      }}>
+                      }}
+                    >
                       <span>Trailer</span>
                     </NavLink>
                   </NavItem>
@@ -288,11 +309,11 @@ class InformationModal extends Component {
                     />
                   </TabPane>
                 </TabContent>
-              </div>
+              </>
             </div>
           </Fragment>
-          {modalFooter()}
         </ModalBody>
+        {modalFooter()}
       </Modal>
     )
   }
@@ -306,7 +327,7 @@ const mapStateToProps = ({ roadTanker }) => ({
 const mapDispatchToProps = dispatch => ({
   onGetRoadTankerDetail: params => dispatch(getRoadTankerDetail(params)),
   onUpdateRoadTankerDetail: params => dispatch(updateRoadTankerDetail(params)),
-  onResetCurrentRoadTankerDetail: () => dispatch(resetCurrentRoadTankerData())
+  onResetCurrentRoadTankerDetail: () => dispatch(resetCurrentRoadTankerData()),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(InformationModal)

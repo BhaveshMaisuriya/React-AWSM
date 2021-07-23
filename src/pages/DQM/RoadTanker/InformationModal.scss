@@ -6,52 +6,47 @@
     border: 1px solid #d9d9d9;
     background-color: #eeeeee;
   }
-}
 
-// .modalTIContainer {
-//   height: 100% !important;
-// }
-
-// .close {
-//   padding-right: 0px !important;
-//   margin-right: 0px !important;
-//   display: flex;
-
-//   span {
-//     margin-left: auto;
-//   }
-// }
-
-.last-updated-sub-title {
-  height: 16px;
-  width: 350px;
-  color: #757575;
-  font-family: "Museo Sans", serif;
-  font-size: 12px;
-  font-style: italic;
-  letter-spacing: 0;
-  line-height: 16px;
-}
-
-.modal-title {
-  padding-left: 0;
-  height: 26px;
-  color: #000000;
-  font-family: "Museo Sans", serif;
-  font-size: 24px;
-  letter-spacing: 0;
-  line-height: 26px;
-}
-
-.active {
-  border-radius: 4px 4px 0px 0px;
-  .nav-link {
+  button .close{
+    padding-left: 0px !important;
+    margin-left: 0px !important;
+    // display: flex;
     span {
-      color: white;
+      margin-left: auto;
     }
-    background-color: #00a19c;
+  }
+
+  .last-updated-sub-title {
+    height: 16px;
+    width: fit-content !important;
+    color: #757575;
+    font-family: "Museo Sans", serif;
+    font-size: 12px;
+    font-style: italic;
+    letter-spacing: 0;
+    line-height: 16px;
+  }
+
+  .modal-title {
+    padding-left: 0;
+    height: 26px;
+    color: #000000;
+    font-family: "Museo Sans", serif;
+    font-size: 24px;
+    letter-spacing: 0;
+    line-height: 26px;
   }
 }
+
+// .active {
+//   border-radius: 4px 4px 0px 0px;
+//   .nav-link {
+//     span {
+//       color: white;
+//     }
+//     background-color: #00a19c;
+//   }
+// }
 
 .extra-button {
   position: absolute;
@@ -68,17 +63,17 @@
   color: #00a19c !important;
 }
 
-.trailer {
-  margin-top: 20px;
-}
+// .trailer {
+//   margin-top: 20px;
+// }
 
-.availability {
-  margin-top: 20px;
-}
+// .availability {
+//   margin-top: 20px;
+// }
 
-.specification {
-  margin-top: 20px;
-}
+// .specification {
+//   margin-top: 20px;
+// }
 
 .Mui-selected {
   background-color: #e0f4f3 !important;
@@ -96,12 +91,13 @@ fieldset {
   color: red;
   position: absolute;
   right: 0px;
+  font-size: 10px;
 }
-ul {
-  li {
-    font-size: 12px !important;
-  }
-}
+// ul {
+//   li {
+//     font-size: 12px !important;
+//   }
+// }
 
 .MuiSelect-root {
   font-size: 12px !important;
@@ -120,7 +116,6 @@ ul {
 }
 
 #restriction {
-  // color: #00a19c;
 }
 
 .Mui-checked {
@@ -162,6 +157,7 @@ ul li div span {
 
 .yes-noBtn {
   width: max-content;
+  font-size: 10px;
   a {
     color: red;
   }

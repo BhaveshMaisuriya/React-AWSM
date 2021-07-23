@@ -24,6 +24,7 @@ const initialState = {
   filterTerminal: [],
   currentTerminal: null,
   downloadTerminal: [],
+  isFetchDataAfterChange :false,
   isLoading: false,
 }
 
@@ -39,6 +40,7 @@ const Terminal = (state = initialState, action) => {
         ...state,
         terminal: action.payload,
         isLoading: false,
+        isFetchDataAfterChange: false
       }
 
     case GET_TERMINAL_FAIL:
@@ -88,17 +90,15 @@ const Terminal = (state = initialState, action) => {
       notify.success("Update successfully")
       return {
         ...state,
-        address: state.events.map(event =>
-          event.id.toString() === action.payload.id.toString()
-            ? { event, ...action.payload }
-            : event
-        ),
+        isFetchDataAfterChange:true
       }
 
     case UPDATE_TERMINAL_TABLE_INFORMATION_FAIL:
+      notify.error("Update failed")
       return {
         ...state,
         error: action.payload,
+        isFetchDataAfterChange:true
       }
 
     case GET_TERMINAL_FILTER_SUCCESS:

@@ -19,7 +19,12 @@ const Product = ({ value, productKey, onChange, scheduler, onDelete }) => {
   const onCancel = () => {
     setIsConfirmDelete(false)
   }
-
+  function renderExceedError(key, max){
+    if(value?.[key] > max){
+      return <p style={{color: "red"}}>Must not exceed {max}</p>
+    }
+    return null
+  }
   return (
     <div className="terminal-product">
       {isConfirmDelete && (
@@ -51,18 +56,18 @@ const Product = ({ value, productKey, onChange, scheduler, onDelete }) => {
       <div className="row">
         <div className="col-3 form-group">
           <label htmlFor="productName">PRODUCT NAME</label>
-          <AWSMInputNumber
-            value={value.name}
-            placeholder="Numeric only"
-            disabled
+          <AWSMInput
+            defaultValue={value.name}
+            disabled = {scheduler}
+            onChange={value => onFieldChange("name", value)}
           />
         </div>
         <div className="col-3 form-group">
           <label htmlFor="productCode">PRODUCT CODE</label>
           <AWSMInputNumber
-            value={value.code}
-            placeholder="Numeric only"
-            disabled
+            defaultValue={value.code}
+            disabled = {scheduler}
+            onChange={value => onFieldChange("code", value)}
           />
         </div>
         <div className="col-3 form-group">
@@ -70,17 +75,19 @@ const Product = ({ value, productKey, onChange, scheduler, onDelete }) => {
           <AWSMDropdown
             value={value.status_awsm}
             disabled={scheduler}
-            items={["ACTIVE", "DELETE"]}
+            items={["Active", "Inactive"]}
             onChange={value => onFieldChange("status_awsm", value)}
           />
         </div>
         <div className="col-3 form-group">
           <label>FLOW RATE (L/MIN)</label>
           <AWSMInputNumber
-            value={value.flow_rate}
+            defaultValue={value.flow_rate}
             disabled={scheduler}
             onChange={value => onFieldChange("flow_rate", value)}
+            // max={10000}
           />
+          {renderExceedError("flow_rate",10000)}
         </div>
       </div>
       <h6 className="font-weight-bold">VOLUME CAPPING</h6>
@@ -97,17 +104,19 @@ const Product = ({ value, productKey, onChange, scheduler, onDelete }) => {
         </div>
         <div className="col-3 form-group">
           <label htmlFor="volume1">VOLUME (L) 1</label>
-          <AWSMDropdown
-            value={value.volume_capping_volume}
+          <AWSMInputNumber
+            defaultValue={value.volume_capping_volume}
             disabled={scheduler}
-            items={["Lorem Ipsum", "Hello world"]}
+            items={["Lorem Ipsum"]}
             onChange={value => onFieldChange("volume_capping_volume", value)}
+            // max={10000000}
           />
+          {renderExceedError("volume_capping_volume",10000000)}
         </div>
         <div className="col-6 form-group">
           <label>REMARKS 1</label>
           <AWSMInput
-            value={value.volume_capping_remarks}
+            defaultValue={value.volume_capping_remarks}
             disabled={scheduler}
             onChange={value => onFieldChange("volume_capping_remarks", value)}
           />
@@ -126,17 +135,19 @@ const Product = ({ value, productKey, onChange, scheduler, onDelete }) => {
         </div>
         <div className="col-3 form-group">
           <label>VOLUME (L) 2</label>
-          <AWSMDropdown
-            value={value.volume_capping_volume_2}
+          <AWSMInputNumber
+            defaultValue={value.volume_capping_volume_2}
             disabled={scheduler}
-            items={["Lorem Ipsum", "Hello world"]}
+            items={["Lorem Ipsum"]}
             onChange={value => onFieldChange("volume_capping_volume_2", value)}
+            // max={10000000}
           />
+          {renderExceedError("volume_capping_volume_2",10000000)}
         </div>
         <div className="col-6 form-group">
           <label htmlFor="remarks2">REMARKS 2</label>
           <AWSMInput
-            value={value.volume_capping_remarks_2}
+            defaultValue={value.volume_capping_remarks_2}
             disabled={scheduler}
             onChange={value => onFieldChange("volume_capping_remarks_2", value)}
           />

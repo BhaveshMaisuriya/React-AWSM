@@ -5,7 +5,8 @@ import "react-day-picker/lib/style.css"
 import "./day-picker.scss"
 import CheckBox from "@material-ui/core/Checkbox"
 import Popover from "@material-ui/core/Popover"
-import CALENDAR_ICON from "../../../assets/images/calendar-alt-regular.svg"
+// import CALENDAR_ICON from "../../../assets/images/calendar-alt-regular.svg"
+import AWSM_Calendar from "../../../assets/images/AWSM-Calendar.svg"
 import { ReactSVG } from "react-svg"
 
 const WEEK_DAYS = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"]
@@ -30,6 +31,7 @@ const DateRangePicker = ({
   types = ["single", "range", "every", "daily"],
   startDate = new Date(),
   endDate = null,
+  placeholder
 }) => {
   const [value, setValue] = useState(defaultValue || dateObjectTemplate)
   const [month, setMonth] = useState(defaultMonth)
@@ -260,10 +262,12 @@ const DateRangePicker = ({
         aria-describedby={id}
         color="primary"
         onClick={handleClick}
-        className={`d-flex justify-content-between align-items-center py-2 w-100 calendar-label ${disabled ? "disabled" : ""}`}
+        className={`d-flex justify-content-between align-items-center py-2 w-100 calendar-label ${
+          disabled ? "disabled" : ""
+        }`}
       >
-        <div className="date-picker-label">{labelValue}</div>
-        <ReactSVG className="date-picker-icon" src={CALENDAR_ICON} />
+        <div className="date-picker-label">{labelValue || placeholder}</div>
+        <ReactSVG className="date-picker-icon" src={AWSM_Calendar} />
       </button>
       <Popover
         id={id}
@@ -303,12 +307,20 @@ const DateRangePicker = ({
                 />
                 <label>Start and End date</label>
               </div>
-            ): <div/>}
+            ) : (
+              <div />
+            )}
             <div className="d-flex pr-2">
-              <button className="btn btn-outline-primary mr-2 btn-date-range" onClick={onClear}>
+              <button
+                className="btn btn-outline-primary mr-2 btn-date-range"
+                onClick={onClear}
+              >
                 Clear
               </button>
-              <button className="btn btn-primary btn-date-range" onClick={onApply}>
+              <button
+                className="btn btn-primary btn-date-range"
+                onClick={onApply}
+              >
                 Apply
               </button>
             </div>

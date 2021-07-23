@@ -8,9 +8,9 @@
     background-color: rgb(238, 238, 238);
   }
   .awsm-dropdown-arrow {
-    position: absolute;
-    top: 7px;
-    right: 5px;
+    // position: absolute;
+    top: 8px;
+    right: 10px;
     cursor: pointer;
     color: #777777;
   }
@@ -60,19 +60,18 @@
   // padding: 0.5rem;
 
   // new css
-width: 100%;
-height: calc(1.5em + 0.94rem + 2px);
-padding: 0.47rem 0.75rem;
-font-size: 0.8125rem;
-font-weight: 400;
-line-height: 1.5;
-color: #495057;
-background-color: #fff;
-background-clip: padding-box;
-border: 1px solid #ced4da;
-border-radius: 0.25rem;
-transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-
+  width: 100%;
+  height: calc(1.5em + 0.94rem + 2px);
+  padding: 0.47rem 0.75rem;
+  font-size: 0.8125rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #495057;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 
   &.disabled {
     background-color: rgb(238, 238, 238);
@@ -97,7 +96,6 @@ transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
     border-radius: 0.25rem;
     border: 1px solid #d8d8d8;
     padding: 0.5rem;
-
 
     &.disabled {
       background-color: rgb(238, 238, 238);
@@ -131,7 +129,7 @@ transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
   }
 }
 
-#remarks input:focus{
+#remarks input:focus {
   border: 1px solid #008f8a;
   background-color: rgb(240, 249, 249);
   color: #000;

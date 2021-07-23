@@ -1,3 +1,5 @@
+import { tagColors } from "../Common/helper"
+
 const tableColumns = [
   "code",
   "name",
@@ -83,7 +85,7 @@ const tableMapping = {
     columnSize: "cell-text",
     type: "badge",
     getBadgeColor: value => {
-      return value === "ACTIVE" ? "primary" : "secondary"
+      return tagColors[`${value.toUpperCase()}`] || "secondary"
     },
   },
   inactive_date_range_1_value: {
@@ -164,6 +166,10 @@ const tableMapping = {
   },
   turnaround_time: {
     label: "TURNAROUND TIME",
+    columnSize: "cell-text",
+  },
+  postcode: {
+    label: "POSTCODE",
     columnSize: "cell-text",
   },
 }

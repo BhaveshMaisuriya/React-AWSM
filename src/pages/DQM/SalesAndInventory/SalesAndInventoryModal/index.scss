@@ -1,32 +1,32 @@
   .modal-title{
-      display: flex;
-      .sub-title {
-        height: 16px;
-        width: fit-content;
-        color: #757575;
-        font-family: "Museo Sans";
-        font-size: 12px;
-        font-style: italic;
-        letter-spacing: 0;
-        line-height: 16px;
-        margin: 0px 0px 5px 5px;
-        padding: 0px 0px 5px 5px;
-      }
+    display: flex;
+    .sub-title {
+      height: 16px;
+      width: fit-content;
+      color: #757575;
+      font-family: "Museo Sans";
+      font-size: 12px;
+      font-style: italic;
+      letter-spacing: 0;
+      line-height: 16px;
+      margin: 0px 0px 5px 5px;
+      padding: 0px 0px 5px 5px;
+    }
   }
 
-  label{
-      display: flex;
-      justify-content: space-between;
-      span{
-        margin-left: auto;
-      }
+  label {
+    display: flex;
+    justify-content: space-between;
+    span{
+      margin-left: auto;
+    }
   }
 
-  .simple-bar {
-    height: 600px;
+  .simple-bar-sale {
     width: 100%;
-    overflow-x: hidden;
+    overflow: visible;
     padding-right: 0.5rem;
+    padding-top: 20px;
   }
 
   .extra-lbl {

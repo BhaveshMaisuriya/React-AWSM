@@ -1,5 +1,4 @@
 .awsm-date-picker-container {
-
   .date-picker-button {
     width: 100%;
     display: flex;
@@ -10,16 +9,16 @@
     border-radius: 0.25rem;
     position: relative;
     &.disabled {
-      background-color: #EEEEEE;
+      background-color: #eeeeee;
       color: rgba(16, 16, 16, 0.3);
     }
   }
 
   .date-picker-icon {
-    width: 0.85rem;
-    position: absolute;
-    right: 0.35rem;
-    top: 0.5rem;
+    // width: 0.85rem;
+    // position: absolute;
+    // right: 0.35rem;
+    // top: 0.5rem;
     color: rgb(204, 205, 207);
   }
 }
@@ -28,13 +27,14 @@
   display: flex;
   justify-content: center;
 
+  padding: 0.25rem 1.25rem;
   .rdrMonthAndYearPickers {
     font-size: 0.9rem;
     text-transform: uppercase;
   }
 
   .rdrSelected {
-    background-color: #008F8A !important;
+    background-color: #008f8a !important;
     border-radius: 0;
     top: 0;
     bottom: 0;
@@ -58,7 +58,7 @@
 
   .rdrDay {
     &:hover {
-      background-color: #DDDDDD;
+      background-color: #dddddd;
     }
   }
 

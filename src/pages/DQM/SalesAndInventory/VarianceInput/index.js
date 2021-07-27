@@ -1,7 +1,7 @@
 import { ReactSVG } from "react-svg"
 import AWSMEditIcon from "../../../../assets/images/AWSM-Edit-Icon.svg"
 import React, { useState, useEffect, useRef } from "react"
-import "./VarianceControl.scss"
+import "./VarianceInput.scss"
 
 const VarianceInput = ({ value, disabled = false, onChange }) => {
     const inputRef = useRef(null)
@@ -21,7 +21,9 @@ const VarianceInput = ({ value, disabled = false, onChange }) => {
     }
 
     const onBlur = () => {
-        setIsFocus(false)
+        if (isFocus) {
+            setIsFocus(false)
+        }
     }
 
     const onValueChange = event => {
@@ -45,7 +47,7 @@ const VarianceInput = ({ value, disabled = false, onChange }) => {
     }
 
     return (
-        <div className={`variance-input ${isFocus ? "focus" : ""} ${disabled ? "disabled" : ""} `}>
+        <div className={`variance-input ${isFocus ? "focus" : ""} ${disabled ? "disabled" : ""} input-group`}>
             <input
                 className="form-control"
                 value={value}
@@ -57,13 +59,17 @@ const VarianceInput = ({ value, disabled = false, onChange }) => {
                 onChange={onValueChange}
                 onKeyPress={onPress}
             />
-            <button
-                className="form-control"
-                disabled={disabled}
-                onClick={onEditButtonClick}
-            >
-                <ReactSVG src={AWSMEditIcon} />
-            </button>
+
+            <div class="input-group-append">
+                <button
+                    className="form-control button-edit"
+                    disabled={disabled}
+                    onClick={onEditButtonClick}
+                    type="button"
+                    style={{ display: `${isFocus ? "none" : ""}` }}>
+                    <ReactSVG src={AWSMEditIcon} />
+                </button>
+            </div>
         </div>
     )
 }

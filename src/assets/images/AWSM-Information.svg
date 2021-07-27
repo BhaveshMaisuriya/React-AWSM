@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="14px" height="14px" viewBox="0 0 14 14" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    
+    <title>Icons/14×14/Information</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Icons/14×14/Information" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="info">
+            <circle id="Oval" stroke="#979797" stroke-width="1.4" fill-rule="nonzero" cx="7" cy="7" r="6.3"></circle>
+            <path d="M6.95734603,4.91469206 C6.42857143,4.91469206 6,4.48612063 6,3.95734603 C6,3.42857143 6.42857143,3 6.95734603,3 C7.48612063,3 7.91469206,3.42857143 7.91469206,3.95734603 C7.91469206,4.4856254 7.48612063,4.91469206 6.95734603,4.91469206 Z" id="Path" fill="#979797" transform="translate(6.957346, 3.957346) scale(1, -1) translate(-6.957346, -3.957346) "></path>
+            <path d="M7.91469206,10.2615862 C7.91469206,10.7165556 7.48612063,11.0853079 6.95734603,11.0853079 C6.42857143,11.0853079 6,10.7161295 6,10.2615862 L6,6.82372173 C6,6.36875235 6.42857143,6 6.95734603,6 C7.48612063,6 7.91469206,6.36875235 7.91469206,6.82372173 L7.91469206,10.2615862 Z" id="Path" fill="#979797" transform="translate(6.957346, 8.542654) scale(1, -1) translate(-6.957346, -8.542654) "></path>
+        </g>
+    </g>
+</svg>

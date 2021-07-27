@@ -3,6 +3,7 @@ import styles from "./storageTab.module.css"
 import Product from "./Product"
 import { isScheduler } from "../../../../helpers/auth_helper"
 import AWSMInputNumber from "../../../../components/Common/InputNumber"
+import { maxTime } from 'date-fns'
 
 const newProductTemplate = {
   id: null,
@@ -61,7 +62,12 @@ const StorageTab = ({ data, onChange }) => {
     () => Object.keys(storageData).filter(key => key.startsWith("product_")),
     [storageData]
   )
-
+  function renderExceedError(key, max){
+    if(storageData?.[key] > max){
+      return <p style={{color: "red"}}>Must not exceed {max}</p>
+    }
+    return null
+  }
   return (
     <div>
       <div className="d-flex">
@@ -70,8 +76,11 @@ const StorageTab = ({ data, onChange }) => {
           <AWSMInputNumber
             disabled={scheduler}
             defaultValue={storageData?.loading_bay_no}
+            placeholder="Numeric only"
             onChange={value => onFieldChange("loading_bay_no", value)}
+            // max={100}
           />
+          {renderExceedError("loading_bay_no",100)}
         </div>
         <div className="w-50 ml-2">
           <label>MAX VOL THRESHOLD</label>
@@ -79,6 +88,7 @@ const StorageTab = ({ data, onChange }) => {
             disabled={scheduler}
             defaultValue={storageData?.max_volume_threshold}
             onChange={value => onFieldChange("max_volume_threshold", value)}
+            placeholder="Numeric only"
           />
         </div>
       </div>
@@ -89,7 +99,10 @@ const StorageTab = ({ data, onChange }) => {
             disabled={scheduler}
             defaultValue={storageData?.loading_time}
             onChange={value => onFieldChange("loading_time", value)}
+            placeholder="Numeric only"
+            // max={1440}
           />
+          {renderExceedError("loading_time",1440)}
         </div>
         <div className="w-50 ml-2">
           <label>TURNAROUND TIME (MIN)</label>
@@ -97,14 +110,17 @@ const StorageTab = ({ data, onChange }) => {
             disabled={scheduler}
             defaultValue={storageData?.turnaround_time}
             onChange={value => onFieldChange("turnaround_time", value)}
+            placeholder="Numeric only"
+            // max={1440}
           />
+          {renderExceedError("turnaround_time",1440)}
         </div>
       </div>
       {productList.length < 1 && (
         <div className="row m-0 mt-3">
           <div className={`col-12 form-group ${styles.addButton}`}>
             <btn
-              className="btn btn-outline"
+              className="btn text-success btn-outline"
               onClick={onAddProduct}
               disabled={scheduler}
             >

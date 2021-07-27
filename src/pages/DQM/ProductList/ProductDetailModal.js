@@ -3,13 +3,17 @@ import { connect } from "react-redux"
 import { Button, Modal, ModalFooter, ModalBody, ModalHeader } from "reactstrap"
 import CloseButton from "../../../components/Common/CloseButton"
 import { isScheduler } from "../../../helpers/auth_helper"
-import { getProductDetail, updateProductDetail } from "../../../store/actions"
+import {
+  getProductDetail,
+  resetProductDetail,
+  updateProductDetail,
+} from "../../../store/actions"
+import AWSMDropdown from "../../../components/Common/Dropdown"
 import "./ProductDetailModal.scss"
 
 class ProductDetailModal extends PureComponent {
   constructor(props) {
     super(props)
-
     this.state = {
       updateDictionary: {},
       displayConfirmationBox: false,
@@ -21,43 +25,63 @@ class ProductDetailModal extends PureComponent {
     onGetProductDetail(data.code)
   }
 
-  handleUpdate(event) {
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.updateStatus) {
+      this.ModalCloseHandler()
+      this.props.refreshMainTable()
+    }
+  }
+
+  async handleUpdate(event) {
     if (Object.keys(this.state.updateDictionary).length > 0) {
       const { code } = this.props.data
-      this.props.onUpdateProductDetail({
+      await this.props.onUpdateProductDetail({
         code,
         body: { ...this.props.currentProduct, ...this.state.updateDictionary },
       })
-      this.props.onCancel()
     } else this.props.onCancel()
   }
 
+  handleClose() {
+    if (Object.keys(this.state.updateDictionary).length > 0)
+      this.setState({ displayConfirmationBox: true })
+    else this.props.onCancel()
+  }
+
   renderConfirmationDialog() {
-    const { onCancel } = this.props
-    return (
-      <div className="Confirmation-box">
-        <div>
-          <h3>Exit Confirmation</h3>
-          <p>
-            Are you sure you want to exit without update? <br />
-            You will lose all the changes made.
-          </p>
-          <button
-            className="btn btn-outline-danger"
-            onClick={() => this.setState({ displayConfirmationBox: false })}
-          >
-            Cancel
-          </button>
-          <button className="btn btn-danger" onClick={onCancel}>
-            Exit
-          </button>
+    if (Object.keys(this.state.updateDictionary).length > 0) {
+      return (
+        <div className="Confirmation-box">
+          <div>
+            <h3>Exit Confirmation</h3>
+            <p>
+              Are you sure you want to exit without update? <br />
+              You will lose all the changes made.
+            </p>
+            <button
+              className="btn btn-outline-danger"
+              onClick={() => this.setState({ displayConfirmationBox: false })}
+            >
+              Cancel
+            </button>
+            <button className="btn btn-danger" onClick={this.ModalCloseHandler}>
+              Exit
+            </button>
+          </div>
         </div>
-      </div>
-    )
+      )
+    } else this.props.onCancel()
+  }
+
+  ModalCloseHandler = () => {
+    const { onCancel, resetProductDetail } = this.props
+    onCancel()
+    resetProductDetail()
   }
 
   renderModalBody() {
     const { onCancel, currentProduct } = this.props
+    const { updateDictionary } = this.state
     const isDisabledField = isScheduler()
     return (
       <>
@@ -87,11 +111,29 @@ class ProductDetailModal extends PureComponent {
               <div className="row">
                 <div className="col-md-6 form-group">
                   <label> STATUS IN AWSM </label>
-                  <select
+                  <AWSMDropdown
+                    value={
+                      updateDictionary?.status_awsm
+                        ? updateDictionary.status_awsm
+                        : currentProduct.status_awsm
+                    }
+                    items={["ACTIVE", "INACTIVE"]}
+                    onChange={ev => {
+                      this.setState({
+                        updateDictionary: {
+                          ...this.state.updateDictionary,
+                          ...{ status_awsm: ev },
+                        },
+                      })
+                    }}
+                    disabled={isDisabledField}
+                    className="form-control"
+                  />
+                  {/* <select
                     className="form-control"
                     type="text"
                     disabled={isDisabledField}
-                    defaultValue={currentProduct.status_awsm}
+                    defaultValue={updateDictionary.status_awsm}
                     onChange={ev => {
                       this.setState({
                         updateDictionary: {
@@ -103,7 +145,7 @@ class ProductDetailModal extends PureComponent {
                   >
                     <option value="ACTIVE">ACTIVE</option>
                     <option value="INACTIVE">INACTIVE</option>
-                  </select>
+                  </select> */}
                 </div>
               </div>
 
@@ -188,7 +230,11 @@ class ProductDetailModal extends PureComponent {
                   <input
                     className="form-control"
                     type="text"
-                    defaultValue={currentProduct.remarks}
+                    defaultValue={
+                      updateDictionary?.remarks
+                        ? updateDictionary.remarks
+                        : currentProduct.remarks
+                    }
                     disabled={isDisabledField}
                     onChange={ev => {
                       this.setState({
@@ -204,19 +250,19 @@ class ProductDetailModal extends PureComponent {
             </div>
           </ModalBody>
         ) : null}
-        <ModalFooter>
-          <button
-            className="btn-sec"
-            onClick={() => this.setState({ displayConfirmationBox: true })}
-          >
-            Cancel
-          </button>
-          {!isDisabledField && currentProduct ? (
+        {!isDisabledField && currentProduct ? (
+          <ModalFooter>
+            <button
+              className="btn-sec"
+              onClick={() => this.setState({ displayConfirmationBox: true })}
+            >
+              Cancel
+            </button>
             <Button onClick={this.handleUpdate.bind(this)} color="primary">
               Update
             </Button>
-          ) : null}
-        </ModalFooter>
+          </ModalFooter>
+        ) : null}
       </>
     )
   }
@@ -224,9 +270,7 @@ class ProductDetailModal extends PureComponent {
   render() {
     const { visible, currentProduct } = this.props
     const externalCloseBtn = (
-      <CloseButton
-        handleClose={() => this.setState({ displayConfirmationBox: true })}
-      />
+      <CloseButton handleClose={() => this.handleClose()} />
     )
 
     if (!currentProduct)
@@ -273,6 +317,7 @@ const mapStateToProps = ({ products }) => ({
 const mapDispatchToProps = dispatch => ({
   onGetProductDetail: params => dispatch(getProductDetail(params)),
   onUpdateProductDetail: params => dispatch(updateProductDetail(params)),
+  resetProductDetail: () => dispatch(resetProductDetail()),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProductDetailModal)

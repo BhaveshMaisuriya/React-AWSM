@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 import Tooltip from '@material-ui/core/Tooltip';
+import informationIcon from "../../../../assets/images/AWSM-Information.svg";
 export default class DeliveryTab extends Component {
     constructor(props) {
         super(props)
@@ -36,10 +37,10 @@ export default class DeliveryTab extends Component {
                 <table className="table table-bordered">
                     <thead>
                         <tr>
-                            <th><b>DATE</b><Tooltip title="1 week historical data"><InfoOutlinedIcon /></Tooltip></th>
-                            <th><b>VOLUME (L)</b><Tooltip title="1 week historical data"><InfoOutlinedIcon /></Tooltip></th>
-                            <th><b>VOLUME ADJUSTMENT (L)</b><Tooltip title="1 week historical data taken from Yesterday Delivery Adjustment (L)"><InfoOutlinedIcon /></Tooltip></th>
-                            <th><b>TOTAL DELIVERY (L)</b><Tooltip title="1 week historical data taken Total Delivery = Past Delivery Volume + Past Delivery Volume Adjustment"><InfoOutlinedIcon /></Tooltip></th>
+                            <th><b>DATE</b>  <Tooltip title="1 week historical data"><img src={informationIcon} /></Tooltip></th>
+                            <th><b>VOLUME (L)</b>  <Tooltip title="1 week historical data"><img src={informationIcon} /></Tooltip></th>
+                            <th><b>VOLUME ADJUSTMENT (L)</b>  <Tooltip title="1 week historical data taken from Yesterday Delivery Adjustment (L)"><img src={informationIcon} /></Tooltip></th>
+                            <th><b>TOTAL DELIVERY (L)</b>  <Tooltip title="1 week historical data taken Total Delivery = Past Delivery Volume + Past Delivery Volume Adjustment"><img src={informationIcon} /></Tooltip></th>
                         </tr>
                     </thead>
                     <tbody>

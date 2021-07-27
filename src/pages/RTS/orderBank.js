@@ -40,7 +40,7 @@ import {
 } from "../../store/orderBank/actions"
 import OrderBankActionModal from "./OrderBankActionModal"
 import CrossTerminalModal from "./crossTerminalModal"
-import GanttChartTable from "./OrderBankTable/GanttChartTable"
+import BryntumChartTable from "./OrderBankTable/BryntumChartTable"
 import OrderBankAuditModal from "./OrderBankAuditModal"
 
 const GanttChartBottom = [
@@ -72,6 +72,21 @@ const GanttChartBottom = [
     title: "Soft Overrule",
     color: "yellow",
   },
+]
+
+const GanttChartBottomHover = [
+  {
+    title: "Terminal",
+    color: "blue",
+  },
+  {
+    title: "Station retail",
+    color: "light-sky",
+  },
+  {
+    title: "station commercial",
+    color: "green",
+  }
 ]
 
 function OrderBank({
@@ -401,7 +416,7 @@ const enabledCross = (val) => {
                             </span>
                           </Col>
                         </Row>
-                        <GanttChartTable />
+                        <BryntumChartTable />
                         <div className="square_border">
                           {GanttChartBottom.map((item, index) => {
                             return (
@@ -413,6 +428,18 @@ const enabledCross = (val) => {
                               </div>
                             )
                           })}
+                          <div className="hover_display">
+                            {GanttChartBottomHover.map((item, index) => {
+                              return (
+                                <div className="d-flex align-items-center mr-2">
+                                  <div
+                                    className={`square ${item.color} mr-1 ml-2`}
+                                  ></div>
+                                  {item.title}
+                                </div>
+                              )
+                            })}
+                          </div>
                         </div>
                       </div>
                       <div className="gantt_chart_second pt-2">

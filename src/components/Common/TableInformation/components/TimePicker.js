@@ -1,7 +1,9 @@
 import React, { useState } from "react"
 import { Dropdown, DropdownToggle, DropdownMenu, Input } from "reactstrap"
 import "./timePicker.scss"
-import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown"
+// import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown"
+import { ReactSVG } from "react-svg"
+import ArrowDropDownIcon from "../../../../assets/images/AWSM-Dropdown.svg"
 /**
  *
  * @param items
@@ -23,7 +25,7 @@ const AWSMDropdown = ({
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const toggle = () => setDropdownOpen(prevState => !prevState)
   const [itemSelected, setValue] = useState(
-    !value ? "Select time" : items ? value : ''
+    !value ? "Select time" : items ? value : ""
   )
   const onValueChange = item => {
     setValue(item)
@@ -42,9 +44,13 @@ const AWSMDropdown = ({
         aria-expanded={dropdownOpen}
         disabled={disabled}
       >
-        <div className={`awsm-select-toggle p-2 position-relative ${disabled ? "disabled" : ""}`}>
-          <div>{value ? value.toString().substring(0,5) : "Select time"}</div>
-          <ArrowDropDownIcon className="awsm-dropdown-arrow"/>
+        <div
+          className={`awsm-select-toggle p-2 position-relative  ${
+            disabled ? "disabled" : ""
+          }`}
+        >
+          <div>{value ? value.toString().substring(0, 5) : "Select time"}</div>
+          <ReactSVG src={ArrowDropDownIcon} className="awsm-dropdown-arrow" />
         </div>
       </DropdownToggle>
       <DropdownMenu className="awsm-select-menu w-100">

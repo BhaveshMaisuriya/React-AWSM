@@ -145,6 +145,7 @@ const RoadTanker = (state = initialState, action) => {
         isUpdateSuccess: true,
       }
     case UPDATE_ROAD_TANKER_DETAIL_FAIL:
+      notify.error("Update Fail")
       return {
         ...state,
         error: action.payload,

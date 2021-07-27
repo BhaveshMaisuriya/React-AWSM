@@ -1,6 +1,7 @@
 import React, { PureComponent } from "react"
 import DatePicker from "../../../components/Common/DatePicker"
-
+import AWSMDropdown from "components/Common/Dropdown"
+import { CUSTOMER_TYPE_DROPDOWN_VALUE } from "./constants"
 import MultipleSelect from "./MultipleSelect"
 import { MODE } from "./constants"
 class SpecificationTab extends PureComponent {
@@ -9,19 +10,19 @@ class SpecificationTab extends PureComponent {
 
     this.state = {
       isRTRestrictionAdding: false,
-      field: [],
       restriction: "",
-      names: [
-        "Multiproduct",
-        "Long Haul",
-        "Long Hose",
-        "Pit Stop",
-        "Highland Road",
-        "Mild Steel Tank",
-        "New Restriction",
-      ],
+      names: [],
+      restrictionArray: [],
       idDeleteBtnShow: true
     }
+  }
+
+  componentDidMount() {
+    const { data } = this.props
+    this.setState({
+      restrictionArray: data?.restriction,
+      names: data?.restriction_dropdown
+    })
   }
 
   onChangeHandler = (value, key) => {
@@ -35,19 +36,18 @@ class SpecificationTab extends PureComponent {
     const { mode, scheduler, data, toggle, onChange } = this.props
 
     function arrayRemove(arr, value) {
-
       return arr.filter(function (ele) {
-        return ele != value;
-      });
+        return ele != value
+      })
     }
 
     const onConfirmClick = () => {
       const { names, isDeleteBtnShow } = this.state
       const name = names[names.length - 1]
-      let personNames = arrayRemove(names, name);
+      let personNames = arrayRemove(names, name)
       this.setState({
         names: personNames,
-        isDeleteBtnShow: !isDeleteBtnShow
+        isDeleteBtnShow: !isDeleteBtnShow,
       })
     }
 
@@ -73,13 +73,18 @@ class SpecificationTab extends PureComponent {
 
     const onAddBtnClick = () => {
       const { isRTRestrictionAdding } = this.state
-      if (isRTRestrictionAdding) {
+      if (!isRTRestrictionAdding) {
         this.setState(
           {
-            isRTRestrictionAdding: false,
+            isRTRestrictionAdding: true,
+            restriction: ""
           },
           () => {
             setClass()
+
+            if (document.getElementById("done") != null) {
+              document.getElementById("done").classList.add("active-btn")
+            }
           }
         )
       }
@@ -89,13 +94,19 @@ class SpecificationTab extends PureComponent {
       const { names } = this.state
       if (document.getElementById("restriction") != null) {
         let rtRestriction = document.getElementById("restriction").value
-        this.setState({ names: [...names, rtRestriction] })
-        // onChange("rt_restriction", names)
+        if (rtRestriction && rtRestriction.length > 0) {
+          if (names.length === 0 && !names) {
+            this.setState({ names: [rtRestriction] })
+          }
+          else {
+            this.setState({ names: [...names, rtRestriction] })
+          }
+        }
       }
 
       this.setState(
         {
-          isRTRestrictionAdding: true,
+          isRTRestrictionAdding: false,
         },
         () => {
           if (document.getElementById("add") != null) {
@@ -109,7 +120,7 @@ class SpecificationTab extends PureComponent {
 
     const onAutoFillBtnClick = () => {
       const { restriction } = this.state
-      if (!restriction) {
+      if (!restriction || restriction.length === 0) {
         this.setState({ restriction: "New Restriction" })
       }
     }
@@ -119,15 +130,6 @@ class SpecificationTab extends PureComponent {
       const rtRestrictionBtn = isRTRestrictionAdding ? (
         <a
           type="button"
-          onClick={onAddBtnClick}
-          className={`extra-button ${disabled ? "disable-link" : null}`}
-          id="add"
-        >
-          + Add
-        </a>
-      ) : (
-        <a
-          type="button"
           onClick={onDoneBtnClick}
           className={`extra-button ${disabled ? "disable-link" : null}`}
           id="done"
@@ -135,16 +137,26 @@ class SpecificationTab extends PureComponent {
         >
           Done
         </a>
+      ) : (
+        <a
+          type="button"
+          onClick={onAddBtnClick}
+          className={`extra-button ${disabled ? "disable-link" : null}`}
+          id="add"
+        >
+          + Add
+        </a>
       )
       return rtRestrictionBtn
     }
 
     const rtRestriction = disabled => {
-      const { isRTRestrictionAdding, names, isDeleteBtnShow } = this.state
+      const { isRTRestrictionAdding, names, isDeleteBtnShow, restriction, restrictionArray } = this.state
 
-      const rtRestriction = isRTRestrictionAdding ? (
+      const rtRestriction = !isRTRestrictionAdding ? (
         <MultipleSelect
           names={names}
+          rtRestrictionSelected={restrictionArray}
           isDeleteBtnShow={isDeleteBtnShow}
           onDeleteBtnClick={onDeleteBtnClick}
           onConfirmClick={onConfirmClick}
@@ -157,7 +169,7 @@ class SpecificationTab extends PureComponent {
             className="form-control"
             id="restriction"
             type="text"
-            defaultValue={data?.rt_restriction}
+            defaultValue={restriction}
             disabled={disabled}
           />
           <div className="input-group-append">
@@ -183,7 +195,9 @@ class SpecificationTab extends PureComponent {
               className="form-control"
               type="text"
               defaultValue={data?.product_type_sap}
-              onChange={e => this.onChangeHandler(e.target.value, "product_type_sap")}
+              onChange={e =>
+                this.onChangeHandler(e.target.value, "product_type_sap")
+              }
               disabled={true}
             />
           </div>
@@ -201,18 +215,29 @@ class SpecificationTab extends PureComponent {
         <div className="row">
           <div className="col-md-6 form-group">
             <label>PRODUCT TYPE IN ASWM</label>
-            <select
+            {/* <select
               className="form-control"
               disabled={
                 (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
               }
               defaultValue={data?.product_type_awsm}
-              onChange={e => this.onChangeHandler(e.target.value, "product_type_awsm")}
+              onChange={e =>
+                this.onChangeHandler(e.target.value, "product_type_awsm")
+              }
             >
               {data?.product_type_awsm_dropdown?.map((value, index) => {
                 return <option value={index}>{value}</option>
               })}
-            </select>
+            </select> */}
+            <AWSMDropdown
+              value={data?.product_type_awsm}
+              items={data?.product_type_awsm_dropdown}
+              onChange={e => this.onChangeHandler(e, "product_type_awsm")}
+              disabled={
+                (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
+              }
+              className="form-control"
+            />
           </div>
           <div className="col-md-6 form-group">
             <label>DATE</label>
@@ -222,7 +247,9 @@ class SpecificationTab extends PureComponent {
                 (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
               }
               value={data?.temporary_product_date_range}
-              onChange={v => this.onChangeHandler(v, "temporary_product_date_range")}
+              onChange={v =>
+                this.onChangeHandler(v, "temporary_product_date_range")
+              }
             />
           </div>
         </div>
@@ -234,23 +261,22 @@ class SpecificationTab extends PureComponent {
               className="form-control"
               disabled={true}
               defaultValue={data?.chartering_type}
-              onChange={e => this.onChangeHandler(e.target.value, "chartering_type")}
+              onChange={e =>
+                this.onChangeHandler(e.target.value, "chartering_type")
+              }
             ></input>
           </div>
           <div className="col-md-6 form-group">
             <label>CUSTOMER TYPE</label>
-            <select
-              className="form-control"
+            <AWSMDropdown
+              value={data?.customer_type}
+              items={CUSTOMER_TYPE_DROPDOWN_VALUE}
+              onChange={e => this.onChangeHandler(e, "customer_type")}
               disabled={
                 (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
               }
-              defaultValue={data?.customer_type}
-              onChange={e => this.onChangeHandler(e.target.value, "customer_type")}
-            >
-
-              {data?.customer_type_dropdown}
-              <option value="active">Active</option>
-            </select>
+              className="form-control"
+            />
           </div>
         </div>
 
@@ -272,7 +298,9 @@ class SpecificationTab extends PureComponent {
               className="form-control"
               disabled={true}
               defaultValue={data?.restriction_code}
-              onChange={e => this.onChangeHandler(e.target.value, "restriction_code")}
+              onChange={e =>
+                this.onChangeHandler(e.target.value, "restriction_code")
+              }
             ></input>
           </div>
         </div>

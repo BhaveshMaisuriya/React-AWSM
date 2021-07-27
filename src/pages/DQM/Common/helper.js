@@ -18,7 +18,7 @@ export function transformObjectToStringSentence(qObject) {
   if (Object.keys(qObject).length !== 0 && qObject) {
     const keys = Object.keys(qObject)
     for (let [index, key] of keys.entries()) {
-      if(qObject[key].length !== 0) {
+      if (qObject[key].length !== 0) {
         newString = newString.concat("(")
         for (let [index, object] of qObject[key].entries()) {
           newString = newString.concat(key, "==", checkType(object))
@@ -27,8 +27,8 @@ export function transformObjectToStringSentence(qObject) {
         }
         if (index !== keys.length - 1) newString = newString.concat(")&&")
       } else {
-        newString = '';
-        newString = newString.concat("(");
+        newString = ""
+        newString = newString.concat("(")
       }
     }
     newString = newString.concat(")")
@@ -75,22 +75,25 @@ export function getCookieByKey(key) {
   }
 }
 
-export const  runValidation = (data) => {
+export const runValidation = data => {
   if (data.storage) {
     const validateStorage = Object.keys(data.storage).every(key => {
       if (key.startsWith("storage_") && data.storage[key]) {
         return data.storage[key].monthly_fixed_quota <= 10000000
       }
-      return  true
+      return true
     })
     if (!validateStorage) {
       return validateStorage
     }
   }
-  if(data.contact) {
+  if (data.contact) {
     const validateContact = Object.keys(data.contact).every(key => {
       if (key.startsWith("contact_") && data.contact[key]) {
-        return !data.contact[key].number || /^\+?[0-9- ]+$/.test(data.contact[key].number)
+        return (
+          !data.contact[key].number ||
+          /^\+?[0-9- ]+$/.test(data.contact[key].number)
+        )
       }
       return true
     })
@@ -99,15 +102,39 @@ export const  runValidation = (data) => {
     }
   }
   if (data.status && data.status.status_awsm === "Temporarily Closed") {
-    if (!data.status.close_period || !(data.status.close_period.date_from && data.status.close_period.date_to && data.status.close_period.time_from && data.status.close_period.time_to)) {
+    if (
+      !data.status.close_period ||
+      !(
+        data.status.close_period.date_from &&
+        data.status.close_period.date_to &&
+        data.status.close_period.time_from &&
+        data.status.close_period.time_to
+      )
+    ) {
       return false
     }
   }
-  if (data.territory_manager && data.territory_manager.number && !/^\+?[0-9- ]+$/.test(data.territory_manager.number)) {
+  if (
+    data.territory_manager &&
+    data.territory_manager.number &&
+    !/^\+?[0-9- ]+$/.test(data.territory_manager.number)
+  ) {
     return false
   }
-  if (data.retail_sales_manager && data.retail_sales_manager.number &&  !/^\+?[0-9- ]+$/.test(data.retail_sales_manager.number)) {
+  if (
+    data.retail_sales_manager &&
+    data.retail_sales_manager.number &&
+    !/^\+?[0-9- ]+$/.test(data.retail_sales_manager.number)
+  ) {
     return false
   }
   return true
+}
+
+export const tagColors = {
+  ACTIVE: "primary",
+  INACTIVE: "secondary",
+  DELETE: "secondary",
+  "TEMP BLOCKED": "tertiary",
+  "TEMPORARY INACTIVE": "tertiary",
 }

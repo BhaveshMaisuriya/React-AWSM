@@ -44,7 +44,7 @@ class TerminalDetailModal extends PureComponent {
       event: {},
       updateDictionary: {},
       isConfirm: false,
-      dataSource:props.currentTerminal
+      dataSource: props.currentTerminal,
     }
   }
 
@@ -53,20 +53,23 @@ class TerminalDetailModal extends PureComponent {
     fetchTableInformation(data.code)
   }
 
-  componentWillReceiveProps(nextProps){
-    if(!isEqual(nextProps.currentTerminal,this.props.currentTerminal)){
-      this.setState({dataSource:nextProps.currentTerminal})
+  componentWillReceiveProps(nextProps) {
+    if (!isEqual(nextProps.currentTerminal, this.props.currentTerminal)) {
+      this.setState({ dataSource: nextProps.currentTerminal })
+    }
+    if (nextProps.isFetchDataAfterChange) {
+      this.props.onCancel()
+      nextProps.refreshMainTable()
     }
   }
 
-  handleUpdate(event) {
+  async handleUpdate() {
     const { code } = this.props.data
     const { dataSource } = this.state
-    this.props.onUpdateTableInformation({
-      ship_to_party:code,
+    await this.props.onUpdateTableInformation({
+      ship_to_party: code,
       body: dataSource,
     })
-    this.props.onCancel()
   }
   toggleTab = tab => {
     if (this.state.activeTab !== tab) {
@@ -76,9 +79,9 @@ class TerminalDetailModal extends PureComponent {
     }
   }
   onFieldChange = (key, value) => {
-    const newData = {...this.state.dataSource}
-    newData[key] = value;
-    this.setState({dataSource:newData})
+    const newData = { ...this.state.dataSource }
+    newData[key] = value
+    this.setState({ dataSource: newData })
   }
 
   onConfirmCancel = () => {
@@ -92,6 +95,17 @@ class TerminalDetailModal extends PureComponent {
     }
   }
 
+  handleExitConfirmation = () => {
+    if (!isEqual(this.state.dataSource, this.props.currentTerminal))
+      return (
+        <ExitConfirmation
+          onExit={this.onConfirmExit}
+          onCancel={this.onConfirmCancel}
+        />
+      )
+    else this.onConfirmExit()
+  }
+
   render() {
     const { activeTab } = this.state
     const toggle = tab => {
@@ -102,7 +116,10 @@ class TerminalDetailModal extends PureComponent {
     const { onCancel, visible, currentTerminal, data } = this.props
     const isDisabledField = isScheduler()
     return (
-      <Modal isOpen={visible} className="commercial-customer-modal modal-lg">
+      <Modal
+        isOpen={visible}
+        className="commercial-customer-modal terminal-detail-modal modal-lg"
+      >
         <ModalHeader
           close={
             <CloseButton
@@ -110,199 +127,208 @@ class TerminalDetailModal extends PureComponent {
             />
           }
         >
-          <span className="modal-title">Terminal Code: {data.code}</span>
-          <span className="last-updated-sub-title">
+          <div className="header-title">Terminal Code: {data.code}</div>
+          <div className="header-subtitle">
             Last Updated By: Nur Izzati on 3rd March 2021
-          </span>
+          </div>
         </ModalHeader>
         <>
           {currentTerminal ? (
-            <ModalBody>
-              {this.state.isConfirm && (
-                <ExitConfirmation
-                  onExit={this.onConfirmExit}
-                  onCancel={this.onConfirmCancel}
-                />
-              )}
-              <Fragment>
-                <div>
-                  <div className="row">
-                    <div className="col-md-6 form-group">
-                      <label>TERMINAL CODE</label>
-                      <input
-                        className="form-control"
-                        type="text"
-                        defaultValue={currentTerminal.code}
-                        disabled={true}
-                        onChange={e =>
-                          this.onFieldChange("code", e.target.value)
-                        }
-                      />
+            <>
+              <ModalBody>
+                {this.state.isConfirm ? this.handleExitConfirmation() : ""}
+                <Fragment>
+                  <div>
+                    <div className="row">
+                      <div className="col-md-6 form-group">
+                        <label>TERMINAL CODE</label>
+                        <input
+                          className="form-control"
+                          type="text"
+                          defaultValue={currentTerminal.code}
+                          disabled={true}
+                          onChange={e =>
+                            this.onFieldChange("code", e.target.value)
+                          }
+                        />
+                      </div>
+                      <div className="col-md-6 form-group">
+                        <label>TERMINAL NAME</label>
+                        <input
+                          className="form-control"
+                          type="text"
+                          defaultValue={currentTerminal.name}
+                          disabled={true}
+                          onChange={e =>
+                            this.onFieldChange("name", e.target.value)
+                          }
+                        />
+                      </div>
                     </div>
-                    <div className="col-md-6 form-group">
-                      <label>TERMINAL NAME</label>
-                      <input
-                        className="form-control"
-                        type="text"
-                        defaultValue={currentTerminal.name}
-                        disabled={true}
-                        onChange={e =>
-                          this.onFieldChange("name", e.target.value)
-                        }
-                      />
+
+                    <div className="row">
+                      <div className="col-md-12 form-group">
+                        <label> REMARKS</label>
+                        <input
+                          placeholder="Type something here..."
+                          className="form-control"
+                          type="text"
+                          defaultValue={currentTerminal.remarks}
+                          disabled={isDisabledField}
+                          onChange={e =>
+                            this.onFieldChange("remarks", e.target.value)
+                          }
+                        />
+                      </div>
                     </div>
                   </div>
+                  <Nav pills justified>
+                    <NavItem>
+                      <NavLink
+                        className={classnames({
+                          active: this.state.activeTab === "1",
+                        })}
+                        onClick={() => {
+                          this.toggleTab("1")
+                        }}
+                      >
+                        {/* <i className="bx bx-chat font-size-20 d-sm-none" /> */}
+                        <span className="d-none d-sm-block">Address</span>
+                      </NavLink>
+                    </NavItem>
+                    <NavItem>
+                      <NavLink
+                        className={classnames({
+                          active: this.state.activeTab === "2",
+                        })}
+                        onClick={() => {
+                          this.toggleTab("2")
+                        }}
+                      >
+                        {/* <i className="bx bx-group font-size-20 d-sm-none" /> */}
+                        <span className="d-none d-sm-block">Storage</span>
+                      </NavLink>
+                    </NavItem>
+                    <NavItem>
+                      <NavLink
+                        className={classnames({
+                          active: this.state.activeTab === "3",
+                        })}
+                        onClick={() => {
+                          this.toggleTab("3")
+                        }}
+                      >
+                        {/* <i className="bx bx-book-content font-size-20 d-sm-none" /> */}
+                        <span className="d-none d-sm-block">Status</span>
+                      </NavLink>
+                    </NavItem>
+                    <NavItem>
+                      <NavLink
+                        className={classnames({
+                          active: this.state.activeTab === "4",
+                        })}
+                        onClick={() => {
+                          this.toggleTab("4")
+                        }}
+                      >
+                        {/* <i className="bx bx-chat font-size-20 d-sm-none" /> */}
+                        <span className="d-none d-sm-block">Contact</span>
+                      </NavLink>
+                    </NavItem>
+                    <NavItem />
+                    <NavItem />
+                    <NavItem />
+                    <NavItem />
+                  </Nav>
 
-                  <div className="row">
-                    <div className="col-md-12 form-group">
-                      <label> REMARKS</label>
-                      <input
-                        placeholder="Type something here..."
-                        className="form-control"
-                        type="text"
-                        defaultValue={currentTerminal.remarks}
-                        disabled={isDisabledField}
-                        onChange={(e) => this.onFieldChange("remarks", e.target.value)}
-                      />
-                    </div>
-                  </div>
-                </div>
-                <Nav pills justified>
-                  <NavItem>
-                    <NavLink
-                      className={classnames({
-                        active: this.state.activeTab === "1",
-                      })}
-                      onClick={() => {
-                        this.toggleTab("1")
-                      }}
-                    >
-                      {/* <i className="bx bx-chat font-size-20 d-sm-none" /> */}
-                      <span className="d-none d-sm-block">Address</span>
-                    </NavLink>
-                  </NavItem>
-                  <NavItem>
-                    <NavLink
-                      className={classnames({
-                        active: this.state.activeTab === "2",
-                      })}
-                      onClick={() => {
-                        this.toggleTab("2")
-                      }}
-                    >
-                      {/* <i className="bx bx-group font-size-20 d-sm-none" /> */}
-                      <span className="d-none d-sm-block">Storage</span>
-                    </NavLink>
-                  </NavItem>
-                  <NavItem>
-                    <NavLink
-                      className={classnames({
-                        active: this.state.activeTab === "3",
-                      })}
-                      onClick={() => {
-                        this.toggleTab("3")
-                      }}
-                    >
-                      {/* <i className="bx bx-book-content font-size-20 d-sm-none" /> */}
-                      <span className="d-none d-sm-block">Status</span>
-                    </NavLink>
-                  </NavItem>
-                  <NavItem>
-                    <NavLink
-                      className={classnames({
-                        active: this.state.activeTab === "4",
-                      })}
-                      onClick={() => {
-                        this.toggleTab("4")
-                      }}
-                    >
-                      {/* <i className="bx bx-chat font-size-20 d-sm-none" /> */}
-                      <span className="d-none d-sm-block">Contact</span>
-                    </NavLink>
-                  </NavItem>
-                  <NavItem />
-                  <NavItem />
-                  <NavItem />
-                  <NavItem />
-                </Nav>
-
-                {/* tab content */}
-                <TabContent activeTab={this.state.activeTab} className="py-4">
-                  <TabPane tabId="1">
-                    <SimpleBar
-                      style={{
-                        height: "350px",
-                        width: "100%",
-                        overflowX: "hidden",
-                      }}
-                    >
-                      <AddressTab
-                        data={currentTerminal?.address}
-                        onChange={value => this.onFieldChange("address", value)}
-                      />
-                    </SimpleBar>
-                  </TabPane>
-                  <TabPane tabId="2">
-                    <SimpleBar
-                      style={{
-                        height: "350px",
-                        width: "100%",
-                        overflowX: "hidden",
-                      }}
-                    >
-                      <StorageTab
-                        data={currentTerminal?.storage}
-                        onChange={value => this.onFieldChange("storage", value)}
-                      />
-                    </SimpleBar>
-                  </TabPane>
-                  <TabPane tabId="3">
-                    <SimpleBar
-                      style={{
-                        height: "350px",
-                        width: "100%",
-                        overflowX: "hidden",
-                      }}
-                    >
-                      <StatusTab
-                        data={currentTerminal?.status}
-                        onChange={value => this.onFieldChange("status", value)}
-                      />
-                    </SimpleBar>
-                  </TabPane>
-                  <TabPane tabId="4">
-                    <SimpleBar
-                      style={{
-                        height: "350px",
-                        width: "100%",
-                        overflowX: "hidden",
-                      }}
-                    >
-                      <ContactTab
-                        data={currentTerminal?.contact}
-                        onChange={value => this.onFieldChange("contact", value)}
-                      />
-                    </SimpleBar>
-                  </TabPane>
-                </TabContent>
-              </Fragment>
-              <ModalFooter>
-                <button
-                  className="btn-sec"
-                  onClick={() => this.setState({ isConfirm: true })}
-                >
-                  Cancel
-                </button>
-                {!isDisabledField && currentTerminal ? (
+                  {/* tab content */}
+                  <TabContent activeTab={this.state.activeTab} className="py-4">
+                    <TabPane tabId="1">
+                      <SimpleBar
+                        style={{
+                          height: "350px",
+                          width: "100%",
+                          overflowX: "hidden",
+                        }}
+                      >
+                        <AddressTab
+                          data={currentTerminal?.address}
+                          onChange={value =>
+                            this.onFieldChange("address", value)
+                          }
+                        />
+                      </SimpleBar>
+                    </TabPane>
+                    <TabPane tabId="2" style={{ marginRight: "-25px" }}>
+                      <SimpleBar
+                        style={{
+                          height: "350px",
+                          width: "100%",
+                          overflowX: "hidden",
+                          paddingRight: "25px",
+                        }}
+                      >
+                        <StorageTab
+                          data={currentTerminal?.storage}
+                          onChange={value =>
+                            this.onFieldChange("storage", value)
+                          }
+                        />
+                      </SimpleBar>
+                    </TabPane>
+                    <TabPane tabId="3" style={{ marginRight: "-25px" }}>
+                      <SimpleBar
+                        style={{
+                          height: "350px",
+                          width: "100%",
+                          overflowX: "hidden",
+                          paddingRight: "25px",
+                        }}
+                      >
+                        <StatusTab
+                          data={currentTerminal?.status}
+                          onChange={value =>
+                            this.onFieldChange("status", value)
+                          }
+                        />
+                      </SimpleBar>
+                    </TabPane>
+                    <TabPane tabId="4">
+                      <SimpleBar
+                        style={{
+                          height: "350px",
+                          width: "100%",
+                          overflowX: "hidden",
+                        }}
+                      >
+                        <ContactTab
+                          data={currentTerminal?.contact}
+                          onChange={value =>
+                            this.onFieldChange("contact", value)
+                          }
+                        />
+                      </SimpleBar>
+                    </TabPane>
+                  </TabContent>
+                </Fragment>
+              </ModalBody>
+              {!isDisabledField && !this.state.isConfirm ? (
+                <ModalFooter className="pr-4">
+                  <button
+                    className="btn-sec"
+                    onClick={() => this.setState({ isConfirm: true })}
+                  >
+                    Cancel
+                  </button>
                   <Button
                     onClick={this.handleUpdate.bind(this)}
                     color="primary"
                   >
                     Update
                   </Button>
-                ) : null}
-              </ModalFooter>
-            </ModalBody>
+                </ModalFooter>
+              ) : null}
+            </>
           ) : null}
         </>
       </Modal>
@@ -313,6 +339,7 @@ class TerminalDetailModal extends PureComponent {
 const mapStateToProps = ({ terminal }) => ({
   currentTerminal: terminal.currentTerminal,
   error: terminal.error,
+  isFetchDataAfterChange: terminal.isFetchDataAfterChange,
 })
 
 const mapDispatchToProps = dispatch => ({

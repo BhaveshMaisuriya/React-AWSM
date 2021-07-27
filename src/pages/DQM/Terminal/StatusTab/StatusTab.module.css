@@ -1,45 +1,44 @@
 .arrow {
-    position: absolute;
-    top: 40%;
-    right: 15px;
-    color: #777;
-    cursor: pointer;
-  }
-  #road_tanker_requirement {
-    cursor: pointer;
-  }
-  .field {
-    cursor: pointer;
-  }
-  .add {
-    background-color: transparent !important;
-    border: 0 !important;
-    color: #018f89 !important;
-    position: absolute !important;
-    top: -8px !important;
-    right: 0px !important;
-    text-align: right;
-  }
-  .arrow2 {
-    position: absolute;
-    top: 15%;
-    right: 15px;
-    color: #777;
-    cursor: pointer;
-  }
-  .arrow3 {
-    position: absolute;
-    top: 50%;
-    right: 15px;
-    color: #777;
-    cursor: pointer;
-  }
-  #road_tanker_requirement {
-    background-color: aquamarine;
-  }
-  
-  .disabled {
-    background-color: #eee !important;
-    color: rgba(16, 16, 16, 0.3) !important;
-  }
-  
+  position: absolute;
+  top: 31px;
+  right: 24px;
+  color: #777;
+  cursor: pointer;
+}
+#road_tanker_requirement {
+  cursor: pointer;
+}
+.field {
+  cursor: pointer;
+}
+.add {
+  background-color: transparent !important;
+  border: 0 !important;
+  color: #018f89 !important;
+  position: absolute !important;
+  top: -8px !important;
+  right: 0px !important;
+  text-align: right;
+}
+.arrow2 {
+  position: absolute;
+  top: 15%;
+  right: 15px;
+  color: #777;
+  cursor: pointer;
+}
+.arrow3 {
+  position: absolute;
+  top: 50%;
+  right: 15px;
+  color: #777;
+  cursor: pointer;
+}
+#road_tanker_requirement {
+  background-color: aquamarine;
+}
+
+.disabled {
+  background-color: #eee !important;
+  color: rgba(16, 16, 16, 0.3) !important;
+}

@@ -17,6 +17,7 @@ import {
   GET_DOWNLOAD_PRODUCTS,
   GET_DOWNLOAD_PRODUCTS_SUCCESS,
   GET_DOWNLOAD_PRODUCTS_FAIL,
+  RESET_PRODUCT_DETAIL
 } from "./actionTypes"
 
 export const getProducts = params => ({
@@ -106,4 +107,8 @@ export const updateProductDetailSuccess = response => ({
 export const updateProductDetailFail = error => ({
   type: UPDATE_PRODUCT_DETAIL_FAIL,
   payload: error
+})
+
+export const resetProductDetail = () =>({
+  type: RESET_PRODUCT_DETAIL
 })

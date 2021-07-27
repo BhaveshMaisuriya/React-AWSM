@@ -3,6 +3,8 @@ import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 import Tooltip from '@material-ui/core/Tooltip';
 import DatePicker from "../../../../components/Common/DatePicker"
 import VarianceInput from '../VarianceInput';
+import informationIcon from "../../../../assets/images/AWSM-Information.svg";
+
 export default class InventoryTab extends Component {
     constructor(props) {
         super(props)
@@ -48,7 +50,7 @@ export default class InventoryTab extends Component {
                 <h6>FINAL VARIANCE & INVENTORY</h6>
                 <div className="row">
                     <div className="col-md-6 form-group">
-                        <label>INVENTORY VARIANCE (L)<Tooltip title="Inventory Final Figure - Calculated Inventory"><InfoOutlinedIcon /></Tooltip><span className="extra-lbl">D0</span></label>
+                        <label>INVENTORY VARIANCE (L)  <Tooltip title="Inventory Final Figure - Calculated Inventory"><img src={informationIcon} /></Tooltip><span className="extra-lbl">D0</span></label>
                         <input
                             className="form-control"
                             defaultValue={data?.inventory_variance}
@@ -56,13 +58,13 @@ export default class InventoryTab extends Component {
                             onChange={e => this.onChangeHandler(e.target.value, "inventory_variance")}></input>
                     </div>
                     <div className="col-md-6 form-group">
-                        <label> INVENTORY VARIANCE (%)<Tooltip title="((Inventory Final Figure - Calculated Inventory)/Calculated Inventory) * 100"><InfoOutlinedIcon /></Tooltip><span className="extra-lbl">D0</span></label>
+                        <label> INVENTORY VARIANCE (%)  <Tooltip title="((Inventory Final Figure - Calculated Inventory)/Calculated Inventory) * 100"><img src={informationIcon} /></Tooltip><span className="extra-lbl">D0</span></label>
                         <input className="form-control" defaultValue={data?.inventory_variance_percent} disabled="true"></input>
                     </div>
                 </div>
                 <div className="row">
                     <div className="col-md-6 form-group">
-                        <label>INVENTORY FINAL FIGURE (L)<Tooltip title="Total Inventory = Dipping Value(L) + Dipping to Midnight Sale Volume(L) + Dipping to Midnight Delivery(L)+ Dipping to Midnight Diversion(L) + Dipping Adjustment(L) + Delivery Adjustment"><InfoOutlinedIcon /></Tooltip><span className="extra-lbl">D0</span></label>
+                        <label>INVENTORY FINAL FIGURE (L)  <Tooltip title="Total Inventory = Dipping Value(L) + Dipping to Midnight Sale Volume(L) + Dipping to Midnight Delivery(L)+ Dipping to Midnight Diversion(L) + Dipping Adjustment(L) + Delivery Adjustment"><img src={informationIcon} /></Tooltip><span className="extra-lbl">D0</span></label>
                         <input className="form-control" defaultValue={data?.inventory_final_figure} disabled="true"></input>
                     </div>
                     <div className="col-md-6 form-group">
@@ -128,7 +130,7 @@ export default class InventoryTab extends Component {
 
                 <div className="row">
                     <div className="col-md-6 form-group">
-                        <label>OPENING INVENTORY @12AM (L)<Tooltip title="Total inventory=Dipping Value (L) + Dipping to Midnigh Sales Volume (L) + Dipping to Midnight Delivery (L) + Dipping to Midnight Deversion (L) + Dipping Adjustment (L) + Delivery Adjustment (L)"><InfoOutlinedIcon /></Tooltip><span className="extra-lbl">D0</span></label>
+                        <label>OPENING INVENTORY @12AM (L)  <Tooltip title="Total inventory=Dipping Value (L) + Dipping to Midnigh Sales Volume (L) + Dipping to Midnight Delivery (L) + Dipping to Midnight Deversion (L) + Dipping Adjustment (L) + Delivery Adjustment (L)"><img src={informationIcon} /></Tooltip><span className="extra-lbl">D0</span></label>
                         <input className="form-control" defaultValue={data?.opening_inventory} disabled="true"></input>
                     </div>
                 </div>
@@ -142,7 +144,7 @@ export default class InventoryTab extends Component {
                         <input className="form-control" defaultValue={data?.yesterday_opening_inventory} disabled="true"></input>
                     </div>
                     <div className="col-md-6 form-group">
-                        <label>YESTERDAY SALES FINAL FIGURE (L)<Tooltip title="Sales of Final Figure D-1"><InfoOutlinedIcon /></Tooltip><span className="extra-lbl">D-1</span></label>
+                        <label>YESTERDAY SALES FINAL FIGURE (L)  <Tooltip title="Sales of Final Figure D-1"><img src={informationIcon} /></Tooltip><span className="extra-lbl">D-1</span></label>
                         <input className="form-control" defaultValue={data?.yesterday_sales_final_figure} disabled="true"></input>
                     </div>
                 </div>
@@ -176,7 +178,7 @@ export default class InventoryTab extends Component {
 
                 <div className="row">
                     <div className="col-md-6 form-group">
-                        <label>CACULATED INVENTORY @12AM (L)<Tooltip title="Calculated Inventory = Yesterday Opening Inventory (L) + Yesterday Final Figure (L) + Yesterday Delivery(L)+ Yesterday Diversion + Yesterday Delivery Adjustment"><InfoOutlinedIcon /></Tooltip><span className="extra-lbl">D0</span></label>
+                        <label>CACULATED INVENTORY @12AM (L)   <Tooltip title="Calculated Inventory = Yesterday Opening Inventory (L) + Yesterday Final Figure (L) + Yesterday Delivery(L)+ Yesterday Diversion + Yesterday Delivery Adjustment"><img src={informationIcon} /></Tooltip><span className="extra-lbl">D0</span></label>
                         <input className="form-control" value={data?.calculated_inventory} disabled="true"></input>
                     </div>
                 </div>

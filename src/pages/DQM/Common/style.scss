@@ -276,8 +276,16 @@
 .modal-header,
 .modal-body,
 .modal-footer {
-  padding-left: 2rem !important;
-  padding-right: 2rem !important;
-  padding-top: 2rem !important;
+  padding-left: 35px !important;
+  padding-right: 35px !important;
+}
+
+.modal-header {
+  padding-top: 30px !important;
   border-bottom: 0px !important;
+}
+
+.modal-footer {
+  padding-bottom: 25px !important;
+  padding-top: 25px !important;
 }

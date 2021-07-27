@@ -1,4 +1,4 @@
-import React, { Component } from "react"
+import React, { Component, Fragment } from "react"
 import {
   Modal,
   ModalHeader,
@@ -17,7 +17,6 @@ import InventoryTab from "./inventoryTab"
 import DeliveryTab from "./deliveryTab"
 import {
   getDetailsSales,
-  getSaleAndInventory,
 } from "../../../../store/salesAndInventory/actions"
 import { connect } from "react-redux"
 import CloseButton from "../../../../components/Common/CloseButton"
@@ -65,10 +64,10 @@ class SalesAndInventoryTableInformation extends Component {
     }
   }
 
-  componentWillUnmount() {}
+  componentWillUnmount() { }
 
   // Prototype methods, Bind in Constructor (ES2015)
-  handleEvent() {}
+  handleEvent() { }
 
   // Class Properties (Stage 3 Proposal)
   handler = () => {
@@ -103,14 +102,10 @@ class SalesAndInventoryTableInformation extends Component {
         <Modal
           isOpen={visible}
           className="commercial-customer-modal modal-lg"
-          // contentClassName="modalTIContainer"
         >
-          <ModalHeader
-            close={
-              <CloseButton
-                handleClose={() => this.setState({ isConfirm: true })}
-              />
-            }
+          <ModalHeader close={<CloseButton
+            handleClose={() => this.setState({ isConfirm: true })}
+          />}
           >
             <span className="modal-title">Record ID: 123456789</span>
             <span className="date-sub-title">| Date: 12 Mar 2021</span>
@@ -118,18 +113,7 @@ class SalesAndInventoryTableInformation extends Component {
               Last Updated By: Nur Izzati on 3rd March 2021
             </span>
           </ModalHeader>
-          {/* <div className="modal-header">
-            <h5 className="modal-title">
-              RECORD ID: 123456789
-              <span className="sub-title">Date: 12 Mar 2021</span>
-              <span className="sub-title">
-                Last Updated By: Nur Izzati on 3rd March 2021
-              </span>
-            </h5>
-            <CloseButton
-              handleClose={() => this.setState({ isConfirm: true })}
-            />
-          </div> */}
+
           <ModalBody>
             {this.state.isConfirm && (
               <ExitConfirmation
@@ -137,84 +121,78 @@ class SalesAndInventoryTableInformation extends Component {
                 onCancel={this.onConfirmCancel}
               />
             )}
-            <div>
-              <Nav tabs>
-                <NavItem
-                  className={activeTab === "1" ? "active" : null}
-                  onClick={() => {
-                    toggle("1")
-                  }}
-                >
-                  <NavLink>
-                    <span>Details</span>
-                  </NavLink>
-                </NavItem>
-                <NavItem
-                  className={activeTab === "2" ? "active" : null}
-                  onClick={() => {
-                    toggle("2")
-                  }}
-                >
-                  <NavLink>
-                    <span>Sales</span>
-                  </NavLink>
-                </NavItem>
-                <NavItem
-                  className={activeTab === "3" ? "active" : null}
-                  onClick={() => {
-                    toggle("3")
-                  }}
-                >
-                  <NavLink>
-                    <span>Inventory</span>
-                  </NavLink>
-                </NavItem>
-                <NavItem
-                  className={activeTab === "4" ? "active" : null}
-                  onClick={() => {
-                    toggle("4")
-                  }}
-                >
-                  <NavLink>
-                    <span>Delivery</span>
-                  </NavLink>
-                </NavItem>
-              </Nav>
-              <TabContent activeTab={activeTab}>
-                <TabPane tabId="1">
-                  <div className="simple-bar">
-                    <DetailsTab
-                      data={data?.details}
-                      onChange={onFieldValueChange}
-                    />
-                  </div>
-                </TabPane>
-                <TabPane tabId="2">
-                  <div className="simple-bar">
-                    <SalesTab
-                      data={data?.sales}
-                      onChange={onFieldValueChange}
-                    />
-                  </div>
-                </TabPane>
-                <TabPane tabId="3">
-                  <div className="simple-bar">
-                    <InventoryTab
-                      data={data?.inventory}
-                      onChange={onFieldValueChange}
-                    />
-                  </div>
-                </TabPane>
-                <TabPane tabId="4">
-                  <div className="simple-bar">
-                    <DeliveryTab
-                      data={data?.delivery}
-                      onChange={onFieldValueChange}
-                    />
-                  </div>
-                </TabPane>
-              </TabContent>
-            </div>
+            <Fragment>
+              <div>
+                <Nav pills justified>
+                  <NavItem>
+                    <NavLink className={activeTab === "1" ? "active" : null}
+                      onClick={() => {
+                        toggle("1")
+                      }}>
+                      <span>Details</span>
+                    </NavLink>
+                  </NavItem>
+                  <NavItem>
+                    <NavLink className={activeTab === "2" ? "active" : null}
+                      onClick={() => {
+                        toggle("2")
+                      }}>
+                      <span>Sales</span>
+                    </NavLink>
+                  </NavItem>
+                  <NavItem>
+                    <NavLink className={activeTab === "3" ? "active" : null}
+                      onClick={() => {
+                        toggle("3")
+                      }}>
+                      <span>Inventory</span>
+                    </NavLink>
+                  </NavItem>
+                  <NavItem>
+                    <NavLink className={activeTab === "4" ? "active" : null}
+                      onClick={() => {
+                        toggle("4")
+                      }}>
+                      <span>Delivery</span>
+                    </NavLink>
+                  </NavItem>
+                </Nav>
+                <TabContent activeTab={activeTab}>
+                  <TabPane tabId="1">
+                    <div className="simple-bar-sale">
+                      <DetailsTab
+                        data={data?.details}
+                        onChange={onFieldValueChange}
+                      />
+                    </div>
+                  </TabPane>
+                  <TabPane tabId="2">
+                    <div className="simple-bar-sale">
+                      <SalesTab
+                        data={data?.sales}
+                        onChange={onFieldValueChange}
+                      />
+                    </div>
+                  </TabPane>
+                  <TabPane tabId="3">
+                    <div className="simple-bar-sale">
+                      <InventoryTab
+                        data={data?.inventory}
+                        onChange={onFieldValueChange}
+                      />
+                    </div>
+                  </TabPane>
+                  <TabPane tabId="4">
+                    <div className="simple-bar-sale">
+                      <DeliveryTab
+                        data={data?.delivery}
+                        onChange={onFieldValueChange}
+                      />
+                    </div>
+                  </TabPane>
+                </TabContent>
+              </div>
+            </Fragment>
           </ModalBody>
           <ModalFooter>
             <div className="d-flex align-items-center justify-content-end mt-4 mb-4 px-4">

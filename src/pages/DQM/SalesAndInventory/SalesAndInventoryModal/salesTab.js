@@ -3,6 +3,8 @@ import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 import Tooltip from '@material-ui/core/Tooltip';
 import DatePicker from "../../../../components/Common/DatePicker"
 import VarianceInput from '../VarianceInput';
+import informationIcon from "../../../../assets/images/AWSM-Information.svg";
+
 export default class SalesTab extends Component {
     constructor(props) {
         super(props)
@@ -79,15 +81,14 @@ export default class SalesTab extends Component {
 
                 <div className="row">
                     <div className="col-md-6 form-group">
-                        <label>SALES FINAL FIGURE (L)
-                            <Tooltip title="Actual Sales + Yesterday's Sales Adjustment (L)">
-                                <InfoOutlinedIcon />
-                            </Tooltip>
+                        <label>SALES FINAL FIGURE (L)  <Tooltip title="Actual Sales + Yesterday's Sales Adjustment (L)">
+                            <img src={informationIcon} />
+                        </Tooltip>
                             <span className="extra-lbl">D-1</span></label>
                         <input className="form-control" defaultValue={data?.sales_final_figure} disabled="true" onChange={e => this.onChangeHandler(e.target.value, "sales_final_figure")}></input>
                     </div>
                     <div className="col-md-6 form-group">
-                        <label>SALES VARIANCE (L)<Tooltip title="(Sales Final Figure - Expected Sales) / Expected Sales"><InfoOutlinedIcon /></Tooltip>
+                        <label>SALES VARIANCE (L)  <Tooltip title="(Sales Final Figure - Expected Sales) / Expected Sales"><img src={informationIcon} /></Tooltip>
                             <span className="extra-lbl">D-1</span></label>
                         <input className="form-control" disabled="true" defaultValue={data?.sales_variance} onChange={e => this.onChangeHandler(e.target.value, "sales_variance")}></input>
                     </div>
@@ -95,7 +96,7 @@ export default class SalesTab extends Component {
 
                 <div className="row">
                     <div className="col-md-6 form-group">
-                        <label>SALES VARIANCE (%)<Tooltip title="((Sales Final Figure - ExpectedSales)/Expected Sales) * 100%"><InfoOutlinedIcon /></Tooltip><span className="extra-lbl">D-1</span></label>
+                        <label>SALES VARIANCE (%)  <Tooltip title="((Sales Final Figure - ExpectedSales)/Expected Sales) * 100%"><img src={informationIcon} /></Tooltip><span className="extra-lbl">D-1</span></label>
                         <input className="form-control" defaultValue={data?.sales_variance_percent} disabled="true" onChange={e => this.onChangeHandler(e.target.value, "sales_variance_percent")}></input>
                     </div>
                 </div>

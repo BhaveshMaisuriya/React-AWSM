@@ -5,10 +5,12 @@ import React, { useState, useEffect } from "react"
 import AWSMDropdown from "../../../../components/Common/Dropdown"
 import TimePicker from "../../../../components/Common/TableInformation/components/TimePicker"
 import { isScheduler } from "../../../../helpers/auth_helper"
-import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown"
+// import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown"
+import { ReactSVG } from "react-svg"
+import ArrowDropDownIcon from "../../../../assets/images/AWSM-Dropdown.svg"
 import styles from "./StatusTab.module.css"
 
-const STATUS_IN_AWSM = ["Active", "Delete"]
+const STATUS_IN_AWSM = ["Active", "Temporary Inactive", "Permanently Inactive"]
 const ACTUAL_OPEN_TIME = [
   { name: "Monday", checked: false },
   { name: "Tuesday", checked: false },
@@ -57,6 +59,9 @@ const TabStatus = props => {
     const fl = field.split(".")
     let newData = { ...data }
     if (fl.length >= 2) {
+      if(!newData[fl[0]]){
+        newData[fl[0]] = {}
+      }
       switch (fl[0]) {
         case "terminal_operating_days_1":
           newData["terminal_operating_days_1"][fl[1]] = value
@@ -76,7 +81,6 @@ const TabStatus = props => {
     setData(newData)
   }
 
-  
   const onchangeOperationHandler = event => {
     const index = openTime1.findIndex(e => e.name === event.name)
     if (index < 0) {
@@ -89,7 +93,10 @@ const TabStatus = props => {
       ...data,
       terminal_operating_days_1: {
         ...data.terminal_operating_days_1,
-        days: openTime1.filter(i => i.checked).map(i => i.name).join(","),
+        days: openTime1
+          .filter(i => i.checked)
+          .map(i => i.name)
+          .join(","),
       },
     })
   }
@@ -97,14 +104,24 @@ const TabStatus = props => {
   const actualOpenTime1 = openTime1.filter(item => {
     return item.checked === true
   })
-
+  function renderDateRangeError(){
+    if(data?.status_awsm ==="Temporary Inactive"){
+      if(data?.inactive_date_range_1?.type==="range"){
+        if(!data?.inactive_date_range_1?.date_from || !data?.inactive_date_range_1?.date_to){
+          return <p style={{color: 'red'}}>Must fill Start and End date</p>
+        }
+        return null
+      }
+      return <p style={{color: 'red'}}>Must fill Start and End date</p>
+    }
+  }
   return (
     <div className="dqm-status-container">
       <div className="row">
         <div className="col-12 col-sm-6">
           <label>STATUS IN AWSM</label>
           <AWSMDropdown
-            value={data?.status_awsm}
+            value={data?.status_awsm || "Select"}
             items={STATUS_IN_AWSM}
             onChange={value => onchangeHandler("status_awsm", value)}
             disabled={scheduler}
@@ -118,7 +135,9 @@ const TabStatus = props => {
             onChange={value => onchangeHandler("inactive_date_range_1", value)}
             defaultValue={data?.inactive_date_range_1}
             disabled={scheduler}
+            placeholder={"Select Date Range"}
           />
+          {renderDateRangeError()}
         </div>
       </div>
       <div className="row mt-3">
@@ -145,7 +164,7 @@ const TabStatus = props => {
                 style={{ height: "40px", marginTop: "-4px", cursor: "pointer" }}
               />
               <div className={styles.arrow}>
-                <ArrowDropDownIcon />
+                <ReactSVG src={ArrowDropDownIcon} />
               </div>
             </AvForm>
           </SimplePopover>
@@ -185,6 +204,7 @@ const TabStatus = props => {
               }
               defaultValue={data?.no_delivery_interval_1}
               disabled={scheduler}
+              placeholder={"Select Date"}
             />
           </div>
           <div className="col-12 col-sm-3">
@@ -220,6 +240,7 @@ const TabStatus = props => {
               }
               defaultValue={data?.no_delivery_interval_2}
               disabled={scheduler}
+              placeholder={"Select Date"}
             />
           </div>
           <div className="col-12 col-sm-3">
@@ -238,7 +259,7 @@ const TabStatus = props => {
             <TimePicker
               items={timeData}
               onChange={value =>
-                onchangeHandler("data.no_delivery_interval_2.time_to", value)
+                onchangeHandler("no_delivery_interval_2.time_to", value)
               }
               value={data?.no_delivery_interval_2?.time_to}
               disabled={scheduler}

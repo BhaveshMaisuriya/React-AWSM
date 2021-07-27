@@ -368,11 +368,16 @@
 .yellow {
     background-color: #FECE66;
 }
+.green {
+    background-color: green;
+}
 .square_border {
     border: 1px solid #EEEEEE;
     padding: 5px 10px;
     display: flex;
-    width: 100%;
+   // width: 100%;
+    border-radius: 10px;
+    margin-top: 5px;
     height: 10%;
 }
 .pointer {
@@ -383,4 +388,7 @@
 }
 .radio_option label {
     margin-bottom: 0;
+}
+.hover_display {
+    display: none;
 }

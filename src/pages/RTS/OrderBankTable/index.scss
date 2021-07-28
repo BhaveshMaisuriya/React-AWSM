@@ -164,14 +164,10 @@
 .b-sch-event-content {
     display: none !important;
 }
-.b-has-content:hover .b-sch-event-content {
+.b-sch-event:hover .b-sch-event-content {
     display: block !important;
 }
 
-.hover_tooltip {
-    height: 20px;
-    width: 100%;
-}
 .white-bg {
     background-color: #FFFFFF;
 }

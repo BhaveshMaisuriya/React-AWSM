@@ -140,18 +140,21 @@ function BryntumChartTable(props) {
     });
   }
 
-  // var subTarget = document.getElementsByClassName(".b-sch-event-content");
-  // target.addEventListener("mouseover", function(e) {
-  //   subTarget.classList.remove("active");
-  // });
-  // // target.addEventListener("mouseout", mOut, false);
-
-  // function mOver() {
-  //   subTarget.setAttribute("style", "display:block;")
-  // }
-  // function mOut() {  
-  //   subTarget.setAttribute("style", "display:none;")
-  // }
+  const target = document.getElementsByClassName(`b-sch-event-content`);
+  const hover = document.getElementsByClassName(`b-sch-event`)[0];
+  const bottom_target = document.getElementsByClassName(`hover_display`)[0];
+ 
+  if (hover) {    
+    hover.addEventListener("mouseenter", event => {
+      console.log("here", hover);
+      bottom_target.setAttribute("style", "display:flex;");
+      target.innerHTML = "Hello World!";
+    })
+    hover.addEventListener("mouseleave", event => {
+      console.log("here1", hover);
+      bottom_target.setAttribute("style", "display:none;");
+    })
+  }
 
   return (
     <div className="rts-table-container scroll" id="scrollableDiv">

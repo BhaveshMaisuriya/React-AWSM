@@ -204,6 +204,40 @@ const ganttChartTableData =[
     shift: "On 1",
     cap: "21480",
     rtcode: "1003"
+  },
+  {
+    id: 6,
+    vehicle: 'WA 5559V',
+    hours: '05',
+    status: 'On 1',
+    size: '21840',
+    type: '1003',
+    rate: '00',
+    shift_list: [
+      "On 1",
+      "On 2",
+      "on 3"
+    ],
+    shift: "On 1",
+    cap: "21480",
+    rtcode: "1003"
+  },
+  {
+    id: 7,
+    vehicle: 'WA 5559V',
+    hours: '05',
+    status: 'On 1',
+    size: '21840',
+    type: '1003',
+    rate: '00',
+    shift_list: [
+      "On 1",
+      "On 2",
+      "on 3"
+    ],
+    shift: "On 1",
+    cap: "21480",
+    rtcode: "1003"
   }
 ]
 
@@ -213,8 +247,8 @@ const ganttChartTableEvents = [
   { id : 3, resourceId : 2, name : 'RT11940 Drag true', startDate : '2021-07-23 00:00', endDate : '2021-07-23 09:00', eventColor: '#9F79B7', eventType: 'Pending Shipment' },
   { id : 4, resourceId : 5, name : 'RT11940 Drag true', startDate : '2021-07-23 00:00', endDate : '2021-07-23 09:00', eventColor: '#615E9B', eventType: 'Shipment Created' },
   { id : 5, resourceId : 4, name : 'RT09567 Drag false', startDate : '2021-07-23 22:00', endDate : '2021-07-23 23:59:00', draggable : false, eventColor: '#BDBDBD', eventType : 'Cancellation' },
-  { id : 6, resourceId : 7, name : 'RT09567 Drag false', startDate : '2021-07-23 22:00', endDate : '2021-07-23 23:59:00', draggable : false, eventColor : '#E45E5E', eventType : 'Blocked DN' },
-  { id : 7, resourceId : 6, name : 'RT09567 Drag false', startDate : '2021-07-23 22:00', endDate : '2021-07-23 23:59:00', draggable : false, eventColor : '#FECE66', eventType : 'Soft Overrule' },
+  { id : 6, resourceId : 7, name : 'RT09567 Drag false', startDate : '2021-07-23 00:00', endDate : '2021-07-23 09:00', draggable : false, eventColor : '#E45E5E', eventType : 'Blocked DN' },
+  { id : 7, resourceId : 6, name : 'RT09567 Drag false', startDate : '2021-07-23 05:00', endDate : '2021-07-23 09:00', draggable : false, eventColor : '#FECE66', eventType : 'Soft Overrule' },
 ]
 
 export { tableMapping, tableColumns, ganttChartTableColumns, ganttChartTableMapping, ganttChartTableData, ganttChartTableEvents }

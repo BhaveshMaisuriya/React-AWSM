@@ -246,6 +246,10 @@ const sendRequestsHandler = () =>{
     resourceMargin: 0,
     autoAdjustTimeAxis: false,
     fillTicks: true,
+    eventRenderer:({ eventRecord, renderData  })=>{
+      // customize content for event in here
+      return `<div class="eventCustomize"><div class="white-bg brdr-radius"><p>1</p></div> <div class="blue-bg brdr-radius"><p>M808</p></div> <div class="white-text brdr-radius"><p>${renderData.resource.hours} hrs</p></div> <div class="green-bg brdr-radius"><p>eta 09:00</p></div></div>`
+    },
     features: {
       eventTooltip:{
         disabled : true
@@ -375,6 +379,28 @@ const sendRequestsHandler = () =>{
     })
   }
 
+  const hover = document.getElementsByClassName(`b-sch-event`);//eventCustomize
+  const bottom_target = document.getElementsByClassName(`hover_display`);
+ 
+  if (hover) {
+    hover.onmouseover = function() {
+      console.log("here", hover);
+      bottom_target.style.display = 'flex';
+    }
+    
+    hover.onmouseout = function() {
+      bottom_target.style.display = 'none';
+    }    
+    // hover.addEventListener("mouseenter", event => {      
+      // hover.style.display = 'flex';
+      // bottom_target.setAttribute("style", "display:flex;");
+    // })
+    // hover.addEventListener("mouseleave", event => {
+    //   console.log("here1", hover);
+    //   bottom_target.setAttribute("style", "display:none;");
+    // })
+  }
+
   useEffect(() => {
     Object.keys(ganttChartTableMapping).forEach(e => {
       const el = document.getElementById(`chart-column-${e}-button`)
@@ -417,12 +443,6 @@ const sendRequestsHandler = () =>{
             <BryntumSchedulerPro
               {...schedulerproConfig}
               resources={tableData}
-              eventBodyTemplate={data => {
-                const { originalData } = data
-                return `<div>
-                  ${originalData.name}
-                </div>`
-              }}
               syncDataOnLoad
               ref={schedulerProRef}
               // other props, event handlers, etc

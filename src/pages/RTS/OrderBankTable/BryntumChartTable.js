@@ -246,6 +246,10 @@ const sendRequestsHandler = () =>{
     resourceMargin: 0,
     autoAdjustTimeAxis: false,
     fillTicks: true,
+    eventRenderer:({ eventRecord, renderData  })=>{
+      // customize content for event in here
+      return `<div class="eventCustomize"><span>1</span> <span>M808</span> <span>3 hrs</span> <span>eta 09:00</span></div>`
+    },
     features: {
       eventTooltip:{
         disabled : true
@@ -416,12 +420,6 @@ const sendRequestsHandler = () =>{
             <BryntumSchedulerPro
               {...schedulerproConfig}
               resources={tableData}
-              eventBodyTemplate={data => {
-                const { originalData } = data
-                return `<div>
-                  ${originalData.name}
-                </div>`
-              }}
               syncDataOnLoad
               ref={schedulerProRef}
               // other props, event handlers, etc

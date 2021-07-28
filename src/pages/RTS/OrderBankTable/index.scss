@@ -167,3 +167,19 @@
 .b-panel.b-floating{
     height: auto !important;
 }
+.b-sch-event-content{
+    width: 100%;
+}
+.eventCustomize{
+    width: 100%;
+    text-align: center;
+    span{
+        visibility: hidden;
+    }
+}
+.eventCustomize{
+    &:hover span{
+        visibility: visible;
+        color: white;
+    }
+}

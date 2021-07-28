@@ -208,10 +208,13 @@ const ganttChartTableData =[
 ]
 
 const ganttChartTableEvents = [
-  { id : 1, resourceId : 1, name : 'RT13098 Drag true', startDate : '2021-07-23 00:00', endDate : '2021-07-23 12:00', eventColor: 'blue'},
-  { id : 2, resourceId : 3, name : 'RT11940 Drag true', startDate : '2021-07-23 12:00', endDate : '2021-07-23 14:59', eventColor: 'white' },
-  { id : 3, resourceId : 2, name : 'RT11940 Drag true', startDate : '2021-07-23 00:00', endDate : '2021-07-23 09:00', eventColor: 'blue' },
-  { id : 5, resourceId : 4, name : 'RT09567 Drag false', startDate : '2021-07-23 22:00', endDate : '2021-07-23 23:59:00', draggable : false, eventColor : 'orange' }
+  { id : 1, resourceId : 1, name : 'RT13098 Drag true', startDate : '2021-07-23 00:00', endDate : '2021-07-23 12:00', eventColor: '#84B0E9', eventType: 'Scheduled'},
+  { id : 2, resourceId : 3, name : 'RT11940 Drag true', startDate : '2021-07-23 12:00', endDate : '2021-07-23 14:59', eventColor: '#DBE5F0', eventType: 'RT Availability' },
+  { id : 3, resourceId : 2, name : 'RT11940 Drag true', startDate : '2021-07-23 00:00', endDate : '2021-07-23 09:00', eventColor: '#9F79B7', eventType: 'Pending Shipment' },
+  { id : 4, resourceId : 5, name : 'RT11940 Drag true', startDate : '2021-07-23 00:00', endDate : '2021-07-23 09:00', eventColor: '#615E9B', eventType: 'Shipment Created' },
+  { id : 5, resourceId : 4, name : 'RT09567 Drag false', startDate : '2021-07-23 22:00', endDate : '2021-07-23 23:59:00', draggable : false, eventColor: '#BDBDBD', eventType : 'Cancellation' },
+  { id : 6, resourceId : 7, name : 'RT09567 Drag false', startDate : '2021-07-23 22:00', endDate : '2021-07-23 23:59:00', draggable : false, eventColor : '#E45E5E', eventType : 'Blocked DN' },
+  { id : 7, resourceId : 6, name : 'RT09567 Drag false', startDate : '2021-07-23 22:00', endDate : '2021-07-23 23:59:00', draggable : false, eventColor : '#FECE66', eventType : 'Soft Overrule' },
 ]
 
 export { tableMapping, tableColumns, ganttChartTableColumns, ganttChartTableMapping, ganttChartTableData, ganttChartTableEvents }

@@ -468,6 +468,7 @@
     z-index: 99;
 
     &.hide {
+        display: none;
         visibility: hidden;
         pointer-events: none;
     }

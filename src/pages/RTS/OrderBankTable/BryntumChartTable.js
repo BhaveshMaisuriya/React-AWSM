@@ -54,7 +54,7 @@ function BryntumChartTable(props) {
       {
         id: 1,
         resourceId: 2,
-        name: "",
+        name: "M808",
         startDate  : new Date(2021, 6, 27, 2),
         endDate    : new Date(2021, 6, 27, 5),
         durationUnit: "h",
@@ -63,7 +63,7 @@ function BryntumChartTable(props) {
       {
         id: 2,
         resourceId: 3,
-        name: "",
+        name: "M808",
         startDate  : new Date(2021, 6, 27, 4),
         endDate    : new Date(2021, 6, 27, 6),
         eventColor: "blue",

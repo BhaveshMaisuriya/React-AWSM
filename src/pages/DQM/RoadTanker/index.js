@@ -50,7 +50,6 @@ class RoadTanker extends Component {
     }
     onGetRoadTanker(params)
     onGetRoadTankerAuditLog(payload)
-    //onGetTableInformation()
   }
 
   GetonDownload = async currentPage => {
@@ -67,13 +66,10 @@ class RoadTanker extends Component {
     const {
       onGetRoadTanker,
       onGetRoadTankerAuditLog,
-      // onGetRoadTankerFilter,
       onGetTableInformation,
       onUpdateTableInformation,
-      // auditsRoadTanker,
       filterRoadTanker,
       downloadRoadTanker,
-      // address,
       roadTanker,
       roadTankerIsLoading,
     } = this.props
@@ -88,7 +84,6 @@ class RoadTanker extends Component {
           <Page
             onGetMainTable={onGetRoadTanker}
             onGetAuditLog={onGetRoadTankerAuditLog}
-            // onGetFilter={onGetRoadTankerFilter}
             onGetTableInformation={onGetTableInformation}
             onUpdateTableInformation={onUpdateTableInformation}
             tableColumns={searchFields}
@@ -113,7 +108,6 @@ class RoadTanker extends Component {
 const mapStateToProps = ({ roadTanker }) => ({
   roadTanker: roadTanker.roadTanker,
   roadTankerIsLoading: roadTanker.isLoading,
-  // auditsRoadTanker: roadTanker.auditsRoadTanker,
   filterRoadTanker: roadTanker.filterRoadTanker,
   downloadRoadTanker: roadTanker.downloadRoadTanker,
 })
@@ -121,7 +115,6 @@ const mapStateToProps = ({ roadTanker }) => ({
 const mapDispatchToProps = dispatch => ({
   onGetRoadTanker: params => dispatch(getRoadTanker(params)),
   onGetRoadTankerAuditLog: payload => dispatch(getRoadTankerAuditLog(payload)),
-  // onGetRoadTankerFilter: payload => dispatch(getRoadTankerFilter(payload)),
   onGetTableInformation: () => dispatch(getTableInformation()),
   onUpdateTableInformation: event => dispatch(updateTableInformation(event)),
   onGetDownloadRoadTanker: params => dispatch(getDownloadRoadTanker(params)),

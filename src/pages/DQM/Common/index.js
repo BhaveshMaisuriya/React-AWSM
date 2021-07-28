@@ -31,6 +31,7 @@ import {
 import "./style.scss"
 import SettingsIcon from "@material-ui/icons/Settings"
 import downloadExcelIcon from "../../../assets/images/AWSM-Excel.svg"
+import { DownloadIcon } from "./icon"
 import DownloadExcel from "../../../components/Common/DownloadExcel"
 import AWSMAlert from "../../../components/Common/AWSMAlert"
 import VarianceControl from "../SalesAndInventory/VarianceControl"
@@ -259,7 +260,11 @@ class Pages extends Component {
       pathName === "/retail-customer" ||
       pathName === "/commercial-customer" ? (
       <ModalComponent
-        data={this.props.tableData && this.props.tableData.list ? this.props.tableData.list[this.state.selectedItem] : null}
+        data={
+          this.props.tableData && this.props.tableData.list
+            ? this.props.tableData.list[this.state.selectedItem]
+            : null
+        }
         visible={modalTI}
         onCancel={this.toggleTI}
         refreshMainTable={this.getCustomerData}
@@ -311,7 +316,6 @@ class Pages extends Component {
       varianceControlData,
       overrideActionColumn,
     } = this.props
-
     if (!tableData || tableData.length === 0) return ""
     return (
       <React.Fragment>
@@ -359,10 +363,10 @@ class Pages extends Component {
               >
                 <div className="vertical-hr-right">
                   <button
-                    className="btn btn-outline-primary"
+                    className="btn btn-outline-primary excel-download-btn"
                     onClick={() => this.downloadExcel()}
                   >
-                    <img src={downloadExcelIcon} />
+                    <DownloadIcon />
                     {this.state.loader === true ? (
                       <Fragment> Downloading ... </Fragment>
                     ) : (

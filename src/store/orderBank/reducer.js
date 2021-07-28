@@ -13,6 +13,8 @@ import {
   SEND_DN_STATUS_REQUEST_SUCCESS,
   GET_ORDER_BANK_AUDITLOG_SUCCESS,
   GET_ORDER_BANK_AUDITLOG_FAIL,
+  PROCESS_PAYMENT_IN_GANTT_CHART_FAIL,
+  PROCESS_PAYMENT_IN_GANTT_CHART_SUCCESS
 } from "./actionTypes"
 
 const initialState = {
@@ -106,6 +108,19 @@ const RTSOrderBank = (state = initialState, action) => {
       }
 
     case GET_ORDER_BANK_AUDITLOG_FAIL:
+      return {
+        ...state,
+        error: action.payload,
+      }
+
+    case PROCESS_PAYMENT_IN_GANTT_CHART_SUCCESS:
+      notify.success("A shipment has been successfully created in SAP")
+      return {
+        ...state,
+      }
+
+    case PROCESS_PAYMENT_IN_GANTT_CHART_FAIL:
+      notify.error("A shipment has been fail created in SAP")
       return {
         ...state,
         error: action.payload,

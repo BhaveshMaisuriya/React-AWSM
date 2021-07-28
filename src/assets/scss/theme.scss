@@ -217,8 +217,10 @@ span.flatpickr-weekday {
 
 .badge.badge-pill {
   border-radius: 12px;
-  width: 90px;
+  width: auto;
   line-height: 20px;
+  font-size: 11px;
+  min-width: 120px;
 }
 
 .badge.badge-primary {
@@ -229,6 +231,11 @@ span.flatpickr-weekday {
 .badge.badge-secondary {
   color: #d50000;
   background-color: #f2b2b2;
+}
+
+.badge.badge-tertiary {
+  color: #fdb924;
+  background-color: #fff2d6;
 }
 
 ::-webkit-scrollbar {
@@ -244,4 +251,19 @@ span.flatpickr-weekday {
 ::-webkit-scrollbar-thumb {
   border-radius: 15px;
   box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
+}
+
+::placeholder {
+  color: rgba(16, 16, 16, 0.3) !important;
+  opacity: 1; /* Firefox */
+}
+
+:-ms-input-placeholder {
+  /* Internet Explorer 10-11 */
+  color: rgba(16, 16, 16, 0.3) !important;
+}
+
+::-ms-input-placeholder {
+  /* Microsoft Edge */
+  color: rgba(16, 16, 16, 0.3) !important;
 }

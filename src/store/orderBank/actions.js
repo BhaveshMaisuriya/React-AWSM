@@ -27,6 +27,9 @@ import {
   GET_ORDER_BANK_AUDITLOG,
   GET_ORDER_BANK_AUDITLOG_SUCCESS,
   GET_ORDER_BANK_AUDITLOG_FAIL,
+  PROCESS_PAYMENT_IN_GANTT_CHART,
+  PROCESS_PAYMENT_IN_GANTT_CHART_SUCCESS,
+  PROCESS_PAYMENT_IN_GANTT_CHART_FAIL
 } from "./actionTypes"
 
 export const getRTSOrderBankTableData = (params) => ({
@@ -168,5 +171,19 @@ export const getOrderBankAuditLogSuccess = response => ({
 
 export const getOrderBankAuditLogFail = error => ({
   type: GET_ORDER_BANK_AUDITLOG_FAIL,
+  payload: error,
+})
+
+export const processPaymentInGanttChart = () => ({
+  type: PROCESS_PAYMENT_IN_GANTT_CHART,
+})
+
+export const processPaymentInGanttChartSuccess = response => ({
+  type: PROCESS_PAYMENT_IN_GANTT_CHART_SUCCESS,
+  payload: response,
+})
+
+export const processPaymentInGanttChartFail = error => ({
+  type: PROCESS_PAYMENT_IN_GANTT_CHART_FAIL,
   payload: error,
 })

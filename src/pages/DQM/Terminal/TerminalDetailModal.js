@@ -45,12 +45,20 @@ class TerminalDetailModal extends PureComponent {
       updateDictionary: {},
       isConfirm: false,
       dataSource: props.currentTerminal,
+      isValidated: false,
     }
   }
 
   componentDidMount() {
     const { fetchTableInformation, data } = this.props
     fetchTableInformation(data.code)
+  }
+
+  componentDidUpdate(prevProps, prevStates){
+    const { dataSource } = this.state
+    if(!isEqual(prevStates.dataSource, dataSource)){
+      this.validate()
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -95,6 +103,37 @@ class TerminalDetailModal extends PureComponent {
     }
   }
 
+  validate(){
+    const { dataSource } = this.state
+    const {status, storage} = dataSource
+    let exceedValues = []
+    if( storage?.loading_bay_no > 100 || storage?.loading_time > 1440 || storage?.turnaround_time > 1440 ){
+      exceedValues.push(1)
+    }
+    for (let i = 1; i < 50; i++) {
+     if(storage?.[`product_${i}`]){
+       if(storage?.[`product_${i}`]?.flow_rate >10000 || 
+          storage?.[`product_${i}`]?.volume_capping_volume > 10000000 || 
+          storage?.[`product_${i}`]?.volume_capping_volume_2 > 10000000){
+          exceedValues.push(1)
+       }
+     }else{
+       break;
+     }
+    }
+    if(status?.status_awsm === "Temporary Inactive" ){
+      if(!status?.inactive_date_range_1?.date_from || !status?.inactive_date_range_1?.date_to ){
+        exceedValues.push(1)
+      }
+    }
+    if(
+      exceedValues.length > 0
+    ){
+      this.setState({isValidated: true})
+    }else{
+      this.setState({isValidated: false})
+    }
+  }
   handleExitConfirmation = () => {
     if (!isEqual(this.state.dataSource, this.props.currentTerminal))
       return (
@@ -321,6 +360,7 @@ class TerminalDetailModal extends PureComponent {
                     Cancel
                   </button>
                   <Button
+                    disabled={this.state.isValidated}
                     onClick={this.handleUpdate.bind(this)}
                     color="primary"
                   >

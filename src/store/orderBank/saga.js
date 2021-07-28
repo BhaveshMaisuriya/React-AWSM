@@ -10,6 +10,7 @@ import {
   REFRESH_ORDER_BANK_DN,
   SEND_DN_STATUS_REQUEST,
   GET_ORDER_BANK_AUDITLOG,
+  PROCESS_PAYMENT_IN_GANTT_CHART
 } from "./actionTypes"
 
 import {
@@ -30,7 +31,9 @@ import {
   sendDNStatusRequestSuccess,
   sendDNStatusRequestFail,
   getOrderBankAuditLogSuccess,
-  getOrderBankAuditLogFail
+  getOrderBankAuditLogFail,
+  processPaymentInGanttChartSuccess,
+  processPaymentInGanttChartFail
 } from "./actions"
 import {
   getOrderBank,
@@ -124,6 +127,15 @@ function* onGetOrderBankAuditLog() {
   }
 }
 
+function* sendRequestPaymentInGanttChart({ params={} }){
+  try {
+    // send request
+    yield put(processPaymentInGanttChartSuccess())
+  } catch (error) {
+    yield put(processPaymentInGanttChartFail(error))
+  }
+}
+
 function* orderBankSaga() {
   yield takeLatest(GET_ORDERBANK, onGetOrderbank)
   yield takeLatest(GET_RTS_ORDER_BANK_TABLE_DATA, onGetRTSOrderBank)
@@ -143,6 +155,7 @@ function* orderBankSaga() {
   yield takeLatest(SEND_ORDER_BANK_DN, onSendOrderBankDN)
   yield takeLatest(SEND_DN_STATUS_REQUEST, onSendDNStatusRequest)
   yield takeLatest(GET_ORDER_BANK_AUDITLOG, onGetOrderBankAuditLog)
+  yield takeLatest(PROCESS_PAYMENT_IN_GANTT_CHART , sendRequestPaymentInGanttChart)
 }
 
 export default orderBankSaga

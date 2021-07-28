@@ -33,6 +33,7 @@ import {
 } from "../../../store/commercialCustomer/actions"
 import AWSMAlert from "../../../components/Common/AWSMAlert"
 import { isScheduler } from "../../../helpers/auth_helper"
+import { isEqual } from "lodash"
 import { runValidation } from "../Common/helper"
 import CloseButton from "../../../components/Common/CloseButton"
 
@@ -112,6 +113,14 @@ const CommercialCustomerModal = props => {
     }
   }
 
+  const handleExitConfirmation = () => {
+    return !isEqual(currentCommercialDetail, props.currentCommercialDetail) ? (
+      <ExitConfirmation onExit={onConfirmExit} onCancel={onConfirmCancel} />
+    ) : (
+      onConfirmExit()
+    )
+  }
+
   if (!data) {
     return null
   }
@@ -135,12 +144,7 @@ const CommercialCustomerModal = props => {
             closeAlert={() => setAlert(false)}
           />
           <ModalBody className="position-relative">
-            {isConfirm && (
-              <ExitConfirmation
-                onExit={onConfirmExit}
-                onCancel={onConfirmCancel}
-              />
-            )}
+            {isConfirm && handleExitConfirmation()}
             <>
               <div className="d-flex justify-content-between">
                 <div className="w-50 mr-4">
@@ -279,7 +283,7 @@ const CommercialCustomerModal = props => {
               </TabContent>
             </div>
           </ModalBody>
-          {!scheduler && (
+          {!scheduler && !isConfirm && (
             <ModalFooter>
               <button onClick={handleClose} className="btn-sec">
                 Cancel

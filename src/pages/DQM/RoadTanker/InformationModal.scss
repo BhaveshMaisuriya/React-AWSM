@@ -5,9 +5,18 @@
   .form-control[readonly] {
     border: 1px solid #d9d9d9;
     background-color: #eeeeee;
+    color: rgba(16, 16, 16, 0.3) !important;
+  }
+  .css-uc78jj-MuiInputBase-root-MuiOutlinedInput-root.Mui-disabled {
+    border: 1px solid #d9d9d9;
+    background-color: #eeeeee;
   }
 
-  button .close{
+  .css-4a49d4-MuiSvgIcon-root-MuiSelect-icon {
+    opacity: 0.3;
+  }
+
+  button .close {
     padding-left: 0px !important;
     margin-left: 0px !important;
     // display: flex;

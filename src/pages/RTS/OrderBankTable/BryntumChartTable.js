@@ -1,165 +1,457 @@
-import React, { Component, useMemo, useState, useEffect, useRef } from "react"
+import React, { useEffect, useMemo, useRef, useState } from "react"
 import { connect } from "react-redux"
-import { Row, Col } from "reactstrap"
-import NoDataIcon from "../../../assets/images/AWSM-No-Data-Available.svg"
 import {
-  ganttChartTableColumns,
+  Row,
+  Col,
+  Popover,
+  PopoverBody,
+} from "reactstrap"
+import { createPopper } from "@popperjs/core"
+import {
   ganttChartTableMapping,
   ganttChartTableData,
+  ganttChartTableEvents,
 } from "./tableMapping"
 import "./index.scss"
-import { BryntumScheduler } from "@bryntum/schedulerpro-react"
+import { BryntumSchedulerPro } from "@bryntum/schedulerpro-react"
 import "@bryntum/schedulerpro/schedulerpro.classic-dark.css"
 import "@bryntum/schedulerpro/schedulerpro.classic-light.css"
 import "@bryntum/schedulerpro/schedulerpro.classic.css"
 import "@bryntum/schedulerpro/schedulerpro.material.css"
 import "@bryntum/schedulerpro/schedulerpro.stockholm.css"
-import moment from "moment"
+import "../style.scss"
+import { ReactSVG } from "react-svg"
+import ArrowDropDownIcon from "../../../assets/images/AWSM-Caret-Down-Icon.svg"
+import SearchIcon from "../../../assets/images/AWSM-search.svg"
+import Checkbox from "@material-ui/core/Checkbox"
+import selectAllIcon3 from "../../../assets/images/AWSM-Checkbox.svg"
+import selectAllIcon2 from "../../../assets/images/AWSM-Checked-box.svg"
+import selectAllIcon from "../../../assets/images/AWSM-Select-all-Checkbox.svg"
+import ConfirmDNStatusModal from "./confirmDNStatusModal"
+import { processPaymentInGanttChart } from "../../../store/actions"
 
-function BryntumChartTable(props) {
-  const schedulerConfig = {
-    eventColor: null,
-    timeRangesFeature: {
-      narrowThreshold: 10,
-    },
-    autoHeight: true,
-    rowHeight: 40,
-    barMargin: 1,
-    features : {
-      eventDrag : {
-          constrainDragToResource : true,
-          nonWorkingTime : true
-      },
-      eventTooltip : {
-        // align : 't-b', // Align left to right,
-        template : data => `
-        <div className="hover_tooltip">
-          <p className="white-bg brdr-radius">1</p>
-          <p className="blue-bg brdr-radius">M808</p>
-          <p className="white-text brdr-radius">3 hrs</p>
-          <p className="green-bg brdr-radius">eta 09:00</p>
-        </div>
-        `
-    },
-      timeRanges             : {
-          showCurrentTimeLine : true
-      }
-  },
-    startDate        : new Date(2021, 6, 27, 0),
-    endDate          : new Date(2021, 6, 27, 24),
-    viewPreset: "hourAndDay",
-    useInitialAnimation: "slide-from-left",
-    zoomKeepsOriginalTimespan: false,
-    events: [
-      {
-        id: 1,
-        resourceId: 2,
-        name: "M808",
-        startDate  : new Date(2021, 6, 27, 2),
-        endDate    : new Date(2021, 6, 27, 5),
-        durationUnit: "h",
-        eventColor: "sky",
-      },
-      {
-        id: 2,
-        resourceId: 3,
-        name: "M808",
-        startDate  : new Date(2021, 6, 27, 4),
-        endDate    : new Date(2021, 6, 27, 6),
-        eventColor: "blue",
-        durationUnit: "h",
-      },
-      {
-        id: 3,
-        resourceId: 5,
-        name: "",
-        startDate  : new Date(2021, 6, 27, 1),
-        endDate    : new Date(2021, 6, 27, 5, 30),
-        eventColor: "blue",
-        durationUnit: "h",
-      },
-      {
-        id: 4,
-        resourceId: 1,
-        name: "",
-        startDate  : new Date(2021, 6, 27, 1),
-        endDate    : new Date(2021, 6, 27, 10, 30),
-        eventColor: "red",
-        durationUnit: "h",
-      },
-      {
-        id: 5,
-        resourceId: 4,
-        name: "",
-        startDate  : new Date(2021, 6, 27, 4, 30),
-        endDate    : new Date(2021, 6, 27, 10),
-        draggable: false,
-        eventColor: "red",
-        durationUnit: "h",
-      },
-    ],
-    columns: [],
-    resources: ganttChartTableData,
-    multiEventSelect : true,
-  }
-
-  for (const tableMap of Object.keys(ganttChartTableMapping)) {
-    schedulerConfig.columns.push({
-      text: ganttChartTableMapping[tableMap].label,
-      field: tableMap,
-      width: "auto",
-    })
-  }
-
-  const para = document.createElement("p");
-  const node = document.createTextNode("M808");
-  para.appendChild(node);
-  // const element = document.getElementsByClassName("b-sch-event-content");
-  // element.appendChild(para);
-  // var target = document.getElementsByClassName("b-has-content")[0];
-  // var count = target && target.length;
-  var target = document.querySelector(".b-sch-event-content");
-  var subtarget = document.querySelector(".hover_display");
-  // var html = '<h1 id="title">Some Title</h1><span style="display:inline-block; width=100px;">Some arbitrary text</span>';
+const ShiftPopover = ({ record, onChange }) => {
+  const [popoverOpen, setPopoverOpen] = useState(false)
+  const toggle = () => setPopoverOpen(!popoverOpen)
   
-  if(target){
-    target.addEventListener("mouseover", function(e) {
-      console.log("here", target)
-      // document.getElementsByClassName("b-sch-event-content").innerHTML = html;
-      // target.innerHTML(html);
-      // appendHtml(document.body, html);
-      subtarget.style.display = 'flex';
-    });
-    target.addEventListener("mouseout", function(e) {
-      subtarget.style.display = 'none';
-    });
+  return (
+    <div className="w-100">
+      <button
+        id={`chart-shift-cell-${record.id}`}
+        type={"button"}
+        onBlur={() => setPopoverOpen(false)}
+      >
+        <div>{record.shift}</div>
+        <ReactSVG src={ArrowDropDownIcon} />
+      </button>
+      <Popover
+        placement="bottom"
+        isOpen={popoverOpen}
+        target={`chart-shift-cell-${record.id}`}
+        toggle={toggle}
+      >
+        <PopoverBody className="p-0">
+          {record.shift_list.map(e => (
+            <div className="shift-item" onClick={() => onChange(record.id, e)}>
+              {e}
+            </div>
+          ))}
+        </PopoverBody>
+      </Popover>
+    </div>
+  )
+}
+
+const CustomIcon = () => {
+  // untick checkbox icon
+  return <img src={selectAllIcon3} alt="icon" />
+}
+const CustomIcon2 = () => {
+  // ticked checkbox icon
+  return <img src={selectAllIcon2} alt="icon" />
+}
+const CustomIcon3 = () => {
+  // indeterminate icon
+  return <img src={selectAllIcon} alt="icon" />
+}
+
+const ChartColumnFilter = ({
+  filterData = [],
+  filterKey,
+  onApply,
+  onReset,
+}) => {
+  const [data, setData] = useState(
+    [...new Set(filterData)].map(e => ({
+      text: e,
+      checked: true,
+      visible: true,
+    }))
+  )
+
+  const onItemChange = index => {
+    const newData = [...data]
+    if (newData[index]) {
+      newData[index].checked = !newData[index].checked
+    }
+    setData(newData)
   }
 
- 
-  // var subTarget = document.getElementsByClassName(".b-sch-event-content");
-  // target.addEventListener("mouseover", function(e) {
-  //   subTarget.classList.remove("active");
-  // });
-  // // target.addEventListener("mouseout", mOut, false);
+  const isCheckAll = useMemo(() => {
+    return data.length === data.filter(e => e.checked).length
+  }, [data])
 
-  // function mOver() {
-  //   subTarget.setAttribute("style", "display:block;")
-  // }
-  // function mOut() {  
-  //   subTarget.setAttribute("style", "display:none;")
-  // }
+  const checkAllChange = () => {
+    setData([...data].map(e => ({ ...e, checked: !isCheckAll })))
+  }
+
+  const onInputSearchChange = event => {
+    const value = event.target.value.toString()
+    setData(
+      [...data].map(e => ({
+        ...e,
+        visible:
+          !value ||
+          e.text
+            .toString()
+            .toLowerCase()
+            .includes(value.toString().toLowerCase()),
+      }))
+    )
+  }
+
+  const apply = () => {
+    if (onApply) {
+      onApply({ filterKey })
+    }
+  }
 
   return (
-    <div className="rts-table-container scroll" id="scrollableDiv">
-      <div className="container-orderbank" style={{ maxWidth: "100%" }}>
-        <Row style={{}} className="w-100">
-          <Col lg={12}>
-            <BryntumScheduler {...schedulerConfig} />
-          </Col>
-        </Row>
+    <div
+      className={`chart-column-filter hide`}
+      id={`chart-tooltip-${filterKey}`}
+    >
+      <div className="chart-column-input-search">
+        <input onChange={onInputSearchChange} />
+        <ReactSVG src={SearchIcon} />
+      </div>
+      {data.map(
+        (e, index) =>
+          e.visible && (
+            <div
+              className={`chart-column-select-item ${
+                e.checked ? "checked" : " "
+              }`}
+            >
+              <Checkbox
+                checked={e.checked}
+                onChange={() => onItemChange(index)}
+                icon={<CustomIcon />}
+                checkedIcon={<CustomIcon2 />}
+                style={{
+                  height: "20px",
+                  width: "5px",
+                  marginLeft: "5px",
+                  marginTop: "-1px",
+                }}
+              />
+              <label>{e.text}</label>
+            </div>
+          )
+      )}
+      <div className="chart-column-footer">
+        <div>
+          <Checkbox
+            checked={isCheckAll}
+            onChange={checkAllChange}
+            icon={<CustomIcon3 />}
+            checkedIcon={<CustomIcon2 />}
+            style={{
+              height: "20px",
+              width: "5px",
+              marginLeft: "5px",
+              marginTop: "-1px",
+            }}
+          />
+          <label>Select All</label>
+        </div>
+        <div>
+          <button className="btn btn-outline-primary" onClick={onReset}>
+            Reset
+          </button>
+          <button className="btn btn-primary" onClick={apply}>
+            Apply
+          </button>
+        </div>
       </div>
     </div>
   )
 }
 
-export default BryntumChartTable
+function BryntumChartTable(props) {
+  const [tableData, setTableData] = useState(ganttChartTableData)
+  const [modal, setModal] = useState(false);
+  const [dropdownSelectedItem, setDropdownSelectedItem] =  useState(null);
+  const toggle = () => setModal(!modal);
+  const schedulerProRef = useRef()
+  const [filterList, setFilterList] = useState(
+    Object.keys(ganttChartTableMapping).map(e => ({
+      key: e,
+      isOpen: false,
+    }))
+  )
+
+  const updateModalHandler = (type) =>{
+    let data = {};
+    switch(type){
+        case 'shipment':{
+            data.header = 'Create Shipment'
+            data.body = 'Shipment Creation'
+            break
+        }
+        default:{
+            data.header = ''
+            data.body = ''
+            break
+        }
+    }
+    toggle()
+    setDropdownSelectedItem(data)
+}
+
+const sendRequestsHandler = () =>{
+    toggle()
+    props.processPaymentInGanttChart('abc')
+}
+
+  const schedulerproConfig = {
+    columns: [],
+    events: ganttChartTableEvents,
+    autoHeight: true,
+    rowHeight: 40,
+    barMargin: 0,
+    resourceMargin: 0,
+    autoAdjustTimeAxis: false,
+    fillTicks: true,
+    features : {
+        eventDrag : {
+            constrainDragToResource : true,
+            nonWorkingTime : true
+        },
+        nonWorkingTime         : true,
+        resourceNonWorkingTime : true,
+        timeRanges             : {
+            showCurrentTimeLine : true
+        },
+    },
+    features: {
+      eventTooltip:{
+        disabled : true
+      },
+      eventCopyPaste : false,
+      eventDrag: {
+        constrainDragToResource: true,
+        nonWorkingTime: true,
+      },
+      nonWorkingTime: true,
+      resourceNonWorkingTime: true,
+      timeRanges: {
+        showCurrentTimeLine: false,
+      },
+    },
+    startDate: "2021-07-23",
+    resourceNonWorkingTimeFeature: true,
+    viewPreset: "hourAndDay",
+    nonWorkingTimeFeature: true,
+    resourceTimeRangesFeature: true,
+    maxTimeAxisUnit: "hour",
+    eventMenuFeature: {
+        items: {
+        editEvent : false,
+        deleteEvent : false,
+          cancel:{
+            text: 'Cancel',
+            onItem({ source, eventRecord }) {
+              updateModalHandler()
+            }
+          },
+          sendOrderForDS:{
+            text: 'Send OrderS For DS',
+            onItem({ source, eventRecord }) {
+              updateModalHandler()
+            }
+          },
+          createShipment:{
+            text: 'Create Shipment',
+            onItem({ source, eventRecord }) {
+              updateModalHandler('shipment')
+            }
+          },
+          terminalRelay:{
+            text: 'Terminal Relay',
+            onItem({ source, eventRecord }) {
+              updateModalHandler()
+            }
+          },
+          plannedLoadTime:{
+            text: 'Planned Load Time',
+            onItem({ source, eventRecord }) {
+              updateModalHandler()
+            }
+          },
+        },
+    // viewPreset: {
+    //   base: "hourAndDay",
+    //   id: "customHourAndDayPresent",
+    //   headers: [
+    //     {
+    //       unit: "day",
+    //       dateFormat: "dddd. do MMM YYYY",
+    //     },
+    //     {
+    //       unit: "hour",
+    //       dateFormat: "HH",
+    //       increment: 1,
+    //     },
+    //   ],
+    // },
+  }
+}
+
+  const onShiftDateChange = (recordId, value) => {
+    const scheduler = schedulerProRef.current.instance
+    const recordIndex = tableData.findIndex(e => e.id === recordId)
+    if (recordIndex >= 0) {
+      tableData[recordIndex] = { ...tableData[recordIndex], shift: value }
+    }
+    scheduler.resourceStore.data = [...tableData]
+    setTableData([...tableData])
+  }
+
+  for (const tableMap of Object.keys(ganttChartTableMapping)) {
+    schedulerproConfig.columns.push({
+      text: ganttChartTableMapping[tableMap].label,
+      field: tableMap,
+      width: "auto",
+      editor: null,
+      renderer: ({ value, column, record }) => {
+        switch (column.field) {
+          case "vehicle": {
+            return (
+              <div className="chart-vehicle-cell">
+                <div className="value">{value}</div>
+                {record.pto && <div className="suffix">{record.pto}</div>}
+              </div>
+            )
+          }
+          case "shift": {
+            return (
+              <div className="chart-shift-cell">
+                <ShiftPopover record={record} onChange={onShiftDateChange} />
+              </div>
+            )
+          }
+        }
+        return <div>{value}</div>
+      },
+      headerRenderer: ({ column }) => {
+        return `
+                <div class="d-flex align-items-center chart-header" id="chart-column-${column.data.field}">
+                  <div>${column.data.text}</div>
+                  <button id="chart-column-${column.data.field}-button">
+                    <svg width="22px" height="22px" viewBox="0 0 22 22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                        <title>AWSM Calendar</title>
+                        <g id="AWSM-Calendar" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                            <g id="TF-Icon---Dropdown" transform="translate(1.000000, 3.000000)" fill="currentColor">
+                                <polygon id="Dropdown-Icon-Copy-2" points="6 6 11 11 16 6"></polygon>
+                            </g>
+                        </g>
+                    </svg>
+                  </button>
+                </div>`
+      },
+    })
+  }
+
+  useEffect(() => {
+    Object.keys(ganttChartTableMapping).forEach(e => {
+      const el = document.getElementById(`chart-column-${e}-button`)
+      if (el) {
+        el.addEventListener("click", event => {
+          event.stopPropagation()
+          event.preventDefault()
+          const tooltip = document.getElementById(`chart-tooltip-${e}`)
+          createPopper(el, tooltip, {
+            placement: "bottom",
+            modifiers: [
+              {
+                name: "offset",
+                options: {
+                  offset: [0, 20],
+                },
+              },
+            ],
+          })
+          tooltip.classList.toggle("hide")
+          Object.keys(ganttChartTableMapping).forEach(f => {
+            if (f !== e) {
+              const hideEl = document.getElementById(`chart-tooltip-${f}`)
+              hideEl.classList.add("hide")
+            }
+          })
+        })
+      }
+    })
+  }, [])
+
+  return (
+    <div className="rts-table-container scroll" id="scrollableDiv">
+      <div
+        className="container-orderbank gant-chart-table"
+        style={{ maxWidth: "100%" }}
+      >
+        <Row style={{}} className="w-100">
+          <Col lg={12}>
+            <BryntumSchedulerPro
+              {...schedulerproConfig}
+              resources={tableData}
+              eventBodyTemplate={data => {
+                const { originalData } = data
+                return `<div>
+                  ${originalData.name}
+                </div>`
+              }}
+              syncDataOnLoad
+              ref={schedulerProRef}
+              // other props, event handlers, etc
+            />
+          </Col>
+        </Row>
+        {filterList.map(e => {
+          return (
+            <ChartColumnFilter
+              key={e.key}
+              filterKey={e.key}
+              filterData={ganttChartTableData.map(v => v[e.key])}
+            />
+          )
+        })}
+      </div>
+      <ConfirmDNStatusModal 
+        isOpen={modal} 
+        onSend={sendRequestsHandler} 
+        onCancel={toggle} 
+        headerContent={dropdownSelectedItem?.header || ''} 
+        bodyContent={`Are you sure you want to proceed for ${dropdownSelectedItem?.body || ''}`}/>
+    </div>
+  )
+}
+
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        processPaymentInGanttChart: (params) => dispatch(processPaymentInGanttChart(params))
+    }
+}
+
+export default  connect(null, mapDispatchToProps)(BryntumChartTable) 

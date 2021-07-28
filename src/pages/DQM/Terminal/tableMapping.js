@@ -19,6 +19,7 @@ const tableMapping = {
     label: "TERMINAL CODE",
     columnSize: "cell-text",
     type: "link",
+    key: "frozen",
   },
   name: {
     label: "TERMINAL NAME",

@@ -430,6 +430,8 @@ class index extends Component {
                 isOpen={DNStatus.isOpenConfirmModal}
                 onSend={this.onSendRequestOnDNStatusHandler.bind(this)}
                 onCancel={() => this.setState({ DNStatus: { isOpenConfirmModal:false }} )}
+                headerContent = {`Send for DN`}
+                bodyContent = {`Are you sure you want to send this order for DN Creation?`}
                 />
                 )
               }

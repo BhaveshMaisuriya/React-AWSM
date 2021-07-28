@@ -16,10 +16,12 @@ const tableMapping = {
     label: "RECORD ID",
     columnSize: "cell-text",
     type: "link",
+    key: "frozen",
   },
   ship_to_party: {
     label: "SHIP TO PARTY",
     columnSize: "cell-text",
+    key: "frozen",
   },
   product: {
     label: "PRODUCT",
@@ -28,7 +30,7 @@ const tableMapping = {
   override: {
     label: "OVERRIDE ACTION",
     columnSize: "cell-text",
-    type:"override"
+    type: "override",
   },
   data_source: {
     label: "SOURCE OF DATA",

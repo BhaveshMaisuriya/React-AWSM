@@ -35,6 +35,7 @@ import closeIcon from "../../../assets/images/AWSM-Cancel-Icon.svg"
 import { isScheduler } from "../../../helpers/auth_helper"
 import ExitConfirmation from "../../../components/Common/ExitConfirmation"
 import { runValidation } from "../Common/helper"
+import { isEqual } from "lodash"
 
 const RetailCustomerModal = props => {
   const {
@@ -112,6 +113,14 @@ const RetailCustomerModal = props => {
     }
   }
 
+  const handleExitConfirmation = () => {
+    return !isEqual(currentRetailDetail, props.currentRetailDetail) ? (
+      <ExitConfirmation onExit={onConfirmExit} onCancel={onConfirmCancel} />
+    ) : (
+      onConfirmExit()
+    )
+  }
+
   if (!data) {
     return null
   }
@@ -135,12 +144,7 @@ const RetailCustomerModal = props => {
             closeAlert={() => setAlert(false)}
           />
           <ModalBody>
-            {isConfirm && (
-              <ExitConfirmation
-                onExit={onConfirmExit}
-                onCancel={onConfirmCancel}
-              />
-            )}
+            {isConfirm && handleExitConfirmation()}
             <>
               <div className="d-flex justify-content-between">
                 <div className="w-50 mr-4">
@@ -285,7 +289,7 @@ const RetailCustomerModal = props => {
       ) : (
         <Skeleton variant="rect" width={800} height={300} />
       )}
-      {!scheduler && (
+      {!scheduler && !isConfirm && (
         <ModalFooter>
           <button onClick={handleClose} className="btn-sec">
             Cancel

@@ -33,7 +33,7 @@ import { processPaymentInGanttChart } from "../../../store/actions"
 const ShiftPopover = ({ record, onChange }) => {
   const [popoverOpen, setPopoverOpen] = useState(false)
   const toggle = () => setPopoverOpen(!popoverOpen)
-  
+
   return (
     <div className="w-100">
       <button
@@ -81,8 +81,21 @@ const ChartColumnFilter = ({
   onApply,
   onReset,
 }) => {
+
+  const originalDataList = useMemo(() => {
+    return filterData.map(e => e[filterKey])
+  }, [filterData]);
+
+  useEffect(() => {
+    setData([...new Set(originalDataList)].map(e => ({
+      text: e,
+      checked: true,
+      visible: true,
+    })))
+  }, [originalDataList])
+
   const [data, setData] = useState(
-    [...new Set(filterData)].map(e => ({
+    [...new Set(originalDataList)].map(e => ({
       text: e,
       checked: true,
       visible: true,
@@ -233,18 +246,6 @@ const sendRequestsHandler = () =>{
     resourceMargin: 0,
     autoAdjustTimeAxis: false,
     fillTicks: true,
-    features : {
-      
-        eventDrag : {
-            constrainDragToResource : true,
-            nonWorkingTime : true
-        },
-        nonWorkingTime         : true,
-        resourceNonWorkingTime : true,
-        timeRanges             : {
-            showCurrentTimeLine : true
-        },
-    },
     features: {
       eventTooltip:{
         disabled : true
@@ -299,7 +300,8 @@ const sendRequestsHandler = () =>{
               updateModalHandler()
             }
           },
-        },
+        }
+    },
     viewPreset: {
       base: "hourAndDay",
       id: "customHourAndDayPresent",
@@ -314,8 +316,7 @@ const sendRequestsHandler = () =>{
           increment: 1,
         },
       ],
-    },
-  }
+    }
 }
 
   const onShiftDateChange = (recordId, value) => {
@@ -432,16 +433,16 @@ const sendRequestsHandler = () =>{
             <ChartColumnFilter
               key={e.key}
               filterKey={e.key}
-              filterData={ganttChartTableData.map(v => v[e.key])}
+              filterData={tableData}
             />
           )
         })}
       </div>
-      <ConfirmDNStatusModal 
-        isOpen={modal} 
-        onSend={sendRequestsHandler} 
-        onCancel={toggle} 
-        headerContent={dropdownSelectedItem?.header || ''} 
+      <ConfirmDNStatusModal
+        isOpen={modal}
+        onSend={sendRequestsHandler}
+        onCancel={toggle}
+        headerContent={dropdownSelectedItem?.header || ''}
         bodyContent={`Are you sure you want to proceed for ${dropdownSelectedItem?.body || ''}`}/>
     </div>
   )
@@ -454,4 +455,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-export default  connect(null, mapDispatchToProps)(BryntumChartTable) 
+export default  connect(null, mapDispatchToProps)(BryntumChartTable)

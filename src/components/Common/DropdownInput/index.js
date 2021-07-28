@@ -2,12 +2,21 @@ import React, { useEffect, useRef, useState } from "react"
 import AWSMDropdown from "../Dropdown"
 import "./dropdownInput.scss"
 
-const DropdownInput = ({value, items, title, onChange, onAddItem, acceptDuplicate = false, RowComponent = null, disabled}) => {
+const DropdownInput = ({
+  value,
+  items,
+  title,
+  onChange,
+  onAddItem,
+  acceptDuplicate = false,
+  RowComponent = null,
+  disabled,
+}) => {
   const [inputMode, setInputMode] = useState(false)
   const [inputValue, setInputValue] = useState("")
   const inputRef = useRef(null)
 
-  const onInputValueChange = (event) => {
+  const onInputValueChange = event => {
     setInputValue(event.target.value)
   }
 
@@ -18,7 +27,7 @@ const DropdownInput = ({value, items, title, onChange, onAddItem, acceptDuplicat
     setInputMode(!inputMode)
   }
 
-  const onAddNewItem = () =>  {
+  const onAddNewItem = () => {
     if (inputValue) {
       if (items.includes(inputValue) && !acceptDuplicate) {
         return
@@ -37,18 +46,42 @@ const DropdownInput = ({value, items, title, onChange, onAddItem, acceptDuplicat
     }
   }, [inputMode])
 
-  return(
+  return (
     <div className="awsm-dropdown-input w-100">
       <div className="d-flex justify-content-between">
         <div className="input-header mb-2">{title}</div>
-        {inputMode ? <div onClick={onAddNewItem} className={`awsm-label-add ${inputValue ? "" : "disabled"}`}>Done</div> : <div onClick={onInputModeChange} className="awsm-label-add">+Add</div>}
+        {inputMode ? (
+          <div
+            onClick={onAddNewItem}
+            className={`awsm-label-add ${inputValue ? "" : "disabled"}`}
+          >
+            Done
+          </div>
+        ) : (
+          !disabled && (
+            <div onClick={onInputModeChange} className="awsm-label-add">
+              +Add
+            </div>
+          )
+        )}
       </div>
       <div className={!inputMode ? "d-none" : "d-block position-relative"}>
-        <input onChange={onInputValueChange} value={inputValue}  className="awsm-input w-100" ref={inputRef}/>
+        <input
+          onChange={onInputValueChange}
+          value={inputValue}
+          className="awsm-input w-100"
+          ref={inputRef}
+        />
         <span className="position-absolute awsm-input-right-content">{`+${items.length}`}</span>
       </div>
       <div className={inputMode ? "d-none" : "d-block"}>
-        <AWSMDropdown disabled={disabled} value={value} onChange={onChange} items={items} RowComponent={RowComponent}/>
+        <AWSMDropdown
+          disabled={disabled}
+          value={value}
+          onChange={onChange}
+          items={items}
+          RowComponent={RowComponent}
+        />
       </div>
     </div>
   )

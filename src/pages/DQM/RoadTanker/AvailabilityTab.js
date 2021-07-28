@@ -40,21 +40,6 @@ class AvailabilityTab extends PureComponent {
             </div>
             <div className="col-md-6 form-group">
               <label> SHIFT TYPE </label>
-              {/* <select
-                className="form-control"
-                type="text"
-                defaultValue={data?.shift_type}
-                onChange={e =>
-                  this.onChangeHandler(e.target.value, "shift_type")
-                }
-                disabled={
-                  (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
-                }
-              >
-                {data?.shift_type_dropdown.map((value, index) => {
-                  return <option value={value}>{value}</option>
-                })}
-              </select> */}
               <AWSMDropdown
                 value={data?.shift_type}
                 items={SHIFT_TYPE_DROPDOWN_VALUE}
@@ -81,25 +66,10 @@ class AvailabilityTab extends PureComponent {
             </div>
             <div className="col-md-6 form-group">
               <label> STATUS IN AWSM </label>
-              {/* <select
-                defaultValue={data?.status_awsm}
-                className="form-control"
-                type="text"
-                onChange={e =>
-                  this.onChangeHandler(e.target.value, "status_in_awsm")
-                }
-                disabled={
-                  (mode === MODE.VIEW_AND_AMEND ?   false : true) || scheduler
-                }
-              >
-                {data?.status_awsm_dropdown?.map(value => {
-                  return <option value={value}>{value}</option>
-                })}
-              </select> */}
               <AWSMDropdown
                 value={data?.status_awsm}
                 items={RT_STATUS_IN_AWSM_DROPDOWN_VALUE}
-                onChange={e => this.onChangeHandler(e, "status_in_awsm")}
+                onChange={e => this.onChangeHandler(e, "status_awsm")}
                 disabled={
                   (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
                 }

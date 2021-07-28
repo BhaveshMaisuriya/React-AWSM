@@ -3,15 +3,27 @@ import DateRangePicker from "../../../../components/Common/DateRangePicker"
 import AWSMInput from "../../../../components/Common/Input"
 import AWSMInputNumber from "../../../../components/Common/InputNumber"
 import AWSMDropdown from "../../../../components/Common/Dropdown"
+import AutoCompleteDropDown from "./AutoCompleteDropDown"
 import "./Product.scss"
 
-const Product = ({ value, productKey, onChange, scheduler, onDelete }) => {
+const Product = ({
+  value,
+  productKey,
+  onChange,
+  scheduler,
+  onDelete,
+  productsList,
+}) => {
   const [isConfirmDelete, setIsConfirmDelete] = useState(false)
 
   const onFieldChange = (fieldKey, fieldValue) => {
     const newValue = { ...value }
     newValue[fieldKey] = fieldValue
     if (onChange) {
+      if (fieldKey === "code") {
+        newValue[fieldKey] = fieldValue?.code
+        newValue["name"] = fieldValue?.name
+      }
       onChange(newValue)
     }
   }
@@ -19,9 +31,9 @@ const Product = ({ value, productKey, onChange, scheduler, onDelete }) => {
   const onCancel = () => {
     setIsConfirmDelete(false)
   }
-  function renderExceedError(key, max){
-    if(value?.[key] > max){
-      return <p style={{color: "red"}}>Must not exceed {max}</p>
+  function renderExceedError(key, max) {
+    if (value?.[key] > max) {
+      return <p style={{ color: "red" }}>Must not exceed {max}</p>
     }
     return null
   }
@@ -45,29 +57,34 @@ const Product = ({ value, productKey, onChange, scheduler, onDelete }) => {
         <h6 className="my-3 font-weight-bold">
           PRODUCT {productKey.substring(8)}
         </h6>
-        <button
-          className="btn-delete-product"
-          onClick={() => setIsConfirmDelete(true)}
-          disabled={scheduler}
-        >
-          Delete Product
-        </button>
+        {!scheduler && (
+          <button
+            className="btn-delete-product"
+            onClick={() => setIsConfirmDelete(true)}
+            disabled={scheduler}
+          >
+            Delete Product
+          </button>
+        )}
       </div>
       <div className="row">
         <div className="col-3 form-group">
-          <label htmlFor="productName">PRODUCT NAME</label>
-          <AWSMInput
-            defaultValue={value.name}
-            disabled = {scheduler}
-            onChange={value => onFieldChange("name", value)}
+          <label htmlFor="productCode">PRODUCT CODE</label>
+          <AutoCompleteDropDown
+            value={value.code}
+            disabled={scheduler}
+            items={productsList}
+            key={value.code}
+            onChange={value => onFieldChange("code", value)}
           />
         </div>
         <div className="col-3 form-group">
-          <label htmlFor="productCode">PRODUCT CODE</label>
-          <AWSMInputNumber
-            defaultValue={value.code}
-            disabled = {scheduler}
-            onChange={value => onFieldChange("code", value)}
+          <label htmlFor="productName">PRODUCT NAME</label>
+          <AWSMInput
+            key={value.code}
+            defaultValue={value.name}
+            disabled
+            onChange={value => onFieldChange("name", value)}
           />
         </div>
         <div className="col-3 form-group">
@@ -87,7 +104,7 @@ const Product = ({ value, productKey, onChange, scheduler, onDelete }) => {
             onChange={value => onFieldChange("flow_rate", value)}
             // max={10000}
           />
-          {renderExceedError("flow_rate",10000)}
+          {renderExceedError("flow_rate", 10000)}
         </div>
       </div>
       <h6 className="font-weight-bold">VOLUME CAPPING</h6>
@@ -111,7 +128,7 @@ const Product = ({ value, productKey, onChange, scheduler, onDelete }) => {
             onChange={value => onFieldChange("volume_capping_volume", value)}
             // max={10000000}
           />
-          {renderExceedError("volume_capping_volume",10000000)}
+          {renderExceedError("volume_capping_volume", 10000000)}
         </div>
         <div className="col-6 form-group">
           <label>REMARKS 1</label>
@@ -142,7 +159,7 @@ const Product = ({ value, productKey, onChange, scheduler, onDelete }) => {
             onChange={value => onFieldChange("volume_capping_volume_2", value)}
             // max={10000000}
           />
-          {renderExceedError("volume_capping_volume_2",10000000)}
+          {renderExceedError("volume_capping_volume_2", 10000000)}
         </div>
         <div className="col-6 form-group">
           <label htmlFor="remarks2">REMARKS 2</label>

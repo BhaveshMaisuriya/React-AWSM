@@ -78,34 +78,38 @@ const DragContainer = ({ items, onChange, onUpdateOne }) => {
       <Droppable droppableId="droppable">
         {provided => (
           <div {...provided.droppableProps} ref={provided.innerRef}>
-            {items.map((item, index) => (
-              <Draggable key={item.id} draggableId={item.id} index={index}>
-                {(provided, snapshot) => (
-                  <div
-                    ref={provided.innerRef}
-                    {...provided.draggableProps}
-                    {...provided.dragHandleProps}
-                    className={`drag-content ${
-                      snapshot.isDragging ? "drag-content-dragging" : ""
-                    }`}
-                  >
-                    <div className="d-flex">
-                      <div className="drag-content-start-icon">
-                        <EllipsisIcon />
-                        <EllipsisIcon />
-                      </div>
-                      <div className="drag-content-label">{item.label}</div>
-                    </div>
+            {items.map((item, index) =>
+              item.key !== "frozen" ? (
+                <Draggable key={item.id} draggableId={item.id} index={index}>
+                  {(provided, snapshot) => (
                     <div
-                      className="drag-content-x-icon"
-                      onClick={() => onRemoveItem(item)}
+                      ref={provided.innerRef}
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                      className={`drag-content ${
+                        snapshot.isDragging ? "drag-content-dragging" : ""
+                      }`}
                     >
-                      <XIcon />
+                      <div className="d-flex">
+                        <div className="drag-content-start-icon">
+                          <EllipsisIcon />
+                          <EllipsisIcon />
+                        </div>
+                        <div className="drag-content-label">{item.label}</div>
+                      </div>
+                      <div
+                        className="drag-content-x-icon"
+                        onClick={() => onRemoveItem(item)}
+                      >
+                        <XIcon />
+                      </div>
                     </div>
-                  </div>
-                )}
-              </Draggable>
-            ))}
+                  )}
+                </Draggable>
+              ) : (
+                ""
+              )
+            )}
             {provided.placeholder}
           </div>
         )}
@@ -191,7 +195,9 @@ const CustomizeTableModal = ({
     }
   }
 
-  const [itemToSelect, setItemToSelect] = useState(availableMetricTransform)
+  const [itemToSelect, setItemToSelect] = useState(
+    availableMetricTransform.sort((a, b) => b.checked - a.checked)
+  )
   const [itemToDrag, setItemToDrag] = useState([])
   const [error, setError] = useState("")
 
@@ -262,6 +268,7 @@ const CustomizeTableModal = ({
     const itemKeys = itemToDrag.map(item => item.id)
     setCookie(tableName, JSON.stringify(itemKeys), "01 Dec 3000 12:00:00 UTC")
     setInitMetric(itemKeys)
+    setItemToSelect(itemToSelect.sort((a, b) => b.checked - a.checked))
     if (onChange) {
       onChange(itemKeys)
     }
@@ -306,13 +313,17 @@ const CustomizeTableModal = ({
           <div className="customize-table-content">
             <div className="col-5">
               <h5>Available Metrics</h5>
-              {itemToSelect.map(item => (
-                <ItemSelect
-                  key={item.id}
-                  onChange={onItemSelectChange}
-                  item={item}
-                />
-              ))}
+              {itemToSelect.map(item =>
+                item.key !== "frozen" ? (
+                  <ItemSelect
+                    key={item.id}
+                    onChange={onItemSelectChange}
+                    item={item}
+                  />
+                ) : (
+                  ""
+                )
+              )}
             </div>
             <div className="col-7 ">
               <h5>Column Arrangement</h5>

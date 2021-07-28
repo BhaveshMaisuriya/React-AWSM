@@ -11,18 +11,13 @@ class SpecificationTab extends PureComponent {
     this.state = {
       isRTRestrictionAdding: false,
       restriction: "",
-      names: [],
-      restrictionArray: [],
+      names: props.data?.restriction ? props.data?.restriction : [],
+      restrictionArray: props.data?.restriction_dropdown ? props.data?.restriction_dropdown : [],
       idDeleteBtnShow: true
     }
   }
 
   componentDidMount() {
-    const { data } = this.props
-    this.setState({
-      restrictionArray: data?.restriction,
-      names: data?.restriction_dropdown
-    })
   }
 
   onChangeHandler = (value, key) => {
@@ -91,16 +86,16 @@ class SpecificationTab extends PureComponent {
     }
 
     const onDoneBtnClick = () => {
-      const { names } = this.state
+
       if (document.getElementById("restriction") != null) {
         let rtRestriction = document.getElementById("restriction").value
-        if (rtRestriction && rtRestriction.length > 0) {
-          if (names.length === 0 && !names) {
-            this.setState({ names: [rtRestriction] })
-          }
-          else {
-            this.setState({ names: [...names, rtRestriction] })
-          }
+        const names = this.state.names
+
+        if (names?.length === 0 && names) {
+          this.setState({ names: [rtRestriction] })
+        }
+        else {
+          this.setState({ names: [...names, rtRestriction] })
         }
       }
 

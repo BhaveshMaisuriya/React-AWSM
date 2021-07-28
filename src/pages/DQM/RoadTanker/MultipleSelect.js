@@ -1,9 +1,10 @@
-import React, { Component } from 'react';
-import MenuItem from '@material-ui/core/MenuItem';
-import Select from '@material-ui/core/Select';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import Checkbox from '@material-ui/core/Checkbox';
+import React, { Component } from "react"
+import MenuItem from "@material-ui/core/MenuItem"
+import Select from "@material-ui/core/Select"
+import ListItemIcon from "@material-ui/core/ListItemIcon"
+import ListItemText from "@material-ui/core/ListItemText"
+import Checkbox from "@material-ui/core/Checkbox"
+import "./InformationModal.scss"
 
 export default class MultipleSelect extends Component {
   constructor(props) {
@@ -26,47 +27,47 @@ export default class MultipleSelect extends Component {
       onConfirmClick,
       onDeleteBtnClick,
       onNoClick,
-    } = this.props;
-    const {
-      RtRestrictionSelected,
-    } = this.state;
+      disabled,
+    } = this.props
+    const { RtRestrictionSelected } = this.state
 
-    const handleChange = (event) => {
-      const { onChange } = this.props;
-      this.setState({ RtRestrictionSelected: event.target.value },
-        () => onChange(this.state.RtRestrictionSelected));
-    };
+    const handleChange = event => {
+      const { onChange } = this.props
+      this.setState({ RtRestrictionSelected: event.target.value }, () =>
+        onChange(this.state.RtRestrictionSelected)
+      )
+    }
 
-    const showDeleteBtn = (_name) => {
-      const deleteBtn = isDeleteBtnShow ?
-        (
-          <div>
-            <a
-              type="button"
-              onClick={() => onDeleteBtnClick()}
-              className="delete-btn"
-              id="delete"
-              role="button"
-            > Delete
-            </a>
-          </div>) :
-        (<div className="yes-noBtn">
+    const showDeleteBtn = _name => {
+      const deleteBtn = isDeleteBtnShow ? (
+        <div>
+          <a
+            type="button"
+            onClick={() => onDeleteBtnClick()}
+            className="delete-btn"
+            id="delete"
+            role="button"
+          >
+            {" "}
+            Delete
+          </a>
+        </div>
+      ) : (
+        <div className="yes-noBtn">
           <a
             type="button"
             onClick={() => {
               onConfirmClick()
-            }
-            }
-            className="confirm">
+            }}
+            className="confirm"
+          >
             Confirm |
           </a>
-          <a
-            type="button"
-            onClick={() => onNoClick()}
-            className="No">
+          <a type="button" onClick={() => onNoClick()} className="No">
             No
           </a>
-        </div>)
+        </div>
+      )
 
       return deleteBtn
     }
@@ -77,24 +78,19 @@ export default class MultipleSelect extends Component {
         multiple
         value={RtRestrictionSelected}
         onChange={handleChange}
-        renderValue={(selected) => selected.join(', ')}
+        renderValue={selected => selected.join(", ")}
+        disabled={disabled}
       >
-        {names?.map((name) => (
+        {names?.map(name => (
           <MenuItem key={name} value={name}>
             <ListItemIcon>
-              <Checkbox
-                checked={RtRestrictionSelected.indexOf(name) !== -1}
-              />
+              <Checkbox checked={RtRestrictionSelected.indexOf(name) !== -1} />
             </ListItemIcon>
             <ListItemText id={name} primary={name} />
-            {
-              name === names[names.length - 1] ?
-                showDeleteBtn(name)
-                : null
-            }
+            {name === names[names.length - 1] ? showDeleteBtn(name) : null}
           </MenuItem>
         ))}
       </Select>
-    );
+    )
   }
 }

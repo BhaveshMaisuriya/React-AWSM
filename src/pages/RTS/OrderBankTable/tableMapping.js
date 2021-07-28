@@ -98,22 +98,22 @@ const ganttChartTableMapping = {
     label: "vehicle",
     columnSize: "cell-text",
   },
-  hours: {
-    label: "hours",
+  rate: {
+    label: "RATE(%)",
     columnSize: "cell-text",
   },
-  status: {
-    label: "status",
+  shift: {
+    label: "SHIFT",
     columnSize: "cell-text",
   },
-  size: {
-    label: "size",
+  cap: {
+    label: "CAP(L)",
     columnSize: "cell-text",
   },
-  type: {
-    label: "type",
+  rtcode: {
+    label: "RT CODE",
     columnSize: "cell-text",
-  },
+  }
 }
 
 const ganttChartTableData = [
@@ -124,7 +124,16 @@ const ganttChartTableData = [
     hours: '13.36',
     status: 'On 1',
     size: '21840',
-    type: '1003'
+    type: '1003',
+    rate: '00',
+    shift_list: [
+      "On 1",
+      "On 2",
+      "on 3"
+    ],
+    shift: "On 1",
+    cap: "21480",
+    rtcode: "1003"
   },
   {
     id: 2,
@@ -132,7 +141,16 @@ const ganttChartTableData = [
     hours: '13.36',
     status: 'On 1',
     size: '21840',
-    type: '1003'
+    type: '1003',
+    rate: '00',
+    shift_list: [
+      "On 1",
+      "On 2",
+      "on 3"
+    ],
+    shift: "On 1",
+    cap: "21480",
+    rtcode: "1003"
   },
   {
     id: 3,
@@ -141,7 +159,16 @@ const ganttChartTableData = [
     hours: '13.36',
     status: 'On 1',
     size: '21840',
-    type: '1003'
+    type: '1003',
+    rate: '00',
+    shift_list: [
+      "On 1",
+      "On 2",
+      "on 3"
+    ],
+    shift: "On 1",
+    cap: "21480",
+    rtcode: "1003"
   },
   {
     id: 4,
@@ -150,7 +177,16 @@ const ganttChartTableData = [
     hours: '13.36',
     status: 'On 1',
     size: '21840',
-    type: '1003'
+    type: '1003',
+    rate: '00',
+    shift_list: [
+      "On 1",
+      "On 2",
+      "on 3"
+    ],
+    shift: "On 1",
+    cap: "21480",
+    rtcode: "1003"
   },
   {
     id: 5,
@@ -158,8 +194,24 @@ const ganttChartTableData = [
     hours: '13.36',
     status: 'On 1',
     size: '21840',
-    type: '1003'
+    type: '1003',
+    rate: '00',
+    shift_list: [
+      "On 1",
+      "On 2",
+      "on 3"
+    ],
+    shift: "On 1",
+    cap: "21480",
+    rtcode: "1003"
   }
 ]
 
-export { tableMapping, tableColumns, ganttChartTableColumns, ganttChartTableMapping, ganttChartTableData }
+const ganttChartTableEvents = [
+  { id : 1, resourceId : 1, name : 'RT13098 Drag true', startDate : '2021-07-23 00:00', endDate : '2021-07-23 12:00', eventColor: 'blue'},
+  { id : 2, resourceId : 3, name : 'RT11940 Drag true', startDate : '2021-07-23 12:00', endDate : '2021-07-23 14:59', eventColor: 'white' },
+  { id : 3, resourceId : 2, name : 'RT11940 Drag true', startDate : '2021-07-23 00:00', endDate : '2021-07-23 09:00', eventColor: 'blue' },
+  { id : 5, resourceId : 4, name : 'RT09567 Drag false', startDate : '2021-07-23 22:00', endDate : '2021-07-23 23:59:00', draggable : false, eventColor : 'orange' }
+]
+
+export { tableMapping, tableColumns, ganttChartTableColumns, ganttChartTableMapping, ganttChartTableData, ganttChartTableEvents }

@@ -21,6 +21,7 @@ const tableMapping = {
     apiKey: "code",
     columnSize: "cell-text",
     type: "link",
+    key: "frozen",
   },
   name: {
     label: "PRODUCT NAME",

@@ -14,8 +14,8 @@ import CloseButton from "../../../../components/Common/CloseButton"
 
 const headers = [
   { label: "STATION TANK STATUS", value: "station_tank_status" },
-  { label: "VARIANCE VALUE(L)", value: "variance_value" },
-  { label: "VARIANCE PERCENTAGE(%)", value: "variance_percentage" },
+  { label: "VARIANCE VALUE (L)", value: "variance_value" },
+  { label: "VARIANCE PERCENTAGE (%)", value: "variance_percentage" },
 ]
 
 const VarianceInput = ({ value, disabled, onChange }) => {

@@ -7,6 +7,10 @@
   color: $danger;
 }
 
+.error-invalid {
+  border-color: $danger !important;
+}
+
 .parsley-error {
   border-color: $danger;
 }

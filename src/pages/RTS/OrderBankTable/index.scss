@@ -160,3 +160,10 @@
     background: repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2) 10px, rgba(190, 190, 190, 0.2) 10px, rgba(190, 190, 190, 0.2) 20px) rgba(255, 255, 255, 0);
     color: #888;
 }
+.b-menuitem.b-contains-focus, .b-menuitem:focus{
+    background-color: #00a19c !important;
+    color:#FFFFFF !important
+}
+.b-panel.b-floating{
+    height: auto !important;
+}

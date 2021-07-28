@@ -1,197 +1,457 @@
-import React, { Component, useMemo, useState, useEffect } from "react"
+import React, { useEffect, useMemo, useRef, useState } from "react"
 import { connect } from "react-redux"
-import { Row, Col } from "reactstrap"
-import NoDataIcon from "../../../assets/images/AWSM-No-Data-Available.svg"
 import {
-  ganttChartTableColumns,
+  Row,
+  Col,
+  Popover,
+  PopoverBody,
+} from "reactstrap"
+import { createPopper } from "@popperjs/core"
+import {
   ganttChartTableMapping,
   ganttChartTableData,
+  ganttChartTableEvents,
 } from "./tableMapping"
 import "./index.scss"
 import { BryntumSchedulerPro } from "@bryntum/schedulerpro-react"
-import '@bryntum/schedulerpro/schedulerpro.classic-dark.css';
-import '@bryntum/schedulerpro/schedulerpro.classic-light.css';
-import '@bryntum/schedulerpro/schedulerpro.classic.css';
-import '@bryntum/schedulerpro/schedulerpro.material.css';
-import '@bryntum/schedulerpro/schedulerpro.stockholm.css';
-import moment from 'moment'
+import "@bryntum/schedulerpro/schedulerpro.classic-dark.css"
+import "@bryntum/schedulerpro/schedulerpro.classic-light.css"
+import "@bryntum/schedulerpro/schedulerpro.classic.css"
+import "@bryntum/schedulerpro/schedulerpro.material.css"
+import "@bryntum/schedulerpro/schedulerpro.stockholm.css"
+import "../style.scss"
+import { ReactSVG } from "react-svg"
+import ArrowDropDownIcon from "../../../assets/images/AWSM-Caret-Down-Icon.svg"
+import SearchIcon from "../../../assets/images/AWSM-search.svg"
+import Checkbox from "@material-ui/core/Checkbox"
+import selectAllIcon3 from "../../../assets/images/AWSM-Checkbox.svg"
+import selectAllIcon2 from "../../../assets/images/AWSM-Checked-box.svg"
+import selectAllIcon from "../../../assets/images/AWSM-Select-all-Checkbox.svg"
+import ConfirmDNStatusModal from "./confirmDNStatusModal"
+import { processPaymentInGanttChart } from "../../../store/actions"
 
-function BryntumChartTable(props) {
-    
-    const schedulerproConfig = {
-        project: {
-            calendar: 'weekends',
-            calendarsData: [
-                {
-                    id        : 'shift1',
-                    name      : 'Day Shift',
-                    // Intervals to define all SA and SU as non-working days
-                    intervals : [
-                        {
-                            recurrentStartDate : 'at 08:00',
-                            recurrentEndDate   : 'at 18:00',
-                            isWorking          : false
-                        },
-                        {
-                            "startDate"          : "2021-07-24",
-                            "endDate"            : "2021-07-30",
-                            isWorking          : false
-                        }
-                    ]
-                },
-                {
-                    id        : 'weekends',
-                    name      : 'Weekends',
-                    // Intervals to define all SA and SU as non-working days
-                    intervals : [
-                        {
-                            "startDate"          : "2021-07-28 00:00",
-                            "endDate"            : "2021-07-29 00:00",
-                            isWorking          : false
-                        },
-                        {
-                            "startDate"          : "2021-07-30 00:00",
-                            "endDate"            : "2021-07-31 00:00",
-                            isWorking          : false
-                        },
-                        {
-                            "startDate"          : "2021-07-29 00:00",
-                            "endDate"            : "2021-07-30 00:00",
-                            isWorking          : false
-                        },
-                        {
-                            "startDate"          : "2021-07-31 00:00",
-                            "endDate"            : "2021-08-01 00:00",
-                            isWorking          : false
-                        },
-                        {
-                            "startDate"          : "2021-07-31 00:00",
-                            "endDate"            : "2021-08-01 00:00",
-                            isWorking          : false
-                        },
-                        // {
-                        //     recurrentStartDate : 'on Sat at 0:00',
-                        //     recurrentEndDate   : 'on Mon at 0:00',
-                        //     isWorking          : false
-                        // }
-                    ]
-                },
-                {
-                    "id"                       : "day",
-                    "name"                     : "Day shift",
-                    "unspecifiedTimeIsWorking" : false,
-                    "intervals"                : [
-                        {
-                            "recurrentStartDate" : "at 8:00",
-                            "recurrentEndDate"   : "at 17:00",
-                            "isWorking"          : true
-                        }
-                    ]
-                },
-                {
-                    "id"                       : "early",
-                    "name"                     : "Early shift",
-                    "unspecifiedTimeIsWorking" : false,
-                    "intervals"                : [
-                        {
-                            "recurrentStartDate" : "at 6:00",
-                            "recurrentEndDate"   : "at 14:00",
-                            "isWorking"          : true
-                        }
-                    ]
-                },
-                {
-                    "id"                       : "late",
-                    "name"                     : "Late shift",
-                    "unspecifiedTimeIsWorking" : false,
-                    "intervals"                : [
-                        {
-                            "recurrentStartDate" : "at 14:00",
-                            "recurrentEndDate"   : "at 22:00",
-                            "isWorking"          : true
-                        }
-                    ]
-                },
-                {
-                    "id"                       : "night",
-                    "name"                     : "Night shift",
-                    "unspecifiedTimeIsWorking" : false,
-                    "intervals"                : [
-                        {
-                            "recurrentStartDate" : "at 22:00",
-                            "recurrentEndDate"   : "at 6:00",
-                            "isWorking"          : true
-                        }
-                    ]
-                }
-            ]
-        },
-        columns : [],
-        events: [
-            { id : 1, resourceId : 1, name : 'RT13098 Drag true', startDate : '2021-07-19', endDate : '2021-07-23' },
-            { id : 2, resourceId : 1, name : 'RT11940 Drag true', startDate : '2021-07-24 08:00', endDate : '2021-07-25 23:59', eventColor: 'blue' },
-            { id : 3, resourceId : 2, name : 'RT11940 Drag true', startDate : '2021-07-20', endDate : '2021-07-21', eventColor: 'blue' },
-            { id : 5, resourceId : 4, name : 'RT09567 Drag false', startDate : '2021-07-24', endDate : '2021-07-28', draggable : false, eventColor : 'red' }
-        ],
-        resourceTimeRanges: [
-            {
-                id             : 1,
-                resourceId     : 3,
-                startDate      : '2021-07-20',
-                endDate        : '2021-07-30',
-                name           : 'Not Available',
-                timeRangeColor: 'gray',
-                cls : 'unavailable-gantt'
-                // this time range should repeat every day
-                // recurrenceRule : 'FREQ=DAILY'
-            }
-        ],
-
-        autoHeight : true,
-        rowHeight  : 40,
-        barMargin  : 4,
-        features : {
-            eventDrag : {
-                constrainDragToResource : true,
-                nonWorkingTime : true
-            },
-            nonWorkingTime         : true,
-            resourceNonWorkingTime : true,
-            timeRanges             : {
-                showCurrentTimeLine : true
-            }
-        },
-        startDate : moment().subtract(1, 'days').toDate(),
-        endDate   : moment().add(1, 'days').toDate(),
-        resources: ganttChartTableData,
-        resourceNonWorkingTimeFeature: true,
-        nonWorkingTimeFeature: true,
-        resourceTimeRangesFeature: true,
-        maxTimeAxisUnit : 'hour',
-    }
-
-    for (const tableMap of Object.keys(ganttChartTableMapping)) {
-        schedulerproConfig.columns.push({
-            text: ganttChartTableMapping[tableMap].label,
-            field: tableMap,
-            width: 'auto'
-        })
-    }
+const ShiftPopover = ({ record, onChange }) => {
+  const [popoverOpen, setPopoverOpen] = useState(false)
+  const toggle = () => setPopoverOpen(!popoverOpen)
+  
   return (
-    <div className="rts-table-container scroll" id="scrollableDiv">
-      <div className="container-orderbank" style={{ maxWidth: "100%" }}>
-        <Row style={{}} className='w-100'>
-          <Col lg={12}>
-          <BryntumSchedulerPro
-            {...schedulerproConfig}
-            // other props, event handlers, etc
-        />
+    <div className="w-100">
+      <button
+        id={`chart-shift-cell-${record.id}`}
+        type={"button"}
+        onBlur={() => setPopoverOpen(false)}
+      >
+        <div>{record.shift}</div>
+        <ReactSVG src={ArrowDropDownIcon} />
+      </button>
+      <Popover
+        placement="bottom"
+        isOpen={popoverOpen}
+        target={`chart-shift-cell-${record.id}`}
+        toggle={toggle}
+      >
+        <PopoverBody className="p-0">
+          {record.shift_list.map(e => (
+            <div className="shift-item" onClick={() => onChange(record.id, e)}>
+              {e}
+            </div>
+          ))}
+        </PopoverBody>
+      </Popover>
+    </div>
+  )
+}
 
-          </Col>
-        </Row>
+const CustomIcon = () => {
+  // untick checkbox icon
+  return <img src={selectAllIcon3} alt="icon" />
+}
+const CustomIcon2 = () => {
+  // ticked checkbox icon
+  return <img src={selectAllIcon2} alt="icon" />
+}
+const CustomIcon3 = () => {
+  // indeterminate icon
+  return <img src={selectAllIcon} alt="icon" />
+}
+
+const ChartColumnFilter = ({
+  filterData = [],
+  filterKey,
+  onApply,
+  onReset,
+}) => {
+  const [data, setData] = useState(
+    [...new Set(filterData)].map(e => ({
+      text: e,
+      checked: true,
+      visible: true,
+    }))
+  )
+
+  const onItemChange = index => {
+    const newData = [...data]
+    if (newData[index]) {
+      newData[index].checked = !newData[index].checked
+    }
+    setData(newData)
+  }
+
+  const isCheckAll = useMemo(() => {
+    return data.length === data.filter(e => e.checked).length
+  }, [data])
+
+  const checkAllChange = () => {
+    setData([...data].map(e => ({ ...e, checked: !isCheckAll })))
+  }
+
+  const onInputSearchChange = event => {
+    const value = event.target.value.toString()
+    setData(
+      [...data].map(e => ({
+        ...e,
+        visible:
+          !value ||
+          e.text
+            .toString()
+            .toLowerCase()
+            .includes(value.toString().toLowerCase()),
+      }))
+    )
+  }
+
+  const apply = () => {
+    if (onApply) {
+      onApply({ filterKey })
+    }
+  }
+
+  return (
+    <div
+      className={`chart-column-filter hide`}
+      id={`chart-tooltip-${filterKey}`}
+    >
+      <div className="chart-column-input-search">
+        <input onChange={onInputSearchChange} />
+        <ReactSVG src={SearchIcon} />
+      </div>
+      {data.map(
+        (e, index) =>
+          e.visible && (
+            <div
+              className={`chart-column-select-item ${
+                e.checked ? "checked" : " "
+              }`}
+            >
+              <Checkbox
+                checked={e.checked}
+                onChange={() => onItemChange(index)}
+                icon={<CustomIcon />}
+                checkedIcon={<CustomIcon2 />}
+                style={{
+                  height: "20px",
+                  width: "5px",
+                  marginLeft: "5px",
+                  marginTop: "-1px",
+                }}
+              />
+              <label>{e.text}</label>
+            </div>
+          )
+      )}
+      <div className="chart-column-footer">
+        <div>
+          <Checkbox
+            checked={isCheckAll}
+            onChange={checkAllChange}
+            icon={<CustomIcon3 />}
+            checkedIcon={<CustomIcon2 />}
+            style={{
+              height: "20px",
+              width: "5px",
+              marginLeft: "5px",
+              marginTop: "-1px",
+            }}
+          />
+          <label>Select All</label>
+        </div>
+        <div>
+          <button className="btn btn-outline-primary" onClick={onReset}>
+            Reset
+          </button>
+          <button className="btn btn-primary" onClick={apply}>
+            Apply
+          </button>
+        </div>
       </div>
     </div>
   )
 }
 
-export default BryntumChartTable
+function BryntumChartTable(props) {
+  const [tableData, setTableData] = useState(ganttChartTableData)
+  const [modal, setModal] = useState(false);
+  const [dropdownSelectedItem, setDropdownSelectedItem] =  useState(null);
+  const toggle = () => setModal(!modal);
+  const schedulerProRef = useRef()
+  const [filterList, setFilterList] = useState(
+    Object.keys(ganttChartTableMapping).map(e => ({
+      key: e,
+      isOpen: false,
+    }))
+  )
+
+  const updateModalHandler = (type) =>{
+    let data = {};
+    switch(type){
+        case 'shipment':{
+            data.header = 'Create Shipment'
+            data.body = 'Shipment Creation'
+            break
+        }
+        default:{
+            data.header = ''
+            data.body = ''
+            break
+        }
+    }
+    toggle()
+    setDropdownSelectedItem(data)
+}
+
+const sendRequestsHandler = () =>{
+    toggle()
+    props.processPaymentInGanttChart('abc')
+}
+
+  const schedulerproConfig = {
+    columns: [],
+    events: ganttChartTableEvents,
+    autoHeight: true,
+    rowHeight: 40,
+    barMargin: 0,
+    resourceMargin: 0,
+    autoAdjustTimeAxis: false,
+    fillTicks: true,
+    features : {
+      
+        eventDrag : {
+            constrainDragToResource : true,
+            nonWorkingTime : true
+        },
+        nonWorkingTime         : true,
+        resourceNonWorkingTime : true,
+        timeRanges             : {
+            showCurrentTimeLine : true
+        },
+    },
+    features: {
+      eventTooltip:{
+        disabled : true
+      },
+      eventCopyPaste : false,
+      eventDrag: {
+        constrainDragToResource: true,
+        nonWorkingTime: true,
+      },
+      nonWorkingTime: true,
+      resourceNonWorkingTime: true,
+      timeRanges: {
+        showCurrentTimeLine: false,
+      },
+    },
+    startDate: "2021-07-23",
+    resourceNonWorkingTimeFeature: true,
+    nonWorkingTimeFeature: true,
+    resourceTimeRangesFeature: true,
+    maxTimeAxisUnit: "hour",
+    eventMenuFeature: {
+        items: {
+        editEvent : false,
+        deleteEvent : false,
+          cancel:{
+            text: 'Cancel',
+            onItem({ source, eventRecord }) {
+              updateModalHandler()
+            }
+          },
+          sendOrderForDS:{
+            text: 'Send OrderS For DS',
+            onItem({ source, eventRecord }) {
+              updateModalHandler()
+            }
+          },
+          createShipment:{
+            text: 'Create Shipment',
+            onItem({ source, eventRecord }) {
+              updateModalHandler('shipment')
+            }
+          },
+          terminalRelay:{
+            text: 'Terminal Relay',
+            onItem({ source, eventRecord }) {
+              updateModalHandler()
+            }
+          },
+          plannedLoadTime:{
+            text: 'Planned Load Time',
+            onItem({ source, eventRecord }) {
+              updateModalHandler()
+            }
+          },
+        },
+    viewPreset: {
+      base: "hourAndDay",
+      id: "customHourAndDayPresent",
+      headers: [
+        {
+          unit: "day",
+          dateFormat: "dddd. do MMM YYYY",
+        },
+        {
+          unit: "hour",
+          dateFormat: "HH",
+          increment: 1,
+        },
+      ],
+    },
+  }
+}
+
+  const onShiftDateChange = (recordId, value) => {
+    const scheduler = schedulerProRef.current.instance
+    const recordIndex = tableData.findIndex(e => e.id === recordId)
+    if (recordIndex >= 0) {
+      tableData[recordIndex] = { ...tableData[recordIndex], shift: value }
+    }
+    scheduler.resourceStore.data = [...tableData]
+    setTableData([...tableData])
+  }
+
+  for (const tableMap of Object.keys(ganttChartTableMapping)) {
+    schedulerproConfig.columns.push({
+      text: ganttChartTableMapping[tableMap].label,
+      field: tableMap,
+      width: "auto",
+      editor: null,
+      renderer: ({ value, column, record }) => {
+        switch (column.field) {
+          case "vehicle": {
+            return (
+              <div className="chart-vehicle-cell">
+                <div className="value">{value}</div>
+                {record.pto && <div className="suffix">{record.pto}</div>}
+              </div>
+            )
+          }
+          case "shift": {
+            return (
+              <div className="chart-shift-cell">
+                <ShiftPopover record={record} onChange={onShiftDateChange} />
+              </div>
+            )
+          }
+        }
+        return <div>{value}</div>
+      },
+      headerRenderer: ({ column }) => {
+        return `
+                <div class="d-flex align-items-center chart-header" id="chart-column-${column.data.field}">
+                  <div>${column.data.text}</div>
+                  <button id="chart-column-${column.data.field}-button">
+                    <svg width="22px" height="22px" viewBox="0 0 22 22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                        <title>AWSM Calendar</title>
+                        <g id="AWSM-Calendar" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                            <g id="TF-Icon---Dropdown" transform="translate(1.000000, 3.000000)" fill="currentColor">
+                                <polygon id="Dropdown-Icon-Copy-2" points="6 6 11 11 16 6"></polygon>
+                            </g>
+                        </g>
+                    </svg>
+                  </button>
+                </div>`
+      },
+    })
+  }
+
+  useEffect(() => {
+    Object.keys(ganttChartTableMapping).forEach(e => {
+      const el = document.getElementById(`chart-column-${e}-button`)
+      if (el) {
+        el.addEventListener("click", event => {
+          event.stopPropagation()
+          event.preventDefault()
+          const tooltip = document.getElementById(`chart-tooltip-${e}`)
+          createPopper(el, tooltip, {
+            placement: "bottom",
+            modifiers: [
+              {
+                name: "offset",
+                options: {
+                  offset: [0, 20],
+                },
+              },
+            ],
+          })
+          tooltip.classList.toggle("hide")
+          Object.keys(ganttChartTableMapping).forEach(f => {
+            if (f !== e) {
+              const hideEl = document.getElementById(`chart-tooltip-${f}`)
+              hideEl.classList.add("hide")
+            }
+          })
+        })
+      }
+    })
+  }, [])
+
+  return (
+    <div className="rts-table-container scroll" id="scrollableDiv">
+      <div
+        className="container-orderbank gant-chart-table"
+        style={{ maxWidth: "100%" }}
+      >
+        <Row style={{}} className="w-100">
+          <Col lg={12}>
+            <BryntumSchedulerPro
+              {...schedulerproConfig}
+              resources={tableData}
+              eventBodyTemplate={data => {
+                const { originalData } = data
+                return `<div>
+                  ${originalData.name}
+                </div>`
+              }}
+              syncDataOnLoad
+              ref={schedulerProRef}
+              // other props, event handlers, etc
+            />
+          </Col>
+        </Row>
+        {filterList.map(e => {
+          return (
+            <ChartColumnFilter
+              key={e.key}
+              filterKey={e.key}
+              filterData={ganttChartTableData.map(v => v[e.key])}
+            />
+          )
+        })}
+      </div>
+      <ConfirmDNStatusModal 
+        isOpen={modal} 
+        onSend={sendRequestsHandler} 
+        onCancel={toggle} 
+        headerContent={dropdownSelectedItem?.header || ''} 
+        bodyContent={`Are you sure you want to proceed for ${dropdownSelectedItem?.body || ''}`}/>
+    </div>
+  )
+}
+
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        processPaymentInGanttChart: (params) => dispatch(processPaymentInGanttChart(params))
+    }
+}
+
+export default  connect(null, mapDispatchToProps)(BryntumChartTable) 

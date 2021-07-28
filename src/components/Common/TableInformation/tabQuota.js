@@ -48,7 +48,7 @@ const tabQuota = ({ scheduler, data, onChange }) => {
                 validate={{
                   max: {
                     value: 10000000,
-                    errorMessage: "Maximum quota within 10,000,000 only",
+                    errorMessage: "Must not exceed 10,000,000",
                   },
                 }}
                 className={scheduler ? "disabledField" : null}

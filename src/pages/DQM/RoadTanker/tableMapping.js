@@ -16,6 +16,7 @@ const tableMapping = {
     apiKey: "vehicle",
     columnSize: "cell-text",
     type: "link",
+    key: "frozen",
   },
   owner: {
     label: "OWNER",

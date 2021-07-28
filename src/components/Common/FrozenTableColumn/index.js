@@ -25,20 +25,16 @@ class FixedCoulmnTable extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (!isEqual(this.props.headers, prevProps.headers)) {
+    if (this.props.tableData !== prevProps.tableData) {
+      this.setState({ tableDatas: this.props.tableData })
+    }
+    if (this.props.headers !== prevProps.headers) {
       const fixedHeaders = this.props.headers.slice(0, this.props.frozen)
       const regularHeaders = this.props.headers.slice(
         this.props.frozen,
         this.props.headers.length
       )
       this.setState({ fixedHeaders, regularHeaders })
-    }
-  }
-
-  componentDidUpdate(prevProps) {
-    if (this.props.tableData !== prevProps.tableData) {
-      console.log("arr::", this.props.tableData, prevProps.tableData)
-      this.setState({tableDatas: this.props.tableData});
     }
   }
 
@@ -92,8 +88,10 @@ class FixedCoulmnTable extends Component {
   }
   renderFrozenTr = arr => {
     if (!arr) return null
-    return typeof arr === 'string' ? (
-      <tr><td className='h-145'></td></tr>
+    return typeof arr === "string" ? (
+      <tr>
+        <td className="h-145"></td>
+      </tr>
     ) : (
       arr.map((e, index) => {
         return <tr key={index}>{this.renderFrozenTd(e, index)}</tr>
@@ -106,9 +104,13 @@ class FixedCoulmnTable extends Component {
     return this.getTdType(sliceArr, arr)
   }
   renderRegular = arr => {
-    if (!arr) return null    
-    return typeof arr === 'string' ? (
-      <tr><td colSpan='0' className='no-data-svg'><ReactSVG src={NoDataIcon} /></td></tr>
+    if (!arr) return null
+    return typeof arr === "string" ? (
+      <tr>
+        <td colSpan="0" className="no-data-svg">
+          <ReactSVG src={NoDataIcon} />
+        </td>
+      </tr>
     ) : (
       arr.map((e, index) => {
         return <tr key={index}>{this.renderRegularTd(e)}</tr>
@@ -116,26 +118,46 @@ class FixedCoulmnTable extends Component {
     )
   }
 
-  AddConditionalForActionColumn = (salesValue, inventoryValue, data, index) =>{
+  AddConditionalForActionColumn = (salesValue, inventoryValue, data, index) => {
     const { overrideActionColumn } = this.props
-    let result;
-    if(Math.abs(data.sales_variance) > salesValue.variance_value
-      || Math.abs(data.inventory_variance) > inventoryValue.variance_value
-      || Math.abs(data.sales_variance_percentage) > salesValue.variance_percentage){
-        result = (<div className="cursor-pointer" onClick={()=>overrideActionColumn(index)}>
-          { data?.overrideAction ? <ReactSVG className="d-inline-block mr-2" src={OverrideIcon} />
-          : <span className="accurate d-inline-block mr-2"></span> }
-        <span className={`d-inline-block override-text ${data?.overrideAction ? 'green' : ''}`}>Override</span></div>)
-      }
-    else{
-      result = (<><ReactSVG className="d-inline-block mr-2" src={OverrideIcon} />
-      <span className="accurate-text">Accurate</span></>)
+    let result
+    if (
+      Math.abs(data.sales_variance) > salesValue.variance_value ||
+      Math.abs(data.inventory_variance) > inventoryValue.variance_value ||
+      Math.abs(data.sales_variance_percentage) > salesValue.variance_percentage
+    ) {
+      result = (
+        <div
+          className="cursor-pointer"
+          onClick={() => overrideActionColumn(index)}
+        >
+          {data?.overrideAction ? (
+            <ReactSVG className="d-inline-block mr-2" src={OverrideIcon} />
+          ) : (
+            <span className="accurate d-inline-block mr-2"></span>
+          )}
+          <span
+            className={`d-inline-block override-text ${
+              data?.overrideAction ? "green" : ""
+            }`}
+          >
+            Override
+          </span>
+        </div>
+      )
+    } else {
+      result = (
+        <>
+          <ReactSVG className="d-inline-block mr-2" src={OverrideIcon} />
+          <span className="accurate-text">Accurate</span>
+        </>
+      )
     }
-    return(<div className="action-status">{result}</div>)
+    return <div className="action-status">{result}</div>
   }
 
   getTdType = (sliceArr, arr, parentIndex = 0) => {
-    const pathName = window.location.pathname;
+    const pathName = window.location.pathname
     const { config, modalPop, varianceControlData } = this.props
     return sliceArr.map((e, index) => {
       switch (config[e] && config[e].type) {
@@ -152,20 +174,21 @@ class FixedCoulmnTable extends Component {
             </td>
           )
         case "override":
-        case "color":
-        {
-          if(pathName === "/sales-inventory") {
-            let threshold;
-            const salesValue = varianceControlData.sales.find(e => e.station_tank_status === arr.station_tank_status)
-            const inventoryValue = varianceControlData.inventory.find(e => e.station_tank_status === arr.station_tank_status)
+        case "color": {
+          if (pathName === "/sales-inventory") {
+            let threshold
+            const salesValue = varianceControlData.sales.find(
+              e => e.station_tank_status === arr.station_tank_status
+            )
+            const inventoryValue = varianceControlData.inventory.find(
+              e => e.station_tank_status === arr.station_tank_status
+            )
             switch (e) {
-              case "sales_variance":
-              {
+              case "sales_variance": {
                 threshold = salesValue?.variance_value
                 break
               }
-              case "sales_variance_percentage":
-              {
+              case "sales_variance_percentage": {
                 threshold = salesValue?.variance_percentage
                 break
               }
@@ -178,10 +201,15 @@ class FixedCoulmnTable extends Component {
                 break
               }
             }
-            if(config[e].type == "override"){
+            if (config[e].type == "override") {
               return (
                 <td key={index}>
-                  {this.AddConditionalForActionColumn(salesValue, inventoryValue, arr, parentIndex)}
+                  {this.AddConditionalForActionColumn(
+                    salesValue,
+                    inventoryValue,
+                    arr,
+                    parentIndex
+                  )}
                 </td>
               )
             }
@@ -232,7 +260,7 @@ class FixedCoulmnTable extends Component {
 
   render() {
     const { tableData } = this.props
-    
+
     const { fixedHeaders, regularHeaders } = this.state
     return (
       <div className="container" style={{ maxWidth: "100%" }}>

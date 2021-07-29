@@ -428,7 +428,7 @@ const enabledCross = (val) => {
                               </div>
                             )
                           })}
-                          <div className="hover_display">
+                          <div id="gethighlight" className="hover_display">
                             {GanttChartBottomHover.map((item, index) => {
                               return (
                                 <div className="d-flex align-items-center mr-2">

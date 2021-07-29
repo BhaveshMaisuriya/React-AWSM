@@ -246,9 +246,24 @@ const sendRequestsHandler = () =>{
     resourceMargin: 0,
     autoAdjustTimeAxis: false,
     fillTicks: true,
-    eventRenderer:({ eventRecord, renderData  })=>{
-      // customize content for event in here
-      return `<div class="eventCustomize"><div class="white-bg brdr-radius"><p>1</p></div> <div class="blue-bg brdr-radius"><p>M808</p></div> <div class="white-text brdr-radius"><p>${renderData.resource.hours} hrs</p></div> <div class="green-bg brdr-radius"><p>eta 09:00</p></div></div>`
+    eventRenderer:({ eventRecord, renderData  }) => {
+      // customize content for event in here marquee
+      return `
+      <div class="eventCustomize" onmouseover="document.getElementById('gethighlight').style.display = 'flex';" onmouseout="document.getElementById('gethighlight').style.display = 'none';">
+        <div class="white-bg brdr-radius">
+          <p>1</p>
+        </div> 
+        <div class="blue-bg brdr-radius">
+          <p>M808</p>
+        </div> 
+        <div class="white-text brdr-radius">
+          <p>${renderData.resource.hours} hrs</p>
+        </div> 
+        <div class="green-bg brdr-radius">
+          <p>eta 09:00</p>
+        </div>
+      </div>
+      `
     },
     features: {
       eventTooltip:{
@@ -323,6 +338,8 @@ const sendRequestsHandler = () =>{
       ],
     }
 }
+
+
 
   const onShiftDateChange = (recordId, value) => {
     const scheduler = schedulerProRef.current.instance

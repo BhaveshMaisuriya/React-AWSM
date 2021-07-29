@@ -12,13 +12,14 @@ class SpecificationTab extends PureComponent {
       isRTRestrictionAdding: false,
       restriction: "",
       names: props.data?.restriction ? props.data?.restriction : [],
-      restrictionArray: props.data?.restriction_dropdown ? props.data?.restriction_dropdown : [],
-      idDeleteBtnShow: true
+      restrictionArray: props.data?.restriction_dropdown
+        ? props.data?.restriction_dropdown
+        : [],
+      idDeleteBtnShow: true,
     }
   }
 
-  componentDidMount() {
-  }
+  componentDidMount() {}
 
   onChangeHandler = (value, key) => {
     const { data, onChange } = this.props
@@ -72,7 +73,7 @@ class SpecificationTab extends PureComponent {
         this.setState(
           {
             isRTRestrictionAdding: true,
-            restriction: ""
+            restriction: "",
           },
           () => {
             setClass()
@@ -86,15 +87,13 @@ class SpecificationTab extends PureComponent {
     }
 
     const onDoneBtnClick = () => {
-
       if (document.getElementById("restriction") != null) {
         let rtRestriction = document.getElementById("restriction").value
         const names = this.state.names
 
         if (names?.length === 0 && names) {
           this.setState({ names: [rtRestriction] })
-        }
-        else {
+        } else {
           this.setState({ names: [...names, rtRestriction] })
         }
       }
@@ -133,20 +132,28 @@ class SpecificationTab extends PureComponent {
           Done
         </a>
       ) : (
-        <a
-          type="button"
-          onClick={onAddBtnClick}
-          className={`extra-button ${disabled ? "disable-link" : null}`}
-          id="add"
-        >
-          + Add
-        </a>
+        !disabled && (
+          <a
+            type="button"
+            onClick={onAddBtnClick}
+            className={`extra-button ${disabled ? "disable-link" : null}`}
+            id="add"
+          >
+            + Add
+          </a>
+        )
       )
       return rtRestrictionBtn
     }
 
     const rtRestriction = disabled => {
-      const { isRTRestrictionAdding, names, isDeleteBtnShow, restriction, restrictionArray } = this.state
+      const {
+        isRTRestrictionAdding,
+        names,
+        isDeleteBtnShow,
+        restriction,
+        restrictionArray,
+      } = this.state
 
       const rtRestriction = !isRTRestrictionAdding ? (
         <MultipleSelect
@@ -157,6 +164,7 @@ class SpecificationTab extends PureComponent {
           onConfirmClick={onConfirmClick}
           onNoClick={onNoClick}
           onChange={e => this.onChangeHandler(e, "rt_restriction")}
+          disabled={disabled}
         />
       ) : (
         <div className="input-group add-restriction">
@@ -169,8 +177,9 @@ class SpecificationTab extends PureComponent {
           />
           <div className="input-group-append">
             <a
-              className={`btn btn-auto-fill ${disabled ? "disable-link" : null
-                }`}
+              className={`btn btn-auto-fill ${
+                disabled ? "disable-link" : null
+              }`}
               type="button"
               onClick={onAutoFillBtnClick}
             >
@@ -279,13 +288,9 @@ class SpecificationTab extends PureComponent {
           <div className="col-md-6 form-group">
             <div>
               <label>RT RESTRICTION</label>
-              {rtRestrictionBtn(
-                (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
-              )}
+              {rtRestrictionBtn(scheduler)}
             </div>
-            {rtRestriction(
-              (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
-            )}
+            {rtRestriction(scheduler)}
           </div>
           <div className="form-group col-md-6">
             <label>RESTRICT CODE</label>

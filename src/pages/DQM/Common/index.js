@@ -363,15 +363,23 @@ class Pages extends Component {
               >
                 <div className="vertical-hr-right">
                   <button
-                    className="btn btn-outline-primary excel-download-btn"
+                    className="btn btn-outline-primary excel-btn-container"
                     onClick={() => this.downloadExcel()}
                   >
-                    <DownloadIcon />
-                    {this.state.loader === true ? (
-                      <Fragment> Downloading ... </Fragment>
-                    ) : (
-                      <Fragment>Download Excel </Fragment>
-                    )}
+                    <div className="excel-download-btn">
+                      <span className="download-icon">
+                        <DownloadIcon />
+                      </span>
+                      {this.state.loader === true ? (
+                        <span className="downloan-button-message">
+                          Downloading ...
+                        </span>
+                      ) : (
+                        <span className="download-button-message">
+                          Download Excel
+                        </span>
+                      )}
+                    </div>
                   </button>
                 </div>
                 <Link

@@ -368,6 +368,9 @@
 .yellow {
     background-color: #FECE66;
 }
+.green {
+    background-color: green;
+}
 .square_border {
     border: 1px solid #EEEEEE;
     padding: 5px 10px;
@@ -386,9 +389,12 @@
 .radio_option label {
     margin-bottom: 0;
 }
+.hover_display {
+    display: none;
+}
 
 .b-grid-subgrid.b-grid-subgrid-normal.b-grid-horizontal-scroller.b-widget.b-widget-scroller, .unavailable-gantt.b-sch-resourcetimerange.b-sch-color-gray{
-    background-color: #DBE5F0 !important;
+    background-color: #fff !important;
     background-image: none !important;
     .b-sch-event-endsoutside.b-sch-event-startsoutside {
         display: none;
@@ -462,7 +468,8 @@
     z-index: 99;
 
     &.hide {
-        display: none;
+        position: absolute;
+        left: -999;
         visibility: hidden;
         pointer-events: none;
     }
@@ -489,6 +496,10 @@
             right: 0;
             top: 6px;
         }
+    }
+
+    .chart-column-filter-body {
+        max-height: 250px;
     }
 
     .chart-column-footer {

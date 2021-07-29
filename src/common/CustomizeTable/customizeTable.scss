@@ -15,14 +15,14 @@
       cursor: pointer;
 
       &:hover {
-        background-color: #DDDDDD;
+        background-color: #dddddd;
         color: #777777;
       }
     }
   }
 
   .customize-table-content {
-    max-height: 75%;
+    max-height: 85%;
     display: flex;
 
     & > div {
@@ -45,7 +45,7 @@
       z-index: 1;
     }
 
-    div[data-rbd-droppable-id=droppable] {
+    div[data-rbd-droppable-id="droppable"] {
       background-color: white;
       width: 100%;
 
@@ -69,7 +69,8 @@
           padding: 0.25rem;
         }
 
-        .drag-content-start-icon, .drag-content-x-icon {
+        .drag-content-start-icon,
+        .drag-content-x-icon {
           display: flex;
           width: 1.25rem;
           color: lightgrey;
@@ -103,7 +104,7 @@
         width: 0.9rem;
       }
     }
-   }
+  }
 }
 .btn-pre-icon {
   display: flex;
@@ -113,10 +114,15 @@
     transform: rotate(45deg);
   }
   div {
-    margin-left: 0.5rem;
+    margin-left: 0.6rem;
   }
 }
 #customize_popup.modal-dialog {
   max-width: 810px !important;
   width: 100%;
+}
+
+.btn-size {
+  height: 42px;
+  width: 120px;
 }

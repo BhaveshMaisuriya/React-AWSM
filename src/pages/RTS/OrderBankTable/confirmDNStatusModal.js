@@ -11,7 +11,7 @@ const ConfirmDNStatusModal = ({ isOpen, onSend, onCancel,headerContent,bodyConte
           <h6>{bodyContent}</h6>
           <div className="d-flex align-items-center justify-content-end">
             <button onClick={onCancel} className="btn btn-outline-success mr-2">Cancel</button>
-            <button onClick={onSend} className="btn btn-success">Send</button>
+            <button onClick={onSend} className="btn btn-success">Proceed</button>
           </div>
         </ModalBody>
       </Modal>

@@ -160,6 +160,14 @@
     background: repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2) 10px, rgba(190, 190, 190, 0.2) 10px, rgba(190, 190, 190, 0.2) 20px) rgba(255, 255, 255, 0);
     color: #888;
 }
+
+.b-sch-event-content {
+    display: none !important;
+}
+.b-sch-event:hover .b-sch-event-content {
+    display: block !important;
+}
+
 .b-menuitem.b-contains-focus, .b-menuitem:focus{
     background-color: #00a19c !important;
     color:#FFFFFF !important
@@ -170,15 +178,35 @@
 .b-sch-event-content{
     width: 100%;
 }
-.eventCustomize{
+.eventCustomize {
     width: 100%;
     text-align: center;
-    span{
+    display: inline-block;
+    div{
         visibility: hidden;
+        border-radius: 20px;
+        display: inherit;
+        p {
+            margin-bottom: 0;
+            padding: 2px 8px;
+        }
+    }
+    .white-bg {
+        background-color: #FFFFFF;
+        color: #000 !important;
+    }
+    .blue-bg {
+        background-color: rgb(54, 148, 236);
+    }
+    .white-text {
+        color: #fff;
+    }
+    .green-bg {
+        background-color: green;
     }
 }
-.eventCustomize{
-    &:hover span{
+.eventCustomize {
+    &:hover div{
         visibility: visible;
         color: white;
     }

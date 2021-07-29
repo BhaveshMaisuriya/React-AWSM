@@ -29,7 +29,14 @@ import {
   GET_ORDER_BANK_AUDITLOG_FAIL,
   PROCESS_PAYMENT_IN_GANTT_CHART,
   PROCESS_PAYMENT_IN_GANTT_CHART_SUCCESS,
-  PROCESS_PAYMENT_IN_GANTT_CHART_FAIL
+  PROCESS_PAYMENT_IN_GANTT_CHART_FAIL,
+  CANCEL_PAYMENT_IN_GANTT_CHART,
+  CANCEL_PAYMENT_IN_GANTT_CHART_SUCCESS,
+  CANCEL_PAYMENT_IN_GANTT_CHART_FAIL,
+  SEND_ORDER_IN_GANTT_CHART,
+  SEND_ORDER_IN_GANTT_CHART_SUCCESS,
+  SEND_ORDER_IN_GANTT_CHART_FAIL,
+
 } from "./actionTypes"
 
 export const getRTSOrderBankTableData = (params) => ({
@@ -187,3 +194,34 @@ export const processPaymentInGanttChartFail = error => ({
   type: PROCESS_PAYMENT_IN_GANTT_CHART_FAIL,
   payload: error,
 })
+
+
+export const cancelPaymentInGanttChart = () => ({
+  type: CANCEL_PAYMENT_IN_GANTT_CHART,
+})
+
+export const cancelPaymentInGanttChartSuccess = response => ({
+  type: CANCEL_PAYMENT_IN_GANTT_CHART_SUCCESS,
+  payload: response,
+})
+
+export const cancelPaymentInGanttChartFail = error => ({
+  type: CANCEL_PAYMENT_IN_GANTT_CHART_FAIL,
+  payload: error,
+})
+
+
+export const sendOrderInGanttChart = () => ({
+  type: SEND_ORDER_IN_GANTT_CHART,
+})
+
+export const sendOrderInGanttChartSuccess = response => ({
+  type: SEND_ORDER_IN_GANTT_CHART_SUCCESS,
+  payload: response,
+})
+
+export const sendOrderInGanttChartFail = error => ({
+  type: SEND_ORDER_IN_GANTT_CHART_FAIL,
+  payload: error,
+})
+

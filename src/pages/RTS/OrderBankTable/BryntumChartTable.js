@@ -28,7 +28,8 @@ import selectAllIcon3 from "../../../assets/images/AWSM-Checkbox.svg"
 import selectAllIcon2 from "../../../assets/images/AWSM-Checked-box.svg"
 import selectAllIcon from "../../../assets/images/AWSM-Select-all-Checkbox.svg"
 import ConfirmDNStatusModal from "./confirmDNStatusModal"
-import { processPaymentInGanttChart } from "../../../store/actions"
+import { processPaymentInGanttChart, cancelPaymentInGanttChart, sendOrderInGanttChart } from "../../../store/actions"
+import { cloneDeep } from 'lodash'
 
 const ShiftPopover = ({ record, onChange }) => {
   const [popoverOpen, setPopoverOpen] = useState(false)
@@ -80,10 +81,19 @@ const ChartColumnFilter = ({
   filterKey,
   onApply,
   onReset,
+  type,
 }) => {
 
   const originalDataList = useMemo(() => {
-    return filterData.map(e => e[filterKey])
+    switch (type) {
+      case "list": {
+        return [...new Set([].concat(...filterData.map(e => e[`${filterKey}_list`])))]
+      }
+      default: {
+        return filterData.map(e => e[filterKey])
+      }
+    }
+
   }, [filterData]);
 
   useEffect(() => {
@@ -135,8 +145,18 @@ const ChartColumnFilter = ({
 
   const apply = () => {
     if (onApply) {
-      onApply({ filterKey })
+      onApply(
+        data.filter(e => e.checked && e.visible).map(e => e.text),
+        filterKey
+      )
     }
+  }
+
+  const reset = () => {
+    if (onReset) {
+      onReset(filterKey)
+    }
+    setData([...data].map(e => ({ ...e, checked: true })))
   }
 
   return (
@@ -148,30 +168,32 @@ const ChartColumnFilter = ({
         <input onChange={onInputSearchChange} />
         <ReactSVG src={SearchIcon} />
       </div>
-      {data.map(
-        (e, index) =>
-          e.visible && (
-            <div
-              className={`chart-column-select-item ${
-                e.checked ? "checked" : " "
-              }`}
-            >
-              <Checkbox
-                checked={e.checked}
-                onChange={() => onItemChange(index)}
-                icon={<CustomIcon />}
-                checkedIcon={<CustomIcon2 />}
-                style={{
-                  height: "20px",
-                  width: "5px",
-                  marginLeft: "5px",
-                  marginTop: "-1px",
-                }}
-              />
-              <label>{e.text}</label>
-            </div>
-          )
-      )}
+      <div className="chart-column-filter-body">
+        {data.map(
+          (e, index) =>
+            e.visible && (
+              <div
+                className={`chart-column-select-item ${
+                  e.checked ? "checked" : " "
+                }`}
+              >
+                <Checkbox
+                  checked={e.checked}
+                  onChange={() => onItemChange(index)}
+                  icon={<CustomIcon />}
+                  checkedIcon={<CustomIcon2 />}
+                  style={{
+                    height: "20px",
+                    width: "5px",
+                    marginLeft: "5px",
+                    marginTop: "-1px",
+                  }}
+                />
+                <label>{e.text}</label>
+              </div>
+            )
+        )}
+      </div>
       <div className="chart-column-footer">
         <div>
           <Checkbox
@@ -189,7 +211,7 @@ const ChartColumnFilter = ({
           <label>Select All</label>
         </div>
         <div>
-          <button className="btn btn-outline-primary" onClick={onReset}>
+          <button className="btn btn-outline-primary" onClick={reset}>
             Reset
           </button>
           <button className="btn btn-primary" onClick={apply}>
@@ -205,22 +227,38 @@ function BryntumChartTable(props) {
   const [tableData, setTableData] = useState(ganttChartTableData)
   const [modal, setModal] = useState(false);
   const [dropdownSelectedItem, setDropdownSelectedItem] =  useState(null);
-  const toggle = () => setModal(!modal);
+  const [filterCondition, setFilterCondition] = useState([])
+  const [eventsData, setEventsData] = useState(ganttChartTableEvents)
   const schedulerProRef = useRef()
   const [filterList, setFilterList] = useState(
     Object.keys(ganttChartTableMapping).map(e => ({
       key: e,
-      isOpen: false,
+      type: ganttChartTableMapping[e].type,
     }))
   )
 
-  const updateModalHandler = (type) =>{
+  const toggle = () => setModal(!modal);
+
+  const updateModalHandler = (type, eventRecord) =>{
     let data = {};
     switch(type){
         case 'shipment':{
+            data.type = 'shipment'
             data.header = 'Create Shipment'
-            data.body = 'Shipment Creation'
+            data.body = 'for Shipment Creation'
             break
+        }
+        case 'cancelShipment':{
+          data.type = 'cancelShipment'
+          data.header = 'Cancel Shipment Confirmation'
+          data.body = 'with this shipment cancellation?'
+          break
+        }
+        case 'sendOrder':{
+          data.type = 'sendOrder'
+          data.header = 'Send Order for DN'
+          data.body = 'send this shipments order for DN?'
+          break
         }
         default:{
             data.header = ''
@@ -228,33 +266,85 @@ function BryntumChartTable(props) {
             break
         }
     }
+    data.itemSelectedId = eventRecord.id
     toggle()
     setDropdownSelectedItem(data)
-}
+  }
 
-const sendRequestsHandler = () =>{
-    toggle()
-    props.processPaymentInGanttChart('abc')
-}
+  const changeColorOfEventHandler = (color) =>{
+    const newData = cloneDeep(eventsData)
+    let itemSelected = newData.filter((v)=>v.id == dropdownSelectedItem.itemSelectedId)
+    itemSelected[0].eventColor = color
+    setEventsData(newData)
+  }
+
+  const sendRequestsHandler = () =>{
+    changeColorOfEventHandler('#9F79B7')
+    switch(dropdownSelectedItem.type){
+      case 'shipment':{
+          setTimeout(()=>{
+            props.processPaymentInGanttChart('abc')
+          },2000)
+          break
+      }
+      case 'cancelShipment':{
+        props.processCancelPaymentInGanttChart('abc')
+        break
+      }
+      case 'sendOrder':{
+        props.processSendOrderInGanttChart('abc')
+        break
+      }
+      default:{
+          data.header = ''
+          data.body = ''
+          break
+      }
+      }
+      toggle()
+    }
+
+  const updateResourceRecords = (updateData, preventClear = false) => {
+    const scheduler = schedulerProRef.current.instance
+    if (preventClear) {
+      scheduler.resourceStore.data = updateData
+    } else {
+      scheduler.resourceStore.removeAll()
+      if (!scheduler.eventStore.data) {
+        scheduler.eventStore.data = eventsData
+      }
+      updateData.forEach(e => {
+        scheduler.resourceStore.add(e)
+      })
+    }
+    setTableData(updateData)
+  }
 
   const schedulerproConfig = {
     columns: [],
-    events: ganttChartTableEvents,
+    // events: ganttChartTableEvents,
     autoHeight: true,
     rowHeight: 40,
     barMargin: 0,
     resourceMargin: 0,
     autoAdjustTimeAxis: false,
     fillTicks: true,
-    eventRenderer:({ eventRecord, renderData  })=>{
+    eventRenderer: ({ eventRecord, renderData }) => {
       // customize content for event in here
-      return `<div class="eventCustomize"><span>1</span> <span>M808</span> <span>3 hrs</span> <span>eta 09:00</span></div>`
+      return `<div class="eventCustomize">
+                <div class="white-bg brdr-radius">
+                  <p>1</p></div> 
+                <div class="blue-bg brdr-radius">
+                  <p>M808</p></div>
+                <div class="white-text brdr-radius"><p>${renderData.resource.hours} hrs</p></div>
+                <div class="green-bg brdr-radius"><p>eta 09:00</p></div>
+             </div>`
     },
     features: {
-      eventTooltip:{
-        disabled : true
+      eventTooltip: {
+        disabled: true
       },
-      eventCopyPaste : false,
+      eventCopyPaste: false,
       eventDrag: {
         constrainDragToResource: true,
         nonWorkingTime: true,
@@ -271,25 +361,33 @@ const sendRequestsHandler = () =>{
     resourceTimeRangesFeature: true,
     maxTimeAxisUnit: "hour",
     eventMenuFeature: {
+        // menuitem of event right click handler
+        processItems({ eventRecord, items }) {
+          if (eventRecord.data.id === 1) {
+            items.cancel = {
+              hidden: true
+            };
+          }
+        },
         items: {
         editEvent : false,
         deleteEvent : false,
           cancel:{
             text: 'Cancel',
             onItem({ source, eventRecord }) {
-              updateModalHandler()
+              updateModalHandler('cancelShipment', eventRecord)
             }
           },
           sendOrderForDS:{
             text: 'Send OrderS For DS',
             onItem({ source, eventRecord }) {
-              updateModalHandler()
+              updateModalHandler('sendOrder',eventRecord)
             }
           },
           createShipment:{
             text: 'Create Shipment',
             onItem({ source, eventRecord }) {
-              updateModalHandler('shipment')
+              updateModalHandler('shipment',eventRecord)
             }
           },
           terminalRelay:{
@@ -304,7 +402,8 @@ const sendRequestsHandler = () =>{
               updateModalHandler()
             }
           },
-        }
+        },
+
     },
     viewPreset: {
       base: "hourAndDay",
@@ -321,23 +420,21 @@ const sendRequestsHandler = () =>{
         },
       ],
     }
-}
+  }
 
   const onShiftDateChange = (recordId, value) => {
-    const scheduler = schedulerProRef.current.instance
     const recordIndex = tableData.findIndex(e => e.id === recordId)
     if (recordIndex >= 0) {
       tableData[recordIndex] = { ...tableData[recordIndex], shift: value }
     }
-    scheduler.resourceStore.data = [...tableData]
-    setTableData([...tableData])
+    updateResourceRecords([...tableData], true)
   }
 
   for (const tableMap of Object.keys(ganttChartTableMapping)) {
     schedulerproConfig.columns.push({
       text: ganttChartTableMapping[tableMap].label,
       field: tableMap,
-      width: "auto",
+      width: "100px",
       editor: null,
       renderer: ({ value, column, record }) => {
         switch (column.field) {
@@ -378,6 +475,57 @@ const sendRequestsHandler = () =>{
     })
   }
 
+  // useEffect(() => {
+  const hover = document.querySelector(`b-sch-event`);//eventCustomize
+  const bottom_target = document.getElementById(`hover_display`);
+  document.querySelectorAll(".b-sch-event").forEach(e => {
+    console.log(e);
+  });
+  // for (i = 0; i < x.length; i++) {
+
+  //   x[i].addEventListener('onmouseover', function (event) {
+  //   });
+  // }
+  // const el = document.getElementById(`chart-column-${e}-button`)
+  // if (hover) {
+  //   hover.addEventListener("onmouseover", event => {
+  //     //const tooltip = document.getElementById(`chart-tooltip-${e}`)
+  //     bottom_target.style.display = 'block'
+  //   })
+  // }
+  // }, [])
+
+
+
+  // if (hover) {
+  //   console.log("here.....123", hover);
+  //   hover.onmouseover = function (e) {
+  //     e.stopPropagation()
+  //     e.preventDefault()
+  //     bottom_target.style.display = 'flex';
+  //   }
+
+  //   hover.onmouseout = function (e) {
+  //     e.stopPropagation()
+  //     e.preventDefault()
+  //     bottom_target.style.display = 'none';
+  //   }
+  // hover.addEventListener("mouseenter", event => {
+  // hover.style.display = 'flex';
+  // bottom_target.setAttribute("style", "display:flex;");
+  // })
+  // hover.addEventListener("mouseleave", event => {
+  //   console.log("here1", hover);
+  //   bottom_target.setAttribute("style", "display:none;");
+  // })
+  //}
+
+  useEffect(() => {
+    if(props.isSendRequestProcess && dropdownSelectedItem?.itemSelectedId){
+      changeColorOfEventHandler('#615E9B')
+    }
+  }, [props.isSendRequestProcess])
+
   useEffect(() => {
     Object.keys(ganttChartTableMapping).forEach(e => {
       const el = document.getElementById(`chart-column-${e}-button`)
@@ -409,6 +557,45 @@ const sendRequestsHandler = () =>{
     })
   }, [])
 
+  const hideFilterElement = (dataKey) => {
+    const hideEl = document.getElementById(`chart-tooltip-${dataKey}`)
+    if (hideEl) {
+      hideEl.classList.add("hide")
+    }
+  }
+
+  const onApplyFilter = (data, dataKey) => {
+    const index = filterCondition.findIndex(e => e.key === dataKey)
+    const newFilterCondition = [...filterCondition]
+    if (index >= 0) {
+      newFilterCondition[index] = { ...newFilterCondition[index], data: data }
+    } else {
+      newFilterCondition.push({ data, key: dataKey })
+    }
+    setFilterCondition(newFilterCondition)
+    hideFilterElement(dataKey)
+  }
+
+  const onResetFilter = (dataKey) => {
+    const index = filterCondition.findIndex(e => e.key === dataKey)
+    if (index >= 0) {
+      const newFilterCondition = [...filterCondition]
+      newFilterCondition.splice(index, 1)
+      setFilterCondition(newFilterCondition)
+    }
+    hideFilterElement(dataKey)
+  }
+
+
+  useEffect(() => {
+    const newTableData = ganttChartTableData.filter(e => {
+      return filterCondition.every(condition => {
+        return condition.data.includes(e[condition.key])
+      })
+    })
+    updateResourceRecords(newTableData)
+  }, [filterCondition])
+
   return (
     <div className="rts-table-container scroll" id="scrollableDiv">
       <div
@@ -419,10 +606,11 @@ const sendRequestsHandler = () =>{
           <Col lg={12}>
             <BryntumSchedulerPro
               {...schedulerproConfig}
+              events={eventsData}
               resources={tableData}
               syncDataOnLoad
               ref={schedulerProRef}
-              // other props, event handlers, etc
+            // other props, event handlers, etc
             />
           </Col>
         </Row>
@@ -431,7 +619,10 @@ const sendRequestsHandler = () =>{
             <ChartColumnFilter
               key={e.key}
               filterKey={e.key}
-              filterData={tableData}
+              filterData={ganttChartTableData}
+              type={e.type}
+              onApply={onApplyFilter}
+              onReset={onResetFilter}
             />
           )
         })}
@@ -441,16 +632,23 @@ const sendRequestsHandler = () =>{
         onSend={sendRequestsHandler}
         onCancel={toggle}
         headerContent={dropdownSelectedItem?.header || ''}
-        bodyContent={`Are you sure you want to proceed for ${dropdownSelectedItem?.body || ''}`}/>
+        bodyContent={`Are you sure you want to proceed ${dropdownSelectedItem?.body || ''}`}/>
     </div>
   )
 }
 
+const mapStateToProps = ({ orderBank }) => {
+  return {
+    isSendRequestProcess: orderBank.isSendRequestProcess
+  }
+}
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        processPaymentInGanttChart: (params) => dispatch(processPaymentInGanttChart(params))
+        processPaymentInGanttChart: (params) => dispatch(processPaymentInGanttChart(params)),
+        processCancelPaymentInGanttChart: (params) => dispatch(cancelPaymentInGanttChart(params)),
+        processSendOrderInGanttChart: (params) => dispatch(sendOrderInGanttChart(params))
     }
 }
 
-export default  connect(null, mapDispatchToProps)(BryntumChartTable)
+export default  connect(mapStateToProps, mapDispatchToProps)(BryntumChartTable)

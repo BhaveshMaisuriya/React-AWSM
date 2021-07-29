@@ -74,6 +74,21 @@ const GanttChartBottom = [
   },
 ]
 
+const GanttChartBottomHover = [
+  {
+    title: "Terminal",
+    color: "blue",
+  },
+  {
+    title: "Station retail",
+    color: "light-sky",
+  },
+  {
+    title: "station commercial",
+    color: "green",
+  }
+]
+
 function OrderBank({
   getRTSOrderBankTableData,
   orderBankTableData,
@@ -413,6 +428,18 @@ const enabledCross = (val) => {
                               </div>
                             )
                           })}
+                          <div id="hover_display" className="hover_display">
+                            {GanttChartBottomHover.map((item, index) => {
+                              return (
+                                <div className="d-flex align-items-center mr-2">
+                                  <div
+                                    className={`square ${item.color} mr-1 ml-2`}
+                                  ></div>
+                                  {item.title}
+                                </div>
+                              )
+                            })}
+                          </div>
                         </div>
                       </div>
                       <div className="gantt_chart_second pt-2">

@@ -346,7 +346,7 @@ const CustomizeTableModal = ({
             <div className="d-flex align-items-center justify-content-between mt-4">
               <button
                 onClick={onRevertToDefault}
-                className="btn btn-outline-primary px-4"
+                className="btn btn-outline-primary px-4 btn-size"
               >
                 <div className="btn-pre-icon">
                   <RefreshDotIcon />
@@ -356,11 +356,14 @@ const CustomizeTableModal = ({
               <div className="d-flex align-items-center">
                 <button
                   onClick={closeDialog}
-                  className="btn btn-outline-primary px-4 mr-2"
+                  className="btn btn-outline-primary px-4 mr-2 btn-size"
                 >
                   Cancel
                 </button>
-                <button onClick={onSave} className="btn btn-primary px-4">
+                <button
+                  onClick={onSave}
+                  className="btn btn-primary px-4 btn-size"
+                >
                   Save
                 </button>
               </div>

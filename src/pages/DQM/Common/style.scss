@@ -289,3 +289,17 @@
   padding-bottom: 25px !important;
   padding-top: 25px !important;
 }
+
+.excel-btn-container {
+  padding-bottom: 5px !important;
+  .excel-download-btn {
+    display: flex;
+    .download-icon {
+      margin-bottom: 5px;
+      margin-right: 3px;
+    }
+    .download-button-message {
+      margin: auto;
+    }
+  }
+}

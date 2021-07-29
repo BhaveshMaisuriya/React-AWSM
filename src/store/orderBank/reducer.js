@@ -14,7 +14,12 @@ import {
   GET_ORDER_BANK_AUDITLOG_SUCCESS,
   GET_ORDER_BANK_AUDITLOG_FAIL,
   PROCESS_PAYMENT_IN_GANTT_CHART_FAIL,
-  PROCESS_PAYMENT_IN_GANTT_CHART_SUCCESS
+  PROCESS_PAYMENT_IN_GANTT_CHART_SUCCESS,
+  CANCEL_PAYMENT_IN_GANTT_CHART_SUCCESS,
+  CANCEL_PAYMENT_IN_GANTT_CHART_FAIL,
+  SEND_ORDER_IN_GANTT_CHART_SUCCESS,
+  SEND_ORDER_IN_GANTT_CHART_FAIL
+
 } from "./actionTypes"
 
 const initialState = {
@@ -23,6 +28,7 @@ const initialState = {
   error: null,
   currentOrderDetail: null,
   updateSuccess: false,
+  isSendRequestProcess: false,
   auditsCom: null
 }
 
@@ -117,10 +123,34 @@ const RTSOrderBank = (state = initialState, action) => {
       notify.success("A shipment has been successfully created in SAP")
       return {
         ...state,
+        isSendRequestProcess : state.isSendRequestProcess+1
       }
 
     case PROCESS_PAYMENT_IN_GANTT_CHART_FAIL:
       notify.error("A shipment has been fail created in SAP")
+      return {
+        ...state,
+        error: action.payload,
+        isSendRequestProcess : state.isSendRequestProcess+1
+      }
+    case CANCEL_PAYMENT_IN_GANTT_CHART_SUCCESS:
+      notify.success("A shipment has been successfully cancelled from schedule")
+      return {
+        ...state,
+      }
+    case CANCEL_PAYMENT_IN_GANTT_CHART_FAIL:
+      notify.error("A shipment has been fail cancelled in SAP")
+      return {
+        ...state,
+        error: action.payload,
+      }
+    case SEND_ORDER_IN_GANTT_CHART_SUCCESS:
+      notify.success("A shipment has been successfully sent for Creation")
+      return {
+        ...state,
+      }
+    case SEND_ORDER_IN_GANTT_CHART_FAIL:
+      notify.error("A shipment has been fail to sent for Creation")
       return {
         ...state,
         error: action.payload,

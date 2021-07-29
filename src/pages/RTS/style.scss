@@ -468,7 +468,8 @@
     z-index: 99;
 
     &.hide {
-        display: none;
+        position: absolute;
+        left: -999;
         visibility: hidden;
         pointer-events: none;
     }
@@ -495,6 +496,10 @@
             right: 0;
             top: 6px;
         }
+    }
+
+    .chart-column-filter-body {
+        max-height: 250px;
     }
 
     .chart-column-footer {

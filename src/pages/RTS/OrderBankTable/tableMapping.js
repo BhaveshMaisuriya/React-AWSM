@@ -105,6 +105,7 @@ const ganttChartTableMapping = {
   shift: {
     label: "SHIFT",
     columnSize: "cell-text",
+    type: "list"
   },
   cap: {
     label: "CAP(L)",
@@ -119,7 +120,7 @@ const ganttChartTableMapping = {
 const ganttChartTableData =[
   {
     id: 1,
-    vehicle: 'WA 5559V',
+    vehicle: 'WA 5551V',
     pto: 'PTO',
     hours: '3.36',
     status: 'On 1',
@@ -137,8 +138,8 @@ const ganttChartTableData =[
   },
   {
     id: 2,
-    vehicle: 'WA 5559V',
-    hours: '5',
+    vehicle: 'WA 5552V',
+    hours: '13.36',
     status: 'On 1',
     size: '21840',
     type: '1003',
@@ -154,7 +155,7 @@ const ganttChartTableData =[
   },
   {
     id: 3,
-    vehicle: 'WA 5559V',
+    vehicle: 'WA 5553V',
     pto: 'PTO',
     hours: '13.36',
     status: 'On 1',
@@ -182,7 +183,7 @@ const ganttChartTableData =[
     shift_list: [
       "On 1",
       "On 2",
-      "on 3"
+      "on 4"
     ],
     shift: "On 1",
     cap: "21480",

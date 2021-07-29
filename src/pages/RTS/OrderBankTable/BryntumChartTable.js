@@ -329,16 +329,24 @@ function BryntumChartTable(props) {
     resourceMargin: 0,
     autoAdjustTimeAxis: false,
     fillTicks: true,
-    eventRenderer: ({ eventRecord, renderData }) => {
-      // customize content for event in here
-      return `<div class="eventCustomize">
-                <div class="white-bg brdr-radius">
-                  <p>1</p></div> 
-                <div class="blue-bg brdr-radius">
-                  <p>M808</p></div>
-                <div class="white-text brdr-radius"><p>${renderData.resource.hours} hrs</p></div>
-                <div class="green-bg brdr-radius"><p>eta 09:00</p></div>
-             </div>`
+    eventRenderer:({ eventRecord, renderData  }) => {
+      // customize content for event in here marquee
+      return `
+      <div class="eventCustomize marquee" onmouseover="document.getElementById('gethighlight').style.display = 'flex';" onmouseout="document.getElementById('gethighlight').style.display = 'none';">
+        <div class="white-bg brdr-radius">
+          <p>1</p>
+        </div> 
+        <div class="blue-bg brdr-radius">
+          <p>M808</p>
+        </div> 
+        <div class="white-text brdr-radius">
+          <p>${renderData.resource.hours} hrs</p>
+        </div> 
+        <div class="green-bg brdr-radius">
+          <p>eta 09:00</p>
+        </div>
+      </div>
+      `
     },
     features: {
       eventTooltip: {
@@ -357,6 +365,7 @@ function BryntumChartTable(props) {
     },
     startDate: "2021-07-23",
     resourceNonWorkingTimeFeature: true,
+    // viewPreset: "hourAndDay",
     nonWorkingTimeFeature: true,
     resourceTimeRangesFeature: true,
     maxTimeAxisUnit: "hour",
@@ -422,6 +431,8 @@ function BryntumChartTable(props) {
     }
   }
 
+
+
   const onShiftDateChange = (recordId, value) => {
     const recordIndex = tableData.findIndex(e => e.id === recordId)
     if (recordIndex >= 0) {
@@ -474,51 +485,6 @@ function BryntumChartTable(props) {
       },
     })
   }
-
-  // useEffect(() => {
-  const hover = document.querySelector(`b-sch-event`);//eventCustomize
-  const bottom_target = document.getElementById(`hover_display`);
-  document.querySelectorAll(".b-sch-event").forEach(e => {
-    console.log(e);
-  });
-  // for (i = 0; i < x.length; i++) {
-
-  //   x[i].addEventListener('onmouseover', function (event) {
-  //   });
-  // }
-  // const el = document.getElementById(`chart-column-${e}-button`)
-  // if (hover) {
-  //   hover.addEventListener("onmouseover", event => {
-  //     //const tooltip = document.getElementById(`chart-tooltip-${e}`)
-  //     bottom_target.style.display = 'block'
-  //   })
-  // }
-  // }, [])
-
-
-
-  // if (hover) {
-  //   console.log("here.....123", hover);
-  //   hover.onmouseover = function (e) {
-  //     e.stopPropagation()
-  //     e.preventDefault()
-  //     bottom_target.style.display = 'flex';
-  //   }
-
-  //   hover.onmouseout = function (e) {
-  //     e.stopPropagation()
-  //     e.preventDefault()
-  //     bottom_target.style.display = 'none';
-  //   }
-  // hover.addEventListener("mouseenter", event => {
-  // hover.style.display = 'flex';
-  // bottom_target.setAttribute("style", "display:flex;");
-  // })
-  // hover.addEventListener("mouseleave", event => {
-  //   console.log("here1", hover);
-  //   bottom_target.setAttribute("style", "display:none;");
-  // })
-  //}
 
   useEffect(() => {
     if(props.isSendRequestProcess && dropdownSelectedItem?.itemSelectedId){

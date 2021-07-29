@@ -249,7 +249,7 @@ const sendRequestsHandler = () =>{
     eventRenderer:({ eventRecord, renderData  }) => {
       // customize content for event in here marquee
       return `
-      <div class="eventCustomize" onmouseover="document.getElementById('gethighlight').style.display = 'flex';" onmouseout="document.getElementById('gethighlight').style.display = 'none';">
+      <div class="eventCustomize marquee" onmouseover="document.getElementById('gethighlight').style.display = 'flex';" onmouseout="document.getElementById('gethighlight').style.display = 'none';">
         <div class="white-bg brdr-radius">
           <p>1</p>
         </div> 

@@ -486,51 +486,6 @@ function BryntumChartTable(props) {
     })
   }
 
-  // useEffect(() => {
-  const hover = document.querySelector(`b-sch-event`);//eventCustomize
-  const bottom_target = document.getElementById(`hover_display`);
-  document.querySelectorAll(".b-sch-event").forEach(e => {
-    console.log(e);
-  });
-  // for (i = 0; i < x.length; i++) {
-
-  //   x[i].addEventListener('onmouseover', function (event) {
-  //   });
-  // }
-  // const el = document.getElementById(`chart-column-${e}-button`)
-  // if (hover) {
-  //   hover.addEventListener("onmouseover", event => {
-  //     //const tooltip = document.getElementById(`chart-tooltip-${e}`)
-  //     bottom_target.style.display = 'block'
-  //   })
-  // }
-  // }, [])
-
-
-
-  // if (hover) {
-  //   console.log("here.....123", hover);
-  //   hover.onmouseover = function (e) {
-  //     e.stopPropagation()
-  //     e.preventDefault()
-  //     bottom_target.style.display = 'flex';
-  //   }
-
-  //   hover.onmouseout = function (e) {
-  //     e.stopPropagation()
-  //     e.preventDefault()
-  //     bottom_target.style.display = 'none';
-  //   }
-  // hover.addEventListener("mouseenter", event => {
-  // hover.style.display = 'flex';
-  // bottom_target.setAttribute("style", "display:flex;");
-  // })
-  // hover.addEventListener("mouseleave", event => {
-  //   console.log("here1", hover);
-  //   bottom_target.setAttribute("style", "display:none;");
-  // })
-  //}
-
   useEffect(() => {
     if(props.isSendRequestProcess && dropdownSelectedItem?.itemSelectedId){
       changeColorOfEventHandler('#615E9B')

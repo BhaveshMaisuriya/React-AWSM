@@ -320,12 +320,7 @@ function BryntumChartTable(props) {
     setTableData(updateData)
   }
 
-  // function isElementOverflowing(element) {
-  //   var overflowX = element.offsetWidth < element.scrollWidth,
-  //     overflowY = element.offsetHeight < element.scrollHeight;
-  
-  //   return (overflowX || overflowY);
-  // }
+
   
   // function wrapContentsInMarquee(element) {
   //   var marquee = document.createElement('marquee'),
@@ -353,24 +348,40 @@ function BryntumChartTable(props) {
     autoAdjustTimeAxis: false,
     fillTicks: true,
     eventRenderer:({ eventRecord, renderData  }) => {
-      // customize content for event in here
+      // var marquee = '';
+      // if(renderData.width < 360){
+      //   marquee = 'ellipsis_text';
+      //   setTimeout(function(){ 
+      //     alert("here")
+      //     marquee = 'marquee';
+      //   }, 1000);
+      // }
       return `
-      <div class="eventCustomize" id="eventEllipses" onmouseover="document.getElementById('gethighlight').style.display = 'flex';" onmouseout="document.getElementById('gethighlight').style.display = 'none';">
-        <div class="marquee">
-          <div class="white-bg brdr-radius">
-            <p>1</p>
-          </div> 
-          <div class="blue-bg brdr-radius">
-            <p>M808</p>
-          </div> 
-          <div class="white-text brdr-radius">
-            <p>${renderData.resource.hours} hrs</p>
-          </div> 
-          <div class="green-bg brdr-radius">
-            <p>eta 09:00</p>
+        <div class="eventCustomize" id="eventEllipses" 
+          onmouseover="document.getElementById('gethighlight').style.display = 'flex';" 
+          onmouseout="document.getElementById('gethighlight').style.display = 'none';"
+        >
+          <div class=${renderData.width < 360 ? 'marquee' : ''}>
+            <div class="white-bg brdr-radius">
+              <p>1</p>
+            </div>
+            <div class="blue-bg brdr-radius">
+              <p>M808</p>
+            </div>
+            <div class="white-text brdr-radius">
+              <p>${renderData.resource.hours} hrs</p>
+            </div>
+            <div class="green-bg brdr-radius">
+              <p>eta 09:00</p>
+            </div>
+            <div class="white-text brdr-radius">
+              <p>${renderData.resource.hours} hrs</p>
+            </div>
+            <div class="green-bg brdr-radius">
+              <p>eta 09:00</p>
+            </div>
           </div>
         </div>
-      </div>
       `
     },
     features: {

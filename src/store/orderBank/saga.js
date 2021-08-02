@@ -12,7 +12,8 @@ import {
   GET_ORDER_BANK_AUDITLOG,
   PROCESS_PAYMENT_IN_GANTT_CHART,
   CANCEL_PAYMENT_IN_GANTT_CHART,
-  SEND_ORDER_IN_GANTT_CHART
+  SEND_ORDER_IN_GANTT_CHART,
+  GET_RTS_GANTT_CHART_DATA,
 } from "./actionTypes"
 
 import {
@@ -39,7 +40,9 @@ import {
   cancelPaymentInGanttChartSuccess,
   cancelPaymentInGanttChartFail,
   sendOrderInGanttChartSuccess,
-  sendOrderInGanttChartFail
+  sendOrderInGanttChartFail,
+  getRTSOderBankGanttChartSuccess,
+  getRTSOderBankGanttChartFail,
 } from "./actions"
 import {
   getOrderBank,
@@ -50,6 +53,7 @@ import {
   refreshRTSOrderBank,
   deleteOrderBankDetail,
   getOrderBankAuditLog,
+  getRTSOderBankGanttChart,
 } from "../../helpers/fakebackend_helper"
 
 function* onGetOrderbank({ params = {} }) {
@@ -160,6 +164,14 @@ function* sendRequestOrderPaymentInGanttChart({ params={} }){
   }
 }
 
+function* onGetRTSOrderBankGanttChart({ params = {} }) {
+  try {
+    const response = yield call(getRTSOderBankGanttChart, params)
+    yield put(getRTSOderBankGanttChartSuccess(response))
+  } catch (error) {
+    yield put(getRTSOderBankGanttChartFail(error))
+  }
+}
 
 function* orderBankSaga() {
   yield takeLatest(GET_ORDERBANK, onGetOrderbank)
@@ -183,6 +195,7 @@ function* orderBankSaga() {
   yield takeLatest(PROCESS_PAYMENT_IN_GANTT_CHART , sendRequestPaymentInGanttChart)
   yield takeLatest(CANCEL_PAYMENT_IN_GANTT_CHART , sendRequestCancelPaymentInGanttChart)
   yield takeLatest(SEND_ORDER_IN_GANTT_CHART , sendRequestOrderPaymentInGanttChart)
+  yield takeLatest(GET_RTS_GANTT_CHART_DATA, onGetRTSOrderBankGanttChart)
 }
 
 export default orderBankSaga

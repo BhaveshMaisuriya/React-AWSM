@@ -1,0 +1,45 @@
+.custom-radio-button{
+	cursor: pointer;
+	padding-left:1.4rem;
+	font-weight: 400;
+	*{
+		transition: 0.3s;
+	}
+	input{
+		cursor: pointer;
+		height: 0;
+		width: 0;
+		opacity: 0;
+		&:checked{
+			& ~ .check-mark{
+				background-color: #00a19c!important;
+				border:none;
+			}
+			& ~ .check-mark:after{
+				display: block!important;
+			}
+		}
+	}
+	.check-mark{
+		top:0;
+		left:0;
+		background-color: #fff;
+		border: 0.5px solid rgba(0,0,0,0.4);
+		&:after{
+			content:"";
+			display: none;
+			border-radius: 50%;
+			width: calc(100% - 10px);
+			height: calc(100% - 10px);
+			background-color: #fff;
+		}
+	}
+	&:hover{
+		input{
+			& ~ .check-mark{
+				background-color: #00a19c;
+				border:none;
+			}
+		}
+	}
+}

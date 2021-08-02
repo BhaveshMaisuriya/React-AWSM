@@ -18,7 +18,9 @@ import {
   CANCEL_PAYMENT_IN_GANTT_CHART_SUCCESS,
   CANCEL_PAYMENT_IN_GANTT_CHART_FAIL,
   SEND_ORDER_IN_GANTT_CHART_SUCCESS,
-  SEND_ORDER_IN_GANTT_CHART_FAIL
+  SEND_ORDER_IN_GANTT_CHART_FAIL,
+  GET_RTS_GANTT_CHART_DATA_SUCCESS,
+  GET_RTS_GANTT_CHART_DATA_FAIL,
 
 } from "./actionTypes"
 
@@ -29,7 +31,11 @@ const initialState = {
   currentOrderDetail: null,
   updateSuccess: false,
   isSendRequestProcess: false,
-  auditsCom: null
+  auditsCom: null,
+  ganttChart: {
+    table: [],
+    event: [],
+  }
 }
 
 import { notify } from "../../helpers/notify"
@@ -155,6 +161,22 @@ const RTSOrderBank = (state = initialState, action) => {
         ...state,
         error: action.payload,
       }
+    case GET_RTS_GANTT_CHART_DATA_SUCCESS: {
+      return {
+        ...state,
+        ganttChart: action.payload
+      }
+    }
+    case GET_RTS_GANTT_CHART_DATA_FAIL: {
+      return {
+        ...state,
+        ganttChart: {
+          table: [],
+          event: [],
+        },
+        error: action.payload
+      }
+    }
     default:
       return state
   }

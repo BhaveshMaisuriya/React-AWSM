@@ -468,6 +468,11 @@ export const refreshRTSOrderBank = params => {
 export const sendRTSOrderBank = params => {
   return put(url.GET_RTS_ORDER_BANK, params)
 }
+
+export const getRTSOderBankGanttChart = params => {
+  return post(url.GET_RTS_GANTT_CHART, params)
+}
+
 export {
   getLoggedInUser,
   isUserAuthenticated,

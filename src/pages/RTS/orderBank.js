@@ -42,6 +42,7 @@ import OrderBankActionModal from "./OrderBankActionModal"
 import CrossTerminalModal from "./crossTerminalModal"
 import BryntumChartTable from "./OrderBankTable/BryntumChartTable"
 import OrderBankAuditModal from "./OrderBankAuditModal"
+import CustomRadioButton from "components/Common/CustomRadioButton"
 
 const GanttChartBottom = [
   {
@@ -89,6 +90,25 @@ const GanttChartBottomHover = [
   }
 ]
 
+const GanttChartFilterButtons = [
+	{
+		label:"Backlog",
+		value :"backlog"
+	},
+	{
+		label: "Future",
+		value: "future"
+	},
+	{
+		label: "Special Request",
+		value:"request"
+	},
+	{
+		label: "High Priority",
+		value: "high"
+	}
+
+]
 function OrderBank({
   getRTSOrderBankTableData,
   orderBankTableData,
@@ -279,7 +299,16 @@ const enabledCross = (val) => {
       }
     }
   }
-
+  const changeGanttChartAllRadio = (event) => {
+		const target = event.target
+		const value = target.value
+		if (value === ganttChartAllRadio && target.checked) {
+			target.checked = false
+			return setGanttChartAllRadio('')
+		}
+		target.checked = true
+		return setGanttChartAllRadio(value)
+  }
   return (
     <React.Fragment>
       <div className="order-bank-page-content">
@@ -342,7 +371,7 @@ const enabledCross = (val) => {
                     <div class="gantt_chart_main">
                       <div className="gantt_chart_first pb-3">
                       <Row className='remove_border pb-0'>
-                          <Col lg={6} className='order-bank-bar'>
+                          <Col lg={5} className='order-bank-bar'>
                             <div className="order-bank-shift-date">
                               <div>DATE</div>
                               <DateRangePicker
@@ -367,17 +396,17 @@ const enabledCross = (val) => {
                               <AWSMDropdown value={terminal} onChange={value => setTerminal(value)} items={terminalList}/>
                             </div>
                           </Col>
-                          <Col lg={6} className='order-bank-bar right'>                           
+                          <Col lg={7} className='order-bank-bar right'>                           
                             <img src={customiseTableIcon} className="ml-2" />
-                            <div className='radio_option m-0 order-bank-label'>
-                              <input
+                            <div className='d-flex align-items-center justify-content-between radio_option m-0 order-bank-label'>
+                              {/* <input
                                 type="radio"
                                 id="high"
                                 name="radioWidth"
                                 value="high"
                                 checked={ganttChartAllRadio === 'high' ? true : false}
                                 className="mr-1 ml-1 pointer"
-                                onChange={() => setGanttChartAllRadio('high')}
+                                onClick={changeGanttChartAllRadio}
                               />
                               <label for='high' className="mr-1 pointer">High Priority</label>
                               <input
@@ -387,7 +416,7 @@ const enabledCross = (val) => {
                                 value="request"
                                 className='mr-1 pointer'
                                 checked={ganttChartAllRadio === 'request' ? true : false}
-                                onChange={() => setGanttChartAllRadio('request')}
+                                onClick={changeGanttChartAllRadio}
                               />
                               <label for='request' className='mr-1 pointer'>Special Request</label>
                               <input
@@ -397,7 +426,7 @@ const enabledCross = (val) => {
                                 value="future"
                                 checked={ganttChartAllRadio === 'future' ? true : false}
                                 className='mr-1 pointer'
-                                onChange={() => setGanttChartAllRadio('future')}
+                                onClick={changeGanttChartAllRadio}
                               />
                               <label for='future' className='mr-1 pointer'>Future</label>
                               <input
@@ -407,16 +436,28 @@ const enabledCross = (val) => {
                                 value="backlog"
                                 checked={ganttChartAllRadio === 'backlog' ? true : false}
                                 className='mr-1 pointer'
-                                onChange={() => setGanttChartAllRadio('backlog')}
+                                onClick={changeGanttChartAllRadio}
                               />
                               <label for='backlog' className='mr-1 pointer'>Back Log</label>
-                            </div>
+															<CustomRadioButton label="high" checked={ganttChartAllRadio === "test" ? true :false} name="radioWidth" value="test" onClick={changeGanttChartAllRadio}/> */}
+															{
+																GanttChartFilterButtons && GanttChartFilterButtons.length > 0 &&
+																GanttChartFilterButtons.map((button,index)=>{
+																	const {value,label} = button;
+																	return <CustomRadioButton key={`${index}-${value}`} 
+																	label={label} value={value} 
+																	checked={ganttChartAllRadio === value}
+																	name="radioWidth" 
+																	onClick={changeGanttChartAllRadio}/>
+																})
+															}
+														</div>
                             <span className="m-0 order-bank-label">
                               141 DNs, 3 shipments, 3 special request, 5 high priority
                             </span>
                           </Col>
                         </Row>
-                        <BryntumChartTable />
+                        <BryntumChartTable ganttChartAllRadio={ganttChartAllRadio} />
                         <div className="square_border">
                           {GanttChartBottom.map((item, index) => {
                             return (

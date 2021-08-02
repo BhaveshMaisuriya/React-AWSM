@@ -14,17 +14,17 @@ import Calendar from "../pages/Calendar/index"
 import Dashboard from "../pages/Dashboard/index"
 import DashboardSaas from "../pages/Dashboard-saas/index"
 // Charts
-import ChartApex from "../pages/Charts/Apexcharts"
-import ChartistChart from "../pages/Charts/ChartistChart"
-import ChartjsChart from "../pages/Charts/ChartjsChart"
-import EChart from "../pages/Charts/EChart"
-import SparklineChart from "../pages/Charts/SparklineChart"
-import ToastUIChart from "../pages/Charts/ToastUIChart"
-import ChartsKnob from "../pages/Charts/charts-knob"
+// import ChartApex from "../pages/Charts/Apexcharts"
+// import ChartistChart from "../pages/Charts/ChartistChart"
+// import ChartjsChart from "../pages/Charts/ChartjsChart"
+// import EChart from "../pages/Charts/EChart"
+// import SparklineChart from "../pages/Charts/SparklineChart"
+// import ToastUIChart from "../pages/Charts/ToastUIChart"
+// import ChartsKnob from "../pages/Charts/charts-knob"
 
 // Maps
-import MapsGoogle from "../pages/Maps/MapsGoogle"
-import MapsVector from "../pages/Maps/MapsVector"
+// import MapsGoogle from "../pages/Maps/MapsGoogle"
+// import MapsVector from "../pages/Maps/MapsVector"
 // import MapsLeaflet from "../pages/Maps/MapsLeaflet"
 //Contacts
 import ContactsGrid from "../pages/Contacts/contacts-grid"
@@ -66,19 +66,19 @@ const authProtectedRoutes = [
   { path: "/orderbank", component: OrderBank },
   { path: "/rts", component: RTS },  
 
-  { path: "/dashboard/2", component: DashboardSaas },
-  { path: "/chat", component: Chat },
+  // { path: "/dashboard/2", component: DashboardSaas },
+  // { path: "/chat", component: Chat },
   { path: "/calendar", component: Calendar },
   // this route should be at the end of all other routes
-  { path: "/apex-charts", component: ChartApex },
-  { path: "/chartist-charts", component: ChartistChart },
-  { path: "/chartjs-charts", component: ChartjsChart },
-  { path: "/e-charts", component: EChart },
-  { path: "/sparkline-charts", component: SparklineChart },
-  { path: "/tui-charts", component: ToastUIChart },
-  { path: "/charts-knob", component: ChartsKnob },
-  { path: "/maps-google", component: MapsGoogle },
-  { path: "/maps-vector", component: MapsVector },
+  // { path: "/apex-charts", component: ChartApex },
+  // { path: "/chartist-charts", component: ChartistChart },
+  // { path: "/chartjs-charts", component: ChartjsChart },
+  // { path: "/e-charts", component: EChart },
+  // { path: "/sparkline-charts", component: SparklineChart },
+  // { path: "/tui-charts", component: ToastUIChart },
+  // { path: "/charts-knob", component: ChartsKnob },
+  // { path: "/maps-google", component: MapsGoogle },
+  // { path: "/maps-vector", component: MapsVector },
   // { path: "/maps-leaflet", component: MapsLeaflet },
   // Contacts
   { path: "/contacts-grid", component: ContactsGrid },

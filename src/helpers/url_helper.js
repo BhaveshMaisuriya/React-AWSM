@@ -101,3 +101,4 @@ export const GET_SLA_AUDITLOG = "/sla_audit_log"
 
 // RTS Order bank
 export const GET_RTS_ORDER_BANK = "/rts_oder_bank"
+export const GET_RTS_GANTT_CHART = "/rts_gantt_chart"

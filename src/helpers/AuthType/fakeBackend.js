@@ -43,6 +43,8 @@ import {
   currentSaleAndInventory,
   slaData,
   orderBank,
+  ganttChartTableData,
+  ganttChartTableEvents,
 } from "../../common/data"
 
 import { axiosApi } from "../api_helper"
@@ -963,6 +965,17 @@ const fakeBackend = () => {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         resolve([200, orderBank])
+      }, 500)
+    })
+  })
+
+  mock.onPost(url.GET_RTS_GANTT_CHART).reply(() => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve([200, {
+          table: ganttChartTableData,
+          event: ganttChartTableEvents,
+        }])
       }, 500)
     })
   })

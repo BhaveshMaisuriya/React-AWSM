@@ -186,7 +186,6 @@
 }
 .eventCustomize {
     width: 100%;
-    text-align: center;
     display: inline-block;
     padding: 10px 0;
     div{
@@ -218,7 +217,12 @@
         color: white;
     }
 }
-.marquee {    
+.deleteModal .modal-header {
+    padding-left: 10px !important;
+}
+
+.marquee {
+
     -moz-transform: translateX(100%);
     -webkit-transform: translateX(100%);
     transform: translateX(100%);
@@ -256,4 +260,7 @@
         -webkit-transform: translateX(-100%);
         transform: translateX(-100%);
     }
+}
+.opacity-20{
+    opacity:0.2;
 }

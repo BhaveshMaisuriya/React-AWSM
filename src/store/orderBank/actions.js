@@ -36,6 +36,9 @@ import {
   SEND_ORDER_IN_GANTT_CHART,
   SEND_ORDER_IN_GANTT_CHART_SUCCESS,
   SEND_ORDER_IN_GANTT_CHART_FAIL,
+  GET_RTS_GANTT_CHART_DATA,
+  GET_RTS_GANTT_CHART_DATA_SUCCESS,
+  GET_RTS_GANTT_CHART_DATA_FAIL,
 
 } from "./actionTypes"
 
@@ -224,4 +227,20 @@ export const sendOrderInGanttChartFail = error => ({
   type: SEND_ORDER_IN_GANTT_CHART_FAIL,
   payload: error,
 })
+
+export const getRTSOderBankGanttChart = params => ({
+  type: GET_RTS_GANTT_CHART_DATA,
+  params,
+})
+
+export const getRTSOderBankGanttChartSuccess = response => ({
+  type: GET_RTS_GANTT_CHART_DATA_SUCCESS,
+  payload: response,
+})
+
+export const getRTSOderBankGanttChartFail = error => ({
+  type: GET_RTS_GANTT_CHART_DATA_FAIL,
+  payload: error,
+})
+
 

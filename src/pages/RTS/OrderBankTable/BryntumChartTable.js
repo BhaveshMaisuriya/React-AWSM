@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react"
+import React, { useEffect, useMemo, useRef, useState, useCallback } from "react"
 import { connect } from "react-redux"
 import {
   Row,
@@ -9,8 +9,6 @@ import {
 import { createPopper } from "@popperjs/core"
 import {
   ganttChartTableMapping,
-  ganttChartTableData,
-  ganttChartTableEvents,
 } from "./tableMapping"
 import "./index.scss"
 import { BryntumSchedulerPro } from "@bryntum/schedulerpro-react"
@@ -28,8 +26,12 @@ import selectAllIcon3 from "../../../assets/images/AWSM-Checkbox.svg"
 import selectAllIcon2 from "../../../assets/images/AWSM-Checked-box.svg"
 import selectAllIcon from "../../../assets/images/AWSM-Select-all-Checkbox.svg"
 import ConfirmDNStatusModal from "./confirmDNStatusModal"
-import { processPaymentInGanttChart, cancelPaymentInGanttChart, sendOrderInGanttChart } from "../../../store/actions"
+import { processPaymentInGanttChart, cancelPaymentInGanttChart, sendOrderInGanttChart, getRTSOderBankGanttChart } from "../../../store/actions"
 import { cloneDeep } from 'lodash'
+
+const EventSchedulerStatus = {
+    HIDDEN_CREATE_SHIPMENT : "not yet to be created"
+}
 
 const ShiftPopover = ({ record, onChange }) => {
   const [popoverOpen, setPopoverOpen] = useState(false)
@@ -224,18 +226,32 @@ const ChartColumnFilter = ({
 }
 
 function BryntumChartTable(props) {
-  const [tableData, setTableData] = useState(ganttChartTableData)
+  // const [tableData, setTableData] = useState([])
+  const tableData = useRef([])
+  const setTableData = (newData) => {
+    tableData.current = newData
+  }
   const [modal, setModal] = useState(false);
   const [dropdownSelectedItem, setDropdownSelectedItem] =  useState(null);
   const [filterCondition, setFilterCondition] = useState([])
-  const [eventsData, setEventsData] = useState(ganttChartTableEvents)
+  const [eventsData, setEventsData] = useState([])
   const schedulerProRef = useRef()
+	const firstRender = useRef(true)
   const [filterList, setFilterList] = useState(
     Object.keys(ganttChartTableMapping).map(e => ({
       key: e,
       type: ganttChartTableMapping[e].type,
     }))
   )
+  useEffect(() => {
+    const { getRTSOderBankGanttChart } = props
+    getRTSOderBankGanttChart()
+  }, [])
+
+  useEffect(() => {
+    setTableData(props.ganttChartData.table)
+    setEventsData(props.ganttChartData.event)
+  }, [props.ganttChartData])
 
   const toggle = () => setModal(!modal);
 
@@ -246,18 +262,21 @@ function BryntumChartTable(props) {
             data.type = 'shipment'
             data.header = 'Create Shipment'
             data.body = 'for Shipment Creation'
+            data.styleColor = 'success'
             break
         }
         case 'cancelShipment':{
           data.type = 'cancelShipment'
           data.header = 'Cancel Shipment Confirmation'
           data.body = 'with this shipment cancellation?'
+          data.styleColor = 'danger'
           break
         }
         case 'sendOrder':{
           data.type = 'sendOrder'
           data.header = 'Send Order for DN'
           data.body = 'send this shipments order for DN?'
+          data.styleColor = 'success'
           break
         }
         default:{
@@ -283,16 +302,16 @@ function BryntumChartTable(props) {
     switch(dropdownSelectedItem.type){
       case 'shipment':{
           setTimeout(()=>{
-            props.processPaymentInGanttChart('abc')
+            props.processPaymentInGanttChart(null)
           },2000)
           break
       }
       case 'cancelShipment':{
-        props.processCancelPaymentInGanttChart('abc')
+        props.processCancelPaymentInGanttChart(null)
         break
       }
       case 'sendOrder':{
-        props.processSendOrderInGanttChart('abc')
+        props.processSendOrderInGanttChart(null)
         break
       }
       default:{
@@ -305,42 +324,25 @@ function BryntumChartTable(props) {
     }
 
   const updateResourceRecords = (updateData, preventClear = false) => {
-    const scheduler = schedulerProRef.current.instance
-    if (preventClear) {
-      scheduler.resourceStore.data = updateData
-    } else {
-      scheduler.resourceStore.removeAll()
-      if (!scheduler.eventStore.data) {
-        scheduler.eventStore.data = eventsData
+    const scheduler = schedulerProRef.current?.instance
+    if (scheduler) {
+      if (preventClear) {
+        scheduler.resourceStore.data = updateData
+      } else {
+        scheduler.resourceStore.removeAll()
+        if (!scheduler.eventStore.data) {
+          scheduler.eventStore.data = eventsData
+        }
+        updateData.forEach(e => {
+          scheduler.resourceStore.add(e)
+        })
       }
-      updateData.forEach(e => {
-        scheduler.resourceStore.add(e)
-      })
+      setTableData(updateData)
     }
-    setTableData(updateData)
   }
-
-
-  
-  // function wrapContentsInMarquee(element) {
-  //   var marquee = document.createElement('marquee'),
-  //     contents = element.innerText;
-  
-  //   marquee.innerText = contents;
-  //   element.innerHTML = '';
-  //   element.appendChild(marquee);
-  // }
-  
-  // var element = document.getElementById('eventEllipses');
-  
-  // if (isElementOverflowing(element)) {
-  //   wrapContentsInMarquee(element);
-  // }
-  
 
   const schedulerproConfig = {
     columns: [],
-    // events: ganttChartTableEvents,
     autoHeight: true,
     rowHeight: 40,
     barMargin: 0,
@@ -407,8 +409,8 @@ function BryntumChartTable(props) {
     eventMenuFeature: {
         // menuitem of event right click handler
         processItems({ eventRecord, items }) {
-          if (eventRecord.data.id === 1) {
-            items.cancel = {
+          if (eventRecord.data?.status === EventSchedulerStatus.HIDDEN_CREATE_SHIPMENT) {
+            items.createShipment = {
               hidden: true
             };
           }
@@ -436,12 +438,14 @@ function BryntumChartTable(props) {
           },
           terminalRelay:{
             text: 'Terminal Relay',
+            disabled: true,
             onItem({ source, eventRecord }) {
               updateModalHandler()
             }
           },
           plannedLoadTime:{
             text: 'Planned Load Time',
+            disabled: true,
             onItem({ source, eventRecord }) {
               updateModalHandler()
             }
@@ -467,13 +471,13 @@ function BryntumChartTable(props) {
   }
 
 
-
-  const onShiftDateChange = (recordId, value) => {
-    const recordIndex = tableData.findIndex(e => e.id === recordId)
+  function onShiftDateChange (recordId, value)  {
+    const currentTableData = tableData.current
+    const recordIndex = currentTableData.findIndex(e => e.id === recordId)
     if (recordIndex >= 0) {
-      tableData[recordIndex] = { ...tableData[recordIndex], shift: value }
+      currentTableData[recordIndex] = { ...currentTableData[recordIndex], shift: value }
     }
-    updateResourceRecords([...tableData], true)
+    updateResourceRecords([...currentTableData], true)
   }
 
   for (const tableMap of Object.keys(ganttChartTableMapping)) {
@@ -508,7 +512,6 @@ function BryntumChartTable(props) {
                   <div>${column.data.text}</div>
                   <button id="chart-column-${column.data.field}-button">
                     <svg width="22px" height="22px" viewBox="0 0 22 22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                        <title>AWSM Calendar</title>
                         <g id="AWSM-Calendar" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                             <g id="TF-Icon---Dropdown" transform="translate(1.000000, 3.000000)" fill="currentColor">
                                 <polygon id="Dropdown-Icon-Copy-2" points="6 6 11 11 16 6"></polygon>
@@ -520,6 +523,41 @@ function BryntumChartTable(props) {
       },
     })
   }
+
+  useEffect(() => {
+    let isMounted = true // prevent bryntum maximum render
+    if (schedulerProRef.current && schedulerProRef.current.instance && isMounted && !firstRender.current) {
+      const { instance: scheduler } = schedulerProRef.current
+      const {ganttChartAllRadio} = props
+      if (!ganttChartAllRadio) {
+        setEventsData((prevEventsData) => {
+          const newEventsData = prevEventsData.map((event) => {
+            event.highlight = true
+            return event
+          })
+          scheduler.eventStore.data = newEventsData
+          return newEventsData
+        })
+      }
+      if (ganttChartAllRadio) {
+        setEventsData((prevEventsData) => {
+          const newEventsData = prevEventsData.map((event) => {
+            if(event.eventType === 'Scheduled'){
+              event.highlight = event.eventFilter === ganttChartAllRadio
+            }
+            if(event.eventType !== 'Scheduled'){
+              event.highlight = true
+            }
+            return event
+          })
+          scheduler.eventStore.data = newEventsData
+          return newEventsData
+        })
+      }
+    }
+    firstRender.current = false
+    return () => isMounted = false
+  }, [props.ganttChartAllRadio])
 
   useEffect(() => {
     if(props.isSendRequestProcess && dropdownSelectedItem?.itemSelectedId){
@@ -589,7 +627,7 @@ function BryntumChartTable(props) {
 
 
   useEffect(() => {
-    const newTableData = ganttChartTableData.filter(e => {
+    const newTableData = props.ganttChartData.table.filter(e => {
       return filterCondition.every(condition => {
         return condition.data.includes(e[condition.key])
       })
@@ -608,7 +646,7 @@ function BryntumChartTable(props) {
             <BryntumSchedulerPro
               {...schedulerproConfig}
               events={eventsData}
-              resources={tableData}
+              resources={props.ganttChartData.table}
               syncDataOnLoad
               ref={schedulerProRef}
             // other props, event handlers, etc
@@ -620,7 +658,7 @@ function BryntumChartTable(props) {
             <ChartColumnFilter
               key={e.key}
               filterKey={e.key}
-              filterData={ganttChartTableData}
+              filterData={props.ganttChartData.table}
               type={e.type}
               onApply={onApplyFilter}
               onReset={onResetFilter}
@@ -633,14 +671,17 @@ function BryntumChartTable(props) {
         onSend={sendRequestsHandler}
         onCancel={toggle}
         headerContent={dropdownSelectedItem?.header || ''}
-        bodyContent={`Are you sure you want to proceed ${dropdownSelectedItem?.body || ''}`}/>
+        bodyContent={`Are you sure you want to proceed ${dropdownSelectedItem?.body || ''}`}
+        styleColor = {dropdownSelectedItem?.styleColor}
+        />
     </div>
   )
 }
 
 const mapStateToProps = ({ orderBank }) => {
   return {
-    isSendRequestProcess: orderBank.isSendRequestProcess
+    isSendRequestProcess: orderBank.isSendRequestProcess,
+    ganttChartData: orderBank.ganttChart,
   }
 }
 
@@ -648,7 +689,8 @@ const mapDispatchToProps = (dispatch) => {
     return {
         processPaymentInGanttChart: (params) => dispatch(processPaymentInGanttChart(params)),
         processCancelPaymentInGanttChart: (params) => dispatch(cancelPaymentInGanttChart(params)),
-        processSendOrderInGanttChart: (params) => dispatch(sendOrderInGanttChart(params))
+        processSendOrderInGanttChart: (params) => dispatch(sendOrderInGanttChart(params)),
+        getRTSOderBankGanttChart: (params) => dispatch(getRTSOderBankGanttChart(params))
     }
 }
 

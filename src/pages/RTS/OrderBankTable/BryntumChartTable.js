@@ -350,14 +350,6 @@ function BryntumChartTable(props) {
     autoAdjustTimeAxis: false,
     fillTicks: true,
     eventRenderer:({ eventRecord, renderData  }) => {
-      // var marquee = '';
-      // if(renderData.width < 360){
-      //   marquee = 'ellipsis_text';
-      //   setTimeout(function(){ 
-      //     alert("here")
-      //     marquee = 'marquee';
-      //   }, 1000);
-      // }
       return `
         <div class="eventCustomize" id="eventEllipses" 
           onmouseover="document.getElementById('gethighlight').style.display = 'flex';" 

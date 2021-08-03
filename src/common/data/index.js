@@ -28,7 +28,7 @@ import { terminal, auditsTerminal, filterTerminal } from "./terminal"
 import { productList } from "./product"
 import { varianceControl, currentSaleAndInventory } from "./salesAndInventory"
 import { slaData } from "./sla"
-import { orderBank, ganttChartTableData, ganttChartTableEvents } from "./orderBank"
+import { orderBank, ganttChartTableData, ganttChartTableEvents, shipmentTableData } from "./orderBank"
 export {
   productsData,
   discountData,
@@ -73,4 +73,5 @@ export {
   orderBank,
   ganttChartTableData,
   ganttChartTableEvents,
+  shipmentTableData,
 }

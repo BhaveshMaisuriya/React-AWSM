@@ -1,24 +1,13 @@
 import React, { Fragment, useState } from "react"
 import { Modal, ModalBody, ModalHeader } from "reactstrap"
 import { connect } from "react-redux"
-import { shipmentTableColumns, shipmentTableData } from "./tableMapping"
+import { shipmentTableColumns } from "./tableMapping"
 
 function OrderBankShipmentModal(props) {
-  const [rowsAudit, setRowsAudit] = useState(6)
-  const [currentAuditPage, setCurrentAuditPage] = useState(0)
-
   function toggle() {
     props.istoggle()
   }
-
-  function CloseModal() {
-    props.CloseModal()
-  }
-
-  function handleChangeAuditPage(event, currentAudit) {
-    setCurrentAuditPage(currentAudit)
-  }
-
+console.log("::data", props.shipmentOrderBankTableData)
   return (
     <Fragment>
       <Modal
@@ -54,8 +43,8 @@ function OrderBankShipmentModal(props) {
                   </tr>
                 </thead>
                 <tbody>
-                  {shipmentTableData &&
-                    shipmentTableData.map(item => {
+                  {props.shipmentOrderBankTableData &&
+                    props.shipmentOrderBankTableData.map(item => {
                       return (
                         <tr>
                           <td className="text-center">
@@ -143,7 +132,7 @@ function OrderBankShipmentModal(props) {
 }
 
 const mapStateToProps = ({ orderBank }) => ({
-  auditsCom: orderBank.auditsCom,
+  shipmentOrderBankTableData: orderBank.shipmentOrderBankTableData,
 })
 
 const mapDispatchToProps = dispatch => ({})

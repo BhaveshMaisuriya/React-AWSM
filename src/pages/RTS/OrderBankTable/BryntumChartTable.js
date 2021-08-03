@@ -26,7 +26,7 @@ import selectAllIcon3 from "../../../assets/images/AWSM-Checkbox.svg"
 import selectAllIcon2 from "../../../assets/images/AWSM-Checked-box.svg"
 import selectAllIcon from "../../../assets/images/AWSM-Select-all-Checkbox.svg"
 import ConfirmDNStatusModal from "./confirmDNStatusModal"
-import { processPaymentInGanttChart, cancelPaymentInGanttChart, sendOrderInGanttChart, getRTSOderBankGanttChart } from "../../../store/actions"
+import { processPaymentInGanttChart, cancelPaymentInGanttChart, sendOrderInGanttChart, getRTSOderBankGanttChart, getShipmentOfOderBankGanttChart } from "../../../store/actions"
 import { cloneDeep } from 'lodash'
 import OrderBankShipmentModal from "./OrderBankShipmentModal"
 
@@ -534,6 +534,8 @@ function BryntumChartTable(props) {
 
   function displayDblClickModal(event, resource){
     if(event._data.eventType === "Blocked DN"){
+      const { getShipmentOfOderBankGanttChart } = props
+      getShipmentOfOderBankGanttChart()
       setDisplayDblclick(true);
     }
   }
@@ -749,7 +751,7 @@ function BryntumChartTable(props) {
         styleColor={dropdownSelectedItem?.styleColor}
       />
       {displayDblclick &&
-        <OrderBankShipmentModal open={displayDblclick} istoggle={toggleShipment} CloseModal={toggleShipment} />
+        <OrderBankShipmentModal open={displayDblclick} istoggle={toggleShipment} />
       }
     </div>
   )
@@ -767,7 +769,8 @@ const mapDispatchToProps = (dispatch) => {
     processPaymentInGanttChart: (params) => dispatch(processPaymentInGanttChart(params)),
     processCancelPaymentInGanttChart: (params) => dispatch(cancelPaymentInGanttChart(params)),
     processSendOrderInGanttChart: (params) => dispatch(sendOrderInGanttChart(params)),
-    getRTSOderBankGanttChart: (params) => dispatch(getRTSOderBankGanttChart(params))
+    getRTSOderBankGanttChart: (params) => dispatch(getRTSOderBankGanttChart(params)),
+    getShipmentOfOderBankGanttChart: (params) => dispatch(getShipmentOfOderBankGanttChart(params))
   }
 }
 

@@ -224,14 +224,14 @@ const tableMapping = {
     apiKey: "status_awsm",
     columnSize: "cell-text",
   },
-  station_close_period_date_from: {
-    label: "CLOSE PERIOD FROM",
-    apiKey: "station_close_period.date_from",
+  close_period_1_time_from: {
+    label: "STATION CLOSE FROM",
+    apiKey: "close_period_1.time_from",
     columnSize: "cell-text-big",
   },
-  station_close_period_date_to: {
-    label: "CLOSE PERIOD TO",
-    apiKey: "station_close_period.date_to",
+  close_period_1_time_to: {
+    label: "STATION CLOSE TO",
+    apiKey: "close_period_1.time_to",
     columnSize: "cell-text-big",
   },
   sales_inventory_data_source: {
@@ -718,16 +718,6 @@ const tableMapping = {
     label: "NO DELIVERY INTERVAL TIME TO 5",
     apiKey: "no_delivery_interval_5.time_to",
     columnSize: "cell-text",
-  },
-  close_period_1_time_from: {
-    label: "STATION CLOSE FROM",
-    apiKey: "close_period_1.time_from",
-    columnSize: "cell-text-big",
-  },
-  close_period_1_time_to: {
-    label: "STATION CLOSE TO",
-    apiKey: "close_period_1.time_to",
-    columnSize: "cell-text-big",
   },
 }
 

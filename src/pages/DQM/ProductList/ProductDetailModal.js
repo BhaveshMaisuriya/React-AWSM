@@ -16,7 +16,7 @@ class ProductDetailModal extends PureComponent {
     super(props)
     this.state = {
       updateDictionary: {
-       remarks: props?.currentProduct?.remarks
+        remarks: props?.currentProduct?.remarks,
       },
       displayConfirmationBox: false,
     }
@@ -82,9 +82,10 @@ class ProductDetailModal extends PureComponent {
   }
 
   renderModalBody() {
-    const { onCancel, currentProduct } = this.props
+    const { currentProduct } = this.props
     const { updateDictionary } = this.state
     const isDisabledField = isScheduler()
+    // const isDisabledField = false
     return (
       <>
         {currentProduct ? (

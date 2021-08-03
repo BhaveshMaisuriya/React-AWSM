@@ -12,9 +12,10 @@ import {
   GET_TERMINAL_FILTER_FAIL,
   GET_DOWNLOAD_TERMINAL_SUCCESS,
   GET_DOWNLOAD_TERMINAL_FAIL,
-  RESET_CURRENT_TERMINAL_DETAIL
+  RESET_CURRENT_TERMINAL_DETAIL,
 } from "./actionTypes"
-import { notify } from "../../helpers/notify"
+// import { notify } from "../../helpers/notify"
+import { Toast, swalConfig } from "../../helpers/swal"
 
 const initialState = {
   terminal: [],
@@ -24,7 +25,7 @@ const initialState = {
   filterTerminal: [],
   currentTerminal: null,
   downloadTerminal: [],
-  isFetchDataAfterChange :false,
+  isFetchDataAfterChange: false,
   isLoading: false,
 }
 
@@ -40,7 +41,7 @@ const Terminal = (state = initialState, action) => {
         ...state,
         terminal: action.payload,
         isLoading: false,
-        isFetchDataAfterChange: false
+        isFetchDataAfterChange: false,
       }
 
     case GET_TERMINAL_FAIL:
@@ -87,18 +88,18 @@ const Terminal = (state = initialState, action) => {
       }
 
     case UPDATE_TERMINAL_TABLE_INFORMATION_SUCCESS:
-      notify.success("Update successfully")
+      Toast.fire({ ...swalConfig["success"] })
       return {
         ...state,
-        isFetchDataAfterChange:true
+        isFetchDataAfterChange: true,
       }
 
     case UPDATE_TERMINAL_TABLE_INFORMATION_FAIL:
-      notify.error("Update failed")
+      Toast.fire({ ...swalConfig["success"], title: "Update Failed" })
       return {
         ...state,
         error: action.payload,
-        isFetchDataAfterChange:true
+        isFetchDataAfterChange: true,
       }
 
     case GET_TERMINAL_FILTER_SUCCESS:

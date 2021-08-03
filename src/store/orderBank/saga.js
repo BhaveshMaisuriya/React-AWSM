@@ -140,7 +140,7 @@ function* onGetOrderBankAuditLog() {
 function* sendRequestPaymentInGanttChart({ params={} }){
   try {
     // send request
-    yield put(processPaymentInGanttChartSuccess())
+    yield put(processPaymentInGanttChartSuccess(params))
   } catch (error) {
     yield put(processPaymentInGanttChartFail(error))
   }
@@ -149,7 +149,7 @@ function* sendRequestPaymentInGanttChart({ params={} }){
 function* sendRequestCancelPaymentInGanttChart({ params={} }){
   try {
     // send request
-    yield put(cancelPaymentInGanttChartSuccess())
+    yield put(cancelPaymentInGanttChartSuccess(params))
   } catch (error) {
     yield put(cancelPaymentInGanttChartFail(error))
   }
@@ -158,6 +158,7 @@ function* sendRequestCancelPaymentInGanttChart({ params={} }){
 function* sendRequestOrderPaymentInGanttChart({ params={} }){
   try {
     // send request
+    
     yield put(sendOrderInGanttChartSuccess())
   } catch (error) {
     yield put(sendOrderInGanttChartFail(error))

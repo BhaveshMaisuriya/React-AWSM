@@ -134,9 +134,9 @@ export const ganttChartTableData =[
 ]
 
 export const ganttChartTableEvents = [
-  { id : 1, resourceId : 1, name : 'RT13098 Drag true', startDate : '2021-07-23 00:00', endDate : '2021-07-23 12:00', eventColor: '#84B0E9', eventType: 'Scheduled',highlight:true,eventFilter:"high", status:'not yet to be created'},
-  { id : 2, resourceId : 3, name : 'RT11940 Drag true', startDate : '2021-07-23 12:00', endDate : '2021-07-23 14:59', eventColor: '#DBE5F0', eventType: 'RT Availability',highlight:true,eventFilter:"future" },
-  { id : 3, resourceId : 2, name : 'RT11940 Drag true', startDate : '2021-07-23 00:00', endDate : '2021-07-23 09:00', eventColor: '#9F79B7', eventType: 'Pending Shipment',highlight:true,eventFilter:"backlog" },
+  { id : 1, resourceId : 1, name : 'RT13098 Drag true', startDate : '2021-07-23 00:00', endDate : '2021-07-23 12:00', eventColor: '#84B0E9', eventType: 'Scheduled',highlight:true,eventFilter:"high", status:'not yet to be created',resourceOrder:[{DNNumber:1},{DNNumber:1}]},
+  { id : 2, resourceId : 3, name : 'RT11940 Drag true', startDate : '2021-07-23 12:00', endDate : '2021-07-23 14:59', eventColor: 'green', eventType: 'RT Availability',highlight:true,eventFilter:"future",status:'not yet to be created',resourceOrder:[{DNNumber:1},{test:0}] },
+  { id : 3, resourceId : 2, name : 'RT11940 Drag true', startDate : '2021-07-23 00:00', endDate : '2021-07-23 09:00', eventColor: '#9F79B7', eventType: 'Pending Shipment',highlight:true,eventFilter:"backlog",status:'created' },
   { id : 4, resourceId : 5, name : 'RT11940 Drag true', startDate : '2021-07-23 00:00', endDate : '2021-07-23 09:00', eventColor: '#615E9B', eventType: 'Shipment Created',highlight:true ,eventFilter:"request"},
   { id : 5, resourceId : 4, name : 'RT09567 Drag false', startDate : '2021-07-23 22:00', endDate : '2021-07-23 23:59:00', draggable : false, eventColor: '#BDBDBD', eventType : 'Cancellation',highlight:true,eventFilter:"request" },
   { id : 6, resourceId : 7, name : 'RT09567 Drag false', startDate : '2021-07-23 00:00', endDate : '2021-07-23 09:00', draggable : false, eventColor : '#E45E5E', eventType : 'Blocked DN',highlight:true,eventFilter:"backlog" },

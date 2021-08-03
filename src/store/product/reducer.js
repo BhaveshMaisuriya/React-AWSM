@@ -12,9 +12,10 @@ import {
   UPDATE_PRODUCT_DETAIL_FAIL,
   GET_DOWNLOAD_PRODUCTS_SUCCESS,
   GET_DOWNLOAD_PRODUCTS_FAIL,
-  RESET_PRODUCT_DETAIL
+  RESET_PRODUCT_DETAIL,
 } from "./actionTypes"
 
+import { Toast, swalConfig } from "../../helpers/swal"
 const initialState = {
   dataList: [],
   error: null,
@@ -101,14 +102,14 @@ const Product = (state = initialState, action) => {
       }
 
     case UPDATE_PRODUCT_DETAIL_SUCCESS:
-      notify.success("Product Detail Updated!")
+      Toast.fire({ ...swalConfig["success"] })
       return {
         ...state,
         updateStatus: true,
       }
 
     case UPDATE_PRODUCT_DETAIL_FAIL:
-      notify.error(action.payload)
+      Toast.fire({ ...swalConfig["error"] })
       return {
         ...state,
         error: action.payload,
@@ -117,7 +118,7 @@ const Product = (state = initialState, action) => {
     case RESET_PRODUCT_DETAIL:
       return {
         ...state,
-        currentProduct: {}
+        currentProduct: {},
       }
     default:
       return state

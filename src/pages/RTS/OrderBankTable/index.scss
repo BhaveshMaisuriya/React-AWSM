@@ -185,6 +185,7 @@
     width: inherit;    
 }
 .eventCustomize {
+    text-align: center;
     width: 100%;
     display: inline-block;
     padding: 10px 0;
@@ -222,7 +223,6 @@
 }
 
 .marquee {
-
     -moz-transform: translateX(100%);
     -webkit-transform: translateX(100%);
     transform: translateX(100%);
@@ -251,9 +251,9 @@
 
 @keyframes scroll-left {
     0% {
-        -moz-transform: translateX(100%);
-        -webkit-transform: translateX(100%);
-        transform: translateX(100%);
+        -moz-transform: translateX(10%);
+        -webkit-transform: translateX(10%);
+        transform: translateX(10%);
     }
     100% {
         -moz-transform: translateX(-100%);

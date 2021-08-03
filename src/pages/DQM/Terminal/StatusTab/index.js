@@ -107,12 +107,9 @@ const TabStatus = props => {
   function renderDateRangeError(){
     if(data?.status_awsm ==="Temporary Inactive"){
       if(data?.inactive_date_range_1?.type==="range"){
-        if(!data?.inactive_date_range_1?.date_from || !data?.inactive_date_range_1?.date_to){
-          return <p style={{color: 'red'}}>Must fill Start and End date</p>
-        }
         return null
       }
-      return <p style={{color: 'red'}}>Must fill Start and End date</p>
+      return <p style={{color: 'red'}}>Please fill in Temporary Inactive Date range</p>
     }
   }
   return (

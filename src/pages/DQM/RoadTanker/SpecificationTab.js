@@ -19,7 +19,7 @@ class SpecificationTab extends PureComponent {
     }
   }
 
-  componentDidMount() {}
+  componentDidMount() { }
 
   onChangeHandler = (value, key) => {
     const { data, onChange } = this.props
@@ -177,9 +177,8 @@ class SpecificationTab extends PureComponent {
           />
           <div className="input-group-append">
             <a
-              className={`btn btn-auto-fill ${
-                disabled ? "disable-link" : null
-              }`}
+              className={`btn btn-auto-fill ${disabled ? "disable-link" : null
+                }`}
               type="button"
               onClick={onAutoFillBtnClick}
             >

@@ -15,6 +15,7 @@ import {
   UPDATE_COMMERCIAL_TABLE_INFORMATION_FAIL,
 } from "./actionTypes"
 
+import { Toast, swalConfig } from "../../helpers/swal"
 const initialState = {
   commercialCustomers: [],
   error: {},
@@ -26,7 +27,7 @@ const initialState = {
   isLoading: false,
 }
 
-import { notify } from "../../helpers/notify"
+// import { notify } from "../../helpers/notify"
 
 const CommercialCustomer = (state = initialState, action) => {
   switch (action.type) {
@@ -106,7 +107,7 @@ const CommercialCustomer = (state = initialState, action) => {
       }
 
     case UPDATE_COMMERCIAL_TABLE_INFORMATION_SUCCESS: {
-      notify.success("Record Successfully Updated")
+      Toast.fire({ ...swalConfig["success"] })
       return {
         ...state,
         currentCommercialDetail: null,
@@ -116,7 +117,7 @@ const CommercialCustomer = (state = initialState, action) => {
     }
 
     case UPDATE_COMMERCIAL_TABLE_INFORMATION_FAIL: {
-      notify.error(action.payload?.message)
+      Toast.fire({ ...swalConfig["error"] })
       return {
         ...state,
         error: action.payload,

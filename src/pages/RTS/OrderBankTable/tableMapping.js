@@ -18,6 +18,61 @@ const tableColumns = [
   "remarks",
 ]
 
+const shipmentTableColumns = [
+  "no.",
+  "station",
+  "order 1",
+  "order 2",
+  "order 3",
+  "order 4",
+  "order 5",
+]
+
+const shipmentTableData = [
+  {
+    'no': 1,
+    station: {
+    'id': 36114489,
+    'name': 'maju gas trending',
+    'load_time': '09:00',
+    'loading_time': 1,
+    'duration': '3',
+    'eta': '13:00',
+    },
+    order1: {
+      'product': 'Primax 97 Premium',
+      'volume': '546OL',
+      'station_cat': 'LV1',
+      'DN': 1234,
+    },
+    order2:null,
+    order3:null,
+    order4:null,
+    order5:null,
+  },
+  {
+    'no': 2,
+    station: {
+    'id': 3611464,
+    'name': 'one sh trending',
+    'load_time': '14:00',
+    'loading_time': 3,
+    'duration': '3',
+    'eta': '17:00',
+    },
+    order1: {
+      'product': 'Primax 97 Premium',
+      'volume': '546OL',
+      'station_cat': 'LV1',
+      'DN': 1234,
+    },
+    order2:null,
+    order3:null,
+    order4:null,
+    order5:null,
+  },
+]
+
 const tableMapping = {
   priority: {
     label: "priority",
@@ -117,4 +172,4 @@ const ganttChartTableMapping = {
   }
 }
 
-export { tableMapping, tableColumns, ganttChartTableColumns, ganttChartTableMapping }
+export { tableMapping, tableColumns, ganttChartTableColumns, ganttChartTableMapping, shipmentTableColumns, shipmentTableData}

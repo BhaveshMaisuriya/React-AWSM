@@ -268,3 +268,26 @@
 .opacity-20{
     opacity:0.2;
 }
+
+.top-shipment-details {
+    background-color: #EFF9F9;
+    padding: 10px;
+    width: fit-content;
+}
+.top-shipment-details span {
+    padding: 0 2rem 0 10px;
+    border-right: 1px solid #D4E2E2;
+}
+.top-shipment-details span:last-child {
+    border-right: unset;
+}
+.shipment-main p {
+    margin-bottom: 0px !important;
+}
+.shipment-main {
+    border: 1px solid #d9d9d9;
+    margin-top: 2em;
+}
+span.b-sch-header-text.b-sticky-header {
+    font-weight: bold;
+}

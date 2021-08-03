@@ -115,7 +115,7 @@ const StorageTab = ({ data, onChange }) => {
             defaultValue={storageData?.loading_time}
             onChange={value => onFieldChange("loading_time", value)}
             placeholder="Numeric only"
-            renderExceedError={renderExceedError("lloading_time", 1440)}
+            renderExceedError={renderExceedError("loading_time", 1440)}
             // max={1440}
           />
           {renderExceedError("loading_time", 1440)}

@@ -33,7 +33,7 @@ const Product = ({
   }
   function renderExceedError(key, max) {
     if (value?.[key] > max) {
-      return <p style={{ color: "red" }}>Must not exceed {max}</p>
+      return <p style={{ color: "#f46a6a" }}>Must not exceed {max}</p>
     }
     return null
   }
@@ -97,11 +97,16 @@ const Product = ({
           />
         </div>
         <div className="col-3 form-group">
-          <label>FLOW RATE (L/MIN)</label>
+          <label
+            className={`${renderExceedError("flow_rate", 100) ? "error" : ""}`}
+          >
+            FLOW RATE (L/MIN)
+          </label>
           <AWSMInputNumber
             defaultValue={value.flow_rate}
             disabled={scheduler}
             onChange={value => onFieldChange("flow_rate", value)}
+            renderExceedError={renderExceedError("flow_rate", 1440)}
             // max={10000}
           />
           {renderExceedError("flow_rate", 10000)}
@@ -120,12 +125,25 @@ const Product = ({
           />
         </div>
         <div className="col-3 form-group">
-          <label htmlFor="volume1">VOLUME (L) 1</label>
+          <label
+            className={`${
+              renderExceedError("volume_capping_volume", 10000000)
+                ? "error"
+                : ""
+            }`}
+            htmlFor="volume1"
+          >
+            VOLUME (L) 1
+          </label>
           <AWSMInputNumber
             defaultValue={value.volume_capping_volume}
             disabled={scheduler}
             items={["Lorem Ipsum"]}
             onChange={value => onFieldChange("volume_capping_volume", value)}
+            renderExceedError={renderExceedError(
+              "volume_capping_volume",
+              10000000
+            )}
             // max={10000000}
           />
           {renderExceedError("volume_capping_volume", 10000000)}
@@ -151,12 +169,25 @@ const Product = ({
           />
         </div>
         <div className="col-3 form-group">
-          <label>VOLUME (L) 2</label>
+          <label
+            className={`${
+              renderExceedError("volume_capping_volume_2", 10000000)
+                ? "error"
+                : ""
+            }`}
+            htmlFor="volume1"
+          >
+            VOLUME (L) 2
+          </label>
           <AWSMInputNumber
             defaultValue={value.volume_capping_volume_2}
             disabled={scheduler}
             items={["Lorem Ipsum"]}
             onChange={value => onFieldChange("volume_capping_volume_2", value)}
+            renderExceedError={renderExceedError(
+              "volume_capping_volume_2",
+              10000000
+            )}
             // max={10000000}
           />
           {renderExceedError("volume_capping_volume_2", 10000000)}

@@ -14,7 +14,6 @@ import {
   GET_DOWNLOAD_RETAIL_CUSTOMER_SUCCESS,
   GET_DOWNLOAD_RETAIL_CUSTOMER_FAIL,
 } from "./actionTypes"
-
 const initialState = {
   retailCustomers: [],
   error: {},
@@ -23,10 +22,11 @@ const initialState = {
   filter: [],
   currentRetailDetail: null,
   updateSuccess: null,
+  updateAlert: null,
   downloadretailCustomers: [],
   isLoading: false,
 }
-import { notify } from "../../helpers/notify"
+import { Toast, swalConfig } from "../../helpers/swal"
 
 const RetailCustomer = (state = initialState, action) => {
   switch (action.type) {
@@ -96,7 +96,7 @@ const RetailCustomer = (state = initialState, action) => {
       }
 
     case UPDATE_TABLE_INFORMATION_SUCCESS: {
-      notify.success("Record Successfully Updated")
+      Toast.fire({ ...swalConfig["success"] })
       return {
         ...state,
         updateSuccess: true,
@@ -104,7 +104,7 @@ const RetailCustomer = (state = initialState, action) => {
     }
 
     case UPDATE_TABLE_INFORMATION_FAIL: {
-      notify.error(action.payload)
+      Toast.fire({ ...swalConfig["error"] })
       return {
         ...state,
         error: action.payload,

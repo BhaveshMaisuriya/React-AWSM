@@ -199,8 +199,9 @@ export const processPaymentInGanttChartFail = error => ({
 })
 
 
-export const cancelPaymentInGanttChart = () => ({
+export const cancelPaymentInGanttChart = (param) => ({
   type: CANCEL_PAYMENT_IN_GANTT_CHART,
+  payload: param,
 })
 
 export const cancelPaymentInGanttChartSuccess = response => ({

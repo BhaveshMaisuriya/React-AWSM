@@ -74,7 +74,7 @@ export default class MultipleSelect extends Component {
 
     return (
       <Select
-        className="form-control popup"
+        className="form-control"
         multiple
         value={RtRestrictionSelected}
         onChange={handleChange}

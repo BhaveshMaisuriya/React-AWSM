@@ -143,6 +143,7 @@ const RTSOrderBank = (state = initialState, action) => {
       notify.success("A shipment has been successfully cancelled from schedule")
       return {
         ...state,
+        isSendRequestProcess : state.isSendRequestProcess+1
       }
     case CANCEL_PAYMENT_IN_GANTT_CHART_FAIL:
       notify.error("A shipment has been fail cancelled in SAP")

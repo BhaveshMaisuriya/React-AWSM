@@ -221,7 +221,7 @@ class InformationModal extends Component {
                 <div className="col-md-6 form-group">
                   <label>MAX VOLUME</label>
                   <input
-                    className="form-control"
+                    className="form-control awsm-input"
                     type="text"
                     defaultValue={data?.max_volume}
                     onChange={e =>

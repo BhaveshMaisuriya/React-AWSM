@@ -212,6 +212,10 @@
         background-color: green;
     }
 }
+#eventEllipses .white-bg p{
+    color: #000 !important;
+}
+
 .eventCustomize {
     &:hover div{
         visibility: visible;
@@ -251,9 +255,9 @@
 
 @keyframes scroll-left {
     0% {
-        -moz-transform: translateX(50%);
-        -webkit-transform: translateX(50%);
-        transform: translateX(50%);
+        -moz-transform: translateX(10%);
+        -webkit-transform: translateX(10%);
+        transform: translateX(10%);
     }
     100% {
         -moz-transform: translateX(-100%);

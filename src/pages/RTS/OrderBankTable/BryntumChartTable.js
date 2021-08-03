@@ -533,8 +533,9 @@ function BryntumChartTable(props) {
   }
 
   function displayDblClickModal(event, resource){
-    console.log("::", event, resource)
-    setDisplayDblclick(true);
+    if(event._data.eventType === "Blocked DN"){
+      setDisplayDblclick(true);
+    }
   }
 
   function toggleShipment(){

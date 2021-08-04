@@ -87,27 +87,26 @@ const GanttChartBottomHover = [
   {
     title: "station commercial",
     color: "green",
-  }
+  },
 ]
 
 const GanttChartFilterButtons = [
-	{
-		label:"Backlog",
-		value :"backlog"
-	},
-	{
-		label: "Future",
-		value: "future"
-	},
-	{
-		label: "Special Request",
-		value:"request"
-	},
-	{
-		label: "High Priority",
-		value: "high"
-	}
-
+  {
+    label: "Backlog",
+    value: "backlog",
+  },
+  {
+    label: "Future",
+    value: "future",
+  },
+  {
+    label: "Special Request",
+    value: "request",
+  },
+  {
+    label: "High Priority",
+    value: "high",
+  },
 ]
 function OrderBank({
   getRTSOrderBankTableData,
@@ -146,16 +145,16 @@ function OrderBank({
   let orderBankStatus = [
     {
       value: "unscheduled",
-      label: "Unscheduled"
+      label: "Unscheduled",
     },
     {
       value: "scheduled",
-      label: "Scheduled"
+      label: "Scheduled",
     },
     {
       value: "all",
       label: "All",
-    }
+    },
   ]
 
   const [activeTab, setActiveTab] = useState("1")
@@ -167,7 +166,7 @@ function OrderBank({
   const [region, setRegion] = useState(REGION_TERMINAL[0].region)
   const [terminal, setTerminal] = useState(REGION_TERMINAL[0].terminal[0])
   const [refreshDNModal, setRefreshDNModal] = useState(false)
-  const [ganttChartAllRadio, setGanttChartAllRadio] = useState('');
+  const [ganttChartAllRadio, setGanttChartAllRadio] = useState("")
   // {high:false, request: false, future: false, backlog: false}
   const [sendDNModal, setSendDNModal] = useState(false)
   const [status, setStatusDropdown] = useState("Unscheduled")
@@ -209,39 +208,39 @@ function OrderBank({
     setShowNewOrder(false)
   }
 
-const enabledCross = (val) => {  
-  if(val !== 0){
-    let temp = [...orderBankSetting];
-    temp.map(function(item, index) {      
-      if((item.value === 'CrossTerminal') || (item.value === 'SendDN')){
-        item.disabled = false;        
-      }
-    })
-    setOrderBankSetting(temp);
-  } else {
-    let temp = [...orderBankSetting]
-    temp.map(function(item, index) {      
-      if((item.value === 'CrossTerminal') || (item.value === 'SendDN')){
-        item.disabled = true;
-      }
-    })
-    setOrderBankSetting(temp)
+  const enabledCross = val => {
+    if (val !== 0) {
+      let temp = [...orderBankSetting]
+      temp.map(function (item, index) {
+        if (item.value === "CrossTerminal" || item.value === "SendDN") {
+          item.disabled = false
+        }
+      })
+      setOrderBankSetting(temp)
+    } else {
+      let temp = [...orderBankSetting]
+      temp.map(function (item, index) {
+        if (item.value === "CrossTerminal" || item.value === "SendDN") {
+          item.disabled = true
+        }
+      })
+      setOrderBankSetting(temp)
+    }
   }
-}
 
-  useEffect(()=>{
+  useEffect(() => {
     const payload = {
       limit: 6,
       pagination: 0,
       sort_dir: "desc",
       sort_field: "created",
       q: "commercial_customer",
-    };
-    onGetOrderBankAuditLog(payload);
+    }
+    onGetOrderBankAuditLog(payload)
   })
 
   useEffect(() => {
-    getRTSOrderBankTableData({ region, terminal, shiftDate, status })    
+    getRTSOrderBankTableData({ region, terminal, shiftDate, status })
   }, [region, terminal, shiftDate, status])
 
   const onTableColumnsChange = columns => {
@@ -257,20 +256,20 @@ const enabledCross = (val) => {
     refreshOderBankDN(orderBankTableData.filter(e => e.isChecked))
   }
 
-  const changeGanttChartOption = async(e, val) => {
-    let temp = {...ganttChartAllRadio};
-    Object.keys(temp).map(function(keyName, keyIndex) {
-      temp[keyName] = (keyName === val) ? e.target.checked : false;
+  const changeGanttChartOption = async (e, val) => {
+    let temp = { ...ganttChartAllRadio }
+    Object.keys(temp).map(function (keyName, keyIndex) {
+      temp[keyName] = keyName === val ? e.target.checked : false
     })
-    await setGanttChartAllRadio(temp);
+    await setGanttChartAllRadio(temp)
   }
 
   const istoggle = () => {
-    setShowAuditModal(!showAuditModal);
+    setShowAuditModal(!showAuditModal)
   }
 
   const CloseModal = () => {
-    setShowAuditModal(false);
+    setShowAuditModal(false)
   }
 
   const onFullScreen = () => {
@@ -299,15 +298,15 @@ const enabledCross = (val) => {
       }
     }
   }
-  const changeGanttChartAllRadio = (event) => {
-		const target = event.target
-		const value = target.value
-		if (value === ganttChartAllRadio && target.checked) {
-			target.checked = false
-			return setGanttChartAllRadio('')
-		}
-		target.checked = true
-		return setGanttChartAllRadio(value)
+  const changeGanttChartAllRadio = event => {
+    const target = event.target
+    const value = target.value
+    if (value === ganttChartAllRadio && target.checked) {
+      target.checked = false
+      return setGanttChartAllRadio("")
+    }
+    target.checked = true
+    return setGanttChartAllRadio(value)
   }
   return (
     <React.Fragment>
@@ -315,7 +314,7 @@ const enabledCross = (val) => {
         <div className="container-fluid">
           <Card className="order_bank_main">
             <CardBody>
-              <Row className='border_btm'>
+              <Row className="border_btm">
                 <Col lg={3} md={3} sm={12}>
                   <div className="h-100">
                     <Nav pills justified>
@@ -370,8 +369,8 @@ const enabledCross = (val) => {
                   <TabPane tabId="1">
                     <div class="gantt_chart_main">
                       <div className="gantt_chart_first pb-3">
-                      <Row className='remove_border pb-0'>
-                          <Col lg={5} className='order-bank-bar'>
+                        <Row className="remove_border pb-0">
+                          <Col lg={5} className="order-bank-bar">
                             <div className="order-bank-shift-date">
                               <div>DATE</div>
                               <DateRangePicker
@@ -381,7 +380,9 @@ const enabledCross = (val) => {
                                 onChange={value => setShiftDate(value)}
                               />
                             </div>
-                            <p className="order-bank-region-label">REGION & TERMINAL</p>
+                            <p className="order-bank-region-label">
+                              REGION & TERMINAL
+                            </p>
                             <div className="order-bank-region">
                               <AWSMDropdown
                                 value={region}
@@ -393,12 +394,16 @@ const enabledCross = (val) => {
                               />
                             </div>
                             <div className="order-bank-region ml-2">
-                              <AWSMDropdown value={terminal} onChange={value => setTerminal(value)} items={terminalList}/>
+                              <AWSMDropdown
+                                value={terminal}
+                                onChange={value => setTerminal(value)}
+                                items={terminalList}
+                              />
                             </div>
                           </Col>
-                          <Col lg={7} className='order-bank-bar right'>                           
+                          <Col lg={7} className="order-bank-bar right">
                             <img src={customiseTableIcon} className="ml-2" />
-                            <div className='d-flex align-items-center justify-content-between radio_option m-0 order-bank-label'>
+                            <div className="d-flex align-items-center justify-content-between radio_option m-0 order-bank-label">
                               {/* <input
                                 type="radio"
                                 id="high"
@@ -440,24 +445,31 @@ const enabledCross = (val) => {
                               />
                               <label for='backlog' className='mr-1 pointer'>Back Log</label>
 															<CustomRadioButton label="high" checked={ganttChartAllRadio === "test" ? true :false} name="radioWidth" value="test" onClick={changeGanttChartAllRadio}/> */}
-															{
-																GanttChartFilterButtons && GanttChartFilterButtons.length > 0 &&
-																GanttChartFilterButtons.map((button,index)=>{
-																	const {value,label} = button;
-																	return <CustomRadioButton key={`${index}-${value}`} 
-																	label={label} value={value} 
-																	checked={ganttChartAllRadio === value}
-																	name="radioWidth" 
-																	onClick={changeGanttChartAllRadio}/>
-																})
-															}
-														</div>
+                              {GanttChartFilterButtons &&
+                                GanttChartFilterButtons.length > 0 &&
+                                GanttChartFilterButtons.map((button, index) => {
+                                  const { value, label } = button
+                                  return (
+                                    <CustomRadioButton
+                                      key={`${index}-${value}`}
+                                      label={label}
+                                      value={value}
+                                      checked={ganttChartAllRadio === value}
+                                      name="radioWidth"
+                                      onClick={changeGanttChartAllRadio}
+                                    />
+                                  )
+                                })}
+                            </div>
                             <span className="m-0 order-bank-label">
-                              141 DNs, 3 shipments, 3 special request, 5 high priority
+                              141 DNs, 3 shipments, 3 special request, 5 high
+                              priority
                             </span>
                           </Col>
                         </Row>
-                        <BryntumChartTable ganttChartAllRadio={ganttChartAllRadio} />
+                        <BryntumChartTable
+                          ganttChartAllRadio={ganttChartAllRadio}
+                        />
                         <div className="square_border">
                           {GanttChartBottom.map((item, index) => {
                             return (
@@ -516,9 +528,7 @@ const enabledCross = (val) => {
                                 items={terminalList}
                               />
                             </div>
-                            <p className="order-bank-region-label">
-                              STATUS
-                            </p>
+                            <p className="order-bank-region-label">STATUS</p>
                             <div className="order-bank-region">
                               <AWSMDropdown
                                 value={status}
@@ -604,7 +614,8 @@ const enabledCross = (val) => {
               open={showCustomize}
               closeDialog={onCloseCustomize}
               availableMetric={tableMapping}
-              defaultMetric={searchFields}
+              initialMetric={searchFields}
+              defaultMetric={tableColumns}
             />
             <OrderBankActionModal
               open={sendDNModal}
@@ -622,11 +633,13 @@ const enabledCross = (val) => {
               onSubmit={onRefreshOrderBankDN}
               type="RefreshDN"
             />
-            {showAuditModal && <OrderBankAuditModal
-              open={showAuditModal}
-              istoggle={istoggle}
-              CloseModal={CloseModal}
-            />}
+            {showAuditModal && (
+              <OrderBankAuditModal
+                open={showAuditModal}
+                istoggle={istoggle}
+                CloseModal={CloseModal}
+              />
+            )}
           </Card>
         </div>
       </div>

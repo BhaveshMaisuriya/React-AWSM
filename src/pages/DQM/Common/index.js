@@ -1,5 +1,4 @@
-import React, { Component, Fragment } from "react"
-import Header from "../../../components/Common/CustomPageHeader"
+import React, { Component } from "react"
 import SearchBar from "../../../components/Common/SearchBar"
 import TablePagination from "../../../components/Common/DataTable/tablePagination"
 import PropTypes from "prop-types"
@@ -22,15 +21,12 @@ import customiseTableIcon from "../../../assets/images/AWSM-Customise-Table.svg"
 import AuditLog from "../../../components/Common/AuditLog"
 import FixedColumnTable from "../../../components/Common/FrozenTableColumn"
 import CustomizeTableModal from "../../../common/CustomizeTable"
-import InformationModal from "../RoadTanker/InformationModal"
 import {
   transformArrayToString,
   transformObjectToStringSentence,
   filterObject,
 } from "./helper"
 import "./style.scss"
-import SettingsIcon from "@material-ui/icons/Settings"
-import downloadExcelIcon from "../../../assets/images/AWSM-Excel.svg"
 import { DownloadIcon } from "./icon"
 import DownloadExcel from "../../../components/Common/DownloadExcel"
 import AWSMAlert from "../../../components/Common/AWSMAlert"
@@ -343,7 +339,8 @@ class Pages extends Component {
           open={this.state.customizeModalOpen}
           closeDialog={this.handleOpenCustomizeTable}
           availableMetric={tableMapping}
-          defaultMetric={searchFields}
+          initialMetric={searchFields}
+          defaultMetric={this.props.defaultColumns}
         />
         <VarianceControl
           open={this.state.varianceControl}

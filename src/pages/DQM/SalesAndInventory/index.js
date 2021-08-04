@@ -11,7 +11,6 @@ import {
 import { tableColumns, tableMapping } from "./tableMapping"
 import { transformArrayToString, getCookieByKey } from "../Common/helper"
 import SalesAndInventoryModal from "./SalesAndInventoryModal"
-import RetailCustomerModal from "../RetailCustomer/RetailCustomerModal"
 import Loader from "../../../components/Common/Loader"
 import {
   getSalesAndInventoryVarianceControl,
@@ -95,6 +94,7 @@ class SalesInventory extends Component {
             onGetTableInformation={onGetTableInformation}
             onUpdateTableInformation={onUpdateTableInformation}
             tableColumns={searchFields}
+            defaultColumns={tableColumns}
             tableMapping={tableMapping}
             tableData={saleAndInventory}
             downloadtableData={downloadtableData}

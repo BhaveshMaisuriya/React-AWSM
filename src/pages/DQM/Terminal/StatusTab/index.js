@@ -62,19 +62,7 @@ const TabStatus = props => {
       if(!newData[fl[0]]){
         newData[fl[0]] = {}
       }
-      switch (fl[0]) {
-        case "terminal_operating_days_1":
-          newData["terminal_operating_days_1"][fl[1]] = value
-          break
-        case "no_delivery_interval_1":
-          newData["no_delivery_interval_1"][fl[1]] = value
-          break
-        case "no_delivery_interval_2":
-          newData["no_delivery_interval_2"][fl[1]] = value
-          break
-        default:
-          break
-      }
+      newData[fl[0]][fl[1]] = value
     } else {
       newData[field] = value
     }
@@ -259,6 +247,78 @@ const TabStatus = props => {
                 onchangeHandler("no_delivery_interval_2.time_to", value)
               }
               value={data?.no_delivery_interval_2?.time_to}
+              disabled={scheduler}
+            />
+          </div>
+        </div>
+        <div className="row mt-3">
+          <div className="col-12 col-sm-6">
+            <label>DATE 3</label>
+            <DateRangePicker
+              range={true}
+              onChange={value =>
+                onchangeHandler("no_delivery_interval_3", value)
+              }
+              defaultValue={data?.no_delivery_interval_3}
+              disabled={scheduler}
+              placeholder={"Select Date"}
+            />
+          </div>
+          <div className="col-12 col-sm-3">
+            <label>TIME (FROM) 3</label>
+            <TimePicker
+              items={timeData}
+              onChange={value =>
+                onchangeHandler("no_delivery_interval_3.time_from", value)
+              }
+              value={data?.no_delivery_interval_3?.time_from}
+              disabled={scheduler}
+            />
+          </div>
+          <div className="col-12 col-sm-3">
+            <label>TIME (TO) 3</label>
+            <TimePicker
+              items={timeData}
+              onChange={value =>
+                onchangeHandler("no_delivery_interval_3.time_to", value)
+              }
+              value={data?.no_delivery_interval_3?.time_to}
+              disabled={scheduler}
+            />
+          </div>
+        </div>
+        <div className="row mt-3">
+          <div className="col-12 col-sm-6">
+            <label>DATE 4</label>
+            <DateRangePicker
+              range={true}
+              onChange={value =>
+                onchangeHandler("no_delivery_interval_4", value)
+              }
+              defaultValue={data?.no_delivery_interval_4}
+              disabled={scheduler}
+              placeholder={"Select Date"}
+            />
+          </div>
+          <div className="col-12 col-sm-3">
+            <label>TIME (FROM) 4</label>
+            <TimePicker
+              items={timeData}
+              onChange={value =>
+                onchangeHandler("no_delivery_interval_4.time_from", value)
+              }
+              value={data?.no_delivery_interval_4?.time_from}
+              disabled={scheduler}
+            />
+          </div>
+          <div className="col-12 col-sm-3">
+            <label>TIME (TO) 4</label>
+            <TimePicker
+              items={timeData}
+              onChange={value =>
+                onchangeHandler("no_delivery_interval_4.time_to", value)
+              }
+              value={data?.no_delivery_interval_4?.time_to}
               disabled={scheduler}
             />
           </div>

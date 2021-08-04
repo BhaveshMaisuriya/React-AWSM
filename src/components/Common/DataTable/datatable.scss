@@ -33,10 +33,13 @@
 }
 
 .checkmark .MuiFormControlLabel-label {
-  margin-top: auto !important;
+  margin-top: 10px !important;
+  margin-bottom: 5px !important;
   margin-left: 8px !important;
   font-size: 12px !important;
   font-family: "Museo Sans" !important;
+  max-width: 230px;
+  line-height: 1;
   // line-height: 14px;
 }
 
@@ -105,7 +108,8 @@
 }
 
 .filter-container {
-  width: 280px;
+  width: 280px !important;
+  max-width: 280px !important;
   border-radius: 4px;
   box-shadow: 0 0 4px 2px rgba(0, 0, 0, 0.16);
   padding: 4px !important;

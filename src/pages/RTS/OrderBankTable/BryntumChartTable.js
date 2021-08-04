@@ -533,7 +533,7 @@ function BryntumChartTable(props) {
   }
 
   function displayDblClickModal(event, resource){
-    if(event._data.eventType === "Blocked DN"){
+    if(event._data.eventType === ("Blocked DN" || "Shipment Created" || "Scheduled")){
       const { getShipmentOfOderBankGanttChart } = props
       getShipmentOfOderBankGanttChart()
       setDisplayDblclick(true);

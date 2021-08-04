@@ -51,6 +51,12 @@ class SearchBar extends Component {
       )
   }
 
+  getEnterClick = (e) => {
+    if (e.key === 'Enter') {
+      this.handleSearchOnClick();
+    }
+  }
+
   handleSearchOnChange = searchBoxTextValue => {
     const { searchOnChangeHandler } = this.props
     this.setState({ searchBoxTextValue }, () =>
@@ -69,6 +75,7 @@ class SearchBar extends Component {
           onChange={inputValue =>
             this.handleSearchOnChange(inputValue.target.value)
           }
+          onKeyDown={(e) => this.getEnterClick(e)}
         />
         <IconButton
           className={classes.iconButton}

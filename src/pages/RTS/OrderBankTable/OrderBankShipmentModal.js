@@ -7,7 +7,6 @@ function OrderBankShipmentModal(props) {
   function toggle() {
     props.istoggle()
   }
-console.log("::data", props.shipmentOrderBankTableData)
   return (
     <Fragment>
       <Modal

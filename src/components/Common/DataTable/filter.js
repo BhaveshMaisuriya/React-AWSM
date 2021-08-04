@@ -41,7 +41,8 @@ const Example = React.memo(props => {
         })
         setData(alldata)
         let arr = []
-        alldata.length <= 10 && setHasMore(false)
+        
+        // alldata.length <= rowsPerLoad && setHasMore(false)
         alldata.map((item, index) => {
           if (index < rowsPerLoad) {
             arr.push(item)
@@ -59,12 +60,19 @@ const Example = React.memo(props => {
   useEffect(() => {
     let alldata = [...data]
     let arr = []
+    let temp = [];
     alldata.map((item, index) => {
+      if (item.visibility === true) {
+        temp.push(item)
+      }
+    })
+
+    temp.map((item, index) => {
       if (index < rowsPerLoad) {
         arr.push(item)
       }
     })
-    arr.length <= rowsPerLoad ? setHasMore(false) : setHasMore(true)
+    temp.length <= rowsPerLoad ? setHasMore(false) : setHasMore(true)
     setCurrent(arr)
   }, [data])
 
@@ -109,8 +117,9 @@ const Example = React.memo(props => {
    * Filter
    * @param event
    */
-  function onSearchTextChange(event) {
-    const newData = [...data]
+  function onSearchTextChange(event) {    
+    let newData = [...data]
+    let temp = [];
     newData.map((item, index) => {
       item.visibility =
         item.text !== null &&
@@ -118,7 +127,7 @@ const Example = React.memo(props => {
       item.checked =
         item.text !== null &&
         item.text.toString().toLowerCase().includes(event.target.value)
-    })
+    })    
     setData(newData)
   }
 
@@ -291,28 +300,32 @@ const Example = React.memo(props => {
               </Fragment>
             )}
             <div style={{ height: "25px" }}>
-              <Checkbox
-                checked={checkAll}
-                onChange={() => setCheckAll(!checkAll)}
-                icon={<CustomIcon3 />}
-                checkedIcon={<CustomIcon2 />}
-                onClick={selectAll}
-                style={{
-                  height: "20px",
-                  width: "5px",
-                  marginLeft: "5px",
-                  marginTop: "-1px",
-                }}
-              />
-              <label
-                style={{
-                  color: "#008F8A",
-                  fontFamily: "Museo Sans",
-                  margin: "3px auto auto 8px",
-                }}
-              >
-                Select All
-              </label>
+            {!hasRemark && (
+              <Fragment>
+                <Checkbox
+                  checked={checkAll}
+                  onChange={() => setCheckAll(!checkAll)}
+                  icon={<CustomIcon3 />}
+                  checkedIcon={<CustomIcon2 />}
+                  onClick={selectAll}
+                  style={{
+                    height: "20px",
+                    width: "5px",
+                    marginLeft: "5px",
+                    marginTop: "-1px",
+                  }}
+                />
+                <label
+                  style={{
+                    color: "#008F8A",
+                    fontFamily: "Museo Sans",
+                    margin: "3px auto auto 8px",
+                  }}
+                >
+                  Select All
+                </label>
+              </Fragment>
+            )}
               <Button
                 type="submit"
                 className="filter-popover-button filter-popover-button-apply"

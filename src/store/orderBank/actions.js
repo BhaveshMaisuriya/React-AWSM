@@ -2,6 +2,9 @@ import {
   GET_RTS_ORDER_BANK_TABLE_DATA_FAIL,
   GET_RTS_ORDER_BANK_TABLE_DATA_SUCCESS,
   GET_RTS_ORDER_BANK_TABLE_DATA,
+  GET_SHIPMENT_ORDER_BANK_TABLE_DATA_FAIL,
+  GET_SHIPMENT_ORDER_BANK_TABLE_DATA_SUCCESS,
+  GET_SHIPMENT_ORDER_BANK_TABLE_DATA,
   GET_ORDERBANK,
   GET_ORDERBANK_SUCCESS,
   GET_ORDERBANK_FAIL,
@@ -56,6 +59,23 @@ export const getRTSOrderBankTableDataFail = (error) => ({
   type: GET_RTS_ORDER_BANK_TABLE_DATA_FAIL,
   payload: error,
 })
+
+export const getShipmentOfOderBankGanttChart = (params) => ({
+  type: GET_SHIPMENT_ORDER_BANK_TABLE_DATA,
+  params,
+})
+
+export const getShipmentOfOderBankGanttChartSuccess = (response) => ({
+  type: GET_SHIPMENT_ORDER_BANK_TABLE_DATA_SUCCESS,
+  payload: response,
+})
+
+export const getShipmentOfOderBankGanttChartFail = (error) => ({
+  type: GET_SHIPMENT_ORDER_BANK_TABLE_DATA_FAIL,
+  payload: error,
+})
+
+
 
 export const getOrderBank = params => ({
   type: GET_ORDERBANK,

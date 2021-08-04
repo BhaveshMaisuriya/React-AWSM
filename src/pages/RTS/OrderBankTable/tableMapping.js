@@ -18,6 +18,16 @@ const tableColumns = [
   "remarks",
 ]
 
+const shipmentTableColumns = [
+  "no.",
+  "station",
+  "order 1",
+  "order 2",
+  "order 3",
+  "order 4",
+  "order 5",
+]
+
 const tableMapping = {
   priority: {
     label: "priority",
@@ -117,4 +127,4 @@ const ganttChartTableMapping = {
   }
 }
 
-export { tableMapping, tableColumns, ganttChartTableColumns, ganttChartTableMapping }
+export { tableMapping, tableColumns, ganttChartTableColumns, ganttChartTableMapping, shipmentTableColumns}

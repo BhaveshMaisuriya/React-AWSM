@@ -1,6 +1,8 @@
 import {
   GET_RTS_ORDER_BANK_TABLE_DATA_SUCCESS,
   GET_RTS_ORDER_BANK_TABLE_DATA_FAIL,
+  GET_SHIPMENT_ORDER_BANK_TABLE_DATA_SUCCESS,
+  GET_SHIPMENT_ORDER_BANK_TABLE_DATA_FAIL,  
   GET_ORDERBANK_FAIL,
   GET_ORDERBANK_SUCCESS,
   GET_ORDERBANK_TABLE_INFORMATION_SUCCESS,
@@ -27,6 +29,7 @@ import {
 const initialState = {
   orderBankData: null,
   orderBankTableData: null,
+  shipmentOrderBankTableData: null,
   error: null,
   currentOrderDetail: null,
   updateSuccess: false,
@@ -54,6 +57,18 @@ const RTSOrderBank = (state = initialState, action) => {
         orderBankTableData: null,
         error: action.payload,
       }
+    case GET_SHIPMENT_ORDER_BANK_TABLE_DATA_SUCCESS:
+      return {
+        ...state,
+        shipmentOrderBankTableData: action.payload,
+        error: null,
+      }
+    case GET_SHIPMENT_ORDER_BANK_TABLE_DATA_FAIL:
+      return {
+        ...state,
+        shipmentOrderBankTableData: null,
+        error: action.payload,
+      }      
     case GET_ORDERBANK_SUCCESS:
       return {
         ...state,

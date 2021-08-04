@@ -3,6 +3,7 @@ import Factory from "./factory"
 import {
   GET_ORDERBANK,
   GET_ORDERBANK_TABLE_INFORMATION,
+  GET_SHIPMENT_ORDER_BANK_TABLE_DATA,
   UPDATE_ORDERBANK_TABLE_INFORMATION,
   DELETE_ORDERBANK_DETAIL,
   GET_RTS_ORDER_BANK_TABLE_DATA,
@@ -19,6 +20,8 @@ import {
 import {
   getRTSOrderBankTableDataSuccess,
   getRTSOrderBankTableDataFail,
+  getShipmentOfOderBankGanttChartSuccess,
+  getShipmentOfOderBankGanttChartFail,  
   getOrderBankSuccess,
   getOrderBankFail,
   getOrderBankDetailFail,
@@ -48,6 +51,7 @@ import {
   getOrderBank,
   getOrderBankDetail,
   getRTSOderBank,
+  getShipmentOderBank,
   putOrderbankDetail,
   sendRTSOrderBank,
   refreshRTSOrderBank,
@@ -89,6 +93,15 @@ function* onGetRTSOrderBank({ params = {} }) {
     yield put(getRTSOrderBankTableDataSuccess(response))
   } catch (error) {
     yield put(getRTSOrderBankTableDataFail(error))
+  }
+}
+
+function* onGetShipmentOrderBankData({ params = {} }) {
+  try {
+    const response = yield call(getShipmentOderBank, params)
+    yield put(getShipmentOfOderBankGanttChartSuccess(response))
+  } catch (error) {
+    yield put(getShipmentOfOderBankGanttChartFail(error))
   }
 }
 
@@ -177,6 +190,7 @@ function* onGetRTSOrderBankGanttChart({ params = {} }) {
 function* orderBankSaga() {
   yield takeLatest(GET_ORDERBANK, onGetOrderbank)
   yield takeLatest(GET_RTS_ORDER_BANK_TABLE_DATA, onGetRTSOrderBank)
+  yield takeLatest(GET_SHIPMENT_ORDER_BANK_TABLE_DATA, onGetShipmentOrderBankData)
   yield takeLatest(
     GET_ORDERBANK_TABLE_INFORMATION,
     onGetOrderbankTableInformation

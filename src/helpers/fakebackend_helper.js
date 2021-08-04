@@ -461,6 +461,10 @@ export const getRTSOderBank = params => {
   return get(url.GET_RTS_ORDER_BANK, { params: params })
 }
 
+export const getShipmentOderBank = params => {
+  return get(url.GET_SHIPMENT_ORDER_BANK, { params: params })
+}
+
 export const refreshRTSOrderBank = params => {
   return put(url.GET_RTS_ORDER_BANK, params)
 }

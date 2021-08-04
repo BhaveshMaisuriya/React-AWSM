@@ -45,6 +45,7 @@ import {
   orderBank,
   ganttChartTableData,
   ganttChartTableEvents,
+  shipmentTableData,
 } from "../../common/data"
 
 import { axiosApi } from "../api_helper"
@@ -968,6 +969,14 @@ const fakeBackend = () => {
       }, 500)
     })
   })
+
+  mock.onGet(url.GET_SHIPMENT_ORDER_BANK).reply(() => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve([200, shipmentTableData])
+      }, 500)
+    })
+  })  
 
   mock.onPost(url.GET_RTS_GANTT_CHART).reply(() => {
     return new Promise((resolve, reject) => {

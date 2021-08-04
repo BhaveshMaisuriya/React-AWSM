@@ -147,3 +147,48 @@ export const ganttChartTableEvents = [
   { id : 11, resourceId : 3, name : 'RT09567 Drag false', startDate : '2021-07-23 9:00', endDate : '2021-07-23 22:00', draggable : false, eventColor : '#84B0E9', eventType : 'Scheduled',highlight:true,eventFilter:"future" },
   { id : 12, resourceId : 3, name : 'RT09567 Drag false', startDate : '2021-07-23 0:00', endDate : '2021-07-23 8:00', draggable : false, eventColor : '#84B0E9', eventType : 'Scheduled',highlight:true,eventFilter:"request" },
 ]
+
+export const shipmentTableData = [
+  {
+    'no': 1,
+    station: {
+    'id': 36114489,
+    'name': 'maju gas trending',
+    'load_time': '09:00',
+    'loading_time': 1,
+    'duration': '3',
+    'eta': '13:00',
+    },
+    order1: {
+      'product': 'Primax 97 Premium',
+      'volume': '546OL',
+      'station_cat': 'LV1',
+      'DN': 1234,
+    },
+    order2:null,
+    order3:null,
+    order4:null,
+    order5:null,
+  },
+  {
+    'no': 2,
+    station: {
+    'id': 3611464,
+    'name': 'one sh trending',
+    'load_time': '14:00',
+    'loading_time': 3,
+    'duration': '3',
+    'eta': '17:00',
+    },
+    order1: {
+      'product': 'Primax 97 Premium',
+      'volume': '546OL',
+      'station_cat': 'LV1',
+      'DN': 1234,
+    },
+    order2:null,
+    order3:null,
+    order4:null,
+    order5:null,
+  },
+]

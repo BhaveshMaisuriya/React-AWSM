@@ -4,14 +4,12 @@ import Page from "../Common"
 import {
   getRetailCustomer,
   getRetailAuditLog,
-  // getRetailFilter,
   getTableInformation,
   updateTableInformation,
   getDownloadRetailCustomer,
 } from "../../../store/actions"
 import { tableColumns, tableMapping } from "./tableMapping"
 import { transformArrayToString, getCookieByKey } from "../Common/helper"
-// import TableInformationWrapper from "../../../components/Common/TableInformationWrapper"
 import RetailCustomerModal from "./RetailCustomerModal"
 import Loader from "../../../components/Common/Loader"
 
@@ -28,11 +26,7 @@ class RetailCustomer extends Component {
   }
 
   componentDidMount() {
-    const {
-      onGetRetailCustomer,
-      onGetRetailAuditLog,
-      onGetTableInformation,
-    } = this.props
+    const { onGetRetailCustomer, onGetRetailAuditLog } = this.props
     const { searchFields } = this.state
     const params = {
       limit: 10,
@@ -50,7 +44,6 @@ class RetailCustomer extends Component {
     }
     onGetRetailCustomer(params)
     onGetRetailAuditLog(payload)
-    // onGetTableInformation()
   }
 
   GetonDownload = async currentPage => {
@@ -89,6 +82,7 @@ class RetailCustomer extends Component {
             onGetTableInformation={onGetTableInformation}
             onUpdateTableInformation={onUpdateTableInformation}
             tableColumns={searchFields}
+            defaultColumns={tableColumns}
             tableMapping={tableMapping}
             tableData={retailCustomer}
             downloadtableData={downloadretailCustomer}
@@ -118,7 +112,6 @@ const mapStateToProps = ({ retailCustomer }) => ({
 const mapDispatchToProps = dispatch => ({
   onGetRetailCustomer: params => dispatch(getRetailCustomer(params)),
   onGetRetailAuditLog: payload => dispatch(getRetailAuditLog(payload)),
-  // onGetRetailFilter: payload => dispatch(getRetailFilter(payload)),
   onGetTableInformation: () => dispatch(getTableInformation()),
   onUpdateTableInformation: event => dispatch(updateTableInformation(event)),
   onGetDownloadRetailCustomer: params =>

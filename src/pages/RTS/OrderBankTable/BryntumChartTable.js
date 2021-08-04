@@ -31,8 +31,8 @@ import { cloneDeep } from 'lodash'
 import OrderBankShipmentModal from "./OrderBankShipmentModal"
 
 const EventSchedulerStatus = {
-  ARE_YET_CREATED_PAYMENT: 'not yet to be created',
-  CREATED_PAYMENT: 'created'
+    ARE_YET_CREATED_PAYMENT : 'not yet to be created',
+    CREATED_PAYMENT:'created'
 }
 
 const ShiftPopover = ({ record, onChange }) => {
@@ -177,8 +177,9 @@ const ChartColumnFilter = ({
           (e, index) =>
             e.visible && (
               <div
-                className={`chart-column-select-item ${e.checked ? "checked" : " "
-                  }`}
+                className={`chart-column-select-item ${
+                  e.checked ? "checked" : " "
+                }`}
               >
                 <Checkbox
                   checked={e.checked}
@@ -233,13 +234,12 @@ function BryntumChartTable(props) {
     tableData.current = newData
   }
   const [modal, setModal] = useState(false);
-  const [dropdownSelectedItem, setDropdownSelectedItem] = useState(null);
+  const [dropdownSelectedItem, setDropdownSelectedItem] =  useState(null);
   const [filterCondition, setFilterCondition] = useState([])
   const [eventsData, setEventsData] = useState([])
   const [displayDblclick, setDisplayDblclick] = useState(false)
   const schedulerProRef = useRef()
-  const firstRender = useRef(true)
-
+	const firstRender = useRef(true)
   const [filterList, setFilterList] = useState(
     Object.keys(ganttChartTableMapping).map(e => ({
       key: e,
@@ -258,45 +258,45 @@ function BryntumChartTable(props) {
 
   const toggle = () => setModal(!modal);
 
-  const updateModalHandler = (type, eventRecord) => {
+  const updateModalHandler = (type, eventRecord) =>{
     let data = {};
-    switch (type) {
-      case 'shipment': {
-        data.type = 'shipment'
-        data.header = 'Create Shipment'
-        data.body = 'proceed for Shipment Creation?'
-        data.styleColor = 'success'
-        break
-      }
-      case 'cancelShipment': {
-        data.type = 'cancelShipment'
-        data.header = 'Cancel Shipment Confirmation'
-        data.body = 'proceed with this shipment cancellation?'
-        data.styleColor = 'danger'
-        data.record = eventRecord.data
-        break
-      }
-      case 'sendOrder': {
-        data.type = 'sendOrder'
-        data.header = 'Send Order for DN'
-        data.body = "send this shipment's order for DN?"
-        data.styleColor = 'success'
-        break
-      }
-      default: {
-        data.header = ''
-        data.body = ''
-        break
-      }
+    switch(type){
+        case 'shipment':{
+            data.type = 'shipment'
+            data.header = 'Create Shipment'
+            data.body = 'proceed for Shipment Creation?'
+            data.styleColor = 'success'
+            break
+        }
+        case 'cancelShipment':{
+          data.type = 'cancelShipment'
+          data.header = 'Cancel Shipment Confirmation'
+          data.body = 'proceed with this shipment cancellation?'
+          data.styleColor = 'danger'
+          data.record = eventRecord.data
+          break
+        }
+        case 'sendOrder':{
+          data.type = 'sendOrder'
+          data.header = 'Send Order for DN'
+          data.body = "send this shipment's order for DN?"
+          data.styleColor = 'success'
+          break
+        }
+        default:{
+            data.header = ''
+            data.body = ''
+            break
+        }
     }
     data.itemSelectedId = eventRecord.id
     toggle()
     setDropdownSelectedItem(data)
   }
 
-  const changeColorOfEventHandler = (color, isPending = false, eventType = undefined) => {
+  const changeColorOfEventHandler = (color,isPending = false, eventType = undefined) =>{
     const newData = cloneDeep(eventsData)
-    let itemSelected = newData.filter((v) => v.id == dropdownSelectedItem.itemSelectedId)
+    let itemSelected = newData.filter((v)=>v.id == dropdownSelectedItem.itemSelectedId)
     itemSelected[0].eventColor = color
     itemSelected[0].isPending = isPending
     if (eventType) {
@@ -306,33 +306,33 @@ function BryntumChartTable(props) {
     setEventsData(newData)
   }
 
-  const sendRequestsHandler = () => {
-    changeColorOfEventHandler('#9F79B7', true)
-    switch (dropdownSelectedItem.type) {
-      case 'shipment': {
-        setTimeout(() => {
-          props.processPaymentInGanttChart(null)
-        }, 2000)
-        break
+  const sendRequestsHandler = () =>{
+    changeColorOfEventHandler('#9F79B7',true)
+    switch(dropdownSelectedItem.type){
+      case 'shipment':{
+          setTimeout(()=>{
+            props.processPaymentInGanttChart(null)
+          },2000)
+          break
       }
-      case 'cancelShipment': {
-        setTimeout(() => {
+      case 'cancelShipment':{
+        setTimeout(()=>{
           props.processCancelPaymentInGanttChart(dropdownSelectedItem)
         }, 2000)
         break
       }
-      case 'sendOrder': {
+      case 'sendOrder':{
         props.processSendOrderInGanttChart(null)
         break
       }
-      default: {
-        data.header = ''
-        data.body = ''
-        break
+      default:{
+          data.header = ''
+          data.body = ''
+          break
       }
+      }
+      toggle()
     }
-    toggle()
-  }
 
   const updateResourceRecords = (updateData, preventClear = false) => {
     const scheduler = schedulerProRef.current?.instance
@@ -368,6 +368,9 @@ function BryntumChartTable(props) {
     eventRenderer: ({ eventRecord, renderData }) => {
       // customize content for event in here
       if (!eventRecord.data?.highlight) {
+    eventRenderer:({ eventRecord, renderData  }) => {
+       // customize content for event in here
+       if (!eventRecord.data?.highlight) {
         renderData.cls.add("opacity-20")
       }
       if (eventRecord.data?.highlight) {
@@ -402,11 +405,6 @@ function BryntumChartTable(props) {
       `
     },
     features: {
-      eventEdit: {
-        editorConfig: {
-          type: 'myCustomEditorType'
-        }
-      },
       eventTooltip: {
         disabled: true
       },
@@ -427,92 +425,92 @@ function BryntumChartTable(props) {
     resourceTimeRangesFeature: true,
     maxTimeAxisUnit: "hour",
     eventMenuFeature: {
-      // menuitem of event right click handler
-      processItems({ eventRecord, items }) {
-        if (eventRecord.data?.eventType === 'Cancellation') {
-          items.sendOrderForDS = {
-            hidden: true
-          };
-          items.plannedLoadTime = {
-            hidden: true
-          };
-          items.terminalRelay = {
-            hidden: true
-          };
-          items.createShipment = {
-            hidden: true
-          };
-          items.cancel = {
-            hidden: true
-          };
-          return;
-        }
-        if (eventRecord.data?.isPending) return false
-        if (!eventRecord.data?.resourceOrder) {
-          items.sendOrderForDS = {
-            hidden: true
-          };
-        }
-        if (!eventRecord.data?.eventType === 'Cancellation') {
-          items.sendOrderForDS = {
-            hidden: true
-          };
-        }
-        if (eventRecord.data?.resourceOrder) {
-          let check = eventRecord.data?.resourceOrder.filter(v => !v.DNNumber)
-          items.sendOrderForDS = {
-            ...items.sendOrderForDS,
-            disabled: !!check.length
-          };
-        }
-        if (eventRecord.data?.status === EventSchedulerStatus.CREATED_PAYMENT) {
-          items.createShipment = {
-            hidden: true
-          };
-          items.sendOrderForDS = {
-            hidden: true
-          };
-          items.terminalRelay = {
-            hidden: true
-          };
-        }
-      },
-      items: {
-        editEvent: false,
-        deleteEvent: false,
-        sendOrderForDS: {
-          text: 'Send OrderS For DS',
-          onItem({ source, eventRecord }) {
-            updateModalHandler('sendOrder', eventRecord)
+        // menuitem of event right click handler
+        processItems({ eventRecord, items }) {
+          if(eventRecord.data?.eventType === 'Cancellation'){
+            items.sendOrderForDS = {
+              hidden: true
+            };
+            items.plannedLoadTime = {
+              hidden: true
+            };
+            items.terminalRelay = {
+              hidden: true
+            };
+            items.createShipment = {
+              hidden: true
+            };
+            items.cancel = {
+              hidden: true
+            };
+            return;
+          }
+          if(eventRecord.data?.isPending) return false
+          if(!eventRecord.data?.resourceOrder){
+            items.sendOrderForDS = {
+              hidden: true
+            };
+          }
+          if(!eventRecord.data?.eventType === 'Cancellation'){
+            items.sendOrderForDS = {
+              hidden: true
+            };
+          }
+          if(eventRecord.data?.resourceOrder){
+            let check = eventRecord.data?.resourceOrder.filter(v=>!v.DNNumber)
+            items.sendOrderForDS = {
+              ...items.sendOrderForDS,
+              disabled: !!check.length
+            };
+          }
+          if(eventRecord.data?.status === EventSchedulerStatus.CREATED_PAYMENT){
+            items.createShipment = {
+              hidden: true
+            };
+            items.sendOrderForDS = {
+              hidden: true
+            };
+            items.terminalRelay = {
+              hidden: true
+            };
           }
         },
-        plannedLoadTime: {
-          text: 'Planned Load Times',
-          disabled: true,
-          onItem({ source, eventRecord }) {
-            updateModalHandler()
-          }
+        items: {
+          editEvent : false,
+          deleteEvent : false,
+          sendOrderForDS:{
+            text: 'Send OrderS For DS',
+            onItem({ source, eventRecord }) {
+              updateModalHandler('sendOrder',eventRecord)
+            }
+          },
+          plannedLoadTime:{
+            text: 'Planned Load Times',
+            disabled: true,
+            onItem({ source, eventRecord }) {
+              updateModalHandler()
+            }
+          },
+          terminalRelay:{
+            text: 'Terminal Relay',
+            disabled: true,
+            onItem({ source, eventRecord }) {
+              updateModalHandler()
+            }
+          },
+          createShipment:{
+            text: 'Create Shipment',
+            onItem({ source, eventRecord }) {
+              updateModalHandler('shipment',eventRecord)
+            }
+          },
+          cancel:{
+            text: 'Cancel',
+            onItem({ source, eventRecord }) {
+              updateModalHandler('cancelShipment', eventRecord)
+            }
+          },
         },
-        terminalRelay: {
-          text: 'Terminal Relay',
-          disabled: true,
-          onItem({ source, eventRecord }) {
-            updateModalHandler()
-          }
-        },
-        createShipment: {
-          text: 'Create Shipment',
-          onItem({ source, eventRecord }) {
-            updateModalHandler('shipment', eventRecord)
-          }
-        },
-        cancel: {
-          text: 'Cancel',
-          onItem({ source, eventRecord }) {
-            updateModalHandler('cancelShipment', eventRecord)
-          }
-        },
-      },
 
     },
     viewPreset: {
@@ -544,7 +542,7 @@ function BryntumChartTable(props) {
     setDisplayDblclick(!displayDblclick);
   }
 
-  function onShiftDateChange(recordId, value) {
+  function onShiftDateChange (recordId, value)  {
     const currentTableData = tableData.current
     const recordIndex = currentTableData.findIndex(e => e.id === recordId)
     if (recordIndex >= 0) {
@@ -601,7 +599,7 @@ function BryntumChartTable(props) {
     let isMounted = true // prevent bryntum maximum render
     if (schedulerProRef.current && schedulerProRef.current.instance && isMounted && !firstRender.current) {
       const { instance: scheduler } = schedulerProRef.current
-      const { ganttChartAllRadio } = props
+      const {ganttChartAllRadio} = props
       if (!ganttChartAllRadio) {
         setEventsData((prevEventsData) => {
           const newEventsData = prevEventsData.map((event) => {
@@ -615,10 +613,10 @@ function BryntumChartTable(props) {
       if (ganttChartAllRadio) {
         setEventsData((prevEventsData) => {
           const newEventsData = prevEventsData.map((event) => {
-            if (event.eventType === 'Scheduled') {
+            if(event.eventType === 'Scheduled'){
               event.highlight = event.eventFilter === ganttChartAllRadio
             }
-            if (event.eventType !== 'Scheduled') {
+            if(event.eventType !== 'Scheduled'){
               event.highlight = true
             }
             return event
@@ -633,7 +631,7 @@ function BryntumChartTable(props) {
   }, [props.ganttChartAllRadio])
 
   useEffect(() => {
-    if (props.isSendRequestProcess && dropdownSelectedItem?.itemSelectedId) {
+    if(props.isSendRequestProcess && dropdownSelectedItem?.itemSelectedId){
       if (dropdownSelectedItem.type === 'cancelShipment') {
         changeColorOfEventHandler('#aeaeae', false, 'Cancellation');
       } else {
@@ -753,6 +751,8 @@ function BryntumChartTable(props) {
       {displayDblclick &&
         <OrderBankShipmentModal open={displayDblclick} istoggle={toggleShipment} />
       }
+        styleColor = {dropdownSelectedItem?.styleColor}
+        />
     </div>
   )
 }

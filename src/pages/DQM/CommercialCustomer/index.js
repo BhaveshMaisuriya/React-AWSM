@@ -80,6 +80,7 @@ class CommercialCustomer extends Component {
             onGetTableInformation={onGetTableInformation}
             onUpdateTableInformation={onUpdateTableInformation}
             tableColumns={searchFields}
+            defaultColumns={tableColumns}
             tableMapping={tableMapping}
             tableData={commercialCustomer}
             downloadtableData={downloadCommercialCustomer}

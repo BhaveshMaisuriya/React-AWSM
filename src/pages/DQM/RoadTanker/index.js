@@ -4,7 +4,6 @@ import Page from "./../Common"
 import {
   getRoadTanker,
   getRoadTankerAuditLog,
-  // getRoadTankerFilter,
   getDownloadRoadTanker,
   getTableInformation,
   updateTableInformation,
@@ -74,7 +73,7 @@ class RoadTanker extends Component {
       roadTankerIsLoading,
     } = this.props
 
-    const { searchFields, isRoadTankerTIVisible } = this.state
+    const { searchFields } = this.state
 
     return (
       <Fragment>
@@ -87,6 +86,7 @@ class RoadTanker extends Component {
             onGetTableInformation={onGetTableInformation}
             onUpdateTableInformation={onUpdateTableInformation}
             tableColumns={searchFields}
+            defaultColumns={tableColumns}
             tableMapping={tableMapping}
             tableData={roadTanker}
             tableName={RoadTankerTableName}

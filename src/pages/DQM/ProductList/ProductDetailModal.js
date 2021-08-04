@@ -10,16 +10,16 @@ import {
 } from "../../../store/actions"
 import AWSMDropdown from "../../../components/Common/Dropdown"
 import "./ProductDetailModal.scss"
+import { isEqual } from "lodash"
 
 class ProductDetailModal extends PureComponent {
   constructor(props) {
     super(props)
     this.state = {
-      updateDictionary: {
-        remarks: props?.currentProduct?.remarks,
-      },
+      updateDictionary: {},
       displayConfirmationBox: false,
     }
+    this.handleInputChange = this.handleInputChange.bind(this)
   }
 
   componentDidMount() {
@@ -31,6 +31,12 @@ class ProductDetailModal extends PureComponent {
     if (nextProps.updateStatus) {
       this.ModalCloseHandler()
       this.props.refreshMainTable()
+    }
+  }
+
+  componentDidUpdate() {
+    if (isEqual(this.state.updateDictionary, {})) {
+      this.setState({ updateDictionary: this.props.currentProduct })
     }
   }
 
@@ -51,7 +57,7 @@ class ProductDetailModal extends PureComponent {
   }
 
   renderConfirmationDialog() {
-    if (Object.keys(this.state.updateDictionary).length > 0) {
+    if (!isEqual(this.state.updateDictionary, this.props.currentProduct)) {
       return (
         <div className="Confirmation-box">
           <div>
@@ -81,6 +87,18 @@ class ProductDetailModal extends PureComponent {
     resetProductDetail()
   }
 
+  handleInputChange = event => {
+    const newInput = {
+      [event.target.name]: event.target.value,
+    }
+    this.setState({
+      updateDictionary: {
+        ...this.state.updateDictionary,
+        ...newInput,
+      },
+    })
+  }
+
   renderModalBody() {
     const { currentProduct } = this.props
     const { updateDictionary } = this.state
@@ -88,7 +106,7 @@ class ProductDetailModal extends PureComponent {
     // const isDisabledField = false
     return (
       <>
-        {currentProduct ? (
+        {updateDictionary ? (
           <ModalBody>
             <div>
               <div className="row">
@@ -97,7 +115,7 @@ class ProductDetailModal extends PureComponent {
                   <input
                     className="form-control"
                     type="text"
-                    defaultValue={currentProduct.name}
+                    defaultValue={updateDictionary.name}
                     disabled={true}
                   />
                 </div>
@@ -106,7 +124,7 @@ class ProductDetailModal extends PureComponent {
                   <input
                     className="form-control"
                     type="text"
-                    defaultValue={currentProduct.status_sap}
+                    defaultValue={updateDictionary.status_sap}
                     disabled={true}
                   />
                 </div>
@@ -115,11 +133,8 @@ class ProductDetailModal extends PureComponent {
                 <div className="col-md-6 form-group">
                   <label> STATUS IN AWSM </label>
                   <AWSMDropdown
-                    value={
-                      updateDictionary?.status_awsm
-                        ? updateDictionary.status_awsm
-                        : currentProduct.status_awsm
-                    }
+                    value={updateDictionary.status_awsm}
+                    name="status_awsm"
                     items={["ACTIVE", "INACTIVE"]}
                     onChange={ev => {
                       this.setState({
@@ -132,23 +147,6 @@ class ProductDetailModal extends PureComponent {
                     disabled={isDisabledField}
                     className="form-control"
                   />
-                  {/* <select
-                    className="form-control"
-                    type="text"
-                    disabled={isDisabledField}
-                    defaultValue={updateDictionary.status_awsm}
-                    onChange={ev => {
-                      this.setState({
-                        updateDictionary: {
-                          ...this.state.updateDictionary,
-                          ...{ status_awsm: ev.target.value },
-                        },
-                      })
-                    }}
-                  >
-                    <option value="ACTIVE">ACTIVE</option>
-                    <option value="INACTIVE">INACTIVE</option>
-                  </select> */}
                 </div>
               </div>
 
@@ -158,7 +156,7 @@ class ProductDetailModal extends PureComponent {
                   <input
                     className="form-control"
                     type="text"
-                    defaultValue={currentProduct.division}
+                    defaultValue={updateDictionary.division}
                     disabled={true}
                   />
                 </div>
@@ -167,7 +165,7 @@ class ProductDetailModal extends PureComponent {
                   <input
                     className="form-control"
                     type="text"
-                    defaultValue={currentProduct.material_group}
+                    defaultValue={updateDictionary.material_group}
                     disabled={true}
                   />
                 </div>
@@ -179,7 +177,7 @@ class ProductDetailModal extends PureComponent {
                   <input
                     className="form-control"
                     type="text"
-                    defaultValue={currentProduct.category}
+                    defaultValue={updateDictionary.category}
                     disabled={true}
                   />
                 </div>
@@ -188,7 +186,7 @@ class ProductDetailModal extends PureComponent {
                   <input
                     className="form-control"
                     type="text"
-                    defaultValue={currentProduct.sub_category}
+                    defaultValue={updateDictionary.sub_category}
                     disabled={true}
                   />
                 </div>
@@ -200,7 +198,7 @@ class ProductDetailModal extends PureComponent {
                   <input
                     className="form-control"
                     type="text"
-                    defaultValue={currentProduct.product_group}
+                    defaultValue={updateDictionary.product_group}
                     disabled={true}
                   />
                 </div>
@@ -209,7 +207,7 @@ class ProductDetailModal extends PureComponent {
                   <input
                     className="form-control"
                     type="text"
-                    defaultValue={currentProduct.uom}
+                    defaultValue={updateDictionary.uom}
                     disabled={true}
                   />
                 </div>
@@ -221,7 +219,7 @@ class ProductDetailModal extends PureComponent {
                   <input
                     className="form-control"
                     type="text"
-                    defaultValue={currentProduct.density}
+                    defaultValue={updateDictionary.density}
                     disabled={true}
                   />
                 </div>
@@ -233,20 +231,10 @@ class ProductDetailModal extends PureComponent {
                   <input
                     className="form-control"
                     type="text"
-                    defaultValue={
-                      updateDictionary?.remarks
-                        ? updateDictionary.remarks
-                        : currentProduct.remarks
-                    }
+                    defaultValue={updateDictionary.remarks}
+                    name="remarks"
                     disabled={isDisabledField}
-                    onChange={ev => {
-                      this.setState({
-                        updateDictionary: {
-                          ...this.state.updateDictionary,
-                          ...{ remarks: ev.target.value },
-                        },
-                      })
-                    }}
+                    onChange={this.handleInputChange}
                   />
                 </div>
               </div>
@@ -272,6 +260,7 @@ class ProductDetailModal extends PureComponent {
 
   render() {
     const { visible, currentProduct } = this.props
+    const { updateDictionary } = this.state
     const externalCloseBtn = (
       <CloseButton handleClose={() => this.handleClose()} />
     )
@@ -288,20 +277,11 @@ class ProductDetailModal extends PureComponent {
       <Modal isOpen={visible} className="commercial-customer-modal modal-lg">
         <ModalHeader close={externalCloseBtn}>
           <span className="modal-title">
-            Product Code: {currentProduct.code}
+            Product Code: {updateDictionary.code}
           </span>
           <span className="last-updated-sub-title">
             Last Updated By: Nur Izzati on 3rd March 2021
           </span>
-
-          {/* <button
-            type="button"
-            className="close"
-            aria-label="Close"
-            onClick={() => this.setState({ displayConfirmationBox: true })}
-          >
-            <span aria-hidden="true">&times;</span>
-          </button> */}
         </ModalHeader>
         {this.state.displayConfirmationBox
           ? this.renderConfirmationDialog()

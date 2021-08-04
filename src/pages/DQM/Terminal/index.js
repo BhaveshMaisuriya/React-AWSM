@@ -4,11 +4,10 @@ import Page from "../Common"
 import {
   getTerminal,
   getTerminalAuditLog,
-  // getTerminalFilter,
   getTableInformation,
   getDownloadTerminal,
   updateTableInformation,
-  resetCurrentTerminalDetail
+  resetCurrentTerminalDetail,
 } from "../../../store/actions"
 import { tableColumns, tableMapping } from "./tableMapping"
 import { transformArrayToString, getCookieByKey } from "../Common/helper"
@@ -62,7 +61,6 @@ class Terminal extends Component {
     const {
       onGetTerminal,
       onGetTerminalAuditLog,
-      // onGetTerminalFilter,
       onGetTableInformation,
       onUpdateTableInformation,
       terminalTable,
@@ -70,7 +68,7 @@ class Terminal extends Component {
       downloadTerminal,
       filterTerminal,
       terminalTableIsLoading,
-      resetCurrentTerminalDetail
+      resetCurrentTerminalDetail,
     } = this.props
     const { searchFields } = this.state
     return (
@@ -87,15 +85,15 @@ class Terminal extends Component {
             onGetTableInformation={onGetTableInformation}
             onUpdateTableInformation={onUpdateTableInformation}
             tableColumns={searchFields}
+            defaultColumns={tableColumns}
             tableMapping={tableMapping}
-            // onGetFilter={onGetTerminalFilter}
             tableData={terminalTable}
             audits={auditsTerminal}
             downloadtableData={downloadTerminal}
             filter={filterTerminal}
             modalComponent={TerminalDetailModal}
             onGetDownloadCustomer={this.GetonDownload}
-            resetCurrentTerminalDetail = {resetCurrentTerminalDetail}
+            resetCurrentTerminalDetail={resetCurrentTerminalDetail}
           />
         )}
       </Fragment>
@@ -114,12 +112,10 @@ const mapStateToProps = ({ terminal }) => ({
 const mapDispatchToProps = dispatch => ({
   onGetTerminal: params => dispatch(getTerminal(params)),
   onGetTerminalAuditLog: payload => dispatch(getTerminalAuditLog(payload)),
-  // onGetTerminalFilter: payload => dispatch(getTerminalFilter(payload)),
   onGetTableInformation: () => dispatch(getTableInformation()),
   onUpdateTableInformation: event => dispatch(updateTableInformation(event)),
   onGetDownloadTerminal: params => dispatch(getDownloadTerminal(params)),
-  resetCurrentTerminalDetail : () => dispatch(resetCurrentTerminalDetail())
-
+  resetCurrentTerminalDetail: () => dispatch(resetCurrentTerminalDetail()),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Terminal)

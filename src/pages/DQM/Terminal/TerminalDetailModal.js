@@ -122,7 +122,7 @@ class TerminalDetailModal extends PureComponent {
      }
     }
     if(status?.status_awsm === "Temporary Inactive" ){
-      if(!status?.inactive_date_range_1?.date_from){
+      if(!status?.inactive_date_range_1?.date_from || status?.inactive_date_range_1?.type !== 'range'){
         exceedValues.push(1)
       }
     }
@@ -322,6 +322,7 @@ class TerminalDetailModal extends PureComponent {
                           width: "100%",
                           overflowX: "hidden",
                           paddingRight: "25px",
+                          paddingBottom:"5px"
                         }}
                       >
                         <StatusTab

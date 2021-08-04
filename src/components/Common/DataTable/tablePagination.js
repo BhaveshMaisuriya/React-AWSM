@@ -72,6 +72,7 @@ class TablePaginationActions extends Component {
                 className="Pagination-Button"
                 value={number}
                 onClick={() => this.props.onChangePage(event, number - 1)}
+                onMouseDown={e => e.preventDefault()}
               >
                 <span className="Pagination-Text">{number}</span>
               </PaginationLink>

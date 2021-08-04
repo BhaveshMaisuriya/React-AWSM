@@ -188,7 +188,13 @@ const Example = React.memo(props => {
 
   return (
     <Fragment>
-      <Button id={dataKey} type="button" color="link" className="filter-button">
+      <Button
+        id={dataKey}
+        type="button"
+        color="link"
+        className="filter-button"
+        onMouseDown={e => e.preventDefault()}
+      >
         <i className="mdi mdi-menu-down" />
       </Button>
       <Popover

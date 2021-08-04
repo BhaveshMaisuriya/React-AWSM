@@ -98,7 +98,7 @@ const Product = ({
         </div>
         <div className="col-3 form-group">
           <label
-            className={`${renderExceedError("flow_rate", 100) ? "error" : ""}`}
+            className={`${renderExceedError("flow_rate", 10000) ? "error" : ""}`}
           >
             FLOW RATE (L/MIN)
           </label>

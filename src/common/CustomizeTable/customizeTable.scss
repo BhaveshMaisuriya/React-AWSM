@@ -61,7 +61,7 @@
         user-select: none;
 
         &.drag-content-dragging {
-          background-color: #00a19c;
+          border: 1px solid #00a19c;
         }
 
         .drag-content-label {

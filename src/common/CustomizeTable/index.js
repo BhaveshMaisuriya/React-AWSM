@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react"
-import { Dialog, DialogContent } from "@material-ui/core"
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd"
 
 // Components
@@ -155,7 +154,7 @@ function getCookieByKey(key) {
  * @param onChange
  * @param closeDialog
  * @param tableName
- * @param defaultMetric
+ * @param initialMetric
  * @param availableMetric
  * @param metricArray
  * @param metricKey
@@ -167,8 +166,9 @@ const CustomizeTableModal = ({
   onChange,
   closeDialog,
   tableName,
-  defaultMetric = [],
+  initialMetric = [],
   availableMetric = {},
+  defaultMetric = [],
   metricArray = false,
   metricKey = "id",
 }) => {
@@ -176,7 +176,7 @@ const CustomizeTableModal = ({
   const [initMetric, setInitMetric] = useState(
     getCookieByKey(tableName)
       ? JSON.parse(getCookieByKey(tableName))
-      : defaultMetric
+      : initialMetric
   )
   let availableMetricTransform = []
   if (metricArray) {
@@ -216,13 +216,13 @@ const CustomizeTableModal = ({
   // Function handler
   const onItemSelectChange = item => {
     // Remove item when number of selected item is less or equal 10 will set all selected item to disabled and display error message
-    if (itemToDrag.length <= 10 && !item.checked) {
+    if (itemToDrag.length < 11 && !item.checked) {
       setItemToSelect(
         itemToSelect.map(item =>
           item.checked ? { ...item, disabled: true } : item
         )
       )
-      return setError("Must not be less than 10 metrics")
+      return setError("Must not be less than 9 metrics")
     }
 
     // Update drag item list
@@ -278,9 +278,45 @@ const CustomizeTableModal = ({
   }
 
   /**
+   * On click exit or cancel
+   */
+  const onExit = () => {
+    onRevertToInitial()
+    setError("")
+    if (closeDialog) {
+      closeDialog()
+    }
+  }
+
+  /**
    * Revert to default
    */
   const onRevertToDefault = () => {
+    setItemToSelect(
+      availableMetricTransform
+        .map(item => ({
+          ...item,
+          checked: defaultMetric.includes(item.id),
+        }))
+        .sort((a, b) => b.checked - a.checked)
+    )
+    const newItemToDrag = []
+    for (let i = 0; i < defaultMetric.length; i++) {
+      const indexItem = itemToSelect.findIndex(
+        item => item.id === defaultMetric[i]
+      )
+      if (indexItem >= 0) {
+        newItemToDrag.push(itemToSelect[indexItem])
+      }
+    }
+    setItemToDrag(newItemToDrag)
+    setError("")
+  }
+
+  /**
+   * Revert to initial
+   */
+  const onRevertToInitial = () => {
     setItemToSelect(
       availableMetricTransform.map(item => ({
         ...item,
@@ -302,11 +338,8 @@ const CustomizeTableModal = ({
 
   return (
     <div>
-      <Modal isOpen={open} toggle={closeDialog} id="customize_popup">
-        <ModalHeader
-          toggle={closeDialog}
-          close={<CloseButton handleClose={closeDialog} />}
-        >
+      <Modal isOpen={open} id="customize_popup">
+        <ModalHeader close={<CloseButton handleClose={onExit} />}>
           <h3>Customise Column</h3>
         </ModalHeader>
         <ModalBody className="customize-table-container">
@@ -355,7 +388,7 @@ const CustomizeTableModal = ({
               </button>
               <div className="d-flex align-items-center">
                 <button
-                  onClick={closeDialog}
+                  onClick={onExit}
                   className="btn btn-outline-primary px-4 mr-2 btn-size"
                 >
                   Cancel

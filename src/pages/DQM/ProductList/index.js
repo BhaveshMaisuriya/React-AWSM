@@ -4,7 +4,6 @@ import Page from "../Common"
 import {
   getProducts,
   getProductAuditLog,
-  // getProductFilter,
   getTableInformation,
   updateTableInformation,
   getDownloadProducts,
@@ -26,11 +25,7 @@ class Product extends Component {
   }
 
   componentDidMount() {
-    const {
-      onGetProducts,
-      onGetProductAuditLog,
-      onGetTableInformation,
-    } = this.props
+    const { onGetProducts, onGetProductAuditLog } = this.props
     const { searchFields } = this.state
     const params = {
       limit: 10,
@@ -48,7 +43,6 @@ class Product extends Component {
     }
     onGetProducts(params)
     onGetProductAuditLog(payload)
-    //onGetTableInformation()
   }
 
   GetonDownload = async currentPage => {
@@ -85,10 +79,10 @@ class Product extends Component {
             tableName={ProductTableName}
             onGetMainTable={onGetProducts}
             onGetAuditLog={onGetProductAuditLog}
-            // onGetFilter={onGetProductFilter}
             onGetTableInformation={onGetTableInformation}
             onUpdateTableInformation={onUpdateTableInformation}
             tableColumns={searchFields}
+            defaultColumns={tableColumns}
             tableMapping={tableMapping}
             tableData={products}
             downloadtableData={downloadProduct}
@@ -114,7 +108,6 @@ const mapStateToProps = ({ products }) => ({
 const mapDispatchToProps = dispatch => ({
   onGetProducts: params => dispatch(getProducts(params)),
   onGetProductAuditLog: payload => dispatch(getProductAuditLog(payload)),
-  // onGetProductFilter: payload => dispatch(getProductFilter(payload)),
   onGetTableInformation: () => dispatch(getTableInformation()),
   onUpdateTableInformation: event => dispatch(updateTableInformation(event)),
   onGetDownloadProducts: params => dispatch(getDownloadProducts(params)),

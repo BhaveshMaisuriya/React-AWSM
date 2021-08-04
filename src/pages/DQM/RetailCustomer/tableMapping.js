@@ -125,12 +125,12 @@ const tableMapping = {
     columnSize: "cell-text",
   },
   contact_1_name: {
-    label: "CONTACT PERSON 1 EMAIL",
+    label: "CONTACT PERSON 1 NAME",
     apiKey: "contact_1.name",
     columnSize: "cell-text-big",
   },
   contact_1_number: {
-    label: "CONTACT PERSON 1 NAME",
+    label: "CONTACT PERSON 1 NUMBER",
     apiKey: "contact_1.number",
     columnSize: "cell-text",
   },
@@ -224,13 +224,17 @@ const tableMapping = {
     apiKey: "status_awsm",
     columnSize: "cell-text",
   },
+  close_period_1_value: {
+    label: "STATION CLOSE DAY",
+    columnSize: "cell-text-big",
+  },
   close_period_1_time_from: {
-    label: "STATION CLOSE FROM",
+    label: "STATION CLOSE TIME FROM",
     apiKey: "close_period_1.time_from",
     columnSize: "cell-text-big",
   },
   close_period_1_time_to: {
-    label: "STATION CLOSE TO",
+    label: "STATION CLOSE TIME TO",
     apiKey: "close_period_1.time_to",
     columnSize: "cell-text-big",
   },
@@ -584,11 +588,11 @@ const tableMapping = {
     apiKey: "road_tanker_accessibility",
     columnSize: "cell-text",
   },
-  delivery_open_time_1_days: {
-    label: "DELIVERY OPEN DAY 1",
-    apiKey: "delivery_open_time_1.days",
-    columnSize: "cell-text-big",
-  },
+  // delivery_open_time_1_value: {
+  //   label: "DELIVERY OPEN DAY 1",
+  //   apiKey: "delivery_open_time_1.days",
+  //   columnSize: "cell-text-big",
+  // },
   delivery_open_time_1_time_from: {
     label: "DELIVERY OPEN TIME FROM 1",
     apiKey: "delivery_open_time_1.time_from",
@@ -599,7 +603,7 @@ const tableMapping = {
     apiKey: "delivery_open_time_1.time_to",
     columnSize: "cell-text",
   },
-  actual_open_time_1_days: {
+  actual_open_time_1_value: {
     label: "ACTUAL OPEN DAY 1",
     apiKey: "actual_open_time_1.days",
     columnSize: "cell-text-big",
@@ -614,7 +618,7 @@ const tableMapping = {
     apiKey: "actual_open_time_1.time_to",
     columnSize: "cell-text",
   },
-  actual_open_time_2_days: {
+  actual_open_time_2_value: {
     label: "ACTUAL OPEN DAY 2",
     apiKey: "actual_open_time_2.days",
     columnSize: "cell-text-big",
@@ -629,7 +633,7 @@ const tableMapping = {
     apiKey: "actual_open_time_2.time_to",
     columnSize: "cell-text",
   },
-  actual_open_time_3_days: {
+  actual_open_time_3_value: {
     label: "ACTUAL OPEN DAY 3",
     apiKey: "actual_open_time_3.days",
     columnSize: "cell-text-big",
@@ -645,7 +649,7 @@ const tableMapping = {
     columnSize: "cell-text",
   },
   no_delivery_interval_1_value: {
-    label: "NO DELIVERY INTERVAL 1",
+    label: "NO DELIVERY INTERVAL 1 DAY",
     apiKey: "no_delivery_interval_1.value",
     columnSize: "cell-text-big",
   },
@@ -660,7 +664,7 @@ const tableMapping = {
     columnSize: "cell-text",
   },
   no_delivery_interval_2_value: {
-    label: "NO DELIVERY INTERVAL 2",
+    label: "NO DELIVERY INTERVAL 2 DAY",
     apiKey: "no_delivery_interval_2.value",
     columnSize: "cell-text-big",
   },
@@ -675,7 +679,7 @@ const tableMapping = {
     columnSize: "cell-text",
   },
   no_delivery_interval_3_value: {
-    label: "NO DELIVERY INTERVAL 3",
+    label: "NO DELIVERY INTERVAL 3 DAY",
     apiKey: "no_delivery_interval_3.value",
     columnSize: "cell-text-big",
   },
@@ -690,7 +694,7 @@ const tableMapping = {
     columnSize: "cell-text",
   },
   no_delivery_interval_4_value: {
-    label: "NO DELIVERY INTERVAL 4",
+    label: "NO DELIVERY INTERVAL 4 DAY",
     apiKey: "no_delivery_interval_4.value",
     columnSize: "cell-text-big",
   },
@@ -705,7 +709,7 @@ const tableMapping = {
     columnSize: "cell-text",
   },
   no_delivery_interval_5_value: {
-    label: "NO DELIVERY INTERVAL 5",
+    label: "NO DELIVERY INTERVAL 5 DAY",
     apiKey: "no_delivery_interval_5.value",
     columnSize: "cell-text-big",
   },

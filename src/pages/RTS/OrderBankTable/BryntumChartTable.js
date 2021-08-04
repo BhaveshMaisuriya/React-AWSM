@@ -368,9 +368,6 @@ function BryntumChartTable(props) {
     eventRenderer: ({ eventRecord, renderData }) => {
       // customize content for event in here
       if (!eventRecord.data?.highlight) {
-    eventRenderer:({ eventRecord, renderData  }) => {
-       // customize content for event in here
-       if (!eventRecord.data?.highlight) {
         renderData.cls.add("opacity-20")
       }
       if (eventRecord.data?.highlight) {
@@ -751,8 +748,6 @@ function BryntumChartTable(props) {
       {displayDblclick &&
         <OrderBankShipmentModal open={displayDblclick} istoggle={toggleShipment} />
       }
-        styleColor = {dropdownSelectedItem?.styleColor}
-        />
     </div>
   )
 }

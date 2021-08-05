@@ -140,7 +140,7 @@ const TabStorage = ({ scheduler, data, onChange }) => {
           onChange={onEndOfDayChange}
           items={timeData}
           disabled={scheduler}
-          value={storageData.end_of_day?.time_to || ""}
+          value={storageData.end_of_day?.time_to?.toString().substring(0, 5) || ""}
         />
       </div>
       {Object.keys(storageData).map((key, index) =>
@@ -282,7 +282,7 @@ const TabStorage = ({ scheduler, data, onChange }) => {
                   />
                 </div>
                 <div className="col col-12 col-sm-6 col-lg-3">
-                  <div className="input-header mb-2">SALE CATEGORY</div>
+                  <div className="input-header mb-2">SALES CATEGORY</div>
                   <AWSMDropdown
                     value={
                       storageData[key]

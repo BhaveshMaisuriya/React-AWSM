@@ -20,8 +20,7 @@ import {
   UPDATE_SALES_AND_INVENTORY_DETAIL_FAIL,
   OVERRIDE_STATUS_IN_ACTION_COLUMN,
 } from "./actionTypes"
-// import { notify } from "../../helpers/notify"
-import { Toast, swalConfig } from "../../helpers/swal"
+import { ToastSuccess, ToastError } from "../../helpers/swal"
 
 const initialState = {
   varianceControlData: null,
@@ -130,7 +129,7 @@ const SaleAndInventory = (state = initialState, action) => {
       }
 
     case UPDATE_SALES_AND_INVENTORY_DETAIL_SUCCESS:
-      Toast.fire({ ...swalConfig["success"] })
+      ToastSuccess.fire()
       let newSaleAndInventory = { ...state.mainTableData }
       let newData2 = newSaleAndInventory.list
       const index = newSaleAndInventory.findIndex(
@@ -144,7 +143,7 @@ const SaleAndInventory = (state = initialState, action) => {
       }
 
     case UPDATE_SALES_AND_INVENTORY_DETAIL_FAIL:
-      Toast.fire({ ...swalConfig["error"] })
+      ToastError.fire()
       return {
         ...state,
         error: action.payload,

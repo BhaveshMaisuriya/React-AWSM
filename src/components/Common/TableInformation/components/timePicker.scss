@@ -6,6 +6,7 @@
   cursor: pointer;
   &.disabled {
     background-color: rgb(238, 238, 238);
+    cursor: context-menu;
   }
   .awsm-dropdown-arrow {
     // position: absolute;

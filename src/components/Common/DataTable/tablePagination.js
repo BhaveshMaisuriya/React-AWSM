@@ -10,23 +10,17 @@ import "./tablePagination.scss"
 
 class TablePaginationActions extends Component {
   handleBackButtonClick = event => {
-    const { decrement } = this.props
-    const firstPage = 0
-    const pageDecrement = this.props.currentPage - decrement
-    this.props.onChangePage(
-      event,
-      pageDecrement < firstPage ? firstPage : pageDecrement
-    )
+    const { increment } = this.props
+    const calcPage = this.props.currentPage - increment
+    const newPage = calcPage > 0 ? calcPage : 0
+    this.props.onChangePage(event, newPage)
   }
 
   handleNextButtonClick = event => {
-    const { count, rowsPerPage, increment } = this.props
-    const lastPage = Math.floor(count / rowsPerPage)
-    const pageIncrement = this.props.currentPage + increment
-    this.props.onChangePage(
-      event,
-      pageIncrement > lastPage ? lastPage : pageIncrement
-    )
+    const { increment, totalPages } = this.props
+    const calcPage = this.props.currentPage + increment
+    const newPage = calcPage > 0 ? calcPage : totalPages
+    this.props.onChangePage(event, newPage)
   }
 
   handlePageNumClick = event => {
@@ -116,12 +110,10 @@ TablePaginationActions.propTypes = {
   currentPage: PropTypes.number.isRequired,
   rowsPerPage: PropTypes.number.isRequired,
   increment: PropTypes.number,
-  decrement: PropTypes.number,
 }
 
 TablePaginationActions.defaultProps = {
   increment: 1,
-  decrement: -1,
 }
 
 export default TablePaginationActions

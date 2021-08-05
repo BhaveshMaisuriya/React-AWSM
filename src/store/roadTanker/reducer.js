@@ -18,9 +18,7 @@ import {
   UPDATE_ROAD_TANKER_DETAIL_FAIL,
   RESET_CURRENT_ROAD_TANKER_DATA,
 } from "./actionTypes"
-// import { notify } from "../../helpers/notify"
-
-import { Toast, swalConfig } from "../../helpers/swal"
+import { ToastSuccess, ToastError } from "../../helpers/swal"
 const initialState = {
   roadTanker: [],
   error: {},
@@ -133,7 +131,7 @@ const RoadTanker = (state = initialState, action) => {
         error: action.payload,
       }
     case UPDATE_ROAD_TANKER_DETAIL_SUCCESS:
-      Toast.fire({ ...swalConfig["success"] })
+      ToastSuccess.fire()
       let newRoadTanker = { ...state.roadTanker }
       let newData = newRoadTanker.list
       const index = newData.findIndex(
@@ -146,7 +144,7 @@ const RoadTanker = (state = initialState, action) => {
         isUpdateSuccess: true,
       }
     case UPDATE_ROAD_TANKER_DETAIL_FAIL:
-      Toast.fire({ ...swalConfig["error"] })
+      ToastError.fire()
       return {
         ...state,
         error: action.payload,

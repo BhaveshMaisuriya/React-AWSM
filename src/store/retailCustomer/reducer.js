@@ -26,7 +26,7 @@ const initialState = {
   downloadretailCustomers: [],
   isLoading: false,
 }
-import { Toast, swalConfig } from "../../helpers/swal"
+import { ToastSuccess, ToastError } from "../../helpers/swal"
 
 const RetailCustomer = (state = initialState, action) => {
   switch (action.type) {
@@ -96,7 +96,7 @@ const RetailCustomer = (state = initialState, action) => {
       }
 
     case UPDATE_TABLE_INFORMATION_SUCCESS: {
-      Toast.fire({ ...swalConfig["success"] })
+      ToastSuccess.fire()
       return {
         ...state,
         updateSuccess: true,
@@ -104,7 +104,7 @@ const RetailCustomer = (state = initialState, action) => {
     }
 
     case UPDATE_TABLE_INFORMATION_FAIL: {
-      Toast.fire({ ...swalConfig["error"] })
+      ToastError.fire()
       return {
         ...state,
         error: action.payload,

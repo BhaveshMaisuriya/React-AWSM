@@ -76,6 +76,7 @@ const TabAddress = ({ scheduler, data, onChange }) => {
             <div className="input-header mb-2">REGION</div>
             <AWSMInput value={addressData.address ? addressData.address.region_name || "" : ""} disabled />
           </div>
+          <div className="col col-12 col-sm-6 col-lg-6"></div>
           <div className="col col-12 col-sm-6 col-lg-6">
             <div className="input-header mb-2">LATITUDE</div>
             <AWSMInput value={addressData.address ? addressData.address.latitude || "" : ""} disabled />
@@ -98,6 +99,7 @@ const TabAddress = ({ scheduler, data, onChange }) => {
               value={addressData.cluster || ""}
               onChange={value => onFieldChange("cluster", value)}
               disabled={scheduler}
+              placeholder='Type something here...'
             />
           </div>
           <div className="col col-12 col-sm-6 col-lg-6">
@@ -106,6 +108,7 @@ const TabAddress = ({ scheduler, data, onChange }) => {
               value={addressData.speed || ""}
               disabled={scheduler}
               onChange={value => onFieldChange("speed", value)}
+              placeholder='Type something here...'
             />
           </div>
           <div className="col col-12 col-sm-6 col-lg-6">
@@ -114,6 +117,7 @@ const TabAddress = ({ scheduler, data, onChange }) => {
               value={addressData.cloud || ""}
               onChange={value => onFieldChange("cloud", value)}
               disabled={scheduler}
+              placeholder='Type something here...'
             />
           </div>
           {pathName === "/retail-customer" && (

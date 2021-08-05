@@ -57,10 +57,11 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
   const [openTime2, setOpenTime2] = useState(
     JSON.parse(JSON.stringify(ACTUAL_OPEN_TIME))
   )
-
-  const no_interval_array = Object.keys(deliveryData).filter(item =>
-    item.includes("no_delivery_interval")
+  const [openTime3, setOpenTime3] = useState(
+    JSON.parse(JSON.stringify(ACTUAL_OPEN_TIME))
   )
+
+  const no_interval_array = [1,2,3,4,5].map((e) => `no_delivery_interval_${e}`)
 
   useEffect(() => {
     setDeliveryData(data.delivery)
@@ -83,6 +84,17 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
         [...openTime2].map(item => ({
           ...item,
           checked: data.delivery.actual_open_time_2.days.includes(item.name),
+        }))
+      )
+    }
+    if (
+      data.delivery.actual_open_time_3 &&
+      data.delivery.actual_open_time_3.days
+    ) {
+      setOpenTime3(
+        [...openTime3].map(item => ({
+          ...item,
+          checked: data.delivery.actual_open_time_3.days.includes(item.name),
         }))
       )
     }
@@ -200,6 +212,30 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
     })
   }, [deliveryData, openTime2])
 
+  const handleActualTime3 = item => {
+    const index = openTime3.findIndex(e => e.name === item.name)
+    if (index < 0) {
+      return
+    }
+    const newDays = [...openTime3]
+    newDays[index].checked = !newDays[index].checked
+    setOpenTime3(newDays)
+    const actualOpenTime3 = deliveryData.actual_open_time_3 || actualOpenTime
+    onFieldChange("actual_open_time_3", {
+      ...actualOpenTime3,
+      days: openTime3
+        .filter(i => i.checked)
+        .map(i => i.name)
+        .join(","),
+    })
+  }
+
+  const actualOpenTime3 = useMemo(() => {
+    return openTime3.filter(item => {
+      return item.checked === true
+    })
+  }, [deliveryData, openTime3])
+
   return (
     <div
       style={{
@@ -296,7 +332,7 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
                 label="DAY(S)"
                 value={
                   actualOpenTime1.length > 0
-                    ? actualOpenTime1.map(i => i.name)
+                    ? (actualOpenTime1.length === 7 ? "Every Day" : actualOpenTime1.map(i => i.name))
                     : "Select day(s)"
                 }
                 className={`${styles.field} ${
@@ -369,7 +405,7 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
                     label="DAY(S)"
                     value={
                       actualOpenTime2.length > 0
-                        ? actualOpenTime2.map(i => i.name)
+                        ? (actualOpenTime2.length === 7 ? "Every Day" : actualOpenTime2.map(i => i.name))
                         : "Select day(s)"
                     }
                     disabled={scheduler}
@@ -422,6 +458,77 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
                 }
               />
             </Col>
+            <Col className="col-12">
+              <h6>
+                <strong>ACTUAL OPEN TIME 3</strong>
+              </h6>
+            </Col>
+            <Col className="col-6">
+              <SimplePopover
+                handleChange={handleActualTime3}
+                data={openTime3}
+                disabled={scheduler}
+              >
+                <AvForm>
+                  <AvField
+                    name="openTime3"
+                    type="text"
+                    label="DAY(S)"
+                    value={
+                      actualOpenTime3.length > 0
+                        ? (actualOpenTime3.length === 7 ? "Every Day" : actualOpenTime3.map(i => i.name))
+                        : "Select day(s)"
+                    }
+                    disabled={scheduler}
+                    className={`${styles.field} ${
+                      scheduler ? styles.disabled : undefined
+                    }`}
+                    style={{ height: "40px", marginTop: "-4px" }}
+                  />
+                  <div className={styles.arrow}>
+                    <ReactSVG src={ArrowDropDownIcon} />
+                  </div>
+                </AvForm>
+              </SimplePopover>
+            </Col>
+            <Col className="col-3">
+              <h6>TIME (FROM)</h6>
+              <TimePicker
+                items={timeData}
+                disabled={scheduler}
+                value={
+                  deliveryData.actual_open_time_3
+                    ? deliveryData.actual_open_time_3.time_from || ""
+                    : ""
+                }
+                onChange={value =>
+                  onFieldChange("actual_open_time_3", {
+                    ...actualOpenTime,
+                    ...deliveryData.actual_open_time_3,
+                    time_from: value,
+                  })
+                }
+              />
+            </Col>
+            <Col className="col-3">
+              <h6>TIME (TO)</h6>
+              <TimePicker
+                items={timeData}
+                disabled={scheduler}
+                value={
+                  deliveryData.actual_open_time_3
+                    ? deliveryData.actual_open_time_3.time_to || ""
+                    : ""
+                }
+                onChange={value =>
+                  onFieldChange("actual_open_time_3", {
+                    ...actualOpenTime,
+                    ...deliveryData.actual_open_time_3,
+                    time_to: value,
+                  })
+                }
+              />
+            </Col>
           </React.Fragment>
         ) : null}
         <Col className="col-6 mb-3">
@@ -440,14 +547,14 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
                 <DateRangePicker
                   defaultValue={deliveryData[subKey]}
                   onChange={value => onFieldChange(subKey, value)}
-                  disabled={index < 3 ? true : scheduler}
+                  disabled={index < 2 ? true : scheduler}
                 />
               </Col>
               <Col className="col-3">
                 <TimePicker
                   items={timeData}
-                  disabled={index < 3 ? true : scheduler}
-                  value={deliveryData[subKey].time_from}
+                  disabled={index < 2 ? true : scheduler}
+                  value={deliveryData[subKey]?.time_from}
                   onChange={value => {
                     setDeliveryData({
                       ...deliveryData,
@@ -469,8 +576,8 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
               <Col className="col-3">
                 <TimePicker
                   items={timeData}
-                  disabled={index < 3 ? true : scheduler}
-                  value={deliveryData[subKey].time_to}
+                  disabled={index < 2 ? true : scheduler}
+                  value={deliveryData[subKey]?.time_to}
                   onChange={value => {
                     setDeliveryData({
                       ...deliveryData,

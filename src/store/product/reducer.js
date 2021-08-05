@@ -15,7 +15,7 @@ import {
   RESET_PRODUCT_DETAIL,
 } from "./actionTypes"
 
-import { Toast, swalConfig } from "../../helpers/swal"
+import { ToastSuccess, ToastError } from "../../helpers/swal"
 const initialState = {
   dataList: [],
   error: null,
@@ -26,8 +26,6 @@ const initialState = {
   downloadProducts: [],
   isLoading: false,
 }
-
-import { notify } from "../../helpers/notify"
 
 const Product = (state = initialState, action) => {
   switch (action.type) {
@@ -82,7 +80,7 @@ const Product = (state = initialState, action) => {
       }
 
     case GET_PRODUCT_FILTER_FAIL:
-      notify.error(action.payload)
+      ToastError.fire()
       return {
         ...state,
         error: action.payload,
@@ -95,21 +93,21 @@ const Product = (state = initialState, action) => {
       }
 
     case GET_PRODUCT_DETAIL_FAIL:
-      notify.error(action.payload)
+      ToastError.fire()
       return {
         ...state,
         error: action.payload,
       }
 
     case UPDATE_PRODUCT_DETAIL_SUCCESS:
-      Toast.fire({ ...swalConfig["success"] })
+      ToastSuccess.fire()
       return {
         ...state,
         updateStatus: true,
       }
 
     case UPDATE_PRODUCT_DETAIL_FAIL:
-      Toast.fire({ ...swalConfig["error"] })
+      ToastError.fire()
       return {
         ...state,
         error: action.payload,

@@ -49,7 +49,7 @@ const AWSMDropdown = ({
           }`}
         >
           <div>{value}</div>
-          <ReactSVG src={ArrowDropDownIcon} className="awsm-dropdown-arrow" />
+          {!disabled && <ReactSVG src={ArrowDropDownIcon} className="awsm-dropdown-arrow" />}
         </div>
       </DropdownToggle>
       <DropdownMenu className="awsm-select-menu w-100">

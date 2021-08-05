@@ -506,8 +506,10 @@ class Pages extends Component {
                         rowsPerPage={rowsPerPage}
                         currentPage={currentPage}
                         onChangePage={this.handleChangePage}
+                        totalPages={Math.ceil(
+                          tableData.total_rows / rowsPerPage
+                        )}
                         increment={10}
-                        decrement={-10}
                       />
                     </CardBody>
                   }

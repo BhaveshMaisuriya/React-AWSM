@@ -26,13 +26,21 @@ import selectAllIcon3 from "../../../assets/images/AWSM-Checkbox.svg"
 import selectAllIcon2 from "../../../assets/images/AWSM-Checked-box.svg"
 import selectAllIcon from "../../../assets/images/AWSM-Select-all-Checkbox.svg"
 import ConfirmDNStatusModal from "./confirmDNStatusModal"
+import TerminalRelayModal from "./TerminalRelayModal"
 import { processPaymentInGanttChart, cancelPaymentInGanttChart, sendOrderInGanttChart, getRTSOderBankGanttChart, getShipmentOfOderBankGanttChart } from "../../../store/actions"
 import { cloneDeep } from 'lodash'
 import OrderBankShipmentModal from "./OrderBankShipmentModal"
 
 const EventSchedulerStatus = {
   ARE_YET_CREATED_PAYMENT: 'not yet to be created',
-  CREATED_PAYMENT: 'created'
+  CREATED_PAYMENT: 'created',
+  CANCELLATION: 'Cancellation'
+}
+const EventContextList = {
+    SHIPMENT :'shipment',
+    CANCEL_SHIPMENT :'cancel_shipment',
+    SEND_ORDER :'send_order',
+    TERMINAL_RELAY:'terminal_relay'
 }
 
 const ShiftPopover = ({ record, onChange }) => {
@@ -236,10 +244,9 @@ function BryntumChartTable(props) {
   const [dropdownSelectedItem, setDropdownSelectedItem] = useState(null);
   const [filterCondition, setFilterCondition] = useState([])
   const [eventsData, setEventsData] = useState([])
-  const [displayDblclick, setDisplayDblclick] = useState(false)
+  const [shipmentDblclick, setShipmentDblclick] = useState(false)
   const schedulerProRef = useRef()
   const firstRender = useRef(true)
-
   const [filterList, setFilterList] = useState(
     Object.keys(ganttChartTableMapping).map(e => ({
       key: e,
@@ -260,38 +267,50 @@ function BryntumChartTable(props) {
 
   const updateModalHandler = (type, eventRecord) => {
     let data = {};
-    switch (type) {
-      case 'shipment': {
-        data.type = 'shipment'
-        data.header = 'Create Shipment'
-        data.body = 'proceed for Shipment Creation?'
-        data.styleColor = 'success'
-        break
-      }
-      case 'cancelShipment': {
-        data.type = 'cancelShipment'
-        data.header = 'Cancel Shipment Confirmation'
-        data.body = 'proceed with this shipment cancellation?'
-        data.styleColor = 'danger'
-        data.record = eventRecord.data
-        break
-      }
-      case 'sendOrder': {
-        data.type = 'sendOrder'
-        data.header = 'Send Order for DN'
-        data.body = "send this shipment's order for DN?"
-        data.styleColor = 'success'
-        break
-      }
-      default: {
-        data.header = ''
-        data.body = ''
-        break
-      }
+    switch(type){
+        case EventContextList.SHIPMENT:{
+            data.type = EventContextList.SHIPMENT
+            data.header = 'Create Shipment'
+            data.body = 'proceed for Shipment Creation?'
+            data.styleColor = 'success'
+            break
+        }
+        case EventContextList.CANCEL_SHIPMENT:{
+          data.type = EventContextList.CANCEL_SHIPMENT
+          data.header = 'Cancel Shipment Confirmation'
+          data.body = 'proceed with this shipment cancellation?'
+          data.styleColor = 'danger'
+          data.record = eventRecord
+          break
+        }
+        case EventContextList.SEND_ORDER:{
+          data.type = EventContextList.SEND_ORDER
+          data.header = 'Send Order for DN'
+          data.body = "send this shipment's order for DN?"
+          data.styleColor = 'success'
+          break
+        }
+        case EventContextList.TERMINAL_RELAY:{
+          data.type = EventContextList.TERMINAL_RELAY
+          break
+        }
+        default:{
+            data.header = ''
+            data.body = ''
+            break
+        }
     }
-    data.itemSelectedId = eventRecord.id
+    data.itemSelectedId = eventRecord.data?.id
     toggle()
     setDropdownSelectedItem(data)
+  }
+
+  const removeShipmentHandler = () => {
+    const { instance: scheduler } = schedulerProRef.current;
+    const newEventsData = eventsData.filter((v) => v.id !== dropdownSelectedItem.itemSelectedId);
+    scheduler.eventStore.remove(dropdownSelectedItem.record);
+    scheduler.eventStore.data = newEventsData;
+    setEventsData(newEventsData);
   }
 
   const changeColorOfEventHandler = (color, isPending = false, eventType = undefined) => {
@@ -307,29 +326,27 @@ function BryntumChartTable(props) {
   }
 
   const sendRequestsHandler = () => {
-    changeColorOfEventHandler('#9F79B7', true)
     switch (dropdownSelectedItem.type) {
-      case 'shipment': {
+      case EventContextList.SHIPMENT: {
+        changeColorOfEventHandler('#9F79B7', true)
         setTimeout(() => {
           props.processPaymentInGanttChart(null)
         }, 2000)
         break
       }
-      case 'cancelShipment': {
+      case EventContextList.CANCEL_SHIPMENT: {
+        changeColorOfEventHandler('#aeaeae', true)
         setTimeout(() => {
           props.processCancelPaymentInGanttChart(dropdownSelectedItem)
+          // removeShipmentHandler();
         }, 2000)
         break
       }
-      case 'sendOrder': {
+      case EventContextList.SEND_ORDER: {
         props.processSendOrderInGanttChart(null)
         break
       }
-      default: {
-        data.header = ''
-        data.body = ''
-        break
-      }
+      default: break
     }
     toggle()
   }
@@ -355,6 +372,9 @@ function BryntumChartTable(props) {
   const schedulerproConfig = {
     columns: [],
     autoHeight: true,
+    autoLoad: true,
+    autoSync: true,
+    autoCommit: true,
     rowHeight: 40,
     barMargin: 0,
     resourceMargin: 0,
@@ -362,7 +382,7 @@ function BryntumChartTable(props) {
     fillTicks: true,
     listeners: {
       beforeEventEdit({ eventRecord, resourceRecord }) {
-        displayDblClickModal(eventRecord, resourceRecord);
+        ShipmentDblclickModal(eventRecord, resourceRecord);
       }
     },
     eventRenderer: ({ eventRecord, renderData }) => {
@@ -429,31 +449,8 @@ function BryntumChartTable(props) {
     eventMenuFeature: {
       // menuitem of event right click handler
       processItems({ eventRecord, items }) {
-        if (eventRecord.data?.eventType === 'Cancellation') {
-          items.sendOrderForDS = {
-            hidden: true
-          };
-          items.plannedLoadTime = {
-            hidden: true
-          };
-          items.terminalRelay = {
-            hidden: true
-          };
-          items.createShipment = {
-            hidden: true
-          };
-          items.cancel = {
-            hidden: true
-          };
-          return;
-        }
-        if (eventRecord.data?.isPending) return false
+        if (eventRecord.data?.eventType === EventSchedulerStatus.CANCELLATION || eventRecord.data?.isPending) return false
         if (!eventRecord.data?.resourceOrder) {
-          items.sendOrderForDS = {
-            hidden: true
-          };
-        }
-        if (!eventRecord.data?.eventType === 'Cancellation') {
           items.sendOrderForDS = {
             hidden: true
           };
@@ -466,54 +463,46 @@ function BryntumChartTable(props) {
           };
         }
         if (eventRecord.data?.status === EventSchedulerStatus.CREATED_PAYMENT) {
-          items.createShipment = {
-            hidden: true
-          };
-          items.sendOrderForDS = {
-            hidden: true
-          };
-          items.terminalRelay = {
-            hidden: true
-          };
+          items.createShipment.hidden = true
+          items.sendOrderForDS.hidden = true
+          items.terminalRelay.hidden = true
         }
       },
       items: {
-        editEvent: false,
-        deleteEvent: false,
-        sendOrderForDS: {
+        editEvent : false,
+        deleteEvent : false,
+        sendOrderForDS:{
           text: 'Send OrderS For DS',
           onItem({ source, eventRecord }) {
-            updateModalHandler('sendOrder', eventRecord)
+            updateModalHandler(EventContextList.SEND_ORDER,eventRecord)
           }
         },
-        plannedLoadTime: {
+        plannedLoadTime:{
           text: 'Planned Load Times',
           disabled: true,
           onItem({ source, eventRecord }) {
             updateModalHandler()
           }
         },
-        terminalRelay: {
+        terminalRelay:{
           text: 'Terminal Relay',
-          disabled: true,
           onItem({ source, eventRecord }) {
-            updateModalHandler()
+            updateModalHandler(EventContextList.TERMINAL_RELAY,eventRecord)
           }
         },
-        createShipment: {
+        createShipment:{
           text: 'Create Shipment',
           onItem({ source, eventRecord }) {
-            updateModalHandler('shipment', eventRecord)
+            updateModalHandler(EventContextList.SHIPMENT,eventRecord)
           }
         },
-        cancel: {
+        cancel:{
           text: 'Cancel',
           onItem({ source, eventRecord }) {
-            updateModalHandler('cancelShipment', eventRecord)
+            updateModalHandler(EventContextList.CANCEL_SHIPMENT, eventRecord)
           }
         },
       },
-
     },
     viewPreset: {
       base: "hourAndDay",
@@ -532,16 +521,17 @@ function BryntumChartTable(props) {
     }
   }
 
-  function displayDblClickModal(event, resource){
-    if(event._data.eventType === ("Blocked DN" || "Shipment Created" || "Scheduled")){
+  function ShipmentDblclickModal(event, resource) {
+    const allowedShipmentModel = ["Blocked DN", "Shipment Created", "Scheduled"]
+    if (allowedShipmentModel.includes(event._data.eventType)) {
       const { getShipmentOfOderBankGanttChart } = props
       getShipmentOfOderBankGanttChart()
-      setDisplayDblclick(true);
+      setShipmentDblclick(true);
     }
   }
 
-  function toggleShipment(){
-    setDisplayDblclick(!displayDblclick);
+  function toggleShipment() {
+    setShipmentDblclick(!shipmentDblclick);
   }
 
   function onShiftDateChange(recordId, value) {
@@ -635,7 +625,7 @@ function BryntumChartTable(props) {
   useEffect(() => {
     if (props.isSendRequestProcess && dropdownSelectedItem?.itemSelectedId) {
       if (dropdownSelectedItem.type === 'cancelShipment') {
-        changeColorOfEventHandler('#aeaeae', false, 'Cancellation');
+        removeShipmentHandler();
       } else {
         changeColorOfEventHandler('#615E9B')
       }
@@ -702,6 +692,7 @@ function BryntumChartTable(props) {
     hideFilterElement(dataKey)
   }
 
+
   useEffect(() => {
     const newTableData = props.ganttChartData.table.filter(e => {
       return filterCondition.every(condition => {
@@ -722,6 +713,7 @@ function BryntumChartTable(props) {
             <BryntumSchedulerPro
               {...schedulerproConfig}
               events={eventsData}
+              autoSync
               resources={props.ganttChartData.table}
               syncDataOnLoad
               ref={schedulerProRef}
@@ -742,16 +734,29 @@ function BryntumChartTable(props) {
           )
         })}
       </div>
-      <ConfirmDNStatusModal
-        isOpen={modal}
-        onSend={sendRequestsHandler}
-        onCancel={toggle}
-        headerContent={dropdownSelectedItem?.header || ''}
-        bodyContent={`Are you sure you want to ${dropdownSelectedItem?.body || ''}`}
-        styleColor={dropdownSelectedItem?.styleColor}
-      />
-      {displayDblclick &&
-        <OrderBankShipmentModal open={displayDblclick} istoggle={toggleShipment} />
+      {
+        (dropdownSelectedItem?.type === EventContextList.SHIPMENT
+        || dropdownSelectedItem?.type === EventContextList.CANCEL_SHIPMENT
+        || dropdownSelectedItem?.type === EventContextList.SEND_ORDER) && (
+        <ConfirmDNStatusModal
+          isOpen={modal}
+          onSend={sendRequestsHandler}
+          onCancel={toggle}
+          headerContent={dropdownSelectedItem?.header || ''}
+          bodyContent={`Are you sure you want to ${dropdownSelectedItem?.body || ''}`}
+          styleColor = {dropdownSelectedItem?.styleColor}
+          />)
+      }
+      {
+        dropdownSelectedItem?.type === EventContextList.TERMINAL_RELAY && (
+        <TerminalRelayModal
+          isOpen={modal}
+          onSend={sendRequestsHandler}
+          onCancel={toggle}
+        />)
+      }
+      {shipmentDblclick &&
+        <OrderBankShipmentModal open={shipmentDblclick} istoggle={toggleShipment} />
       }
     </div>
   )

@@ -24,24 +24,24 @@ const initialState = {
   slaAuditLog: [],
   updateStatus: null,
 }
-
-import { notify } from "../../helpers/notify"
+import { ToastSuccess, ToastError } from "../../helpers/swal"
 
 function sortSLA(data) {
-  const sortedData = { ... data }
+  const sortedData = { ...data }
   Object.keys(data).forEach(e => {
-    sortedData[e] = data[e]?.sort?.((a, b) => {
-      const _a = a.title?.toLowerCase().trim()
-      const _b = b.title?.toLowerCase().trim()
-      if (!_a) return 1
-      if (!_b) return -1
-      if (_a > _b) {
-        return 1
-      } else if (_a < _b) {
-        return -1
-      }
-      return 0
-    }) ?? sortedData[e]
+    sortedData[e] =
+      data[e]?.sort?.((a, b) => {
+        const _a = a.title?.toLowerCase().trim()
+        const _b = b.title?.toLowerCase().trim()
+        if (!_a) return 1
+        if (!_b) return -1
+        if (_a > _b) {
+          return 1
+        } else if (_a < _b) {
+          return -1
+        }
+        return 0
+      }) ?? sortedData[e]
   })
   return sortedData
 }
@@ -72,26 +72,28 @@ const SLA = (state = initialState, action) => {
         error: action.payload,
       }
 
-    case UPDATE_SLA_DETAIL_SUCCESS:{
-        const { payload } = action
-        notify.success(`${payload.category.toUpperCase()} Item Updated!`)
-        const newData = { ...state.data }
-        newData[payload.category] = payload.data
-        return {
-          ...state,
-          data: sortSLA(newData),
-        }
+    case UPDATE_SLA_DETAIL_SUCCESS: {
+      const { payload } = action
+      ToastSuccess.fire({
+        title: `${payload.category.toUpperCase()} Item Updated!`,
+      })
+      const newData = { ...state.data }
+      newData[payload.category] = payload.data
+      return {
+        ...state,
+        data: sortSLA(newData),
       }
+    }
 
     case UPDATE_SLA_DETAIL_FAIL:
-      notify.error(action.payload)
+      ToastError.fire()
       return {
         ...state,
         error: action.payload,
       }
 
     case UPDATE_SLA_SECTION_SUCCESS: {
-      notify.success("SLA Section Updated!")
+      ToastSuccess.fire({ title: "SLA Section Updated!" })
       const newData = { ...state.data }
       newData[action.payload.category] = action.payload.data
       return {
@@ -101,16 +103,16 @@ const SLA = (state = initialState, action) => {
     }
 
     case UPDATE_SLA_SECTION_FAIL: {
-      notify.error(action.payload)
+      ToastError.fire()
       return state
     }
 
     case CREATE_SLA_SECTION_SUCCESS: {
-      notify.success(
-        `${
+      ToastSuccess.fire({
+        title: `${
           action.payload.title
-        } has successfully added in ${action.payload.category.toUpperCase()}`
-      )
+        } has successfully added in ${action.payload.category.toUpperCase()}`,
+      })
       const newData = { ...state.data }
       newData[action.payload.category] = action.payload.data
       return {
@@ -120,16 +122,16 @@ const SLA = (state = initialState, action) => {
     }
 
     case CREATE_SLA_SECTION_FAIL: {
-      notify.error(action.payload)
+      ToastError.fire()
       return state
     }
 
     case DELETE_SLA_SECTION_SUCCESS:
-      notify.success(
-        `${
+      ToastSuccess.fire({
+        title: `${
           action.payload.title
-        } has successfully deleted in ${action.payload.category.toUpperCase()}`
-      )
+        } has successfully deleted in ${action.payload.category.toUpperCase()}`,
+      })
       const newData = { ...state.data }
       newData[action.payload.category] = action.payload.data
       return {
@@ -138,12 +140,16 @@ const SLA = (state = initialState, action) => {
       }
 
     case DELETE_SLA_SECTION_FAIL: {
-      notify.error(action.payload)
+      ToastError.fire()
       return state
     }
 
     case DELETE_SLA_RECORD_SUCCESS: {
-      notify.success(`Data in ${action.payload.title}, ${action.payload.category.toUpperCase()} has successfully updated`)
+      ToastSuccess.fire({
+        title: `Data in ${
+          action.payload.title
+        }, ${action.payload.category.toUpperCase()} has successfully updated`,
+      })
       const newData = { ...state.data }
       newData[action.payload.category] = action.payload.data
       return {
@@ -152,20 +158,26 @@ const SLA = (state = initialState, action) => {
       }
     }
 
-    case  DELETE_SLA_RECORD_FAIL: {
-      notify.error(action.payload)
+    case DELETE_SLA_RECORD_FAIL: {
+      ToastError.fire()
       return state
     }
 
     case UPDATE_SECTION_TAB_SUCCESS:
-      notify.success("New section has successfully updated in Internal")
+      ToastSuccess.fire({
+        title: "New section has successfully updated in Internal",
+      })
       return {
         ...state,
       }
 
-    case CREATE_SLA_RECORD_SUCCESS:{
-      const { payload, } = action
-      notify.success(`New row has successfully added in ${payload.tabName}, ${payload.category.toUpperCase()}`)
+    case CREATE_SLA_RECORD_SUCCESS: {
+      const { payload } = action
+      ToastSuccess.fire({
+        title: `New row has successfully added in ${
+          payload.tabName
+        }, ${payload.category.toUpperCase()}`,
+      })
       const newData = { ...state.data }
       newData[payload.category] = payload.data
       return {
@@ -173,7 +185,6 @@ const SLA = (state = initialState, action) => {
         data: sortSLA(newData),
       }
     }
-
 
     default:
       return state

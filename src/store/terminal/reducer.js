@@ -14,8 +14,7 @@ import {
   GET_DOWNLOAD_TERMINAL_FAIL,
   RESET_CURRENT_TERMINAL_DETAIL,
 } from "./actionTypes"
-// import { notify } from "../../helpers/notify"
-import { Toast, swalConfig } from "../../helpers/swal"
+import { ToastSuccess, ToastError } from "../../helpers/swal"
 
 const initialState = {
   terminal: [],
@@ -88,14 +87,14 @@ const Terminal = (state = initialState, action) => {
       }
 
     case UPDATE_TERMINAL_TABLE_INFORMATION_SUCCESS:
-      Toast.fire({ ...swalConfig["success"] })
+      ToastSuccess.fire()
       return {
         ...state,
         isFetchDataAfterChange: true,
       }
 
     case UPDATE_TERMINAL_TABLE_INFORMATION_FAIL:
-      Toast.fire({ ...swalConfig["success"], title: "Update Failed" })
+      ToastError.fire()
       return {
         ...state,
         error: action.payload,

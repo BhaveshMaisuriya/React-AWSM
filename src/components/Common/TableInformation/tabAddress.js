@@ -16,6 +16,8 @@ const TabAddress = ({ scheduler, data, onChange }) => {
     }
   }
 
+  const pathName = window.location.pathname
+
   return (
     <div className="dqm-address-container" id="dqm-address-container">
       <div>
@@ -28,6 +30,18 @@ const TabAddress = ({ scheduler, data, onChange }) => {
             <div className="input-header mb-2">SOLD TO (COMPANY NAME)</div>
             <AWSMInput defaultValue={addressData.sold_to_company || ""} disabled />
           </div>
+          {pathName === "/retail-customer" && (
+            <>
+              <div className="col col-12 col-sm-6 col-lg-6">
+                <div className="input-header mb-2">SITE ID</div>
+                <AWSMInput defaultValue={addressData.site_id || ""} disabled />
+              </div>
+              <div className="col col-12 col-sm-6 col-lg-6">
+                <div className="input-header mb-2">SITE NAME</div>
+                <AWSMInput defaultValue={addressData.site_name || ""} disabled />
+              </div>
+            </>
+          )}
           <div className="col col-12 col-sm-6 col-lg-6">
             <div className="input-header mb-2">ADDRESS 1</div>
             <AWSMInput value={addressData.address ? addressData.address.address_1 || "" : ""} disabled />
@@ -36,6 +50,12 @@ const TabAddress = ({ scheduler, data, onChange }) => {
             <div className="input-header mb-2">ADDRESS 2</div>
             <AWSMInput value={addressData.address ? addressData.address.address_2 || "" : ""} disabled />
           </div>
+          {pathName === "/retail-customer" && (
+            <div className="col col-12 col-sm-6 col-lg-6">
+              <div className="input-header mb-2">ADDRESS 3</div>
+              <AWSMInput value={addressData.address ? addressData.address.address_3 || "" : ""} disabled />
+            </div>
+          )}
           <div className="col col-12 col-sm-6 col-lg-6">
             <div className="input-header mb-2">CITY</div>
             <AWSMInput value={addressData.address ? addressData.address.city || "" : ""} disabled />
@@ -96,6 +116,16 @@ const TabAddress = ({ scheduler, data, onChange }) => {
               disabled={scheduler}
             />
           </div>
+          {pathName === "/retail-customer" && (
+            <div className="col col-12 col-sm-6 col-lg-6">
+              <div className="input-header mb-2">BORDER</div>
+              <AWSMInput
+                value={addressData.border || ""}
+                onChange={value => onFieldChange("border", value)}
+                disabled={scheduler}
+              />
+            </div>
+          )}
         </div>
       </div>
     </div>

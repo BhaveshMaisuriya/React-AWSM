@@ -57,4 +57,22 @@ const swalConfig = {
   },
 }
 
-export { Toast, swalConfig }
+const ToastSuccess = Swal.mixin({
+  toast: true,
+  position: "top-end",
+  showConfirmButton: false,
+  timer: 3000,
+  showCloseButton: true,
+  ...swalConfig["success"],
+})
+
+const ToastError = Swal.mixin({
+  toast: true,
+  position: "top-end",
+  showConfirmButton: false,
+  timer: 3000,
+  showCloseButton: true,
+  ...swalConfig["error"],
+})
+
+export { Toast, swalConfig, ToastSuccess, ToastError }

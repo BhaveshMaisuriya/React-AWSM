@@ -349,7 +349,7 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
             }
           />
         </Col>
-        {pathName === "/retail-customer" ? (
+        {/* {pathName === "/retail-customer" ? ( */}
           <React.Fragment>
             <Col className="col-12">
               <h6>
@@ -423,7 +423,7 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
               />
             </Col>
           </React.Fragment>
-        ) : null}
+        {/* ) : null} */}
         <Col className="col-6 mb-3">
           <h6>NO DELIVERY INTERVAL</h6>
         </Col>

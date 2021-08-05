@@ -41,8 +41,6 @@ const Example = React.memo(props => {
         })
         setData(alldata)
         let arr = []
-        
-        // alldata.length <= rowsPerLoad && setHasMore(false)
         alldata.map((item, index) => {
           if (index < rowsPerLoad) {
             arr.push(item)
@@ -117,9 +115,8 @@ const Example = React.memo(props => {
    * Filter
    * @param event
    */
-  function onSearchTextChange(event) {    
+  function onSearchTextChange(event) {
     let newData = [...data]
-    let temp = [];
     newData.map((item, index) => {
       item.visibility =
         item.text !== null &&

@@ -115,7 +115,7 @@ const tabContact = ({ scheduler, data, onChange }) => {
                 name="contact_name"
                 placeholder="Name (etc: John Doe)"
                 value={data.territory_manager ? data.territory_manager.name || "" : ""}
-                disabled={!!scheduler}
+                disabled={true}//!!scheduler
                 className={scheduler ? "disabledField" : ""}
                 onChange={e => onParentFieldChange("territory_manager", "name", e.target.value)}
               />
@@ -127,7 +127,7 @@ const tabContact = ({ scheduler, data, onChange }) => {
                 name="contact_phone"
                 placeholder="Contact No. (etc: 011-234556799)"
                 value={data.territory_manager ? data.territory_manager.number || "" : ""}
-                disabled={!!scheduler}
+                disabled={true}//!!scheduler
                 className={scheduler ? "disabledField" : ""}
                 validate={{
                   pattern:{ value: '^\\+?[0-9- ]+$' },
@@ -144,7 +144,7 @@ const tabContact = ({ scheduler, data, onChange }) => {
                 name="contact_email"
                 placeholder="Email (etc: johndoe@petronas.com)"
                 value={data.territory_manager ? data.territory_manager.email || "" : ""}
-                disabled={!!scheduler}
+                disabled={true}//!!scheduler
                 className={scheduler ? "disabledField" : ""}
                 onChange={e => onParentFieldChange("territory_manager", "email", e.target.value)}
               />

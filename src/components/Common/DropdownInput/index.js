@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react"
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import AWSMDropdown from "../Dropdown"
 import "./dropdownInput.scss"
 
@@ -11,6 +11,7 @@ const DropdownInput = ({
   acceptDuplicate = false,
   RowComponent = null,
   disabled,
+  maxChar = 20,
 }) => {
   const [inputMode, setInputMode] = useState(false)
   const [inputValue, setInputValue] = useState("")
@@ -20,25 +21,42 @@ const DropdownInput = ({
     setInputValue(event.target.value)
   }
 
-  const onInputModeChange = () => {
+  const onInputModeChange = (event) => {
+    event.stopPropagation()
     if (disabled) {
       return
     }
-    setInputMode(!inputMode)
+    setInputMode(true)
   }
 
-  const onAddNewItem = () => {
-    if (inputValue) {
+  const onAddNewItem = (event) => {
+    event.stopPropagation()
+    event.preventDefault()
+    if (inputValue && isValid) {
       if (items.includes(inputValue) && !acceptDuplicate) {
+        setInputMode(false)
         return
       }
       onAddItem(inputValue)
       setInputValue("")
-      setInputMode(!inputMode)
+      setInputMode(false)
     } else {
       inputRef.current.focus()
     }
   }
+
+  const onOutsideClick = useCallback(() => {
+    setInputValue("")
+    setInputMode(false)
+  }, [])
+
+  useEffect(() => {
+    if (inputMode) {
+      document.addEventListener("mousedown", onOutsideClick)
+    } else {
+      document.removeEventListener("mousedown", onOutsideClick)
+    }
+  }, [inputMode])
 
   useEffect(() => {
     if (inputMode) {
@@ -46,20 +64,28 @@ const DropdownInput = ({
     }
   }, [inputMode])
 
+  const remainChars = useMemo(() => {
+    return maxChar - inputValue.length
+  }, [inputValue]);
+
+  const isValid = useMemo(() => {
+    return inputValue && remainChars >= 0
+  }, [remainChars]);
+
   return (
     <div className="awsm-dropdown-input w-100">
       <div className="d-flex justify-content-between">
         <div className="input-header mb-2">{title}</div>
         {inputMode ? (
           <div
-            onClick={onAddNewItem}
-            className={`awsm-label-add ${inputValue ? "" : "disabled"}`}
+            onMouseDown={onAddNewItem}
+            className={`awsm-label-add ${inputValue && isValid ? "" : "disabled"}`}
           >
             Done
           </div>
         ) : (
           !disabled && (
-            <div onClick={onInputModeChange} className="awsm-label-add">
+            <div onMouseDown={onInputModeChange} className="awsm-label-add">
               +Add
             </div>
           )
@@ -69,10 +95,11 @@ const DropdownInput = ({
         <input
           onChange={onInputValueChange}
           value={inputValue}
-          className="awsm-input w-100"
+          className={`awsm-input w-100 ${!isValid ? "out-range " : ""}`}
           ref={inputRef}
+          onMouseDown={e => e.stopPropagation()}
         />
-        <span className="position-absolute awsm-input-right-content">{`+${items.length}`}</span>
+        <span className={`position-absolute awsm-input-right-content ${!isValid ? "out-range " : ""}`}>{`${remainChars >= 0 ? "+" : ""}${remainChars}`}</span>
       </div>
       <div className={inputMode ? "d-none" : "d-block"}>
         <AWSMDropdown

@@ -215,14 +215,16 @@ const CustomizeTableModal = ({
   }, [])
   // Function handler
   const onItemSelectChange = item => {
-    // Remove item when number of selected item is less or equal 10 will set all selected item to disabled and display error message
-    if (itemToDrag.length < 11 && !item.checked) {
+    // Remove item when number of selected item is less or equal to defaultmetric will set all selected item to disabled and display error message
+    if (itemToDrag.length <= defaultMetric.length && !item.checked) {
       setItemToSelect(
         itemToSelect.map(item =>
           item.checked ? { ...item, disabled: true } : item
         )
       )
-      return setError("Must not be less than 9 metrics")
+      return setError(
+        `Must not be less than ${defaultMetric.length - 1} metrics`
+      )
     }
 
     // Update drag item list

@@ -8,6 +8,7 @@ import DropdownInput from "../DropdownInput"
 const STATUS_IN_AWSM = ["Active", "Temporarily Closed", "Inactive"]
 
 const timeData = []
+timeData.push(`None`);
 for (let i = 0; i < 24; i++) {
   timeData.push(`${i.toString().padStart(2, "0")}:00`)
   timeData.push(`${i.toString().padStart(2, "0")}:30`)

@@ -11,7 +11,12 @@
       border: 1px solid #008F8A;
       background-color: rgb(240, 249, 249);
       color: #008F8A;
+      &.out-range {
+        border-color: #E80000;
+        color: #f46a6a;
+      }
     }
+    padding-right: 1.5rem !important;
   }
   .awsm-input-right-content {
     color: #008F8A;
@@ -20,6 +25,9 @@
     top: 0;
     padding-top: 0.65rem;
     padding-right: 0.5rem;
+    &.out-range {
+      color: red;
+    }
   }
   .input-header {
     margin-top: 0.75rem;

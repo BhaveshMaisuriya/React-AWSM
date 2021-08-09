@@ -10,6 +10,7 @@ const tableColumns = [
   "terminal_operation_hours_1_time_from",
   "terminal_operation_hours_1_time_to",
   "loading_bay_no",
+  "loading_time",
   "turnaround_time",
   "remarks",
 ]

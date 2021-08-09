@@ -41,8 +41,8 @@ class InformationModal extends Component {
       userRole: {
         scheduler: isScheduler(),
       },
-      updateSuccess: props.isUpdateSuccess,
-      data: props.currentRoadTanker,
+      updateSuccess: props?.isUpdateSuccess,
+      data: props?.currentRoadTanker,
       isConfirm: false,
     }
   }

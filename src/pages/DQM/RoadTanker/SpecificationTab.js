@@ -10,11 +10,7 @@ class SpecificationTab extends PureComponent {
 
     this.state = {
       isRTRestrictionAdding: false,
-      restriction: "",
-      names: props.data?.restriction ? props.data?.restriction : [],
-      restrictionArray: props.data?.restriction_dropdown
-        ? props.data?.restriction_dropdown
-        : [],
+      restrictionStr: "",
       idDeleteBtnShow: true,
     }
   }
@@ -29,7 +25,7 @@ class SpecificationTab extends PureComponent {
   }
 
   render() {
-    const { mode, scheduler, data, toggle, onChange } = this.props
+    const { mode, scheduler, data, toggle } = this.props
 
     function arrayRemove(arr, value) {
       return arr.filter(function (ele) {
@@ -38,11 +34,19 @@ class SpecificationTab extends PureComponent {
     }
 
     const onConfirmClick = () => {
-      const { names, isDeleteBtnShow } = this.state
-      const name = names[names.length - 1]
-      let personNames = arrayRemove(names, name)
+      const { isDeleteBtnShow } = this.state
+      let restriction_dropdown = this.props.data?.restriction_dropdown ? this.props.data?.restriction_dropdown : []
+      //let restriction = this.props.data?.restriction ? this.props.data?.restriction : []
+
+      const name = restriction_dropdown[restriction_dropdown.length - 1]
+
+      //let restrictionValue = arrayRemove(restriction, name)
+      let personNames = arrayRemove(restriction_dropdown, name)
+
+      this.onChangeHandler(personNames, "restriction_dropdown")
+      //this.onChangeHandler(restrictionValue, "restriction")
+
       this.setState({
-        names: personNames,
         isDeleteBtnShow: !isDeleteBtnShow,
       })
     }
@@ -58,7 +62,7 @@ class SpecificationTab extends PureComponent {
     }
 
     const setClass = () => {
-      const { restriction } = this.state
+      const { restrictionStr: restriction } = this.state
       if (restriction && restriction.length > 0) {
         document.getElementById("done").classList.add("active-btn")
       }
@@ -89,12 +93,12 @@ class SpecificationTab extends PureComponent {
     const onDoneBtnClick = () => {
       if (document.getElementById("restriction") != null) {
         let rtRestriction = document.getElementById("restriction").value
-        const names = this.state.names
-
-        if (names?.length === 0 && names) {
-          this.setState({ names: [rtRestriction] })
+        let { restriction_dropdown } = this.props.data
+        restriction_dropdown.push(rtRestriction)
+        if (restriction_dropdown?.length === 0 && restriction_dropdown) {
+          this.onChangeHandler(rtRestriction, "restriction_dropdown")
         } else {
-          this.setState({ names: [...names, rtRestriction] })
+          this.onChangeHandler(restriction_dropdown, "restriction_dropdown")
         }
       }
 
@@ -113,9 +117,9 @@ class SpecificationTab extends PureComponent {
     }
 
     const onAutoFillBtnClick = () => {
-      const { restriction } = this.state
-      if (!restriction || restriction.length === 0) {
-        this.setState({ restriction: "New Restriction" })
+      const { restrictionStr } = this.state
+      if (!restrictionStr || restrictionStr.length === 0) {
+        this.setState({ restrictionStr: "New Restriction" })
       }
     }
 
@@ -147,23 +151,25 @@ class SpecificationTab extends PureComponent {
     }
 
     const rtRestriction = disabled => {
+
       const {
         isRTRestrictionAdding,
-        names,
         isDeleteBtnShow,
-        restriction,
-        restrictionArray,
+        restrictionStr,
       } = this.state
+
+      let restriction_dropdown = this.props.data?.restriction_dropdown ? this.props.data?.restriction_dropdown : []
+      let restriction = this.props.data?.restriction ? this.props.data?.restriction : []
 
       const rtRestriction = !isRTRestrictionAdding ? (
         <MultipleSelect
-          names={names}
-          rtRestrictionSelected={restrictionArray}
+          names={restriction_dropdown}
+          rtRestrictionSelected={restriction}
           isDeleteBtnShow={isDeleteBtnShow}
           onDeleteBtnClick={onDeleteBtnClick}
           onConfirmClick={onConfirmClick}
           onNoClick={onNoClick}
-          onChange={e => this.onChangeHandler(e, "rt_restriction")}
+          onChange={e => this.onChangeHandler(e, "restriction")}
           disabled={disabled}
         />
       ) : (
@@ -172,7 +178,7 @@ class SpecificationTab extends PureComponent {
             className="form-control"
             id="restriction"
             type="text"
-            defaultValue={restriction}
+            defaultValue={restrictionStr}
             disabled={disabled}
           />
           <div className="input-group-append">
@@ -189,36 +195,38 @@ class SpecificationTab extends PureComponent {
       )
       return rtRestriction
     }
+
     return (
       <div className="specification">
-        <div className="row">
-          <div className="col-md-6 form-group">
-            <label> PRODUCT TYPE IN SAP</label>
-            <input
-              className="form-control"
-              type="text"
-              defaultValue={data?.product_type_sap}
-              onChange={e =>
-                this.onChangeHandler(e.target.value, "product_type_sap")
-              }
-              disabled={true}
-            />
+        <form>
+          <div className="row">
+            <div className="col-md-6 form-group">
+              <label> PRODUCT TYPE IN SAP</label>
+              <input
+                className="form-control"
+                type="text"
+                defaultValue={data?.product_type_sap}
+                onChange={e =>
+                  this.onChangeHandler(e.target.value, "product_type_sap")
+                }
+                disabled={true}
+              />
+            </div>
+            <div className="col-md-6 form-group">
+              <label> PUMP TYPE </label>
+              <input
+                className="form-control"
+                type="text"
+                defaultValue={data?.pump_type}
+                onChange={e => this.onChangeHandler(e.target.value, "pump_type")}
+                disabled={true}
+              />
+            </div>
           </div>
-          <div className="col-md-6 form-group">
-            <label> PUMP TYPE </label>
-            <input
-              className="form-control"
-              type="text"
-              defaultValue={data?.pump_type}
-              onChange={e => this.onChangeHandler(e.target.value, "pump_type")}
-              disabled={true}
-            />
-          </div>
-        </div>
-        <div className="row">
-          <div className="col-md-6 form-group">
-            <label>PRODUCT TYPE IN ASWM</label>
-            {/* <select
+          <div className="row">
+            <div className="col-md-6 form-group">
+              <label>PRODUCT TYPE IN ASWM</label>
+              {/* <select
               className="form-control"
               disabled={
                 (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
@@ -232,77 +240,78 @@ class SpecificationTab extends PureComponent {
                 return <option value={index}>{value}</option>
               })}
             </select> */}
-            <AWSMDropdown
-              value={data?.product_type_awsm}
-              items={data?.product_type_awsm_dropdown}
-              onChange={e => this.onChangeHandler(e, "product_type_awsm")}
-              disabled={
-                (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
-              }
-              className="form-control"
-            />
-          </div>
-          <div className="col-md-6 form-group">
-            <label>DATE</label>
-            <DatePicker
-              className="form-control"
-              disabled={
-                (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
-              }
-              value={data?.temporary_product_date_range}
-              onChange={v =>
-                this.onChangeHandler(v, "temporary_product_date_range")
-              }
-            />
-          </div>
-        </div>
-
-        <div className="row">
-          <div className="col-md-6 form-group">
-            <label>CHARTERING TYPE</label>
-            <input
-              className="form-control"
-              disabled={true}
-              defaultValue={data?.chartering_type}
-              onChange={e =>
-                this.onChangeHandler(e.target.value, "chartering_type")
-              }
-            ></input>
-          </div>
-          <div className="col-md-6 form-group">
-            <label>CUSTOMER TYPE</label>
-            <AWSMDropdown
-              value={data?.customer_type}
-              items={CUSTOMER_TYPE_DROPDOWN_VALUE}
-              onChange={e => this.onChangeHandler(e, "customer_type")}
-              disabled={
-                (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
-              }
-              className="form-control"
-            />
-          </div>
-        </div>
-
-        <div className="row">
-          <div className="col-md-6 form-group">
-            <div>
-              <label>RT RESTRICTION</label>
-              {rtRestrictionBtn(scheduler)}
+              <AWSMDropdown
+                value={data?.product_type_awsm}
+                items={data?.product_type_awsm_dropdown}
+                onChange={e => this.onChangeHandler(e, "product_type_awsm")}
+                disabled={
+                  (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
+                }
+                className="form-control"
+              />
             </div>
-            {rtRestriction(scheduler)}
+            <div className="col-md-6 form-group">
+              <label>DATE</label>
+              <DatePicker
+                className="form-control"
+                disabled={
+                  (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
+                }
+                value={data?.temporary_product_date_range}
+                onChange={v =>
+                  this.onChangeHandler(v, "temporary_product_date_range")
+                }
+              />
+            </div>
           </div>
-          <div className="form-group col-md-6">
-            <label>RESTRICT CODE</label>
-            <input
-              className="form-control"
-              disabled={true}
-              defaultValue={data?.restriction_code}
-              onChange={e =>
-                this.onChangeHandler(e.target.value, "restriction_code")
-              }
-            ></input>
+
+          <div className="row">
+            <div className="col-md-6 form-group">
+              <label>CHARTERING TYPE</label>
+              <input
+                className="form-control"
+                disabled={true}
+                defaultValue={data?.chartering_type}
+                onChange={e =>
+                  this.onChangeHandler(e.target.value, "chartering_type")
+                }
+              ></input>
+            </div>
+            <div className="col-md-6 form-group">
+              <label>CUSTOMER TYPE</label>
+              <AWSMDropdown
+                value={data?.customer_type}
+                items={CUSTOMER_TYPE_DROPDOWN_VALUE}
+                onChange={e => this.onChangeHandler(e, "customer_type")}
+                disabled={
+                  (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
+                }
+                className="form-control"
+              />
+            </div>
           </div>
-        </div>
+
+          <div className="row">
+            <div className="col-md-6 form-group">
+              <div>
+                <label>RT RESTRICTION</label>
+                {rtRestrictionBtn(scheduler)}
+              </div>
+              {rtRestriction(scheduler)}
+            </div>
+            <div className="form-group col-md-6">
+              <label>RESTRICT CODE</label>
+              <input
+                className="form-control"
+                disabled={true}
+                defaultValue={data?.restriction_code}
+                onChange={e =>
+                  this.onChangeHandler(e.target.value, "restriction_code")
+                }
+              ></input>
+            </div>
+          </div>
+        </form>
       </div>
     )
   }

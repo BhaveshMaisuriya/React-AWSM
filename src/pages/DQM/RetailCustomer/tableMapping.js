@@ -104,8 +104,8 @@ const tableMapping = {
     apiKey: "cluster",
     columnSize: "cell-text",
   },
-  alternate_cluster: {
-    label: "ALTERNATE CLUSTER",
+  alternative_cluster: {
+    label: "ALTERNATIVE CLUSTER",
     apiKey: "alternate_cluster",
     columnSize: "cell-text",
   },
@@ -248,12 +248,12 @@ const tableMapping = {
     apiKey: "end_of_day",
     columnSize: "cell-text",
   },
-  storage_1_product_code: {
+  storage_1_code: {
     label: "PRODUCT 1 CODE",
     apiKey: "storage_1.product_code",
     columnSize: "cell-text",
   },
-  storage_1_product_name: {
+  storage_1_name: {
     label: "PRODUCT 1 NAME",
     apiKey: "storage_1.product_name",
     columnSize: "cell-text-big",
@@ -288,12 +288,12 @@ const tableMapping = {
     apiKey: "storage_1.duration",
     columnSize: "cell-text",
   },
-  storage_1_station_sales_category: {
+  storage_1_sales_category: {
     label: "PRODUCT 1 SALES CATEGORY",
     apiKey: "storage_1.station_sales_category",
     columnSize: "cell-text",
   },
-  storage_1_product_code_quota: {
+  storage_1_monthly_fixed_quota: {
     label: "PRODUCT 1 MONTHLY FIXED QUOTA",
     apiKey: "storage_1.product_code_quota",
     columnSize: "cell-text",
@@ -303,12 +303,12 @@ const tableMapping = {
     apiKey: "storage_1.remarks",
     columnSize: "cell-text-big",
   },
-  storage_2_product_code: {
+  storage_2_code: {
     label: "PRODUCT 2 CODE",
     apiKey: "storage_2.product_code",
     columnSize: "cell-text",
   },
-  storage_2_product_name: {
+  storage_2_name: {
     label: "PRODUCT 2 NAME",
     apiKey: "storage_2.product_name",
     columnSize: "cell-text-big",
@@ -343,12 +343,12 @@ const tableMapping = {
     apiKey: "storage_2.duration",
     columnSize: "cell-text",
   },
-  storage_2_station_sales_category: {
+  storage_2_sales_category: {
     label: "PRODUCT 2 SALES CATEGORY",
     apiKey: "storage_2.station_sales_category",
     columnSize: "cell-text",
   },
-  storage_2_product_code_quota: {
+  storage_2_monthly_fixed_quota: {
     label: "PRODUCT 2 MONTHLY FIXED QUOTA",
     apiKey: "storage_2.product_code_quota",
     columnSize: "cell-text",
@@ -358,12 +358,12 @@ const tableMapping = {
     apiKey: "storage_2.remarks",
     columnSize: "cell-text-big",
   },
-  storage_3_product_code: {
+  storage_3_code: {
     label: "PRODUCT 3 CODE",
     apiKey: "storage_3.product_code",
     columnSize: "cell-text",
   },
-  storage_3_product_name: {
+  storage_3_name: {
     label: "PRODUCT 3 NAME",
     apiKey: "storage_3.product_name",
     columnSize: "cell-text-big",
@@ -398,12 +398,12 @@ const tableMapping = {
     apiKey: "storage_3.duration",
     columnSize: "cell-text",
   },
-  storage_3_station_sales_category: {
+  storage_3_sales_category: {
     label: "PRODUCT 3 SALES CATEGORY",
     apiKey: "storage_3.station_sales_category",
     columnSize: "cell-text",
   },
-  storage_3_product_code_quota: {
+  storage_3_monthly_fixed_quota: {
     label: "PRODUCT 3 MONTHLY FIXED QUOTA",
     apiKey: "storage_3.product_code_quota",
     columnSize: "cell-text",
@@ -413,12 +413,12 @@ const tableMapping = {
     apiKey: "storage_3.remarks",
     columnSize: "cell-text-big",
   },
-  storage_4_product_code: {
+  storage_4_code: {
     label: "PRODUCT 4 CODE",
     apiKey: "storage_4.product_code",
     columnSize: "cell-text",
   },
-  storage_4_product_name: {
+  storage_4_name: {
     label: "PRODUCT 4 NAME",
     apiKey: "storage_4.product_name",
     columnSize: "cell-text-big",
@@ -453,12 +453,12 @@ const tableMapping = {
     apiKey: "storage_4.duration",
     columnSize: "cell-text",
   },
-  storage_4_station_sales_category: {
+  storage_4_sales_category: {
     label: "PRODUCT 4 SALES CATEGORY",
     apiKey: "storage_4.station_sales_category",
     columnSize: "cell-text",
   },
-  storage_4_product_code_quota: {
+  storage_4_monthly_fixed_quota: {
     label: "PRODUCT 4 MONTHLY FIXED QUOTA",
     apiKey: "storage_4.product_code_quota",
     columnSize: "cell-text",
@@ -468,12 +468,12 @@ const tableMapping = {
     apiKey: "storage_4.remarks",
     columnSize: "cell-text-big",
   },
-  storage_5_product_code: {
+  storage_5_code: {
     label: "PRODUCT 5 CODE",
     apiKey: "storage_5.product_code",
     columnSize: "cell-text",
   },
-  storage_5_product_name: {
+  storage_5_name: {
     label: "PRODUCT 5 NAME",
     apiKey: "storage_5.product_name",
     columnSize: "cell-text-big",
@@ -508,12 +508,12 @@ const tableMapping = {
     apiKey: "storage_5.duration",
     columnSize: "cell-text",
   },
-  storage_5_station_sales_category: {
+  storage_5_sales_category: {
     label: "PRODUCT 5 SALES CATEGORY",
     apiKey: "storage_5.station_sales_category",
     columnSize: "cell-text",
   },
-  storage_5_product_code_quota: {
+  storage_5_monthly_fixed_quota: {
     label: "PRODUCT 5 MONTHLY FIXED QUOTA",
     apiKey: "storage_5.product_code_quota",
     columnSize: "cell-text",
@@ -523,12 +523,12 @@ const tableMapping = {
     apiKey: "storage_5.remarks",
     columnSize: "cell-text-big",
   },
-  storage_6_product_code: {
+  storage_6_code: {
     label: "PRODUCT 6 CODE",
     apiKey: "storage_6.product_code",
     columnSize: "cell-text",
   },
-  storage_6_product_name: {
+  storage_6_name: {
     label: "PRODUCT 6 NAME",
     apiKey: "storage_6.product_name",
     columnSize: "cell-text-big",
@@ -563,12 +563,12 @@ const tableMapping = {
     apiKey: "storage_6.duration",
     columnSize: "cell-text",
   },
-  storage_6_station_sales_category: {
+  storage_6_sales_category: {
     label: "PRODUCT 6 SALES CATEGORY",
     apiKey: "storage_6.station_sales_category",
     columnSize: "cell-text",
   },
-  storage_6_product_code_quota: {
+  storage_6_monthly_fixed_quota: {
     label: "PRODUCT 6 MONTHLY FIXED QUOTA",
     apiKey: "storage_6.product_code_quota",
     columnSize: "cell-text",
@@ -594,12 +594,12 @@ const tableMapping = {
   //   columnSize: "cell-text-big",
   // },
   delivery_open_time_1_time_from: {
-    label: "DELIVERY OPEN TIME FROM 1",
+    label: "DELIVERY OPEN TIME FROM",
     apiKey: "delivery_open_time_1.time_from",
     columnSize: "cell-text",
   },
   delivery_open_time_1_time_to: {
-    label: "DELIVERY OPEN TIME TO 1",
+    label: "DELIVERY OPEN TIME TO",
     apiKey: "delivery_open_time_1.time_to",
     columnSize: "cell-text",
   },

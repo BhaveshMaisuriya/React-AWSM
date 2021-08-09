@@ -131,6 +131,17 @@ export const runValidation = data => {
   return true
 }
 
+export const removeKeywords = string => {
+  const newString = string
+  return newString
+    ? newString
+        .toString()
+        .replace("every ", "")
+        .replace("range ", "")
+        .replace("0:00", "0")
+    : newString
+}
+
 export const tagColors = {
   ACTIVE: "primary",
   INACTIVE: "secondary",

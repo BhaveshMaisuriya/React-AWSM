@@ -30,6 +30,7 @@ import TerminalRelayModal from "./TerminalRelayModal"
 import { processPaymentInGanttChart, cancelPaymentInGanttChart, sendOrderInGanttChart, getRTSOderBankGanttChart, getShipmentOfOderBankGanttChart } from "../../../store/actions"
 import { cloneDeep } from 'lodash'
 import OrderBankShipmentModal from "./OrderBankShipmentModal"
+import PlannedLoadTimesModal from "./PlannedLoadTimesModal"
 
 const EventSchedulerStatus = {
   ARE_YET_CREATED_PAYMENT: 'not yet to be created',
@@ -40,7 +41,8 @@ const EventContextList = {
     SHIPMENT :'shipment',
     CANCEL_SHIPMENT :'cancel_shipment',
     SEND_ORDER :'send_order',
-    TERMINAL_RELAY:'terminal_relay'
+    TERMINAL_RELAY:'terminal_relay',
+    PLAN_LOAD_TIMES:'planned_load_time'
 }
 
 const ShiftPopover = ({ record, onChange }) => {
@@ -294,6 +296,10 @@ function BryntumChartTable(props) {
           data.type = EventContextList.TERMINAL_RELAY
           break
         }
+        case EventContextList.PLAN_LOAD_TIMES:{
+          data.type = EventContextList.PLAN_LOAD_TIMES
+          break
+        }
         default:{
             data.header = ''
             data.body = ''
@@ -479,9 +485,8 @@ function BryntumChartTable(props) {
         },
         plannedLoadTime:{
           text: 'Planned Load Times',
-          disabled: true,
           onItem({ source, eventRecord }) {
-            updateModalHandler()
+            updateModalHandler(EventContextList.PLAN_LOAD_TIMES,eventRecord)
           }
         },
         terminalRelay:{
@@ -624,7 +629,7 @@ function BryntumChartTable(props) {
 
   useEffect(() => {
     if (props.isSendRequestProcess && dropdownSelectedItem?.itemSelectedId) {
-      if (dropdownSelectedItem.type === 'cancelShipment') {
+      if (dropdownSelectedItem.type === EventContextList.CANCEL_SHIPMENT) {
         removeShipmentHandler();
       } else {
         changeColorOfEventHandler('#615E9B')
@@ -750,6 +755,14 @@ function BryntumChartTable(props) {
       {
         dropdownSelectedItem?.type === EventContextList.TERMINAL_RELAY && (
         <TerminalRelayModal
+          isOpen={modal}
+          onSend={sendRequestsHandler}
+          onCancel={toggle}
+        />)
+      }
+      {
+        dropdownSelectedItem?.type === EventContextList.PLAN_LOAD_TIMES && (
+        <PlannedLoadTimesModal
           isOpen={modal}
           onSend={sendRequestsHandler}
           onCancel={toggle}

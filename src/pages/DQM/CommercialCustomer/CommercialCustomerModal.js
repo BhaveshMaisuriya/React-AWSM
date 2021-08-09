@@ -174,7 +174,7 @@ const CommercialCustomerModal = props => {
                       defaultValue={currentCommercialDetail.status_sap}
                     />
                 </Col>
-                <Col className="col-12 bg-lightgreen">
+                <Col className="col-12">
                   <label className="mt-3">REMARKS</label>
                   <AWSMInput
                     defaultValue={currentCommercialDetail.remarks}

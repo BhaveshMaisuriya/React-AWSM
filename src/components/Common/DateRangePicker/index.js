@@ -35,6 +35,7 @@ const DateRangePicker = ({
 }) => {
   const [value, setValue] = useState(defaultValue || dateObjectTemplate)
   const [month, setMonth] = useState(defaultMonth)
+  const [initialValue] = useState(defaultValue || dateObjectTemplate)
 
   const getDay = days => {
     if (!days || !days.length > 0) {
@@ -241,10 +242,9 @@ const DateRangePicker = ({
   }
 
   const onClear = () => {
-    if (defaultValue) {
-      setValue(defaultValue)
-    } else {
-      setValue(dateObjectTemplate)
+    setValue(initialValue)
+    if (onChange) {
+      onChange(initialValue)
     }
   }
 
@@ -267,7 +267,7 @@ const DateRangePicker = ({
         }`}
       >
         <div className="date-picker-label">{labelValue || placeholder}</div>
-        <ReactSVG className="date-picker-icon" src={AWSM_Calendar} />
+        {!disabled && <ReactSVG className="date-picker-icon" src={AWSM_Calendar} />}
       </button>
       <Popover
         id={id}

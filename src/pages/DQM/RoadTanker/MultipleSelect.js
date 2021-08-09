@@ -39,11 +39,16 @@ export default class MultipleSelect extends Component {
     }
 
     const showDeleteBtn = _name => {
+      //const { RtRestrictionSelected } = this.state
+
       const deleteBtn = isDeleteBtnShow ? (
         <div>
           <a
             type="button"
-            onClick={() => onDeleteBtnClick()}
+            onClick={(e) => {
+              e.stopPropagation();
+              onDeleteBtnClick()
+            }}
             className="delete-btn"
             id="delete"
             role="button"
@@ -56,19 +61,23 @@ export default class MultipleSelect extends Component {
         <div className="yes-noBtn">
           <a
             type="button"
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation();
               onConfirmClick()
+              //handleChange(e)
             }}
             className="confirm"
           >
             Confirm |
           </a>
-          <a type="button" onClick={() => onNoClick()} className="No">
+          <a type="button" onClick={(e) => {
+            e.stopPropagation();
+            onNoClick()
+          }} className="No">
             No
           </a>
         </div>
       )
-
       return deleteBtn
     }
 

@@ -12,16 +12,34 @@ const tableColumns = [
 
 const tableMapping = {
   vehicle: {
-    label: "VEHICLE",
+    label: "VEHICLE ID",
     apiKey: "vehicle",
     columnSize: "cell-text",
     type: "link",
     key: "frozen",
   },
   owner: {
-    label: "OWNER",
+    label: "VEHICLE OWNER",
     apiKey: "owner",
     columnSize: "cell-text-big",
+  },
+  status_sap: {
+    label: "RT STATUS IN SAP",
+    apiKey: "status_sap",
+    columnSize: "cell-text",
+    type: "badge",
+    getBadgeColor: value => {
+      return value === "ACTIVE" ? "primary" : "secondary"
+    },
+  },
+  status_awsm: {
+    label: "RT STATUS IN AWSM",
+    apiKey: "status_awsm",
+    columnSize: "cell-text-big",
+    type: "badge",
+    getBadgeColor: value => {
+      return value === "ACTIVE" ? "primary" : "secondary"
+    },
   },
   capacity: {
     label: "RT CAPACITY",
@@ -47,20 +65,6 @@ const tableMapping = {
     label: "DAILY AVAILABLE HOURS",
     apiKey: "daily_available_hours",
     columnSize: "cell-text",
-  },
-  status_sap: {
-    label: "STATUS SAP",
-    apiKey: "status_sap",
-    columnSize: "cell-text",
-  },
-  status_awsm: {
-    label: "STATUS AWSM",
-    apiKey: "status_awsm",
-    columnSize: "cell-text-big",
-    type: "badge",
-    getBadgeColor: value => {
-      return value === "ACTIVE" ? "primary" : "secondary"
-    },
   },
   product_type_sap: {
     label: "PRODUCT TYPE SAP",
@@ -121,6 +125,11 @@ const tableMapping = {
     label: "MAX VOLUME PER COMPARTMENT",
     apiKey: "",
     columnSize: "cell-text-big",
+  },
+  product_weight_hse_compliance: {
+    label: "PRODUCT WEIGHT FOR HSE COMPLIANCE",
+    apiKey: "product_weight_hse_compliance",
+    columnSize: "cell-text",
   },
   offloading_duration: {
     label: "OFFLOADING DURATION (MINS)",

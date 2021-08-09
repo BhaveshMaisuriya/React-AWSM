@@ -11,6 +11,8 @@ import {
   Nav,
   TabPane,
   TabContent,
+  Row,
+  Col
 } from "reactstrap"
 
 //Components
@@ -157,30 +159,30 @@ const RetailCustomerModal = props => {
             </ModalHeader>
             <ModalBody>
               {isConfirm && handleExitConfirmation()}
-              <>
-                <div className="d-flex justify-content-between">
-                  <div className="w-50 mr-4">
+              <Row>
+                <Col className="col-6">
                     <label>SHIP TO (COMPANY NAME)</label>
                     <AWSMInput
                       disabled
                       defaultValue={currentRetailDetail.ship_to_company}
                     />
-                  </div>
-                  <div className="w-50 ml-4">
+                  </Col>
+                  <Col className="col-6">
                     <label>STATUS IN SAP</label>
                     <AWSMInput
                       disabled
                       defaultValue={currentRetailDetail.status_sap}
                     />
-                  </div>
-                </div>
+                 </Col>
+                 <Col className="col-6">
                 <label className="mt-3">REMARKS</label>
                 <AWSMInput
                   defaultValue={currentRetailDetail.remarks}
                   onChange={value => onFieldValueChange("remarks", value)}
                   disabled={scheduler}
                 />
-              </>
+              </Col>
+              </Row>
               <div className="mt-4">
                 <Nav pills justified>
                   <NavItem>

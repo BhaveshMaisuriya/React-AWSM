@@ -9,21 +9,6 @@
   src: url("../../../assets/fonts/Inter/Inter-SemiBold.ttf") format("truetype");
 }
 
-// .searchBar {
-//   border: solid;
-//   border-color: #d9d9d9;
-//   border-width: 1px;
-//   padding-left: 16px;
-//   margin-bottom: 14;
-// }
-// .table {
-//   border: solid;
-//   border-color: #d9d9d9;
-//   border-width: 1px;
-
-//   border-radius: 25px;
-// }
-
 *:focus {
   outline: none;
 }
@@ -40,7 +25,6 @@
   font-family: "Museo Sans" !important;
   max-width: 230px;
   line-height: 1;
-  // line-height: 14px;
 }
 
 .filter-button {
@@ -63,7 +47,6 @@
 
 .tableRow {
   box-sizing: border-box;
-  // height: 53px;
   width: 1201px;
   border: 1px solid #d9d9d9;
   background-color: #ffffff;
@@ -71,7 +54,6 @@
 
 .tableHeaderCell {
   height: 32px;
-  // width: 100px;
   color: #000000;
   font-family: Inter, sans-serif;
   font-size: 12px;
@@ -95,16 +77,6 @@
 }
 .text {
   min-width: 50px;
-}
-
-.Enteries-Label {
-  height: 14px;
-  width: 120px;
-  color: #424242;
-  font-family: "Museo Sans";
-  font-size: 12px;
-  letter-spacing: 0;
-  line-height: 14px;
 }
 
 .filter-container {
@@ -149,16 +121,6 @@
   margin-right: 5px !important;
 }
 
-// .modalTIContainer {
-//   width: 850px !important;
-//   height: 879px;
-//   position: relative !important;
-//   top: 50% !important;
-//   bottom: 50% !important;
-//   transform: translate(-50%, -50%) !important;
-//   margin-left: 300px;
-//   margin-top: 500px;
-// }
 .modal-title {
   width: 100% !important;
 }
@@ -169,4 +131,8 @@
   color: #008f8a !important;
   background-color: unset !important;
   cursor: pointer;
+}
+
+.popover {
+  max-width: none !important;
 }

@@ -30,7 +30,7 @@ const AWSMDropdown = ({
    */
   const onValueChange = item => {
     setDropdownOpen(false)
-    if (onChange && item !== null) {
+    if (onChange) {
       onChange(item)
     }
   }

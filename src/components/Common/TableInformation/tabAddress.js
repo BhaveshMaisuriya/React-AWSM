@@ -1,6 +1,7 @@
 import React, { useMemo } from "react"
 import AWSMInput from "../Input"
 import "./tab-address.scss"
+import AWSMDropdown from "../Dropdown"
 
 
 const TabAddress = ({ scheduler, data, onChange }) => {
@@ -9,7 +10,7 @@ const TabAddress = ({ scheduler, data, onChange }) => {
   }, [data]);
 
   const onFieldChange = (key, value) => {
-    const newAddressData = {...addressData}
+    const newAddressData = { ...addressData }
     newAddressData[key] = value
     if (onChange) {
       onChange("address", newAddressData)
@@ -76,7 +77,9 @@ const TabAddress = ({ scheduler, data, onChange }) => {
             <div className="input-header mb-2">REGION</div>
             <AWSMInput value={addressData.address ? addressData.address.region_name || "" : ""} disabled />
           </div>
-          <div className="col col-12 col-sm-6 col-lg-6"></div>
+          {pathName !== "/retail-customer" && (
+            <div className="col col-12 col-sm-6 col-lg-6"></div>
+          )}
           <div className="col col-12 col-sm-6 col-lg-6">
             <div className="input-header mb-2">LATITUDE</div>
             <AWSMInput value={addressData.address ? addressData.address.latitude || "" : ""} disabled />
@@ -123,10 +126,11 @@ const TabAddress = ({ scheduler, data, onChange }) => {
           {pathName === "/retail-customer" && (
             <div className="col col-12 col-sm-6 col-lg-6">
               <div className="input-header mb-2">BORDER</div>
-              <AWSMInput
-                value={addressData.border || ""}
-                onChange={value => onFieldChange("border", value)}
+              <AWSMDropdown
+                value={addressData.border ? "Y" : "N"}
+                onChange={value => onFieldChange("border", value === "Y")}
                 disabled={scheduler}
+                items={["Y", "N"]}
               />
             </div>
           )}

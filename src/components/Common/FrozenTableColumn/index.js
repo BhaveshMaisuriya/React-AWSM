@@ -7,6 +7,7 @@ import { isEqual, isUndefined } from "lodash"
 import { Badge } from "reactstrap"
 import OverrideIcon from "../../../assets/images/AWSM-success-alert.svg"
 import { ReactSVG } from "react-svg"
+import { removeKeywords } from "../../../pages/DQM/Common/helper"
 import NoDataIcon from "../../../assets/images/AWSM-No-Data-Available.svg"
 
 class FixedCoulmnTable extends Component {
@@ -248,9 +249,9 @@ class FixedCoulmnTable extends Component {
             <td key={index}>
               <div
                 className="table_text_ellipsis"
-                title={isUndefined(arr[e]) ? "-" : arr[e]}
+                title={isUndefined(arr[e]) ? "-" : removeKeywords(arr[e])}
               >
-                {isUndefined(arr[e]) ? "-" : arr[e]}
+                {isUndefined(arr[e]) ? "-" : removeKeywords(arr[e])}
               </div>
             </td>
           )

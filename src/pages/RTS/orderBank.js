@@ -43,6 +43,10 @@ import CrossTerminalModal from "./crossTerminalModal"
 import BryntumChartTable from "./OrderBankTable/BryntumChartTable"
 import OrderBankAuditModal from "./OrderBankAuditModal"
 import CustomRadioButton from "components/Common/CustomRadioButton"
+import OrderBankRunAutoModal from "./OrderBankRunAutoModal"
+import OrderBankSendBulkModal from "./OrderBankSendBulkModal"
+import AWSMAlert from "../../components/Common/AWSMAlert"
+
 
 const GanttChartBottom = [
   {
@@ -166,6 +170,8 @@ function OrderBank({
   const [region, setRegion] = useState(REGION_TERMINAL[0].region)
   const [terminal, setTerminal] = useState(REGION_TERMINAL[0].terminal[0])
   const [refreshDNModal, setRefreshDNModal] = useState(false)
+  const [displayAutoModal, setDisplayAutoModal] = useState(false)
+  const [displayBulkModal, setDisplayBulkModal] = useState(false)
   const [ganttChartAllRadio, setGanttChartAllRadio] = useState("")
   // {high:false, request: false, future: false, backlog: false}
   const [sendDNModal, setSendDNModal] = useState(false)
@@ -176,7 +182,10 @@ function OrderBank({
   })
   const [orderBankSetting, setOrderBankSetting] = useState(orderBankSettings)
   const [showAuditModal, setShowAuditModal] = useState(false)
-
+  const [snackStatus, setSnackStatus] = useState('')
+  const [snackMessage, setSnackMessage] = useState('')
+  const [showSnackAlert, setShowSnackAlert] = useState(false)
+  
   const toggle = () => setOpen(!dropdownOpen)
   const terminalList = useMemo(() => {
     const currentRegion = REGION_TERMINAL.find(e => e.region === region)
@@ -272,6 +281,28 @@ function OrderBank({
     setShowAuditModal(false)
   }
 
+  const istoggleAuto = (status, message) => {
+    setDisplayAutoModal(!displayAutoModal)
+    setShowSnackAlert(true);
+    setSnackMessage(message);
+    setSnackStatus(status);
+  }
+
+  const CloseAutoModal = () => {
+    setDisplayAutoModal(false)
+  }
+
+  const istoggleBulk = (status, message) => {
+    setDisplayBulkModal(!displayBulkModal)
+    setShowSnackAlert(true);
+    setSnackMessage(message);
+    setSnackStatus(status);
+  }
+
+  const CloseBulkModal = () => {
+    setDisplayBulkModal(false)
+  }
+
   const onFullScreen = () => {
     if (
       !document.fullscreenElement &&
@@ -355,10 +386,20 @@ function OrderBank({
                       Audit Log
                     </a>
                     <span className="bl-1-grey-half plr-15">
-                      <Button color={"primary"}>Run Auto Schedule</Button>
+                      <Button
+                        color={"primary"}
+                        onClick={() => setDisplayAutoModal(!displayAutoModal)}
+                      >
+                        Run Auto Schedule
+                      </Button>
                     </span>
                     <span className="bl-1-grey-half plr-15">
-                      <Button disabled>Send Bulk Shipment</Button>
+                      <Button
+                        color={"primary"}
+                        onClick={() => setDisplayBulkModal(!displayBulkModal)}
+                      >
+                        Send Bulk Shipment
+                      </Button>
                     </span>
                   </div>
                 </Col>
@@ -638,6 +679,28 @@ function OrderBank({
                 open={showAuditModal}
                 istoggle={istoggle}
                 CloseModal={CloseModal}
+              />
+            )}
+            {displayAutoModal && (
+              <OrderBankRunAutoModal
+                open={displayAutoModal}
+                istoggle={istoggleAuto}
+                CloseModal={CloseAutoModal}
+              />
+            )}
+            {displayBulkModal && (
+              <OrderBankSendBulkModal
+                open={displayBulkModal}
+                istoggle={istoggleBulk}
+                CloseModal={CloseBulkModal}
+              />
+            )}
+            {showSnackAlert && (
+              <AWSMAlert
+                status={snackStatus}
+                message={snackMessage}
+                openAlert={showSnackAlert}
+                closeAlert={() => setShowSnackAlert(false)}
               />
             )}
           </Card>

@@ -94,6 +94,7 @@ const TabAddress = ({ scheduler, data, onChange }) => {
               value={addressData.alternative_cluster || ""}
               onChange={value => onFieldChange("alternative_cluster", value)}
               disabled={scheduler}
+              placeholder='Type something here...'
             />
           </div>
           <div className="col col-12 col-sm-6 col-lg-6">

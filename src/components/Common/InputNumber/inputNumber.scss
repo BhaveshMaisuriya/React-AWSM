@@ -10,7 +10,8 @@
   }
 
   &:focus {
-    border: 1px solid #008F8A;
+    border: 1px solid #008F8A !important;
+    background-color: #89c2c02e !important;
   }
 
   /* Chrome, Safari, Edge, Opera */

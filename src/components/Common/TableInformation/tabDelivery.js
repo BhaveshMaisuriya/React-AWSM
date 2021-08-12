@@ -337,7 +337,7 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
                 }
                 className={`${styles.field} ${
                   scheduler ? styles.disabled : ""
-                }`}
+                } awsm-input`}
                 disabled={!!scheduler}
                 style={{ height: "40px", marginTop: "-4px", cursor: "pointer" }}
               />
@@ -411,7 +411,7 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
                     disabled={scheduler}
                     className={`${styles.field} ${
                       scheduler ? styles.disabled : undefined
-                    }`}
+                    } awsm-input` }
                     style={{ height: "40px", marginTop: "-4px" }}
                   />
                   <div className={styles.arrow}>
@@ -482,7 +482,7 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
                     disabled={scheduler}
                     className={`${styles.field} ${
                       scheduler ? styles.disabled : undefined
-                    }`}
+                    } awsm-input` }
                     style={{ height: "40px", marginTop: "-4px" }}
                   />
                   <div className={styles.arrow}>

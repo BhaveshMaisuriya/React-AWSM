@@ -51,7 +51,7 @@ const tabQuota = ({ scheduler, data, onChange }) => {
                     errorMessage: "Must not exceed 10,000,000",
                   },
                 }}
-                className={scheduler ? "disabledField" : null}
+                className={scheduler ? "disabledField" : 'awsm-input'}
                 disabled={scheduler}
                 onChange={(e) => onUpdateField(key, "monthly_fixed_quota", e.target.value)}
               />

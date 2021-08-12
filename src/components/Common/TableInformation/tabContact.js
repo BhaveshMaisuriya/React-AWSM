@@ -61,7 +61,7 @@ const tabContact = ({ scheduler, data, onChange }) => {
                       placeholder="Name (etc: John Doe)"
                       value={item.data.name || ""}
                       disabled={!!(item.disabled || scheduler)}
-                      className={!!(item.disabled || scheduler) ? "disabledField" : ""}
+                      className={!!(item.disabled || scheduler) ? "disabledField" : "awsm-input"}
                       onChange={e => onFieldChange(index, "name", e.target.value)}
                     />
                   </AvForm>
@@ -73,7 +73,7 @@ const tabContact = ({ scheduler, data, onChange }) => {
                       placeholder="Contact No. (etc: 011-234556799)"
                       value={item.data.number || ""}
                       disabled={!!(item.disabled || scheduler)}
-                      className={item.disabled || scheduler ? "disabledField" : ""}
+                      className={item.disabled || scheduler ? "disabledField" : "awsm-input"}
                       onChange={e => onFieldChange(index, "number", e.target.value)}
                       validate={{
                         pattern:{value: '^\\+?[0-9- ]+$'},
@@ -90,7 +90,7 @@ const tabContact = ({ scheduler, data, onChange }) => {
                       placeholder="Email (etc: johndoe@petronas.com)"
                       value={item.data.email || ""}
                       disabled={!!(item.disabled || scheduler)}
-                      className={item.disabled || scheduler ? "disabledField" : ""}
+                      className={item.disabled || scheduler ? "disabledField" : "awsm-input"}
                       onChange={e => onFieldChange(index, "email", e.target.value)}
                     />
                   </AvForm>
@@ -102,7 +102,7 @@ const tabContact = ({ scheduler, data, onChange }) => {
                       placeholder="Position (etc: Executive)"
                       value={item.data.position || ""}
                       disabled={!!(item.disabled || scheduler)}
-                      className={item.disabled || scheduler ? "disabledField" : ""}
+                      className={item.disabled || scheduler ? "disabledField" : "awsm-input"}
                       onChange={e => onFieldChange(index, "position", e.target.value)}
                     />
                   </AvForm>
@@ -121,7 +121,7 @@ const tabContact = ({ scheduler, data, onChange }) => {
                 placeholder="Name (etc: John Doe)"
                 value={data.territory_manager ? data.territory_manager.name || "" : ""}
                 disabled={true}//!!scheduler
-                className={scheduler ? "disabledField" : ""}
+                className={scheduler ? "disabledField" : "awsm-input"}
                 onChange={e => onParentFieldChange("territory_manager", "name", e.target.value)}
               />
             </AvForm>
@@ -133,7 +133,7 @@ const tabContact = ({ scheduler, data, onChange }) => {
                 placeholder="Contact No. (etc: 011-234556799)"
                 value={data.territory_manager ? data.territory_manager.number || "" : ""}
                 disabled={true}//!!scheduler
-                className={scheduler ? "disabledField" : ""}
+                className={scheduler ? "disabledField" : "awsm-input"}
                 validate={{
                   pattern:{ value: '^\\+?[0-9- ]+$' },
                 }}
@@ -150,7 +150,7 @@ const tabContact = ({ scheduler, data, onChange }) => {
                 placeholder="Email (etc: johndoe@petronas.com)"
                 value={data.territory_manager ? data.territory_manager.email || "" : ""}
                 disabled={true}//!!scheduler
-                className={scheduler ? "disabledField" : ""}
+                className={scheduler ? "disabledField" : "awsm-input"}
                 onChange={e => onParentFieldChange("territory_manager", "email", e.target.value)}
               />
             </AvForm>
@@ -168,7 +168,7 @@ const tabContact = ({ scheduler, data, onChange }) => {
                 placeholder="Name (etc: John Doe)"
                 value={data.retail_sales_manager ? data.retail_sales_manager.name || "" : ""}
                 disabled={!!scheduler}
-                className={scheduler ? "disabledField" : ""}
+                className={scheduler ? "disabledField" : "awsm-input"}
                 onChange={e => onParentFieldChange("retail_sales_manager", "name", e.target.value)}
               />
             </AvForm>
@@ -180,7 +180,7 @@ const tabContact = ({ scheduler, data, onChange }) => {
                 placeholder="Contact No. (etc: 011-234556799)"
                 value={data.retail_sales_manager ? data.retail_sales_manager.number || "" : ""}
                 disabled={!!scheduler}
-                className={scheduler ? "disabledField" : ""}
+                className={scheduler ? "disabledField" : "awsm-input"}
                 validate={{
                   pattern:{ value: '^\\+?[0-9- ]+$' },
                 }}
@@ -197,7 +197,7 @@ const tabContact = ({ scheduler, data, onChange }) => {
                 placeholder="Email (etc: johndoe@petronas.com)"
                 value={data.retail_sales_manager ? data.retail_sales_manager.email || "" : ""}
                 disabled={!!scheduler}
-                className={scheduler ? "disabledField" : ""}
+                className={scheduler ? "disabledField" : "awsm-input"}
                 onChange={e => onParentFieldChange("retail_sales_manager", "email", e.target.value)}
               />
             </AvForm>

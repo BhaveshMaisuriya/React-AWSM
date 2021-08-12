@@ -101,19 +101,19 @@ export const runValidation = data => {
       return validateContact
     }
   }
-  if (data.status && data.status.status_awsm === "Temporarily Closed") {
-    if (
-      !data.status.close_period ||
-      !(
-        data.status.close_period.date_from &&
-        data.status.close_period.date_to &&
-        data.status.close_period.time_from &&
-        data.status.close_period.time_to
-      )
-    ) {
-      return false
-    }
-  }
+  // if (data.status && data.status.status_awsm === "Temporarily Closed") {
+  //   if (
+  //     !data.status.close_period ||
+  //     !(
+  //       data.status.close_period.date_from &&
+  //       data.status.close_period.date_to &&
+  //       data.status.close_period.time_from &&
+  //       data.status.close_period.time_to
+  //     )
+  //   ) {
+  //     return false
+  //   }
+  // }
   if (
     data.territory_manager &&
     data.territory_manager.number &&

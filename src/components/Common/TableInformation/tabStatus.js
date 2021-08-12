@@ -21,7 +21,6 @@ const TabStatus = ({ scheduler, data, onChange }) => {
   }
   const pathName = window.location.pathname
   const [statusData, setStatusData] = useState(data.status);
-
   const onFieldChange = (key, subKey, value) => {
     const newStatusData = {...statusData}
     if (subKey) {

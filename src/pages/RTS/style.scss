@@ -47,11 +47,11 @@
     height: inherit;
 }
 .gantt_chart_first {
-    height: 45%;
+    height: 55%;
     border-bottom: 1px solid #ccc;
 }
 .gantt_chart_second{
-    height: 50%;
+    height: 45%;
     overflow: hidden;
 }
 .gantt_chart_second .setting_icon {
@@ -111,7 +111,6 @@
 }
 .table_cell {
     display: table-cell;
-    vertical-align: middle;
 }
 .order-bank-bar.right {
     flex-direction: row-reverse;
@@ -420,6 +419,24 @@
 .b-react-portal-container {
     width: 100%;
     .chart-shift-cell {
+        width: 100%;
+        button {
+            width: 100%;
+            background: inherit !important;
+            border: none !important;
+            outline: none !important;
+            display: flex;
+            align-items: center;
+            div {
+                color: #606263;
+            }
+            svg {
+                color: #00A19C;
+            }
+        }
+
+    }
+    .chart-status-cell {
         width: 100%;
         button {
             width: 100%;

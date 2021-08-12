@@ -142,7 +142,7 @@ const DateRangePicker = ({
 
   const onDayClick = day => {
     if (
-      (!types.includes("range") && !types("single")) ||
+      (!types.includes("range") && !types.includes("single")) ||
       (startDate && format(day, "yyyyMMdd") < format(startDate, "yyyyMMdd")) ||
       (endDate && format(day, "yyyyMMdd") > format(endDate, "yyyyMMdd"))
     ) {

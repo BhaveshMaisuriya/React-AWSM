@@ -20,6 +20,7 @@ const AWSMDropdown = ({
   onChange,
   disabled = false,
   RowComponent = null,
+  placeholder
 }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const toggle = () => setDropdownOpen(prevState => !prevState)
@@ -44,11 +45,11 @@ const AWSMDropdown = ({
         disabled={disabled}
       >
         <div
-          className={`awsm-select-toggle p-2 position-relative ${
+          className={`d-flex align-items-center awsm-select-toggle p-2 position-relative ${
             disabled ? "disabled" : ""
           }`}
         >
-          <div>{value}</div>
+          <div>{value? value: placeholder}</div>
           {!disabled && <ReactSVG src={ArrowDropDownIcon} className="awsm-dropdown-arrow" />}
         </div>
       </DropdownToggle>

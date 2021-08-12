@@ -1,29 +1,48 @@
-export const orderBank=[
-  {priority:['hp','sr'],notes:'Shaziman only',name:'test1',cloud:'test',trip:'test',delivery_date:'test',product:'test',volume:'test',retain:'test',runout:'test',product_category:'1234',dn_status:['Send For DN'],split_id:'test',order_type:'test',ship_to:'test',accessibility:'test',remarks:'test',order_status:'scheduled'},
-  {priority:[],notes:'Shaziman only',name:'test2',cloud:'test',trip:'test',delivery_date:'test',product:'test',volume:'test',retain:'test',runout:'test',product_category:'1234',dn_status:['Blocked DN'],split_id:'test',order_type:'test',ship_to:'test',accessibility:'test',remarks:'test',order_status:'unscheduled'},
-  {priority:['sr'],notes:'',name:'test3',cloud:'test',trip:'test',delivery_date:'test',product:'test',volume:'test',retain:'test',runout:'test',product_category:'1234',dn_status:['Late Unblock'],split_id:'test',order_type:'test',ship_to:'test',accessibility:'test',remarks:'test',order_status:'unscheduled'},
-  {priority:['hp'],notes:'',name:'test',cloud:'test',trip:'test',delivery_date:'test',product:'test',volume:'test',retain:'test',runout:'test',product_category:'1234',dn_status:['Clear DN'],split_id:'test',order_type:'test',ship_to:'test',accessibility:'test',remarks:'test',order_status:'scheduled'},
-  {priority:['hp'],notes:'Shaziman only',name:'test',cloud:'test',trip:'test',delivery_date:'test',product:'test',volume:'test',retain:'test',runout:'test',product_category:'1234',dn_status:['Send For DN'],split_id:'test',order_type:'test',ship_to:'test',accessibility:'test',remarks:'test',order_status:'unscheduled'},
-  {priority:['hp','sr'],notes:'',name:'test1',cloud:'test',trip:'test',delivery_date:'test',product:'test',volume:'test',retain:'test',runout:'test',product_category:'1234',dn_status:['Unblocked'],split_id:'test',order_type:'test',ship_to:'test',accessibility:'test',remarks:'test',order_status:'unscheduled'},
-  {priority:['sr','hp'],notes:'',name:'test5',cloud:'test',trip:'test',delivery_date:'test',product:'test',volume:'test',retain:'test',runout:'test',product_category:'1234',dn_status:['Send For DN'],split_id:'test',order_type:'test',ship_to:'test',accessibility:'test',remarks:'test',order_status:'scheduled'},
-]
+// export const orderBank=[
+//   {priority:['hp','sr'],notes:'Shaziman only',name:'test1',cloud:'test',trip:'test',delivery_date:'test',product:'test',volume:'test',retain:'test',runout:'test',product_category:'1234',dn_status:['Send For DN'],split_id:'test',order_type:'test',ship_to:'test',accessibility:'test',remarks:'test',order_status:'scheduled'},
+//   {priority:[],notes:'Shaziman only',name:'test2',cloud:'test',trip:'test',delivery_date:'test',product:'test',volume:'test',retain:'test',runout:'test',product_category:'1234',dn_status:['Blocked DN'],split_id:'test',order_type:'test',ship_to:'test',accessibility:'test',remarks:'test',order_status:'unscheduled'},
+//   {priority:['sr'],notes:'',name:'test3',cloud:'test',trip:'test',delivery_date:'test',product:'test',volume:'test',retain:'test',runout:'test',product_category:'1234',dn_status:['Late Unblock'],split_id:'test',order_type:'test',ship_to:'test',accessibility:'test',remarks:'test',order_status:'unscheduled'},
+//   {priority:['hp'],notes:'',name:'test',cloud:'test',trip:'test',delivery_date:'test',product:'test',volume:'test',retain:'test',runout:'test',product_category:'1234',dn_status:['Clear DN'],split_id:'test',order_type:'test',ship_to:'test',accessibility:'test',remarks:'test',order_status:'scheduled'},
+//   {priority:['hp'],notes:'Shaziman only',name:'test',cloud:'test',trip:'test',delivery_date:'test',product:'test',volume:'test',retain:'test',runout:'test',product_category:'1234',dn_status:['Send For DN'],split_id:'test',order_type:'test',ship_to:'test',accessibility:'test',remarks:'test',order_status:'unscheduled'},
+//   {priority:['hp','sr'],notes:'',name:'test1',cloud:'test',trip:'test',delivery_date:'test',product:'test',volume:'test',retain:'test',runout:'test',product_category:'1234',dn_status:['Unblocked'],split_id:'test',order_type:'test',ship_to:'test',accessibility:'test',remarks:'test',order_status:'unscheduled'},
+//   {priority:['sr','hp'],notes:'',name:'test5',cloud:'test',trip:'test',delivery_date:'test',product:'test',volume:'test',retain:'test',runout:'test',product_category:'1234',dn_status:['Send For DN'],split_id:'test',order_type:'test',ship_to:'test',accessibility:'test',remarks:'test',order_status:'scheduled'},
+// ]
 
+export const orderBank = [
+	{id: 1, priority:['hp','sr'],notes:'Shaziman only',name:'Umaten biz enterprise',cloud:'00',trip:'00',delivery_date:'1234',product:'Primax 95 Premium', volume:'1234',retain:'00',runout:'00',product_category:'1234',dn_status:['Send for DN'],split_id:'00',order_type:'ASR',ship_to:'36114489',accessibility:'1234',remarks:"remark",order_status:"scheduled"},
+	{id: 2, priority:[],notes:'Shaziman only',name:'Daya Bumi gas enterprise',cloud:'00',trip:'00',delivery_date:'1234',product:'Primax 97 Premium', volume:'1234',retain:'00',runout:'00',product_category:'1234',dn_status:['Blocked DN'],split_id:'00',order_type:'SMP',ship_to:'36114487',accessibility:'1234',remarks:"remark",order_status:"scheduled"},
+	{id: 3, priority:['hp'],notes:'Shaziman only',name:'Maju gas trading',cloud:'00',trip:'00',delivery_date:'1234',product:'Biodiesel B10 (Camm)', volume:'1234',retain:'00',runout:'00',product_category:'1234',dn_status:['Late Unblock'],split_id:'00',order_type:'Comm',ship_to:'36114668',accessibility:'1234',remarks:"remark",order_status:"scheduled"},
+	{id: 4, priority:['sr'],notes:'Shaziman only',name:'Idamo enterprise',cloud:'00',trip:'00',delivery_date:'1234',product:'Biodielsel B10 (Retail)', volume:'1234',retain:'00',runout:'00',product_category:'1234',dn_status:['Clean DN'],split_id:'00',order_type:'ASR',ship_to:'36114008',accessibility:'1234',remarks:"remark",order_status:"scheduled"},
+	{id: 5, priority:[],notes:'Shaziman only',name:'Zaidi fuel station',cloud:'00',trip:'00',delivery_date:'1234',product:'Diesel Euro 5', volume:'1234',retain:'00',runout:'00',product_category:'1234',dn_status:['Send for DN'],split_id:'00',order_type:'ASR',ship_to:'36114481',accessibility:'1234',remarks:"remark",order_status:"scheduled"},
+	{id: 6, priority:['sr','hp'],notes:'Shaziman only',name:'Warrick petromart',cloud:'00',trip:'00',delivery_date:'1234',product:'Biodielsel B7 (Camm)', volume:'1234',retain:'00',runout:'00',product_category:'1234',dn_status:['Send for DN'],split_id:'00',order_type:'Comm',ship_to:'36113388',accessibility:'1234',remarks:"remark",order_status:"scheduled"},
+	{id: 7, priority:[],notes:'Shaziman only',name:'Utama gas trading',cloud:'00',trip:'00',delivery_date:'1234',product:'Kerosene', volume:'1234',retain:'00',runout:'00',product_category:'1234',dn_status:['Send for DN'],split_id:'00',order_type:'SMP',ship_to:'36114876',accessibility:'1234',remarks:"remark",order_status:"scheduled"},
+	{id: 8, priority:['hp','sr'],notes:'Shaziman only',name:'One sh trading',cloud:'00',trip:'00',delivery_date:'1234',product:'Primax 95 Premium', volume:'1234',retain:'00',runout:'00',product_category:'1234',dn_status:['Send for DN'],split_id:'00',order_type:'ASR',ship_to:'36114245',accessibility:'1234',remarks:"remark",order_status:"scheduled"},
+	{id: 9, priority:['hp'],notes:'Shaziman only',name:'Zaidi fuel station',cloud:'00',trip:'00',delivery_date:'1234',product:'Primax 97 Premium', volume:'1234',retain:'00',runout:'00',product_category:'1234',dn_status:['Send for DN'],split_id:'00',order_type:'ASR',ship_to:'36114765',accessibility:'1234',remarks:"remark",order_status:"scheduled"},
+	{id: 10, priority:['sr'],notes:'Shaziman only',name:'Daya bumi gas enterprise',cloud:'00',trip:'00',delivery_date:'1234',product:'Biodielsel B7 Euro 5', volume:'1234',retain:'00',runout:'00',product_category:'1234',dn_status:['Send for DN'],split_id:'00',order_type:'Comm',ship_to:'361100987',accessibility:'1234',remarks:"remark",order_status:"scheduled"},
+	{id: 11, priority:[],notes:'Shaziman only',name:'Umaten biz enterprise',cloud:'00',trip:'00',delivery_date:'1234',product:'Primax 95 Premium', volume:'1234',retain:'00',runout:'00',product_category:'1234',dn_status:['Send for DN'],split_id:'00',order_type:'ASR',ship_to:'361111234',accessibility:'1234',remarks:"remark",order_status:"scheduled"},
+]
 export const ganttChartTableData =[
   {
     id: 1,
     vehicle: 'WA 5551V',
     pto: 'PTO',
     hours: '3.36',
-    status: 'On 1',
+    status: "On",
+    status_list: [
+      "On",
+      "On1",
+      "On2",
+      "On3",
+      "Off"
+    ],
     size: '21840',
     type: '1003',
     rate: '00',
     shift_list: [
-      "On 1",
-      "On 2",
-      "on 3"
+      "ON",
+      "OH",
     ],
-    shift: "On 1",
+    shift: "ON",
     cap: "21480",
     rtcode: "1003"
   },
@@ -31,16 +50,19 @@ export const ganttChartTableData =[
     id: 2,
     vehicle: 'WA 5552V',
     hours: '13.36',
-    status: 'On 1',
+    status: "OH",
+    status_list: [
+      "OH",
+      "Off"
+    ],
     size: '21840',
     type: '1003',
     rate: '00',
     shift_list: [
-      "On 1",
-      "On 2",
-      "on 3"
+      "ON",
+      "OH",
     ],
-    shift: "On 1",
+    shift: "OH",
     cap: "21480",
     rtcode: "1003"
   },
@@ -49,16 +71,22 @@ export const ganttChartTableData =[
     vehicle: 'WA 5553V',
     pto: 'PTO',
     hours: '13.36',
-    status: 'On 1',
+    status: "Off",
+    status_list: [
+      "On",
+      "On1",
+      "On2",
+      "On3",
+      "Off"
+    ],
     size: '21840',
     type: '1003',
     rate: '00',
     shift_list: [
-      "On 1",
-      "On 2",
-      "on 3"
+      "ON",
+      "OH",
     ],
-    shift: "On 1",
+    shift: "ON",
     cap: "21480",
     rtcode: "1003"
   },
@@ -67,16 +95,19 @@ export const ganttChartTableData =[
     vehicle: 'WA 5559V',
     pto: 'PTO',
     hours: '6',
-    status: 'On 1',
+    status: "OH",
+    status_list: [
+      "OH",
+      "Off"
+    ],
     size: '21840',
     type: '1003',
     rate: '00',
     shift_list: [
-      "On 1",
-      "On 2",
-      "on 4"
+      "ON",
+      "OH",
     ],
-    shift: "On 1",
+    shift: "OH",
     cap: "21480",
     rtcode: "1003"
   },
@@ -84,16 +115,19 @@ export const ganttChartTableData =[
     id: 5,
     vehicle: 'WA 5559V',
     hours: '05',
-    status: 'On 1',
+    status: "Off",
+    status_list: [
+      "OH",
+      "Off"
+    ],
     size: '21840',
     type: '1003',
     rate: '00',
     shift_list: [
-      "On 1",
-      "On 2",
-      "on 3"
+      "ON",
+      "OH",
     ],
-    shift: "On 1",
+    shift: "OH",
     cap: "21480",
     rtcode: "1003"
   },
@@ -101,16 +135,22 @@ export const ganttChartTableData =[
     id: 6,
     vehicle: 'WA 5559V',
     hours: '05',
-    status: 'On 1',
+    status: "On3",
+    status_list: [
+      "On",
+      "On1",
+      "On2",
+      "On3",
+      "Off"
+    ],
     size: '21840',
     type: '1003',
     rate: '00',
     shift_list: [
-      "On 1",
-      "On 2",
-      "on 3"
+      "ON",
+      "OH",
     ],
-    shift: "On 1",
+    shift: "ON",
     cap: "21480",
     rtcode: "1003"
   },
@@ -118,16 +158,22 @@ export const ganttChartTableData =[
     id: 7,
     vehicle: 'WA 5559V',
     hours: '05',
-    status: 'On 1',
+    status: "On1",
+    status_list: [
+      "On",
+      "On1",
+      "On2",
+      "On3",
+      "Off"
+    ],
     size: '21840',
     type: '1003',
     rate: '00',
     shift_list: [
-      "On 1",
-      "On 2",
-      "on 3"
+      "ON",
+      "OH",
     ],
-    shift: "On 1",
+    shift: "ON",
     cap: "21480",
     rtcode: "1003"
   }

@@ -20,14 +20,13 @@ const Example = React.memo(props => {
   const [backupData, setBackupData] = useState([])
   const [checkedList, setCheckedList] = useState([])
   const [checkedCount, setCheckedCount] = useState(0)
-  const [visibilityCount, setVisibilityCount] = useState(1)
+  const [visibilityCount, setVisibilityCount] = useState(0)
   const [count, setCount] = useState(0)
   const [searchWords, setSearch] = useState("")
   const [hasMore, setHasMore] = useState(true)
   const [hasRemark, setHasRemark] = useState(true)
   const [current, setCurrent] = useState([])
   let rowsPerLoad = 30
-
   const UntickIcon = () => <img src={selectAllIcon3} alt="icon" />
   const CheckedIcon = () => <img src={selectAllIcon2} alt="icon" />
   const UndeterminateIcon = () => <img src={selectAllIcon} alt="icon" />
@@ -48,6 +47,7 @@ const Example = React.memo(props => {
         })
         setCount(rowsPerLoad)
         setCurrent(arr)
+        setVisibilityCount(arr.length)
         checkedList.length === 0
           ? setCheckedCount(dataFilter[dataKey].length)
           : setCheckedCount(checkedList.length)

@@ -32,6 +32,7 @@ const AddressTab = (props) => {
                   value={data?.address_1}
                   onChange={(e)=>handleOnChangeValue(e)}
                   disabled
+                  placeholder="Type something here..."
                 />
               </div>
               <div className="col-md-6 form-group">
@@ -43,6 +44,7 @@ const AddressTab = (props) => {
                   value={data?.city}
                   onChange={(e)=>handleOnChangeValue(e)}
                   disabled
+                  placeholder="Type something here..."
                 />
               </div>
             </div>
@@ -56,6 +58,7 @@ const AddressTab = (props) => {
                   value={data?.postcode}
                   onChange={(e)=>handleOnChangeValue(e)}
                   disabled
+                  placeholder="Type something here..."
                 />
               </div>
               <div className="col-md-6 form-group">
@@ -67,6 +70,7 @@ const AddressTab = (props) => {
                   value={data?.state}
                   onChange={(e)=>handleOnChangeValue(e)}
                   disabled
+                  placeholder="Type something here..."
                 />
               </div>
             </div>
@@ -80,6 +84,7 @@ const AddressTab = (props) => {
                   value={data?.region_name}
                   onChange={(e)=>handleOnChangeValue(e)}
                   disabled
+                  placeholder="Type something here..."
                 />
               </div>
               <div className="col-md-6 form-group">
@@ -91,6 +96,7 @@ const AddressTab = (props) => {
                   value={data?.country}
                   onChange={(e)=>handleOnChangeValue(e)}
                   disabled
+                  placeholder="Type something here..."
                 />
               </div>
             </div>
@@ -104,6 +110,7 @@ const AddressTab = (props) => {
                   value={data?.latitude}
                   onChange={(e)=>handleOnChangeValue(e)}
                   disabled
+                  placeholder="Type something here..."
                 />
               </div>
               <div className="col-md-6 form-group">
@@ -115,6 +122,7 @@ const AddressTab = (props) => {
                   value={data?.longitude}
                   onChange={(e)=>handleOnChangeValue(e)}
                   disabled
+                  placeholder="Type something here..."
                 />
               </div>
             </div>

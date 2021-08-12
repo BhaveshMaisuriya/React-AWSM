@@ -15,3 +15,11 @@
     background-image: url(../../../assets/images/warning.svg) !important;
     background-repeat: no-repeat;
   }
+  .form-control:focus {
+    color: #495057;
+    border-color: #00A19C!important;
+    outline: 0;
+    box-shadow: none;
+}
+
+

@@ -101,21 +101,27 @@ const tableMapping = {
   },
 }
 
-const ganttChartTableColumns = ["vehicle", "hours", "status", "size", "type"]
+const ganttChartTableColumns = ["vehicle", "shift", "rate", "cap", "rtcode"]
 
-const ganttChartTableMapping = {
+const ganttChartTableDefaultColumns = {
   vehicle: {
-    label: "vehicle",
+    label: "VEHICLE ID",
     columnSize: "cell-text",
   },
   rate: {
     label: "RATE(%)",
     columnSize: "cell-text",
   },
-  shift: {
-    label: "SHIFT",
+  // shift: {
+  //   label: "SHIFT",
+  //   columnSize: "cell-text",
+  //   type: "list"
+  // },
+  status: {
+    label: "STATUS",
     columnSize: "cell-text",
     type: "list"
+
   },
   cap: {
     label: "CAP(L)",
@@ -124,7 +130,76 @@ const ganttChartTableMapping = {
   rtcode: {
     label: "RT CODE",
     columnSize: "cell-text",
-  }
+  },
 }
 
-export { tableMapping, tableColumns, ganttChartTableColumns, ganttChartTableMapping, shipmentTableColumns}
+
+const ganttChartTableMapping = {
+  vehicle: {
+    label: "VEHICLE ID",
+    columnSize: "cell-text",
+    key:"frozen"
+  },
+  rate: {
+    label: "RATE(%)",
+    columnSize: "cell-text",
+  },
+  shift: {
+    label: "SHIFT",
+    columnSize: "cell-text",
+    type: "list",
+  },
+  cap: {
+    label: "CAP(L)",
+    columnSize: "cell-text",
+  },
+  rtcode: {
+    label: "RT CODE",
+    columnSize: "cell-text",
+  },
+  name: {
+    label: "NAME",
+    columnSize: "cell-text",
+  },
+  status: {
+    label: "STATUS",
+    columnSize: "cell-text",
+  },
+  hours: {
+    label: "HOURS",
+    columnSize: "cell-text",
+  },
+  product: {
+    label: "PRODUCT",
+    columnSize: "cell-text",
+  },
+  pump: {
+    label: "PUMP",
+    columnSize: "cell-text",
+  },
+  no_of_com: {
+    label: "NO. OF COM",
+    label_short: "NO. OF...",
+    columnSize: "cell-text",
+  },
+  max_weight: {
+    label: "MAX WEIGHT",
+    label_short: "MAX W...",
+    columnSize: "cell-text",
+  },
+  cust_type: {
+    label: "CUST TYPE",
+    label_short: "CUST T...",
+    columnSize: "cell-text",
+  },
+  type: {
+    label: "TYPE",
+    columnSize: "cell-text",
+  },
+  remarks: {
+    label: "REMARKS",
+    columnSize: "cell-text",
+  },
+}
+
+export { tableMapping, tableColumns, ganttChartTableColumns,ganttChartTableDefaultColumns ,ganttChartTableMapping,shipmentTableColumns }

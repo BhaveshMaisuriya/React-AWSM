@@ -68,6 +68,16 @@ const Product = ({
         )}
       </div>
       <div className="row">
+      <div className="col-3 form-group">
+          <label htmlFor="productName">PRODUCT NAME</label>
+          <AWSMInput
+            key={value.code}
+            defaultValue={value.name}
+            disabled
+            onChange={value => onFieldChange("name", value)}
+            placeholder="Type something here..."
+          />
+        </div>
         <div className="col-3 form-group">
           <label htmlFor="productCode">PRODUCT CODE</label>
           <AutoCompleteDropDown
@@ -76,24 +86,17 @@ const Product = ({
             items={productsList}
             key={value.code}
             onChange={value => onFieldChange("code", value)}
+            placeholder="Select"
           />
         </div>
         <div className="col-3 form-group">
-          <label htmlFor="productName">PRODUCT NAME</label>
-          <AWSMInput
-            key={value.code}
-            defaultValue={value.name}
-            disabled
-            onChange={value => onFieldChange("name", value)}
-          />
-        </div>
-        <div className="col-3 form-group">
-          <label>STATUS IN SAP</label>
+          <label>STATUS IN AWSM</label>
           <AWSMDropdown
             value={value.status_awsm}
             disabled={scheduler}
             items={["Active", "Inactive"]}
             onChange={value => onFieldChange("status_awsm", value)}
+            placeholder="Select status"
           />
         </div>
         <div className="col-3 form-group">
@@ -108,6 +111,7 @@ const Product = ({
             onChange={value => onFieldChange("flow_rate", value)}
             renderExceedError={renderExceedError("flow_rate", 1440)}
             // max={10000}
+            placeholder="Numeric only"
           />
           {renderExceedError("flow_rate", 10000)}
         </div>
@@ -122,6 +126,7 @@ const Product = ({
             onChange={value =>
               onFieldChange("volume_capping_date_range", value)
             }
+            placeholder="Select date"
           />
         </div>
         <div className="col-3 form-group">
@@ -145,6 +150,7 @@ const Product = ({
               10000000
             )}
             // max={10000000}
+            placeholder="Numeric only"
           />
           {renderExceedError("volume_capping_volume", 10000000)}
         </div>
@@ -154,6 +160,7 @@ const Product = ({
             defaultValue={value.volume_capping_remarks}
             disabled={scheduler}
             onChange={value => onFieldChange("volume_capping_remarks", value)}
+            placeholder="Type something here..."
           />
         </div>
       </div>
@@ -166,6 +173,7 @@ const Product = ({
             onChange={value =>
               onFieldChange("volume_capping_date_range_2", value)
             }
+            placeholder="Select date"
           />
         </div>
         <div className="col-3 form-group">
@@ -189,6 +197,7 @@ const Product = ({
               10000000
             )}
             // max={10000000}
+            placeholder="Numeric only"
           />
           {renderExceedError("volume_capping_volume_2", 10000000)}
         </div>
@@ -198,6 +207,7 @@ const Product = ({
             defaultValue={value.volume_capping_remarks_2}
             disabled={scheduler}
             onChange={value => onFieldChange("volume_capping_remarks_2", value)}
+            placeholder="Type something here..."
           />
         </div>
       </div>

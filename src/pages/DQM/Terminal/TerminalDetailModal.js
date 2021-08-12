@@ -35,6 +35,7 @@ import {
   UncontrolledTooltip,
 } from "reactstrap"
 import ExitConfirmation from "../../../components/Common/ExitConfirmation"
+import AWSMInput from "components/Common/Input"
 class TerminalDetailModal extends PureComponent {
   constructor(props) {
     super(props)
@@ -180,18 +181,6 @@ class TerminalDetailModal extends PureComponent {
                   <div>
                     <div className="row">
                       <div className="col-md-6 form-group">
-                        <label>TERMINAL CODE</label>
-                        <input
-                          className="form-control"
-                          type="text"
-                          defaultValue={currentTerminal.code}
-                          disabled={true}
-                          onChange={e =>
-                            this.onFieldChange("code", e.target.value)
-                          }
-                        />
-                      </div>
-                      <div className="col-md-6 form-group">
                         <label>TERMINAL NAME</label>
                         <input
                           className="form-control"
@@ -203,10 +192,7 @@ class TerminalDetailModal extends PureComponent {
                           }
                         />
                       </div>
-                    </div>
-
-                    <div className="row">
-                      <div className="col-md-12 form-group">
+                      <div className="col-md-6 form-group">
                         <label> REMARKS</label>
                         <input
                           placeholder="Type something here..."
@@ -220,6 +206,7 @@ class TerminalDetailModal extends PureComponent {
                         />
                       </div>
                     </div>
+
                   </div>
                   <Nav pills justified>
                     <NavItem>

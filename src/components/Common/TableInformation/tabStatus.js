@@ -35,8 +35,11 @@ const TabStatus = ({ scheduler, data, onChange }) => {
           time_from: null,
           time_to: null,
         }
-      }
+      }      
       newStatusData[key][subKey] = value
+      if(key === "close_period" && (subKey === 'time_from' || subKey === 'time_to') && value === 'None'){        
+        newStatusData['close_period'][subKey] = null;
+      }
     } else {
       newStatusData[key] = value;
     }
@@ -52,14 +55,14 @@ const TabStatus = ({ scheduler, data, onChange }) => {
     onFieldChange("sales_inventory_data_source_items", null, newDataSourceItems);
   }
 
-  const errorMessage = useMemo(() => {
-    if (statusData.status_awsm === "Temporarily Closed") {
-      if (!statusData.close_period || !(statusData.close_period.date_from && statusData.close_period.date_to && statusData.close_period.time_from && statusData.close_period.time_to)) {
-        return "Close period is required!"
-      }
-    }
-    return null
-  }, [statusData])
+  // const errorMessage = useMemo(() => {
+  //   if (statusData.status_awsm === "Temporarily Closed") {
+  //     if (!statusData.close_period || !(statusData.close_period.date_from && statusData.close_period.date_to && statusData.close_period.time_from && statusData.close_period.time_to)) {
+  //       return "Close period is required!"
+  //     }
+  //   }
+  //   return null
+  // }, [statusData])
 
   return (
     <div className="dqm-status-container">
@@ -121,6 +124,7 @@ const TabStatus = ({ scheduler, data, onChange }) => {
             <div className="input-header">TIME</div>
             <AWSMDropdown
               items={timeData}
+              optionValue={true}
               value={statusData.close_period ? statusData.close_period.time_from?.toString().substring(0, 5) || "" : ""}
               onChange={value =>
                 onFieldChange("close_period", "time_from", value)
@@ -156,7 +160,7 @@ const TabStatus = ({ scheduler, data, onChange }) => {
             />
           </div>
         </div>
-        {errorMessage && <p className="error">{errorMessage}</p>}
+        {/* {errorMessage && <p className="error">{errorMessage}</p>} */}
       </div>
       {pathName === "/commercial-customer" && (
         <div className="row">

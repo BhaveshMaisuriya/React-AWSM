@@ -113,7 +113,7 @@ class ProductDetailModal extends PureComponent {
                 <div className="col-md-6 form-group">
                   <label> PRODUCT NAME</label>
                   <input
-                    className="form-control"
+                    className="form-control awsm-input"
                     type="text"
                     defaultValue={updateDictionary.name}
                     disabled={true}
@@ -122,7 +122,7 @@ class ProductDetailModal extends PureComponent {
                 <div className="col-md-6 form-group">
                   <label>STATUS IN SAP</label>
                   <input
-                    className="form-control"
+                    className="form-control awsm-input"
                     type="text"
                     defaultValue={updateDictionary.status_sap}
                     disabled={true}
@@ -145,7 +145,7 @@ class ProductDetailModal extends PureComponent {
                       })
                     }}
                     disabled={isDisabledField}
-                    className="form-control"
+                    className="form-control awsm-input"
                   />
                 </div>
               </div>
@@ -154,7 +154,7 @@ class ProductDetailModal extends PureComponent {
                 <div className="col-md-6 form-group">
                   <label> PRODUCT DIVISION</label>
                   <input
-                    className="form-control"
+                    className="form-control awsm-input"
                     type="text"
                     defaultValue={updateDictionary.division}
                     disabled={true}
@@ -163,7 +163,7 @@ class ProductDetailModal extends PureComponent {
                 <div className="col-md-6 form-group">
                   <label> MATERIAL GROUP</label>
                   <input
-                    className="form-control"
+                    className="form-control awsm-input"
                     type="text"
                     defaultValue={updateDictionary.material_group}
                     disabled={true}
@@ -175,7 +175,7 @@ class ProductDetailModal extends PureComponent {
                 <div className="col-md-6 form-group">
                   <label> CATEGORY</label>
                   <input
-                    className="form-control"
+                    className="form-control awsm-input"
                     type="text"
                     defaultValue={updateDictionary.category}
                     disabled={true}
@@ -184,7 +184,7 @@ class ProductDetailModal extends PureComponent {
                 <div className="col-md-6 form-group">
                   <label> SUB CATEGORY</label>
                   <input
-                    className="form-control"
+                    className="form-control awsm-input"
                     type="text"
                     defaultValue={updateDictionary.sub_category}
                     disabled={true}
@@ -196,7 +196,7 @@ class ProductDetailModal extends PureComponent {
                 <div className="col-md-6 form-group">
                   <label> PRODUCT GROUP</label>
                   <input
-                    className="form-control"
+                    className="form-control awsm-input"
                     type="text"
                     defaultValue={updateDictionary.product_group}
                     disabled={true}
@@ -205,7 +205,7 @@ class ProductDetailModal extends PureComponent {
                 <div className="col-md-6 form-group">
                   <label> UOM</label>
                   <input
-                    className="form-control"
+                    className="form-control awsm-input"
                     type="text"
                     defaultValue={updateDictionary.uom}
                     disabled={true}
@@ -217,7 +217,7 @@ class ProductDetailModal extends PureComponent {
                 <div className="col-md-6 form-group">
                   <label> PRODUCT DENSITY</label>
                   <input
-                    className="form-control"
+                    className="form-control awsm-input"
                     type="text"
                     defaultValue={updateDictionary.density}
                     disabled={true}
@@ -229,7 +229,7 @@ class ProductDetailModal extends PureComponent {
                 <div className="col-md-12 form-group">
                   <label> REMARKS</label>
                   <input
-                    className="form-control"
+                    className="form-control awsm-input"
                     type="text"
                     defaultValue={updateDictionary.remarks}
                     name="remarks"

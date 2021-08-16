@@ -101,8 +101,8 @@ const tabContact = ({ scheduler, data, onChange }) => {
                       name="contact_position"
                       placeholder="Position (etc: Executive)"
                       value={item.data.position || ""}
-                      disabled={!!(item.disabled || scheduler)}
-                      className={item.disabled || scheduler ? "disabledField" : "awsm-input"}
+                      disabled={scheduler}
+                      className={scheduler ? "disabledField" : "awsm-input"}
                       onChange={e => onFieldChange(index, "position", e.target.value)}
                     />
                   </AvForm>

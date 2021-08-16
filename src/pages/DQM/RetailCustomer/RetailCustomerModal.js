@@ -107,6 +107,7 @@ const RetailCustomerModal = props => {
   function onFieldValueChange(fieldName, value) {
     const newRetailDetail = { ...currentRetailDetail }
     newRetailDetail[fieldName] = value
+    console.log("currentRetailDetail::12", newRetailDetail, props.currentRetailDetail)
     setCurrentRetailDetail(newRetailDetail)
   }
 
@@ -132,6 +133,7 @@ const RetailCustomerModal = props => {
   // }
 
   const handleExitConfirmation = () => {
+    console.log("currentRetailDetail::", currentRetailDetail, props.currentRetailDetail)
     return !isEqual(currentRetailDetail, props.currentRetailDetail) ? (
       <ExitConfirmation onExit={onConfirmExit} onCancel={onConfirmCancel} />
     ) : (
@@ -174,8 +176,8 @@ const RetailCustomerModal = props => {
                       defaultValue={currentRetailDetail.status_sap}
                     />
                  </Col>
-                 <Col className="col-6">
-                <label className="mt-3">REMARKS</label>
+                 <Col className="col-12">
+                <label className="mt-12">REMARKS</label>
                 <AWSMInput
                   defaultValue={currentRetailDetail.remarks}
                   onChange={value => onFieldValueChange("remarks", value)}

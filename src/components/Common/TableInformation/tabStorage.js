@@ -87,10 +87,13 @@ const TabStorage = ({ scheduler, data, onChange }) => {
 
   const onUpdateField = (key, subKey, value) => {
     const newStorageData = { ...storageData }
-    if (!newStorageData[key]) {
-      newStorageData[key] = {}
-    }
+    // if (!newStorageData[key]) {
+    //   newStorageData[key] = {}
+    // }
+    
     newStorageData[key][subKey] = value
+    setStorageData(newStorageData)
+    console.log("newStorageData::", newStorageData)
     if (onChange) {
       onChange("storage", newStorageData)
     }
@@ -170,7 +173,7 @@ const TabStorage = ({ scheduler, data, onChange }) => {
                   </div>
                   <button
                     onClick={() => setDeleteItemKey(null)}
-                    className="btn btn-outline-danger m-2"
+                    className="btn btn-dan m-2"
                   >
                     Cancel
                   </button>
@@ -183,6 +186,7 @@ const TabStorage = ({ scheduler, data, onChange }) => {
                 </div>
               )}
               <div className="row">
+              {scheduler && pathName !== "/retail-customer" && (
                 <div className="col col-12 col-sm-6 col-lg-3">
                   <div className="input-header mb-2">PRODUCT CODE</div>
                   <AWSMInput
@@ -193,6 +197,8 @@ const TabStorage = ({ scheduler, data, onChange }) => {
                     disabled={scheduler}
                   />
                 </div>
+              )}
+              {scheduler && pathName !== "/retail-customer" && (
                 <div className="col col-12 col-sm-6 col-lg-3">
                   <div className="input-header mb-2">TANK CAPACITY</div>
                   <AWSMInputNumber
@@ -208,6 +214,7 @@ const TabStorage = ({ scheduler, data, onChange }) => {
                     disabled={scheduler}
                   />
                 </div>
+              )}
                 <div className="col col-12 col-sm-6 col-lg-3">
                   <div className="input-header mb-2">ACTIVE PRODUCT</div>
                   <AWSMDropdown
@@ -249,6 +256,7 @@ const TabStorage = ({ scheduler, data, onChange }) => {
                     closeAlert={() => setAlert(false)}
                   />
                 </div>
+              {scheduler && pathName !== "/retail-customer" && (
                 <div className="col col-12 col-sm-6 col-lg-3">
                   <div className="input-header mb-2">TERMINAL</div>
                   <AWSMInput
@@ -259,6 +267,8 @@ const TabStorage = ({ scheduler, data, onChange }) => {
                     disabled={scheduler}
                   />
                 </div>
+              )}
+              {scheduler && pathName !== "/retail-customer" && (
                 <div className="col col-12 col-sm-6 col-lg-3">
                   <div className="input-header mb-2">DISTANCE</div>
                   <AWSMInput
@@ -269,6 +279,7 @@ const TabStorage = ({ scheduler, data, onChange }) => {
                     disabled={scheduler}
                   />
                 </div>
+              )}
                 <div className="col col-12 col-sm-6 col-lg-3">
                   <div className="input-header mb-2">DURATION</div>
                   <AWSMInputNumber
@@ -355,7 +366,7 @@ const TabStorage = ({ scheduler, data, onChange }) => {
         ) : null
       )}
       <hr style={{ margin: "2em 0" }} />
-      {!scheduler && pathName === "/retail-customer" && (
+      {!scheduler && pathName !== "/retail-customer" && (
         <div className="mt-4 dqm-storage-add" onClick={onAddStorage}>
           + Add storage
         </div>

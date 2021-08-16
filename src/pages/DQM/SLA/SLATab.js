@@ -33,7 +33,7 @@ const DeleteNoteConfirmation = ({ isOpen, onDelete, onCancel, item }) => {
         <h6>Are you sure you want to delete this {item}?</h6>
         <hr/>
         <div className="d-flex align-items-center justify-content-end">
-          <button onClick={onCancel} className="btn btn-outline-danger mr-2">Cancel</button>
+          <button onClick={onCancel} className="btn btn-dan mr-2">Cancel</button>
           <button onClick={onDelete} className="btn btn-danger">Delete</button>
         </div>
       </ModalBody>

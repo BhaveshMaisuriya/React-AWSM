@@ -153,7 +153,7 @@ const TabStorage = ({ scheduler, data, onChange }) => {
               <div className="section-header">{`STORAGE ${
                 key.split("_")[1]
               }`}</div>
-              {!scheduler && (
+              {!scheduler && pathName !== "/retail-customer" && (
                 <div
                   className="dqm-storage-delete"
                   onClick={() => onSetDeleteItem(key)}
@@ -355,7 +355,7 @@ const TabStorage = ({ scheduler, data, onChange }) => {
         ) : null
       )}
       <hr style={{ margin: "2em 0" }} />
-      {!scheduler && (
+      {!scheduler && pathName === "/retail-customer" && (
         <div className="mt-4 dqm-storage-add" onClick={onAddStorage}>
           + Add storage
         </div>

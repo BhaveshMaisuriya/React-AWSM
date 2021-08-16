@@ -43,7 +43,7 @@ const Product = ({
         <div className="d-flex align-items-center justify-content-center delete-confirm">
           <div>Are you sure you want to delete this Product?</div>
           <button
-            className="btn btn-outline-danger mr-2 ml-3"
+            className="btn-dan ml-2"
             onClick={onCancel}
           >
             Cancel

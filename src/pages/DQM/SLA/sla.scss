@@ -4,15 +4,17 @@
 
 .nav-sla .nav-item .nav-link.active {
   background-color: transparent;
-
-  h4 {
+  &:after {
+    height: 5px;
+  }
+  h4, h5 {
     color: #008F8A;
   }
 }
 
 .nav-sla-tab .nav-item .nav-link {
   color: white;
-
+  font-weight: lighter;
   &.active {
     color: #7F7F7F;
   }

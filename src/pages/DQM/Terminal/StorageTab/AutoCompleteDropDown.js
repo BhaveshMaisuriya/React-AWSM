@@ -19,6 +19,7 @@ const AWSMDropdown = ({
   onChange,
   disabled = false,
   RowComponent = null,
+  placeholder
 }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const toggle = () => setDropdownOpen(prevState => !prevState)
@@ -55,7 +56,7 @@ const AWSMDropdown = ({
             disabled ? "disabled" : ""
           }`}
         >
-          <Input defaultValue={value} className="addl-value" onChange={onChangeInput.bind(this)}></Input>
+          <Input defaultValue={value? value: placeholder} className="addl-value" onChange={onChangeInput.bind(this)}></Input>
           <ReactSVG src={ArrowDropDownIcon} className="awsm-dropdown-arrow" />
         </div>
       </DropdownToggle>

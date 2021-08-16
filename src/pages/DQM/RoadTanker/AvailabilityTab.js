@@ -1,5 +1,6 @@
 import React, { PureComponent } from "react"
 import DatePicker from "../../../components/Common/DatePicker"
+import DateRangePicker from "components/Common/DateRangePicker"
 import { MODE } from "./constants"
 import AWSMDropdown from "components/Common/Dropdown"
 import { SHIFT_TYPE_DROPDOWN_VALUE, RT_STATUS_IN_AWSM_DROPDOWN_VALUE } from "./constants"
@@ -36,6 +37,7 @@ class AvailabilityTab extends PureComponent {
                 onChange={e =>
                   this.onChangeHandler(e.target.value, "default_terminal")
                 }
+                placeholder="Typing something here..."
               />
             </div>
             <div className="col-md-6 form-group">
@@ -62,8 +64,11 @@ class AvailabilityTab extends PureComponent {
                 onChange={e =>
                   this.onChangeHandler(e.target.value, "daily_available_hours")
                 }
+                placeholder="Typing something here..."
               />
             </div>
+          </div>
+          <div className="row">
             <div className="col-md-6 form-group">
               <label> STATUS IN AWSM </label>
               <AWSMDropdown
@@ -76,6 +81,15 @@ class AvailabilityTab extends PureComponent {
                 className="form-control"
               />
             </div>
+            <div className="col-md-6 form-group">
+              <label> Date </label>
+              <DateRangePicker
+                disabled={
+                  (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
+                }
+                placeholder="Select Date"
+              />
+            </div>
           </div>
 
           <div>
@@ -83,30 +97,42 @@ class AvailabilityTab extends PureComponent {
           </div>
           <div className="row">
             <div className="col-md-6 form-group">
-              <label>DATE </label>
-              <DatePicker
+              <label>DATE 1</label>
+              <DateRangePicker
                 disabled={
                   (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
                 }
+                placeholder="Typing something here..."
               />
             </div>
             <div className="col-md-6 form-group">
               <label> MOBILIZED TERMINAL NAME 1</label>
-              {/* <select
-                className="form-control"
-                type="text"
+              <AWSMDropdown
                 value={data?.default_terminal}
-                onChange={e =>
-                  this.onChangeHandler(e.target.value, "default_terminal")
-                }
+                items={data?.terminal_dropdown}
+                onChange={e => {
+                  this.onChangeHandler(e, "default_terminal")
+                }}
                 disabled={
                   (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
                 }
-              >
-                {data?.terminal_dropdown?.map(value => {
-                  return <option value={value}>{value}</option>
-                })}
-              </select> */}
+                className="form-control"
+                placeholder="Select"
+              />
+            </div>
+          </div>
+          <div className="row">
+            <div className="col-md-6 form-group">
+              <label>DATE 2</label>
+              <DateRangePicker
+                disabled={
+                  (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
+                }
+                placeholder="Select Date"
+              />
+            </div>
+            <div className="col-md-6 form-group">
+              <label> MOBILIZED TERMINAL NAME 2</label>
               <AWSMDropdown
                 value={data?.default_terminal}
                 items={data?.terminal_dropdown}

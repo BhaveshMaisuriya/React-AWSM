@@ -138,7 +138,7 @@ class index extends Component {
         super(props);
         this.state={
             fixedHeaders:['name'],
-            filterData:null,
+            filterData: {},
             selectedAllItem:false,
             expandSearch:false,
             dataSource: props.dataSource,
@@ -306,7 +306,7 @@ class index extends Component {
     DataOfTableFixed = () => {
         const { dataSource } = this.state
         return dataSource.map((v,i)=>{
-            return <tr key={i}>
+            return <tr key={i} className={v.isChecked ? "selected-row" : "bg-white"}>
                 <th>
                 <TableGroupEvent index={i} allData={v} isChecked={v.isChecked} Onchange={this.OnChangeCheckBoxHandler} deleteRecords={this.OnDeleteRecords} />
                 </th>
@@ -377,12 +377,14 @@ class index extends Component {
 
     OnSelectedAllItems = () =>{
         const { selectedAllItem, dataSource } = this.state
+        const { updateOrderBankTableData } = this.props
         // const { dataSource } = this.props
         let data = [...dataSource]
         data = data.map((v)=>{
             return { ...v,isChecked:selectedAllItem ? false : true }
         })
         this.setState({ selectedAllItem:!selectedAllItem, dataSource:data })
+        updateOrderBankTableData(data)
     }
 
     DNStatusOnClickHandler( data, key ){
@@ -431,7 +433,7 @@ class index extends Component {
                   </table>):null}
                   <div className="scroll">
                     {/* <DragDropContext onDragEnd={(r) => console.log(r)}> */}
-                      <Droppable droppableId="droppable1" isDropDisabled={true}>
+                      <Droppable droppableId="order-bank-table" isDropDisabled={true}>
                         {provided => (
                             <table {...provided.droppableProps} ref={provided.innerRef} className={`scrollable ${!dataSource.length ? 'bd-left' : '' }`}>
                               <thead>
@@ -445,7 +447,7 @@ class index extends Component {
                                         {(provided, snapshot) => (
                                           <>
                                             <tr
-                                              className="bg-white"
+                                              className={`${v.isChecked && !snapshot.isDragging ? "selected-row" : "bg-white"}`}
                                               ref={provided.innerRef}
                                               {...provided.draggableProps}
                                               {...provided.dragHandleProps}
@@ -454,7 +456,7 @@ class index extends Component {
                                               {this.bodyTableConfiguration(v, snapshot.isDragging)}
                                             </tr>
                                             {snapshot.isDragging && (
-                                              <tr>
+                                              <tr className={`${v.isChecked ? "selected-row" : "bg-white"}`}>
                                                 {this.bodyTableConfiguration(v)}
                                               </tr>
                                             )}

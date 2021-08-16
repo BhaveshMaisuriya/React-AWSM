@@ -21,6 +21,7 @@ const TabStatus = ({ scheduler, data, onChange }) => {
   }
   const pathName = window.location.pathname
   const [statusData, setStatusData] = useState(data.status);
+
   const onFieldChange = (key, subKey, value) => {
     const newStatusData = {...statusData}
     if (subKey) {
@@ -124,7 +125,7 @@ const TabStatus = ({ scheduler, data, onChange }) => {
             <AWSMDropdown
               items={timeData}
               optionValue={true}
-              value={statusData.close_period ? statusData.close_period.time_from?.toString().substring(0, 5) || "" : ""}
+              value={statusData.close_period ? statusData.close_period.time_from?.toString().substring(0, 5) || "None" : ""}
               onChange={value =>
                 onFieldChange("close_period", "time_from", value)
               }
@@ -150,7 +151,7 @@ const TabStatus = ({ scheduler, data, onChange }) => {
             <div className="input-header">TIME</div>
             <AWSMDropdown
               items={timeData}
-              value={statusData.close_period ? statusData.close_period.time_to?.toString().substring(0, 5) || "" : ""}
+              value={statusData.close_period ? statusData.close_period.time_to?.toString().substring(0, 5) || "None" : ""}
               onChange={value =>
                 onFieldChange("close_period", "time_to", value)
               }

@@ -42,6 +42,7 @@ import {
   sendOrderBankDN,
   refreshOderBankDN,
   getOrderBankAuditLog,
+  dragOrderBankToGanttChart,
 } from "../../store/orderBank/actions"
 import OrderBankActionModal from "./OrderBankActionModal"
 import CrossTerminalModal from "./crossTerminalModal"
@@ -127,6 +128,7 @@ function OrderBank({
   sendOrderBankDN,
   refreshOderBankDN,
   onGetOrderBankAuditLog,
+  dragOrderBankToGanttChart,
 }) {
   let orderBankSettings = [
     {
@@ -377,9 +379,15 @@ function OrderBank({
     }
   }
 
+  const onDragEnd = ({ destination }) => {
+     if (destination) {
+       dragOrderBankToGanttChart()
+     }
+  }
+
   return (
     <React.Fragment>
-      <DragDropContext onDragEnd={(r) => console.log(r)}>
+      <DragDropContext onDragEnd={onDragEnd}>
       <div className="order-bank-page-content">
         <div className="container-fluid">
           <Card className="order_bank_main">
@@ -727,6 +735,7 @@ const mapDispatchToProps = dispatch => ({
   refreshOderBankDN: params => dispatch(refreshOderBankDN(params)),
   sendOrderBankDN: params => dispatch(sendOrderBankDN(params)),
   onGetOrderBankAuditLog: payload => dispatch(getOrderBankAuditLog(payload)),
+  dragOrderBankToGanttChart: () => dispatch(dragOrderBankToGanttChart())
 })
 
 const mapStateToProps = ({ orderBank }) => ({

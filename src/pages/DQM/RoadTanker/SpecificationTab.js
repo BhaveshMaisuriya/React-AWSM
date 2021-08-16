@@ -12,6 +12,7 @@ class SpecificationTab extends PureComponent {
       isRTRestrictionAdding: false,
       restrictionStr: "",
       idDeleteBtnShow: true,
+      restrictionCharRemain: 20
     }
   }
 
@@ -36,15 +37,12 @@ class SpecificationTab extends PureComponent {
     const onConfirmClick = () => {
       const { isDeleteBtnShow } = this.state
       let restriction_dropdown = this.props.data?.restriction_dropdown ? this.props.data?.restriction_dropdown : []
-      //let restriction = this.props.data?.restriction ? this.props.data?.restriction : []
 
       const name = restriction_dropdown[restriction_dropdown.length - 1]
 
-      //let restrictionValue = arrayRemove(restriction, name)
       let personNames = arrayRemove(restriction_dropdown, name)
 
       this.onChangeHandler(personNames, "restriction_dropdown")
-      //this.onChangeHandler(restrictionValue, "restriction")
 
       this.setState({
         isDeleteBtnShow: !isDeleteBtnShow,
@@ -94,7 +92,11 @@ class SpecificationTab extends PureComponent {
       if (document.getElementById("restriction") != null) {
         let rtRestriction = document.getElementById("restriction").value
         let { restriction_dropdown } = this.props.data
-        restriction_dropdown.push(rtRestriction)
+
+        if (rtRestriction.length > 0 && !restriction_dropdown.includes(rtRestriction)) {
+          restriction_dropdown.push(rtRestriction)
+        }
+
         if (restriction_dropdown?.length === 0 && restriction_dropdown) {
           this.onChangeHandler(rtRestriction, "restriction_dropdown")
         } else {
@@ -119,7 +121,10 @@ class SpecificationTab extends PureComponent {
     const onAutoFillBtnClick = () => {
       const { restrictionStr } = this.state
       if (!restrictionStr || restrictionStr.length === 0) {
-        this.setState({ restrictionStr: "New Restriction" })
+        this.setState({
+          restrictionStr: "New Restriction",
+          restrictionCharRemain: 5
+        })
       }
     }
 
@@ -177,9 +182,15 @@ class SpecificationTab extends PureComponent {
           <input
             className="form-control"
             id="restriction"
+            maxLength="20"
             type="text"
             defaultValue={restrictionStr}
             disabled={disabled}
+            onChange={() => {
+              let rtRestriction = document.getElementById("restriction").value
+              let length = rtRestriction.length
+              this.setState({ restrictionCharRemain: 20 - length })
+            }}
           />
           <div className="input-group-append">
             <a
@@ -188,7 +199,7 @@ class SpecificationTab extends PureComponent {
               type="button"
               onClick={onAutoFillBtnClick}
             >
-              +20
+              +{this.state.restrictionCharRemain}
             </a>
           </div>
         </div>
@@ -205,6 +216,7 @@ class SpecificationTab extends PureComponent {
               <input
                 className="form-control"
                 type="text"
+                placeholder="Typing something here..."
                 defaultValue={data?.product_type_sap}
                 onChange={e =>
                   this.onChangeHandler(e.target.value, "product_type_sap")
@@ -217,6 +229,7 @@ class SpecificationTab extends PureComponent {
               <input
                 className="form-control"
                 type="text"
+                placeholder="Typing something here..."
                 defaultValue={data?.pump_type}
                 onChange={e => this.onChangeHandler(e.target.value, "pump_type")}
                 disabled={true}
@@ -226,20 +239,6 @@ class SpecificationTab extends PureComponent {
           <div className="row">
             <div className="col-md-6 form-group">
               <label>PRODUCT TYPE IN ASWM</label>
-              {/* <select
-              className="form-control"
-              disabled={
-                (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
-              }
-              defaultValue={data?.product_type_awsm}
-              onChange={e =>
-                this.onChangeHandler(e.target.value, "product_type_awsm")
-              }
-            >
-              {data?.product_type_awsm_dropdown?.map((value, index) => {
-                return <option value={index}>{value}</option>
-              })}
-            </select> */}
               <AWSMDropdown
                 value={data?.product_type_awsm}
                 items={data?.product_type_awsm_dropdown}
@@ -248,6 +247,7 @@ class SpecificationTab extends PureComponent {
                   (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
                 }
                 className="form-control"
+                placeholder="Select"
               />
             </div>
             <div className="col-md-6 form-group">
@@ -261,6 +261,7 @@ class SpecificationTab extends PureComponent {
                 onChange={v =>
                   this.onChangeHandler(v, "temporary_product_date_range")
                 }
+                showButtons={true}
               />
             </div>
           </div>

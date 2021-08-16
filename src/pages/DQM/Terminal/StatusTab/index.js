@@ -59,7 +59,7 @@ const TabStatus = props => {
     const fl = field.split(".")
     let newData = { ...data }
     if (fl.length >= 2) {
-      if(!newData[fl[0]]){
+      if (!newData[fl[0]]) {
         newData[fl[0]] = {}
       }
       newData[fl[0]][fl[1]] = value
@@ -92,13 +92,35 @@ const TabStatus = props => {
   const actualOpenTime1 = openTime1.filter(item => {
     return item.checked === true
   })
-  function renderDateRangeError(){
-    if(data?.status_awsm ==="Temporary Inactive"){
-      if(data?.inactive_date_range_1?.type==="range"){
+  function renderDateRangeError() {
+    if (data?.status_awsm === "Temporary Inactive") {
+      if (data?.inactive_date_range_1?.type === "range") {
         return null
       }
-      return <p style={{color: 'red'}}>Please fill in Temporary Inactive Date range</p>
+      return (
+        <p style={{ color: "red" }}>
+          Please fill in Temporary Inactive Date range
+        </p>
+      )
     }
+  }
+
+  function renderDayValues() {
+    let valueDate = ""
+    if (
+      data?.terminal_operating_days_1 &&
+      data?.terminal_operating_days_1.days.length === 56
+    ) {
+      valueDate = "Every Day"
+    } else if (
+      data?.terminal_operating_days_1 &&
+      data?.terminal_operating_days_1.days.length !== 0
+    ) {
+      valueDate = actualOpenTime1.map(i => i.name)
+    } else {
+      valueDate = "Select"
+    }
+    return valueDate
   }
   return (
     <div className="dqm-status-container">
@@ -138,12 +160,7 @@ const TabStatus = props => {
                 name="days1"
                 type="text"
                 label="TERMINAL OPERATING DAY"
-                value={
-                  data?.terminal_operating_days_1 &&
-                  data?.terminal_operating_days_1.days.length !== 0
-                    ? actualOpenTime1.map(i => i.name)
-                    : "Select day(s)"
-                }
+                value={renderDayValues()}
                 className={`${styles.field} ${
                   scheduler ? styles.disabled : ""
                 }`}
@@ -177,7 +194,6 @@ const TabStatus = props => {
             items={timeData}
             disabled={scheduler}
             placeholder="Select time"
-
           />
         </div>
       </div>
@@ -206,7 +222,6 @@ const TabStatus = props => {
               value={data?.no_delivery_interval_1?.time_from}
               disabled={scheduler}
               placeholder="Select time"
-
             />
           </div>
           <div className="col-12 col-sm-3">
@@ -219,7 +234,6 @@ const TabStatus = props => {
               value={data?.no_delivery_interval_1?.time_to}
               disabled={scheduler}
               placeholder="Select time"
-
             />
           </div>
         </div>
@@ -246,7 +260,6 @@ const TabStatus = props => {
               value={data?.no_delivery_interval_2?.time_from}
               disabled={scheduler}
               placeholder="Select time"
-
             />
           </div>
           <div className="col-12 col-sm-3">
@@ -259,7 +272,6 @@ const TabStatus = props => {
               value={data?.no_delivery_interval_2?.time_to}
               disabled={scheduler}
               placeholder="Select time"
-
             />
           </div>
         </div>
@@ -286,7 +298,6 @@ const TabStatus = props => {
               value={data?.no_delivery_interval_3?.time_from}
               disabled={scheduler}
               placeholder="Select time"
-
             />
           </div>
           <div className="col-12 col-sm-3">
@@ -299,7 +310,6 @@ const TabStatus = props => {
               value={data?.no_delivery_interval_3?.time_to}
               disabled={scheduler}
               placeholder="Select time"
-
             />
           </div>
         </div>
@@ -326,7 +336,6 @@ const TabStatus = props => {
               value={data?.no_delivery_interval_4?.time_from}
               disabled={scheduler}
               placeholder="Select time"
-
             />
           </div>
           <div className="col-12 col-sm-3">
@@ -339,7 +348,6 @@ const TabStatus = props => {
               value={data?.no_delivery_interval_4?.time_to}
               disabled={scheduler}
               placeholder="Select time"
-
             />
           </div>
         </div>

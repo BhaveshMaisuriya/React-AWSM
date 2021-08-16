@@ -27,7 +27,7 @@ const tableMapping = {
     columnSize: "cell-text-big",
   },
   status_sap: {
-    label: "PRODUCT STATUS IN SAP",
+    label: "STATUS IN SAP",
     apiKey: "status_sap",
     columnSize: "cell-text",
     type: "badge",
@@ -36,7 +36,7 @@ const tableMapping = {
     },
   },
   status_awsm: {
-    label: "PRODUCT STATUS IN AWSM",
+    label: "STATUS IN AWSM",
     apiKey: "status_awsm",
     columnSize: "cell-text",
     type: "badge",
@@ -54,15 +54,15 @@ const tableMapping = {
     apiKey: "material_group",
     columnSize: "cell-text",
   },
-  product_group: {
-    label: "PRODUCT GROUP",
-    apiKey: "product_group",
-    columnSize: "cell-text-big",
-  },
   category: {
     label: "PRODUCT CATEGORY",
     apiKey: "category",
     columnSize: "cell-text",
+  },
+  product_group: {
+    label: "PRODUCT GROUP",
+    apiKey: "product_group",
+    columnSize: "cell-text-big",
   },
   sub_category: {
     label: "PRODUCT SUB CATEGORY",

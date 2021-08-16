@@ -45,6 +45,9 @@
     overflow-y: auto;
     overflow-x: auto;
     height: inherit;
+    .selected-row {
+        opacity: 0.4;
+    }
 }
 .gantt_chart_first {
     height: 55%;
@@ -574,4 +577,18 @@
 }
 .p-1035 {
     padding: 10px 35px !important;
+}
+
+.rts-gantt-chart {
+    position: relative;
+    .on-dragging {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        background-color: white;
+        z-index: 999;
+        opacity: 0.2;
+    }
 }

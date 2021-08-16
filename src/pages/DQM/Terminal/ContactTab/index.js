@@ -2,7 +2,6 @@ import React,{ useState, useEffect } from "react"
 import { Formik, Form, Field, ErrorMessage } from "formik"
 import { isScheduler } from "../../../../helpers/auth_helper"
 import { isEqual } from "lodash"
-import AWSMInput from "components/Common/Input"
 
 const ContactTab = (props) => {
   const [data,setData] = useState(props.data)
@@ -26,7 +25,7 @@ const ContactTab = (props) => {
             <div className="row">
               <div className="col-md-6 form-group">
                 <label htmlFor="supervisor.name">SUPERVISOR CONTACT NAME</label>
-                <AWSMInput
+                <Field
                   type="text"
                   name="supervisor.name"
                   id="supervisorName"
@@ -42,7 +41,7 @@ const ContactTab = (props) => {
                 <label htmlFor="supervisor.number">
                   SUPERVISOR CONTACT NUMBER
                 </label>
-                <AWSMInput
+                <Field
                   name="supervisor.number"
                   id="supervisorNumber"
                   className="form-control"
@@ -57,7 +56,7 @@ const ContactTab = (props) => {
             <div className="row">
               <div className="col-md-6 form-group">
                 <label htmlFor="supervisor.email">SUPERVISOR EMAIL</label>
-                <AWSMInput
+                <Field
                   type="email"
                   id="supervisorEmail"
                   name="supervisor.email"
@@ -76,7 +75,7 @@ const ContactTab = (props) => {
                 <label htmlFor="superintendant.name">
                   SUPERINTENDANT CONTACT NAME
                 </label>
-                <AWSMInput
+                <Field
                   type="text"
                   id="superintendantName"
                   name="superintendant.name"
@@ -92,7 +91,7 @@ const ContactTab = (props) => {
                 <label htmlFor="superintendant.number">
                   SUPERINTENDANT CONTACT NUMBER
                 </label>
-                <AWSMInput
+                <Field
                   id="superintendantNumber"
                   name="superintendant.number"
                   className="form-control"
@@ -110,7 +109,7 @@ const ContactTab = (props) => {
                 <label htmlFor="superintendant.email">
                   SUPERINTENDANT EMAIL
                 </label>
-                <AWSMInput
+                <Field
                   type="email"
                   id="superintendantEmail"
                   name="superintendant.email"

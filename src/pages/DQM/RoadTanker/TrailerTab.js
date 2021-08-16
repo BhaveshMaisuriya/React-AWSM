@@ -23,6 +23,8 @@ class TrailerTab extends PureComponent {
             <div className="col-md-6 form-group">
               <label>RT UNLADEN WEIGHT</label>
               <input
+                type="number"
+                placeholder="Numeric only"
                 className="form-control"
                 defaultValue={data?.unladen_weight}
                 disabled={true}
@@ -32,6 +34,8 @@ class TrailerTab extends PureComponent {
             <div className="col-md-6 form-group">
               <label>RT MAX WEIGHT</label>
               <input
+                type="number"
+                placeholder="Numeric only"
                 className="form-control"
                 defaultValue={data?.max_weight}
                 disabled
@@ -44,6 +48,8 @@ class TrailerTab extends PureComponent {
             <div className="col-md-6 form-group">
               <label>NO OF COMPARTMENT</label>
               <input
+                type="number"
+                placeholder="Numeric only"
                 className="form-control"
                 disabled={true}
                 defaultValue={data?.compartment_no}
@@ -54,6 +60,8 @@ class TrailerTab extends PureComponent {
             <div className="col-md-6 form-group">
               <label>MAX VOLUME PER COMPARTMENT</label>
               <input
+                type="number"
+                placeholder="Numeric only"
                 className="form-control"
                 disabled={true}
                 defaultValue={data?.compartment_max_vol}
@@ -63,22 +71,23 @@ class TrailerTab extends PureComponent {
           </div>
 
           <div className="row">
-            <div className="col-md-6 form-group">
+            {/* <div className="col-md-6 form-group">
               <label>PRODUCT WEIGHT FOR HSE COMPLIANCE</label>
               <input
                 className="form-control"
                 placeholder="Type something here.."
+                type="number"
                 disabled={true}
-                defaultValue="2000"
-                onChange={e => this.OnChangHandler("offloading_duration_mins", e.target.value)}
+                defaultValue={data?.product_weight_hse_compliance}
+                onChange={e => this.OnChangHandler("product_weight_hse_compliance", e.target.value)}
               ></input>
-            </div>
+            </div> */}
             <div className="col-md-6 form-group">
               <label>OFFLOADING DURATION (MINS)</label>
               <input
                 type="number"
+                placeholder="Numeric only"
                 className="form-control"
-                placeholder="Type something here.."
                 disabled={
                   (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
                 }

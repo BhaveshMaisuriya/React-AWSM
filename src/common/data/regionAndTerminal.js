@@ -17,7 +17,7 @@ const REGION_TERMINAL = [
   },
   {
     region: "Sabah",
-    terminal: ["Labuan", "Sanadakan", "Sepanggar Bay", "Tawau JV"],
+    terminal: ["Labuan", "Sandakan", "Sepanggar Bay", "Tawau JV"],
   },
   {
     region: "Sarawak",

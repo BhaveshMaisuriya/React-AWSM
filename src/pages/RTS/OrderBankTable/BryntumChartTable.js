@@ -58,9 +58,8 @@ const ShiftPopover = ({ record, onChange, type }) => {
     "On",
     "On1",
     "On2",
-    "On3",
     "Off"
-  ] : record.shift === "OH" ?  ["ON", "OFF"] : []
+  ] : record.shift === "OH" ?  ["ON", "Off"] : []
   return (
     <div className="w-100">
       <button
@@ -771,9 +770,10 @@ function BryntumChartTable(props) {
         <Row style={{}} className="w-100">
           <Col lg={12}>
               <Droppable key="gantt-chart" droppableId="gantt-chart">
-                {provided => {
+                {(provided, snapshot) => {
                   return (
-                    <div {...provided.droppableProps} ref={provided.innerRef}>
+                    <div className="rts-gantt-chart" {...provided.droppableProps} ref={provided.innerRef}>
+                      {snapshot.isDraggingOver && <div className="on-dragging"/>}
                       <BryntumSchedulerPro
                         {...schedulerproConfig}
                         events={eventsData}

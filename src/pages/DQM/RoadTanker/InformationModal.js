@@ -145,14 +145,6 @@ class InformationModal extends Component {
                 Update
               </Button>
             )}{" "}
-            {/* <AWSMAlert
-              status="success"
-              message="Update Success !"
-              openAlert={this.state.updateSuccess}
-              closeAlert={() => {
-                this.setState({ updateSuccess: false })
-              }}
-            /> */}
           </ModalFooter>
         ) : null
       return footer
@@ -183,18 +175,6 @@ class InformationModal extends Component {
             <div>
               <div className="row">
                 <div className="col-md-6 form-group">
-                  <label> VEHICAL ID</label>
-                  <input
-                    className="form-control"
-                    type="text"
-                    defaultValue={data?.vehicle}
-                    onChange={e =>
-                      onFieldValueChange("vehicle", e.target.value)
-                    }
-                    disabled={true}
-                  />
-                </div>
-                <div className="col-md-6 form-group">
                   <label>VEHICAL OWNER</label>
                   <input
                     className="form-control"
@@ -202,6 +182,7 @@ class InformationModal extends Component {
                     defaultValue={data?.owner}
                     onChange={e => onFieldValueChange("owner", e.target.value)}
                     disabled={true}
+                    placeholder="Typing something here..."
                   />
                 </div>
               </div>
@@ -215,6 +196,7 @@ class InformationModal extends Component {
                     onChange={e =>
                       onFieldValueChange("status_sap", e.target.value)
                     }
+                    placeholder="Typing something here..."
                     disabled={true}
                   />
                 </div>
@@ -222,11 +204,12 @@ class InformationModal extends Component {
                   <label>MAX VOLUME</label>
                   <input
                     className="form-control awsm-input"
-                    type="text"
+                    type="number"
                     defaultValue={data?.max_volume}
                     onChange={e =>
                       onFieldValueChange("max_volume", e.target.value)
                     }
+                    placeholder="Numeric only..."
                     disabled={true}
                   />
                 </div>
@@ -241,6 +224,7 @@ class InformationModal extends Component {
                     onChange={e =>
                       onFieldValueChange("remarks", e.target.value)
                     }
+                    placeholder="Typing something here..."
                     disabled={
                       (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
                     }

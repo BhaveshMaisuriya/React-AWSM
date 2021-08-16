@@ -28,20 +28,9 @@ export const ganttChartTableData =[
     pto: 'PTO',
     hours: '3.36',
     status: "On",
-    status_list: [
-      "On",
-      "On1",
-      "On2",
-      "On3",
-      "Off"
-    ],
     size: '21840',
     type: '1003',
     rate: '00',
-    shift_list: [
-      "ON",
-      "OH",
-    ],
     shift: "ON",
     cap: "21480",
     rtcode: "1003"
@@ -51,17 +40,9 @@ export const ganttChartTableData =[
     vehicle: 'WA 5552V',
     hours: '13.36',
     status: "OH",
-    status_list: [
-      "OH",
-      "Off"
-    ],
     size: '21840',
     type: '1003',
     rate: '00',
-    shift_list: [
-      "ON",
-      "OH",
-    ],
     shift: "OH",
     cap: "21480",
     rtcode: "1003"
@@ -72,20 +53,9 @@ export const ganttChartTableData =[
     pto: 'PTO',
     hours: '13.36',
     status: "Off",
-    status_list: [
-      "On",
-      "On1",
-      "On2",
-      "On3",
-      "Off"
-    ],
     size: '21840',
     type: '1003',
     rate: '00',
-    shift_list: [
-      "ON",
-      "OH",
-    ],
     shift: "ON",
     cap: "21480",
     rtcode: "1003"
@@ -96,17 +66,9 @@ export const ganttChartTableData =[
     pto: 'PTO',
     hours: '6',
     status: "OH",
-    status_list: [
-      "OH",
-      "Off"
-    ],
     size: '21840',
     type: '1003',
     rate: '00',
-    shift_list: [
-      "ON",
-      "OH",
-    ],
     shift: "OH",
     cap: "21480",
     rtcode: "1003"
@@ -116,17 +78,9 @@ export const ganttChartTableData =[
     vehicle: 'WA 5559V',
     hours: '05',
     status: "Off",
-    status_list: [
-      "OH",
-      "Off"
-    ],
     size: '21840',
     type: '1003',
     rate: '00',
-    shift_list: [
-      "ON",
-      "OH",
-    ],
     shift: "OH",
     cap: "21480",
     rtcode: "1003"
@@ -136,20 +90,9 @@ export const ganttChartTableData =[
     vehicle: 'WA 5559V',
     hours: '05',
     status: "On3",
-    status_list: [
-      "On",
-      "On1",
-      "On2",
-      "On3",
-      "Off"
-    ],
     size: '21840',
     type: '1003',
     rate: '00',
-    shift_list: [
-      "ON",
-      "OH",
-    ],
     shift: "ON",
     cap: "21480",
     rtcode: "1003"
@@ -159,20 +102,9 @@ export const ganttChartTableData =[
     vehicle: 'WA 5559V',
     hours: '05',
     status: "On1",
-    status_list: [
-      "On",
-      "On1",
-      "On2",
-      "On3",
-      "Off"
-    ],
     size: '21840',
     type: '1003',
     rate: '00',
-    shift_list: [
-      "ON",
-      "OH",
-    ],
     shift: "ON",
     cap: "21480",
     rtcode: "1003"

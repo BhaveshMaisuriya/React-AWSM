@@ -29,11 +29,6 @@ const tableMapping = {
     apiKey: "status_sap",
     columnSize: "cell-text",
   },
-  remarks: {
-    label: "REMARKS",
-    apiKey: "remarks",
-    columnSize: "cell-text-big",
-  },
   sold_to_party: {
     label: "SOLD TO PARTY",
     apiKey: "sold_to_party",
@@ -44,19 +39,14 @@ const tableMapping = {
     apiKey: "sold_to_company",
     columnSize: "cell-text-big",
   },
-  site_id: {
-    label: "SITE ID",
-    apiKey: "site_id",
-    columnSize: "cell-text",
-  },
   site_name: {
     label: "SITE NAME",
     apiKey: "site_name",
     columnSize: "cell-text-big",
   },
-  ordering_category_primax_95: {
-    label: "ORDERING CATEGORY OF PRIMAX 95",
-    apiKey: "ordering_category_primax_95",
+  site_id: {
+    label: "SITE ID",
+    apiKey: "site_id",
     columnSize: "cell-text",
   },
   address_1: {
@@ -224,17 +214,21 @@ const tableMapping = {
     apiKey: "status_awsm",
     columnSize: "cell-text",
   },
-  close_period_1_value: {
-    label: "STATION CLOSE DAY",
+  close_period_1_date_from: {
+    label: "CLOSE PERIOD FROM DATE",
+    columnSize: "cell-text-big",
+  },
+  close_period_1_date_to: {
+    label: "CLOSE PERIOD TO DATE",
     columnSize: "cell-text-big",
   },
   close_period_1_time_from: {
-    label: "STATION CLOSE TIME FROM",
+    label: "CLOSE PERIOD FROM TIME",
     apiKey: "close_period_1.time_from",
     columnSize: "cell-text-big",
   },
   close_period_1_time_to: {
-    label: "STATION CLOSE TIME TO",
+    label: "CLOSE PERIOD TO TIME",
     apiKey: "close_period_1.time_to",
     columnSize: "cell-text-big",
   },
@@ -583,10 +577,20 @@ const tableMapping = {
     apiKey: "road_tanker_requirement",
     columnSize: "cell-text-big",
   },
+  ordering_category_primax_95: {
+    label: "ORDERING CATEGORY OF PRIMAX 95",
+    apiKey: "ordering_category_primax_95",
+    columnSize: "cell-text",
+  },
   road_tanker_accessibility: {
     label: "ROAD TANKER ACCESSIBILITY",
     apiKey: "road_tanker_accessibility",
     columnSize: "cell-text",
+  },
+  remarks: {
+    label: "REMARKS",
+    apiKey: "remarks",
+    columnSize: "cell-text-big",
   },
   // delivery_open_time_1_value: {
   //   label: "DELIVERY OPEN DAY 1",
@@ -664,7 +668,7 @@ const tableMapping = {
     columnSize: "cell-text",
   },
   no_delivery_interval_2_value: {
-    label: "NO DELIVERY INTERVAL 2 DAY",
+    label: "NO DELIVERY INTERVAL DAY 2",
     apiKey: "no_delivery_interval_2.value",
     columnSize: "cell-text-big",
   },
@@ -679,7 +683,7 @@ const tableMapping = {
     columnSize: "cell-text",
   },
   no_delivery_interval_3_value: {
-    label: "NO DELIVERY INTERVAL 3 DAY",
+    label: "NO DELIVERY INTERVAL DAY 3",
     apiKey: "no_delivery_interval_3.value",
     columnSize: "cell-text-big",
   },
@@ -694,7 +698,7 @@ const tableMapping = {
     columnSize: "cell-text",
   },
   no_delivery_interval_4_value: {
-    label: "NO DELIVERY INTERVAL 4 DAY",
+    label: "NO DELIVERY INTERVAL DAY 4",
     apiKey: "no_delivery_interval_4.value",
     columnSize: "cell-text-big",
   },
@@ -709,7 +713,7 @@ const tableMapping = {
     columnSize: "cell-text",
   },
   no_delivery_interval_5_value: {
-    label: "NO DELIVERY INTERVAL 5 DAY",
+    label: "NO DELIVERY INTERVAL DAY 5",
     apiKey: "no_delivery_interval_5.value",
     columnSize: "cell-text-big",
   },

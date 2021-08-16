@@ -1,8 +1,15 @@
 import { userRoleMapping } from "../common/data/userMapping"
+import jwt from 'jwt-decode'
 
 export const isScheduler = () => {
-    const userEmail = sessionStorage.getItem('userUPN')
+    var userEmail = sessionStorage.getItem('userUPN')
+    if (!userEmail || userEmail.length < 1) {
+        const authToken = sessionStorage.getItem('apiAccessToken')
+        const decodedToken = jwt(authToken)
+        userEmail = decodedToken.upn
+    }
     const userRole = userRoleMapping[userEmail]
+    console.log("*** ISSCHEDULER CHECK", userEmail, userRole)
     if (!userEmail || userEmail.length < 1 || !userRole || userRole.length < 1) return true
     return userRole === "scheduler"
 }

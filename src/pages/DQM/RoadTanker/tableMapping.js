@@ -41,16 +41,6 @@ const tableMapping = {
       return value === "ACTIVE" ? "primary" : "secondary"
     },
   },
-  capacity: {
-    label: "RT CAPACITY",
-    apiKey: "capacity",
-    columnSize: "cell-text",
-  },
-  remarks: {
-    label: "REMARKS",
-    apiKey: "remarks",
-    columnSize: "cell-text-big",
-  },
   default_terminal: {
     label: "DEFAULT TERMINAL",
     apiKey: "default_terminal",
@@ -61,9 +51,24 @@ const tableMapping = {
     apiKey: "shift_type",
     columnSize: "cell-text",
   },
+  product_type_awsm: {
+    label: "PRODUCT TYPE AWSM",
+    apiKey: "product_type_awsm",
+    columnSize: "cell-text",
+  },
+  pump_type: {
+    label: "PUMP TYPE",
+    apiKey: "pump_type",
+    columnSize: "cell-text",
+  },
   daily_available_hours: {
     label: "DAILY AVAILABLE HOURS",
     apiKey: "daily_available_hours",
+    columnSize: "cell-text",
+  },
+  capacity: {
+    label: "RT CAPACITY",
+    apiKey: "capacity",
     columnSize: "cell-text",
   },
   product_type_sap: {
@@ -71,25 +76,20 @@ const tableMapping = {
     apiKey: "product_type_sap",
     columnSize: "cell-text",
   },
-  product_type_awsm: {
-    label: "PRODUCT TYPE AWSM",
-    apiKey: "product_type_awsm",
-    columnSize: "cell-text",
-  },
   temporary_product_date_range: {
     label: "TEMPORARY PRODUCT DATE RANGE",
     apiKey: "temporary_product_date_range",
     columnSize: "cell-text-big",
   },
-  pump_type: {
-    label: "PUMP TYPE",
-    apiKey: "pump_type",
-    columnSize: "cell-text",
-  },
   chartering_type: {
     label: "CHARTERING TYPE",
     apiKey: "chartering_type",
     columnSize: "cell-text",
+  },
+  remarks: {
+    label: "REMARKS",
+    apiKey: "remarks",
+    columnSize: "cell-text-big",
   },
   customer_type: {
     label: "CUSTOMER TYPE",

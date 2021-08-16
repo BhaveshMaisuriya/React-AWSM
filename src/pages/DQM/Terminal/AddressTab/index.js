@@ -109,7 +109,6 @@ const AddressTab = (props) => {
                   className="form-control"
                   value={data?.latitude}
                   onChange={(e)=>handleOnChangeValue(e)}
-                  disabled
                   placeholder="Type something here..."
                 />
               </div>
@@ -121,7 +120,6 @@ const AddressTab = (props) => {
                   className="form-control"
                   value={data?.longitude}
                   onChange={(e)=>handleOnChangeValue(e)}
-                  disabled
                   placeholder="Type something here..."
                 />
               </div>

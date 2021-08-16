@@ -105,8 +105,8 @@ const CommercialCustomerModal = props => {
   }, [props.currentCommercialDetail])
 
   function onFieldValueChange(fieldName, value) {
-    const newCommercialDetail = { ...currentCommercialDetail }    
-    newCommercialDetail[fieldName] = value;    
+    const newCommercialDetail = { ...currentCommercialDetail }
+    newCommercialDetail[fieldName] = value
     setCurrentCommercialDetail(newCommercialDetail)
   }
 

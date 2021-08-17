@@ -107,6 +107,7 @@ const RetailCustomerModal = props => {
   function onFieldValueChange(fieldName, value) {
     const newRetailDetail = { ...currentRetailDetail }
     newRetailDetail[fieldName] = value
+    console.log("currentRetailDetail::12", newRetailDetail, props.currentRetailDetail)
     setCurrentRetailDetail(newRetailDetail)
   }
 
@@ -132,6 +133,7 @@ const RetailCustomerModal = props => {
   // }
 
   const handleExitConfirmation = () => {
+    console.log("currentRetailDetail::", currentRetailDetail, props.currentRetailDetail)
     return !isEqual(currentRetailDetail, props.currentRetailDetail) ? (
       <ExitConfirmation onExit={onConfirmExit} onCancel={onConfirmCancel} />
     ) : (

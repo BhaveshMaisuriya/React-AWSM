@@ -174,8 +174,8 @@ const RetailCustomerModal = props => {
                       defaultValue={currentRetailDetail.status_sap}
                     />
                  </Col>
-                 <Col className="col-6">
-                <label className="mt-3">REMARKS</label>
+                 <Col className="col-12">
+                <label className="mt-12">REMARKS</label>
                 <AWSMInput
                   defaultValue={currentRetailDetail.remarks}
                   onChange={value => onFieldValueChange("remarks", value)}

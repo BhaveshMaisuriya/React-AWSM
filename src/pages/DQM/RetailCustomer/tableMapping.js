@@ -25,7 +25,7 @@ const tableMapping = {
     columnSize: "cell-text-big",
   },
   status_sap: {
-    label: "STATION STATUS IN SAP",
+    label: "STATUS IN SAP",
     apiKey: "status_sap",
     columnSize: "cell-text",
   },
@@ -210,7 +210,7 @@ const tableMapping = {
     columnSize: "cell-text-big",
   },
   status_awsm: {
-    label: "STATION STATUS IN AWSM",
+    label: "STATUS IN AWSM",
     apiKey: "status_awsm",
     columnSize: "cell-text",
   },

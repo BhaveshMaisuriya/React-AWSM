@@ -23,6 +23,7 @@
     "@material-ui/pickers": "^3.3.10",
     "@material-ui/styles": "*",
     "@popperjs/core": "^2.9.2",
+    "@react-pdf/renderer": "^2.0.18",
     "@testing-library/jest-dom": "^5.11.6",
     "@testing-library/react": "^11.2.2",
     "@testing-library/user-event": "^12.2.2",

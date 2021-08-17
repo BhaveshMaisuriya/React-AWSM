@@ -10,7 +10,7 @@ const ExitConfirmation = ({onCancel, onExit, className = ""}) => {
         You will lose all the changes made.
       </div>
       <div className="d-flex">
-        <button className="btn btn-outline-danger" onClick={onCancel}>Cancel</button>
+        <button className="btn btn-dan" onClick={onCancel}>Cancel</button>
         <button className="btn btn-danger ml-2" onClick={onExit}>Exit</button>
       </div>
     </div>

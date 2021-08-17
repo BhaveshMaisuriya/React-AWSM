@@ -53,7 +53,7 @@ class TableInformationWrapper extends PureComponent {
               <div>
                 <h3>Exit Confirmation</h3>
                 <p>Are you sure you want to exit without update? <br />You will lose all the changes made.</p>
-                <button className="btn btn-outline-danger" onClick={() => this.setState({displayConfirmationBox: false})}>Cancel</button>
+                <button className="btn btn-dan" onClick={() => this.setState({displayConfirmationBox: false})}>Cancel</button>
                 <button className="btn btn-danger" onClick={onCancel}>Exit</button>
               </div>
             </div>

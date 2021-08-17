@@ -264,7 +264,7 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
             ROAD TANKER ACCESSIBILITY
           </div>
           <AWSMInput
-            value={deliveryData.road_tanker_accessibilty || ""}
+            value={deliveryData.road_tanker_accessibility || ""}
             disabled
           />
         </Col>

@@ -26,6 +26,7 @@ import {
   Row,
   TabContent,
   TabPane,
+  Label,
 } from "reactstrap"
 import classnames from "classnames"
 import SLATab from "./SLATab"
@@ -33,8 +34,10 @@ import "./sla.scss"
 import Attachments from "./attachments"
 import SLATable from "./SLATable"
 import { DownloadIcon } from "../Common/icon"
-import { Checkbox, FormControlLabel } from "@material-ui/core"
-import AWSMCheckBox from "../../../common/CheckBox"
+import { FormControlLabel } from "@material-ui/core"
+import Checkbox from "@material-ui/core/Checkbox"
+import MyDocument from "./MyDocument"
+import { PDFDownloadLink } from "@react-pdf/renderer"
 
 const UntickIcon = () => <img src={selectAllIcon3} alt="icon" />
 const CheckedIcon = () => <img src={selectAllIcon2} alt="icon" />
@@ -49,11 +52,10 @@ class SLA extends Component {
       activeTab: "0",
       showDownloadOption: false,
       downloadCheck: [],
+      isDownloadPdf: false,
     }
     this.toggle = this.toggle.bind(this)
   }
-
-
 
   componentDidMount() {
     const { onGetSLAItems, onGetSLAAuditLog } = this.props
@@ -72,19 +74,6 @@ class SLA extends Component {
     }
     onGetSLAItems(params)
     onGetSLAAuditLog(payload)
-
-    const { slaData } = this.props
-    console.log("sla::", slaData)
-    if (slaData && slaData.rbd && slaData.rbd.length > 0) {
-      
-      let temp = [...this.state.downloadCheck]
-      temp.push({ label: "All Section", checked: true })
-      slaData.rbd.map((item, index) => {
-        temp.push({ label: item.title, checked: false })
-      })
-      this.setState({ downloadCheck: temp })
-    }
-    
   }
 
   /**
@@ -163,10 +152,32 @@ class SLA extends Component {
     }
   }
 
-  getCheckedDownloadVal(val) {
+  getCheckedDownloadVal(index) {
     const temp = [...this.state.downloadCheck]
-    temp[index].checked = !newData[index].checked
+    temp[index].checked = !temp[index].checked
     this.setState({ downloadCheck: temp })
+  }
+
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    if (nextProps.slaData && nextProps.slaData.rbd) {
+      let temp = []
+      temp.push({ title: "All Section", checked: true, id: "0" })
+      nextProps.slaData.rbd.map((item, index) => {
+        temp.push({ ...item, checked: false })
+      })
+      this.setState({ downloadCheck: temp })
+    }
+  }
+
+  DownloadPDF() {
+    let temp = []
+    this.state.downloadCheck.map((item, index) => {
+      if (item.checked === true) {
+        temp.push(item.id)
+      }
+    })
+    this.setState({ isDownloadPdf: true })
+    console.log("checked::", temp)
   }
 
   render() {
@@ -289,36 +300,41 @@ class SLA extends Component {
                             style={{ width: "auto" }}
                             toggle={this.toggleDownload}
                           >
-                            <PopoverBody className="filter-container">
-                              {console.log("::", this.state.downloadCheck)}
-                              {this.state.downloadCheck &&
-                                this.state.downloadCheck.length > 0 &&
-                                this.state.downloadCheck.map((item, index) => {
-                                  return (
-                                    <FormControlLabel
-                                      key={`${item}${index}`}
-                                      onChange={() =>
-                                        this.getCheckedDownloadVal(index)
-                                      }
-                                      checked={item.checked}
-                                      className="checkmark"
-                                      control={
-                                        <Checkbox
-                                          icon={<UntickIcon />}
-                                          checkedIcon={<CheckedIcon />}
-                                          style={{
-                                            height: "20px",
-                                            width: "5px",
-                                            marginLeft: "16px",
-                                            marginTop: "8px",
-                                          }}
-                                          name={item.label}
-                                        />
-                                      }
-                                      label={item.label}
-                                    />
-                                  )
-                                })}
+                            <PopoverBody className="filter-container sla-rbd-download">
+                              <>
+                                {this.state.downloadCheck.length > 0 &&
+                                  this.state.downloadCheck.map(
+                                    (item, index) => {
+                                      return (
+                                        <>
+                                          <Checkbox
+                                            id={index}
+                                            checked={item.checked}
+                                            onChange={() =>
+                                              this.getCheckedDownloadVal(index)
+                                            }
+                                          />
+                                          <Label for={index}>
+                                            {item.title}
+                                          </Label>
+                                        </>
+                                      )
+                                    }
+                                  )}
+                                <div className="pdf-wid">
+                                  <PDFDownloadLink
+                                    document={
+                                      <MyDocument
+                                        data={this.state.downloadCheck.length === 1 && this.state.downloadCheck[0].id === '0' ? sla.rbd : this.state.downloadCheck}
+                                      />
+                                    }
+                                    fileName="slalist.pdf"
+                                    className="btn btn-outline-primary excel-btn-container pdf-btn"
+                                  >
+                                    Download
+                                  </PDFDownloadLink>
+                                </div>
+                              </>
                             </PopoverBody>
                           </Popover>
                         </Col>
@@ -329,10 +345,7 @@ class SLA extends Component {
                       </Row>
                     </TabPane>
                     <TabPane tabId="1">
-                      <Header
-                        title="SLA on Customer Order Fulfilment (COF) between Commercial Business Division (CBD), Supply & distribution (SSD),
-Finance Division (FDN) & Customer Experience Department"
-                      />
+                      <Header title="SLA on Customer Order Fulfilment (COF) between Commercial Business Division (CBD), Supply & distribution (SSD), Finance Division (FDN) & Customer Experience Department" />
                       <Row>
                         <SLATab category="cbd" data={slaData.cbd} />
                       </Row>
@@ -346,6 +359,12 @@ Finance Division (FDN) & Customer Experience Department"
                   </TabContent>
                 </CardBody>
               </Card>
+              {console.log("dd::", this.state.isDownloadPdf)}
+              {this.state.isDownloadPdf && (
+                <ReactPDF>
+                  <MyDocument />
+                </ReactPDF>
+              )}
             </div>
             {/*  */}
             {this.runAuditLogModal()}

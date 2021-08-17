@@ -67,7 +67,7 @@ class ProductDetailModal extends PureComponent {
               You will lose all the changes made.
             </p>
             <button
-              className="btn btn-outline-danger"
+              className="btn btn-dan"
               onClick={() => this.setState({ displayConfirmationBox: false })}
             >
               Cancel

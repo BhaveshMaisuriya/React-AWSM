@@ -90,7 +90,9 @@ const TabStorage = ({ scheduler, data, onChange }) => {
     if (!newStorageData[key]) {
       newStorageData[key] = {}
     }
+    
     newStorageData[key][subKey] = value
+    setStorageData(newStorageData)
     if (onChange) {
       onChange("storage", newStorageData)
     }
@@ -170,7 +172,7 @@ const TabStorage = ({ scheduler, data, onChange }) => {
                   </div>
                   <button
                     onClick={() => setDeleteItemKey(null)}
-                    className="btn btn-outline-danger m-2"
+                    className="btn btn-dan m-2"
                   >
                     Cancel
                   </button>
@@ -190,9 +192,10 @@ const TabStorage = ({ scheduler, data, onChange }) => {
                       storageData[key] ? storageData[key].code || "" : ""
                     }
                     onChange={value => onUpdateField(key, "code", value)}
-                    disabled={scheduler}
+                    disabled={!scheduler && pathName =='/commercial-customer' ? false:true}
                   />
                 </div>
+              
                 <div className="col col-12 col-sm-6 col-lg-3">
                   <div className="input-header mb-2">TANK CAPACITY</div>
                   <AWSMInputNumber
@@ -205,9 +208,10 @@ const TabStorage = ({ scheduler, data, onChange }) => {
                     onChange={value =>
                       onUpdateField(key, "tank_capacity", value)
                     }
-                    disabled={scheduler}
+                    disabled={!scheduler && pathName =='/commercial-customer' ? false:true}
                   />
                 </div>
+             
                 <div className="col col-12 col-sm-6 col-lg-3">
                   <div className="input-header mb-2">ACTIVE PRODUCT</div>
                   <AWSMDropdown
@@ -249,6 +253,7 @@ const TabStorage = ({ scheduler, data, onChange }) => {
                     closeAlert={() => setAlert(false)}
                   />
                 </div>
+              
                 <div className="col col-12 col-sm-6 col-lg-3">
                   <div className="input-header mb-2">TERMINAL</div>
                   <AWSMInput
@@ -256,7 +261,7 @@ const TabStorage = ({ scheduler, data, onChange }) => {
                       storageData[key] ? storageData[key].terminal || "" : ""
                     }
                     onChange={value => onUpdateField(key, "terminal", value)}
-                    disabled={scheduler}
+                    disabled={!scheduler && pathName =='/commercial-customer' ? false:true}
                   />
                 </div>
                 <div className="col col-12 col-sm-6 col-lg-3">
@@ -266,9 +271,10 @@ const TabStorage = ({ scheduler, data, onChange }) => {
                       storageData[key] ? storageData[key].distance || "" : ""
                     }
                     onChange={value => onUpdateField(key, "distance", value)}
-                    disabled={scheduler}
+                    disabled={!scheduler && pathName =='/commercial-customer' ? false:true}
                   />
                 </div>
+           
                 <div className="col col-12 col-sm-6 col-lg-3">
                   <div className="input-header mb-2">DURATION</div>
                   <AWSMInputNumber
@@ -312,6 +318,7 @@ const TabStorage = ({ scheduler, data, onChange }) => {
                           onChange={value =>
                             onUpdateField(key, "dead_stock", value)
                           }
+                          disabled={scheduler}
                         />
                       </div>
                     </Col>
@@ -329,6 +336,7 @@ const TabStorage = ({ scheduler, data, onChange }) => {
                           onChange={value =>
                             onUpdateField(key, "safe_fill", value)
                           }
+                          disabled={scheduler}
                         />
                       </div>
                     </Col>
@@ -355,7 +363,7 @@ const TabStorage = ({ scheduler, data, onChange }) => {
         ) : null
       )}
       <hr style={{ margin: "2em 0" }} />
-      {!scheduler && pathName === "/retail-customer" && (
+      {!scheduler && pathName !== "/retail-customer" && (
         <div className="mt-4 dqm-storage-add" onClick={onAddStorage}>
           + Add storage
         </div>

@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from "react"
+import React, { PureComponent } from "react";
 import {
   Button,
   Modal,
@@ -9,309 +9,163 @@ import {
   NavLink,
   ModalFooter,
   ModalBody,
-  ModalHeader,
-} from "reactstrap"
-import AvailabilityTab from "./AvailabilityTab"
-import SpecificationTab from "./SpecificationTab"
-import TrailerTab from "./TrailerTab"
-import "./InformationModal.scss"
-import { MODE } from "./constants"
-import AWSMAlert from "../../../components/Common/AWSMAlert/index"
-import { isScheduler } from "../../../helpers/auth_helper"
-import CloseButton from "../../../components/Common/CloseButton"
+  ModalHeader
+} from "reactstrap";
+import AvailabilityTab from "./AvailabilityTab";
+import SpecificationTab from "./SpecificationTab";
+import TrailerTab from "./TrailerTab";
+import "./InformationModal.scss";
 
-import {
-  getRoadTankerDetail,
-  updateRoadTankerDetail,
-  resetCurrentRoadTankerData,
-} from "../../../store/actions"
-import { connect } from "react-redux"
-import ExitConfirmation from "../../../components/Common/ExitConfirmation"
-import { isEqual } from "lodash"
-
-// Information Modal
-class InformationModal extends Component {
+class InformationModal extends PureComponent {
   constructor(props) {
     super(props)
 
     this.state = {
       activeTab: "1",
-      mode: MODE.VIEW_AND_AMEND,
-      showAlert: false,
-      userRole: {
-        scheduler: isScheduler(),
-      },
-      updateSuccess: props?.isUpdateSuccess,
-      data: props?.currentRoadTanker,
-      isConfirm: false,
-    }
-  }
-
-  componentWillUnmount() {
-    this.props.onResetCurrentRoadTankerDetail()
-  }
-
-  componentDidMount() {
-    const { mode } = this.props
-    let modalMode = mode ? mode : MODE.VIEW_AND_AMEND
-    this.setState({ mode: modalMode })
-    const { onGetRoadTankerDetail, data } = this.props
-    onGetRoadTankerDetail(data.vehicle)
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (!isEqual(nextProps.currentRoadTanker, this.props.currentRoadTanker)) {
-      this.setState({ data: nextProps.currentRoadTanker })
-    }
-  }
-
-  onConfirmCancel = () => {
-    this.setState({ isConfirm: false })
-  }
-
-  onConfirmExit = () => {
-    this.setState({ isConfirm: false })
-    if (this.props.onCancel()) {
-      this.props.onCancel()
+      displayConfirmationBox: false,
     }
   }
 
   render() {
-    const {
-      visible,
-      currentRoadTanker,
-      onCancel,
-      onUpdateRoadTankerDetail,
-    } = this.props
-    const { activeTab, mode, showAlert, data } = this.state
-    const { scheduler } = this.state.userRole
-
+    const { activeTab } = this.state;
     const toggle = tab => {
       if (activeTab !== tab) {
         this.setState({ activeTab: tab })
       }
     }
-
-    const handleClose = () => {
-      if (scheduler) {
-        onCancel()
-      } else {
-        this.setState({ isConfirm: true })
-      }
-    }
-
-    const handleExitConfirmation = () => {
-      if (!isEqual(this.state.data, this.props.currentRoadTanker))
-        return (
-          <ExitConfirmation
-            onExit={this.onConfirmExit}
-            onCancel={this.onConfirmCancel}
-          />
-        )
-      else this.onConfirmExit()
-    }
-
-    const handleUpdate = e => {
-      e.preventDefault()
-      onUpdateRoadTankerDetail({ vehicle_name: data.vehicle, data })
-      this.onConfirmExit()
-    }
-
-    const toggleAlert = () => {
-      this.setState({ showAlert: !showAlert })
-    }
-
-    const onFieldValueChange = (fieldName, value) => {
-      const newData = { ...data }
-      newData[fieldName] = value
-      this.setState({ data: newData })
-    }
-    const modalFooter = () => {
-      const footer =
-        !scheduler && !this.state.isConfirm ? (
-          <ModalFooter>
-            <button
-              className="btn-sec"
-              onClick={() => this.setState({ isConfirm: true })}
-            >
-              Cancel
-            </button>
-            {!scheduler && (
-              <Button
-                color="primary"
-                type="submit"
-                onClick={e => handleUpdate(e)}
-              >
-                Update
-              </Button>
-            )}{" "}
-          </ModalFooter>
-        ) : null
-      return footer
-    }
-
+    const { onCancle, visible } = this.props;
     return (
-      <Modal isOpen={visible} className="table-information modal-lg">
-        <ModalHeader close={<CloseButton handleClose={handleClose} />}>
-          <span className="modal-title">
-            {" "}
-            VEHICLE ID: {currentRoadTanker?.vehicle}
-          </span>
-          <span className="last-updated-sub-title">
-            Last Updated By: Nur Izzati on 3rd March 2021
-          </span>
+      <Modal isOpen={visible} className="table-information modal-lg" toggle={() => this.setState({displayConfirmationBox: !this.state.displayConfirmationBox})}>
+        <ModalHeader toggle={() => this.setState({displayConfirmationBox: !this.state.displayConfirmationBox})}>
+          <h3>
+            <span>Product Information
+              <span className="last-updated-sub-title">
+                Last Updated By: Nur Izzati on 3rd March 2021
+              </span>
+            </span>
+          </h3>
         </ModalHeader>
-        <AWSMAlert
-          status="success"
-          message=" New RT Restriction Added"
-          openAlert={showAlert}
-          closeAlert={() => {
-            toggleAlert()
-          }}
-        />
         <ModalBody>
-          {this.state.isConfirm ? handleExitConfirmation() : ""}
-          <Fragment>
+        <Fragment>
+          {this.state.displayConfirmationBox ?
+            <div className="Confirmation-box">
+              <div>
+                <h3>Exit Confirmation</h3>
+                <p>Are you sure you want to exit without update? <br />You will lose all the changes made.</p>
+                <button className="btn btn-dan" onClick={() => this.setState({displayConfirmationBox: !this.state.displayConfirmationBox})}>Cancel</button>
+                <button className="btn btn-danger" onClick={() => onCancle()}>Exit</button>
+              </div>
+            </div>
+            :
             <div>
-              <div className="row">
-                <div className="col-md-6 form-group">
-                  <label>VEHICAL OWNER</label>
+            <div className="row">
+              <div className="col-md-6 form-group">
+                <label> VEHICAL ID</label>
                   <input
                     className="form-control"
                     type="text"
-                    defaultValue={data?.owner}
-                    onChange={e => onFieldValueChange("owner", e.target.value)}
+                    defaultValue={"RYD0287"}
                     disabled={true}
-                    placeholder="Typing something here..."
                   />
-                </div>
               </div>
-              <div className="row">
-                <div className="col-md-6 form-group">
-                  <label>RT STATUS IN SAP</label>
+              <div className="col-md-6 form-group">
+                <label> VEHICAL OWNER</label>
                   <input
                     className="form-control"
                     type="text"
-                    defaultValue={data?.status_sap}
-                    onChange={e =>
-                      onFieldValueChange("status_sap", e.target.value)
-                    }
-                    placeholder="Typing something here..."
+                    defaultValue={"Eshah Filling Station"}
                     disabled={true}
                   />
-                </div>
-                <div className="col-md-6 form-group">
-                  <label>MAX VOLUME</label>
-                  <input
-                    className="form-control awsm-input"
-                    type="number"
-                    defaultValue={data?.max_volume}
-                    onChange={e =>
-                      onFieldValueChange("max_volume", e.target.value)
-                    }
-                    placeholder="Numeric only..."
-                    disabled={true}
-                  />
-                </div>
               </div>
-              <div className="row">
-                <div className="col-md-12 form-group">
-                  <label> REMARKS</label>
+            </div>
+            <div className="row">
+              <div className="col-md-6 form-group">
+                <label>STATUS IN SAP</label>
                   <input
                     className="form-control"
                     type="text"
-                    defaultValue={data?.remarks}
-                    onChange={e =>
-                      onFieldValueChange("remarks", e.target.value)
-                    }
-                    placeholder="Typing something here..."
-                    disabled={
-                      (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
-                    }
+                    defaultValue={"Operational"}
+                    disabled={true}
+                  />
+              </div>
+              <div className="col-md-6 form-group">
+                <label>RT CAPACITY</label>
+                  <input
+                    className="form-control"
+                    type="text"
+                    defaultValue={"Operational"}
+                    disabled={true}
+                  />
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-md-12 form-group">
+                <label> REMARKS</label>
+                  <input
+                    className="form-control"
+                    type="text"
+                    defaultValue={"Shaziman only"}
                   />
                 </div>
-              </div>
-              <>
-                <Nav pills justified>
-                  <NavItem>
-                    <NavLink
-                      className={activeTab === "1" ? "active" : null}
-                      onClick={() => {
-                        toggle("1")
-                      }}
-                    >
+            </div>
+              <div>
+                <Nav tabs>
+                  <NavItem
+                    className={activeTab === "1" ? "active" : null}
+                    onClick={() => {
+                      toggle("1")
+                    }}
+                  >
+                    <NavLink>
                       <span>Availability</span>
                     </NavLink>
                   </NavItem>
-                  <NavItem>
-                    <NavLink
-                      className={activeTab === "2" ? "active" : null}
-                      onClick={() => {
-                        toggle("2")
-                      }}
-                    >
+                  <NavItem
+                    className={activeTab === "2" ? "active" : null}
+                    onClick={() => {
+                      toggle("2")
+                    }}
+                  >
+                    <NavLink>
                       <span>Specification</span>
                     </NavLink>
                   </NavItem>
-                  <NavItem>
-                    <NavLink
-                      className={activeTab === "3" ? "active" : null}
-                      onClick={() => {
-                        toggle("3")
-                      }}
-                    >
+                  <NavItem
+                    className={activeTab === "3" ? "active" : null}
+                    onClick={() => {
+                      toggle("3")
+                    }}
+                  >
+                    <NavLink>
                       <span>Trailer</span>
                     </NavLink>
                   </NavItem>
                 </Nav>
                 <TabContent activeTab={activeTab}>
                   <TabPane tabId="1">
-                    <AvailabilityTab
-                      mode={mode}
-                      scheduler={scheduler}
-                      data={data?.availability}
-                      onChange={onFieldValueChange}
-                    />
+                      <AvailabilityTab/>
                   </TabPane>
                   <TabPane tabId="2">
-                    <SpecificationTab
-                      mode={mode}
-                      scheduler={scheduler}
-                      data={data?.specification}
-                      toggle={() => {
-                        toggleAlert()
-                      }}
-                      onChange={onFieldValueChange}
-                    />
+                    <SpecificationTab/>
                   </TabPane>
                   <TabPane tabId="3">
-                    <TrailerTab
-                      mode={mode}
-                      scheduler={scheduler}
-                      data={data?.trailer}
-                      onChange={onFieldValueChange}
-                    />
+                    <TrailerTab/>
                   </TabPane>
                 </TabContent>
-              </>
+              </div>
             </div>
-          </Fragment>
+          }
+        </Fragment>
         </ModalBody>
-        {modalFooter()}
+        <ModalFooter>
+          <button className="btn-sec" onClick={() => this.setState({displayConfirmationBox: !this.state.displayConfirmationBox})}>
+            Cancel
+          </button>
+          <Button color="primary">Update</Button>{" "}
+        </ModalFooter>
       </Modal>
     )
   }
 }
 
-const mapStateToProps = ({ roadTanker }) => ({
-  currentRoadTanker: roadTanker.currentRoadTanker?.data,
-  isUpdateSuccess: roadTanker.currentRoadTanker?.isUpdateSuccess,
-})
-
-const mapDispatchToProps = dispatch => ({
-  onGetRoadTankerDetail: params => dispatch(getRoadTankerDetail(params)),
-  onUpdateRoadTankerDetail: params => dispatch(updateRoadTankerDetail(params)),
-  onResetCurrentRoadTankerDetail: () => dispatch(resetCurrentRoadTankerData()),
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(InformationModal)
+export default InformationModal;

@@ -53,7 +53,7 @@ class RoadTanker extends Component {
 
   GetonDownload = async currentPage => {
     const downloadParams = {
-      limit: 10,
+      limit: null,
       page: 0,
       search_fields: "*",
     }

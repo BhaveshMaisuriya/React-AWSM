@@ -105,8 +105,8 @@ const CommercialCustomerModal = props => {
   }, [props.currentCommercialDetail])
 
   function onFieldValueChange(fieldName, value) {
-    const newCommercialDetail = { ...currentCommercialDetail }
-    newCommercialDetail[fieldName] = value
+    const newCommercialDetail = { ...currentCommercialDetail }    
+    newCommercialDetail[fieldName] = value;    
     setCurrentCommercialDetail(newCommercialDetail)
   }
 
@@ -175,7 +175,7 @@ const CommercialCustomerModal = props => {
                     />
                 </Col>
                 <Col className="col-12">
-                  <label className="mt-3">REMARKS</label>
+                  <label className="mt-12">REMARKS</label>
                   <AWSMInput
                     defaultValue={currentCommercialDetail.remarks}
                     onChange={value => onFieldValueChange("remarks", value)}

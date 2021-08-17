@@ -143,7 +143,7 @@ const SLATable = ({ items, onDeleteSLADetail, scheduler, onUpdate }) => {
                       Are you sure you want to delete this data from this table?
                     </div>
                     <button
-                      className="btn btn-outline-danger ml-3 mr-2"
+                      className="btn btn-dan ml-3 mr-2"
                       onClick={() => setDeleteItem(null)}
                     >
                       Cancel

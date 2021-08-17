@@ -42,6 +42,8 @@ const tabContact = ({ scheduler, data, onChange }) => {
     }
   }
 
+  const pathName = window.location.pathname
+
   return (
     <>
       <div className="d-flex align-items-center justify-content-end">
@@ -101,7 +103,7 @@ const tabContact = ({ scheduler, data, onChange }) => {
                       name="contact_position"
                       placeholder="Position (etc: Executive)"
                       value={item.data.position || ""}
-                      disabled={scheduler}
+                      disabled={scheduler || (item.disabled && pathName === "/commercial-customer")}
                       className={scheduler ? "disabledField" : "awsm-input"}
                       onChange={e => onFieldChange(index, "position", e.target.value)}
                     />

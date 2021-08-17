@@ -1,5 +1,7 @@
 import React,{ useState, useEffect } from "react"
 import { Formik, Form, Field } from "formik"
+import { isScheduler } from "helpers/auth_helper"
+
 
 const AddressTab = (props) => {
   const [data,setData] = useState(props.data)
@@ -16,7 +18,7 @@ const AddressTab = (props) => {
     newData[e.target.id] = e.target.value
     setData(newData)
   }
-
+  const isDisabledField = isScheduler()
   return (
     <Formik initialValues={data} onSubmit={handleSubmit}>
       {props => {
@@ -110,6 +112,7 @@ const AddressTab = (props) => {
                   value={data?.latitude}
                   onChange={(e)=>handleOnChangeValue(e)}
                   placeholder="Type something here..."
+                  disabled={isDisabledField}
                 />
               </div>
               <div className="col-md-6 form-group">
@@ -121,6 +124,7 @@ const AddressTab = (props) => {
                   value={data?.longitude}
                   onChange={(e)=>handleOnChangeValue(e)}
                   placeholder="Type something here..."
+                  disabled={isDisabledField}
                 />
               </div>
             </div>

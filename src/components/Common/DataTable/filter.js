@@ -326,7 +326,7 @@ const Example = props => {
               </Fragment>
             )}
             <div style={{ height: "25px" }}>
-              {!isRemark && (
+              {!isRemark && current.length > 0 && (
                 <Fragment>
                   <Checkbox
                     checked={checkAll}

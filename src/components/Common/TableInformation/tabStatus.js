@@ -151,7 +151,7 @@ const TabStatus = ({ scheduler, data, onChange }) => {
             <div className="input-header">TIME</div>
             <AWSMDropdown
               items={timeData}
-              value={statusData.close_period ? statusData.close_period.time_to?.toString().substring(0, 5) || "None" : ""}
+              value={statusData.close_period ? statusData.close_period.time_to?.toString().substring(0, 5) || "" : ""}
               onChange={value =>
                 onFieldChange("close_period", "time_to", value)
               }

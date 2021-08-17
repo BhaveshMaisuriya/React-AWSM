@@ -57,7 +57,7 @@ class SalesInventory extends Component {
 
   GetonDownload = async currentPage => {
     const downloadParams = {
-      limit: 10,
+      limit: null,
       page: currentPage,
       search_fields: "*",
     }

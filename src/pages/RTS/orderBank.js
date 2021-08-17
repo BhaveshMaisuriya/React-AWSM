@@ -30,13 +30,19 @@ import REGION_TERMINAL from "../../common/data/regionAndTerminal"
 import customiseTableIcon from "../../assets/images/AWSM-Customise-Table.svg"
 import { Link } from "react-router-dom"
 import CustomizeTableModal from "../../common/CustomizeTable"
-import { tableColumns, tableMapping } from "./OrderBankTable/tableMapping"
+import {
+  ganttChartTableColumns, ganttChartTableDefaultColumns,
+  ganttChartTableMapping,
+  tableColumns,
+  tableMapping
+} from "./OrderBankTable/tableMapping"
 import { format } from "date-fns"
 import {
   getRTSOrderBankTableData,
   sendOrderBankDN,
   refreshOderBankDN,
   getOrderBankAuditLog,
+  dragOrderBankToGanttChart,
 } from "../../store/orderBank/actions"
 import OrderBankActionModal from "./OrderBankActionModal"
 import CrossTerminalModal from "./crossTerminalModal"
@@ -46,6 +52,10 @@ import CustomRadioButton from "components/Common/CustomRadioButton"
 import OrderBankRunAutoModal from "./OrderBankRunAutoModal"
 import OrderBankSendBulkModal from "./OrderBankSendBulkModal"
 import AWSMAlert from "../../components/Common/AWSMAlert"
+
+import {bryntumSchedulerTableNameForCookie} from "./OrderBankTable/BryntumChartTable"
+import { getCookieByKey } from "../DQM/Common/helper"
+import { DragDropContext} from "react-beautiful-dnd"
 
 
 const GanttChartBottom = [
@@ -118,6 +128,7 @@ function OrderBank({
   sendOrderBankDN,
   refreshOderBankDN,
   onGetOrderBankAuditLog,
+  dragOrderBankToGanttChart,
 }) {
   let orderBankSettings = [
     {
@@ -185,7 +196,18 @@ function OrderBank({
   const [snackStatus, setSnackStatus] = useState('')
   const [snackMessage, setSnackMessage] = useState('')
   const [showSnackAlert, setShowSnackAlert] = useState(false)
-  
+
+  const [isCustomizeGanttModalOpen,setIsCustomizeGanttModalOpen] = useState(false)
+  const [bryntumCurrentColumns,setBryntumCurrentColumns] = useState(()=>{
+    if (!getCookieByKey(bryntumSchedulerTableNameForCookie)) return ganttChartTableDefaultColumns
+    const cookieParseData = JSON.parse(getCookieByKey(bryntumSchedulerTableNameForCookie))
+    if (cookieParseData.length < 4) return ganttChartTableDefaultColumns
+    const columns = {vehicle:{...ganttChartTableMapping["vehicle"]}}
+    cookieParseData.forEach((col)=>{
+      columns[col] = {...ganttChartTableMapping[col]}
+    })
+    return columns
+  })
   const toggle = () => setOpen(!dropdownOpen)
   const terminalList = useMemo(() => {
     const currentRegion = REGION_TERMINAL.find(e => e.region === region)
@@ -246,7 +268,7 @@ function OrderBank({
       q: "commercial_customer",
     }
     onGetOrderBankAuditLog(payload)
-  })
+  }, [])
 
   useEffect(() => {
     getRTSOrderBankTableData({ region, terminal, shiftDate, status })
@@ -339,8 +361,33 @@ function OrderBank({
     target.checked = true
     return setGanttChartAllRadio(value)
   }
+  const toggleCustomizeModal = ()=> {
+    setIsCustomizeGanttModalOpen((prevState)=> !prevState)
+  }
+  const onChangeBryntumSchedulerColumns = (newColumnsList) =>{
+    if(newColumnsList){
+      setBryntumCurrentColumns((prevCols)=>{
+        const columns = {vehicle: {...ganttChartTableMapping["vehicle"]}}
+        newColumnsList.forEach((col)=>{
+          columns[col] = {...ganttChartTableMapping[col]}
+        })
+        if(JSON.stringify(columns) === JSON.stringify(prevCols)) {
+          return prevCols
+        }
+        return {...columns}
+      })
+    }
+  }
+
+  const onDragEnd = ({ destination }) => {
+     if (destination) {
+       dragOrderBankToGanttChart()
+     }
+  }
+
   return (
     <React.Fragment>
+      <DragDropContext onDragEnd={onDragEnd}>
       <div className="order-bank-page-content">
         <div className="container-fluid">
           <Card className="order_bank_main">
@@ -415,7 +462,7 @@ function OrderBank({
                             <div className="order-bank-shift-date">
                               <div>DATE</div>
                               <DateRangePicker
-                                types={["single", "range"]}
+                                types={["single"]}
                                 startDate={null}
                                 defaultValue={shiftDate}
                                 onChange={value => setShiftDate(value)}
@@ -442,66 +489,26 @@ function OrderBank({
                               />
                             </div>
                           </Col>
-                          <Col lg={7} className="order-bank-bar right">
-                            <img src={customiseTableIcon} className="ml-2" />
-                            <div className="d-flex align-items-center justify-content-between radio_option m-0 order-bank-label">
-                              {/* <input
-                                type="radio"
-                                id="high"
-                                name="radioWidth"
-                                value="high"
-                                checked={ganttChartAllRadio === 'high' ? true : false}
-                                className="mr-1 ml-1 pointer"
-                                onClick={changeGanttChartAllRadio}
-                              />
-                              <label for='high' className="mr-1 pointer">High Priority</label>
-                              <input
-                                type="radio"
-                                id="request"
-                                name="radioWidth"
-                                value="request"
-                                className='mr-1 pointer'
-                                checked={ganttChartAllRadio === 'request' ? true : false}
-                                onClick={changeGanttChartAllRadio}
-                              />
-                              <label for='request' className='mr-1 pointer'>Special Request</label>
-                              <input
-                                type="radio"
-                                id="future"
-                                name="radioWidth"
-                                value="future"
-                                checked={ganttChartAllRadio === 'future' ? true : false}
-                                className='mr-1 pointer'
-                                onClick={changeGanttChartAllRadio}
-                              />
-                              <label for='future' className='mr-1 pointer'>Future</label>
-                              <input
-                                type="radio"
-                                id="backlog"
-                                name="radioWidth"
-                                value="backlog"
-                                checked={ganttChartAllRadio === 'backlog' ? true : false}
-                                className='mr-1 pointer'
-                                onClick={changeGanttChartAllRadio}
-                              />
-                              <label for='backlog' className='mr-1 pointer'>Back Log</label>
-															<CustomRadioButton label="high" checked={ganttChartAllRadio === "test" ? true :false} name="radioWidth" value="test" onClick={changeGanttChartAllRadio}/> */}
-                              {GanttChartFilterButtons &&
-                                GanttChartFilterButtons.length > 0 &&
-                                GanttChartFilterButtons.map((button, index) => {
-                                  const { value, label } = button
-                                  return (
-                                    <CustomRadioButton
-                                      key={`${index}-${value}`}
-                                      label={label}
-                                      value={value}
-                                      checked={ganttChartAllRadio === value}
-                                      name="radioWidth"
-                                      onClick={changeGanttChartAllRadio}
-                                    />
-                                  )
-                                })}
-                            </div>
+                          <Col lg={7} className='order-bank-bar right'>
+                            <IconButton
+                              aria-label="delete"
+                              onClick={toggleCustomizeModal}
+                            >
+                              <img src={customiseTableIcon} />
+                            </IconButton>
+                            <div className='d-flex align-items-center justify-content-between radio_option m-0 order-bank-label'>
+															{
+																GanttChartFilterButtons && GanttChartFilterButtons.length > 0 &&
+																GanttChartFilterButtons.map((button,index)=>{
+																	const {value,label} = button;
+																	return <CustomRadioButton key={`${index}-${value}`}
+																	label={label} value={value}
+																	checked={ganttChartAllRadio === value}
+																	name="radioWidth"
+																	onClick={changeGanttChartAllRadio}/>
+																})
+															}
+														</div>
                             <span className="m-0 order-bank-label">
                               141 DNs, 3 shipments, 3 special request, 5 high
                               priority
@@ -510,6 +517,7 @@ function OrderBank({
                         </Row>
                         <BryntumChartTable
                           ganttChartAllRadio={ganttChartAllRadio}
+                          bryntumCurrentColumns={bryntumCurrentColumns}
                         />
                         <div className="square_border">
                           {GanttChartBottom.map((item, index) => {
@@ -642,6 +650,16 @@ function OrderBank({
               </div>
             </CardBody>
             <NewOrderModal open={showNewOrder} onCancel={onCloseNewOrder} />
+            <CustomizeTableModal
+              open={isCustomizeGanttModalOpen}
+              closeDialog={toggleCustomizeModal}
+              tableName={bryntumSchedulerTableNameForCookie}
+              availableMetric={ganttChartTableMapping}
+              initialMetric={ganttChartTableColumns}
+              defaultMetric={ganttChartTableColumns}
+              maxMetrics={ganttChartTableColumns.length}
+              onChange={onChangeBryntumSchedulerColumns}
+            />
             <CrossTerminalModal
               open={crossTerminal}
               onCancel={onCloseCrossTerminal}
@@ -706,6 +724,7 @@ function OrderBank({
           </Card>
         </div>
       </div>
+      </DragDropContext>
     </React.Fragment>
   )
 }
@@ -716,6 +735,7 @@ const mapDispatchToProps = dispatch => ({
   refreshOderBankDN: params => dispatch(refreshOderBankDN(params)),
   sendOrderBankDN: params => dispatch(sendOrderBankDN(params)),
   onGetOrderBankAuditLog: payload => dispatch(getOrderBankAuditLog(payload)),
+  dragOrderBankToGanttChart: () => dispatch(dragOrderBankToGanttChart())
 })
 
 const mapStateToProps = ({ orderBank }) => ({

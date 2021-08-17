@@ -5,6 +5,7 @@ import AWSMInputNumber from "../../../../components/Common/InputNumber"
 import AWSMDropdown from "../../../../components/Common/Dropdown"
 import AutoCompleteDropDown from "./AutoCompleteDropDown"
 import "./Product.scss"
+import { isScheduler } from "../../../../helpers/auth_helper"
 
 const Product = ({
   value,
@@ -37,6 +38,7 @@ const Product = ({
     }
     return null
   }
+  const isDisabledField = isScheduler()
   return (
     <div className="terminal-product">
       {isConfirmDelete && (
@@ -72,10 +74,11 @@ const Product = ({
           <label htmlFor="productCode">PRODUCT CODE</label>
           <AutoCompleteDropDown
             value={value.code}
-            disabled={scheduler}
             items={productsList}
             key={value.code}
             onChange={value => onFieldChange("code", value)}
+            placeholder="Select"
+            disabled={isDisabledField}
           />
         </div>
         <div className="col-3 form-group">

@@ -12,22 +12,20 @@ import { removeKeywords } from "../../../pages/DQM/Common/helper"
 import "./datatable.scss"
 import ReplayIcon from "@material-ui/icons/Replay"
 
-const Example = React.memo(props => {
+const Example = props => {
   const { dataFilter, dataKey, handleClickApply, handleClickReset } = props
   const [popoverOpen, setPopoverOpen] = useState(false)
   const [checkAll, setCheckAll] = useState(true)
   const [data, setData] = useState([])
-  const [backupData, setBackupData] = useState([])
-  const [checkedList, setCheckedList] = useState([])
+  const [appliedFiltersList, setAppliedFilters] = useState([])
   const [checkedCount, setCheckedCount] = useState(0)
-  const [visibilityCount, setVisibilityCount] = useState(1)
+  const [visibilityCount, setVisibilityCount] = useState(0)
   const [count, setCount] = useState(0)
   const [searchWords, setSearch] = useState("")
   const [hasMore, setHasMore] = useState(true)
-  const [hasRemark, setHasRemark] = useState(true)
+  const [isRemark, setHasRemark] = useState(false)
   const [current, setCurrent] = useState([])
   let rowsPerLoad = 30
-
   const UntickIcon = () => <img src={selectAllIcon3} alt="icon" />
   const CheckedIcon = () => <img src={selectAllIcon2} alt="icon" />
   const UndeterminateIcon = () => <img src={selectAllIcon} alt="icon" />
@@ -37,20 +35,19 @@ const Example = React.memo(props => {
   useEffect(() => {
     if (dataFilter) {
       if (!isNull(dataFilter[dataKey]) && !isUndefined(dataFilter[dataKey])) {
-        let alldata = getFilterData()
+        dataKey === "remarks" ? setHasRemark(true) : setHasRemark(false)
+        const alldata = getFilterData()
         setData(alldata)
-        setBackupData(alldata)
-        let arr = []
+        const arr = []
         alldata.map((item, index) => {
           if (index < rowsPerLoad) {
             arr.push(item)
           }
         })
         setCount(rowsPerLoad)
-        setCurrent(arr)
-        checkedList.length === 0
+        appliedFiltersList.length === 0
           ? setCheckedCount(dataFilter[dataKey].length)
-          : setCheckedCount(checkedList.length)
+          : setCheckedCount(appliedFiltersList.length)
       }
     }
   }, [dataFilter])
@@ -69,6 +66,7 @@ const Example = React.memo(props => {
       if (index < rowsPerLoad) arr.push(item)
     })
     temp.length <= rowsPerLoad ? setHasMore(false) : setHasMore(true)
+    setVisibilityCount(arr.length)
     setCurrent(arr)
   }, [data])
 
@@ -77,20 +75,28 @@ const Example = React.memo(props => {
    */
   useEffect(() => {
     const tempSearch = searchWords === "*" ? "" : searchWords
-    let newData = [...backupData]
-    let count = 0
+    let newData = [...data]
+    // let count = 0
     newData.map(item => {
       item.visibility =
         item.text !== null &&
         item.text.toString().toLowerCase().includes(tempSearch)
       item.checked =
-        item.text !== null &&
-        item.text.toString().toLowerCase().includes(tempSearch)
-      count = item.checked ? count + 1 : count
+        appliedFiltersList.length > 0
+          ? appliedFiltersList.includes(item.text)
+          : item.visibility
+      // count = item.checked ? count + 1 : count
     })
-    setVisibilityCount(count)
     setData(newData)
   }, [searchWords])
+
+  /**
+   *
+   */
+  useEffect(() => {
+    if (checkedCount < data.length) setCheckAll(false)
+    else if (checkedCount === data.length) setCheckAll(true)
+  }, [checkedCount])
 
   /**
    * set filter object with text checked and visibility value
@@ -101,25 +107,32 @@ const Example = React.memo(props => {
     dataFilter[dataKey].map(item => {
       newArr.push({
         text: item,
-        checked: checkedList.length > 0 ? checkedList.includes(item) : true,
+        checked:
+          appliedFiltersList.length > 0
+            ? appliedFiltersList.includes(item)
+            : true,
         visibility: true,
       })
     })
-    return newArr
+    return newArr.sort((a, b) => b.checked - a.checked)
   }
 
   /**
    * Update check status of row
-   * @param index
+   * @param event
    */
-  function onInputChange(index) {
-    const newData = [...data]
-    newData[index].checked = !newData[index].checked
+  function onInputChange(event) {
+    const target = event.target
+    let newData = [...data]
+    newData.map(item => {
+      if (target.value === item.text) {
+        item.checked = !item.checked
+        item.checked
+          ? setCheckedCount(checkedCount + 1)
+          : setCheckedCount(checkedCount - 1)
+      }
+    })
     setData(newData)
-    if (checkAll) setCheckAll(false)
-    newData[index].checked
-      ? setCheckedCount(checkedCount + 1)
-      : setCheckedCount(checkedCount - 1)
   }
 
   /**
@@ -142,7 +155,8 @@ const Example = React.memo(props => {
       .map(item => {
         return item.text
       })
-    setCheckedList(checkedFilter)
+    setSearch("")
+    setAppliedFilters(checkedFilter)
     setPopoverOpen(!popoverOpen)
     handleClickApply(checkedFilter, dataKey)
   }
@@ -153,7 +167,7 @@ const Example = React.memo(props => {
   function clickReset() {
     handleClickReset(dataKey)
     setCheckedCount(dataFilter[dataKey].length)
-    setCheckAll(true)
+    setAppliedFilters([])
     toggle()
   }
 
@@ -173,9 +187,18 @@ const Example = React.memo(props => {
    */
   const toggle = () => {
     setPopoverOpen(!popoverOpen)
-    setData(getFilterData())
-    if (popoverOpen) setSearch("")
-    dataKey === "remarks" ? setHasRemark(true) : setHasRemark(false)
+    if (popoverOpen) {
+      setSearch("")
+      setData(getFilterData())
+      if (appliedFiltersList.length > 0)
+        setCheckedCount(appliedFiltersList.length)
+      else setCheckAll(true)
+    }
+  }
+
+  const noResultsMessage = () => {
+    const string = `Couldn't find '${searchWords}'`
+    return <span style={{ paddingLeft: "7px" }}>{string}</span>
   }
 
   /**
@@ -184,7 +207,6 @@ const Example = React.memo(props => {
   const getMoreData = () => {
     if (data.length <= count) {
       setHasMore(false)
-      return
     } else {
       let arr = [...current]
       data.map((item, index) => {
@@ -201,7 +223,6 @@ const Example = React.memo(props => {
     <Fragment>
       <Button
         id={dataKey}
-        type="button"
         color="link"
         className="filter-button"
         onMouseDown={e => e.preventDefault()}
@@ -214,7 +235,6 @@ const Example = React.memo(props => {
         target={dataKey}
         toggle={toggle}
         trigger="legacy"
-        style={{ width: "auto" }}
       >
         <PopoverBody className="filter-container">
           <div className="position-relative">
@@ -241,7 +261,7 @@ const Example = React.memo(props => {
               e.preventDefault()
             }}
           >
-            {(!hasRemark || searchWords !== "") && (
+            {(!isRemark || searchWords !== "") && (
               <Fragment>
                 <SimpleBar
                   autoHide={false}
@@ -252,19 +272,20 @@ const Example = React.memo(props => {
                   }}
                 >
                   {current.length > 0 && !isNull(current)
-                    ? current.map((row, index) => {
+                    ? current.map(row => {
                         return (
                           row.visibility && (
                             <div
                               key={row.text}
                               className={`d-flex align-items-center filter-selection ${
-                                row.checked || checkAll ? "item-checked" : ""
+                                row.checked ? "item-checked" : ""
                               }`}
                             >
                               <FormControlLabel
-                                key={`${row}${index}`}
-                                onChange={() => onInputChange(index)}
-                                checked={checkAll || row.checked}
+                                key={`${row.text}`}
+                                value={`${row.text}`}
+                                onChange={onInputChange}
+                                checked={row.checked}
                                 className="checkmark"
                                 control={
                                   <Checkbox
@@ -276,11 +297,6 @@ const Example = React.memo(props => {
                                       marginLeft: "16px",
                                       marginTop: "8px",
                                     }}
-                                    name={
-                                      isNull(row.text)
-                                        ? "-"
-                                        : removeKeywords(row.text)
-                                    }
                                   />
                                 }
                                 label={
@@ -293,7 +309,7 @@ const Example = React.memo(props => {
                           )
                         )
                       })
-                    : `Couldn't find ${searchWords}`}
+                    : noResultsMessage()}
                   {hasMore && (
                     <IconButton
                       color="primary"
@@ -310,11 +326,10 @@ const Example = React.memo(props => {
               </Fragment>
             )}
             <div style={{ height: "25px" }}>
-              {!hasRemark && (
+              {!isRemark && current.length > 0 && (
                 <Fragment>
                   <Checkbox
                     checked={checkAll}
-                    onChange={() => setCheckAll(!checkAll)}
                     icon={<UndeterminateIcon />}
                     checkedIcon={<CheckedIcon />}
                     onClick={clickSelectAll}
@@ -345,7 +360,6 @@ const Example = React.memo(props => {
                 Apply
               </Button>
               <Button
-                type="button"
                 outline
                 color="#008F8A"
                 onClick={clickReset}
@@ -359,7 +373,7 @@ const Example = React.memo(props => {
       </Popover>
     </Fragment>
   )
-})
+}
 
 Example.defaultProps = {
   handleClickApply: () => {},

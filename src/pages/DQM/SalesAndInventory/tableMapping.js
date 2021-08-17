@@ -21,7 +21,6 @@ const tableMapping = {
   ship_to_party: {
     label: "SHIP TO PARTY",
     columnSize: "cell-text",
-    key: "frozen",
   },
   product: {
     label: "PRODUCT",
@@ -31,6 +30,7 @@ const tableMapping = {
     label: "OVERRIDE ACTION",
     columnSize: "cell-text",
     type: "override",
+    key: "frozen",
   },
   data_source: {
     label: "SOURCE OF DATA",

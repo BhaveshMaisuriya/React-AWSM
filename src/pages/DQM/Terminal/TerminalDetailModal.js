@@ -179,18 +179,7 @@ class TerminalDetailModal extends PureComponent {
                 <Fragment>
                   <div>
                     <div className="row">
-                      <div className="col-md-6 form-group">
-                        <label>TERMINAL CODE</label>
-                        <input
-                          className="form-control awsm-input"
-                          type="text"
-                          defaultValue={currentTerminal.code}
-                          disabled={true}
-                          onChange={e =>
-                            this.onFieldChange("code", e.target.value)
-                          }
-                        />
-                      </div>
+                      
                       <div className="col-md-6 form-group">
                         <label>TERMINAL NAME</label>
                         <input
@@ -202,6 +191,9 @@ class TerminalDetailModal extends PureComponent {
                             this.onFieldChange("name", e.target.value)
                           }
                         />
+                      </div>
+                      <div className="col-md-6 form-group">
+                      
                       </div>
                     </div>
 

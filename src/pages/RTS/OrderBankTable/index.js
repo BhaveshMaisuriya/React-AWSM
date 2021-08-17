@@ -30,6 +30,7 @@ import EditOrderBankModal from "../editOrderBankModal"
 import ConfirmDNStatusModal from "./confirmDNStatusModal"
 import { isEqual } from "lodash"
 import { updateOrderBankTableData, deleteOrderBankDetail, sendDNStatusRequest } from "../../../store/actions"
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd"
 
 
 class TableGroupEvent extends React.Component {
@@ -56,7 +57,7 @@ class TableGroupEvent extends React.Component {
 
   onChangeCheckBox(e) {
     const { Onchange, index } = this.props
-    Onchange(e.target.checked, index)    
+    Onchange(e.target.checked, index)
   }
 
   deleteOrder = async() => {
@@ -137,7 +138,7 @@ class index extends Component {
         super(props);
         this.state={
             fixedHeaders:['name'],
-            filterData:null,
+            filterData: {},
             selectedAllItem:false,
             expandSearch:false,
             dataSource: props.dataSource,
@@ -258,28 +259,43 @@ class index extends Component {
         })
       }
 
-    bodyTableConfiguration = (data) => {
-        const { expandSearch } = this.state
-        return tableColumns.map((v)=> {
-            let typeOfColumn = tableMapping[v].type
-            let result;
-            switch (typeOfColumn) {
-                case "priority_type":
-                    result = <td>{data[v] && data[v].map((e)=>{
-                        return (<span className={`circle ${e}`}>{e}</span>)})}
-                            </td>
-                            break
-                case "dn_status":
-                    result = <td>{data[v] && data[v].map((e)=>{
-                        return (<span className={`status ${e}`} onClick={this.DNStatusOnClickHandler.bind(this,data,e)}>{e}</span>)})}
-                            </td>
-                             break
-                default:
-                    result =  <td>{data[v]}</td>;
-                    break
-            }
-            return (v != "notes" || expandSearch) && result
-        })
+    bodyTableConfiguration = (data, isDragging = false) => {
+        const { dataSource } = this.state
+        if (isDragging) {
+          return <table>
+            <tbody>
+              {dataSource.map(e => {
+                return  e.isChecked && <tr className="bg-white" style={{zIndex: 99}}>
+                  {this.RenderTRComponent(e)}
+                </tr>
+              })}
+            </tbody>
+          </table>
+        }
+        return this.RenderTRComponent(data)
+    }
+    RenderTRComponent = (data) => {
+      const { expandSearch } = this.state
+      return tableColumns.map((v)=> {
+        let typeOfColumn = tableMapping[v].type
+        let result;
+        switch (typeOfColumn) {
+          case "priority_type":
+            result = <td>{data[v] && data[v].map((e)=>{
+              return (<span className={`circle ${e}`}>{e}</span>)})}
+            </td>
+            break
+          case "dn_status":
+            result = <td>{data[v] && data[v].map((e)=>{
+              return (<span className={`status ${e}`} onClick={this.DNStatusOnClickHandler.bind(this,data,e)}>{e}</span>)})}
+            </td>
+            break
+          default:
+            result =  <td>{data[v]}</td>;
+            break
+        }
+        return (v != "notes" || expandSearch) && result
+      })
     }
 
     OnDeleteRecords = async(allData) => {
@@ -290,7 +306,7 @@ class index extends Component {
     DataOfTableFixed = () => {
         const { dataSource } = this.state
         return dataSource.map((v,i)=>{
-            return <tr key={i}>
+            return <tr key={i} className={v.isChecked ? "selected-row" : "bg-white"}>
                 <th>
                 <TableGroupEvent index={i} allData={v} isChecked={v.isChecked} Onchange={this.OnChangeCheckBoxHandler} deleteRecords={this.OnDeleteRecords} />
                 </th>
@@ -361,12 +377,14 @@ class index extends Component {
 
     OnSelectedAllItems = () =>{
         const { selectedAllItem, dataSource } = this.state
+        const { updateOrderBankTableData } = this.props
         // const { dataSource } = this.props
         let data = [...dataSource]
         data = data.map((v)=>{
             return { ...v,isChecked:selectedAllItem ? false : true }
         })
         this.setState({ selectedAllItem:!selectedAllItem, dataSource:data })
+        updateOrderBankTableData(data)
     }
 
     DNStatusOnClickHandler( data, key ){
@@ -381,6 +399,17 @@ class index extends Component {
       const { onSendDNStatusRequest } = this.props
       onSendDNStatusRequest(DNStatus.data)
       this.setState({DNStatus: { isOpenConfirmModal:false }})
+    }
+
+    getStyle(style, snapshot) {
+      if (!snapshot.isDropAnimating) {
+        return style;
+      }
+      return {
+        ...style,
+        // cannot be 0, but make it super tiny
+        transitionDuration: `0.001s`,
+      };
     }
 
     render() {
@@ -403,30 +432,59 @@ class index extends Component {
                       </tbody>
                   </table>):null}
                   <div className="scroll">
-                      <table className={`scrollable ${!dataSource.length ? 'bd-left' : '' }`}>
-                          <thead>
-                          <tr>{this.headerTableConfiguration()}</tr>
-                          </thead>
-                          <tbody>
-                          {
-                            dataSource && dataSource.length ? dataSource.map((v) => {
-                              return <tr>{this.bodyTableConfiguration(v)}</tr>
-                          }) :
-                            (<tr><td colSpan={18} className={'rts-table-nodata'}>
-                              <div>
-                                <img
-                                  src={NoDataIcon}
-                                  alt="No Data"
-                                />
-                              </div>
-                              </td></tr>)
-                          }
-                          </tbody>
-                      </table>
+                    {/* <DragDropContext onDragEnd={(r) => console.log(r)}> */}
+                      <Droppable droppableId="order-bank-table" isDropDisabled={true}>
+                        {provided => (
+                            <table {...provided.droppableProps} ref={provided.innerRef} className={`scrollable ${!dataSource.length ? 'bd-left' : '' }`}>
+                              <thead>
+                              <tr>{this.headerTableConfiguration()}</tr>
+                              </thead>
+                              <tbody>
+                              {
+                                dataSource && dataSource.length ? dataSource.map((v, index) => {
+                                    return (
+                                      <Draggable isDragDisabled={!v.isChecked} key={v.id} draggableId={index.toString()} index={index}>
+                                        {(provided, snapshot) => (
+                                          <>
+                                            <tr
+                                              className={`${v.isChecked && !snapshot.isDragging ? "selected-row" : "bg-white"}`}
+                                              ref={provided.innerRef}
+                                              {...provided.draggableProps}
+                                              {...provided.dragHandleProps}
+                                              style={this.getStyle(provided.draggableProps.style, snapshot)}
+                                            >
+                                              {this.bodyTableConfiguration(v, snapshot.isDragging)}
+                                            </tr>
+                                            {snapshot.isDragging && (
+                                              <tr className={`${v.isChecked ? "selected-row" : "bg-white"}`}>
+                                                {this.bodyTableConfiguration(v)}
+                                              </tr>
+                                            )}
+                                          </>
+                                        )
+                                        }
+                                      </Draggable>
+                                    )
+                                  }) :
+                                  (<tr><td colSpan={18} className={'rts-table-nodata'}>
+                                    <div>
+                                      <img
+                                        src={NoDataIcon}
+                                        alt="No Data"
+                                      />
+                                    </div>
+                                  </td></tr>)
+                              }
+                              </tbody>
+                            </table>
+                          )
+                        }
+                      </Droppable>
+                    {/* </DragDropContext> */}
                   </div>
               </div>
               { DNStatus.isOpenConfirmModal && (
-                <ConfirmDNStatusModal 
+                <ConfirmDNStatusModal
                 isOpen={DNStatus.isOpenConfirmModal}
                 onSend={this.onSendRequestOnDNStatusHandler.bind(this)}
                 onCancel={() => this.setState({ DNStatus: { isOpenConfirmModal:false }} )}

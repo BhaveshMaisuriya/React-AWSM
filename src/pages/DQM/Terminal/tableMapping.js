@@ -26,10 +26,6 @@ const tableMapping = {
     label: "TERMINAL NAME",
     columnSize: "cell-text-big",
   },
-  remarks: {
-    label: "REMARKS",
-    columnSize: "cell-text-big",
-  },
   address_1: {
     label: "ADDRESS",
     columnSize: "cell-text-big",
@@ -83,7 +79,7 @@ const tableMapping = {
     columnSize: "cell-text-big",
   },
   status_awsm: {
-    label: "TERMINAL STATUS IN AWSM",
+    label: "STATUS IN AWSM",
     columnSize: "cell-text",
     type: "badge",
     getBadgeColor: value => {
@@ -95,15 +91,15 @@ const tableMapping = {
     columnSize: "cell-text-big",
   },
   terminal_operating_days_1_value: {
-    label: "TERMINAL OPERATING DAYS",
+    label: "OPERATING DAYS",
     columnSize: "cell-text-big",
   },
   terminal_operation_hours_1_time_from: {
-    label: "TERMINAL OPERATING HOURS FROM",
+    label: "OPERATING HOURS FROM",
     columnSize: "cell-text",
   },
   terminal_operation_hours_1_time_to: {
-    label: "TERMINAL OPERATING HOURS TO",
+    label: "OPERATING HOURS TO",
     columnSize: "cell-text",
   },
   no_delivery_interval_1_value: {
@@ -169,6 +165,10 @@ const tableMapping = {
   turnaround_time: {
     label: "TURNAROUND TIME",
     columnSize: "cell-text",
+  },
+  remarks: {
+    label: "REMARKS",
+    columnSize: "cell-text-big",
   },
   postcode: {
     label: "POSTCODE",

@@ -42,7 +42,9 @@ import {
   GET_RTS_GANTT_CHART_DATA,
   GET_RTS_GANTT_CHART_DATA_SUCCESS,
   GET_RTS_GANTT_CHART_DATA_FAIL,
-
+  DRAG_RTS_ORDER_BANK_TO_GANTT_CHART,
+  DRAG_RTS_ORDER_BANK_TO_GANTT_CHART_SUCCESS,
+  DRAG_RTS_ORDER_BANK_TO_GANTT_CHART_FAIL,
 } from "./actionTypes"
 
 export const getRTSOrderBankTableData = (params) => ({
@@ -264,3 +266,14 @@ export const getRTSOderBankGanttChartFail = error => ({
   payload: error,
 })
 
+export const dragOrderBankToGanttChart = () => ({
+  type: DRAG_RTS_ORDER_BANK_TO_GANTT_CHART,
+})
+
+export const dragOrderBankToGanttChartSuccess = () => ({
+  type: DRAG_RTS_ORDER_BANK_TO_GANTT_CHART_SUCCESS,
+})
+
+export const dragOrderBankToGanttChartFail = () => ({
+  type: DRAG_RTS_ORDER_BANK_TO_GANTT_CHART_FAIL,
+})

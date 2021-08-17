@@ -1,5 +1,7 @@
 import React,{ useState, useEffect } from "react"
 import { Formik, Form, Field } from "formik"
+import { isScheduler } from "helpers/auth_helper"
+
 
 const AddressTab = (props) => {
   const [data,setData] = useState(props.data)
@@ -16,7 +18,7 @@ const AddressTab = (props) => {
     newData[e.target.id] = e.target.value
     setData(newData)
   }
-
+  const isDisabledField = isScheduler()
   return (
     <Formik initialValues={data} onSubmit={handleSubmit}>
       {props => {
@@ -32,6 +34,7 @@ const AddressTab = (props) => {
                   value={data?.address_1}
                   onChange={(e)=>handleOnChangeValue(e)}
                   disabled
+                  placeholder="Type something here..."
                 />
               </div>
               <div className="col-md-6 form-group">
@@ -43,6 +46,7 @@ const AddressTab = (props) => {
                   value={data?.city}
                   onChange={(e)=>handleOnChangeValue(e)}
                   disabled
+                  placeholder="Type something here..."
                 />
               </div>
             </div>
@@ -56,6 +60,7 @@ const AddressTab = (props) => {
                   value={data?.postcode}
                   onChange={(e)=>handleOnChangeValue(e)}
                   disabled
+                  placeholder="Type something here..."
                 />
               </div>
               <div className="col-md-6 form-group">
@@ -67,6 +72,7 @@ const AddressTab = (props) => {
                   value={data?.state}
                   onChange={(e)=>handleOnChangeValue(e)}
                   disabled
+                  placeholder="Type something here..."
                 />
               </div>
             </div>
@@ -80,6 +86,7 @@ const AddressTab = (props) => {
                   value={data?.region_name}
                   onChange={(e)=>handleOnChangeValue(e)}
                   disabled
+                  placeholder="Type something here..."
                 />
               </div>
               <div className="col-md-6 form-group">
@@ -91,6 +98,7 @@ const AddressTab = (props) => {
                   value={data?.country}
                   onChange={(e)=>handleOnChangeValue(e)}
                   disabled
+                  placeholder="Type something here..."
                 />
               </div>
             </div>
@@ -103,7 +111,8 @@ const AddressTab = (props) => {
                   className="form-control"
                   value={data?.latitude}
                   onChange={(e)=>handleOnChangeValue(e)}
-                  disabled
+                  placeholder="Type something here..."
+                  disabled={isDisabledField}
                 />
               </div>
               <div className="col-md-6 form-group">
@@ -114,7 +123,8 @@ const AddressTab = (props) => {
                   className="form-control"
                   value={data?.longitude}
                   onChange={(e)=>handleOnChangeValue(e)}
-                  disabled
+                  placeholder="Type something here..."
+                  disabled={isDisabledField}
                 />
               </div>
             </div>

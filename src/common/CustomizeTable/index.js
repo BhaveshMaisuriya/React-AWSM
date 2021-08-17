@@ -158,6 +158,8 @@ function getCookieByKey(key) {
  * @param availableMetric
  * @param metricArray
  * @param metricKey
+ * @param defaultMetric
+ * @param maxMetrics
  * @returns {JSX.Element}
  * @constructor
  */
@@ -171,6 +173,7 @@ const CustomizeTableModal = ({
   defaultMetric = [],
   metricArray = false,
   metricKey = "id",
+  maxMetrics = null,
 }) => {
   // State
   const [initMetric, setInitMetric] = useState(
@@ -195,6 +198,13 @@ const CustomizeTableModal = ({
     }
   }
 
+  const frozenCols = React.useMemo(() => {
+    if (!availableMetric) return []
+    return Object.keys(availableMetric).filter(
+      metric => availableMetric[metric].key === "frozen"
+    )
+  }, [availableMetric])
+
   const [itemToSelect, setItemToSelect] = useState(
     availableMetricTransform.sort((a, b) => b.checked - a.checked)
   )
@@ -215,16 +225,17 @@ const CustomizeTableModal = ({
   }, [])
   // Function handler
   const onItemSelectChange = item => {
-    // Remove item when number of selected item is less or equal to defaultmetric will set all selected item to disabled and display error message
-    if (itemToDrag.length <= defaultMetric.length && !item.checked) {
-      setItemToSelect(
-        itemToSelect.map(item =>
-          item.checked ? { ...item, disabled: true } : item
+    if (typeof maxMetrics === "number") {
+      if (maxMetrics < defaultMetric.length) {
+        return console.error(
+          `maxMetrics(${maxMetrics}) is smaller than minMetrics(${defaultMetric.length})`
         )
-      )
-      return setError(
-        `Must not be less than ${defaultMetric.length - 1} metrics`
-      )
+      }
+      if (itemToDrag.length >= maxMetrics && item.checked) {
+        setError(
+          `Must not be more than ${maxMetrics - frozenCols.length} metrics`
+        )
+      }
     }
 
     // Update drag item list
@@ -237,6 +248,12 @@ const CustomizeTableModal = ({
       newItemToDrag.push(item)
     } else if (!item.checked && dragIndex >= 0) {
       newItemToDrag.splice(dragIndex, 1)
+    }
+    if (
+      newItemToDrag.length >= defaultMetric.length &&
+      newItemToDrag.length <= maxMetrics
+    ) {
+      setError("")
     }
     setItemToDrag(newItemToDrag)
 
@@ -252,7 +269,20 @@ const CustomizeTableModal = ({
       newItemToSelect[selectIndex] = item
     }
     setItemToSelect(newItemToSelect)
-    setError("")
+    // // Remove item when number of selected item is less or equal to defaultmetric will set all selected item to disabled and display error message
+    if (itemToDrag.length <= defaultMetric.length && !item.checked) {
+      setItemToSelect(
+        newItemToSelect.map(item =>
+          item.checked ? { ...item, disabled: true } : item
+        )
+      )
+      return setError(
+        `Must not be less than ${defaultMetric.length - 1} metrics`
+      )
+    }
+    if (typeof maxMetrics !== "number") {
+      setError("")
+    }
   }
 
   /**
@@ -267,10 +297,14 @@ const CustomizeTableModal = ({
    * Save current value to default value then close modal
    */
   const onSave = () => {
+    if (error) {
+      return
+    }
     const itemKeys = itemToDrag.map(item => item.id)
     setCookie(tableName, JSON.stringify(itemKeys), "01 Dec 3000 12:00:00 UTC")
     setInitMetric(itemKeys)
     setItemToSelect(itemToSelect.sort((a, b) => b.checked - a.checked))
+
     if (onChange) {
       onChange(itemKeys)
     }
@@ -398,6 +432,7 @@ const CustomizeTableModal = ({
                 <button
                   onClick={onSave}
                   className="btn btn-primary px-4 btn-size"
+                  disabled={error}
                 >
                   Save
                 </button>

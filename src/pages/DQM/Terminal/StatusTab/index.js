@@ -23,10 +23,10 @@ const ACTUAL_OPEN_TIME = [
 
 const timeData = []
 for (let i = 0; i < 24; i++) {
-  timeData.push(`${i.toString().padStart(2, "0")}:00:00`)
-  timeData.push(`${i.toString().padStart(2, "0")}:30:00`)
+  timeData.push(`${i.toString().padStart(2, "0")}:00`)
+  timeData.push(`${i.toString().padStart(2, "0")}:30`)
 }
-timeData.push(`23:59:00`)
+timeData.push(`23:59`)
 
 const TabStatus = props => {
   const [data, setData] = useState(props.data)
@@ -59,7 +59,7 @@ const TabStatus = props => {
     const fl = field.split(".")
     let newData = { ...data }
     if (fl.length >= 2) {
-      if(!newData[fl[0]]){
+      if (!newData[fl[0]]) {
         newData[fl[0]] = {}
       }
       newData[fl[0]][fl[1]] = value
@@ -92,17 +92,39 @@ const TabStatus = props => {
   const actualOpenTime1 = openTime1.filter(item => {
     return item.checked === true
   })
-  function renderDateRangeError(){
-    if(data?.status_awsm ==="Temporary Inactive"){
-      if(data?.inactive_date_range_1?.type==="range"){
+  function renderDateRangeError() {
+    if (data?.status_awsm === "Temporary Inactive") {
+      if (data?.inactive_date_range_1?.type === "range") {
         return null
       }
-      return <p style={{color: 'red'}}>Please fill in Temporary Inactive Date range</p>
+      return (
+        <p style={{ color: "red" }}>
+          Please fill in Temporary Inactive Date range
+        </p>
+      )
     }
+  }
+
+  function renderDayValues() {
+    let valueDate = ""
+    if (
+      data?.terminal_operating_days_1 &&
+      data?.terminal_operating_days_1.days.length === 56
+    ) {
+      valueDate = "Every Day"
+    } else if (
+      data?.terminal_operating_days_1 &&
+      data?.terminal_operating_days_1.days.length !== 0
+    ) {
+      valueDate = actualOpenTime1.map(i => i.name)
+    } else {
+      valueDate = "Select"
+    }
+    return valueDate
   }
   return (
     <div className="dqm-status-container">
-      <div className="row">
+      <div className="form-row">
         <div className="col-12 col-sm-6">
           <label>STATUS IN AWSM</label>
           <AWSMDropdown
@@ -111,21 +133,22 @@ const TabStatus = props => {
             onChange={value => onchangeHandler("status_awsm", value)}
             disabled={scheduler}
             className="form-control"
+            placeholder="Select status"
           />
         </div>
         <div className="col-12 col-sm-6">
-          <label>DATE RANGE</label>
+          <label>INACTIVE DATE RANGE</label>
           <DateRangePicker
             range={true}
             onChange={value => onchangeHandler("inactive_date_range_1", value)}
             defaultValue={data?.inactive_date_range_1}
             disabled={scheduler}
-            placeholder={"Select Date Range"}
+            placeholder={"Select date"}
           />
           {renderDateRangeError()}
         </div>
       </div>
-      <div className="row mt-3">
+      <div className="form-row mt-3">
         <div className="col-12 col-sm-6">
           <SimplePopover
             handleChange={onchangeOperationHandler}
@@ -137,16 +160,11 @@ const TabStatus = props => {
                 name="days1"
                 type="text"
                 label="TERMINAL OPERATING DAY"
-                value={
-                  data?.terminal_operating_days_1 &&
-                  data?.terminal_operating_days_1.days.length !== 0
-                    ? actualOpenTime1.map(i => i.name)
-                    : "Select day(s)"
-                }
+                value={renderDayValues()}
                 className={`${styles.field} ${
                   scheduler ? styles.disabled : ""
                 }`}
-                style={{ height: "40px", marginTop: "-4px", cursor: "pointer" }}
+                style={{ height: "40px", cursor: "pointer" }}
               />
               <div className={styles.arrow}>
                 <ReactSVG src={ArrowDropDownIcon} />
@@ -154,7 +172,7 @@ const TabStatus = props => {
             </AvForm>
           </SimplePopover>
         </div>
-        <div className="col-12 col-sm-3">
+        <div className="col-12 col-sm-3 terminal-input">
           <label>OPERATION HOURS (FROM)</label>
           <TimePicker
             value={data?.terminal_operating_days_1?.time_from}
@@ -163,9 +181,10 @@ const TabStatus = props => {
             }
             items={timeData}
             disabled={scheduler}
+            placeholder="Select time"
           />
         </div>
-        <div className="col-12 col-sm-3">
+        <div className="col-12 col-sm-3 terminal-input">
           <label>OPERATION HOURS (TO)</label>
           <TimePicker
             value={data?.terminal_operating_days_1?.time_to}
@@ -174,6 +193,7 @@ const TabStatus = props => {
             }
             items={timeData}
             disabled={scheduler}
+            placeholder="Select time"
           />
         </div>
       </div>
@@ -201,6 +221,7 @@ const TabStatus = props => {
               }
               value={data?.no_delivery_interval_1?.time_from}
               disabled={scheduler}
+              placeholder="Select time"
             />
           </div>
           <div className="col-12 col-sm-3">
@@ -212,6 +233,7 @@ const TabStatus = props => {
               }
               value={data?.no_delivery_interval_1?.time_to}
               disabled={scheduler}
+              placeholder="Select time"
             />
           </div>
         </div>
@@ -237,6 +259,7 @@ const TabStatus = props => {
               }
               value={data?.no_delivery_interval_2?.time_from}
               disabled={scheduler}
+              placeholder="Select time"
             />
           </div>
           <div className="col-12 col-sm-3">
@@ -248,6 +271,7 @@ const TabStatus = props => {
               }
               value={data?.no_delivery_interval_2?.time_to}
               disabled={scheduler}
+              placeholder="Select time"
             />
           </div>
         </div>
@@ -273,6 +297,7 @@ const TabStatus = props => {
               }
               value={data?.no_delivery_interval_3?.time_from}
               disabled={scheduler}
+              placeholder="Select time"
             />
           </div>
           <div className="col-12 col-sm-3">
@@ -284,6 +309,7 @@ const TabStatus = props => {
               }
               value={data?.no_delivery_interval_3?.time_to}
               disabled={scheduler}
+              placeholder="Select time"
             />
           </div>
         </div>
@@ -309,6 +335,7 @@ const TabStatus = props => {
               }
               value={data?.no_delivery_interval_4?.time_from}
               disabled={scheduler}
+              placeholder="Select time"
             />
           </div>
           <div className="col-12 col-sm-3">
@@ -320,6 +347,7 @@ const TabStatus = props => {
               }
               value={data?.no_delivery_interval_4?.time_to}
               disabled={scheduler}
+              placeholder="Select time"
             />
           </div>
         </div>

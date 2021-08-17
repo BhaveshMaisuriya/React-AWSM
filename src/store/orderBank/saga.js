@@ -1,4 +1,4 @@
-import { takeLatest, put, call, takeEvery } from "redux-saga/effects"
+import { takeLatest, put, call, takeEvery, select } from "redux-saga/effects"
 import Factory from "./factory"
 import {
   GET_ORDERBANK,
@@ -15,13 +15,14 @@ import {
   CANCEL_PAYMENT_IN_GANTT_CHART,
   SEND_ORDER_IN_GANTT_CHART,
   GET_RTS_GANTT_CHART_DATA,
+  DRAG_RTS_ORDER_BANK_TO_GANTT_CHART,
 } from "./actionTypes"
 
 import {
   getRTSOrderBankTableDataSuccess,
   getRTSOrderBankTableDataFail,
   getShipmentOfOderBankGanttChartSuccess,
-  getShipmentOfOderBankGanttChartFail,  
+  getShipmentOfOderBankGanttChartFail,
   getOrderBankSuccess,
   getOrderBankFail,
   getOrderBankDetailFail,
@@ -171,7 +172,7 @@ function* sendRequestCancelPaymentInGanttChart({ params={} }){
 function* sendRequestOrderPaymentInGanttChart({ params={} }){
   try {
     // send request
-    
+
     yield put(sendOrderInGanttChartSuccess())
   } catch (error) {
     yield put(sendOrderInGanttChartFail(error))
@@ -185,6 +186,12 @@ function* onGetRTSOrderBankGanttChart({ params = {} }) {
   } catch (error) {
     yield put(getRTSOderBankGanttChartFail(error))
   }
+}
+
+function* onDragOrderBankToGanttChart() {
+  let dragOrder = yield select(store => store.orderBank?.orderBankTableData?.filter(e => e.isChecked))
+  //TODO implement integrate API
+  console.log(dragOrder)
 }
 
 function* orderBankSaga() {
@@ -211,6 +218,7 @@ function* orderBankSaga() {
   yield takeLatest(CANCEL_PAYMENT_IN_GANTT_CHART , sendRequestCancelPaymentInGanttChart)
   yield takeLatest(SEND_ORDER_IN_GANTT_CHART , sendRequestOrderPaymentInGanttChart)
   yield takeLatest(GET_RTS_GANTT_CHART_DATA, onGetRTSOrderBankGanttChart)
+  yield takeLatest(DRAG_RTS_ORDER_BANK_TO_GANTT_CHART, onDragOrderBankToGanttChart)
 }
 
 export default orderBankSaga

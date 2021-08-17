@@ -1,8 +1,9 @@
 import React, { useState } from "react"
-import { Dropdown, DropdownMenu, DropdownToggle,Input } from "reactstrap"
+import { Dropdown, DropdownMenu, DropdownToggle, Input } from "reactstrap"
 // import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown"
 import { ReactSVG } from "react-svg"
 import ArrowDropDownIcon from "../../../../assets/images/AWSM-Dropdown.svg"
+import { isScheduler } from "helpers/auth_helper"
 
 /**
  * Dropdown menu
@@ -19,6 +20,7 @@ const AWSMDropdown = ({
   onChange,
   disabled = false,
   RowComponent = null,
+  placeholder,
 }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const toggle = () => setDropdownOpen(prevState => !prevState)
@@ -35,15 +37,15 @@ const AWSMDropdown = ({
     }
   }
 
-
-  const onChangeInput = (e) =>{
-      let value = e.target.value
-      let newData = items.filter((v)=>v?.code.includes(value))
-      setData(newData)
+  const onChangeInput = e => {
+    let value = e.target.value
+    let newData = items.filter(v => v?.code.includes(value))
+    setData(newData)
   }
-
+  const isDisabledField = isScheduler()
+  const isDisableValue = isDisabledField.toString()
   return (
-    <Dropdown isOpen={dropdownOpen} toggle={toggle}> 
+    <Dropdown isOpen={dropdownOpen} toggle={toggle}>
       <DropdownToggle
         data-toggle="dropdown"
         tag="div"
@@ -55,7 +57,13 @@ const AWSMDropdown = ({
             disabled ? "disabled" : ""
           }`}
         >
-          <Input defaultValue={value} className="addl-value" onChange={onChangeInput.bind(this)}></Input>
+          <Input
+            defaultValue={value ? value : placeholder}
+            className={
+              isDisableValue === "true" ? "addl-value" : "addl-value-storage"
+            }
+            onChange={onChangeInput.bind(this)}
+          ></Input>
           <ReactSVG src={ArrowDropDownIcon} className="awsm-dropdown-arrow" />
         </div>
       </DropdownToggle>

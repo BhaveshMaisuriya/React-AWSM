@@ -8,6 +8,7 @@ import {
 } from "reactstrap"
 import { createPopper } from "@popperjs/core"
 import {
+  ganttChartTableDefaultColumns,
   ganttChartTableMapping,
 } from "./tableMapping"
 import "./index.scss"
@@ -29,6 +30,8 @@ import ConfirmDNStatusModal from "./confirmDNStatusModal"
 import TerminalRelayModal from "./TerminalRelayModal"
 import { processPaymentInGanttChart, cancelPaymentInGanttChart, sendOrderInGanttChart, getRTSOderBankGanttChart, getShipmentOfOderBankGanttChart } from "../../../store/actions"
 import { cloneDeep } from 'lodash'
+import { DragDropContext, Droppable } from "react-beautiful-dnd"
+import {getCookieByKey} from "../../DQM/Common/helper"
 import OrderBankShipmentModal from "./OrderBankShipmentModal"
 import PlannedLoadTimesModal from "./PlannedLoadTimesModal"
 
@@ -45,28 +48,37 @@ const EventContextList = {
     PLAN_LOAD_TIMES:'planned_load_time'
 }
 
-const ShiftPopover = ({ record, onChange }) => {
+export const bryntumSchedulerTableNameForCookie = "rts-gantt-chart-bryntum-scheduler"
+
+const ShiftPopover = ({ record, onChange, type }) => {
   const [popoverOpen, setPopoverOpen] = useState(false)
   const toggle = () => setPopoverOpen(!popoverOpen)
-
+  const buttonRef = useRef()
+  const list = record.shift  === "ON" ? [
+    "On",
+    "On1",
+    "On2",
+    "Off"
+  ] : record.shift === "OH" ?  ["ON", "Off"] : []
   return (
     <div className="w-100">
       <button
-        id={`chart-shift-cell-${record.id}`}
+        ref={buttonRef}
+        id={`chart-${type}-cell-${record.id}`}
         type={"button"}
         onBlur={() => setPopoverOpen(false)}
       >
-        <div>{record.shift}</div>
+        <div>{record?.[type]}</div>
         <ReactSVG src={ArrowDropDownIcon} />
       </button>
       <Popover
         placement="bottom"
         isOpen={popoverOpen}
-        target={`chart-shift-cell-${record.id}`}
+        target={buttonRef}
         toggle={toggle}
       >
         <PopoverBody className="p-0">
-          {record.shift_list.map(e => (
+          {list?.map?.(e => (
             <div className="shift-item" onClick={() => onChange(record.id, e)}>
               {e}
             </div>
@@ -238,28 +250,31 @@ const ChartColumnFilter = ({
 
 function BryntumChartTable(props) {
   // const [tableData, setTableData] = useState([])
+  const {bryntumCurrentColumns} = props
   const tableData = useRef([])
   const setTableData = (newData) => {
     tableData.current = newData
   }
+  const colsRef = useRef(bryntumCurrentColumns)
   const [modal, setModal] = useState(false);
-  const [dropdownSelectedItem, setDropdownSelectedItem] = useState(null);
+  const [dropdownSelectedItem, setDropdownSelectedItem] =  useState(null);
   const [filterCondition, setFilterCondition] = useState([])
   const [eventsData, setEventsData] = useState([])
   const [shipmentDblclick, setShipmentDblclick] = useState(false)
   const schedulerProRef = useRef()
-  const firstRender = useRef(true)
-  const [filterList, setFilterList] = useState(
-    Object.keys(ganttChartTableMapping).map(e => ({
-      key: e,
-      type: ganttChartTableMapping[e].type,
-    }))
-  )
+	const firstRender = useRef(true)
+  const [isCustomizeModalOpen,setIsCustomizeModalOpen] = useState(false)
+  const [filterList, setFilterList] = useState([])
   useEffect(() => {
     const { getRTSOderBankGanttChart } = props
     getRTSOderBankGanttChart()
   }, [])
-
+  useEffect(()=> {
+    setFilterList(Object.keys(bryntumCurrentColumns).map(e => ({
+      key: e,
+      type: ganttChartTableMapping[e].type,
+    })))
+  },[bryntumCurrentColumns])
   useEffect(() => {
     setTableData(props.ganttChartData.table)
     setEventsData(props.ganttChartData.event)
@@ -381,7 +396,7 @@ function BryntumChartTable(props) {
     autoLoad: true,
     autoSync: true,
     autoCommit: true,
-    rowHeight: 40,
+    rowHeight: 30,
     barMargin: 0,
     resourceMargin: 0,
     autoAdjustTimeAxis: false,
@@ -548,9 +563,18 @@ function BryntumChartTable(props) {
     updateResourceRecords([...currentTableData], true)
   }
 
-  for (const tableMap of Object.keys(ganttChartTableMapping)) {
-    schedulerproConfig.columns.push({
-      text: ganttChartTableMapping[tableMap].label,
+  function onStatusChange(recordId, value) {
+    const currentTableData = tableData.current
+    const recordIndex = currentTableData.findIndex(e => e.id === recordId)
+    if (recordIndex >= 0) {
+      currentTableData[recordIndex] = { ...currentTableData[recordIndex], status: value }
+    }
+    updateResourceRecords([...currentTableData], true)
+  }
+
+  function generateColumnsObj(tableMap){
+    return {
+      text: ganttChartTableMapping?.[tableMap]?.label_short ?? ganttChartTableMapping?.[tableMap]?.label,
       field: tableMap,
       width: "100px",
       editor: null,
@@ -564,10 +588,17 @@ function BryntumChartTable(props) {
               </div>
             )
           }
-          case "shift": {
+          // case "shift": {
+          //   return (
+          //     <div className="chart-shift-cell">
+          //       <ShiftPopover record={record} onChange={onShiftDateChange} type="shift" list="shift_list"/>
+          //     </div>
+          //   )
+          // }
+          case "status": {
             return (
-              <div className="chart-shift-cell">
-                <ShiftPopover record={record} onChange={onShiftDateChange} />
+              <div className="chart-status-cell">
+                <ShiftPopover record={record} onChange={onStatusChange} type="status"/>
               </div>
             )
           }
@@ -589,14 +620,18 @@ function BryntumChartTable(props) {
                   </button>
                 </div>`
       },
-    })
+    }
+  }
+
+  for (const tableMap of Object.keys(colsRef.current)) {
+    schedulerproConfig.columns.push(generateColumnsObj(tableMap))
   }
 
   useEffect(() => {
     let isMounted = true // prevent bryntum maximum render
     if (schedulerProRef.current && schedulerProRef.current.instance && isMounted && !firstRender.current) {
       const { instance: scheduler } = schedulerProRef.current
-      const { ganttChartAllRadio } = props
+      const {ganttChartAllRadio} = props
       if (!ganttChartAllRadio) {
         setEventsData((prevEventsData) => {
           const newEventsData = prevEventsData.map((event) => {
@@ -610,10 +645,10 @@ function BryntumChartTable(props) {
       if (ganttChartAllRadio) {
         setEventsData((prevEventsData) => {
           const newEventsData = prevEventsData.map((event) => {
-            if (event.eventType === 'Scheduled') {
+            if(event.eventType === 'Scheduled'){
               event.highlight = event.eventFilter === ganttChartAllRadio
             }
-            if (event.eventType !== 'Scheduled') {
+            if(event.eventType !== 'Scheduled'){
               event.highlight = true
             }
             return event
@@ -623,9 +658,25 @@ function BryntumChartTable(props) {
         })
       }
     }
-    firstRender.current = false
-    return () => isMounted = false
+
+    return () => {
+      isMounted = false
+    }
   }, [props.ganttChartAllRadio])
+
+  useEffect(()=>{
+    if(schedulerProRef.current && !firstRender.current){
+      const {instance:scheduler} = schedulerProRef.current
+        for (const col of Object.keys(ganttChartTableMapping)){
+          if(scheduler.columns.get(col)){
+            scheduler.columns.get(col).remove()
+          }
+        }
+        for (const newCol of Object.keys(bryntumCurrentColumns)){
+          scheduler.columns.add(generateColumnsObj(newCol))
+        }
+    }
+  },[bryntumCurrentColumns])
 
   useEffect(() => {
     if (props.isSendRequestProcess && dropdownSelectedItem?.itemSelectedId) {
@@ -638,35 +689,38 @@ function BryntumChartTable(props) {
   }, [props.isSendRequestProcess])
 
   useEffect(() => {
-    Object.keys(ganttChartTableMapping).forEach(e => {
-      const el = document.getElementById(`chart-column-${e}-button`)
-      if (el) {
-        el.addEventListener("click", event => {
-          event.stopPropagation()
-          event.preventDefault()
-          const tooltip = document.getElementById(`chart-tooltip-${e}`)
-          createPopper(el, tooltip, {
-            placement: "bottom",
-            modifiers: [
-              {
-                name: "offset",
-                options: {
-                  offset: [0, 20],
+    if(bryntumCurrentColumns){
+      Object.keys(bryntumCurrentColumns).forEach(e => {
+        const el = document.getElementById(`chart-column-${e}-button`)
+        if (el) {
+          el.addEventListener("click", event => {
+            event.stopPropagation()
+            event.preventDefault()
+            const tooltip = document.getElementById(`chart-tooltip-${e}`)
+            createPopper(el, tooltip, {
+              placement: "bottom",
+              modifiers: [
+                {
+                  name: "offset",
+                  options: {
+                    offset: [0, 20],
+                  },
                 },
-              },
-            ],
+              ],
+            })
+            tooltip.classList.toggle("hide")
+            Object.keys(bryntumCurrentColumns).forEach(f => {
+              if (f !== e) {
+                const hideEl = document.getElementById(`chart-tooltip-${f}`)
+                hideEl.classList.add("hide")
+              }
+            })
           })
-          tooltip.classList.toggle("hide")
-          Object.keys(ganttChartTableMapping).forEach(f => {
-            if (f !== e) {
-              const hideEl = document.getElementById(`chart-tooltip-${f}`)
-              hideEl.classList.add("hide")
-            }
-          })
-        })
-      }
-    })
-  }, [])
+        }
+      })
+    }
+    firstRender.current = false
+  }, [bryntumCurrentColumns])
 
   const hideFilterElement = (dataKey) => {
     const hideEl = document.getElementById(`chart-tooltip-${dataKey}`)
@@ -715,15 +769,24 @@ function BryntumChartTable(props) {
       >
         <Row style={{}} className="w-100">
           <Col lg={12}>
-            <BryntumSchedulerPro
-              {...schedulerproConfig}
-              events={eventsData}
-              autoSync
-              resources={props.ganttChartData.table}
-              syncDataOnLoad
-              ref={schedulerProRef}
-            // other props, event handlers, etc
-            />
+              <Droppable key="gantt-chart" droppableId="gantt-chart">
+                {(provided, snapshot) => {
+                  return (
+                    <div className="rts-gantt-chart" {...provided.droppableProps} ref={provided.innerRef}>
+                      {snapshot.isDraggingOver && <div className="on-dragging"/>}
+                      <BryntumSchedulerPro
+                        {...schedulerproConfig}
+                        events={eventsData}
+                        autoSync
+                        resources={props.ganttChartData.table}
+                        syncDataOnLoad
+                        ref={schedulerProRef}
+                        // other props, event handlers, etc
+                      />
+                    </div>
+                  )
+                }}
+              </Droppable>
           </Col>
         </Row>
         {filterList.map(e => {

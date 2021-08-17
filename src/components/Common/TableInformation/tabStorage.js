@@ -87,13 +87,12 @@ const TabStorage = ({ scheduler, data, onChange }) => {
 
   const onUpdateField = (key, subKey, value) => {
     const newStorageData = { ...storageData }
-    // if (!newStorageData[key]) {
-    //   newStorageData[key] = {}
-    // }
+    if (!newStorageData[key]) {
+      newStorageData[key] = {}
+    }
     
     newStorageData[key][subKey] = value
     setStorageData(newStorageData)
-    console.log("newStorageData::", newStorageData)
     if (onChange) {
       onChange("storage", newStorageData)
     }
@@ -186,7 +185,6 @@ const TabStorage = ({ scheduler, data, onChange }) => {
                 </div>
               )}
               <div className="row">
-              {scheduler && pathName !== "/retail-customer" && (
                 <div className="col col-12 col-sm-6 col-lg-3">
                   <div className="input-header mb-2">PRODUCT CODE</div>
                   <AWSMInput
@@ -194,11 +192,10 @@ const TabStorage = ({ scheduler, data, onChange }) => {
                       storageData[key] ? storageData[key].code || "" : ""
                     }
                     onChange={value => onUpdateField(key, "code", value)}
-                    disabled={scheduler}
+                    disabled={!scheduler && pathName =='/commercial-customer' ? false:true}
                   />
                 </div>
-              )}
-              {scheduler && pathName !== "/retail-customer" && (
+              
                 <div className="col col-12 col-sm-6 col-lg-3">
                   <div className="input-header mb-2">TANK CAPACITY</div>
                   <AWSMInputNumber
@@ -211,10 +208,10 @@ const TabStorage = ({ scheduler, data, onChange }) => {
                     onChange={value =>
                       onUpdateField(key, "tank_capacity", value)
                     }
-                    disabled={scheduler}
+                    disabled={!scheduler && pathName =='/commercial-customer' ? false:true}
                   />
                 </div>
-              )}
+             
                 <div className="col col-12 col-sm-6 col-lg-3">
                   <div className="input-header mb-2">ACTIVE PRODUCT</div>
                   <AWSMDropdown
@@ -256,7 +253,7 @@ const TabStorage = ({ scheduler, data, onChange }) => {
                     closeAlert={() => setAlert(false)}
                   />
                 </div>
-              {scheduler && pathName !== "/retail-customer" && (
+              
                 <div className="col col-12 col-sm-6 col-lg-3">
                   <div className="input-header mb-2">TERMINAL</div>
                   <AWSMInput
@@ -264,11 +261,9 @@ const TabStorage = ({ scheduler, data, onChange }) => {
                       storageData[key] ? storageData[key].terminal || "" : ""
                     }
                     onChange={value => onUpdateField(key, "terminal", value)}
-                    disabled={scheduler}
+                    disabled={!scheduler && pathName =='/commercial-customer' ? false:true}
                   />
                 </div>
-              )}
-              {scheduler && pathName !== "/retail-customer" && (
                 <div className="col col-12 col-sm-6 col-lg-3">
                   <div className="input-header mb-2">DISTANCE</div>
                   <AWSMInput
@@ -276,10 +271,10 @@ const TabStorage = ({ scheduler, data, onChange }) => {
                       storageData[key] ? storageData[key].distance || "" : ""
                     }
                     onChange={value => onUpdateField(key, "distance", value)}
-                    disabled={scheduler}
+                    disabled={!scheduler && pathName =='/commercial-customer' ? false:true}
                   />
                 </div>
-              )}
+           
                 <div className="col col-12 col-sm-6 col-lg-3">
                   <div className="input-header mb-2">DURATION</div>
                   <AWSMInputNumber
@@ -323,6 +318,7 @@ const TabStorage = ({ scheduler, data, onChange }) => {
                           onChange={value =>
                             onUpdateField(key, "dead_stock", value)
                           }
+                          disabled={scheduler}
                         />
                       </div>
                     </Col>
@@ -340,6 +336,7 @@ const TabStorage = ({ scheduler, data, onChange }) => {
                           onChange={value =>
                             onUpdateField(key, "safe_fill", value)
                           }
+                          disabled={scheduler}
                         />
                       </div>
                     </Col>

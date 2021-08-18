@@ -72,14 +72,21 @@ const Product = ({
       <div className="row">
         <div className="col-3 form-group">
           <label htmlFor="productCode">PRODUCT CODE</label>
+          {isDisabledField ? 
+          <AWSMInput
+            key={value.code}
+            disabled
+            value={value.code}
+            onChange={value => onFieldChange("code", value)}
+          /> :
           <AutoCompleteDropDown
             value={value.code}
             items={productsList}
             key={value.code}
             onChange={value => onFieldChange("code", value)}
             placeholder="Select"
-            disabled={isDisabledField}
           />
+}
         </div>
         <div className="col-3 form-group">
           <label htmlFor="productName">PRODUCT NAME</label>
@@ -90,7 +97,7 @@ const Product = ({
           />
         </div>
         <div className="col-3 form-group">
-          <label>STATUS IN SAP</label>
+          <label>STATUS IN AWSM</label>
           <AWSMDropdown
             value={value.status_awsm}
             disabled={scheduler}

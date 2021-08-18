@@ -33,11 +33,14 @@ import SLATab from "./SLATab"
 import "./sla.scss"
 import Attachments from "./attachments"
 import SLATable from "./SLATable"
-import { DownloadIcon } from "../Common/icon"
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import { FormControlLabel } from "@material-ui/core"
 import Checkbox from "@material-ui/core/Checkbox"
 import MyDocument from "./MyDocument"
 import { PDFDownloadLink } from "@react-pdf/renderer"
+import { DownloadIcon } from "../Common/icon"
+import { removeKeywords } from "../Common/helper"
+import { isNull } from "lodash"
 
 const UntickIcon = () => <img src={selectAllIcon3} alt="icon" />
 const CheckedIcon = () => <img src={selectAllIcon2} alt="icon" />
@@ -53,6 +56,7 @@ class SLA extends Component {
       showDownloadOption: false,
       downloadCheck: [],
       isDownloadPdf: false,
+      checkedValues: [],
     }
     this.toggle = this.toggle.bind(this)
   }
@@ -154,7 +158,15 @@ class SLA extends Component {
 
   getCheckedDownloadVal(index) {
     const temp = [...this.state.downloadCheck]
-    temp[index].checked = !temp[index].checked
+    temp[index].checked = !temp[index].checked;
+    
+    let temp1 = [];
+    temp.map((item, index) => {
+      if(item.checked === true){
+        temp1.push(item);
+      }
+    })
+   this.setState({checkedValues: temp1});
     this.setState({ downloadCheck: temp })
   }
 
@@ -170,14 +182,19 @@ class SLA extends Component {
   }
 
   DownloadPDF() {
-    let temp = []
-    this.state.downloadCheck.map((item, index) => {
-      if (item.checked === true) {
-        temp.push(item.id)
+    this.setState({ isDownloadPdf: true })
+  }
+
+  onInputChange(event) {
+    const target = event.target
+    let newData = [...this.state.downloadCheck]
+    newData.map(item => {
+      if (target.value === item.title) {
+        item.checked = !item.checked
       }
     })
-    this.setState({ isDownloadPdf: true })
-    console.log("checked::", temp)
+   
+   this.setState({downloadCheck: newData});
   }
 
   render() {
@@ -288,7 +305,7 @@ class SLA extends Component {
                               </span>
                               <span className="download-button-message">
                                 Download Excel
-                                <i className="mdi mdi-chevron-down" />
+                                <ArrowDropDownIcon />
                               </span>
                             </div>
                           </button>
@@ -304,32 +321,52 @@ class SLA extends Component {
                               <>
                                 {this.state.downloadCheck.length > 0 &&
                                   this.state.downloadCheck.map(
-                                    (item, index) => {
+                                    (row, index) => {
                                       return (
-                                        <>
-                                          <Checkbox
-                                            id={index}
-                                            checked={item.checked}
-                                            onChange={() =>
-                                              this.getCheckedDownloadVal(index)
-                                            }
-                                          />
-                                          <Label for={index}>
-                                            {item.title}
-                                          </Label>
-                                        </>
+                                        <div
+                                        key={row.title}
+                                        className={`d-flex align-items-center filter-selection ${
+                                          row.checked ? "item-checked" : ""
+                                        }`}
+                                      >
+                                        <FormControlLabel
+                                          key={`${row.title}`}
+                                          value={`${row.title}`}
+                                          onChange={() => this.getCheckedDownloadVal(index)}
+                                          checked={row.checked}
+                                          className="checkmark"
+                                          control={
+                                            <Checkbox
+                                              icon={<UntickIcon />}
+                                              checkedIcon={<CheckedIcon />}
+                                              style={{
+                                                height: "20px",
+                                                width: "5px",
+                                                marginLeft: "16px",
+                                                marginTop: "8px",
+                                              }}
+                                            />
+                                          }
+                                          label={
+                                            isNull(row.title)
+                                              ? "-"
+                                              : removeKeywords(row.title)
+                                          }
+                                        />
+                                      </div>
                                       )
                                     }
                                   )}
                                 <div className="pdf-wid">
+                                  {/* <button onClick={() => this.DownloadPDF()}>download</button> */}
                                   <PDFDownloadLink
                                     document={
                                       <MyDocument
-                                        data={this.state.downloadCheck.length === 1 && this.state.downloadCheck[0].id === '0' ? sla.rbd : this.state.downloadCheck}
+                                        data={this.state.checkedValues.filter(val => val.title === 'All Section').length > 0 ? slaData.rbd : this.state.checkedValues}
                                       />
                                     }
-                                    fileName="slalist.pdf"
-                                    className="btn btn-outline-primary excel-btn-container pdf-btn"
+                                    fileName="rbd.pdf"
+                                    className="btn btn-primary excel-btn-container pdf-btn"
                                   >
                                     Download
                                   </PDFDownloadLink>
@@ -358,18 +395,14 @@ class SLA extends Component {
                     </TabPane>
                   </TabContent>
                 </CardBody>
-              </Card>
-              {console.log("dd::", this.state.isDownloadPdf)}
-              {this.state.isDownloadPdf && (
-                <ReactPDF>
-                  <MyDocument />
-                </ReactPDF>
-              )}
+              </Card>             
             </div>
-            {/*  */}
             {this.runAuditLogModal()}
           </div>
         </div>
+        {this.state.isDownloadPdf && (
+                  <MyDocument data={this.state.checkedValues.filter(val => val.title === 'All Section').length > 0 ? slaData.rbd : this.state.checkedValues} />
+              )}
       </Fragment>
     )
   }

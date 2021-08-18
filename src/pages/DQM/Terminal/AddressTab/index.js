@@ -31,7 +31,7 @@ const AddressTab = (props) => {
                 <Field
                   type="text"
                   id="address_1"
-                  className="form-control"
+                  className="form-control awsm-input"
                   value={data?.address_1}
                   onChange={(e)=>handleOnChangeValue(e)}
                   disabled
@@ -43,7 +43,7 @@ const AddressTab = (props) => {
                 <Field
                   type="text"
                   id="city"
-                  className="form-control"
+                  className="form-control awsm-input"
                   value={data?.city}
                   onChange={(e)=>handleOnChangeValue(e)}
                   disabled
@@ -57,7 +57,7 @@ const AddressTab = (props) => {
                 <Field
                   type="text"
                   id="postcode"
-                  className="form-control"
+                  className="form-control awsm-input"
                   value={data?.postcode}
                   onChange={(e)=>handleOnChangeValue(e)}
                   disabled
@@ -69,7 +69,7 @@ const AddressTab = (props) => {
                 <Field
                   type="text"
                   id="state"
-                  className="form-control"
+                  className="form-control awsm-input"
                   value={data?.state}
                   onChange={(e)=>handleOnChangeValue(e)}
                   disabled
@@ -83,7 +83,7 @@ const AddressTab = (props) => {
                 <Field
                   type="text"
                   id="region_name"
-                  className="form-control"
+                  className="form-control awsm-input"
                   value={data?.region_name}
                   onChange={(e)=>handleOnChangeValue(e)}
                   disabled
@@ -95,7 +95,7 @@ const AddressTab = (props) => {
                 <Field
                   type="text"
                   id="country"
-                  className="form-control"
+                  className="form-control awsm-input"
                   value={data?.country}
                   onChange={(e)=>handleOnChangeValue(e)}
                   disabled
@@ -109,7 +109,7 @@ const AddressTab = (props) => {
                 <Field
                   type="text"
                   id="latitude"
-                  className="form-control"
+                  className="form-control awsm-input"
                   value={data?.latitude}
                   onChange={(e)=>handleOnChangeValue(e)}
                   disabled={isDisabledField}
@@ -121,7 +121,7 @@ const AddressTab = (props) => {
                 <Field
                   type="text"
                   id="longitude"
-                  className="form-control"
+                  className="form-control awsm-input"
                   value={data?.longitude}
                   onChange={(e)=>handleOnChangeValue(e)}
                   disabled={isDisabledField}

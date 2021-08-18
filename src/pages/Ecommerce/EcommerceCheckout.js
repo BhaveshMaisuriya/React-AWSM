@@ -164,7 +164,7 @@ class EcommerceCheckout extends Component {
                                 <Col md="10">
                                   <Input
                                     type="text"
-                                    className="form-control"
+                                    className="form-control awsm-input"
                                     id="billing-name"
                                     placeholder="Enter your name"
                                   />
@@ -181,7 +181,7 @@ class EcommerceCheckout extends Component {
                                 <Col md="10">
                                   <Input
                                     type="email"
-                                    className="form-control"
+                                    className="form-control awsm-input"
                                     id="billing-email-address"
                                     placeholder="Enter your email"
                                   />
@@ -198,7 +198,7 @@ class EcommerceCheckout extends Component {
                                 <Col md={10}>
                                   <input
                                     type="text"
-                                    className="form-control"
+                                    className="form-control awsm-input"
                                     id="billing-phone"
                                     placeholder="Enter your Phone no."
                                   />
@@ -214,7 +214,7 @@ class EcommerceCheckout extends Component {
                                 </Label>
                                 <Col md="10">
                                   <textarea
-  className="form-control"
+  className="form-control awsm-input"
   id="billing-address"
   rows="3"
   placeholder="Enter full address"
@@ -529,7 +529,7 @@ class EcommerceCheckout extends Component {
                                 </Label>
                                 <Col md="10">
                                   <textarea
-  className="form-control"
+  className="form-control awsm-input"
   id="example-textarea"
   rows="3"
   placeholder="Write some note.."
@@ -613,7 +613,7 @@ class EcommerceCheckout extends Component {
                                   </Label>
                                   <Input
                                     type="text"
-                                    className="form-control"
+                                    className="form-control awsm-input"
                                     id="cardnumberInput"
                                     placeholder="0000 0000 0000 0000"
                                   />
@@ -626,7 +626,7 @@ class EcommerceCheckout extends Component {
                                       </Label>
                                       <Input
                                         type="text"
-                                        className="form-control"
+                                        className="form-control awsm-input"
                                         id="cardnameInput"
                                         placeholder="Name on Card"
                                       />
@@ -639,7 +639,7 @@ class EcommerceCheckout extends Component {
                                       </Label>
                                       <Input
                                         type="text"
-                                        className="form-control"
+                                        className="form-control awsm-input"
                                         id="expirydateInput"
                                         placeholder="MM/YY"
                                       />
@@ -652,7 +652,7 @@ class EcommerceCheckout extends Component {
                                       </Label>
                                       <Input
                                         type="text"
-                                        className="form-control"
+                                        className="form-control awsm-input"
                                         id="cvvcodeInput"
                                         placeholder="Enter CVV Code"
                                       />

@@ -132,7 +132,7 @@ const TabStatus = props => {
             items={STATUS_IN_AWSM}
             onChange={value => onchangeHandler("status_awsm", value)}
             disabled={scheduler}
-            className="form-control"
+            className="form-control awsm-input"
             placeholder="Select status"
           />
         </div>

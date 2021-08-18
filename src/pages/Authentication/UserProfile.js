@@ -131,7 +131,7 @@ class UserProfile extends Component {
                       name="username"
                       label="UserName"
                       value={this.state.name}
-                      className="form-control"
+                      className="form-control awsm-input"
                       placeholder="Enter UserName"
                       type="text"
                       required

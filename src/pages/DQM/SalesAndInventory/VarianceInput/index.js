@@ -49,7 +49,7 @@ const VarianceInput = ({ value, disabled = false, onChange }) => {
     return (
         <div className={`variance-input ${isFocus ? "focus" : ""} ${disabled ? "disabled" : ""} input-group`}>
             <input
-                className="form-control"
+                className="form-control awsm-input"
                 value={value}
                 disabled={disabled}
                 type="number"

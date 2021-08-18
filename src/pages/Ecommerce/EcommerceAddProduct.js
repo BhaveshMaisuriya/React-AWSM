@@ -83,7 +83,7 @@ class EcommerceAddProduct extends Component {
                               id="productname"
                               name="productname"
                               type="text"
-                              className="form-control"
+                              className="form-control awsm-input"
                             />
                           </FormGroup>
                           <FormGroup>
@@ -94,7 +94,7 @@ class EcommerceAddProduct extends Component {
                               id="manufacturername"
                               name="manufacturername"
                               type="text"
-                              className="form-control"
+                              className="form-control awsm-input"
                             />
                           </FormGroup>
                           <FormGroup>
@@ -105,7 +105,7 @@ class EcommerceAddProduct extends Component {
                               id="manufacturerbrand"
                               name="manufacturerbrand"
                               type="text"
-                              className="form-control"
+                              className="form-control awsm-input"
                             />
                           </FormGroup>
                           <FormGroup>
@@ -114,7 +114,7 @@ class EcommerceAddProduct extends Component {
                               id="price"
                               name="price"
                               type="text"
-                              className="form-control"
+                              className="form-control awsm-input"
                             />
                           </FormGroup>
                         </Col>
@@ -143,7 +143,7 @@ class EcommerceAddProduct extends Component {
                               Product Description
                             </Label>
                             <textarea
-                              className="form-control"
+                              className="form-control awsm-input"
                               id="productdesc"
                               rows="5"
                             />
@@ -253,7 +253,7 @@ class EcommerceAddProduct extends Component {
                               id="metatitle"
                               name="productname"
                               type="text"
-                              className="form-control"
+                              className="form-control awsm-input"
                             />
                           </FormGroup>
                           <FormGroup>
@@ -262,7 +262,7 @@ class EcommerceAddProduct extends Component {
                               id="metakeywords"
                               name="manufacturername"
                               type="text"
-                              className="form-control"
+                              className="form-control awsm-input"
                             />
                           </FormGroup>
                         </Col>
@@ -273,7 +273,7 @@ class EcommerceAddProduct extends Component {
                               Meta Description
                             </Label>
                             <textarea
-                              className="form-control"
+                              className="form-control awsm-input"
                               id="metadescription"
                               rows="5"
                             />

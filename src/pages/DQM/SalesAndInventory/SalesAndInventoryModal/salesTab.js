@@ -52,7 +52,7 @@ export default class SalesTab extends Component {
                     <div className="form-group col-md-6">
                         <label>ACTUAL SALES(L)<span className="extra-lbl">D-1</span></label>
                         <input
-                            className="form-control"
+                            className="form-control awsm-input"
                             defaultValue={data?.actual_sales}
                             disabled="true"
                             onChange={e => this.onChangeHandler(e.target.value, "actual_sales")}></input>
@@ -60,7 +60,7 @@ export default class SalesTab extends Component {
                     <div className="form-group col-md-6">
                         <label>EXPECTED SALES(L)<span className="extra-lbl">D-1</span></label>
                         <input
-                            className="form-control"
+                            className="form-control awsm-input"
                             defaultValue={data?.expected_sales}
                             disabled="true"
                             onChange={e => this.onChangeHandler(e.target.value, "expected_sales")}
@@ -71,11 +71,11 @@ export default class SalesTab extends Component {
                 <div className="row">
                     <div className="col-md-6 form-group">
                         <label>YESTERDAY'S SALES ADJUSTMENT (L)<span className="extra-lbl">D-1</span></label>
-                        <VarianceInput className="form-control" value={data?.yesterday_sales_adjustment} onChange={(value, field = "yesterday_sales_adjustment") => onVarianceControlChange(value, field)}></VarianceInput>
+                        <VarianceInput className="form-control awsm-input" value={data?.yesterday_sales_adjustment} onChange={(value, field = "yesterday_sales_adjustment") => onVarianceControlChange(value, field)}></VarianceInput>
                     </div>
                     <div className="col-md-6 form-group">
                         <label>YESTERDAY'S SALES ADJUSTMENT REMARKS<span className="extra-lbl">D-1</span></label>
-                        <input className="form-control" value={data?.yesterday_sales_adjustment_remarks} onChange={e => this.onChangeHandler(e.target.value, "yesterday_sales_adjustment_remarks")}></input>
+                        <input className="form-control awsm-input" value={data?.yesterday_sales_adjustment_remarks} onChange={e => this.onChangeHandler(e.target.value, "yesterday_sales_adjustment_remarks")}></input>
                     </div>
                 </div>
 
@@ -85,19 +85,19 @@ export default class SalesTab extends Component {
                             <img src={informationIcon} />
                         </Tooltip>
                             <span className="extra-lbl">D-1</span></label>
-                        <input className="form-control" defaultValue={data?.sales_final_figure} disabled="true" onChange={e => this.onChangeHandler(e.target.value, "sales_final_figure")}></input>
+                        <input className="form-control awsm-input" defaultValue={data?.sales_final_figure} disabled="true" onChange={e => this.onChangeHandler(e.target.value, "sales_final_figure")}></input>
                     </div>
                     <div className="col-md-6 form-group">
                         <label>SALES VARIANCE (L)  <Tooltip title="(Sales Final Figure - Expected Sales) / Expected Sales"><img src={informationIcon} /></Tooltip>
                             <span className="extra-lbl">D-1</span></label>
-                        <input className="form-control" disabled="true" defaultValue={data?.sales_variance} onChange={e => this.onChangeHandler(e.target.value, "sales_variance")}></input>
+                        <input className="form-control awsm-input" disabled="true" defaultValue={data?.sales_variance} onChange={e => this.onChangeHandler(e.target.value, "sales_variance")}></input>
                     </div>
                 </div>
 
                 <div className="row">
                     <div className="col-md-6 form-group">
                         <label>SALES VARIANCE (%)  <Tooltip title="((Sales Final Figure - ExpectedSales)/Expected Sales) * 100%"><img src={informationIcon} /></Tooltip><span className="extra-lbl">D-1</span></label>
-                        <input className="form-control" defaultValue={data?.sales_variance_percent} disabled="true" onChange={e => this.onChangeHandler(e.target.value, "sales_variance_percent")}></input>
+                        <input className="form-control awsm-input" defaultValue={data?.sales_variance_percent} disabled="true" onChange={e => this.onChangeHandler(e.target.value, "sales_variance_percent")}></input>
                     </div>
                 </div>
             </div >

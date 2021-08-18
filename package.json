@@ -101,6 +101,7 @@
     "react-multi-date-picker": "^2.5.4",
     "react-multiple-datepicker": "^0.1.0",
     "react-native-inline-datepicker": "^1.2.0",
+    "react-pdf-html": "^1.0.2",
     "react-perfect-scrollbar": "^1.5.8",
     "react-rangeslider": "^2.2.0",
     "react-rating": "^2.0.5",

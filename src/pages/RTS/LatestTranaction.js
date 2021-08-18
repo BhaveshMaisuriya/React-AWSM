@@ -157,7 +157,7 @@ class LatestTranaction extends Component {
                                       {this.state.currentItem ? this.state.currentItem[col.field] : ''}
                                     </label>
                                       {/* <input
-                                        className="form-control"
+                                        className="form-control awsm-input"
                                         type="text"
                                         defaultValue={this.state.currentItem ? this.state.currentItem[col.field] : ''}
                                       /> */}

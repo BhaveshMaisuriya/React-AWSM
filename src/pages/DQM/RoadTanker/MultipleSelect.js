@@ -83,7 +83,7 @@ export default class MultipleSelect extends Component {
 
     return (
       <Select
-        className="form-control"
+        className="form-control awsm-input"
         multiple
         value={RtRestrictionSelected}
         onChange={handleChange}

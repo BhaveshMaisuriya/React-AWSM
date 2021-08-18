@@ -43,7 +43,7 @@ export default class DetailsTab extends Component {
                         <label>SHIP TO PARTY</label>
                         <input
                             defaultValue={data?.ship_to_party}
-                            className="form-control"
+                            className="form-control awsm-input"
                             disabled={true}
                             onChange={e => this.onChangeHandler(e.target.value, "ship_to_party")}></input>
 
@@ -52,7 +52,7 @@ export default class DetailsTab extends Component {
                         <label>PRODUCT</label>
                         <input
                             defaultValue={data?.product}
-                            className="form-control"
+                            className="form-control awsm-input"
                             disabled={true}
                             onChange={e => this.onChangeHandler(e.target.value, "product")}></input>
                     </div>
@@ -62,14 +62,14 @@ export default class DetailsTab extends Component {
                     <div className="col-md-6 form-group">
                         <label>DATA SOURCE</label>
                         <input defaultValue={data?.data_source}
-                            className="form-control"
+                            className="form-control awsm-input"
                             disabled={true}
                             onChange={e => this.onChangeHandler(e.target.value, "data_source")}></input>
                     </div>
                     <div className="col-md-6 form-group">
                         <label>STATION RANK STATUS</label>
                         <input defaultValue={data?.station_tank_status}
-                            className="form-control"
+                            className="form-control awsm-input"
                             disabled={true}
                             onChange={e => this.onChangeHandler(e.target.value, "station_tank_status")}></input>
                     </div>
@@ -80,7 +80,7 @@ export default class DetailsTab extends Component {
                         <label>REMARKS</label>
                         <input
                             defaultValue={data?.remarks}
-                            className="form-control"
+                            className="form-control awsm-input"
                             onChange={e => this.onChangeHandler(e.target.value, "remarks")}></input>
                     </div>
                 </div>

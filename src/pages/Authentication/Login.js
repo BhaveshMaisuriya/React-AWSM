@@ -132,7 +132,7 @@ class Login extends Component {
                             name="email"
                             label="Email"
                             value="admin@petronas.com"
-                            className="form-control"
+                            className="form-control awsm-input"
                             placeholder="Enter email"
                             type="email"
                             required

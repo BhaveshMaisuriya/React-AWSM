@@ -127,7 +127,7 @@ class Header extends Component {
                 <div className="position-relative">
                   <input
                     type="text"
-                    className="form-control"
+                    className="form-control awsm-input"
                     placeholder="Search..."
                   />
                   <span className="bx bx-search-alt"/>
@@ -316,7 +316,7 @@ class Header extends Component {
                       <div className="input-group">
                         <input
                           type="text"
-                          className="form-control"
+                          className="form-control awsm-input"
                           placeholder={this.props.t("Search") + "..."}
                           aria-label="Recipient's username"
                         />

@@ -1,4 +1,4 @@
-import React, { PureComponent } from "react";
+import React, { PureComponent, Fragment } from "react";
 import {
   Button,
   Modal,
@@ -62,7 +62,7 @@ class InformationModal extends PureComponent {
               <div className="col-md-6 form-group">
                 <label> VEHICAL ID</label>
                   <input
-                    className="form-control"
+                    className="form-control awsm-input"
                     type="text"
                     defaultValue={"RYD0287"}
                     disabled={true}
@@ -71,7 +71,7 @@ class InformationModal extends PureComponent {
               <div className="col-md-6 form-group">
                 <label> VEHICAL OWNER</label>
                   <input
-                    className="form-control"
+                    className="form-control awsm-input"
                     type="text"
                     defaultValue={"Eshah Filling Station"}
                     disabled={true}
@@ -82,7 +82,7 @@ class InformationModal extends PureComponent {
               <div className="col-md-6 form-group">
                 <label>STATUS IN SAP</label>
                   <input
-                    className="form-control"
+                    className="form-control awsm-input"
                     type="text"
                     defaultValue={"Operational"}
                     disabled={true}
@@ -91,7 +91,7 @@ class InformationModal extends PureComponent {
               <div className="col-md-6 form-group">
                 <label>RT CAPACITY</label>
                   <input
-                    className="form-control"
+                    className="form-control awsm-input"
                     type="text"
                     defaultValue={"Operational"}
                     disabled={true}
@@ -102,7 +102,7 @@ class InformationModal extends PureComponent {
               <div className="col-md-12 form-group">
                 <label> REMARKS</label>
                   <input
-                    className="form-control"
+                    className="form-control awsm-input"
                     type="text"
                     defaultValue={"Shaziman only"}
                   />

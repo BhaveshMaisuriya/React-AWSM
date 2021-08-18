@@ -115,14 +115,21 @@
 }
 
 .sla-rbd-download { 
-  width: 125px !important;
-  height: 320px;
+  width: 170px !important;
+  max-height: 320px;
+  height: 100%;
   overflow-y: auto;
-.css-j204z7-MuiFormControlLabel-root {
-  width: 100%;
-}
 }
 
 .pdf-wid {
   margin-bottom: 5em !important;
 }
+
+.pdf-wid .pdf-btn {
+  width: 100%;
+  border-radius: 25px;
+}
+
+// .bs-popover-auto {
+//   left: -20px !important;
+// }

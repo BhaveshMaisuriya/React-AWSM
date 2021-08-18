@@ -2,10 +2,11 @@ const tableColumns = [
   "vehicle",
   "owner",
   "status_sap",
-  "product_type_awsm",
+  "product_type_sap",
   "pump_type",
   "daily_available_hours",
   "capacity",
+  "default_terminal",
   "chartering_type",
   "remarks",
 ]
@@ -32,6 +33,11 @@ const tableMapping = {
       return value === "ACTIVE" ? "primary" : "secondary"
     },
   },
+  product_type_sap: {
+    label: "PRODUCT TYPE SAP",
+    apiKey: "product_type_sap",
+    columnSize: "cell-text",
+  },
   status_awsm: {
     label: "STATUS IN AWSM",
     apiKey: "status_awsm",
@@ -40,21 +46,6 @@ const tableMapping = {
     getBadgeColor: value => {
       return value === "ACTIVE" ? "primary" : "secondary"
     },
-  },
-  default_terminal: {
-    label: "DEFAULT TERMINAL",
-    apiKey: "default_terminal",
-    columnSize: "cell-text",
-  },
-  shift_type: {
-    label: "SHIFT TYPE",
-    apiKey: "shift_type",
-    columnSize: "cell-text",
-  },
-  product_type_awsm: {
-    label: "PRODUCT TYPE AWSM",
-    apiKey: "product_type_awsm",
-    columnSize: "cell-text",
   },
   pump_type: {
     label: "PUMP TYPE",
@@ -71,15 +62,10 @@ const tableMapping = {
     apiKey: "capacity",
     columnSize: "cell-text",
   },
-  product_type_sap: {
-    label: "PRODUCT TYPE SAP",
-    apiKey: "product_type_sap",
+  default_terminal: {
+    label: "DEFAULT TERMINAL",
+    apiKey: "default_terminal",
     columnSize: "cell-text",
-  },
-  temporary_product_date_range: {
-    label: "TEMPORARY PRODUCT DATE RANGE",
-    apiKey: "temporary_product_date_range",
-    columnSize: "cell-text-big",
   },
   chartering_type: {
     label: "CHARTERING TYPE",
@@ -89,6 +75,21 @@ const tableMapping = {
   remarks: {
     label: "REMARKS",
     apiKey: "remarks",
+    columnSize: "cell-text-big",
+  },
+  shift_type: {
+    label: "SHIFT TYPE",
+    apiKey: "shift_type",
+    columnSize: "cell-text",
+  },
+  product_type_awsm: {
+    label: "PRODUCT TYPE AWSM",
+    apiKey: "product_type_awsm",
+    columnSize: "cell-text",
+  },
+  temporary_product_date_range: {
+    label: "TEMPORARY PRODUCT DATE RANGE",
+    apiKey: "temporary_product_date_range",
     columnSize: "cell-text-big",
   },
   customer_type: {

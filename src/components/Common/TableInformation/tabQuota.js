@@ -15,7 +15,7 @@ const tabQuota = ({ scheduler, data, onChange }) => {
     if (!newStorageData[key]) {
       newStorageData[key] = {}
     }
-    newStorageData[key][subKey] = value
+    newStorageData[key] = { ...newStorageData[key], [subKey]: value }
     setStorageData(newStorageData)
     if (onChange) {
       onChange("storage", newStorageData)

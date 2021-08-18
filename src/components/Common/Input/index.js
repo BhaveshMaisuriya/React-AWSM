@@ -26,7 +26,7 @@ const AWSMInput = ({disabled, onChange, placeholder, value, type="text", default
     <input type={type}
            value={value}
            defaultValue={defaultValue}
-           placeholder={placeholder}
+           placeholder={disabled ? "" : placeholder}
            disabled={disabled}
            onChange={onValueChange}
            className={`awsm-input w-100 ${disabled ? "disabled" : ""}`} />

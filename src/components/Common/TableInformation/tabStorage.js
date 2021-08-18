@@ -90,8 +90,7 @@ const TabStorage = ({ scheduler, data, onChange }) => {
     if (!newStorageData[key]) {
       newStorageData[key] = {}
     }
-    
-    newStorageData[key][subKey] = value
+    newStorageData[key] = { ...newStorageData[key], [subKey]: value }
     setStorageData(newStorageData)
     if (onChange) {
       onChange("storage", newStorageData)
@@ -187,7 +186,7 @@ const TabStorage = ({ scheduler, data, onChange }) => {
               <div className="row">
                 <div className="col col-12 col-sm-6 col-lg-3">
                   <div className="input-header mb-2">PRODUCT CODE</div>
-                  <AWSMInput
+                  <AWSMInputNumber
                     defaultValue={
                       storageData[key] ? storageData[key].code || "" : ""
                     }
@@ -195,7 +194,7 @@ const TabStorage = ({ scheduler, data, onChange }) => {
                     disabled={!scheduler && pathName =='/commercial-customer' ? false:true}
                   />
                 </div>
-              
+
                 <div className="col col-12 col-sm-6 col-lg-3">
                   <div className="input-header mb-2">TANK CAPACITY</div>
                   <AWSMInputNumber
@@ -211,7 +210,7 @@ const TabStorage = ({ scheduler, data, onChange }) => {
                     disabled={!scheduler && pathName =='/commercial-customer' ? false:true}
                   />
                 </div>
-             
+
                 <div className="col col-12 col-sm-6 col-lg-3">
                   <div className="input-header mb-2">ACTIVE PRODUCT</div>
                   <AWSMDropdown
@@ -253,7 +252,7 @@ const TabStorage = ({ scheduler, data, onChange }) => {
                     closeAlert={() => setAlert(false)}
                   />
                 </div>
-              
+
                 <div className="col col-12 col-sm-6 col-lg-3">
                   <div className="input-header mb-2">TERMINAL</div>
                   <AWSMInput
@@ -266,7 +265,7 @@ const TabStorage = ({ scheduler, data, onChange }) => {
                 </div>
                 <div className="col col-12 col-sm-6 col-lg-3">
                   <div className="input-header mb-2">DISTANCE</div>
-                  <AWSMInput
+                  <AWSMInputNumber
                     value={
                       storageData[key] ? storageData[key].distance || "" : ""
                     }
@@ -274,7 +273,7 @@ const TabStorage = ({ scheduler, data, onChange }) => {
                     disabled={!scheduler && pathName =='/commercial-customer' ? false:true}
                   />
                 </div>
-           
+
                 <div className="col col-12 col-sm-6 col-lg-3">
                   <div className="input-header mb-2">DURATION</div>
                   <AWSMInputNumber
@@ -309,7 +308,7 @@ const TabStorage = ({ scheduler, data, onChange }) => {
                         <label>DEADSTOCK</label>
                         <AWSMInputNumber
                           type="number"
-                          placeholder="Numberic only"
+                          placeholder="Numeric only"
                           defaultValue={
                             storageData[key]
                               ? storageData[key].dead_stock || ""
@@ -327,7 +326,7 @@ const TabStorage = ({ scheduler, data, onChange }) => {
                         <label>SAFE FILL</label>
                         <AWSMInputNumber
                           type="number"
-                          placeholder="Numberic only"
+                          placeholder="Numeric only"
                           defaultValue={
                             storageData[key]
                               ? storageData[key].safe_fill || ""

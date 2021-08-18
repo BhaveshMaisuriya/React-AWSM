@@ -85,7 +85,6 @@ const Product = ({
           <label htmlFor="productName">PRODUCT NAME</label>
           <AWSMInput
             key={value.code}
-            defaultValue={value.name}
             disabled
             onChange={value => onFieldChange("name", value)}
           />

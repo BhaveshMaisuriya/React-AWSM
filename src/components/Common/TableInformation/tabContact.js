@@ -28,7 +28,7 @@ const tabContact = ({ scheduler, data, onChange }) => {
     if (!newContactData[`contact_${index + 1}`]) {
       newContactData[`contact_${index + 1}`] = {}
     }
-    newContactData[`contact_${index + 1}`][key] = value;
+    newContactData[`contact_${index + 1}`] = { ...newContactData[`contact_${index + 1}`], [key]: value }
     if (onChange) {
       onChange("contact", newContactData)
     }

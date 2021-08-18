@@ -20,6 +20,31 @@ axiosApi.interceptors.response.use(
 
 export { axiosApi }
 
+const realAxiosApi = axios.create({
+  headers: {
+    'content-type': 'application/json',
+  },
+})
+
+realAxiosApi.interceptors.request.use(
+  config => {
+    config.headers = {
+      Authorization: sessionStorage.getItem("apiAccessToken"),
+    }
+    return config
+  },
+  error => {
+    Promise.reject(error)
+  }
+)
+
+realAxiosApi.interceptors.response.use(
+  response => response,
+  error => Promise.reject(error)
+)
+
+export { realAxiosApi }
+
 export async function get(url, config = {}) {
   return await axiosApi.get(url, { ...config }).then(response => response.data)
 }

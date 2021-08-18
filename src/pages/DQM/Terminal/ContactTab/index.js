@@ -31,7 +31,7 @@ const ContactTab = (props) => {
                   id="supervisorName"
                   className="form-control awsm-input"
                   value={props?.values?.supervisor?.name}
-                  placeholder="Name (etc: John Doe)"
+                  placeholder={isDisabledField ? "": "Name (etc: John Doe)"}
                   disabled={isDisabledField}
                   onChange={props.handleChange}
                 />
@@ -47,7 +47,7 @@ const ContactTab = (props) => {
                   className="form-control awsm-input"
                   value={props?.values?.supervisor?.number}
                   onChange={props.handleChange}
-                  placeholder="Contact No. (etc: 011-23456789)"
+                  placeholder={isDisabledField ? "" : "Contact No. (etc: 011-23456789)"}
                   disabled={isDisabledField}
                 />
                 <ErrorMessage name="supervisorNumber" component="div" />
@@ -63,7 +63,7 @@ const ContactTab = (props) => {
                   className="form-control awsm-input"
                   value={props?.values?.supervisor?.email}
                   onChange={props.handleChange}
-                  placeholder="Email (etc: johndoe@petronas.com"
+                  placeholder={isDisabledField ? "" : "Email (etc: johndoe@petronas.com"}
                   disabled={isDisabledField}
                 />
                 <ErrorMessage name="supervisorEmail" component="div" />
@@ -82,7 +82,7 @@ const ContactTab = (props) => {
                   className="form-control awsm-input"
                   value={props?.values?.superintendant?.name}
                   onChange={props.handleChange}
-                  placeholder="Name (etc: John Doe)"
+                  placeholder={isDisabledField ? "" : "Name (etc: John Doe)"}
                   disabled={isDisabledField}
                 />
                 <ErrorMessage name="superintendant.name" component="div" />
@@ -97,7 +97,7 @@ const ContactTab = (props) => {
                   className="form-control awsm-input"
                   value={props?.values?.superintendant?.number}
                   onChange={props.handleChange}
-                  placeholder="Contact No. (etc: 011-23456789)"
+                  placeholder={isDisabledField ? "" : "Contact No. (etc: 011-23456789)"}
                   disabled={isDisabledField}
                 />
 
@@ -114,7 +114,7 @@ const ContactTab = (props) => {
                   id="superintendantEmail"
                   name="superintendant.email"
                   className="form-control awsm-input"
-                  placeholder="Email (etc: johndoe@petronas.com"
+                  placeholder={isDisabledField ? "" : "Email (etc: johndoe@petronas.com"}
                   value={props?.values?.superintendant?.email}
                   onChange={props.handleChange}
                   disabled={isDisabledField}

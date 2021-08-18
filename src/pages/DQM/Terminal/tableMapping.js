@@ -7,8 +7,8 @@ const tableColumns = [
   "region_group",
   "status_awsm",
   "terminal_operating_days_1_value",
-  "terminal_operation_hours_1_time_from",
-  "terminal_operation_hours_1_time_to",
+  "terminal_operating_days_1_time_from",
+  "terminal_operating_days_1_time_to",
   "loading_bay_no",
   "loading_time",
   "turnaround_time",
@@ -94,11 +94,11 @@ const tableMapping = {
     label: "OPERATING DAYS",
     columnSize: "cell-text-big",
   },
-  terminal_operation_hours_1_time_from: {
+  terminal_operating_days_1_time_from: {
     label: "OPERATING HOURS FROM",
     columnSize: "cell-text",
   },
-  terminal_operation_hours_1_time_to: {
+  terminal_operating_days_1_time_to: {
     label: "OPERATING HOURS TO",
     columnSize: "cell-text",
   },

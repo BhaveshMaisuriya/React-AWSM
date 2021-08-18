@@ -216,7 +216,7 @@ class Chat extends Component {
                         <div className="position-relative">
                           <Input
                             type="text"
-                            className="form-control"
+                            className="form-control awsm-input"
                             placeholder="Search..."
                           />
                           <i className="bx bx-search-alt search-icon" />
@@ -474,7 +474,7 @@ class Chat extends Component {
                                         <InputGroup>
                                           <Input
                                             type="text"
-                                            className="form-control"
+                                            className="form-control awsm-input"
                                             placeholder="Search ..."
                                             aria-label="Recipient's username"
                                           />

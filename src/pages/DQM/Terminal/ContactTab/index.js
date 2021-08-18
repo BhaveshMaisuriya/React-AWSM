@@ -29,7 +29,7 @@ const ContactTab = (props) => {
                   type="text"
                   name="supervisor.name"
                   id="supervisorName"
-                  className="form-control"
+                  className="form-control awsm-input"
                   value={props?.values?.supervisor?.name}
                   placeholder="Name (etc: John Doe)"
                   disabled={isDisabledField}
@@ -44,7 +44,7 @@ const ContactTab = (props) => {
                 <Field
                   name="supervisor.number"
                   id="supervisorNumber"
-                  className="form-control"
+                  className="form-control awsm-input"
                   value={props?.values?.supervisor?.number}
                   onChange={props.handleChange}
                   placeholder="Contact No. (etc: 011-23456789)"
@@ -60,7 +60,7 @@ const ContactTab = (props) => {
                   type="email"
                   id="supervisorEmail"
                   name="supervisor.email"
-                  className="form-control"
+                  className="form-control awsm-input"
                   value={props?.values?.supervisor?.email}
                   onChange={props.handleChange}
                   placeholder="Email (etc: johndoe@petronas.com"
@@ -79,7 +79,7 @@ const ContactTab = (props) => {
                   type="text"
                   id="superintendantName"
                   name="superintendant.name"
-                  className="form-control"
+                  className="form-control awsm-input"
                   value={props?.values?.superintendant?.name}
                   onChange={props.handleChange}
                   placeholder="Name (etc: John Doe)"
@@ -94,7 +94,7 @@ const ContactTab = (props) => {
                 <Field
                   id="superintendantNumber"
                   name="superintendant.number"
-                  className="form-control"
+                  className="form-control awsm-input"
                   value={props?.values?.superintendant?.number}
                   onChange={props.handleChange}
                   placeholder="Contact No. (etc: 011-23456789)"
@@ -113,7 +113,7 @@ const ContactTab = (props) => {
                   type="email"
                   id="superintendantEmail"
                   name="superintendant.email"
-                  className="form-control"
+                  className="form-control awsm-input"
                   placeholder="Email (etc: johndoe@petronas.com"
                   value={props?.values?.superintendant?.email}
                   onChange={props.handleChange}

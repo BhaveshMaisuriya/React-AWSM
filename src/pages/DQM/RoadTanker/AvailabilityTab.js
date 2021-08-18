@@ -30,7 +30,7 @@ class AvailabilityTab extends PureComponent {
             <div className="col-md-6 form-group">
               <label> DEFAULT TERMINAL </label>
               <input
-                className="form-control"
+                className="form-control awsm-input"
                 type="text"
                 defaultValue={data?.default_terminal}
                 disabled={true}
@@ -49,7 +49,7 @@ class AvailabilityTab extends PureComponent {
                 disabled={
                   (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
                 }
-                className="form-control"
+                className="form-control awsm-input"
               />
             </div>
           </div>
@@ -57,7 +57,7 @@ class AvailabilityTab extends PureComponent {
             <div className="col-md-6 form-group">
               <label>DAILY AVAILABLE HOURS</label>
               <input
-                className="form-control"
+                className="form-control awsm-input"
                 type="text"
                 defaultValue={data?.daily_available_hours}
                 disabled={true}
@@ -78,7 +78,7 @@ class AvailabilityTab extends PureComponent {
                 disabled={
                   (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
                 }
-                className="form-control"
+                className="form-control awsm-input"
               />
             </div>
             <div className="col-md-6 form-group">
@@ -116,7 +116,7 @@ class AvailabilityTab extends PureComponent {
                 disabled={
                   (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
                 }
-                className="form-control"
+                className="form-control awsm-input"
                 placeholder="Select"
               />
             </div>
@@ -142,7 +142,7 @@ class AvailabilityTab extends PureComponent {
                 disabled={
                   (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
                 }
-                className="form-control"
+                className="form-control awsm-input"
               />
             </div>
           </div>

@@ -180,7 +180,7 @@ class SpecificationTab extends PureComponent {
       ) : (
         <div className="input-group add-restriction">
           <input
-            className="form-control"
+            className="form-control awsm-input"
             id="restriction"
             maxLength="20"
             type="text"
@@ -214,7 +214,7 @@ class SpecificationTab extends PureComponent {
             <div className="col-md-6 form-group">
               <label> PRODUCT TYPE IN SAP</label>
               <input
-                className="form-control"
+                className="form-control awsm-input"
                 type="text"
                 placeholder="Typing something here..."
                 defaultValue={data?.product_type_sap}
@@ -227,7 +227,7 @@ class SpecificationTab extends PureComponent {
             <div className="col-md-6 form-group">
               <label> PUMP TYPE </label>
               <input
-                className="form-control"
+                className="form-control awsm-input"
                 type="text"
                 placeholder="Typing something here..."
                 defaultValue={data?.pump_type}
@@ -246,14 +246,14 @@ class SpecificationTab extends PureComponent {
                 disabled={
                   (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
                 }
-                className="form-control"
+                className="form-control awsm-input"
                 placeholder="Select"
               />
             </div>
             <div className="col-md-6 form-group">
               <label>DATE</label>
               <DatePicker
-                className="form-control"
+                className="form-control awsm-input"
                 disabled={
                   (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
                 }
@@ -270,7 +270,7 @@ class SpecificationTab extends PureComponent {
             <div className="col-md-6 form-group">
               <label>CHARTERING TYPE</label>
               <input
-                className="form-control"
+                className="form-control awsm-input"
                 disabled={true}
                 defaultValue={data?.chartering_type}
                 onChange={e =>
@@ -287,7 +287,7 @@ class SpecificationTab extends PureComponent {
                 disabled={
                   (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
                 }
-                className="form-control"
+                className="form-control awsm-input"
               />
             </div>
           </div>
@@ -303,7 +303,7 @@ class SpecificationTab extends PureComponent {
             <div className="form-group col-md-6">
               <label>RESTRICT CODE</label>
               <input
-                className="form-control"
+                className="form-control awsm-input"
                 disabled={true}
                 defaultValue={data?.restriction_code}
                 onChange={e =>

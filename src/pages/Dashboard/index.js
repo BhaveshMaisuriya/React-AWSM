@@ -228,7 +228,7 @@ class Dashboard extends Component {
                               //       </label>
                               //       <div className="col-md-10">
                               //         <input
-                              //           className="form-control"
+                              //           className="form-control awsm-input"
                               //           type="text"
                               //           defaultValue={this.state.currentItem ? this.state.currentItem[col.field] : ''}
                               //         />

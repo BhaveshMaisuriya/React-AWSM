@@ -19,7 +19,7 @@ class AvailabilityTab extends PureComponent {
             <div className="col-md-6 form-group">
               <label> DEFAULT TERMINAL </label>
               <input
-                className="form-control"
+                className="form-control awsm-input"
                 type="text"
                 defaultValue={"Lorem ipsum"}
                 disabled={true}
@@ -28,7 +28,7 @@ class AvailabilityTab extends PureComponent {
             <div className="col-md-6 form-group">
               <label> SHIFT TYPE </label>
               <select
-                className="form-control"
+                className="form-control awsm-input"
                 type="text"
                 defaultValue={"0"}
               >
@@ -45,7 +45,7 @@ class AvailabilityTab extends PureComponent {
                 DAILY AVAILABLE HOURS
               </label>
               <input
-                className="form-control"
+                className="form-control awsm-input"
                 type="text"
                 defaultValue={"RYD0287"}
                 disabled={true}
@@ -55,7 +55,7 @@ class AvailabilityTab extends PureComponent {
           <div className="row">
             <div className="col-md-6 form-group">
               <label> STATUS IN AWSM </label>
-              <select defaultValue="0" className="form-control" type="text">
+              <select defaultValue="0" className="form-control awsm-input" type="text">
                 <option value="0">Inactive</option>
                 <option value="1">Active</option>
               </select>
@@ -63,7 +63,7 @@ class AvailabilityTab extends PureComponent {
             <div className="col-md-6 form-group">
               <label> DATE</label>
               <DatePicker
-                className="form-control"
+                className="form-control awsm-input"
                 selected={new Date()}
                 onChange={date => this.setState({ date: date })}
               />
@@ -77,7 +77,7 @@ class AvailabilityTab extends PureComponent {
             <div className="col-md-6 form-group">
               <label>DATE 1</label>
               <DatePicker
-                className="form-control"
+                className="form-control awsm-input"
                 selected={new Date()}
                 onChange={date => this.setState({ date: date })}
               />
@@ -85,7 +85,7 @@ class AvailabilityTab extends PureComponent {
             <div className="col-md-6 form-group">
               <label> MOBILIZED TERMINAL NAME 1</label>
               <select
-                className="form-control"
+                className="form-control awsm-input"
                 type="text"
                 defaultValue={"1"}
               >

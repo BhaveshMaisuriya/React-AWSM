@@ -25,7 +25,7 @@ class TrailerTab extends PureComponent {
               <input
                 type="number"
                 placeholder="Numeric only"
-                className="form-control"
+                className="form-control awsm-input"
                 defaultValue={data?.unladen_weight}
                 disabled={true}
                 onChange={e => this.OnChangHandler("unladen_weight", e.target.value)}
@@ -36,7 +36,7 @@ class TrailerTab extends PureComponent {
               <input
                 type="number"
                 placeholder="Numeric only"
-                className="form-control"
+                className="form-control awsm-input"
                 defaultValue={data?.max_weight}
                 disabled
                 onChange={e => this.OnChangHandler("max_weight", e.target.value)}
@@ -50,7 +50,7 @@ class TrailerTab extends PureComponent {
               <input
                 type="number"
                 placeholder="Numeric only"
-                className="form-control"
+                className="form-control awsm-input"
                 disabled={true}
                 defaultValue={data?.compartment_no}
                 onChange={e => this.OnChangHandler("compartment_no", e.target.value)}
@@ -62,7 +62,7 @@ class TrailerTab extends PureComponent {
               <input
                 type="number"
                 placeholder="Numeric only"
-                className="form-control"
+                className="form-control awsm-input"
                 disabled={true}
                 defaultValue={data?.compartment_max_vol}
                 onChange={e => this.OnChangHandler("compartment_max_vol", e.target.value)}
@@ -74,7 +74,7 @@ class TrailerTab extends PureComponent {
             {/* <div className="col-md-6 form-group">
               <label>PRODUCT WEIGHT FOR HSE COMPLIANCE</label>
               <input
-                className="form-control"
+                className="form-control awsm-input"
                 placeholder="Type something here.."
                 type="number"
                 disabled={true}
@@ -87,7 +87,7 @@ class TrailerTab extends PureComponent {
               <input
                 type="number"
                 placeholder="Numeric only"
-                className="form-control"
+                className="form-control awsm-input"
                 disabled={
                   (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
                 }

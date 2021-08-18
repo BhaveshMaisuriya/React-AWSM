@@ -88,7 +88,7 @@ class ChatBox extends Component {
                               <InputGroup>
                                 <Input
                                   type="text"
-                                  className="form-control"
+                                  className="form-control awsm-input"
                                   placeholder="Search ..."
                                   aria-label="Recipient's username"
                                 />

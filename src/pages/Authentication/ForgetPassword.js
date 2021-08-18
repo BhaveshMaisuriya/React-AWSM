@@ -91,7 +91,7 @@ class ForgetPasswordPage extends Component {
                           <AvField
                             name="email"
                             label="Email"
-                            className="form-control"
+                            className="form-control awsm-input"
                             placeholder="Enter email"
                             type="email"
                             required

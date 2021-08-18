@@ -16,7 +16,7 @@ class SpecificationTab extends PureComponent {
             <div className="col-md-6 form-group">
               <label> PRODUCT TYPE IN SAP</label>
                 <input
-                  className="form-control"
+                  className="form-control awsm-input"
                   type="text"
                   defaultValue={"Lorem ipsum"}
                   disabled={true}
@@ -25,7 +25,7 @@ class SpecificationTab extends PureComponent {
             <div className="col-md-6 form-group">
               <label> PUMP TYPE </label>
               <input
-                  className="form-control"
+                  className="form-control awsm-input"
                   type="text"
                   defaultValue={"Lorem ipsum"}
                   disabled={true}
@@ -35,26 +35,26 @@ class SpecificationTab extends PureComponent {
          <div className="row">
            <div className="col-md-6 form-group">
              <label>PRODUCT TYPE IN ASWM</label>
-             <select defaultValue="MultiProduct" className="form-control">
+             <select defaultValue="MultiProduct" className="form-control awsm-input">
               <option value="MultiProduct">Multiproduct</option>
              </select>
            </div>
            <div className="col-md-6 form-group">
               <label>DATE</label>
-            <DatePicker className="form-control"></DatePicker>
+            <DatePicker className="form-control awsm-input"></DatePicker>
           </div>
          </div>
 
          <div className="row">
            <div className="col-md-6 form-group">
              <label>CHARTERING TYPE</label>
-             <input className="form-control"
+             <input className="form-control awsm-input"
              disabled={true}
              defaultValue={'Lorem Ipsum'}></input>
            </div>
            <div className="col-md-6 form-group">
             <label>CUSTOMER TYPE</label>
-              <select defaultValue="0" className="form-control">
+              <select defaultValue="0" className="form-control awsm-input">
                 <option value="0">Active</option>
               </select>
            </div>
@@ -66,13 +66,13 @@ class SpecificationTab extends PureComponent {
                 <label>RT RESTRICTION</label>
                 <a className="extra-button">+ Add</a>
               </div>
-              <select defaultValue="0" className="form-control">
+              <select defaultValue="0" className="form-control awsm-input">
                 <option value="0">Multiproduct, Long Haul, Pit Stop</option>
               </select>
             </div>
             <div className="form-group col-md-6">
               <label>RESTRICT CODE</label>
-              <input className="form-control"
+              <input className="form-control awsm-input"
               disabled={true}
               defaultValue={"1001"}></input>
             </div>

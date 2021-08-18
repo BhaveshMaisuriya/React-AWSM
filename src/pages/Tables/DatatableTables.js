@@ -744,7 +744,7 @@ class DatatableTables extends Component {
                                   <Row className="pt-3" key={index}>
                                     <Col sm={2}>
                                       <div className="">
-                                        <select className="form-control">
+                                        <select className="form-control awsm-input">
                                           {data[locationPath].columns.map(
                                             (popType, lIndex) => {
                                               if (popType.type === "btn")
@@ -761,7 +761,7 @@ class DatatableTables extends Component {
                                     </Col>
                                     <Col sm={2}>
                                       <div className="">
-                                        <select className="form-control">
+                                        <select className="form-control awsm-input">
                                           {popTypes.map((popType, lIndex) => {
                                             return (
                                               <option key={lIndex}>
@@ -775,7 +775,7 @@ class DatatableTables extends Component {
                                     <Col sm={4}>
                                       <div className="">
                                         <input
-                                          className="form-control"
+                                          className="form-control awsm-input"
                                           type="text"
                                         />
                                       </div>
@@ -894,7 +894,7 @@ class DatatableTables extends Component {
                   </label>
                   <div className="col-md-10">
                     <input
-                      className="form-control"
+                      className="form-control awsm-input"
                       type="text"
                       defaultValue={
                         this.state.currentItem

@@ -65,7 +65,7 @@ class FixedCoulmnTable extends Component {
 
   addTd = arr => {
     const { config, filterData } = this.props
-    if (!arr) return null
+    if (!arr) return null    
     return arr.map((e, index) => (
       <td key={index}>
         <div className={"d-flex align-items-center table_header_fit_text"}>
@@ -261,7 +261,6 @@ class FixedCoulmnTable extends Component {
 
   render() {
     const { tableData } = this.props
-
     const { fixedHeaders, regularHeaders } = this.state
     return (
       <div className="container" style={{ maxWidth: "100%" }}>

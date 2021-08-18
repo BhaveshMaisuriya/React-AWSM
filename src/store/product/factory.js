@@ -1,21 +1,23 @@
 import { isNull } from "lodash"
 
-const checkNullValue = (data, defaultValue) =>
+const checkNullValue = (data, key, defaultValue) =>
   isNull(data) ? defaultValue : data
 
 const getValueFromObj = (dataObj, key, defaultVal) => {
   if (Object.prototype.hasOwnProperty.call(dataObj, key)) {
-    return checkNullValue(dataObj[key], defaultVal)
+    let temp = ((key === 'status_sap' || 'status_awsm') && dataObj[key] === null) ? 'ACTIVE' : ((key === 'status_sap' || 'status_awsm') && dataObj[key] === 'x') ? 'DELETE' : checkNullValue(dataObj[key], key, defaultVal);
+    return temp;
   } else return defaultVal
 }
 
 export default function factory(data) {
   let retailCustomerObj = {}
   const finalData = []
-  data.data.list.forEach(d => {
+  data.data.list.forEach(d => {    
     const cloneobj = JSON.parse(JSON.stringify(retailCustomerObj))
-    for (const fields in d)
-      retailCustomerObj[`${fields}`] = getValueFromObj(d, fields, "-")
+    for (const fields in d) {      
+      retailCustomerObj[`${fields}`] = getValueFromObj(d, fields, "-");
+    }
     finalData.push(retailCustomerObj)
     retailCustomerObj = cloneobj
   })

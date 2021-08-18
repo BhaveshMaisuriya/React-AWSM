@@ -1,4 +1,4 @@
-import React, { Component, useMemo, useState, useEffect } from "react"
+import React, { Component, useMemo, useState, useEffect, useCallback } from "react"
 import { connect } from "react-redux"
 import {
   Row,
@@ -351,7 +351,7 @@ function OrderBank({
       }
     }
   }
-  const changeGanttChartAllRadio = event => {
+  const changeGanttChartAllRadio = useCallback(event => {
     const target = event.target
     const value = target.value
     if (value === ganttChartAllRadio && target.checked) {
@@ -360,7 +360,8 @@ function OrderBank({
     }
     target.checked = true
     return setGanttChartAllRadio(value)
-  }
+  },[ganttChartAllRadio])
+
   const toggleCustomizeModal = ()=> {
     setIsCustomizeGanttModalOpen((prevState)=> !prevState)
   }
@@ -504,7 +505,7 @@ function OrderBank({
 																	return <CustomRadioButton key={`${index}-${value}`}
 																	label={label} value={value}
 																	checked={ganttChartAllRadio === value}
-																	name="radioWidth"
+																	name="radio-bryntum-scheduler"
 																	onClick={changeGanttChartAllRadio}/>
 																})
 															}

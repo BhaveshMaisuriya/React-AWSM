@@ -50,7 +50,7 @@ const AWSMInputNumber = ({
     <input
       type={type}
       value={value}
-      placeholder={placeholder}
+      placeholder={disabled ? "" : placeholder}
       disabled={disabled}
       onChange={onValueChange}
       onKeyPress={numberInputValidator}

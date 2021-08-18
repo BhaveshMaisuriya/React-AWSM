@@ -140,7 +140,11 @@ export const removeKeywords = string => {
           "every Sunday,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday",
           "Every day"
         )
-        .replace("every ", "Every ")
+        .replace(
+          "every Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday",
+          "Every day"
+        )
+        .replace("every ", "")
         .replace("daily ", "Every day")
         .replace("daily", "Every day")
         .replace("range ", "")

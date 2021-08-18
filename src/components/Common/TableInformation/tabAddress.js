@@ -2,6 +2,7 @@ import React, { useMemo } from "react"
 import AWSMInput from "../Input"
 import "./tab-address.scss"
 import AWSMDropdown from "../Dropdown"
+import AWSMInputNumber from "../InputNumber"
 
 
 const TabAddress = ({ scheduler, data, onChange }) => {
@@ -108,7 +109,7 @@ const TabAddress = ({ scheduler, data, onChange }) => {
           </div>
           <div className="col col-12 col-sm-6 col-lg-6">
             <div className="input-header mb-2">SPEED (KM/Hr)</div>
-            <AWSMInput
+            <AWSMInputNumber
               value={addressData.speed || ""}
               disabled={scheduler}
               onChange={value => onFieldChange("speed", value)}

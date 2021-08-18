@@ -125,7 +125,8 @@ const Example = props => {
     const target = event.target
     let newData = [...data]
     newData.map(item => {
-      if (target.value === item.text) {
+      const itemText = isNull(item.text) ? "-null" : item.text
+      if (target.value === itemText) {
         item.checked = !item.checked
         item.checked
           ? setCheckedCount(checkedCount + 1)
@@ -272,18 +273,17 @@ const Example = props => {
                   }}
                 >
                   {current.length > 0 && !isNull(current)
-                    ? current.map(row => {
+                    ? current.map((row, index) => {
                         return (
                           row.visibility && (
                             <div
-                              key={row.text}
                               className={`d-flex align-items-center filter-selection ${
                                 row.checked ? "item-checked" : ""
                               }`}
                             >
                               <FormControlLabel
-                                key={`${row.text}`}
-                                value={`${row.text}`}
+                                key={`${row.text}${index}`}
+                                value={isNull(row.text) ? "-null" : row.text}
                                 onChange={onInputChange}
                                 checked={row.checked}
                                 className="checkmark"

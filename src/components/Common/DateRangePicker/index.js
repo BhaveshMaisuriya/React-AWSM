@@ -35,7 +35,6 @@ const DateRangePicker = ({
 }) => {
   const [value, setValue] = useState(defaultValue || dateObjectTemplate)
   const [month, setMonth] = useState(defaultMonth)
-  const [initialValue] = useState(defaultValue || dateObjectTemplate)
 
   const getDay = days => {
     if (!days || !days.length > 0) {
@@ -239,9 +238,10 @@ const DateRangePicker = ({
   }
 
   const onClear = () => {
-    setValue(initialValue)
+    const newValue = { ...defaultValue, type: "single", days: [], date_from: null, date_to: null }
+    setValue(newValue)
     if (onChange) {
-      onChange(initialValue)
+      onChange(newValue)
     }
   }
 

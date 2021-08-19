@@ -104,7 +104,7 @@ const Example = props => {
    */
   function getFilterData() {
     let newArr = []
-    dataFilter[dataKey].map(item => {
+    dataFilter[dataKey]?.map(item => {
       newArr.push({
         text: item,
         checked:

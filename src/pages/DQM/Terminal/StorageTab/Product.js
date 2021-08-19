@@ -92,7 +92,8 @@ const Product = ({
         <div className="col-3 form-group">
           <label htmlFor="productName">PRODUCT NAME</label>
           <AWSMInput
-            key={value.code}
+            value={value.name}
+            key={value.name}
             disabled
             onChange={value => onFieldChange("name", value)}
           />

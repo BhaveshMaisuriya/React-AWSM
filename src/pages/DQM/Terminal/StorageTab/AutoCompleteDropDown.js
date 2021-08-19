@@ -4,6 +4,7 @@ import { Dropdown, DropdownMenu, DropdownToggle, Input } from "reactstrap"
 import { ReactSVG } from "react-svg"
 import ArrowDropDownIcon from "../../../../assets/images/AWSM-Dropdown.svg"
 import { isScheduler } from "helpers/auth_helper"
+import searchIcon from "../../../../assets/images/AWSM-search.svg"
 
 /**
  * Dropdown menu
@@ -64,7 +65,7 @@ const AWSMDropdown = ({
             }
             onChange={onChangeInput.bind(this)}
           ></Input>
-          <ReactSVG src={ArrowDropDownIcon} className="awsm-dropdown-arrow" />
+          {searchIcon ? <ReactSVG src={searchIcon} className="awsm-dropdown-arrow" /> : <ReactSVG src={ArrowDropDownIcon} className="awsm-dropdown-arrow" />}
         </div>
       </DropdownToggle>
       <DropdownMenu className="awsm-select-menu w-100">

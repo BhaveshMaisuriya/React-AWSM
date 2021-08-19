@@ -165,7 +165,7 @@ const StorageTab = ({ data, onChange }) => {
           />
         )
       })}
-      {productList.length > 0 && (
+      {!scheduler && productList.length > 0 && (
         <button
           disabled={scheduler}
           onClick={onAddProduct}

@@ -1,6 +1,6 @@
 import React, { PureComponent } from "react"
 import { connect } from "react-redux"
-import { Button, Modal, ModalFooter, ModalBody, ModalHeader } from "reactstrap"
+import { Button, Modal, ModalFooter, ModalBody, ModalHeader, Col, Row } from "reactstrap"
 import CloseButton from "../../../components/Common/CloseButton"
 import { isScheduler } from "../../../helpers/auth_helper"
 import {
@@ -11,6 +11,7 @@ import {
 import AWSMDropdown from "../../../components/Common/Dropdown"
 import "./ProductDetailModal.scss"
 import { isEqual } from "lodash"
+import AWSMInput from "components/Common/Input"
 
 class ProductDetailModal extends PureComponent {
   constructor(props) {
@@ -19,7 +20,7 @@ class ProductDetailModal extends PureComponent {
       updateDictionary: {},
       displayConfirmationBox: false,
     }
-    this.handleInputChange = this.handleInputChange.bind(this)
+    this.onFieldValueChange = this.onFieldValueChange.bind(this)
   }
 
   componentDidMount() {
@@ -41,6 +42,7 @@ class ProductDetailModal extends PureComponent {
   }
 
   async handleUpdate(event) {
+    console.log("update::", this.state.updateDictionary)
     if (Object.keys(this.state.updateDictionary).length > 0) {
       const { code } = this.props.data
       await this.props.onUpdateProductDetail({
@@ -94,19 +96,29 @@ class ProductDetailModal extends PureComponent {
     this.setState({
       updateDictionary: {
         ...this.state.updateDictionary,
-        ...newInput,
+        ...{ remarks: event.target.value }
+        // ...newInput,
       },
     })
+    
   }
+
+  onFieldValueChange(fieldName, value) {
+    const newData = { ...this.state.updateDictionary }    
+    newData[fieldName] = value
+    this.setState({updateDictionary: newData})
+  }
+
+
 
   renderModalBody() {
     const { currentProduct } = this.props
     const { updateDictionary } = this.state
     const isDisabledField = isScheduler()
-    // const isDisabledField = false
+    // const isDisabledField = false    
     return (
       <>
-        {updateDictionary ? (
+        {updateDictionary !== {} ? (
           <ModalBody>
             <div>
               <div className="row">
@@ -224,8 +236,6 @@ class ProductDetailModal extends PureComponent {
                   />
                 </div>
               </div>
-
-              <div className="row">
                 <div className="col-md-12 form-group">
                   <label> REMARKS</label>
                   <input
@@ -234,10 +244,10 @@ class ProductDetailModal extends PureComponent {
                     defaultValue={updateDictionary.remarks}
                     name="remarks"
                     disabled={isDisabledField}
-                    onChange={this.handleInputChange}
+                    onChange={(e) => this.onFieldValueChange("remarks", e.target.value)}
+                    onBlur={(e) => this.onFieldValueChange("remarks", e.target.value)}
                   />
                 </div>
-              </div>
             </div>
           </ModalBody>
         ) : null}

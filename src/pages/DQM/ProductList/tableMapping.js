@@ -25,6 +25,7 @@ const tableMapping = {
     label: "PRODUCT NAME",
     apiKey: "name",
     columnSize: "cell-text-big",
+    ProductNameColumnFixed: true,
   },
   status_sap: {
     label: "STATUS IN SAP",

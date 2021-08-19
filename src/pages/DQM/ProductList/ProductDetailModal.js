@@ -105,10 +105,11 @@ class ProductDetailModal extends PureComponent {
 
   onFieldValueChange(fieldName, value) {
     const newData = { ...this.state.updateDictionary }    
-    newData[fieldName] = value;
-    this.setState({updateDictionary: newData});
-    console.log("remark::", newData, '::', value)
+    newData[fieldName] = value
+    this.setState({updateDictionary: newData})
   }
+
+
 
   renderModalBody() {
     const { currentProduct } = this.props
@@ -244,6 +245,7 @@ class ProductDetailModal extends PureComponent {
                     name="remarks"
                     disabled={isDisabledField}
                     onChange={(e) => this.onFieldValueChange("remarks", e.target.value)}
+                    onBlur={(e) => this.onFieldValueChange("remarks", e.target.value)}
                   />
                 </div>
             </div>

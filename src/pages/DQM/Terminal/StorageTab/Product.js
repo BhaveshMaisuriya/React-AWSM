@@ -83,6 +83,7 @@ const Product = ({
             value={value.code}
             items={productsList}
             key={value.code}
+            searchIcon={true}
             onChange={value => onFieldChange("code", value)}
             placeholder="Select"
           />

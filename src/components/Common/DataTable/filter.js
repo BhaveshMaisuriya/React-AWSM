@@ -7,7 +7,7 @@ import selectAllIcon3 from "../../../assets/images/AWSM-Checkbox.svg"
 import { IconButton, FormControlLabel } from "@material-ui/core"
 import Checkbox from "@material-ui/core/Checkbox"
 import SimpleBar from "simplebar-react"
-import { isNull, isUndefined } from "lodash"
+import { isEmpty, isNull, isUndefined } from "lodash"
 import { removeKeywords } from "../../../pages/DQM/Common/helper"
 import "./datatable.scss"
 import ReplayIcon from "@material-ui/icons/Replay"
@@ -104,7 +104,7 @@ const Example = props => {
    */
   function getFilterData() {
     let newArr = []
-    dataFilter[dataKey].map(item => {
+    dataFilter[dataKey]?.map(item => {
       newArr.push({
         text: item,
         checked:
@@ -197,8 +197,11 @@ const Example = props => {
     }
   }
 
-  const noResultsMessage = () => {
-    const string = `Couldn't find '${searchWords}'`
+  const ResultsMessage = () => {
+    const string =
+      visibilityCount > 0
+        ? `${visibilityCount} results found for '${searchWords}'`
+        : `Couldn't find '${searchWords}'`
     return <span style={{ paddingLeft: "7px" }}>{string}</span>
   }
 
@@ -272,7 +275,7 @@ const Example = props => {
                     overflow: "auto",
                   }}
                 >
-                  {current.length > 0 && !isNull(current)
+                  {current.length > 0 && !isNull(current) && !isRemark
                     ? current.map((row, index) => {
                         return (
                           row.visibility && (
@@ -300,7 +303,7 @@ const Example = props => {
                                   />
                                 }
                                 label={
-                                  isNull(row.text)
+                                  isNull(row.text) || isEmpty(row.text)
                                     ? "-"
                                     : removeKeywords(row.text)
                                 }
@@ -309,7 +312,7 @@ const Example = props => {
                           )
                         )
                       })
-                    : noResultsMessage()}
+                    : ResultsMessage()}
                   {hasMore && (
                     <IconButton
                       color="primary"

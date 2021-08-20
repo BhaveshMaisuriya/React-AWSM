@@ -489,7 +489,7 @@ class Pages extends Component {
                             </>
                           )}
                         </div>
-                      </div>                      
+                      </div>
                       <FixedColumnTable
                         headers={searchFields}
                         config={tableMapping}

@@ -25,7 +25,7 @@ const tableMapping = {
     label: "PRODUCT NAME",
     apiKey: "name",
     columnSize: "cell-text-big",
-    ProductNameColumnFixed: true,
+    columnFixed: true,
   },
   status_sap: {
     label: "STATUS IN SAP",
@@ -64,11 +64,13 @@ const tableMapping = {
     label: "PRODUCT GROUP",
     apiKey: "product_group",
     columnSize: "cell-text-big",
+    columnFixed: true,
   },
   sub_category: {
     label: "PRODUCT SUB CATEGORY",
     apiKey: "sub_category",
     columnSize: "cell-text-big",
+    columnFixed: true,
   },
   uom: {
     label: "UOM",
@@ -84,6 +86,7 @@ const tableMapping = {
     label: "REMARKS",
     apiKey: "remarks",
     columnSize: "cell-text-big",
+    columnFixed: true,
   },
 }
 

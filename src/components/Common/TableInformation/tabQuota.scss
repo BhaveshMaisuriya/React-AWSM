@@ -9,6 +9,10 @@ input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
   opacity: 0;
 }
+
+.av-invalid .form-group{
+  color:#495057 !important;
+}
 .was-validated .form-control:invalid,
 .form-control.is-invalid {
   background-image: url(../../../assets/images/warning.svg) !important;

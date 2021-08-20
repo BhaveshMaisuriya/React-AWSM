@@ -139,7 +139,7 @@ const StorageTab = ({ data, onChange }) => {
           {renderExceedError("turnaround_time", 1440)}
         </div>
       </div>
-      {productList.length < 1 && (
+      {productList.length < 1 && !scheduler && (
         <div className="row m-0 mt-3">
           <div className={`col-12 form-group ${styles.addButton}`}>
             <btn
@@ -165,7 +165,7 @@ const StorageTab = ({ data, onChange }) => {
           />
         )
       })}
-      {!scheduler && productList.length > 0 && (
+      {productList.length > 0 && !scheduler &&(
         <button
           disabled={scheduler}
           onClick={onAddProduct}

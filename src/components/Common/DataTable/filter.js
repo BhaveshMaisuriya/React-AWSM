@@ -80,7 +80,10 @@ const Example = props => {
     newData.map(item => {
       item.visibility =
         item.text !== null &&
-        item.text.toString().toLowerCase().includes(tempSearch)
+        item.text
+          .toString()
+          .toLowerCase()
+          .includes(tempSearch.toString().toLowerCase())
       item.checked =
         appliedFiltersList.length > 0
           ? appliedFiltersList.includes(item.text)
@@ -123,10 +126,11 @@ const Example = props => {
    */
   function onInputChange(event) {
     const target = event.target
+    const value = target.value
     let newData = [...data]
     newData.map(item => {
       const itemText = isNull(item.text) ? "-null" : item.text
-      if (target.value === itemText) {
+      if (value.toString() === itemText.toString()) {
         item.checked = !item.checked
         item.checked
           ? setCheckedCount(checkedCount + 1)
@@ -303,7 +307,9 @@ const Example = props => {
                                   />
                                 }
                                 label={
-                                  isNull(row.text) || isEmpty(row.text)
+                                  isNull(row.text) ||
+                                  isEmpty(row.text.toString()) ||
+                                  row.text.toString().includes("null")
                                     ? "-"
                                     : removeKeywords(row.text)
                                 }

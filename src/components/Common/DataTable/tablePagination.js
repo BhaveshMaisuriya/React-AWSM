@@ -9,6 +9,12 @@ import { Divider } from "@material-ui/core"
 import "./tablePagination.scss"
 
 class TablePaginationActions extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      firstPage: 1,
+    }
+  }
   handleBackButtonClick = event => {
     const { increment } = this.props
     const calcPage = this.props.currentPage - increment
@@ -27,14 +33,73 @@ class TablePaginationActions extends Component {
     this.props.onChangePage(event, event.target.value - 1)
   }
 
-  render() {
-    const { classes, count, currentPage, rowsPerPage } = this.props
-    let pageNumbers = []
+  renderPage = pageNo => {
+    if (!pageNo) return
+    const { currentPage } = this.props
+    return (
+      <PaginationItem
+        active={currentPage === pageNo - 1}
+        key={Math.random().toString(36).substr(2, 9)}
+      >
+        <PaginationLink
+          className="Pagination-Button Pagination-Text"
+          value={pageNo}
+          onClick={this.handlePageNumClick}
+        >
+          {pageNo}
+        </PaginationLink>
+      </PaginationItem>
+    )
+  }
 
-    for (let i = 1; i <= Math.ceil(count / rowsPerPage); i++) {
+  renderDivider = () => {
+    return (
+      <Divider
+        orientation="vertical"
+        flexItem
+        light
+        className="Pagination-Divider"
+      />
+    )
+  }
+
+  renderPageDots = () => {
+    return (
+      <PaginationItem disabled>
+        <PaginationLink className="Pagination-Button Pagination-Text">
+          {"..."}
+        </PaginationLink>
+      </PaginationItem>
+    )
+  }
+
+  getPagenumbers = pageNumbers => {
+    const { totalPages, currentPage, numShownPages } = this.props
+    let newPageNumbers = 0
+    if (currentPage < numShownPages - 1)
+      newPageNumbers = pageNumbers.splice(0, numShownPages)
+    else if (totalPages - currentPage <= numShownPages - 1)
+      newPageNumbers = pageNumbers.splice(
+        totalPages - numShownPages,
+        numShownPages
+      )
+    else
+      newPageNumbers = pageNumbers.splice(
+        currentPage - Math.ceil(numShownPages / 3),
+        numShownPages - 2
+      )
+    return newPageNumbers
+  }
+
+  render() {
+    const { currentPage, totalPages, numShownPages } = this.props
+    const { firstPage } = this.state
+    let pageNumbers = []
+    for (let i = 1; i <= totalPages; i++) {
       pageNumbers.push(i)
     }
-    const newpageNumbers = pageNumbers.splice(currentPage, 20)
+    // const newpageNumbers = pageNumbers.splice(currentPage, 20)
+    const newpageNumbers = this.getPagenumbers(pageNumbers)
     return (
       <Pagination>
         <div className="Pagination-Container">
@@ -46,53 +111,29 @@ class TablePaginationActions extends Component {
             >
               <img
                 src={currentPage === 0 ? ArrowLeftG : ArrowLeft}
-                alt=""
                 className="img-arrow"
               />
             </PaginationLink>
           </PaginationItem>
-          <Divider
-            orientation="vertical"
-            flexItem
-            light
-            className="Pagination-Divider"
-          />
-          {newpageNumbers.map(number => (
-            <PaginationItem
-              active={number - 1 === currentPage}
-              key={Math.random().toString(36).substr(2, 9)}
-            >
-              <PaginationLink
-                className="Pagination-Button"
-                value={number}
-                onClick={() => this.props.onChangePage(event, number - 1)}
-                onMouseDown={e => e.preventDefault()}
-              >
-                <span className="Pagination-Text">{number}</span>
-              </PaginationLink>
-            </PaginationItem>
-          ))}
-          <Divider
-            orientation="vertical"
-            flexItem
-            light
-            className="Pagination-Divider"
-          />
-          <PaginationItem
-            disabled={currentPage >= Math.ceil(count / rowsPerPage) - 1}
-          >
+          {this.renderDivider()}
+          {currentPage >= numShownPages - 1 ? this.renderPage(firstPage) : ""}
+          {currentPage >= numShownPages - 1 ? this.renderPageDots() : ""}
+          {newpageNumbers.map(number => this.renderPage(number))}
+          {totalPages - currentPage > numShownPages - 1
+            ? this.renderPageDots()
+            : ""}
+          {totalPages - currentPage > numShownPages - 1
+            ? this.renderPage(totalPages)
+            : ""}
+          {this.renderDivider()}
+          <PaginationItem disabled={currentPage >= totalPages - 1}>
             <PaginationLink
               onClick={this.handleNextButtonClick}
               aria-label="Next Page"
               className="Pagination-Button"
             >
               <img
-                src={
-                  currentPage >= Math.ceil(count / rowsPerPage) - 1
-                    ? ArrowRightG
-                    : ArrowRight
-                }
-                alt=""
+                src={currentPage >= totalPages - 1 ? ArrowRightG : ArrowRight}
                 className="img-arrow"
               />
             </PaginationLink>
@@ -104,16 +145,17 @@ class TablePaginationActions extends Component {
 }
 
 TablePaginationActions.propTypes = {
-  classes: PropTypes.object.isRequired,
-  count: PropTypes.number.isRequired,
   onChangePage: PropTypes.func.isRequired,
   currentPage: PropTypes.number.isRequired,
   rowsPerPage: PropTypes.number.isRequired,
+  totalPages: PropTypes.number.isRequired,
   increment: PropTypes.number,
+  numShownPages: PropTypes.number,
 }
 
 TablePaginationActions.defaultProps = {
   increment: 1,
+  numShownPages: 19,
 }
 
 export default TablePaginationActions

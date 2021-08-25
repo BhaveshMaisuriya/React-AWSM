@@ -56,7 +56,6 @@ const styles = {
   },
 }
 class Pages extends Component {
-
   constructor(props) {
     super(props)
     this.state = {
@@ -503,14 +502,12 @@ class Pages extends Component {
                         overrideActionColumn={overrideActionColumn}
                       />
                       <TablePagination
-                        count={tableData.total_rows}
                         rowsPerPage={rowsPerPage}
                         currentPage={currentPage}
                         onChangePage={this.handleChangePage}
                         totalPages={Math.ceil(
                           tableData.total_rows / rowsPerPage
                         )}
-                        increment={10}
                       />
                     </CardBody>
                   }

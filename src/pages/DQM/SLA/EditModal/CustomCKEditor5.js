@@ -36,6 +36,15 @@ const SLARecordEditor = ({ data, onChange }) => {
     }
   }
 
+  const onReady = (editor) => {
+    setEditor(editor);
+    // const modelRoot = editor.model.document.getRoot();
+    // const firstCell = modelRoot.getNodeByPath( [ 0, 0, 0 ] );
+    // const tableSelection = editor.plugins.get( 'TableSelection' );
+    // tableSelection.setCellSelection( firstCell, firstCell );
+    // editor.editing.view.focus(firstCell)
+    // editor.focus()
+  }
 
   const InputDataHandler = () =>{
     return `
@@ -52,7 +61,7 @@ const SLARecordEditor = ({ data, onChange }) => {
         </tr>
     </tbody>
     </table>`
-}
+  }
 
   return (
     <div className="sla-editor">
@@ -77,7 +86,7 @@ const SLARecordEditor = ({ data, onChange }) => {
         name="sla-detail"
         data={InputDataHandler()}
         onChange={onEditorChange}
-        onReady={editor => setEditor(editor)}
+        onReady={onReady}
       />
     </div>
   )

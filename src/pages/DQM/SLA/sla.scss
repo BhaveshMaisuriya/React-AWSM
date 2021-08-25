@@ -97,7 +97,6 @@
       border: none !important;
     }
 
-
     border: 1px solid #00A19C;
     padding-bottom: 1.5rem;
     background-color: rgb(240, 249, 249);
@@ -107,6 +106,16 @@
       border: none !important;
       box-shadow: none !important;
     }
+
+    .btn {
+      width: 120px;
+      &.btn-outline-primary {
+        background-color: white !important;
+        &:hover {
+          color: #00A19C !important;
+        }
+      }
+    }
   }
 
   .ck .ck-toolbar {
@@ -114,7 +123,7 @@
   }
 }
 
-.sla-rbd-download { 
+.sla-rbd-download {
   width: 170px !important;
   max-height: 320px;
   height: 100%;
@@ -133,3 +142,8 @@
 // .bs-popover-auto {
 //   left: -20px !important;
 // }
+.sla-header {
+  font-weight: 600;
+  font-size: 16px!important;
+  margin-bottom: 32px;
+}

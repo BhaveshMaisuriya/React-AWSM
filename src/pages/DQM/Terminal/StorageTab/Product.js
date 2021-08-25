@@ -118,7 +118,7 @@ const Product = ({
         </div>
         <div className="col-3 form-group">
           <label
-            className={`${renderExceedError("flow_rate", 10000) ? "error" : ""}`}
+            className={`${renderExceedError("flow_rate", 10000)}`}
           >
             FLOW RATE (L/MIN)
           </label>
@@ -127,7 +127,7 @@ const Product = ({
             disabled={scheduler}
             placeholder={!scheduler && placeholderNumberOnly}
             onChange={value => onFieldChange("flow_rate", value)}
-            renderExceedError={renderExceedError("flow_rate", 1440)}
+            renderExceedError={renderExceedError("flow_rate", 10000)}
             // max={10000}
           />
           {renderExceedError("flow_rate", 10000)}

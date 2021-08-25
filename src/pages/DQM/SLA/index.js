@@ -6,7 +6,6 @@ import {
   updateSLAItem,
 } from "../../../store/actions"
 import Loader from "../../../components/Common/Loader"
-import Header from "../../../components/Common/CustomPageHeader"
 import { Link } from "react-router-dom"
 import eyeIcon from "../../../assets/images/auditlog-eye.svg"
 import AuditLog from "../../../components/Common/AuditLog"
@@ -44,6 +43,10 @@ import { isNull } from "lodash"
 
 const UntickIcon = () => <img src={selectAllIcon3} alt="icon" />
 const CheckedIcon = () => <img src={selectAllIcon2} alt="icon" />
+
+const Header = ({ title }) => {
+ return <h4 className="sla-header">{title}</h4>
+}
 
 class SLA extends Component {
   constructor(props) {
@@ -159,7 +162,7 @@ class SLA extends Component {
   getCheckedDownloadVal(index) {
     const temp = [...this.state.downloadCheck]
     temp[index].checked = !temp[index].checked;
-    
+
     let temp1 = [];
     temp.map((item, index) => {
       if(item.checked === true){
@@ -193,7 +196,7 @@ class SLA extends Component {
         item.checked = !item.checked
       }
     })
-   
+
    this.setState({downloadCheck: newData});
   }
 
@@ -395,7 +398,7 @@ class SLA extends Component {
                     </TabPane>
                   </TabContent>
                 </CardBody>
-              </Card>             
+              </Card>
             </div>
             {this.runAuditLogModal()}
           </div>

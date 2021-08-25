@@ -2,7 +2,8 @@ import React, { Component, Fragment } from "react"
 import { connect } from "react-redux"
 import PropTypes from "prop-types"
 import { withStyles } from "@material-ui/styles"
-import ModalPagination from "./auditModalPagination"
+import TablePagination from "../DataTable/tablePagination"
+// import ModalPagination from "./auditModalPagination"
 import lineIcon from "../../../assets/images/auditlog-line.svg"
 import "./style.scss"
 
@@ -25,11 +26,7 @@ const styles = {
     letterSpacing: "0",
     color: "#FFFFFF",
   },
-  lineIcon: {
-    // height: "16px",
-    // width: "16px",
-    //paddingTop: "10px",
-  },
+  lineIcon: {},
 }
 
 class AuditLog extends Component {
@@ -139,7 +136,10 @@ class AuditLog extends Component {
             <div className="container-data">
               {data
                 .map((audit, idx) => (
-                  <div key={idx} className="tracking-item"> {this.modalData(audit, idx)}</div>
+                  <div key={idx} className="tracking-item">
+                    {" "}
+                    {this.modalData(audit, idx)}
+                  </div>
                 ))
                 .slice(
                   currentAuditPage * rowsAudit,
@@ -147,13 +147,15 @@ class AuditLog extends Component {
                 )}
             </div>
           )}
+          <div>&nbsp;</div>
+          <TablePagination
+            rowsPerPage={rowsAudit}
+            currentPage={currentAuditPage}
+            onChangePage={handlePageChange}
+            totalPages={Math.ceil(data.length / rowsAudit)}
+            numShownPages={9}
+          />
         </div>
-        <ModalPagination
-          count={data.length}
-          rowsPerPage={rowsAudit}
-          currentPage={currentAuditPage}
-          onChangePage={handlePageChange}
-        />
       </React.Fragment>
     )
   }

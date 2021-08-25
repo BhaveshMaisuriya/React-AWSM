@@ -35,6 +35,7 @@ import {
   UncontrolledTooltip,
 } from "reactstrap"
 import ExitConfirmation from "../../../components/Common/ExitConfirmation"
+
 class TerminalDetailModal extends PureComponent {
   constructor(props) {
     super(props)
@@ -46,6 +47,14 @@ class TerminalDetailModal extends PureComponent {
       isConfirm: false,
       dataSource: props.currentTerminal,
       isValidated: false,
+      forceBlur: {
+        statusTab: {
+          inactive_date_range_1: false,
+        },
+      },
+    }
+    this.errors = {
+      statusTab: [],
     }
   }
 
@@ -54,9 +63,9 @@ class TerminalDetailModal extends PureComponent {
     fetchTableInformation(data.code)
   }
 
-  componentDidUpdate(prevProps, prevStates){
+  componentDidUpdate(prevProps, prevStates) {
     const { dataSource } = this.state
-    if(!isEqual(prevStates.dataSource, dataSource)){
+    if (!isEqual(prevStates.dataSource, dataSource)) {
       this.validate()
     }
   }
@@ -72,6 +81,27 @@ class TerminalDetailModal extends PureComponent {
   }
 
   async handleUpdate() {
+    const { errors } = this
+    if (Object.values(errors).some(errorList => errorList.length > 0)) {
+      const errorTabs = Object.keys(errors)
+      errorTabs.forEach(tab => {
+        this.errors[tab].forEach(({ field }) => {
+          if (
+            this.state.forceBlur?.[tab]?.[field] !== undefined ||
+            this.state.forceBlur?.[tab]?.[field] != null
+          ) {
+            this.setState({
+              forceBlur: {
+                [tab]: {
+                  [field]: true,
+                },
+              },
+            })
+          }
+        })
+      })
+      return
+    }
     const { code } = this.props.data
     const { dataSource } = this.state
     await this.props.onUpdateTableInformation({
@@ -79,6 +109,7 @@ class TerminalDetailModal extends PureComponent {
       body: dataSource,
     })
   }
+
   toggleTab = tab => {
     if (this.state.activeTab !== tab) {
       this.setState({
@@ -103,37 +134,55 @@ class TerminalDetailModal extends PureComponent {
     }
   }
 
-  validate(){
+  validate() {
     const { dataSource } = this.state
-    const {status, storage} = dataSource
+    const { status, storage } = dataSource
     let exceedValues = []
-    if( storage?.loading_bay_no > 100 || storage?.loading_time > 1440 || storage?.turnaround_time > 1440 ){
+    if (
+      storage?.loading_bay_no > 100 ||
+      storage?.loading_time > 1440 ||
+      storage?.turnaround_time > 1440
+    ) {
       exceedValues.push(1)
     }
     for (let i = 1; i < 50; i++) {
-     if(storage?.[`product_${i}`]){
-       if(storage?.[`product_${i}`]?.flow_rate >10000 || 
-          storage?.[`product_${i}`]?.volume_capping_volume > 10000000 || 
-          storage?.[`product_${i}`]?.volume_capping_volume_2 > 10000000){
+      if (storage?.[`product_${i}`]) {
+        if (
+          storage?.[`product_${i}`]?.flow_rate > 10000 ||
+          storage?.[`product_${i}`]?.volume_capping_volume > 10000000 ||
+          storage?.[`product_${i}`]?.volume_capping_volume_2 > 10000000
+        ) {
           exceedValues.push(1)
-       }
-     }else{
-       break;
-     }
+        }
+      } else {
+        break
+      }
     }
-    if(status?.status_awsm === "Temporary Inactive" ){
-      if(!status?.inactive_date_range_1?.date_from || status?.inactive_date_range_1?.type !== 'range'){
+    if (status?.status_awsm === "Temp Inactive") {
+      if (!status?.inactive_date_range_1?.type) {
+        exceedValues.push(1)
+      }
+      if (
+        status?.inactive_date_range_1?.type === "single" &&
+        status?.inactive_date_range_1?.days?.length === 0
+      ) {
+        exceedValues.push(1)
+      }
+      if (
+        status?.inactive_date_range_1?.type === "range" &&
+        (!status?.inactive_date_range_1?.date_from ||
+          !status?.inactive_date_range_1?.date_to)
+      ) {
         exceedValues.push(1)
       }
     }
-    if(
-      exceedValues.length > 0
-    ){
-      this.setState({isValidated: true})
-    }else{
-      this.setState({isValidated: false})
+    if (exceedValues.length > 0) {
+      this.setState({ isValidated: true })
+    } else {
+      this.setState({ isValidated: false })
     }
   }
+
   handleExitConfirmation = () => {
     if (!isEqual(this.state.dataSource, this.props.currentTerminal))
       return (
@@ -143,6 +192,20 @@ class TerminalDetailModal extends PureComponent {
         />
       )
     else this.onConfirmExit()
+  }
+  handleErrors = ({ tab, error, field }, pushError) => {
+    if (this.errors?.[tab] && pushError) {
+      const newErrors = { ...this.errors }
+      newErrors[tab].push({ error, field })
+      this.errors = newErrors
+    }
+    if (this.errors?.[tab] && !pushError) {
+      const newErrors = { ...this.errors }
+      newErrors[tab] = this.errors[tab].filter(
+        error => error.error !== error && error.field !== field
+      )
+      this.errors = newErrors
+    }
   }
 
   render() {
@@ -179,11 +242,12 @@ class TerminalDetailModal extends PureComponent {
                 <Fragment>
                   <div>
                     <div className="row">
-                      
                       <div className="col-md-6 form-group">
                         <label>TERMINAL NAME</label>
                         <input
-                          placeholder={!isDisabledField && "Type something here..."}
+                          placeholder={
+                            !isDisabledField && "Type something here..."
+                          }
                           className="form-control awsm-input"
                           type="text"
                           defaultValue={currentTerminal.name}
@@ -193,16 +257,16 @@ class TerminalDetailModal extends PureComponent {
                           }
                         />
                       </div>
-                      <div className="col-md-6 form-group">
-                      
-                      </div>
+                      <div className="col-md-6 form-group"></div>
                     </div>
 
                     <div className="row">
                       <div className="col-md-12 form-group">
                         <label> REMARKS</label>
                         <input
-                          placeholder={!isDisabledField && "Type something here..."}
+                          placeholder={
+                            !isDisabledField && "Type something here..."
+                          }
                           className="form-control awsm-input"
                           type="text"
                           defaultValue={currentTerminal.remarks}
@@ -315,7 +379,7 @@ class TerminalDetailModal extends PureComponent {
                           width: "100%",
                           overflowX: "hidden",
                           paddingRight: "25px",
-                          paddingBottom:"5px"
+                          paddingBottom: "5px",
                         }}
                       >
                         <StatusTab
@@ -323,6 +387,8 @@ class TerminalDetailModal extends PureComponent {
                           onChange={value =>
                             this.onFieldChange("status", value)
                           }
+                          handleErrors={this.handleErrors}
+                          forceBlur={this.state.forceBlur.statusTab}
                         />
                       </SimpleBar>
                     </TabPane>

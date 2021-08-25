@@ -4,6 +4,7 @@ import Product from "./Product"
 import { isScheduler } from "../../../../helpers/auth_helper"
 import AWSMInputNumber from "../../../../components/Common/InputNumber"
 import { maxTime } from 'date-fns'
+import { AvField, AvForm } from "availity-reactstrap-validation"
 
 const newProductTemplate = {
   id: null,
@@ -66,7 +67,7 @@ const StorageTab = ({ data, onChange }) => {
   )
   function renderExceedError(key, max) {
     if (storageData?.[key] > max) {
-      return <p style={{ color: "#f46a6a" }}>Must not exceed {max}</p>
+      return <p style={{ color: "#f46a6a" , fontSize: "80%", marginTop: "5px"  }}>Must not exceed {max}</p>
     }
     return null
   }
@@ -76,7 +77,7 @@ const StorageTab = ({ data, onChange }) => {
         <div className="w-50 mr-2">
           <label
             className={`${
-              renderExceedError("loading_bay_no", 100) ? "error" : ""
+              renderExceedError("loading_bay_no", 100)
             }`}
           >
             NO OF LOADING BAY
@@ -105,7 +106,7 @@ const StorageTab = ({ data, onChange }) => {
         <div className="w-50 mr-2">
           <label
             className={`${
-              renderExceedError("loading_time", 1440) ? "error" : ""
+              renderExceedError("loading_time", 1440)
             }`}
           >
             LOADING TIME (MIN)
@@ -123,7 +124,7 @@ const StorageTab = ({ data, onChange }) => {
         <div className="w-50 ml-2">
           <label
             className={`${
-              renderExceedError("turnaround_time", 1440) ? "error" : ""
+              renderExceedError("turnaround_time", 1440)
             }`}
           >
             TURNAROUND TIME (MIN)

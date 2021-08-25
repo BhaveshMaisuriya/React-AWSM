@@ -150,6 +150,7 @@ export const removeKeywords = string => {
         .replace("range ", "")
         .replace("single ", "")
         .replace("0:00", "0")
+        .replace("null", "-")
     : newString
 }
 

@@ -115,7 +115,7 @@ const AddressTab = (props) => {
                   className="form-control awsm-input"
                   value={data?.latitude}
                   onChange={(e) => handleOnChangeValue(e)}
-                  onKeyDown={formatNumberInput(["e", "E", "+", "-", ".", ",","ê", "Ê"])}
+                  onKeyDown={formatNumberInput(["e", "E", "+", "-","ê", "Ê"])}
                   disabled={isDisabledField}
                   placeholder={isDisabledField ? "" : placeholderNumberOnly}
                 />
@@ -128,7 +128,7 @@ const AddressTab = (props) => {
                   className="form-control awsm-input"
                   value={data?.longitude}
                   onChange={(e) => handleOnChangeValue(e)}
-                  onKeyDown={formatNumberInput(["e", "E", "+", "-", ".", ",","ê", "Ê"])}
+                  onKeyDown={formatNumberInput(["e", "E", "+", "-","ê", "Ê"])}
                   disabled={isDisabledField}
                   placeholder={isDisabledField ? "" : placeholderNumberOnly}
                 />

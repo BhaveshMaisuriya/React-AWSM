@@ -5,6 +5,7 @@ import React, {
   useMemo,
   useRef,
   useEffect,
+  useCallback,
 } from "react"
 import { connect } from "react-redux"
 import classnames from "classnames"
@@ -145,7 +146,7 @@ const SLAAddNote = ({ data, onSubmit, onDeleteNote, disabled }) => {
   }
 
   const onCancel = () => {
-    editor.setData(data.note || "")
+    editor.setData(data.notes || "")
     setOnEditing(false)
   }
   const onEditorChange = (event, editor) => {
@@ -153,6 +154,11 @@ const SLAAddNote = ({ data, onSubmit, onDeleteNote, disabled }) => {
       setValue(editor.getData())
     }
   }
+  useEffect(() => {
+    if (onEditing) {
+      editor?.editing.view.focus()
+    }
+  }, [onEditing])
 
   return (
     <div className="sla-tab-add-container">
@@ -248,7 +254,8 @@ const SectionLabelEdit = ({ defaultValue, disabled, onSubmit }) => {
     setOnEditing(false)
   }
 
-  const onUpdate = () => {
+  const onUpdate = (event) => {
+    event.stopPropagation();
     if (onSubmit) {
       onSubmit(value)
     }
@@ -267,11 +274,12 @@ const SectionLabelEdit = ({ defaultValue, disabled, onSubmit }) => {
       <div className="flex-grow-1 position-relative">
         <input
           onChange={e => setValue(e.target.value)}
-          className={`sla-section-input ${isError ? "error" : ""}`}
+          className={`sla-section-input ${onEditing ? "focus": ""} ${isError ? "error" : ""}`}
           onFocus={() => setOnEditing(true)}
           value={value}
           ref={inputRef}
           disabled={disabled || !onEditing}
+          onClick={e => e.stopPropagation()}
         />
         {onEditing && (
           <div className={`remain-character ${isError ? "error" : "valid"}`}>

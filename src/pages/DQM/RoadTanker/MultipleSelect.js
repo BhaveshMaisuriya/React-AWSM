@@ -87,8 +87,11 @@ export default class MultipleSelect extends Component {
         multiple
         value={RtRestrictionSelected}
         onChange={handleChange}
-        renderValue={selected => selected.join(", ")}
+        renderValue={selected =>
+          selected.length > 0 && selected ? selected.join(", ") : "Select"
+        }
         disabled={disabled}
+        displayEmpty={true}
       >
         {names?.map(name => (
           <MenuItem key={name} value={name}>

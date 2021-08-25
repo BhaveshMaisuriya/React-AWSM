@@ -214,20 +214,20 @@ const tableMapping = {
     apiKey: "status_awsm",
     columnSize: "cell-text",
   },
-  close_period_1_date_from: {
+  close_period_date_from: {
     label: "CLOSE PERIOD FROM DATE",
     columnSize: "cell-text-big",
   },
-  close_period_1_date_to: {
+  close_period_date_to: {
     label: "CLOSE PERIOD TO DATE",
     columnSize: "cell-text-big",
   },
-  close_period_1_time_from: {
+  close_period_time_from: {
     label: "CLOSE PERIOD FROM TIME",
     apiKey: "close_period_1.time_from",
     columnSize: "cell-text-big",
   },
-  close_period_1_time_to: {
+  close_period_time_to: {
     label: "CLOSE PERIOD TO TIME",
     apiKey: "close_period_1.time_to",
     columnSize: "cell-text-big",
@@ -237,7 +237,7 @@ const tableMapping = {
     apiKey: "sales_inventory_data_source",
     columnSize: "cell-text-big",
   },
-  end_of_day: {
+  end_of_day_value: {
     label: "END OF DAY",
     apiKey: "end_of_day",
     columnSize: "cell-text",
@@ -597,12 +597,12 @@ const tableMapping = {
   //   apiKey: "delivery_open_time_1.days",
   //   columnSize: "cell-text-big",
   // },
-  delivery_open_time_1_time_from: {
+  delivery_open_time_from: {
     label: "DELIVERY OPEN TIME FROM",
     apiKey: "delivery_open_time_1.time_from",
     columnSize: "cell-text",
   },
-  delivery_open_time_1_time_to: {
+  delivery_open_time_to: {
     label: "DELIVERY OPEN TIME TO",
     apiKey: "delivery_open_time_1.time_to",
     columnSize: "cell-text",

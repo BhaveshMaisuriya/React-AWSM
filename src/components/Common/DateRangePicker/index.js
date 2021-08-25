@@ -28,10 +28,12 @@ const DateRangePicker = ({
   defaultMonth = new Date(),
   disabled = false,
   onChange = () => {},
+  onBlur = ()=>{},
   types = ["single", "range", "every", "daily"],
   startDate = new Date(),
   endDate = null,
   placeholder,
+  disablePreviousDayBeforeSelect = false,
   error = false,
 }) => {
   const [value, setValue] = useState(defaultValue || dateObjectTemplate)
@@ -90,6 +92,8 @@ const DateRangePicker = ({
       return value.days[0]
         ? [new Date(value.days[0]), null, null, outRange]
         : [null, null, null, outRange]
+    } else {
+      return { outRange: outRange }
     }
   }, [selectedWeekDays, defaultValue, value, startDate, endDate])
 
@@ -253,11 +257,18 @@ const DateRangePicker = ({
     if (onChange) {
       onChange(newValue)
     }
+    if(onBlur){
+      onBlur()
+    }
   }
 
   const onApply = () => {
     if (onChange) {
       onChange(value)
+    }
+
+    if(onBlur && !value.type){
+      onBlur()
     }
     setAnchorEl(null)
   }
@@ -270,6 +281,7 @@ const DateRangePicker = ({
         aria-describedby={id}
         color="primary"
         onClick={handleClick}
+        onBlur={onBlur}
         className={`d-flex justify-content-between align-items-center py-2 w-100 calendar-label ${
           error && "border-danger"
         } ${disabled ? "disabled" : ""}`}
@@ -301,6 +313,7 @@ const DateRangePicker = ({
             captionElement={captionElement}
             onDayClick={onDayClick}
             navbarElement={navbarElement}
+            disabledDays={disablePreviousDayBeforeSelect && [{before: startDate}]}
           />
           <div className="d-flex justify-content-between align-items-center mb-2">
             {types.includes("range") ? (

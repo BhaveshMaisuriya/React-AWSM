@@ -205,11 +205,6 @@ const tableMapping = {
     apiKey: "status_awsm",
     columnSize: "cell-text",
   },
-  // close_period_1_value: {
-  //   type: "day-range",
-  //   label: "CLOSE PERIOD DATES",
-  //   columnSize: "cell-text-big",
-  // },
   close_period_1_date_from: {
     label: "CLOSE PERIOD FROM DATE",
     columnSize: "cell-text-big",

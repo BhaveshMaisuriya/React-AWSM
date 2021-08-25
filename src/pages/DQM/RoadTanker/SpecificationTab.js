@@ -12,11 +12,11 @@ class SpecificationTab extends PureComponent {
       isRTRestrictionAdding: false,
       restrictionStr: "",
       idDeleteBtnShow: true,
-      restrictionCharRemain: 20
+      restrictionCharRemain: 20,
     }
   }
 
-  componentDidMount() { }
+  componentDidMount() {}
 
   onChangeHandler = (value, key) => {
     const { data, onChange } = this.props
@@ -36,7 +36,9 @@ class SpecificationTab extends PureComponent {
 
     const onConfirmClick = () => {
       const { isDeleteBtnShow } = this.state
-      let restriction_dropdown = this.props.data?.restriction_dropdown ? this.props.data?.restriction_dropdown : []
+      let restriction_dropdown = this.props.data?.restriction_dropdown
+        ? this.props.data?.restriction_dropdown
+        : []
 
       const name = restriction_dropdown[restriction_dropdown.length - 1]
 
@@ -93,7 +95,10 @@ class SpecificationTab extends PureComponent {
         let rtRestriction = document.getElementById("restriction").value
         let { restriction_dropdown } = this.props.data
 
-        if (rtRestriction.length > 0 && !restriction_dropdown.includes(rtRestriction)) {
+        if (
+          rtRestriction.length > 0 &&
+          !restriction_dropdown.includes(rtRestriction)
+        ) {
           restriction_dropdown.push(rtRestriction)
         }
 
@@ -123,7 +128,7 @@ class SpecificationTab extends PureComponent {
       if (!restrictionStr || restrictionStr.length === 0) {
         this.setState({
           restrictionStr: "New Restriction",
-          restrictionCharRemain: 5
+          restrictionCharRemain: 5,
         })
       }
     }
@@ -156,7 +161,6 @@ class SpecificationTab extends PureComponent {
     }
 
     const rtRestriction = disabled => {
-
       const {
         isRTRestrictionAdding,
         isDeleteBtnShow,
@@ -166,45 +170,48 @@ class SpecificationTab extends PureComponent {
       let restriction_dropdown = data?.restriction_dropdown
       let restriction = data?.restriction
 
-      const rtRestriction = !isRTRestrictionAdding && restriction_dropdown && restriction ? (
-        <MultipleSelect
-          names={restriction_dropdown}
-          rtRestrictionSelected={restriction}
-          isDeleteBtnShow={isDeleteBtnShow}
-          onDeleteBtnClick={onDeleteBtnClick}
-          onConfirmClick={onConfirmClick}
-          onNoClick={onNoClick}
-          onChange={e => this.onChangeHandler(e, "restriction")}
-          disabled={disabled}
-        />
-      ) : (
-        <div className="input-group add-restriction">
-          <input
-            className="form-control awsm-input"
-            id="restriction"
-            maxLength="20"
-            type="text"
-            defaultValue={restrictionStr}
+      const rtRestriction =
+        !isRTRestrictionAdding && restriction_dropdown && restriction ? (
+          <MultipleSelect
+            names={restriction_dropdown}
+            rtRestrictionSelected={restriction}
+            isDeleteBtnShow={isDeleteBtnShow}
+            onDeleteBtnClick={onDeleteBtnClick}
+            onConfirmClick={onConfirmClick}
+            onNoClick={onNoClick}
+            onChange={e => this.onChangeHandler(e, "restriction")}
             disabled={disabled}
-            onChange={() => {
-              let rtRestriction = document.getElementById("restriction").value
-              let length = rtRestriction.length
-              this.setState({ restrictionCharRemain: 20 - length })
-            }}
           />
-          <div className="input-group-append">
-            <a
-              className={`form-control btn btn-auto-fill ${disabled ? "disable-link" : null
-                }`}
-              type="button"
-              onClick={onAutoFillBtnClick}
+        ) : (
+          <div className="input-group add-restriction">
+            <input
+              className="form-control awsm-input"
+              id="restriction"
+              maxLength="20"
+              type="text"
+              defaultValue={restrictionStr}
               disabled={disabled}
-            >
-              +{this.state.restrictionCharRemain}
-            </a>
+              onChange={() => {
+                let rtRestriction = document.getElementById("restriction").value
+                let length = rtRestriction.length
+                this.setState({ restrictionCharRemain: 20 - length })
+              }}
+              placeholder="Select"
+            />
+            <div className="input-group-append">
+              <a
+                className={`form-control btn btn-auto-fill ${
+                  disabled ? "disable-link" : null
+                }`}
+                type="button"
+                onClick={onAutoFillBtnClick}
+                disabled={disabled}
+              >
+                +{this.state.restrictionCharRemain}
+              </a>
+            </div>
           </div>
-        </div>
-      )
+        )
 
       return rtRestriction
     }
@@ -218,7 +225,7 @@ class SpecificationTab extends PureComponent {
               <input
                 className="form-control awsm-input"
                 type="text"
-                placeholder="Typing something here..."
+                // placeholder="Typing something here..."
                 defaultValue={data?.product_type_sap}
                 onChange={e =>
                   this.onChangeHandler(e.target.value, "product_type_sap")
@@ -231,9 +238,11 @@ class SpecificationTab extends PureComponent {
               <input
                 className="form-control awsm-input"
                 type="text"
-                placeholder="Typing something here..."
+                // placeholder="Typing something here..."
                 defaultValue={data?.pump_type}
-                onChange={e => this.onChangeHandler(e.target.value, "pump_type")}
+                onChange={e =>
+                  this.onChangeHandler(e.target.value, "pump_type")
+                }
                 disabled={true}
               />
             </div>
@@ -263,6 +272,7 @@ class SpecificationTab extends PureComponent {
                 onChange={v =>
                   this.onChangeHandler(v, "temporary_product_date_range")
                 }
+                placeholder="Select Date"
               />
             </div>
           </div>
@@ -289,6 +299,7 @@ class SpecificationTab extends PureComponent {
                   (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
                 }
                 className="form-control awsm-input"
+                placeholder="Select"
               />
             </div>
           </div>
@@ -298,7 +309,9 @@ class SpecificationTab extends PureComponent {
               <div>
                 <label>RT RESTRICTION</label>
               </div>
-              {rtRestriction((mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler)}
+              {rtRestriction(
+                (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
+              )}
             </div>
             <div className="form-group col-md-6">
               <label>RESTRICT CODE</label>

@@ -7,11 +7,18 @@ import CustomCKEditor from "./CustomCKEditor"
 import "./ModalDetail.scss"
 import { updateSLAItem, createSLARecord } from "store/actions"
 import SLARecordEditor from "./CustomCKEditor5"
+import { isEqual } from "lodash"
 
 export const SLAModalDetail = ({ ...props }) => {
   const { openModalDetail, handleCloseModal, onUpdateSLAItem, data, type, onCreateSLARecord  } = props
   const [modalConfirm, setModalConfirm] = useState(false)
-  const [dataSubmitted,setDataSubmitted] = useState(null)
+  const [dataSubmitted,setDataSubmitted] = useState(data)
+
+  useEffect(() => {
+    if (openModalDetail) {
+      setDataSubmitted(data)
+    }
+  }, [openModalDetail])
 
   const handleCancelModalConfirm = () => {
     setModalConfirm(false)
@@ -19,7 +26,6 @@ export const SLAModalDetail = ({ ...props }) => {
 
   const handleExitModalConfirm = () => {
     setModalConfirm(false)
-    setDataSubmitted(null)
     handleCloseModal()
   }
 
@@ -29,11 +35,11 @@ export const SLAModalDetail = ({ ...props }) => {
     else{
       let keys = Object.keys(dataSubmitted)
       for(let i = 0;i< keys.length;i++){
-        if(!dataSubmitted[keys[i]] || dataSubmitted[keys[i]] == '&nbsp;'){
-          return true
+        if(dataSubmitted[keys[i]] && dataSubmitted[keys[i]] !== '&nbsp;'){
+          return false
         }
       }
-      return false
+      return true
     }
   }
 
@@ -58,18 +64,26 @@ export const SLAModalDetail = ({ ...props }) => {
     handleCloseModal()
   }
 
+  const onCancel = () => {
+    if (isEqual(dataSubmitted, data)) {
+      handleExitModalConfirm()
+    } else {
+      setModalConfirm(true)
+    }
+  }
+
   return (
     <div className={`sla-modal-content`}>
       <Modal isOpen={openModalDetail} size={`lg`} className="modal-detail">
         <div className="variance-control-container">
           <div className="d-flex align-items-center justify-content-between px-4 pt-4 pb-2">
             <h3 className="variance-label">
-              {type == "add" ? "Add Row" : "Edit detail"}
+              {type == "add" ? "Add New Row" : "Edit detail"}
             </h3>
             <div className="d-flex align-items-center">
               <button
                 className="variance-close-button"
-                onClick={() => setModalConfirm(true)}
+                onClick={onCancel}
                 style={{ width: 30 }}
               >
                 <XIcon />
@@ -84,10 +98,9 @@ export const SLAModalDetail = ({ ...props }) => {
               />
             )}
             <div className="w-100">
-              <div className="px-2">
-                <Table className="sla-detail-table">
+              <div>
+                <table className="sla-detail-table">
                   <thead>
-                    <tr>
                       <th className="header hd_1">item no.</th>
                       <th className="header hd_2">description</th>
                       <th className="header hd_3">kpi</th>
@@ -95,7 +108,6 @@ export const SLAModalDetail = ({ ...props }) => {
                       <th className="header hd_5">action by</th>
                       <th className="header hd_6">module</th>
                       <th className="header hd_7">remarks</th>
-                    </tr>
                   </thead>
                   <tbody>
                     <tr className="ck-content">
@@ -105,19 +117,19 @@ export const SLAModalDetail = ({ ...props }) => {
                       </td>
                     </tr>
                   </tbody>
-                </Table>
+                </table>
               </div>
 
-              <div className="d-flex align-items-center justify-content-end mt-5 mb-3 mr-2">
+              <div className="d-flex align-items-center justify-content-end mt-5 pb-3">
                 <button
                   className="btn btn-outline-primary px-4"
-                  onClick={() => setModalConfirm(true)}
+                  onClick={onCancel}
                 >
                   Cancel
                 </button>
                   <button
                   disabled={ValidateDataHandler()}
-                  className="btn btn-primary ml-4 px-4"
+                  className="btn btn-primary ml-3 px-4"
                   onClick={handleOnUpdateClick}
                 >
                   { type == "add" ? 'Add' : 'Update' }

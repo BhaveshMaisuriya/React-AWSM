@@ -18,7 +18,7 @@ const ACTUAL_OPEN_TIME = [
   { name: "Thursday", checked: false },
   { name: "Friday", checked: false },
   { name: "Saturday", checked: false },
-  { name: "Sunday", checked: false },
+  { name: "Sunday", checked: false }
 ]
 
 const timeData = []
@@ -37,11 +37,13 @@ const placeholderSelect = "Select"
 
 const TabStatus = props => {
   const [data, setData] = useState(props.data)
+  const [isInactiveDateRangeTouched, setIsInactiveDateRangeTouched] = useState(false)
   const [openTime1, setOpenTime1] = useState(
     JSON.parse(JSON.stringify(ACTUAL_OPEN_TIME))
   )
   const scheduler = isScheduler()
 
+  const previousInactiveDateRange = React.useRef(null)
   useEffect(() => {
     props.onChange(data)
   }, [data])
@@ -62,9 +64,43 @@ const TabStatus = props => {
     }
   }, [])
 
+  useEffect(() => {
+    if (!data?.inactive_date_range_1?.type ||
+      (data?.inactive_date_range_1?.type === "single" &&
+        data?.inactive_date_range_1?.days?.length === 0) ||
+      (data?.inactive_date_range_1?.type === "range" &&
+        (!data?.inactive_date_range_1?.date_from ||
+          !data?.inactive_date_range_1?.date_to))) {
+      props.handleErrors({
+        tab: "statusTab",
+        error: "invalid date range",
+        field: "inactive_date_range_1"
+      }, true)
+    }
+  }, [])
+
+  useEffect(() => {
+    const { inactive_date_range_1 } = props.forceBlur
+    if (inactive_date_range_1) {
+      if (!data?.inactive_date_range_1?.type ||
+        (data?.inactive_date_range_1?.type === "single" &&
+          data?.inactive_date_range_1?.days?.length === 0) ||
+        (data?.inactive_date_range_1?.type === "range" &&
+          (!data?.inactive_date_range_1?.date_from ||
+            !data?.inactive_date_range_1?.date_to))) {
+        setIsInactiveDateRangeTouched(true)
+      }
+    }
+  }, [props.forceBlur.inactive_date_range_1])
   const onchangeHandler = (field, value) => {
     const fl = field.split(".")
     let newData = { ...data }
+    if (field === "inactive_date_range_1") {
+      previousInactiveDateRange.current = { ...value }
+    }
+    if (field === "status_awsm" && value === "Temp Inactive") {
+      setIsInactiveDateRangeTouched(true)
+    }
     if (fl.length >= 2) {
       if (!newData[fl[0]]) {
         newData[fl[0]] = {}
@@ -75,6 +111,11 @@ const TabStatus = props => {
       field === "status_awsm" && value === "Inactive"
         ? (newData = onChangeStatusInactive(newData))
         : ""
+      if (field === "status_awsm" &&
+        value === "Temp Inactive" &&
+        data?.status_awsm === "Inactive") {
+        newData["inactive_date_range_1"] = { ...previousInactiveDateRange.current }
+      }
     }
     setData(newData)
   }
@@ -104,44 +145,68 @@ const TabStatus = props => {
         days: openTime1
           .filter(i => i.checked)
           .map(i => i.name)
-          .join(","),
-      },
+          .join(",")
+      }
     })
   }
 
   const actualOpenTime1 = openTime1.filter(item => {
     return item.checked === true
   })
+
   function renderDateRangeError() {
-    if (data?.status_awsm === "Temp Inactive") {
-      if (data?.inactive_date_range_1?.type === "range") {
-        return null
+    if (data?.status_awsm === "Temp Inactive" && !scheduler) {
+      if (!data?.inactive_date_range_1?.type ||
+        (data?.inactive_date_range_1?.type === "single" && data?.inactive_date_range_1?.days?.length === 0) ||
+        (data?.inactive_date_range_1?.type === "range" &&
+          (!data?.inactive_date_range_1?.date_from || !data?.inactive_date_range_1?.date_to))) {
+        props.handleErrors({
+          tab: "statusTab",
+          error: "invalid date range",
+          field: "inactive_date_range_1"
+        }, true)
+        return (
+          <p style={{ color: "red" }}>
+            Please fill in Temporary Inactive Date range
+          </p>)
       }
-      return (
-        <p style={{ color: "red" }}>
-          Please fill in Temporary Inactive Date range
-        </p>
-      )
     }
+    props.handleErrors({
+      tab: "statusTab",
+      error: "invalid date range",
+      field: "inactive_date_range_1"
+    }, false)
+    return null
   }
 
   function renderDayValues() {
     let valueDate = ""
     if (
       data?.terminal_operating_days_1 &&
-      data?.terminal_operating_days_1?.days?.length === 56
+      data?.terminal_operating_days_1?.days ===
+        "Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday"
     ) {
       valueDate = "Every Day"
     } else if (
       data?.terminal_operating_days_1 &&
       data?.terminal_operating_days_1?.days?.length !== 0
     ) {
-      valueDate = actualOpenTime1.map(i => i.name)
+      let listDateValue = data?.terminal_operating_days_1?.days?.toString()
+      if (
+        listDateValue ===
+        "Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday"
+      ) {
+        valueDate = "Every Day"
+      } else {
+        valueDate = actualOpenTime1.map(i => i.name)
+      }
     } else {
       valueDate = scheduler ? "" : "Select"
     }
+
     return valueDate
   }
+
   return (
     <div className="dqm-status-container">
       <div className="form-row">
@@ -157,16 +222,19 @@ const TabStatus = props => {
           />
         </div>
         <div className="col-12 col-sm-6">
-          <label>INACTIVE DATE RANGE</label>
+          <label>INACTIVE DATE RANGE{data?.status_awsm === "Temp Inactive" &&
+          <span className="text-danger">*</span>}</label>
           <DateRangePicker
+            onBlur={() => setIsInactiveDateRangeTouched(true)}
             range={true}
             onChange={value => onchangeHandler("inactive_date_range_1", value)}
             defaultValue={data?.inactive_date_range_1}
             disabled={scheduler || data?.status_awsm === "Inactive"}
-            placeholder={!scheduler && placeholderSelectCalendar}
-            error={Boolean(renderDateRangeError())}
+            placeholder={data?.status_awsm === "Inactive" ? "" : !scheduler ? placeholderSelectCalendar : ""}
+            error={isInactiveDateRangeTouched && renderDateRangeError()}
+            disablePreviousDayBeforeSelect={true}
           />
-          {renderDateRangeError()}
+          {isInactiveDateRangeTouched && renderDateRangeError()}
         </div>
       </div>
       <div className="form-row mt-3">
@@ -188,7 +256,7 @@ const TabStatus = props => {
                 style={{ height: "40px", cursor: "pointer" }}
               />
               <div className={styles.arrow}>
-                <ReactSVG src={ArrowDropDownIcon} />
+                {!scheduler ? <ReactSVG src={ArrowDropDownIcon} /> : ""}
               </div>
             </AvForm>
           </SimplePopover>

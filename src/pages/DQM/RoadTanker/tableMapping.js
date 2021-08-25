@@ -1,3 +1,5 @@
+import { tagColors } from "../Common/helper"
+
 const tableColumns = [
   "vehicle",
   "owner",
@@ -30,7 +32,7 @@ const tableMapping = {
     columnSize: "cell-text",
     type: "badge",
     getBadgeColor: value => {
-      return value === "ACTIVE" ? "primary" : "secondary"
+      return tagColors[value ? `${value.toUpperCase()}` : "null"] || "secondary"
     },
   },
   product_type_sap: {
@@ -44,7 +46,7 @@ const tableMapping = {
     columnSize: "cell-text-big",
     type: "badge",
     getBadgeColor: value => {
-      return value === "ACTIVE" ? "primary" : "secondary"
+      return tagColors[value ? `${value.toUpperCase()}` : "null"] || "secondary"
     },
   },
   pump_type: {

@@ -303,7 +303,7 @@ const Example = props => {
                                   />
                                 }
                                 label={
-                                  isNull(row.text) || isEmpty(row.text)
+                                  (isNull(row.text) || isEmpty(row.text) || row.text.includes('null'))
                                     ? "-"
                                     : removeKeywords(row.text)
                                 }

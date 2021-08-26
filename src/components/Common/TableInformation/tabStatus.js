@@ -103,8 +103,8 @@ const TabStatus = ({ scheduler, data, onChange }) => {
           <div className="col-6" />
         )}
       </div>
-      <div>
-        <h6 className="mt-3">CLOSE PERIOD</h6>
+      <div className="marginTop30">
+        <strong className="font-weight-bolder">CLOSE PERIOD</strong>
         <div className="row">
           <div className="col-3">
             <div className="input-header">CLOSE (FROM)</div>

@@ -333,7 +333,7 @@ const DateRangePicker = ({
             ) : (
               <div />
             )}
-            <div className="d-flex pr-2">
+            <div className="d-flex pr-3">
               <button
                 className="btn btn-outline-primary mr-2 btn-date-range"
                 onClick={onClear}

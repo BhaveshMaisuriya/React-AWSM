@@ -93,7 +93,12 @@ const SLA = (state = initialState, action) => {
       }
 
     case UPDATE_SLA_SECTION_SUCCESS: {
-      ToastSuccess.fire({ title: "SLA Section Updated!" })
+      if (action.payload.action && action.payload.action.startsWith("note")) {
+        const noteAction = action.payload.action.split("-")[1]
+        ToastSuccess.fire({ title: `Notes at ${action.payload.title}, ${action.payload.category?.toUpperCase()} is ${noteAction}` })
+      } else {
+        ToastSuccess.fire({ title: "SLA Section Updated!" })
+      }
       const newData = { ...state.data }
       newData[action.payload.category] = action.payload.data
       return {

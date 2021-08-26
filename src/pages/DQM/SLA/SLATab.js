@@ -26,14 +26,13 @@ import { isScheduler } from "helpers/auth_helper"
 
 const DeleteNoteConfirmation = ({ isOpen, onDelete, onCancel, item }) => {
   return (
-    <Modal isOpen={isOpen}>
+    <Modal isOpen={isOpen} className="delete-note-modal">
       <ModalHeader toggle={onCancel}>
         Delete Confirmation
       </ModalHeader>
       <ModalBody>
-        <h6>Are you sure you want to delete this {item}?</h6>
-        <hr/>
-        <div className="d-flex align-items-center justify-content-end">
+        <h6 className="mb-3">Are you sure you want to delete this {item}?</h6>
+        <div className="d-flex align-items-center justify-content-end mt-4">
           <button onClick={onCancel} className="btn btn-dan mr-2">Cancel</button>
           <button onClick={onDelete} className="btn btn-danger">Delete</button>
         </div>
@@ -94,11 +93,12 @@ const AddNewSectionModal = ({ defaultValue, isOpen, onAdd, onCancel, type = "add
           <div className="flex-grow-1 position-relative">
             <input
               onChange={e => setValue(e.target.value)}
-              className={`sla-section-input add-new-section ${isError ? "error" : ""}`}
+              className={`sla-section-input add-new-section ${onEditing ? "focus" : ""} ${isError ? "error" : ""}`}
               onFocus={() => setOnEditing(true)}
               onBlur={() => setOnEditing(false)}
               value={value}
               ref={inputRef}
+              placeholder="Type new name here.."
             />
             {onEditing && (
               <div className={`remain-character ${isError ? "error" : "valid"}`}>
@@ -111,10 +111,10 @@ const AddNewSectionModal = ({ defaultValue, isOpen, onAdd, onCancel, type = "add
           )}
         </div>
         <div className="d-flex align-items-center justify-content-end mt-3">
-          <button onClick={onCancelHandler} className="btn btn-outline-success mr-2">Cancel</button>
+          <button onClick={onCancelHandler} className="btn btn-outline-primary">Cancel</button>
           <button
             onClick={HandleSubmitData}
-            className="btn btn-success"
+            className="btn btn-primary"
             disabled={remainCharacters < 0 || remainCharacters==MAX_CHARS || handleValidatorData()}
           >
             {type == 'add' ? 'Add' : 'Update' }
@@ -127,7 +127,7 @@ const AddNewSectionModal = ({ defaultValue, isOpen, onAdd, onCancel, type = "add
 
 const SLAAddNote = ({ data, onSubmit, onDeleteNote, disabled }) => {
   const [onEditing, setOnEditing] = useState(false)
-  const [value, setValue] = useState(data.note || "");
+  const [value, setValue] = useState(data.notes || "");
   const [editor, setEditor] = useState(null)
   const [viewEditor, setViewEditor] = useState(null)
 
@@ -140,7 +140,7 @@ const SLAAddNote = ({ data, onSubmit, onDeleteNote, disabled }) => {
   }
   const onUpdate = () => {
     if (onSubmit) {
-      onSubmit(value)
+      onSubmit(value, !!data.notes)
     }
     setOnEditing(false)
   }
@@ -202,10 +202,10 @@ const SLAAddNote = ({ data, onSubmit, onDeleteNote, disabled }) => {
           onReady={editor => setEditor(editor)}
         />
         <div className="d-flex justify-content-end pr-3 mt-2">
-          <button className="btn btn-outline-primary mr-3" onClick={onCancel}>
+          <button className="btn btn-outline-primary" onClick={onCancel}>
             Cancel
           </button>
-          <button className="btn btn-primary" onClick={onUpdate}>
+          <button className="btn btn-primary" onClick={onUpdate} disabled={data.notes === value}>
             Update
           </button>
         </div>
@@ -294,14 +294,14 @@ const SectionLabelEdit = ({ defaultValue, disabled, onSubmit }) => {
       ) : (
         <div className="d-flex">
           <button
-            className="btn btn-outline-primary ml-3 mr-2"
+            className="btn btn-outline-primary ml-3"
             onClick={onCancel}
           >
             Cancel
           </button>
           <button
             className="btn btn-primary"
-            disabled={isError}
+            disabled={isError || value === defaultValue}
             onClick={onUpdate}
           >
             Update
@@ -368,15 +368,15 @@ class SLATab extends Component {
     updateSLASection({ id: section.id, category: category, title: section.title, data: { subtitle: value } })
   }
 
-  onSubmitNote(section, value) {
+  onSubmitNote(section, value, isUpdate) {
     const { updateSLASection, category } = this.props
-    updateSLASection({ id: section.id, category: category, title: section.title, data: { notes: value } })
+    updateSLASection({ id: section.id, category: category, title: section.title, data: { notes: value }, action: isUpdate ? "note-updated" : "note-created" })
   }
 
   onDeleteNote() {
     const { updateSLASection, category, data } = this.props
     this.setState({ ...this.state, deleteNoteModal: false })
-    updateSLASection({ id: data[this.state.activeTab].id, category: category, title: data[this.state.activeTab].title, data: { notes: null } })
+    updateSLASection({ id: data[this.state.activeTab].id, category: category, title: data[this.state.activeTab].title, data: { notes: null }, action: "note-deleted" })
   }
 
   onOptionClick(option){
@@ -560,7 +560,7 @@ class SLATab extends Component {
                         }
                         <SLAAddNote
                           data={item}
-                          onSubmit={(value) => this.onSubmitNote(item, value)}
+                          onSubmit={(value, isUpdate) => this.onSubmitNote(item, value, isUpdate)}
                           disabled={scheduler}
                           onDeleteNote={() =>
                             this.setState({

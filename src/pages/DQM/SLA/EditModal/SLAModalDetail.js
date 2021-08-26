@@ -129,7 +129,7 @@ export const SLAModalDetail = ({ ...props }) => {
                 </button>
                   <button
                   disabled={ValidateDataHandler()}
-                  className="btn btn-primary ml-3 px-4"
+                  className="btn btn-primary px-4"
                   onClick={handleOnUpdateClick}
                 >
                   { type == "add" ? 'Add' : 'Update' }

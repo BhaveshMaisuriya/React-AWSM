@@ -57,8 +57,18 @@
 .variance-control-container {
     .btn {
         width: 120px;
+
+        &:active {
+            box-shadow: none!important;
+            outline: 0;
+        }
+
         &.btn-outline-primary {
             background-color: white !important;
+            border: 1px solid #CBEFED !important;
+            color: #00A19C !important;
+            margin-right: 8px;
+
             &:hover {
                 color: #00A19C !important;
             }

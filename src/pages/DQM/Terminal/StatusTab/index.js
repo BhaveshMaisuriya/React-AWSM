@@ -21,7 +21,7 @@ const ACTUAL_OPEN_TIME = [
   { name: "Sunday", checked: false }
 ]
 
-const timeData = []
+const timeData = ['None']
 for (let i = 0; i < 24; i++) {
   timeData.push(`${i.toString().padStart(2, "0")}:00`)
   timeData.push(`${i.toString().padStart(2, "0")}:30`)
@@ -286,9 +286,9 @@ const TabStatus = props => {
           />
         </div>
       </div>
-      <div className="mt-4">
-        <h6>NO DELIVERY INTERVAL</h6>
-        <div className="row mt-3">
+      <div className={styles.marginTop14}>
+        <strong className="font-weight-bolder">NO DELIVERY INTERVAL</strong>
+        <div className={`row ${styles.marginTop20}`}>
           <div className="col-12 col-sm-6">
             <label>DATE 1</label>
             <DateRangePicker

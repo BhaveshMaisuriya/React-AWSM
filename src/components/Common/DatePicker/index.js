@@ -216,7 +216,7 @@ const DatePicker = ({
             </Button>
           </div>
         ) : (
-          <div className="d-flex pr-2 justify-content-end align-items-center mb-2">
+          <div className="d-flex pr-3 justify-content-end align-items-center mb-2">
             <button
               className="btn btn-outline-primary mr-2 btn-date-range"
               onClick={onClear}

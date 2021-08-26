@@ -243,7 +243,7 @@ class InformationModal extends Component {
                     onChange={e =>
                       onFieldValueChange("remarks", e.target.value)
                     }
-                    placeholder="Typing something here..."
+                    placeholder={!scheduler ? "Typing something here..." : ""}
                     disabled={
                       (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
                     }

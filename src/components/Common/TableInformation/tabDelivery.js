@@ -314,7 +314,7 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
             }
           />
         </Col>
-        <Col className={`col-12 ${styles.marginTop30} ${styles.marginBottom20}`}>
+        <Col className={`col-12 ${styles.marginTop32} ${styles.marginBottom16}`}>
           <h6>
             <strong>ACTUAL OPEN TIME 1</strong>
           </h6>
@@ -387,7 +387,7 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
         </Col>
         {pathName === "/retail-customer" ||  pathName === "/commercial-customer" ? (
           <React.Fragment>
-            <Col className={`col-12 ${styles.marginTop14} ${styles.marginBottom20}`}>
+            <Col className={`col-12 ${styles.marginTop16} ${styles.marginBottom16}`}>
               <h6>
                 <strong>ACTUAL OPEN TIME 2</strong>
               </h6>
@@ -458,7 +458,7 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
                 }
               />
             </Col>
-            <Col className={`col-12 ${styles.marginTop14} ${styles.marginBottom20}`}>
+            <Col className={`col-12 ${styles.marginTop16} ${styles.marginBottom16}`}>
               <h6>
                 <strong>ACTUAL OPEN TIME 3</strong>
               </h6>
@@ -531,7 +531,7 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
             </Col>
           </React.Fragment>
         ) : null}
-        <Col className="col-6 mb-3">
+        <Col className="col-6 mb-2">
           <h6>NO DELIVERY INTERVAL</h6>
         </Col>
         <Col className="col-3">

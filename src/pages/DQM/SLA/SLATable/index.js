@@ -17,7 +17,7 @@ const tableMapping = {
   description: {
     label: "Description",
     apiKey: "description",
-    columnSize: 1,
+    columnSize: 2,
   },
   kpi: {
     label: "KPI",
@@ -85,7 +85,7 @@ const SLATable = ({ items, onDeleteSLADetail, scheduler, onUpdate }) => {
     columns.push({
       label: "Action",
       apiKey: null,
-      columnSize: 0.5,
+      columnSize: 0.6,
       TDComponent: TDActionsComponent,
       TDComponentProps: { onEdit, onDelete, disabled: scheduler },
     })

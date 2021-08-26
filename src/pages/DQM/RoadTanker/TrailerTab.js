@@ -24,7 +24,7 @@ class TrailerTab extends PureComponent {
               <label>RT UNLADEN WEIGHT</label>
               <input
                 type="number"
-                placeholder="Numeric only"
+                // placeholder={!scheduler ? "Numeric only" : ""}
                 className="form-control awsm-input"
                 defaultValue={data?.unladen_weight}
                 disabled={true}
@@ -37,7 +37,7 @@ class TrailerTab extends PureComponent {
               <label>RT MAX WEIGHT</label>
               <input
                 type="number"
-                placeholder="Numeric only"
+                // placeholder={!scheduler ? "Numeric only" : ""}
                 className="form-control awsm-input"
                 defaultValue={data?.max_weight}
                 disabled
@@ -94,7 +94,7 @@ class TrailerTab extends PureComponent {
               <label>OFFLOADING DURATION (MINS)</label>
               <input
                 type="number"
-                placeholder="Numeric only"
+                placeholder={!scheduler ? "Numeric only" : ""}
                 className="form-control awsm-input"
                 disabled={
                   (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler

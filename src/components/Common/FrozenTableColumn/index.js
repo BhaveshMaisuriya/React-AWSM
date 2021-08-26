@@ -101,7 +101,7 @@ class FixedCoulmnTable extends Component {
   }
   renderRegularTd = arr => {
     const { headers } = this.props
-    const sliceArr = headers.slice(this.state.fixedHeaders.length, arr.length)
+    const sliceArr = headers.slice(this.state.fixedHeaders.length, arr.length);
     return this.getTdType(sliceArr, arr)
   }
   renderRegular = arr => {

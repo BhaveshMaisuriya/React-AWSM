@@ -1,6 +1,6 @@
 .terminal-product {
   position: relative;
-  padding-top: 0.75rem;
+  //padding-top: 0.75rem;
 
   .delete-confirm {
     position: absolute;
@@ -20,6 +20,7 @@
     font-size: 0.85rem;
     font-weight: 500;
   }
+
 }
 .addl-value{
   padding-left: 0 !important;
@@ -35,4 +36,13 @@
   border: none !important;
   height: 100% !important;
   margin: auto;
+}
+.marginBottom11{
+  margin-bottom: 11px;
+}
+.marginTop19{
+  margin-top: 19px;
+}
+.marginTop20{
+  margin-top: 20px;
 }

@@ -196,7 +196,7 @@ class SpecificationTab extends PureComponent {
                 let length = rtRestriction.length
                 this.setState({ restrictionCharRemain: 20 - length })
               }}
-              placeholder="Select"
+              placeholder={!disabled ? "Select" : ""}
             />
             <div className="input-group-append">
               <a
@@ -258,7 +258,7 @@ class SpecificationTab extends PureComponent {
                   (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
                 }
                 className="form-control awsm-input"
-                placeholder="Select"
+                placeholder={!scheduler ? "Select" : ""}
               />
             </div>
             <div className="col-md-6 form-group">
@@ -272,7 +272,7 @@ class SpecificationTab extends PureComponent {
                 onChange={v =>
                   this.onChangeHandler(v, "temporary_product_date_range")
                 }
-                placeholder="Select Date"
+                placeholder={!scheduler ? "Select Date" : ""}
               />
             </div>
           </div>
@@ -299,7 +299,7 @@ class SpecificationTab extends PureComponent {
                   (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
                 }
                 className="form-control awsm-input"
-                placeholder="Select"
+                placeholder={!scheduler ? "Select" : ""}
               />
             </div>
           </div>

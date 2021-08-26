@@ -62,10 +62,10 @@ const Product = ({
           </button>
         </div>
       )}
-      <div className="d-flex justify-content-between">
-        <h6 className="my-3 font-weight-bold">
+      <div className="d-flex justify-content-between align-items-center marginBottom11 marginTop19">
+        <strong className="font-weight-bolder">
           PRODUCT {productKey.substring(8)}
-        </h6>
+        </strong>
         {!scheduler && (
           <button
             className="btn-delete-product"
@@ -77,7 +77,7 @@ const Product = ({
         )}
       </div>
       <div className="row">
-        <div className="col-3 form-group">
+        <div className="col-3 form-group mb-0">
           <label htmlFor="productCode">PRODUCT CODE</label>
           {isDisabledField ? 
           <AWSMInput
@@ -97,7 +97,7 @@ const Product = ({
           />
 }
         </div>
-        <div className="col-3 form-group">
+        <div className="col-3 form-group mb-0">
           <label htmlFor="productName">PRODUCT NAME</label>
           <AWSMInput
             key={value.name}
@@ -106,7 +106,7 @@ const Product = ({
             onChange={value => onFieldChange("name", value)}
           />
         </div>
-        <div className="col-3 form-group">
+        <div className="col-3 form-group mb-0">
           <label>STATUS IN AWSM</label>
           <AWSMDropdown
             placeholder={!scheduler && "Select status"}
@@ -116,7 +116,7 @@ const Product = ({
             onChange={value => onFieldChange("status_awsm", value)}
           />
         </div>
-        <div className="col-3 form-group">
+        <div className="col-3 form-group mb-0">
           <label
             className={`${renderExceedError("flow_rate", 10000)}`}
           >
@@ -133,8 +133,8 @@ const Product = ({
           {renderExceedError("flow_rate", 10000)}
         </div>
       </div>
-      <h6 className="font-weight-bold">VOLUME CAPPING</h6>
-      <div className="row pt-2">
+      <h6 className="font-weight-bold mb-0 marginTop20">VOLUME CAPPING</h6>
+      <div className="row marginTop20">
         <div className="col-3 form-group">
           <label>FROM TO DATE 1</label>
           <DateRangePicker
@@ -148,11 +148,7 @@ const Product = ({
         </div>
         <div className="col-3 form-group">
           <label
-            className={`${
-              renderExceedError("volume_capping_volume", 10000000)
-                ? "error"
-                : ""
-            }`}
+            className=""
             htmlFor="volume1"
           >
             VOLUME (L) 1
@@ -183,7 +179,7 @@ const Product = ({
         </div>
       </div>
       <div className="row">
-        <div className="col-3 form-group">
+        <div className="col-3 form-group mb-0">
           <label>FROM TO DATE 2</label>
           <DateRangePicker
             placeholder={!scheduler && placeholderSelectCalendar}
@@ -194,13 +190,9 @@ const Product = ({
             }
           />
         </div>
-        <div className="col-3 form-group">
+        <div className="col-3 form-group mb-0">
           <label
-            className={`${
-              renderExceedError("volume_capping_volume_2", 10000000)
-                ? "error"
-                : ""
-            }`}
+            className=""
             htmlFor="volume1"
           >
             VOLUME (L) 2
@@ -219,7 +211,7 @@ const Product = ({
           />
           {renderExceedError("volume_capping_volume_2", 10000000)}
         </div>
-        <div className="col-6 form-group">
+        <div className="col-6 form-group mb-0">
           <label htmlFor="remarks2">REMARKS 2</label>
           <AWSMInput
             defaultValue={value.volume_capping_remarks_2}

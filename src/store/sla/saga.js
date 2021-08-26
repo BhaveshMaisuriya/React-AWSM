@@ -81,7 +81,7 @@ function* onUpdateSLASection({ params }) {
   try {
     yield call(updateSLASection, params)
     const response = yield call(getSLASection, params)
-    yield put(updateSLASectionSuccess({ category: params.category, title: params.title, data: response }))
+    yield put(updateSLASectionSuccess({ category: params.category, title: params.title, data: response, action: params.action }))
   } catch (error) {
     yield put(updateSLASectionFail(error))
   }

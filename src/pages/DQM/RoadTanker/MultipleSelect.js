@@ -96,7 +96,6 @@ export default class MultipleSelect extends Component {
               <Checkbox checked={RtRestrictionSelected.indexOf(name) !== -1} />
             </ListItemIcon>
             <ListItemText id={name} primary={name} />
-            {name === names[names.length - 1] ? showDeleteBtn(name) : null}
           </MenuItem>
         ))}
       </Select>

@@ -36,14 +36,24 @@ import SLATable from "./SLATable"
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import { FormControlLabel } from "@material-ui/core"
 import Checkbox from "@material-ui/core/Checkbox"
-import MyDocument from "./MyDocument"
+import MyDocument from "./Download-pdf/MyDocument"
 import { PDFDownloadLink } from "@react-pdf/renderer"
 import { DownloadIcon } from "../Common/icon"
 import { removeKeywords } from "../Common/helper"
 import { isNull } from "lodash"
+import ReactToPdf  from "react-to-pdf";
+import * as jspdf from 'jspdf'
+
+const ref = React.createRef();
 
 const UntickIcon = () => <img src={selectAllIcon3} alt="icon" />
 const CheckedIcon = () => <img src={selectAllIcon2} alt="icon" />
+
+const options = {
+  orientation: 'landscape',
+  unit: 'in',
+  format: [4]
+};
 
 class SLA extends Component {
   constructor(props) {
@@ -159,6 +169,17 @@ class SLA extends Component {
   getCheckedDownloadVal(index) {
     const temp = [...this.state.downloadCheck]
     temp[index].checked = !temp[index].checked;
+    if(temp[index].id === "0" && temp[index].checked === true) {
+      temp.map((item, index) => {
+        item.checked = true;
+      })
+    }else if(temp[index].id === "0" && temp[index].checked === false) {
+      temp.map((item, index) => {
+        item.checked = false;
+      })
+    } else {
+      temp[0].checked = false;
+    }
     
     let temp1 = [];
     temp.map((item, index) => {
@@ -175,14 +196,37 @@ class SLA extends Component {
       let temp = []
       temp.push({ title: "All Section", checked: true, id: "0" })
       nextProps.slaData.rbd.map((item, index) => {
-        temp.push({ ...item, checked: false })
+        temp.push({ ...item, checked: true })
       })
       this.setState({ downloadCheck: temp })
     }
   }
 
   DownloadPDF() {
-    this.setState({ isDownloadPdf: true })
+    // var element = document.getElementById('sla_pdf');
+
+    // html2pdf(element, {
+    //   margin:       10,
+    //   filename:     'myfile.pdf',
+    //   image:        { type: 'jpeg', quality: 0.98 },
+    //   html2canvas:  { scale: 2, logging: true, dpi: 192, letterRendering: true },
+    //   jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    // });
+
+    // this.setState({ isDownloadPdf: true })
+  //   const input = document.getElementById('capture');
+
+  //   html2canvas(input)
+  //       .then((canvas) => {
+  //           const imgData = canvas.toDataURL('image/png');
+  //           const pdf = new jsPDF('p', 'px', 'a4');
+  //           var width = pdf.internal.pageSize.getWidth();
+  //           var height = pdf.internal.pageSize.getHeight();
+
+  //           pdf.addImage(imgData, 'JPEG', 0, 0, width, height);
+  //           pdf.save("test.pdf");
+        
+  // });
   }
 
   onInputChange(event) {
@@ -358,8 +402,11 @@ class SLA extends Component {
                                     }
                                   )}
                                 <div className="pdf-wid">
+                                <ReactToPdf  targetRef={ref} filename="sla.pdf">
+        {({ toPdf }) => (<button className='btn btn-primary excel-btn-container pdf-btn' onClick={toPdf}>Download</button>)}
+      </ReactToPdf >
                                   {/* <button onClick={() => this.DownloadPDF()}>download</button> */}
-                                  <PDFDownloadLink
+                                  {/* <PDFDownloadLink
                                     document={
                                       <MyDocument
                                         data={this.state.checkedValues.filter(val => val.title === 'All Section').length > 0 ? slaData.rbd : this.state.checkedValues}
@@ -369,7 +416,7 @@ class SLA extends Component {
                                     className="btn btn-primary excel-btn-container pdf-btn"
                                   >
                                     Download
-                                  </PDFDownloadLink>
+                                  </PDFDownloadLink> */}
                                 </div>
                               </>
                             </PopoverBody>
@@ -400,9 +447,12 @@ class SLA extends Component {
             {this.runAuditLogModal()}
           </div>
         </div>
-        {this.state.isDownloadPdf && (
+        <div ref={ref}>
+          <MyDocument data={this.state.checkedValues.filter(val => val.title === 'All Section').length > 0 ? slaData.rbd : this.state.checkedValues} />
+        </div>
+        {/* {this.state.isDownloadPdf && (
                   <MyDocument data={this.state.checkedValues.filter(val => val.title === 'All Section').length > 0 ? slaData.rbd : this.state.checkedValues} />
-              )}
+              )} */}
       </Fragment>
     )
   }

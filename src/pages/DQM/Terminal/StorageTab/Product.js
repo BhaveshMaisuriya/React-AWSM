@@ -7,6 +7,13 @@ import AutoCompleteDropDown from "./AutoCompleteDropDown"
 import "./Product.scss"
 import { isScheduler } from "../../../../helpers/auth_helper"
 
+const placeholderNormalText = "Type something here..."
+const placeholderNumberOnly = "Numeric only"
+const placeholderSelectTime = "Select time"
+const placeholderSelectCalendar = "Select date"
+const placeholderSelectStatus = "Select status"
+const placeholderSelect = "Select"
+
 const Product = ({
   value,
   productKey,
@@ -85,15 +92,16 @@ const Product = ({
             key={value.code}
             searchIcon={true}
             onChange={value => onFieldChange("code", value)}
-            placeholder="Select"
+            placeholder={!isDisabledField && placeholderSelect}
+            disabled={isDisabledField}
           />
 }
         </div>
         <div className="col-3 form-group">
           <label htmlFor="productName">PRODUCT NAME</label>
           <AWSMInput
-            value={value.name}
             key={value.name}
+            value={value.name}
             disabled
             onChange={value => onFieldChange("name", value)}
           />
@@ -101,6 +109,7 @@ const Product = ({
         <div className="col-3 form-group">
           <label>STATUS IN AWSM</label>
           <AWSMDropdown
+            placeholder={!scheduler && "Select status"}
             value={value.status_awsm}
             disabled={scheduler}
             items={["Active", "Inactive"]}
@@ -116,6 +125,7 @@ const Product = ({
           <AWSMInputNumber
             defaultValue={value.flow_rate}
             disabled={scheduler}
+            placeholder={!scheduler && placeholderNumberOnly}
             onChange={value => onFieldChange("flow_rate", value)}
             renderExceedError={renderExceedError("flow_rate", 1440)}
             // max={10000}
@@ -128,6 +138,7 @@ const Product = ({
         <div className="col-3 form-group">
           <label>FROM TO DATE 1</label>
           <DateRangePicker
+            placeholder={!scheduler && placeholderSelectCalendar}
             defaultValue={value.volume_capping_date_range}
             disabled={scheduler}
             onChange={value =>
@@ -155,6 +166,7 @@ const Product = ({
               "volume_capping_volume",
               10000000
             )}
+            placeholder={!scheduler && placeholderNumberOnly}
             // max={10000000}
           />
           {renderExceedError("volume_capping_volume", 10000000)}
@@ -162,9 +174,11 @@ const Product = ({
         <div className="col-6 form-group">
           <label>REMARKS 1</label>
           <AWSMInput
+            placeholder={!scheduler && placeholderNormalText}
             defaultValue={value.volume_capping_remarks}
             disabled={scheduler}
             onChange={value => onFieldChange("volume_capping_remarks", value)}
+
           />
         </div>
       </div>
@@ -172,6 +186,7 @@ const Product = ({
         <div className="col-3 form-group">
           <label>FROM TO DATE 2</label>
           <DateRangePicker
+            placeholder={!scheduler && placeholderSelectCalendar}
             defaultValue={value.volume_capping_date_range_2}
             disabled={scheduler}
             onChange={value =>
@@ -199,6 +214,7 @@ const Product = ({
               "volume_capping_volume_2",
               10000000
             )}
+            placeholder={!scheduler && placeholderNumberOnly}
             // max={10000000}
           />
           {renderExceedError("volume_capping_volume_2", 10000000)}
@@ -209,6 +225,7 @@ const Product = ({
             defaultValue={value.volume_capping_remarks_2}
             disabled={scheduler}
             onChange={value => onFieldChange("volume_capping_remarks_2", value)}
+            placeholder={!scheduler && placeholderNormalText}
           />
         </div>
       </div>

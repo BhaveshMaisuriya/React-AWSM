@@ -293,14 +293,14 @@ const tableMapping = {
     apiKey: "storage_1.remarks",
     columnSize: "cell-text-big",
   },
-  dead_stock_1_code: {
+  storage_1_dead_stock: {
     label: "PRODUCT 1 DEADSTOCK",
     apiKey: "dead_stock_1_code",
     columnSize: "cell-text-big",
   },
-  safe_fill_1_code: {
+  storage_1_safe_fill: {
     label: "PRODUCT 1 SAFE FILL",
-    apiKey: "safe_fill_1_code",
+    apiKey: "storage_1_safe_fill",
     columnSize: "cell-text-big",
   },
   storage_2_code: {
@@ -358,14 +358,14 @@ const tableMapping = {
     apiKey: "storage_2.remarks",
     columnSize: "cell-text-big",
   },
-  dead_stock_2_code: {
+  storage_2_dead_stock: {
     label: "PRODUCT 2 DEADSTOCK",
-    apiKey: "dead_stock_2_code",
+    apiKey: "storage_2_dead_stock",
     columnSize: "cell-text-big",
   },
-  safe_fill_2_code: {
+  storage_2_safe_fill: {
     label: "PRODUCT 2 SAFE FILL",
-    apiKey: "safe_fill_2_code",
+    apiKey: "storage_2_safe_fill",
     columnSize: "cell-text-big",
   },
   storage_3_code: {
@@ -423,14 +423,14 @@ const tableMapping = {
     apiKey: "storage_3.remarks",
     columnSize: "cell-text-big",
   },
-  dead_stock_3_code: {
+  storage_3_dead_stock: {
     label: "PRODUCT 3 DEADSTOCK",
-    apiKey: "dead_stock_3_code",
+    apiKey: "storage_3_dead_stock",
     columnSize: "cell-text-big",
   },
-  safe_fill_3_code: {
+  storage_3_safe_fill: {
     label: "PRODUCT 3 SAFE FILL",
-    apiKey: "safe_fill_3_code",
+    apiKey: "storage_3_safe_fill",
     columnSize: "cell-text-big",
   },
   storage_4_code: {
@@ -488,14 +488,14 @@ const tableMapping = {
     apiKey: "storage_4.remarks",
     columnSize: "cell-text-big",
   },
-  dead_stock_4_code: {
+  storage_4_dead_stock: {
     label: "PRODUCT 4 DEADSTOCK",
-    apiKey: "dead_stock_4_code",
+    apiKey: "storage_4_dead_stock",
     columnSize: "cell-text-big",
   },
-  safe_fill_4_code: {
+  storage_4_safe_fill: {
     label: "PRODUCT 4 SAFE FILL",
-    apiKey: "safe_fill_4_code",
+    apiKey: "storage_4_safe_fill",
     columnSize: "cell-text-big",
   },
   storage_5_code: {
@@ -553,14 +553,14 @@ const tableMapping = {
     apiKey: "storage_5.remarks",
     columnSize: "cell-text-big",
   },
-  dead_stock_5_code: {
+  storage_5_dead_stock: {
     label: "PRODUCT 5 DEADSTOCK",
-    apiKey: "dead_stock_5_code",
+    apiKey: "storage_5_dead_stock",
     columnSize: "cell-text-big",
   },
-  safe_fill_5_code: {
+  storage_5_safe_fill: {
     label: "PRODUCT 5 SAFE FILL",
-    apiKey: "safe_fill_5_code",
+    apiKey: "storage_5_safe_fill",
     columnSize: "cell-text-big",
   },
   storage_6_code: {
@@ -618,14 +618,14 @@ const tableMapping = {
     apiKey: "storage_6.remarks",
     columnSize: "cell-text-big",
   },
-  dead_stock_6_code: {
+  storage_6_dead_stock: {
     label: "PRODUCT 6 DEADSTOCK",
-    apiKey: "dead_stock_6_code",
+    apiKey: "storage_6_dead_stock",
     columnSize: "cell-text-big",
   },
-  safe_fill_6_code: {
+  storage_6_safe_fill: {
     label: "PRODUCT 6 SAFE FILL",
-    apiKey: "safe_fill_6_code",
+    apiKey: "storage_6_safe_fill",
     columnSize: "cell-text-big",
   },
   storage_7_code: {
@@ -683,14 +683,14 @@ const tableMapping = {
     apiKey: "storage_7.remarks",
     columnSize: "cell-text-big",
   },
-  dead_stock_7_code: {
+  storage_7_dead_stock: {
     label: "PRODUCT 7 DEADSTOCK",
-    apiKey: "dead_stock_7_code",
+    apiKey: "storage_7_dead_stock",
     columnSize: "cell-text-big",
   },
-  safe_fill_7_code: {
+  storage_7_safe_fill: {
     label: "PRODUCT 7 SAFE FILL",
-    apiKey: "safe_fill_7_code",
+    apiKey: "storage_7_safe_fill",
     columnSize: "cell-text-big",
   },
   storage_8_code: {
@@ -748,14 +748,14 @@ const tableMapping = {
     apiKey: "storage_8.remarks",
     columnSize: "cell-text-big",
   },
-  dead_stock_8_code: {
+  storage_8_dead_stock: {
     label: "PRODUCT 8 DEADSTOCK",
-    apiKey: "dead_stock_8_code",
+    apiKey: "storage_8_dead_stock",
     columnSize: "cell-text-big",
   },
-  safe_fill_8_code: {
+  storage_8_safe_fill: {
     label: "PRODUCT 8 SAFE FILL",
-    apiKey: "safe_fill_8_code",
+    apiKey: "storage_8_safe_fill",
     columnSize: "cell-text-big",
   },
   storage_9_code: {
@@ -813,14 +813,14 @@ const tableMapping = {
     apiKey: "storage_9.remarks",
     columnSize: "cell-text-big",
   },
-  dead_stock_9_code: {
+  storage_9_dead_stock: {
     label: "PRODUCT 9 DEADSTOCK",
-    apiKey: "dead_stock_9_code",
+    apiKey: "storage_9_dead_stock",
     columnSize: "cell-text-big",
   },
-  safe_fill_9_code: {
+  storage_9_safe_fill: {
     label: "PRODUCT 9 SAFE FILL",
-    apiKey: "safe_fill_9_code",
+    apiKey: "storage_9_safe_fill",
     columnSize: "cell-text-big",
   },
   storage_10_code: {
@@ -878,14 +878,14 @@ const tableMapping = {
     apiKey: "storage_10.remarks",
     columnSize: "cell-text-big",
   },
-  dead_stock_10_code: {
+  storage_10_dead_stock: {
     label: "PRODUCT 10 DEADSTOCK",
-    apiKey: "dead_stock_10_code",
+    apiKey: "storage_10_dead_stock",
     columnSize: "cell-text-big",
   },
-  safe_fill_10_code: {
+  storage_10_safe_fill: {
     label: "PRODUCT 10 SAFE FILL",
-    apiKey: "safe_fill_10_code",
+    apiKey: "storage_10_safe_fill",
     columnSize: "cell-text-big",
   },
   delivery_open_time_1_time_from: {

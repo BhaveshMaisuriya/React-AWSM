@@ -11,6 +11,7 @@ import ArrowDropDownIcon from "../../../../assets/images/AWSM-Dropdown.svg"
  * @param disabled
  * @param defaultEmpty
  * @param value
+ * @param placeholder
  * @returns {JSX.Element}
  * @constructor
  */
@@ -49,7 +50,7 @@ const AWSMDropdown = ({
             disabled ? "disabled" : ""
           }`}
         >
-          <div>{value ? value.toString().substring(0, 5) : "Select time"}</div>
+          <div>{value ? value.toString().substring(0, 5) : disabled ? "" : "Select time"}</div>
           {!disabled && <ReactSVG src={ArrowDropDownIcon} className="awsm-dropdown-arrow" />}
         </div>
       </DropdownToggle>

@@ -246,7 +246,7 @@ class FixedCoulmnTable extends Component {
           )
         default:
           return (
-            <td key={index} className={config[e].ProductNameColumnFixed && 'product_wid'}>
+            <td key={index} className={config[e]?.columnFixed && 'product_wid'}>
               <div
                 className="table_text_ellipsis"
                 title={isUndefined(arr[e]) ? "-" : removeKeywords(arr[e])}

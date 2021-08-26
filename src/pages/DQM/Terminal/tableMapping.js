@@ -6,9 +6,9 @@ const tableColumns = [
   "state",
   "region_group",
   "status_awsm",
-  "terminal_operating_days_1_value",
-  "terminal_operating_days_1_time_from",
-  "terminal_operating_days_1_time_to",
+  "terminal_operating_days_value",
+  "terminal_operating_time_from",
+  "terminal_operating_time_to",
   "loading_bay_no",
   "loading_time",
   "turnaround_time",
@@ -86,19 +86,19 @@ const tableMapping = {
       return tagColors[`${value.toUpperCase()}`] || "secondary"
     },
   },
-  inactive_date_range_1_value: {
+  inactive_date_range_value: {
     label: "INACTIVE DATE RANGE",
     columnSize: "cell-text-big",
   },
-  terminal_operating_days_1_value: {
+  terminal_operating_days_value: {
     label: "OPERATING DAYS",
     columnSize: "cell-text-big",
   },
-  terminal_operating_days_1_time_from: {
+  terminal_operating_time_from: {
     label: "OPERATING HOURS FROM",
     columnSize: "cell-text",
   },
-  terminal_operating_days_1_time_to: {
+  terminal_operating_time_to: {
     label: "OPERATING HOURS TO",
     columnSize: "cell-text",
   },

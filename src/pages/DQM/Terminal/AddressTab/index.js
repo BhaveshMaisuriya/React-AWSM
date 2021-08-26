@@ -1,24 +1,27 @@
-import React,{ useState, useEffect, useRef } from "react"
+import React, { useState, useEffect, useRef } from "react"
 import { Formik, Form, Field } from "formik"
 import { isScheduler } from "helpers/auth_helper"
+import { formatNumberInput } from "../format_number_input_helper"
 
-
+const placeholderNormalText = "Type something here..."
+const placeholderNumberOnly = "Numeric only"
 const AddressTab = (props) => {
-  const [data,setData] = useState(props.data)
+  const [data, setData] = useState(props.data)
   const handleSubmit = values => {
     console.log(values)
   }
-  const placeholder = useRef("Type something here...")
+
   useEffect(() => {
-      props.onChange(data)
+    props.onChange(data)
   }, [data])
 
-  const handleOnChangeValue = (e) =>{
-    let newData = {...data}
+  const handleOnChangeValue = (e) => {
+    let newData = { ...data }
     newData[e.target.id] = e.target.value
     setData(newData)
   }
   const isDisabledField = isScheduler()
+
 
   return (
     <Formik initialValues={data} onSubmit={handleSubmit}>
@@ -33,9 +36,9 @@ const AddressTab = (props) => {
                   id="address_1"
                   className="form-control awsm-input"
                   value={data?.address_1}
-                  onChange={(e)=>handleOnChangeValue(e)}
+                  onChange={(e) => handleOnChangeValue(e)}
                   disabled
-                  // placeholder={isDisabledField ? "" : placeholder.current}
+                  // placeholder={isDisabledField ? "" : placeholderNormalText}
                 />
               </div>
               <div className="col-md-6 form-group">
@@ -45,9 +48,9 @@ const AddressTab = (props) => {
                   id="city"
                   className="form-control awsm-input"
                   value={data?.city}
-                  onChange={(e)=>handleOnChangeValue(e)}
+                  onChange={(e) => handleOnChangeValue(e)}
                   disabled
-                  // placeholder={isDisabledField ? "" : placeholder.current}
+                  // placeholder={isDisabledField ? "" : placeholderNormalText}
                 />
               </div>
             </div>
@@ -59,9 +62,9 @@ const AddressTab = (props) => {
                   id="postcode"
                   className="form-control awsm-input"
                   value={data?.postcode}
-                  onChange={(e)=>handleOnChangeValue(e)}
+                  onChange={(e) => handleOnChangeValue(e)}
                   disabled
-                  // placeholder={isDisabledField ? "" : placeholder.current}
+                  // placeholder={isDisabledField ? "" : placeholderNormalText}
                 />
               </div>
               <div className="col-md-6 form-group">
@@ -71,9 +74,9 @@ const AddressTab = (props) => {
                   id="state"
                   className="form-control awsm-input"
                   value={data?.state}
-                  onChange={(e)=>handleOnChangeValue(e)}
+                  onChange={(e) => handleOnChangeValue(e)}
                   disabled
-                  // placeholder={isDisabledField ? "" : placeholder.current}
+                  // placeholder={isDisabledField ? "" : placeholderNormalText}
                 />
               </div>
             </div>
@@ -85,9 +88,9 @@ const AddressTab = (props) => {
                   id="region_name"
                   className="form-control awsm-input"
                   value={data?.region_name}
-                  onChange={(e)=>handleOnChangeValue(e)}
+                  onChange={(e) => handleOnChangeValue(e)}
                   disabled
-                  // placeholder={isDisabledField ? "" : placeholder.current}
+                  // placeholder={isDisabledField ? "" : placeholderNormalText}
                 />
               </div>
               <div className="col-md-6 form-group">
@@ -97,9 +100,9 @@ const AddressTab = (props) => {
                   id="country"
                   className="form-control awsm-input"
                   value={data?.country}
-                  onChange={(e)=>handleOnChangeValue(e)}
+                  onChange={(e) => handleOnChangeValue(e)}
                   disabled
-                  // placeholder={isDisabledField ? "" : placeholder.current}
+                  // placeholder={isDisabledField ? "" : placeholderNormalText}
                 />
               </div>
             </div>
@@ -107,25 +110,27 @@ const AddressTab = (props) => {
               <div className="col-md-6 form-group">
                 <label htmlFor="latitude">LATITUDE</label>
                 <Field
-                  type="text"
+                  type="number"
                   id="latitude"
                   className="form-control awsm-input"
                   value={data?.latitude}
-                  onChange={(e)=>handleOnChangeValue(e)}
+                  onChange={(e) => handleOnChangeValue(e)}
+                  onKeyDown={formatNumberInput(["e", "E", "+", "-", ".", ",","ê", "Ê"])}
                   disabled={isDisabledField}
-                  placeholder={isDisabledField ? "" : placeholder.current}
+                  placeholder={isDisabledField ? "" : placeholderNumberOnly}
                 />
               </div>
               <div className="col-md-6 form-group">
                 <label htmlFor="longitude">LONGITUDE</label>
                 <Field
-                  type="text"
+                  type="number"
                   id="longitude"
                   className="form-control awsm-input"
                   value={data?.longitude}
-                  onChange={(e)=>handleOnChangeValue(e)}
+                  onChange={(e) => handleOnChangeValue(e)}
+                  onKeyDown={formatNumberInput(["e", "E", "+", "-", ".", ",","ê", "Ê"])}
                   disabled={isDisabledField}
-                  placeholder={isDisabledField ? "" : placeholder.current}
+                  placeholder={isDisabledField ? "" : placeholderNumberOnly}
                 />
               </div>
             </div>

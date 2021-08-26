@@ -54,7 +54,6 @@ function* onGetProducts({ params = {} }) {
       yield put(getProductSuccess('Data is not available'))
     } else {
       const response = yield call(getProducts, params)
-      
       yield put(getProductSuccess(factory(response)))
       yield put(getProductFilterSuccess(response.data.filters))
     }

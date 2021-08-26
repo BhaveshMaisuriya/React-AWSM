@@ -2,6 +2,7 @@ import React,{ useState, useEffect } from "react"
 import { Formik, Form, Field, ErrorMessage } from "formik"
 import { isScheduler } from "../../../../helpers/auth_helper"
 import { isEqual } from "lodash"
+import { formatNumberInput } from "../format_number_input_helper"
 
 const ContactTab = (props) => {
   const [data,setData] = useState(props.data)
@@ -42,12 +43,14 @@ const ContactTab = (props) => {
                   SUPERVISOR CONTACT NUMBER
                 </label>
                 <Field
+                  type="number"
                   name="supervisor.number"
                   id="supervisorNumber"
                   className="form-control awsm-input"
                   value={props?.values?.supervisor?.number}
                   onChange={props.handleChange}
-                  placeholder={isDisabledField ? "" : "Contact No. (etc: 011-23456789)"}
+                  onKeyDown={formatNumberInput(["e", "E", "+", ".", ",","ê", "Ê"])}
+                  placeholder={isDisabledField ? "" : "Numeric only"}
                   disabled={isDisabledField}
                 />
                 <ErrorMessage name="supervisorNumber" component="div" />
@@ -92,15 +95,16 @@ const ContactTab = (props) => {
                   SUPERINTENDANT CONTACT NUMBER
                 </label>
                 <Field
+                  type="number"
                   id="superintendantNumber"
                   name="superintendant.number"
                   className="form-control awsm-input"
                   value={props?.values?.superintendant?.number}
                   onChange={props.handleChange}
-                  placeholder={isDisabledField ? "" : "Contact No. (etc: 011-23456789)"}
+                  onKeyDown={formatNumberInput(["e", "E", "+", ".", ",","ê", "Ê"])}
+                  placeholder={isDisabledField ? "" : "Numeric only"}
                   disabled={isDisabledField}
                 />
-
                 <ErrorMessage name="superintendant.number" component="div" />
               </div>
             </div>

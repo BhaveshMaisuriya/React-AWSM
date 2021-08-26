@@ -129,6 +129,16 @@
     width: 120px;
     height: 40px;
   }
+  .btn-dan {
+    box-sizing: border-box;
+    border: 1px solid #F46A6A;
+    border-radius: 4px;
+    background-color: white;
+    color: #F46A6A !important;
+    :hover{
+      background-color: white;
+    }
+  }
 }
 
 .variance-control-modal {

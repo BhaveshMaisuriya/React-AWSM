@@ -27,11 +27,12 @@ const DateRangePicker = ({
   defaultValue,
   defaultMonth = new Date(),
   disabled = false,
-  onChange = () => { },
+  onChange = () => {},
   types = ["single", "range", "every", "daily"],
   startDate = new Date(),
   endDate = null,
-  placeholder
+  placeholder,
+  error = false,
 }) => {
   const [value, setValue] = useState(defaultValue || dateObjectTemplate)
   const [month, setMonth] = useState(defaultMonth)
@@ -99,13 +100,15 @@ const DateRangePicker = ({
       }
       return `Every ${value.days.join(", ")}`
     } else if (value.type === "range") {
-      return `From ${value.date_from
-        ? format(new Date(value.date_from), DISPLAY_DATE_FORMAT)
-        : "Select date"
-        } to ${!value.date_to
+      return `From ${
+        value.date_from
+          ? format(new Date(value.date_from), DISPLAY_DATE_FORMAT)
+          : "Select date"
+      } to ${
+        !value.date_to
           ? "select another date"
           : format(new Date(value.date_to), DISPLAY_DATE_FORMAT)
-        }`
+      }`
     } else if (value.type === "single") {
       return value.days[0]
         ? format(new Date(value.days[0]), DISPLAY_DATE_FORMAT)
@@ -180,10 +183,11 @@ const DateRangePicker = ({
     return (
       <div
         onClick={() => onWeekSelectDay(weekday)}
-        className={`DayPicker-Weekday ${selectedWeekDays.includes(weekday) && value.type === "every"
-          ? "select"
-          : ""
-          }`}
+        className={`DayPicker-Weekday ${
+          selectedWeekDays.includes(weekday) && value.type === "every"
+            ? "select"
+            : ""
+        }`}
         role="columnheader"
       >
         <div title="Wednesday">{WEEK_DAYS[weekday]}</div>
@@ -238,7 +242,13 @@ const DateRangePicker = ({
   }
 
   const onClear = () => {
-    const newValue = { ...defaultValue, type: "single", days: [], date_from: null, date_to: null }
+    const newValue = {
+      ...defaultValue,
+      type: "",
+      days: [],
+      date_from: null,
+      date_to: null,
+    }
     setValue(newValue)
     if (onChange) {
       onChange(newValue)
@@ -260,11 +270,14 @@ const DateRangePicker = ({
         aria-describedby={id}
         color="primary"
         onClick={handleClick}
-        className={`d-flex justify-content-between align-items-center py-2 w-100 calendar-label ${disabled ? "disabled" : ""
-          }`}
+        className={`d-flex justify-content-between align-items-center py-2 w-100 calendar-label ${
+          error && "border-danger"
+        } ${disabled ? "disabled" : ""}`}
       >
         <div className="date-picker-label">{labelValue || placeholder}</div>
-        {!disabled && <ReactSVG className="date-picker-icon" src={AWSM_Calendar} />}
+        {!disabled && (
+          <ReactSVG className="date-picker-icon" src={AWSM_Calendar} />
+        )}
       </button>
       <Popover
         id={id}

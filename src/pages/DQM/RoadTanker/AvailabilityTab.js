@@ -1,5 +1,4 @@
 import React, { PureComponent } from "react"
-import DatePicker from "../../../components/Common/DatePicker"
 import DateRangePicker from "components/Common/DateRangePicker"
 import { MODE } from "./constants"
 import AWSMDropdown from "components/Common/Dropdown"
@@ -21,8 +20,9 @@ class AvailabilityTab extends PureComponent {
     onChange("availability", newData)
   }
 
+
   render() {
-    const { mode, scheduler, data, onChange } = this.props
+    const { mode, scheduler, data } = this.props
     return (
       <div className="availability">
         <form>
@@ -47,7 +47,8 @@ class AvailabilityTab extends PureComponent {
                 items={SHIFT_TYPE_DROPDOWN_VALUE}
                 onChange={e => this.onChangeHandler(e, "shift_type")}
                 disabled={
-                  (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
+                  ((mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler)
+                  && (data?.shift_type === "OFF" ? true : false)
                 }
                 className="form-control awsm-input"
               />
@@ -88,6 +89,10 @@ class AvailabilityTab extends PureComponent {
                   (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
                 }
                 placeholder="Select Date"
+                defaultValue={data?.block_date_range}
+                onChange={v =>
+                  this.onChangeHandler(v, "block_date_range")
+                }
               />
             </div>
           </div>
@@ -102,16 +107,20 @@ class AvailabilityTab extends PureComponent {
                 disabled={
                   (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
                 }
-                placeholder="Typing something here..."
+                placeholder="Select Date"
+                onChange={e => {
+                  this.onChangeHandler(e, "other_terminal_mobilization_1_date")
+                }}
+                defaultValue={data?.other_terminal_mobilization_1_date}
               />
             </div>
             <div className="col-md-6 form-group">
               <label> MOBILIZED TERMINAL NAME 1</label>
               <AWSMDropdown
-                value={data?.default_terminal}
+                value={data?.other_terminal_mobilization_1_name}
                 items={data?.terminal_dropdown}
                 onChange={e => {
-                  this.onChangeHandler(e, "default_terminal")
+                  this.onChangeHandler(e, "other_terminal_mobilization_1_name")
                 }}
                 disabled={
                   (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
@@ -129,15 +138,19 @@ class AvailabilityTab extends PureComponent {
                   (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
                 }
                 placeholder="Select Date"
+                defaultValue={data?.other_terminal_mobilization_2_date}
+                onChange={v =>
+                  this.onChangeHandler(v, "other_terminal_mobilization_2_date")
+                }
               />
             </div>
             <div className="col-md-6 form-group">
               <label> MOBILIZED TERMINAL NAME 2</label>
               <AWSMDropdown
-                value={data?.default_terminal}
+                value={data?.other_terminal_mobilization_2_name}
                 items={data?.terminal_dropdown}
                 onChange={e => {
-                  this.onChangeHandler(e, "default_terminal")
+                  this.onChangeHandler(e, "other_terminal_mobilization_2_name")
                 }}
                 disabled={
                   (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler

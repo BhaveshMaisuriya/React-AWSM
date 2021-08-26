@@ -34,7 +34,7 @@ const tableMapping = {
     },
   },
   product_type_sap: {
-    label: "PRODUCT TYPE SAP",
+    label: "PRODUCT TYPE IN SAP",
     apiKey: "product_type_sap",
     columnSize: "cell-text",
   },
@@ -58,7 +58,7 @@ const tableMapping = {
     columnSize: "cell-text",
   },
   capacity: {
-    label: "RT CAPACITY",
+    label: "MAX VOLUME",
     apiKey: "capacity",
     columnSize: "cell-text",
   },
@@ -83,7 +83,7 @@ const tableMapping = {
     columnSize: "cell-text",
   },
   product_type_awsm: {
-    label: "PRODUCT TYPE AWSM",
+    label: "PRODUCT TYPE IN AWSM",
     apiKey: "product_type_awsm",
     columnSize: "cell-text",
   },
@@ -108,12 +108,12 @@ const tableMapping = {
     columnSize: "cell-text-big",
   },
   weight: {
-    label: "RT WEIGHT",
+    label: "RT UNLADEN WEIGHT",
     apiKey: "weight",
     columnSize: "cell-text",
   },
   legal_weight: {
-    label: "RT LEGAL WEIGHT ALLOWED",
+    label: "RT MAX WEIGHT",
     apiKey: "legal_weight",
     columnSize: "cell-text",
   },
@@ -126,11 +126,6 @@ const tableMapping = {
     label: "MAX VOLUME PER COMPARTMENT",
     apiKey: "",
     columnSize: "cell-text-big",
-  },
-  product_weight_hse_compliance: {
-    label: "PRODUCT WEIGHT FOR HSE COMPLIANCE",
-    apiKey: "product_weight_hse_compliance",
-    columnSize: "cell-text",
   },
   offloading_duration: {
     label: "OFFLOADING DURATION (MINS)",

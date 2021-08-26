@@ -11,6 +11,7 @@ import AWSMEditIcon from "../../../../assets/images/AWSM-Edit-Icon.svg"
 import { ReactSVG } from "react-svg"
 import { format } from "date-fns"
 import CloseButton from "../../../../components/Common/CloseButton"
+import { isScheduler } from "../../../../helpers/auth_helper"
 
 const headers = [
   { label: "STATION TANK STATUS", value: "station_tank_status" },
@@ -138,13 +139,13 @@ const VarianceTable = ({
 
 const VarianceControl = ({
   open,
-  scheduler,
   closeDialog,
   onChange,
   getSalesAndInventoryVarianceControl,
   varianceControlData,
   updateSalesAndInventoryVarianceControl,
 }) => {
+  const scheduler = isScheduler()
   const [data, setData] = useState({
     ...varianceControlData,
     date: format(new Date(), "yyyy-MM-dd"),

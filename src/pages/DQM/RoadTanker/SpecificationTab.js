@@ -1,5 +1,5 @@
 import React, { PureComponent } from "react"
-import DatePicker from "../../../components/Common/DatePicker"
+import DateRangePicker from "../../../components/Common/DateRangePicker"
 import AWSMDropdown from "components/Common/Dropdown"
 import { CUSTOMER_TYPE_DROPDOWN_VALUE } from "./constants"
 import MultipleSelect from "./MultipleSelect"
@@ -163,10 +163,10 @@ class SpecificationTab extends PureComponent {
         restrictionStr,
       } = this.state
 
-      let restriction_dropdown = this.props.data?.restriction_dropdown ? this.props.data?.restriction_dropdown : []
-      let restriction = this.props.data?.restriction ? this.props.data?.restriction : []
+      let restriction_dropdown = data?.restriction_dropdown
+      let restriction = data?.restriction
 
-      const rtRestriction = !isRTRestrictionAdding ? (
+      const rtRestriction = !isRTRestrictionAdding && restriction_dropdown && restriction ? (
         <MultipleSelect
           names={restriction_dropdown}
           rtRestrictionSelected={restriction}
@@ -194,16 +194,18 @@ class SpecificationTab extends PureComponent {
           />
           <div className="input-group-append">
             <a
-              className={`btn btn-auto-fill ${disabled ? "disable-link" : null
+              className={`form-control btn btn-auto-fill ${disabled ? "disable-link" : null
                 }`}
               type="button"
               onClick={onAutoFillBtnClick}
+              disabled={disabled}
             >
               +{this.state.restrictionCharRemain}
             </a>
           </div>
         </div>
       )
+
       return rtRestriction
     }
 
@@ -251,17 +253,16 @@ class SpecificationTab extends PureComponent {
               />
             </div>
             <div className="col-md-6 form-group">
-              <label>DATE</label>
-              <DatePicker
-                className="form-control awsm-input"
+              <label>DATE RANGE</label>
+              <DateRangePicker
+                className="form-control"
                 disabled={
                   (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
                 }
-                value={data?.temporary_product_date_range}
+                defaultValue={data?.temporary_product_date_range}
                 onChange={v =>
                   this.onChangeHandler(v, "temporary_product_date_range")
                 }
-                showButtons={true}
               />
             </div>
           </div>
@@ -296,9 +297,8 @@ class SpecificationTab extends PureComponent {
             <div className="col-md-6 form-group">
               <div>
                 <label>RT RESTRICTION</label>
-                {rtRestrictionBtn(scheduler)}
               </div>
-              {rtRestriction(scheduler)}
+              {rtRestriction((mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler)}
             </div>
             <div className="form-group col-md-6">
               <label>RESTRICT CODE</label>

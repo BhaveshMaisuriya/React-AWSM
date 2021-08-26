@@ -159,4 +159,5 @@ export const tagColors = {
   DELETE: "secondary",
   "TEMP BLOCKED": "tertiary",
   "TEMPORARY INACTIVE": "tertiary",
+  "TEMP INACTIVE": "tertiary",
 }

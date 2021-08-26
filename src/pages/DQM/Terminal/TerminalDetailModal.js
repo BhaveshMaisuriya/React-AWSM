@@ -183,6 +183,7 @@ class TerminalDetailModal extends PureComponent {
                       <div className="col-md-6 form-group">
                         <label>TERMINAL NAME</label>
                         <input
+                          placeholder={!isDisabledField && "Type something here..."}
                           className="form-control awsm-input"
                           type="text"
                           defaultValue={currentTerminal.name}
@@ -201,7 +202,7 @@ class TerminalDetailModal extends PureComponent {
                       <div className="col-md-12 form-group">
                         <label> REMARKS</label>
                         <input
-                          placeholder="Type something here..."
+                          placeholder={!isDisabledField && "Type something here..."}
                           className="form-control awsm-input"
                           type="text"
                           defaultValue={currentTerminal.remarks}

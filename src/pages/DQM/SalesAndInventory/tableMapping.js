@@ -1,3 +1,5 @@
+import { tagColors } from "../Common/helper"
+
 const tableColumns = [
   "record_id",
   "override",
@@ -8,6 +10,7 @@ const tableColumns = [
   "sales_variance",
   "sales_variance_percentage",
   "inventory_variance",
+  "inventory_variance_percentage",
   "remarks",
 ]
 
@@ -45,7 +48,7 @@ const tableMapping = {
     columnSize: "cell-text",
     type: "badge",
     getBadgeColor: value => {
-      return value === "ACTIVE" ? "primary" : "secondary"
+      return tagColors[value ? `${value.toUpperCase()}` : "null"] || "secondary"
     },
   },
   remarks: {
@@ -61,7 +64,7 @@ const tableMapping = {
     columnSize: "cell-text",
   },
   yesterday_sales_adjustment: {
-    label: "YESTERDAY'S SALES ADJUSTMENT REMARKS",
+    label: "YESTERDAY'S SALES ADJUSTMENT",
     columnSize: "cell-text",
   },
   yesterday_sales_adjustment_remarks: {
@@ -117,7 +120,7 @@ const tableMapping = {
     columnSize: "cell-text",
   },
   dipping_adjustment_remarks: {
-    label: "DIPPING ADJUSTMENT (L)",
+    label: "DIPPING ADJUSTMENT (L) REMARKS",
     columnSize: "cell-text",
   },
   delivery_adjustment: {
@@ -133,7 +136,7 @@ const tableMapping = {
     columnSize: "cell-text",
   },
   yesterday_opening_inventory: {
-    label: "OPENING INVENTORY @12AM (L)",
+    label: "YESTERDAY'S OPENING INVENTORY @12AM (L)",
     columnSize: "cell-text",
   },
   yesterday_final_sales_figure: {

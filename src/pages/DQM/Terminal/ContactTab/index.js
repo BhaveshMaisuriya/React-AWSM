@@ -2,7 +2,7 @@ import React,{ useState, useEffect } from "react"
 import { Formik, Form, Field, ErrorMessage } from "formik"
 import { isScheduler } from "../../../../helpers/auth_helper"
 import { isEqual } from "lodash"
-import { formatNumberInput } from "../format_number_input_helper"
+import { allowOnlyPhoneNumber, formatNumberInput } from "../format_number_input_helper"
 
 const ContactTab = (props) => {
   const [data,setData] = useState(props.data)
@@ -14,12 +14,23 @@ const ContactTab = (props) => {
   const handleSubmit = values => {
     console.log(values)
   }
+
   const isDisabledField = isScheduler()
   return (
     <Formik initialValues={data} onSubmit={handleSubmit}>
       {props => {
         if(!isEqual(data,props.values)){
           setData(props.values)
+        }
+
+        const onHandlePhoneChange = (evt)=>{
+          const value = evt.target.value;
+          const regExp = new RegExp(/^[0-9 +-]+$/) // accept only numbers, plus (+) and minus(-)
+          // Validate when user try to copy and paste a plain text into phone number value
+          if(value && !value.match(regExp)){
+            return evt.preventDefault();
+          }
+          props.handleChange(evt)
         }
         return (
           <Form onSubmit={handleSubmit}>
@@ -43,13 +54,13 @@ const ContactTab = (props) => {
                   SUPERVISOR CONTACT NUMBER
                 </label>
                 <Field
-                  type="number"
+                  type="text"
                   name="supervisor.number"
                   id="supervisorNumber"
                   className="form-control awsm-input"
                   value={props?.values?.supervisor?.number}
-                  onChange={props.handleChange}
-                  onKeyDown={formatNumberInput(["e", "E", "+", ".", ",","ê", "Ê"])}
+                  onChange={onHandlePhoneChange}
+                  onKeyDown={allowOnlyPhoneNumber}
                   placeholder={isDisabledField ? "" : "Numeric only"}
                   disabled={isDisabledField}
                 />
@@ -95,13 +106,13 @@ const ContactTab = (props) => {
                   SUPERINTENDANT CONTACT NUMBER
                 </label>
                 <Field
-                  type="number"
+                  type="text"
                   id="superintendantNumber"
                   name="superintendant.number"
                   className="form-control awsm-input"
                   value={props?.values?.superintendant?.number}
-                  onChange={props.handleChange}
-                  onKeyDown={formatNumberInput(["e", "E", "+", ".", ",","ê", "Ê"])}
+                  onChange={onHandlePhoneChange}
+                  onKeyDown={allowOnlyPhoneNumber}
                   placeholder={isDisabledField ? "" : "Numeric only"}
                   disabled={isDisabledField}
                 />

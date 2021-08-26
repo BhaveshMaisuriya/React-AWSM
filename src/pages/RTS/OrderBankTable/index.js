@@ -262,15 +262,17 @@ class index extends Component {
     bodyTableConfiguration = (data, isDragging = false) => {
         const { dataSource } = this.state
         if (isDragging) {
-          return <table>
-            <tbody>
+          return <td>
+            <table>
+              <tbody>
               {dataSource.map(e => {
                 return  e.isChecked && <tr className="bg-white" style={{zIndex: 99}}>
                   {this.RenderTRComponent(e)}
                 </tr>
               })}
-            </tbody>
-          </table>
+              </tbody>
+            </table>
+          </td>
         }
         return this.RenderTRComponent(data)
     }
@@ -447,7 +449,7 @@ class index extends Component {
                                         {(provided, snapshot) => (
                                           <>
                                             <tr
-                                              className={`${v.isChecked && !snapshot.isDragging ? "selected-row" : "bg-white"}`}
+                                              className={`${v.isChecked && !snapshot.isDragging ? "selected-row" : ""} ${snapshot.isDragging ? "tr-dragging" : ""}`}
                                               ref={provided.innerRef}
                                               {...provided.draggableProps}
                                               {...provided.dragHandleProps}

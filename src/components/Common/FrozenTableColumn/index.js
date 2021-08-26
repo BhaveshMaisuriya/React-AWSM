@@ -3,7 +3,7 @@ import PropTypes from "prop-types"
 import Filter from "../DataTable/filter"
 import { Link } from "react-router-dom"
 import "./style.scss"
-import { isEqual, isUndefined } from "lodash"
+import { isNull, isUndefined } from "lodash"
 import { Badge } from "reactstrap"
 import OverrideIcon from "../../../assets/images/AWSM-success-alert.svg"
 import { ReactSVG } from "react-svg"
@@ -65,7 +65,7 @@ class FixedCoulmnTable extends Component {
 
   addTd = arr => {
     const { config, filterData } = this.props
-    if (!arr) return null    
+    if (!arr) return null
     return arr.map((e, index) => (
       <td key={index}>
         <div className={"d-flex align-items-center table_header_fit_text"}>
@@ -101,7 +101,7 @@ class FixedCoulmnTable extends Component {
   }
   renderRegularTd = arr => {
     const { headers } = this.props
-    const sliceArr = headers.slice(this.state.fixedHeaders.length, arr.length)
+    const sliceArr = headers.slice(this.state.fixedHeaders.length, arr.length);
     return this.getTdType(sliceArr, arr)
   }
   renderRegular = arr => {
@@ -161,6 +161,8 @@ class FixedCoulmnTable extends Component {
     const pathName = window.location.pathname
     const { config, modalPop, varianceControlData } = this.props
     return sliceArr.map((e, index) => {
+      const value =
+        isUndefined(arr[e]) || isNull(arr[e]) ? "-" : removeKeywords(arr[e])
       switch (config[e] && config[e].type) {
         case "badge":
           return (
@@ -170,7 +172,7 @@ class FixedCoulmnTable extends Component {
                 color={config[e].getBadgeColor(arr[e])}
                 pill
               >
-                {arr[e]}
+                {value}
               </Badge>
             </td>
           )
@@ -217,7 +219,7 @@ class FixedCoulmnTable extends Component {
             return (
               <td key={index}>
                 <div className={`${config[e].getColor(arr[e], threshold)}`}>
-                  {isUndefined(arr[e]) ? "-" : arr[e]}
+                  {value}
                 </div>
               </td>
             )
@@ -225,7 +227,7 @@ class FixedCoulmnTable extends Component {
             return (
               <td key={index}>
                 <div className={`${config[e].getColor(arr[`${e}_color`])}`}>
-                  {isUndefined(arr[e]) ? "-" : arr[e]}
+                  {value}
                 </div>
               </td>
             )
@@ -240,19 +242,14 @@ class FixedCoulmnTable extends Component {
                 onClick={modalPop}
                 className={`${config[e].columnSize}`}
               >
-                {arr[e]}
+                {value}
               </Link>
             </td>
           )
         default:
           return (
-            <td key={index} className={config[e]?.columnFixed && 'product_wid'}>
-              <div
-                className="table_text_ellipsis"
-                title={isUndefined(arr[e]) ? "-" : removeKeywords(arr[e])}
-              >
-                {isUndefined(arr[e]) ? "-" : removeKeywords(arr[e])}
-              </div>
+            <td key={index} className={config[e]?.columnFixed && "product_wid"}>
+              <div className="table_text_ellipsis">{value}</div>
             </td>
           )
       }

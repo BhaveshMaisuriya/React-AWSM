@@ -103,4 +103,9 @@
   .ck-content .table table td:nth-child(6) {
     width: 7%;
   }
+  .ck-editor__editable.ck-editor__nested-editable:focus {
+    outline: 1px solid #008F8A !important;
+    background-color: #F0F9F9 !important;
+  }
+
 }

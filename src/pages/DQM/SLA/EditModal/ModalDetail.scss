@@ -4,7 +4,6 @@
         }
   }
 .sla-detail-table{
-    min-height: 400px;
     table-layout:fixed;
     .header{
         background: #F8F9FA;
@@ -13,9 +12,10 @@
         font-weight: 700;
         border-bottom:2px solid #D9D9D9 !important;
         border-top:2px solid #D9D9D9 !important;
-        font-family: "Inter SemiBold";
         font-size: 12px;
         overflow-wrap: anywhere;
+        height: 64px;
+        padding: 12px;
     }
     .ck-content{
         border:2px solid #D9D9D9;
@@ -31,7 +31,7 @@
         border-left:2px solid #D9D9D9;
         width: 5%;
     }
-    
+
     .hd_2{
         width: 17%;
     }
@@ -51,10 +51,31 @@
         border-right:2px solid #D9D9D9;
         width: 17%;
      }
-     
+
 }
- 
- 
- 
-   
- 
+
+.variance-control-container {
+    .btn {
+        width: 120px;
+
+        &:active {
+            box-shadow: none!important;
+            outline: 0;
+        }
+
+        &.btn-outline-primary {
+            background-color: white !important;
+            border: 1px solid #CBEFED !important;
+            color: #00A19C !important;
+            margin-right: 8px;
+
+            &:hover {
+                color: #00A19C !important;
+            }
+        }
+    }
+    .modal-body {
+        padding: 0 24px !important;
+    }
+}
+

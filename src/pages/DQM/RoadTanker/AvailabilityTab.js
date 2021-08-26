@@ -2,7 +2,11 @@ import React, { PureComponent } from "react"
 import DateRangePicker from "components/Common/DateRangePicker"
 import { MODE } from "./constants"
 import AWSMDropdown from "components/Common/Dropdown"
-import { SHIFT_TYPE_DROPDOWN_VALUE, RT_STATUS_IN_AWSM_DROPDOWN_VALUE } from "./constants"
+import {
+  SHIFT_TYPE_DROPDOWN_VALUE,
+  RT_STATUS_IN_AWSM_DROPDOWN_VALUE,
+} from "./constants"
+import "./AvailabilityTab.scss"
 
 class AvailabilityTab extends PureComponent {
   constructor(props) {
@@ -20,9 +24,8 @@ class AvailabilityTab extends PureComponent {
     onChange("availability", newData)
   }
 
-
   render() {
-    const { mode, scheduler, data } = this.props
+    const { mode, scheduler, data, isActive } = this.props
     return (
       <div className="availability">
         <form>
@@ -37,7 +40,7 @@ class AvailabilityTab extends PureComponent {
                 onChange={e =>
                   this.onChangeHandler(e.target.value, "default_terminal")
                 }
-                placeholder="Typing something here..."
+                // placeholder="Typing something here..."
               />
             </div>
             <div className="col-md-6 form-group">
@@ -47,10 +50,12 @@ class AvailabilityTab extends PureComponent {
                 items={SHIFT_TYPE_DROPDOWN_VALUE}
                 onChange={e => this.onChangeHandler(e, "shift_type")}
                 disabled={
-                  ((mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler)
-                  && (data?.shift_type === "OFF" ? true : false)
+                  ((mode === MODE.VIEW_AND_AMEND ? false : true) ||
+                    scheduler) &&
+                  (isActive === "Active" ? true : false)
                 }
                 className="form-control awsm-input"
+                placeholder={!scheduler ? "Select" : ""}
               />
             </div>
           </div>
@@ -65,7 +70,7 @@ class AvailabilityTab extends PureComponent {
                 onChange={e =>
                   this.onChangeHandler(e.target.value, "daily_available_hours")
                 }
-                placeholder="Typing something here..."
+                // placeholder="Typing something here..."
               />
             </div>
           </div>
@@ -80,6 +85,7 @@ class AvailabilityTab extends PureComponent {
                   (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
                 }
                 className="form-control awsm-input"
+                placeholder={!scheduler ? "Select" : ""}
               />
             </div>
             <div className="col-md-6 form-group">
@@ -88,17 +94,14 @@ class AvailabilityTab extends PureComponent {
                 disabled={
                   (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
                 }
-                placeholder="Select Date"
+                placeholder={!scheduler ? "Select Date" : ""}
                 defaultValue={data?.block_date_range}
-                onChange={v =>
-                  this.onChangeHandler(v, "block_date_range")
-                }
+                onChange={v => this.onChangeHandler(v, "block_date_range")}
               />
             </div>
           </div>
-
-          <div>
-            <b>OTHER TERMINAL MOBILIZATION</b>
+          <div className="marginTop14 marginBottom22">
+            <strong className="font-weight-bolder">OTHER TERMINAL MOBILIZATION</strong>
           </div>
           <div className="row">
             <div className="col-md-6 form-group">
@@ -107,7 +110,7 @@ class AvailabilityTab extends PureComponent {
                 disabled={
                   (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
                 }
-                placeholder="Select Date"
+                placeholder={!scheduler ? "Select Date" : ""}
                 onChange={e => {
                   this.onChangeHandler(e, "other_terminal_mobilization_1_date")
                 }}
@@ -126,7 +129,7 @@ class AvailabilityTab extends PureComponent {
                   (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
                 }
                 className="form-control awsm-input"
-                placeholder="Select"
+                placeholder={!scheduler ? "Select" : ""}
               />
             </div>
           </div>
@@ -137,7 +140,7 @@ class AvailabilityTab extends PureComponent {
                 disabled={
                   (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
                 }
-                placeholder="Select Date"
+                placeholder={!scheduler ? "Select Date" : ""}
                 defaultValue={data?.other_terminal_mobilization_2_date}
                 onChange={v =>
                   this.onChangeHandler(v, "other_terminal_mobilization_2_date")
@@ -156,6 +159,7 @@ class AvailabilityTab extends PureComponent {
                   (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
                 }
                 className="form-control awsm-input"
+                placeholder={!scheduler ? "Select" : ""}
               />
             </div>
           </div>

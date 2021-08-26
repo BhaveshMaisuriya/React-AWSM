@@ -267,3 +267,14 @@ span.flatpickr-weekday {
   /* Microsoft Edge */
   color: rgba(16, 16, 16, 0.3) !important;
 }
+
+.btn-dan {
+  box-sizing: border-box;
+  border: 1px solid #F46A6A;
+  border-radius: 4px;
+  background-color: white;
+  color: #F46A6A !important;
+  :hover{
+    background-color: white;
+  }
+}

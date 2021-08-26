@@ -39,7 +39,7 @@ class Attachments extends Component {
     this.allDocuments = this.allDocuments.bind(this)
     this.state = {
       documents: [],
-      acceptedFiles: "image/*", // add more using comma like ex:: image/png, image/gif
+      acceptedFiles: "application/pdf", // add more using comma like ex:: image/png, image/gif
     }
   }
 

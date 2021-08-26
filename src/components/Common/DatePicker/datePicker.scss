@@ -117,6 +117,14 @@
   .DayPicker-caption {
     display: table-caption;
     padding: 0 0.5rem;
+
+    label {
+      text-transform: uppercase;
+    }
+    
+    svg {
+      color: #999999;
+    }
   }
 
   .DayPicker-icon {
@@ -161,7 +169,9 @@
     text-overflow: ellipsis;
   }
 
-
+  .DayPicker-Day--today {
+    color: rgba(0, 0, 0, 0.87);
+  }
 }
 
 .apply_buttons .btn {

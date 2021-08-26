@@ -47,7 +47,7 @@ export default class InventoryTab extends Component {
 
         return (
             <>
-                <h6>FINAL VARIANCE & INVENTORY</h6>
+                <strong className="font-weight-bolder marginBottom22 d-inline-block">FINAL VARIANCE & INVENTORY</strong>
                 <div className="row">
                     <div className="col-md-6 form-group">
                         <label>INVENTORY VARIANCE (L)  <Tooltip title="Inventory Final Figure - Calculated Inventory"><img src={informationIcon} /></Tooltip><span className="extra-lbl">D0</span></label>
@@ -73,7 +73,7 @@ export default class InventoryTab extends Component {
                     </div>
                 </div>
                 <hr />
-                <h6>TODAY SUBMISSION</h6>
+                <strong className="font-weight-bolder marginBottom22 d-inline-block">TODAY SUBMISSION</strong>
                 <div className="row">
                     <div className="col-md-6 form-group">
                         <label>DIPPING VALUE (L)<span className="extra-lbl">D-1</span></label>
@@ -137,7 +137,7 @@ export default class InventoryTab extends Component {
 
                 <hr />
 
-                <h6>YESTERDAY SUBMISSION</h6>
+                <strong className="font-weight-bolder marginBottom22 d-inline-block">YESTERDAY SUBMISSION</strong>
                 <div className="row">
                     <div className="col-md-6 form-group">
                         <label>YESTERDAY OPENING INVENTORY (L)<span className="extra-lbl">D-1</span></label>
@@ -185,7 +185,7 @@ export default class InventoryTab extends Component {
 
                 <hr />
 
-                <h6>INVENTORY CORRECTION</h6>
+                <strong className="font-weight-bolder marginBottom22 d-inline-block">INVENTORY CORRECTION</strong>
                 <div className="row">
                     <div className="col-md-6 form-group">
                         <label>INVENTORY CORRECTION (L)</label>

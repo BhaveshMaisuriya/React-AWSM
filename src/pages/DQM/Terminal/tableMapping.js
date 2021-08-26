@@ -83,7 +83,7 @@ const tableMapping = {
     columnSize: "cell-text",
     type: "badge",
     getBadgeColor: value => {
-      return tagColors[`${value.toUpperCase()}`] || "secondary"
+      return tagColors[value ? `${value.toUpperCase()}` : "null"] || "secondary"
     },
   },
   inactive_date_range_value: {

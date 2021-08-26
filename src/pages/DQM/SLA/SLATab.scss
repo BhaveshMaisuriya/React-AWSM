@@ -1,8 +1,8 @@
 .nav-sla-tab {
   .nav-link {
     font-weight: 600;
-    border-top-left-radius: 1rem !important;
-    border-top-right-radius: 1rem !important;
+    border-top-left-radius: 12px !important;
+    border-top-right-radius: 12px !important;
     font-size: 15px;
     &.active:not(.sla-and-new-section) {
       border: none;
@@ -33,19 +33,21 @@
   justify-content: space-between;
   padding: 1rem 0;
   position: relative;
+  margin-bottom: 4px;
 
   .sla-section-input {
     border: 1px white;
     padding: 0.5rem 2rem 0.5rem 1rem;
     width: 100%;
     background-color: white;
-    &:focus {
+    &.focus {
       background-color: #F0F9F9;
       border: 1px solid #00A19C;
       border-radius: 4px;
     }
     &.error {
       border-color: #E80000;
+      background-color: white !important;
     }
     &:disabled {
       padding-left: 0;
@@ -61,7 +63,7 @@
   }
   .remain-character {
     position: absolute;
-    right: 5px;
+    right: 8px;
     top: 25%;
 
     &.valid {
@@ -71,9 +73,25 @@
       color: #E80000;
     }
   }
-  button {
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
+  .btn {
+    width: 120px;
+    height: 39px;
+
+    &:active {
+      box-shadow: none!important;
+      outline: 0;
+    }
+
+    &.btn-outline-primary {
+      background-color: white !important;
+      border: 1px solid #CBEFED !important;
+      color: #00A19C !important;
+      margin-right: 8px;
+
+      &:hover {
+        color: #00A19C !important;
+      }
+    }
   }
   .sla-btn-edit {
     cursor: pointer;
@@ -82,8 +100,8 @@
     position: absolute;
     bottom: 0;
     font-size: 11px;
-    font-family: Inter Regular, serif;
     color: #D50000;
+    margin-top: 4px;
   }
 }
 
@@ -98,17 +116,84 @@
     width: 16px !important;
   }
 }
-.add-section{
-  .title{
+
+.add-section {
+  .title {
     font-family: "Museo Sans";
     font-weight: 500;
     font-size: 14px;
-    color:#4A4A4A
+    color: #4A4A4A
   }
-  .modal-header{
+
+  .modal-header {
     border-bottom: none;
   }
-  .modal-body{
+
+  .modal-body {
     padding: 1.5rem;
+  }
+
+  .btn {
+    width: 120px;
+    height: 40px;
+    &:active {
+      box-shadow: none!important;
+      outline: 0;
+    }
+
+    &.btn-outline-primary {
+      background-color: white !important;
+      border: 1px solid #CBEFED !important;
+      color: #00A19C !important;
+      margin-right: 8px;
+
+      &:hover {
+        color: #00A19C !important;
+      }
+    }
+  }
+
+  .sla-section-input {
+    border: 1px solid #D9D9D9;
+    padding: 0.5rem 2rem 0.5rem 1rem;
+    width: 100%;
+    background-color: white;
+
+    &.focus {
+      background-color: #F0F9F9;
+      border: 1px solid #00A19C;
+      border-radius: 4px;
+    }
+
+    &.error {
+      border-color: #E80000;
+      background-color: white !important;
+    }
+
+    &:disabled {
+      padding-left: 0;
+      font-family: Museo Sans, serif;
+      color: #333333;
+      font-weight: 700;
+      font-size: 16px;
+    }
+  }
+
+  .modal-title {
+    padding-left: 0 !important;
+  }
+}
+
+td.ck.ck-content {
+  border: 1px solid rgb(217, 217, 217);
+}
+
+.delete-note-modal {
+  h5.modal-title {
+    padding-left: 0 !important;
+  }
+  .btn {
+    width: 120px;
+    height: 40px;
   }
 }

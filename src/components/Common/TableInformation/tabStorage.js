@@ -136,7 +136,7 @@ const TabStorage = ({ scheduler, data, onChange }) => {
   return (
     <div className="dqm-storage-container" id="dqm-storage-container">
       <div className="w-50">
-        <div className="mb-2 input-header">END OF DAY</div>
+        <div className="input-header">END OF DAY</div>
         <AWSMDropdown
           onChange={onEndOfDayChange}
           items={timeData}
@@ -149,7 +149,7 @@ const TabStorage = ({ scheduler, data, onChange }) => {
           <div key={index}>
             <div
               className="d-flex justify-content-between align-items-center"
-              style={{ margin: "3em 0 10px 0" }}
+              style={{ margin: "30px 0 10px 0" }}
             >
               <div className="section-header">{`STORAGE ${
                 key.split("_")[1]

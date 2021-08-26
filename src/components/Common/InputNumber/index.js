@@ -1,5 +1,6 @@
 import React from "react"
 import "./inputNumber.scss"
+import icon from "../../../assets/images/triangle_error_icon.svg"
 
 /**
  * Input control
@@ -47,7 +48,8 @@ const AWSMInputNumber = ({
     }
   }
   return (
-    <input
+    <div className="position-relative">
+      <input
       type={type}
       value={value}
       placeholder={disabled ? "" : placeholder}
@@ -59,6 +61,8 @@ const AWSMInputNumber = ({
         renderExceedError ? "error error-invalid" : ""
       }`}
     />
+    {renderExceedError && <span className="position-absolute triangle-icon"><img src={icon}/></span>}
+    </div>
   )
 }
 

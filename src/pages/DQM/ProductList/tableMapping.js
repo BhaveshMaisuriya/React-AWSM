@@ -33,7 +33,7 @@ const tableMapping = {
     columnSize: "cell-text",
     type: "badge",
     getBadgeColor: value => {
-      return tagColors[`${value.toUpperCase()}`] || "secondary"
+      return tagColors[value ? `${value.toUpperCase()}` : "null"] || "secondary"
     },
   },
   status_awsm: {
@@ -42,7 +42,7 @@ const tableMapping = {
     columnSize: "cell-text",
     type: "badge",
     getBadgeColor: value => {
-      return tagColors[`${value.toUpperCase()}`] || "secondary"
+      return tagColors[value ? `${value.toUpperCase()}` : "null"] || "secondary"
     },
   },
   division: {

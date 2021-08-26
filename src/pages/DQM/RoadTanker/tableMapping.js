@@ -1,3 +1,5 @@
+import { tagColors } from "../Common/helper"
+
 const tableColumns = [
   "vehicle",
   "owner",
@@ -30,7 +32,7 @@ const tableMapping = {
     columnSize: "cell-text",
     type: "badge",
     getBadgeColor: value => {
-      return value === "ACTIVE" ? "primary" : "secondary"
+      return tagColors[value ? `${value.toUpperCase()}` : "null"] || "secondary"
     },
   },
   product_type_sap: {
@@ -44,7 +46,7 @@ const tableMapping = {
     columnSize: "cell-text-big",
     type: "badge",
     getBadgeColor: value => {
-      return value === "ACTIVE" ? "primary" : "secondary"
+      return tagColors[value ? `${value.toUpperCase()}` : "null"] || "secondary"
     },
   },
   pump_type: {
@@ -130,6 +132,26 @@ const tableMapping = {
   offloading_duration: {
     label: "OFFLOADING DURATION (MINS)",
     apiKey: "offloading_duration",
+    columnSize: "cell-text",
+  },
+  block_date_range_1_value: {
+    label: "INACTIVE DATE RANGE",
+    columnSize: "cell-text",
+  },
+  other_terminal_mobilization_1_terminal: {
+    label: "OTHER TERMINAL MOB NAME 1",
+    columnSize: "cell-text",
+  },
+  other_terminal_mobilization_1_value: {
+    label: "OTHER TERMINAL MOB RANGE 1",
+    columnSize: "cell-text",
+  },
+  other_terminal_mobilization_2_terminal: {
+    label: "OTHER TERMINAL MOB NAME 2",
+    columnSize: "cell-text",
+  },
+  other_terminal_mobilization_2_value: {
+    label: "OTHER TERMINAL MOB RANGE 2",
     columnSize: "cell-text",
   },
 }

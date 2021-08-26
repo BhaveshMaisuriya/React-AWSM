@@ -1,9 +1,9 @@
 import React, { Fragment, useCallback, useState } from "react"
+import { ReactSVG } from "react-svg"
 import "./style.scss"
 import { useDropzone } from "react-dropzone"
-import PublishRoundedIcon from "@material-ui/icons/PublishRounded"
 import AWSMAlert from "../AWSMAlert"
-
+import FileUploadIcon from "../../../assets/images/AWSM-Upload.svg"
 export default function FileUpload(props) {
   const [alert, setAlert] = useState(true);
 
@@ -29,7 +29,7 @@ export default function FileUpload(props) {
       <div {...getRootProps()} className="dropzone">
         <input {...getInputProps()} />
         <div className="UploadIcon">
-          <PublishRoundedIcon />
+          <ReactSVG src={FileUploadIcon} />
         </div>
       </div>
       <div className="hide_div">{fileRejectionItems}</div>

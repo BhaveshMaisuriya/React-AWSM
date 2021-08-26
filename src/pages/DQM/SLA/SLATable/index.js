@@ -4,6 +4,7 @@ import EditIcon from "../../../../assets/images/AWSM-Edit-Icon.svg"
 import TrashIcon from "../../../../assets/images/AWSM-Trash-Icon.svg"
 import createDOMPurify from "dompurify"
 import SLAModalDetail from "../EditModal/SLAModalDetail"
+import { isScheduler } from "../../../../helpers/auth_helper"
 
 import "./index.scss"
 
@@ -16,7 +17,7 @@ const tableMapping = {
   description: {
     label: "Description",
     apiKey: "description",
-    columnSize: 1,
+    columnSize: 2,
   },
   kpi: {
     label: "KPI",
@@ -80,13 +81,15 @@ const SLATable = ({ items, onDeleteSLADetail, scheduler, onUpdate }) => {
   }
 
   const columns = Object.keys(tableMapping).map(key => tableMapping[key])
-  columns.push({
-    label: "Action",
-    apiKey: null,
-    columnSize: 0.5,
-    TDComponent: TDActionsComponent,
-    TDComponentProps: { onEdit, onDelete, disabled: scheduler },
-  })
+  if (!isScheduler()) {
+    columns.push({
+      label: "Action",
+      apiKey: null,
+      columnSize: 0.6,
+      TDComponent: TDActionsComponent,
+      TDComponentProps: { onEdit, onDelete, disabled: scheduler },
+    })
+  }
 
   const totalColSizes = columns.reduce(
     (previousValue, currentValue) =>

@@ -111,10 +111,29 @@ class InformationModal extends Component {
       else this.onConfirmExit()
     }
 
+    const validateTerminal = () => {
+      if (
+        (data?.availability?.other_terminal_mobilization_2_name &&
+          !data?.availability?.other_terminal_mobilization_2_date) ||
+        (data?.availability?.other_terminal_mobilization_2_date &&
+          !data?.availability?.other_terminal_mobilization_2_name) ||
+        (data?.availability?.other_terminal_mobilization_1_name &&
+          !data?.availability?.other_terminal_mobilization_1_date) ||
+        (data?.availability?.other_terminal_mobilization_1_date &&
+          !data?.availability?.other_terminal_mobilization_1_name)
+      ) {
+        toggleAlert()
+        return false
+      }
+      return true
+    }
+
     const handleUpdate = e => {
       e.preventDefault()
-      onUpdateRoadTankerDetail({ vehicle_name: data.vehicle, data })
-      this.onConfirmExit()
+      if (validateTerminal()) {
+        onUpdateRoadTankerDetail({ vehicle_name: data.vehicle, data })
+        this.onConfirmExit()
+      }
     }
 
     const toggleAlert = () => {
@@ -155,15 +174,15 @@ class InformationModal extends Component {
         <ModalHeader close={<CloseButton handleClose={handleClose} />}>
           <span className="modal-title">
             {" "}
-            VEHICLE ID: {currentRoadTanker?.vehicle}
+            Vehicle Id: {currentRoadTanker?.vehicle}
           </span>
           <span className="last-updated-sub-title">
             Last Updated By: Nur Izzati on 3rd March 2021
           </span>
         </ModalHeader>
         <AWSMAlert
-          status="success"
-          message=" New RT Restriction Added"
+          status="error"
+          message="Need to put in both date and terminal name to save."
           openAlert={showAlert}
           closeAlert={() => {
             toggleAlert()
@@ -182,7 +201,7 @@ class InformationModal extends Component {
                     defaultValue={data?.owner}
                     onChange={e => onFieldValueChange("owner", e.target.value)}
                     disabled={true}
-                    placeholder="Typing something here..."
+                    // placeholder="Typing something here..."
                   />
                 </div>
               </div>
@@ -196,7 +215,7 @@ class InformationModal extends Component {
                     onChange={e =>
                       onFieldValueChange("status_sap", e.target.value)
                     }
-                    placeholder="Typing something here..."
+                    // placeholder="Typing something here..."
                     disabled={true}
                   />
                 </div>
@@ -209,7 +228,7 @@ class InformationModal extends Component {
                     onChange={e =>
                       onFieldValueChange("max_volume", e.target.value)
                     }
-                    placeholder="Numeric only..."
+                    // placeholder="Numeric only..."
                     disabled={true}
                   />
                 </div>
@@ -224,7 +243,7 @@ class InformationModal extends Component {
                     onChange={e =>
                       onFieldValueChange("remarks", e.target.value)
                     }
-                    placeholder="Typing something here..."
+                    placeholder={!scheduler ? "Typing something here..." : ""}
                     disabled={
                       (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
                     }
@@ -271,6 +290,7 @@ class InformationModal extends Component {
                       scheduler={scheduler}
                       data={data?.availability}
                       onChange={onFieldValueChange}
+                      isActive={data?.status_sap}
                     />
                   </TabPane>
                   <TabPane tabId="2">
@@ -278,9 +298,6 @@ class InformationModal extends Component {
                       mode={mode}
                       scheduler={scheduler}
                       data={data?.specification}
-                      toggle={() => {
-                        toggleAlert()
-                      }}
                       onChange={onFieldValueChange}
                     />
                   </TabPane>

@@ -236,18 +236,20 @@ class ProductDetailModal extends PureComponent {
                   />
                 </div>
               </div>
-                <div className="col-md-12 form-group">
-                  <label> REMARKS</label>
-                  <input
-                    className="form-control awsm-input"
-                    type="text"
-                    defaultValue={updateDictionary.remarks}
-                    name="remarks"
-                    disabled={isDisabledField}
-                    onChange={(e) => this.onFieldValueChange("remarks", e.target.value)}
-                    onBlur={(e) => this.onFieldValueChange("remarks", e.target.value)}
-                  />
-                </div>
+               <div className="row">
+                 <div className="col-md-12 form-group">
+                   <label> REMARKS</label>
+                   <input
+                     className="form-control awsm-input"
+                     type="text"
+                     defaultValue={updateDictionary.remarks}
+                     name="remarks"
+                     disabled={isDisabledField}
+                     onChange={(e) => this.onFieldValueChange("remarks", e.target.value)}
+                     onBlur={(e) => this.onFieldValueChange("remarks", e.target.value)}
+                   />
+                 </div>
+               </div>
             </div>
           </ModalBody>
         ) : null}

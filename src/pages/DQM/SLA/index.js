@@ -6,7 +6,6 @@ import {
   updateSLAItem,
 } from "../../../store/actions"
 import Loader from "../../../components/Common/Loader"
-import Header from "../../../components/Common/CustomPageHeader"
 import { Link } from "react-router-dom"
 import eyeIcon from "../../../assets/images/auditlog-eye.svg"
 import AuditLog from "../../../components/Common/AuditLog"
@@ -54,6 +53,9 @@ const options = {
   unit: 'in',
   format: [4]
 };
+const Header = ({ title }) => {
+ return <h4 className="sla-header">{title}</h4>
+}
 
 class SLA extends Component {
   constructor(props) {
@@ -237,7 +239,7 @@ class SLA extends Component {
         item.checked = !item.checked
       }
     })
-   
+
    this.setState({downloadCheck: newData});
   }
 
@@ -442,7 +444,7 @@ class SLA extends Component {
                     </TabPane>
                   </TabContent>
                 </CardBody>
-              </Card>             
+              </Card>
             </div>
             {this.runAuditLogModal()}
           </div>

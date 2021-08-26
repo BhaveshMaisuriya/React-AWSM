@@ -45,14 +45,23 @@
 .dropdownChecked {
   background-color: #e0f4f3;
 }
+.marginTop16{
+  margin-top: 16px;
+}
 .marginTop30 {
   margin-top: 30px;
+}
+.marginTop32{
+  margin-top:32px;
 }
 .marginTop14 {
   margin-top: 14px;
 }
 .marginTop20 {
   margin-top: 20px;
+}
+.marginBottom16{
+  margin-bottom: 16px
 }
 .marginBottom20 {
   margin-bottom: 20px;

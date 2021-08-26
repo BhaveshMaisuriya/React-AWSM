@@ -45,8 +45,8 @@ export default class MultipleSelect extends Component {
         <div>
           <a
             type="button"
-            onClick={(e) => {
-              e.stopPropagation();
+            onClick={e => {
+              e.stopPropagation()
               onDeleteBtnClick()
             }}
             className="delete-btn"
@@ -61,8 +61,8 @@ export default class MultipleSelect extends Component {
         <div className="yes-noBtn">
           <a
             type="button"
-            onClick={(e) => {
-              e.stopPropagation();
+            onClick={e => {
+              e.stopPropagation()
               onConfirmClick()
               //handleChange(e)
             }}
@@ -70,10 +70,14 @@ export default class MultipleSelect extends Component {
           >
             Confirm |
           </a>
-          <a type="button" onClick={(e) => {
-            e.stopPropagation();
-            onNoClick()
-          }} className="No">
+          <a
+            type="button"
+            onClick={e => {
+              e.stopPropagation()
+              onNoClick()
+            }}
+            className="No"
+          >
             No
           </a>
         </div>
@@ -87,8 +91,13 @@ export default class MultipleSelect extends Component {
         multiple
         value={RtRestrictionSelected}
         onChange={handleChange}
-        renderValue={selected => selected.join(", ")}
+        renderValue={selected =>
+          selected.length > 0 && selected
+            ? selected.join(", ")
+            : !disabled && "Select"
+        }
         disabled={disabled}
+        displayEmpty={true}
       >
         {names?.map(name => (
           <MenuItem key={name} value={name}>

@@ -296,3 +296,24 @@
 span.b-sch-header-text.b-sticky-header {
     font-weight: bold;
 }
+
+.tr-dragging {
+    background-color: transparent !important;
+    > td {
+        border: none !important;
+    }
+    table {
+        background: white;
+        >tbody {
+            border: 1px solid #00A19C;
+            > tr {
+                &:not(:last-child) {
+                    border-bottom: 1px solid #00A19C;
+                }
+                > td {
+                    border: none !important;
+                }
+            }
+        }
+    }
+}

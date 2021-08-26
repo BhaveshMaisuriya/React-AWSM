@@ -24,22 +24,26 @@ class TrailerTab extends PureComponent {
               <label>RT UNLADEN WEIGHT</label>
               <input
                 type="number"
-                placeholder="Numeric only"
+                // placeholder={!scheduler ? "Numeric only" : ""}
                 className="form-control awsm-input"
                 defaultValue={data?.unladen_weight}
                 disabled={true}
-                onChange={e => this.OnChangHandler("unladen_weight", e.target.value)}
+                onChange={e =>
+                  this.OnChangHandler("unladen_weight", e.target.value)
+                }
               ></input>
             </div>
             <div className="col-md-6 form-group">
               <label>RT MAX WEIGHT</label>
               <input
                 type="number"
-                placeholder="Numeric only"
+                // placeholder={!scheduler ? "Numeric only" : ""}
                 className="form-control awsm-input"
                 defaultValue={data?.max_weight}
                 disabled
-                onChange={e => this.OnChangHandler("max_weight", e.target.value)}
+                onChange={e =>
+                  this.OnChangHandler("max_weight", e.target.value)
+                }
               ></input>
             </div>
           </div>
@@ -49,11 +53,13 @@ class TrailerTab extends PureComponent {
               <label>NO OF COMPARTMENT</label>
               <input
                 type="number"
-                placeholder="Numeric only"
+                // placeholder="Numeric only"
                 className="form-control awsm-input"
                 disabled={true}
                 defaultValue={data?.compartment_no}
-                onChange={e => this.OnChangHandler("compartment_no", e.target.value)}
+                onChange={e =>
+                  this.OnChangHandler("compartment_no", e.target.value)
+                }
               ></input>
             </div>
 
@@ -61,11 +67,13 @@ class TrailerTab extends PureComponent {
               <label>MAX VOLUME PER COMPARTMENT</label>
               <input
                 type="number"
-                placeholder="Numeric only"
+                // placeholder="Numeric only"
                 className="form-control awsm-input"
                 disabled={true}
                 defaultValue={data?.compartment_max_vol}
-                onChange={e => this.OnChangHandler("compartment_max_vol", e.target.value)}
+                onChange={e =>
+                  this.OnChangHandler("compartment_max_vol", e.target.value)
+                }
               ></input>
             </div>
           </div>
@@ -86,13 +94,15 @@ class TrailerTab extends PureComponent {
               <label>OFFLOADING DURATION (MINS)</label>
               <input
                 type="number"
-                placeholder="Numeric only"
+                placeholder={!scheduler ? "Numeric only" : ""}
                 className="form-control awsm-input"
                 disabled={
                   (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
                 }
                 defaultValue={data?.offloading_duration}
-                onChange={e => this.OnChangHandler("offloading_duration_mins", e.target.value)}
+                onChange={e =>
+                  this.OnChangHandler("offloading_duration", e.target.value)
+                }
               ></input>
             </div>
           </div>

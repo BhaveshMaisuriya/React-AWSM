@@ -23,6 +23,8 @@ import { createSLARecord, updateSLAItem, updateSLASection } from "../../../store
 import { deleteSLARecord, createSLASection, updateSectionTab, deleteSLASection } from "../../../store/actions"
 import SLAModalDetail from "./EditModal/SLAModalDetail"
 import { isScheduler } from "helpers/auth_helper"
+import ExitConfirmation from "components/Common/ExitConfirmation"
+import { isEqual } from "lodash"
 
 const DeleteNoteConfirmation = ({ isOpen, onDelete, onCancel, item }) => {
   return (
@@ -127,6 +129,7 @@ const AddNewSectionModal = ({ defaultValue, isOpen, onAdd, onCancel, type = "add
 
 const SLAAddNote = ({ data, onSubmit, onDeleteNote, disabled }) => {
   const [onEditing, setOnEditing] = useState(false)
+  const [showExitConfirm, setShowExitConfirm] = useState(false)
   const [value, setValue] = useState(data.notes || "");
   const [editor, setEditor] = useState(null)
   const [viewEditor, setViewEditor] = useState(null)
@@ -145,10 +148,30 @@ const SLAAddNote = ({ data, onSubmit, onDeleteNote, disabled }) => {
     setOnEditing(false)
   }
 
-  const onCancel = () => {
-    editor.setData(data.notes || "")
-    setOnEditing(false)
+  const onCancel = () => {    
+    if(!isEqual(data.notes, value) === true) {
+      setShowExitConfirm(true);
+    } else {
+      setValue(data.notes || "")
+      editor.setData(data.notes || "")
+      setOnEditing(false)
+    }
   }
+
+  const onCancelConfirm = () => {
+    setValue(data.notes || "")
+    editor.setData(data.notes || "")
+    setShowExitConfirm(false);
+    setOnEditing(false)
+  }  
+
+  const onConfirmCancel = () => {
+    editor.setData(editor.getData());
+    setValue(editor.getData())
+    setShowExitConfirm(false);
+    setOnEditing(true);
+  }
+
   const onEditorChange = (event, editor) => {
     if (editor) {
       setValue(editor.getData())
@@ -180,7 +203,11 @@ const SLAAddNote = ({ data, onSubmit, onDeleteNote, disabled }) => {
           />
         </div>
       )}
-      <div className={onEditing ? "add-note-content-container" : "d-none"}>
+      
+        <div className={onEditing ? "add-note-content-container" : "d-none"}>
+          {console.log("value::1", data)}
+        {showExitConfirm ? 
+      <ExitConfirmation onExit={onCancelConfirm} onCancel={onConfirmCancel} /> : (
         <CKEditor
           editor={ClassicEditor}
           config={{
@@ -197,12 +224,13 @@ const SLAAddNote = ({ data, onSubmit, onDeleteNote, disabled }) => {
               "|",
             ],
           }}
-          data={data.notes}
+          data={value}
           onChange={onEditorChange}
           onReady={editor => setEditor(editor)}
         />
+        )}
         <div className="d-flex justify-content-end pr-3 mt-2">
-          <button className="btn btn-outline-primary" onClick={onCancel}>
+          <button className="btn btn-outline-primary" onClick={onCancel} >
             Cancel
           </button>
           <button className="btn btn-primary" onClick={onUpdate} disabled={data.notes === value}>
@@ -210,7 +238,9 @@ const SLAAddNote = ({ data, onSubmit, onDeleteNote, disabled }) => {
           </button>
         </div>
       </div>
-      <div className={!onEditing && data.notes ? "d-block" : "d-none"}>
+      
+
+     <div className={!onEditing && data.notes ? "d-block" : "d-none"}>
         <CKEditor
           editor={ClassicEditor}
           config={{
@@ -249,9 +279,9 @@ const SectionLabelEdit = ({ defaultValue, disabled, onSubmit }) => {
     return MAX_CHARS - value.length
   }, [value])
 
-  const onCancel = () => {
-    setValue(defaultValue)
-    setOnEditing(false)
+  const onCancel = () => {   
+      setValue(defaultValue)
+      setOnEditing(false)
   }
 
   const onUpdate = (event) => {

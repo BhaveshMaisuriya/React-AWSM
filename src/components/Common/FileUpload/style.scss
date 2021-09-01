@@ -1,22 +1,45 @@
 .file_upload_main {
-    background-color: #ebf9f9;
-    padding: 20px;
+    background-color: #cccccc38;
+    padding: 10px;
     .dropzone {
-        border: 3px solid #00a19c;
+    border: 2px dashed #cccccc;
+    border-radius: unset;
+    background-color: #cccccc38;
+    position: relative;
+    cursor: pointer;
+}
+}
+.file_upload_main_active {
+    background-color: #ebf9f9;
+    padding: 10px;
+    .dropzone {
+        border: 2px solid #00a19c;
         background-color: #ebf9f9;
         border-radius: 3px;
         position: relative;
         cursor: pointer;
     }
-    .hide_div{
-        color: #ebf9f9;
-        position: absolute;
-    }
-    .UploadIcon {
-        text-align: center;
-        min-height: 230px;
-        height: 100%;
-        width: 100%;
-        padding: 115px 0;
+}
+
+.hide_div{
+    color: #ebf9f9;
+    position: absolute;
+}
+.UploadIcon {
+    text-align: center;
+    min-height: 230px;
+    height: 100%;
+    width: 100%;
+    padding: 115px 0;
+}
+.drop_text {
+    position: relative;
+    top: 10px;
+    font-weight: 500;
+    font-size: 15px;
+    text-transform: uppercase;
+    span {
+        color: #00a19c;
+        font-weight: bold;
     }
 }

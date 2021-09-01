@@ -89,6 +89,8 @@
   }
 
   .add-note-content-container {
+    position: relative;
+    height: 200px;
     .ck-rounded-corners {
       border: none !important;
     }
@@ -145,7 +147,8 @@
 }
 
 .pdf-wid {
-  margin-bottom: 5em !important;
+  margin-top: 15px !important;
+  margin-bottom: 15px !important;
 }
 
 .pdf-wid .pdf-btn {

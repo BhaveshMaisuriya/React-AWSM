@@ -192,18 +192,15 @@ class SLA extends Component {
 
   UNSAFE_componentWillReceiveProps(nextProps) {
     if (nextProps.slaData && nextProps.slaData.rbd) {
-      let temp = []
-      temp.push({ title: "All Section", checked: true, id: "0" })
+      let temp = [];      
       nextProps.slaData.rbd.map((item, index) => {
         temp.push({ ...item, checked: true })
       })
+      temp.push({ title: "Select All", checked: true, id: "0" })
       this.setState({ downloadCheck: temp })
       this.setState({ checkedValues: temp })
 
-      const showDiv = document.getElementById("showPDf");
-      // if(showDiv){
-      //   showDiv.style.display = "none";
-      // }
+     
     }
   }
 
@@ -236,8 +233,12 @@ class SLA extends Component {
         doc.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight+30)
         heightLeft -= pageHeight
       }
-
-      doc.save(`sla_pdf.pdf`)
+      let all = [];
+       this.state.checkedValues.map(item => {
+        all.push(item.title);
+      })
+      var pdfName = this.state.checkedValues.filter(val => val.id === "0").length > 0 ? 'SLA_RBD_All' : `SLA_RBD_${all.join('_')}`;
+      doc.save(`${pdfName}.pdf`)
 
       showDiv.style.display = "none"
       this.setState({ downloading: false })
@@ -478,7 +479,7 @@ class SLA extends Component {
           <MyDocument
             data={
               this.state.checkedValues.filter(
-                val => val.title === "All Section"
+                val => val.id === "0"
               ).length > 0
                 ? slaData.rbd
                 : this.state.checkedValues

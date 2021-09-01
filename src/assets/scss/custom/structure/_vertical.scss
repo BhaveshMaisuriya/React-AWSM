@@ -154,15 +154,17 @@
       color: $sidebar-menu-item-active-color !important;
     }
   }
-  .active {
-    color: $sidebar-menu-item-active-color !important;
+  .sub-menu {
+    .active {
+      color: $sidebar-menu-item-active-color !important;
 
-    i {
+      i {
+        color: $sidebar-menu-item-active-color !important;
+      }
+    }
+    > i {
       color: $sidebar-menu-item-active-color !important;
     }
-  }
-  > i {
-    color: $sidebar-menu-item-active-color !important;
   }
 }
 
@@ -562,8 +564,7 @@ body[data-sidebar="colored"] {
         color: $white !important;
       }
     }
-    > i,
-    .active {
+    > i {
       color: $white !important;
     }
   }

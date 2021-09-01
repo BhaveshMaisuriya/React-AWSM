@@ -1,7 +1,7 @@
 import { isEmpty, isNull } from "lodash"
 
 const checkNullValue = (data, defaultValue) =>
-  isNull(data) || isEmpty(data) ? defaultValue : data
+(isNull(data) || data === '' || data === ' ') || isEmpty(data) ? defaultValue : data
 
 const getValueFromObj = (dataObj, key, defaultVal) => {
   if (Object.prototype.hasOwnProperty.call(dataObj, key)) {

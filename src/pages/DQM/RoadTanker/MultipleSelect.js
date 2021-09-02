@@ -87,7 +87,7 @@ export default class MultipleSelect extends Component {
 
     return (
       <Select
-        className="form-control awsm-input"
+        className="form-control awsm-input p-0"
         multiple
         value={RtRestrictionSelected}
         onChange={handleChange}
@@ -100,9 +100,9 @@ export default class MultipleSelect extends Component {
         displayEmpty={true}
       >
         {names?.map(name => (
-          <MenuItem key={name} value={name}>
+          <MenuItem key={name} value={name} disableRipple={true}>
             <ListItemIcon>
-              <Checkbox checked={RtRestrictionSelected.indexOf(name) !== -1} />
+              <Checkbox  checked={RtRestrictionSelected.indexOf(name) !== -1} />
             </ListItemIcon>
             <ListItemText id={name} primary={name} />
           </MenuItem>

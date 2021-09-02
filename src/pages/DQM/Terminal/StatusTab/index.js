@@ -222,7 +222,7 @@ const TabStatus = props => {
           />
         </div>
         <div className="col-12 col-sm-6">
-          <label>INACTIVE DATE RANGE{data?.status_awsm === "Temp Inactive" &&
+          <label>INACTIVE DATE RANGE{data?.status_awsm === "Temp Inactive" && !scheduler &&
           <span className="text-danger">*</span>}</label>
           <DateRangePicker
             onBlur={() => setIsInactiveDateRangeTouched(true)}

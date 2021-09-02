@@ -60,6 +60,10 @@ class InformationModal extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    if (nextProps.isUpdateSuccess) {
+      this.onConfirmExit()
+      this.props.refreshMainTable()
+    }
     if (!isEqual(nextProps.currentRoadTanker, this.props.currentRoadTanker)) {
       this.setState({ data: nextProps.currentRoadTanker })
     }
@@ -71,18 +75,12 @@ class InformationModal extends Component {
 
   onConfirmExit = () => {
     this.setState({ isConfirm: false })
-    if (this.props.onCancel()) {
-      this.props.onCancel()
-    }
+    this.props.onResetCurrentRoadTankerDetail()
+    this.props.onCancel()
   }
 
   render() {
-    const {
-      visible,
-      currentRoadTanker,
-      onCancel,
-      onUpdateRoadTankerDetail,
-    } = this.props
+    const { visible, currentRoadTanker, onUpdateRoadTankerDetail } = this.props
     const { activeTab, mode, showAlert, data } = this.state
     const { scheduler } = this.state.userRole
 
@@ -94,7 +92,7 @@ class InformationModal extends Component {
 
     const handleClose = () => {
       if (scheduler) {
-        onCancel()
+        this.onConfirmExit()
       } else {
         this.setState({ isConfirm: true })
       }
@@ -113,26 +111,27 @@ class InformationModal extends Component {
 
     const validateTerminal = () => {
       if (
-        (data?.availability?.other_terminal_mobilization_2_name &&
+        ((data?.availability?.other_terminal_mobilization_2_name &&
+          data?.availability?.other_terminal_mobilization_2_name !== "None") &&
           !data?.availability?.other_terminal_mobilization_2_date) ||
         (data?.availability?.other_terminal_mobilization_2_date &&
           !data?.availability?.other_terminal_mobilization_2_name) ||
-        (data?.availability?.other_terminal_mobilization_1_name &&
+        ((data?.availability?.other_terminal_mobilization_1_name &&
+          data?.availability?.other_terminal_mobilization_2_name !== "None") &&
           !data?.availability?.other_terminal_mobilization_1_date) ||
         (data?.availability?.other_terminal_mobilization_1_date &&
-          !data?.availability?.other_terminal_mobilization_1_name)
-      ) {
+          !data?.availability?.other_terminal_mobilization_1_name)) {
         toggleAlert()
         return false
       }
       return true
     }
 
-    const handleUpdate = e => {
-      e.preventDefault()
+    const handleUpdate = async e => {
+      // e.preventDefault()
       if (validateTerminal()) {
-        onUpdateRoadTankerDetail({ vehicle_name: data.vehicle, data })
-        this.onConfirmExit()
+        await onUpdateRoadTankerDetail({ vehicle_name: data.vehicle, data })
+        // this.props.onCancel()
       }
     }
 
@@ -201,7 +200,7 @@ class InformationModal extends Component {
                     defaultValue={data?.owner}
                     onChange={e => onFieldValueChange("owner", e.target.value)}
                     disabled={true}
-                    // placeholder="Typing something here..."
+                  // placeholder="Typing something here..."
                   />
                 </div>
               </div>
@@ -322,7 +321,7 @@ class InformationModal extends Component {
 
 const mapStateToProps = ({ roadTanker }) => ({
   currentRoadTanker: roadTanker.currentRoadTanker?.data,
-  isUpdateSuccess: roadTanker.currentRoadTanker?.isUpdateSuccess,
+  isUpdateSuccess: roadTanker.isUpdateSuccess,
 })
 
 const mapDispatchToProps = dispatch => ({

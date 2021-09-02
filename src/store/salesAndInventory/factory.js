@@ -45,4 +45,3 @@ export default function factory(data) {
     total_rows: getValueFromObj(data.data, "total_rows", "0"),
   }
 }
-

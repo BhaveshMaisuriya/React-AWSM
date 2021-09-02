@@ -12,7 +12,7 @@ import { removeKeywords } from "../../../pages/DQM/Common/helper"
 import "./datatable.scss"
 import ReplayIcon from "@material-ui/icons/Replay"
 
-const Example = props => {
+const FilterDropdown = props => {
   const { dataFilter, dataKey, handleClickApply, handleClickReset } = props
   const [popoverOpen, setPopoverOpen] = useState(false)
   const [checkAll, setCheckAll] = useState(true)
@@ -34,7 +34,7 @@ const Example = props => {
    */
   useEffect(() => {
     if (dataFilter) {
-      if (!isNull(dataFilter[dataKey]) && !isUndefined(dataFilter[dataKey])) {
+      if (dataFilter && !isUndefined(dataFilter[dataKey])) {
         dataKey === "remarks" ? setHasRemark(true) : setHasRemark(false)
         const alldata = getFilterData()
         setData(alldata)
@@ -194,7 +194,7 @@ const Example = props => {
     setPopoverOpen(!popoverOpen)
     if (popoverOpen) {
       setSearch("")
-      setData(getFilterData())
+      dataFilter ? setData(getFilterData()) : ""
       if (appliedFiltersList.length > 0)
         setCheckedCount(appliedFiltersList.length)
       else setCheckAll(true)
@@ -284,6 +284,7 @@ const Example = props => {
                         return (
                           row.visibility && (
                             <div
+                              key={`${row.text}${index}`}
                               className={`d-flex align-items-center filter-selection ${
                                 row.checked ? "item-checked" : ""
                               }`}
@@ -384,9 +385,9 @@ const Example = props => {
   )
 }
 
-Example.defaultProps = {
+FilterDropdown.defaultProps = {
   handleClickApply: () => {},
   handleClickReset: () => {},
 }
 
-export default Example
+export default FilterDropdown

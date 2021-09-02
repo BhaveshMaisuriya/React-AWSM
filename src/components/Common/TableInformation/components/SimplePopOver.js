@@ -50,7 +50,8 @@ export default function SimplePopover({ handleChange, data, children, disabled }
                 />
               }
               label={item.name || "-"}
-              className={`${item.checked ? "MuiFormControlLabel-checked" : ""}`}
+              className={`${item.checked ? "MuiFormControlLabel-checked justify-content-start align-items-center" : 
+                "justify-content-start align-items-center"}`}
             />
           )
         })}

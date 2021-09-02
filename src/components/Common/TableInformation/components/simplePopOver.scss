@@ -1,13 +1,16 @@
 .MuiPopover-paper {
   display: flex;
-  width: 377px;
+  width: 360px;
   flex-direction: column;
-  border: 1px solid #ced4da;
-  margin-top: 2px;
+  //border: 1px solid #ced4da;
+  margin-top: 0.5rem!important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 0.5px 8px 1px rgba(31, 26, 26, 0.1)!important;
+  padding: 0.3rem!important;
 
   label {
     margin:0;
-    padding-right: 15px;
+    //padding-right: 15px;
   }
   svg {
     color: #008f8a;
@@ -19,7 +22,7 @@
   line-height: 1.5;
 }
 .MuiPaper-elevation {
-  box-shadow: none !important;
+  //box-shadow: none !important;
 }
 
 .MuiFormControlLabel-checked {

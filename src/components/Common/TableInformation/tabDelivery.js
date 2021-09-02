@@ -42,7 +42,7 @@ const RowComponent = ({ onChange, item }) => {
         onChange={() => onChange(item)}
         name={item.name}
       />
-      <label className="mb-0">{item.name || "-"}</label>
+      <label className="mb-0 font-weight-normal">{item.name || "-"}</label>
     </div>
   )
 }

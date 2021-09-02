@@ -55,6 +55,12 @@
     letter-spacing: 0;
     line-height: 26px;
   }
+
+}
+
+ul.MuiList-root {
+  padding-top: 0;
+  padding-bottom: 0;
 }
 
 // .active {
@@ -130,7 +136,8 @@ fieldset {
 }
 
 ul li div span {
-  font-size: 12px !important;
+  font-family: "Poppins", sans-serif !important;
+  font-size: 13px !important;
   line-height: 0.5 !important;
   padding: 0px !important;
   margin: 0px !important;

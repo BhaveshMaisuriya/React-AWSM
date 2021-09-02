@@ -27,7 +27,7 @@ const initialState = {
   filterRoadTanker: [],
   downloadRoadTanker: [],
   currentRoadTanker: {},
-  isUpdateSuccess: false,
+  isUpdateSuccess: null,
   isLoading: false,
 }
 
@@ -43,6 +43,7 @@ const RoadTanker = (state = initialState, action) => {
         ...state,
         roadTanker: action.payload,
         isLoading: false,
+        isUpdateSuccess: false,
       }
 
     case GET_ROAD_TANKER_FAIL:
@@ -132,15 +133,15 @@ const RoadTanker = (state = initialState, action) => {
       }
     case UPDATE_ROAD_TANKER_DETAIL_SUCCESS:
       ToastSuccess.fire()
-      let newRoadTanker = { ...state.roadTanker }
-      let newData = newRoadTanker.list
-      const index = newData.findIndex(
-        v => v.vehicle === action?.payload?.data?.vehicle
-      )
-      newData[index] = action?.payload?.data
+      // let newRoadTanker = { ...state.roadTanker }
+      // let newData = newRoadTanker.list
+      // const index = newData.findIndex(
+      //   v => v.vehicle === action?.payload?.data?.vehicle
+      // )
+      // newData[index] = action?.payload?.data
       return {
         ...state,
-        roadTanker: newRoadTanker,
+        // roadTanker: newRoadTanker,
         isUpdateSuccess: true,
       }
     case UPDATE_ROAD_TANKER_DETAIL_FAIL:
@@ -148,6 +149,7 @@ const RoadTanker = (state = initialState, action) => {
       return {
         ...state,
         error: action.payload,
+        isUpdateSuccess: false,
       }
     default:
       return state

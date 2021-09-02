@@ -34,7 +34,6 @@ const StorageTab = ({ data, onChange }) => {
   useEffect(() => {
     setStorageData(data)
   }, [data])
-
   const onFieldChange = (key, value) => {
     const newStorageData = { ...storageData }
     newStorageData[key] = value
@@ -48,9 +47,12 @@ const StorageTab = ({ data, onChange }) => {
   }
 
   const onAddProduct = () => {
+    if (productList.length >= 20){
+      return;
+    }
     let newProductKey = "product_1"
     if (productList.length > 0) {
-      const lastProductKey = productList.sort().pop()
+      const lastProductKey = productList.sort((a,b)=> a - b).pop()
       newProductKey =
         "product_" + (Number(lastProductKey.substring(8)) + 1).toString()
     }

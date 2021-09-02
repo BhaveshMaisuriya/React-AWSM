@@ -79,17 +79,6 @@ class TrailerTab extends PureComponent {
           </div>
 
           <div className="row">
-            {/* <div className="col-md-6 form-group">
-              <label>PRODUCT WEIGHT FOR HSE COMPLIANCE</label>
-              <input
-                className="form-control awsm-input"
-                placeholder="Type something here.."
-                type="number"
-                disabled={true}
-                defaultValue={data?.product_weight_hse_compliance}
-                onChange={e => this.OnChangHandler("product_weight_hse_compliance", e.target.value)}
-              ></input>
-            </div> */}
             <div className="col-md-6 form-group">
               <label>OFFLOADING DURATION (MINS)</label>
               <input
@@ -99,11 +88,12 @@ class TrailerTab extends PureComponent {
                 disabled={
                   (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
                 }
-                defaultValue={data?.offloading_duration}
+                value={data?.offloading_duration}
                 onChange={e =>
                   this.OnChangHandler("offloading_duration", e.target.value)
                 }
-              ></input>
+              >
+              </input>
             </div>
           </div>
         </form>

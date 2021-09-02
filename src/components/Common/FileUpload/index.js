@@ -30,7 +30,7 @@ export default function FileUpload(props) {
         <input {...getInputProps()} />
         <div className="UploadIcon">
           <ReactSVG src={FileUploadIcon} />
-          {isDragActive ? <p className='drop_text'>Drop the files here ...</p> : <p className='drop_text'>drag n drop your file here or <span>browse</span></p>}
+          {isDragActive ? <p className='drop_text'>Drop the files here ...</p> : <p className='drop_text'>drag & drop your file here or <span>browse</span></p>}
         </div>
       </div>
       <div className="hide_div">{fileRejectionItems}</div>

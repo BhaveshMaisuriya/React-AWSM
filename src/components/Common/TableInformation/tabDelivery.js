@@ -243,7 +243,7 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
         paddingRight: "15px",
       }}
     >
-      <Row form>
+      <Row>
         <Col className="col-6 mb-3">
           <DropdownInput
             title="ROAD TANKER REQUIREMENT"

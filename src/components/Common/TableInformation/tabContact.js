@@ -45,7 +45,7 @@ const tabContact = ({ scheduler, data, onChange }) => {
   const pathName = window.location.pathname
 
   return (
-    <>
+    <div className='pr-23'>
       <div className="d-flex align-items-center justify-content-end">
         <p>
           <i className="last-updated-sub-title">{`Contact Last Updated By: ${data.contact?.updated_by || ""} on ${data.contact?.updated_at || ""}`}</i>
@@ -207,7 +207,7 @@ const tabContact = ({ scheduler, data, onChange }) => {
           <Col className="col-6"/>
         </Row>
       </div>
-    </>
+    </div>
   )
 }
 

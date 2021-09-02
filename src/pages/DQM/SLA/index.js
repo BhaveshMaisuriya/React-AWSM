@@ -41,6 +41,7 @@ import { removeKeywords } from "../Common/helper"
 import { isNull } from "lodash"
 import html2canvas from "html2canvas"
 import jsPDF from "jspdf"
+import AWSMAlert from "components/Common/AWSMAlert"
 
 const UntickIcon = () => <img src={selectAllIcon3} alt="icon" />
 const CheckedIcon = () => <img src={selectAllIcon2} alt="icon" />
@@ -64,6 +65,7 @@ class SLA extends Component {
       isDownloadPdf: false,
       checkedValues: [],
       downloading: false,
+      showSnackAlert: false,
     }
     this.toggle = this.toggle.bind(this)
     this.generatePdf = this.generatePdf.bind(this)
@@ -168,16 +170,20 @@ class SLA extends Component {
   getCheckedDownloadVal(index) {
     const temp = [...this.state.downloadCheck]
     temp[index].checked = !temp[index].checked
-    if (temp[index].id === "0" && temp[index].checked === true) {
+
+    if (temp[index].checked === true) {
+      if(temp.filter(val => val.checked === true).length === temp.length - 1 || temp[index].id === "0") {
       temp.map((item, index) => {
         item.checked = true
       })
+    }
     } else if (temp[index].id === "0" && temp[index].checked === false) {
-      temp.map((item, index) => {
-        item.checked = false
-      })
-    } else {
-      temp[0].checked = false
+        temp.map((item, index) => {
+          item.checked = false
+        })
+    }
+    else {
+      temp[temp.length - 1].checked = false
     }
 
     let temp1 = []
@@ -213,7 +219,7 @@ class SLA extends Component {
     showDiv.style.display = "block"
     const input = document.getElementById("sla_pdf")   
 
-    html2canvas(input).then(canvas => {
+    html2canvas(input).then(async canvas => {
       const imgData = canvas.toDataURL("image/png")
 
       var imgWidth = 210
@@ -238,10 +244,12 @@ class SLA extends Component {
         all.push(item.title);
       })
       var pdfName = this.state.checkedValues.filter(val => val.id === "0").length > 0 ? 'SLA_RBD_All' : `SLA_RBD_${all.join('_')}`;
-      doc.save(`${pdfName}.pdf`)
+
+      await doc.save(`${pdfName}.pdf`);
 
       showDiv.style.display = "none"
       this.setState({ downloading: false })
+      this.setState({ showSnackAlert: true })
     })
   }
 
@@ -486,6 +494,14 @@ class SLA extends Component {
             }
           />
         </div>
+        {this.state.showSnackAlert && (
+              <AWSMAlert
+                status='success'
+                message='PDF generated successfully.'
+                openAlert={this.state.showSnackAlert}
+                closeAlert={() => this.setState({showSnackAlert: false})}
+              />
+            )}
       </Fragment>
     )
   }

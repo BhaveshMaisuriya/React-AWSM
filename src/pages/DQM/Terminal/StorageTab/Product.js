@@ -97,7 +97,7 @@ const Product = ({
           />
 }
         </div>
-        <div className="col-3 form-group mb-0">
+        <div className="col-3 form-group mb-0 h-40">
           <label htmlFor="productName">PRODUCT NAME</label>
           <AWSMInput
             key={value.name}
@@ -116,7 +116,7 @@ const Product = ({
             onChange={value => onFieldChange("status_awsm", value)}
           />
         </div>
-        <div className="col-3 form-group mb-0">
+        <div className="col-3 form-group mb-0 h-40">
           <label
             className={`${renderExceedError("flow_rate", 10000)}`}
           >

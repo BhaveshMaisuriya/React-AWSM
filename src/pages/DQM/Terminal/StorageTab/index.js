@@ -74,7 +74,7 @@ const StorageTab = ({ data, onChange }) => {
   return (
     <div>
       <div className="d-flex">
-        <div className="w-50 mr-2">
+        <div className="w-50 mr-12">
           <label
             className={`${
               renderExceedError("loading_bay_no", 100)
@@ -92,7 +92,7 @@ const StorageTab = ({ data, onChange }) => {
           />
           {renderExceedError("loading_bay_no", 100)}
         </div>
-        <div className="w-50 ml-2">
+        <div className="w-50 ml-12">
           <label>MAX VOL THRESHOLD</label>
           <AWSMInputNumber
             disabled={scheduler}
@@ -103,7 +103,7 @@ const StorageTab = ({ data, onChange }) => {
         </div>
       </div>
       <div className="d-flex mt-3">
-        <div className="w-50 mr-2">
+        <div className="w-50 mr-12">
           <label
             className={`${
               renderExceedError("loading_time", 1440)
@@ -121,7 +121,7 @@ const StorageTab = ({ data, onChange }) => {
           />
           {renderExceedError("loading_time", 1440)}
         </div>
-        <div className="w-50 ml-2">
+        <div className="w-50 ml-12">
           <label
             className={`${
               renderExceedError("turnaround_time", 1440)

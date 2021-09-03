@@ -209,7 +209,7 @@ const TabStatus = props => {
 
   return (
     <div className="dqm-status-container">
-      <div className="form-row">
+      <div className="row">
         <div className="col-12 col-sm-6">
           <label>STATUS IN AWSM</label>
           <AWSMDropdown
@@ -237,7 +237,7 @@ const TabStatus = props => {
           {isInactiveDateRangeTouched && renderDateRangeError()}
         </div>
       </div>
-      <div className="form-row mt-3">
+      <div className="row mt-3">
         <div className="col-12 col-sm-6">
           <SimplePopover
             handleChange={onchangeOperationHandler}
@@ -262,7 +262,7 @@ const TabStatus = props => {
           </SimplePopover>
         </div>
         <div className="col-12 col-sm-3 terminal-input">
-          <label>OPERATION HOURS (FROM)</label>
+          <label style={{fontSize: '12px'}}>OPERATION HOURS (FROM)</label>
           <TimePicker
             value={data?.terminal_operating_days_1?.time_from}
             onChange={value =>

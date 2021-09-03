@@ -25,7 +25,9 @@ const tabQuota = ({ scheduler, data, onChange }) => {
   return (
     <>
       {Object.keys(storageData).map((key, index) =>  key.startsWith("storage_") ? (
-        <Row>
+         <div className="dqm-address-container" id="dqm-address-container">
+         <div>
+           <div className="row mt-3">
           <Col className="col-6">
             <AvForm>
               <AvField
@@ -57,7 +59,9 @@ const tabQuota = ({ scheduler, data, onChange }) => {
               />
             </AvForm>
           </Col>
-        </Row>
+        </div>
+        </div>
+        </div>
       ) : null)}
     </>
   )

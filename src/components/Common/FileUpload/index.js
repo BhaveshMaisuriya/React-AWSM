@@ -6,9 +6,11 @@ import AWSMAlert from "../AWSMAlert"
 import FileUploadIcon from "../../../assets/images/AWSM-Upload.svg"
 export default function FileUpload(props) {
   const [alert, setAlert] = useState(true);
+  const [successalert, setSuccessAlert] = useState(false);
 
   const onDrop = useCallback(acceptedFiles => {
     props.allDocuments(acceptedFiles)
+    setSuccessAlert(true);
   }, [])
   const {
     getRootProps,
@@ -42,6 +44,14 @@ export default function FileUpload(props) {
           closeAlert={() => setAlert(false)}
         />
       )}
+      {successalert && 
+        <AWSMAlert
+          status="success"
+          message={'PDF Uploaded Successfully'}
+          openAlert={successalert}
+          closeAlert={() => setSuccessAlert(false)}
+        />      
+      }
     </div>
   )
 }

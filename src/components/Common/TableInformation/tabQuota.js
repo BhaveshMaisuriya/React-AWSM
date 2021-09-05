@@ -41,7 +41,7 @@ const tabQuota = ({ scheduler, data, onChange }) => {
           </Col>
           <Col className="col-6">
             <AvForm>
-              <AvField
+              <AvField  
                 name="monthly_fixed_quota"
                 type="number"
                 label="MONTHLY FIXED QUOTA"

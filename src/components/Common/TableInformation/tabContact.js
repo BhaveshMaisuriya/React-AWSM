@@ -24,14 +24,15 @@ const tabContact = ({ scheduler, data, onChange }) => {
   }, [data]);
 
   const onFieldChange = (index, key, value) => {
-    const newContactData = {...data.contact}
-    if (!newContactData[`contact_${index + 1}`]) {
-      newContactData[`contact_${index + 1}`] = {}
-    }
-    newContactData[`contact_${index + 1}`] = { ...newContactData[`contact_${index + 1}`], [key]: value }
-    if (onChange) {
-      onChange("contact", newContactData)
-    }
+      const newContactData = {...data.contact}
+      console.log("pattern::", newContactData)
+      if (!newContactData[`contact_${index + 1}`]) {
+        newContactData[`contact_${index + 1}`] = {}
+      }
+      newContactData[`contact_${index + 1}`] = { ...newContactData[`contact_${index + 1}`], [key]: value }
+      if (onChange) {
+        onChange("contact", newContactData)
+      }
   }
 
   const onParentFieldChange = (key, subKey, value) => {
@@ -92,7 +93,10 @@ const tabContact = ({ scheduler, data, onChange }) => {
                       placeholder="Email (etc: johndoe@petronas.com)"
                       value={item.data.email || ""}
                       disabled={!!(item.disabled || scheduler)}
-                      className={item.disabled || scheduler ? "disabledField" : "awsm-input"}
+                      className={item.disabled || scheduler ? "disabledField" : "awsm-input"}                     
+                      validate={{
+                        pattern:{value: '/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/'},
+                      }}
                       onChange={e => onFieldChange(index, "email", e.target.value)}
                     />
                   </AvForm>
@@ -154,6 +158,9 @@ const tabContact = ({ scheduler, data, onChange }) => {
                 disabled={true}//!!scheduler
                 className={scheduler ? "disabledField" : "awsm-input"}
                 onChange={e => onParentFieldChange("territory_manager", "email", e.target.value)}
+                validate={{
+                  pattern:{value: ' /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/'},
+                }}
               />
             </AvForm>
           </Col>
@@ -201,6 +208,9 @@ const tabContact = ({ scheduler, data, onChange }) => {
                 disabled={!!scheduler}
                 className={scheduler ? "disabledField" : "awsm-input"}
                 onChange={e => onParentFieldChange("retail_sales_manager", "email", e.target.value)}
+                validate={{
+                  pattern:{value: ' /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/'},
+                }}
               />
             </AvForm>
           </Col>

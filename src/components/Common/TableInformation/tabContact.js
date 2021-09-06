@@ -63,90 +63,73 @@ const tabContact = ({ scheduler, data, onChange }) => {
         </p>
       </div>
       {contactList.map((item, index) => {
-        return (
-          <div key={index}>
-            <label>Contact Person {index + 1}</label>
-            <Row>
-              <Col className="col-6">
-                <AvForm>
-                  <AvField
-                    name="name"
-                    placeholder="Name (etc: John Doe)"
-                    value={item.data.name || ""}
-                    disabled={!!(item.disabled || scheduler)}
-                    className={
-                      !!(item.disabled || scheduler)
-                        ? "disabledField"
-                        : "awsm-input"
-                    }
-                    onChange={e => onFieldChange(index, "name", e.target.value)}
-                  />
-                </AvForm>
-              </Col>
-              <Col className="col-6">
-                <AvForm>
-                  <AvField
-                    name="number"
-                    placeholder="Contact No. (etc: 011-234556799)"
-                    value={item.data.number || ""}
-                    disabled={!!(item.disabled || scheduler)}
-                    className={
-                      item.disabled || scheduler
-                        ? "disabledField"
-                        : "awsm-input"
-                    }
-                    onChange={e =>
-                      onFieldChange(index, "number", e.target.value)
-                    }
-                    validate={{
-                      pattern: { value: "^\\+?[0-9- ]+$" },
-                    }}
-                  />
-                </AvForm>
-              </Col>
-            </Row>
-            <Row>
-              <Col className="col-6">
-                <AvForm>
-                  <AvField
-                    name="email"
-                    placeholder="Email (etc: johndoe@petronas.com)"
-                    value={item.data.email || ""}
-                    disabled={!!(item.disabled || scheduler)}
-                    className={
-                      item.disabled || scheduler
-                        ? "disabledField"
-                        : "awsm-input"
-                    }
-                    onChange={e =>
-                      onFieldChange(index, "email", e.target.value)
-                    }
-                  />
-                </AvForm>
-              </Col>
-              <Col className="col-6">
-                <AvForm>
-                  <AvField
-                    name="contact_position"
-                    placeholder="Position (etc: Executive)"
-                    value={item.data.position || ""}
-                    disabled={
-                      scheduler ||
-                      (item.disabled && pathName === "/commercial-customer")
-                    }
-                    className={scheduler ? "disabledField" : "awsm-input"}
-                    onChange={e =>
-                      onFieldChange(index, "position", e.target.value)
-                    }
-                  />
-                </AvForm>
-              </Col>
-            </Row>
-          </div>
-        )
-      })}
-      <>
-        <label>Territory Manager</label>
+          return (
+            <div key={index}>
+              <h5>Contact Person {index + 1}</h5>
+              <Row>
+                <Col className="col-6">
+                  <AvForm>
+                    <AvField
+                      name="name"
+                      placeholder="Name (etc: John Doe)"
+                      value={item.data.name || ""}
+                      disabled={!!(item.disabled || scheduler)}
+                      className={!!(item.disabled || scheduler) ? "disabledField" : "awsm-input"}
+                      onChange={e => onFieldChange(index, "name", e.target.value)}
+                    />
+                  </AvForm>
+                </Col>
+                <Col className="col-6">
+                  <AvForm>
+                    <AvField
+                      name="number"
+                      placeholder="Contact No. (etc: 011-234556799)"
+                      value={item.data.number || ""}
+                      disabled={!!(item.disabled || scheduler)}
+                      className={item.disabled || scheduler ? "disabledField" : "awsm-input"}
+                      onChange={e => onFieldChange(index, "number", e.target.value)}
+                      validate={{
+                        pattern:{value: '^\\+?[0-9- ]+$'},
+                      }}
+                    />
+                  </AvForm>
+                </Col>
+              </Row>
+              <Row>
+                <Col className="col-6">
+                  <AvForm>
+                    <AvField
+                      name="email"
+                      placeholder="Email (etc: johndoe@petronas.com)"
+                      value={item.data.email || ""}
+                      disabled={!!(item.disabled || scheduler)}
+                      className={item.disabled || scheduler ? "disabledField" : "awsm-input"}   
+                      type='email'
+                      validate={{
+                        pattern: {value: '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$', errorMessage: 'Incorrect format,please re-check the email address'},
+                      }}
+                      onChange={e => onFieldChange(index, "email", e.target.value)}
+                    />
+                  </AvForm>
+                </Col>
+                <Col className="col-6">
+                  <AvForm>
+                    <AvField
+                      name="contact_position"
+                      placeholder="Position (etc: Executive)"
+                      value={item.data.position || ""}
+                      disabled={scheduler || (item.disabled && pathName === "/commercial-customer")}
+                      className={scheduler ? "disabledField" : "awsm-input"}
+                      onChange={e => onFieldChange(index, "position", e.target.value)}
+                    />
+                  </AvForm>
+                </Col>
+              </Row>
+            </div>
+          )
+        })}
+      <div>
+        <h5>Territory Manager</h5>
         <Row>
           <Col className="col-6">
             <AvForm>
@@ -209,19 +192,17 @@ const tabContact = ({ scheduler, data, onChange }) => {
                 }
                 disabled={true} //!!scheduler
                 className={scheduler ? "disabledField" : "awsm-input"}
-                onChange={e =>
-                  onParentFieldChange(
-                    "territory_manager",
-                    "email",
-                    e.target.value
-                  )
-                }
+                onChange={e => onParentFieldChange("territory_manager", "email", e.target.value)}
+                type='email'
+                validate={{
+                  pattern: {value: '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$', errorMessage: 'Incorrect format,please re-check the email address'},
+                }}
               />
             </AvForm>
           </Col>
           <Col className="col-6" />
         </Row>
-      </>
+      </div>
       <>
         <label>Retail Sales Manager</label>
         <Row>
@@ -286,13 +267,11 @@ const tabContact = ({ scheduler, data, onChange }) => {
                 }
                 disabled={!!scheduler}
                 className={scheduler ? "disabledField" : "awsm-input"}
-                onChange={e =>
-                  onParentFieldChange(
-                    "retail_sales_manager",
-                    "email",
-                    e.target.value
-                  )
-                }
+                onChange={e => onParentFieldChange("retail_sales_manager", "email", e.target.value)}
+                type='email'
+                validate={{
+                  pattern: {value: '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$', errorMessage: 'Incorrect format,please re-check the email address'},
+                }}
               />
             </AvForm>
           </Col>

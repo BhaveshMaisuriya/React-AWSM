@@ -26,6 +26,7 @@ import {
   TabPane,
 } from "reactstrap"
 import ExitConfirmation from "../../../components/Common/ExitConfirmation"
+import { runValidation } from "../Common/helper"
 
 class TerminalDetailModal extends PureComponent {
   constructor(props) {
@@ -46,6 +47,7 @@ class TerminalDetailModal extends PureComponent {
     }
     this.errors = {
       statusTab: [],
+      contactTab: [],
     }
   }
 
@@ -56,7 +58,7 @@ class TerminalDetailModal extends PureComponent {
 
   componentDidUpdate(prevProps, prevStates) {
     const { dataSource } = this.state
-    if (!isEqual(prevStates.dataSource, dataSource)) {
+    if (!isEqual(prevStates.dataSource, dataSource)) {     
       this.validate()
     }
   }
@@ -73,28 +75,37 @@ class TerminalDetailModal extends PureComponent {
 
   async handleUpdate() {
     const { errors } = this
-    if (Object.values(errors).some(errorList => errorList.length > 0)) {
-      const errorTabs = Object.keys(errors)
-      errorTabs.forEach(tab => {
-        this.errors[tab].forEach(({ field }) => {
-          if (
-            this.state.forceBlur?.[tab]?.[field] !== undefined ||
-            this.state.forceBlur?.[tab]?.[field] != null
-          ) {
-            this.setState({
-              forceBlur: {
-                [tab]: {
-                  [field]: true,
+      if (Object.values(errors).some(errorList => errorList.length > 0)) {
+        const errorTabs = Object.keys(errors)
+        errorTabs.forEach(tab => {
+          this.errors[tab].forEach(({ field }) => {
+            if (
+              this.state.forceBlur?.[tab]?.[field] !== undefined ||
+              this.state.forceBlur?.[tab]?.[field] != null
+            ) {
+              this.setState({
+                forceBlur: {
+                  [tab]: {
+                    [field]: true,
+                  },
                 },
-              },
-            })
-          }
+              })
+            }
+          })
         })
-      })
-      return
-    }
-    const { code } = this.props.data
-    const { dataSource } = this.state
+        return
+      }
+
+      const { code } = this.props.data
+      const { dataSource } = this.state
+      if(dataSource?.contact?.email && !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(dataSource?.contact?.email)){
+        this.setState({ isValidated: false })
+        return
+      } 
+      if(dataSource?.contact?.superintendant?.email && !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(dataSource?.contact?.superintendant?.email)){
+        this.setState({ isValidated: false })
+        return
+      }
     await this.props.onUpdateTableInformation({
       ship_to_party: code,
       body: dataSource,
@@ -149,6 +160,7 @@ class TerminalDetailModal extends PureComponent {
         break
       }
     }
+
     if (status?.status_awsm === "Temp Inactive") {
       if (!status?.inactive_date_range_1?.type) {
         exceedValues.push(1)

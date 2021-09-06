@@ -76,7 +76,7 @@ const TabAddress = ({ scheduler, data, onChange }) => {
           </div>
           <div className="col col-12 col-sm-6 col-lg-6">
             <div className="input-header mb-2">REGION</div>
-            <AWSMInput value={addressData.address ? addressData.address.region_name || "" : ""} disabled />
+            <AWSMInput value={addressData.address ? addressData.address.region_group || "" : ""} disabled />
           </div>
           {pathName !== "/retail-customer" && (
             <div className="col col-12 col-sm-6 col-lg-6"></div>

@@ -181,7 +181,8 @@ const CommercialCustomerModal = props => {
                   <AWSMInput
                     defaultValue={currentCommercialDetail.remarks}
                     onChange={value => onFieldValueChange("remarks", value)}
-                    disabled={scheduler}                    
+                    disabled={scheduler}
+                    placeholder='Type something here ...'                    
                   />
                 </Col>
               </Row>

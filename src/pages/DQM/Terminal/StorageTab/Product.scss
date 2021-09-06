@@ -9,20 +9,19 @@
     right: 0;
     bottom: 0;
     z-index: 2;
-    background-color: #F8F9FA;
+    background-color: #f8f9fa;
   }
 
   .btn-delete-product {
-    color: #D50000;
+    color: #d50000;
     outline: none;
     border: none;
     background-color: white;
     font-size: 0.85rem;
     font-weight: 500;
   }
-
 }
-.addl-value{
+.addl-value {
   padding-left: 0 !important;
   border: none !important;
   height: 100% !important;
@@ -31,19 +30,19 @@
   pointer-events: none !important;
 }
 
-.addl-value-storage{
+.addl-value-storage {
   padding-left: 0 !important;
   border: none !important;
   height: 100% !important;
   margin: auto;
 }
-.marginBottom11{
+.marginBottom11 {
   margin-bottom: 11px;
 }
-.marginTop19{
+.marginTop19 {
   margin-top: 19px;
 }
-.marginTop20{
+.marginTop20 {
   margin-top: 20px;
 }
 .ml-12 {
@@ -54,4 +53,9 @@
 }
 .h-40 input {
   height: 40px;
+}
+
+.dqm-product-add {
+  cursor: pointer;
+  color: #008f8a;
 }

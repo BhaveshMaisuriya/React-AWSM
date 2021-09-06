@@ -247,7 +247,6 @@ class ProductDetailModal extends PureComponent {
                      disabled={isDisabledField}
                      onChange={(e) => this.onFieldValueChange("remarks", e.target.value)}
                      onBlur={(e) => this.onFieldValueChange("remarks", e.target.value)}
-                     placeholder='Type something here ...'
                    />
                  </div>
                </div>

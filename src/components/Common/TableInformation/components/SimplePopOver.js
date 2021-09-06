@@ -2,6 +2,7 @@ import React from "react"
 import Popover from "@material-ui/core/Popover"
 import { FormControlLabel, Checkbox } from "@material-ui/core"
 import "./simplePopOver.scss"
+import AWSMCheckBox from "../../../../common/CheckBox"
 
 export default function SimplePopover({ handleChange, data, children, disabled }) {
   const [anchorEl, setAnchorEl] = React.useState(null)
@@ -43,12 +44,10 @@ export default function SimplePopover({ handleChange, data, children, disabled }
             <FormControlLabel
               key={`${item}${index}`}
               control={
-                <Checkbox
-                  checked={item.checked}
-                  onChange={() => handleChange(item)}
-                  name={item.name}
-                />
-              }
+                <AWSMCheckBox
+                checked={item.checked}
+                onChange={() => handleChange(item)}
+                name={item.name}/>}
               label={item.name || "-"}
               className={`${item.checked ? "MuiFormControlLabel-checked justify-content-start align-items-center" : 
                 "justify-content-start align-items-center"}`}

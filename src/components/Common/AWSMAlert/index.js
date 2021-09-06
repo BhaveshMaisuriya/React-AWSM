@@ -9,24 +9,24 @@ import { alertConfig } from "./helper"
 const AWSMAlert = ({ status = "", message = null, openAlert, closeAlert }) => {
   let statusConfig = alertConfig[status] || alertConfig["error"]
   // console.log(status, message, openAlert, closeAlert)
-  // let color = ""
-  // let colorBack = ""
-  // switch (status) {
-  //   case true:
-  //   case "success":
-  //     color = "#4CAF50"
-  //     colorBack = "#edf7ed"
-  //     break
-  //   case false:
-  //   case "error":
-  //     color = "#f44336"
-  //     colorBack = "#fdecea"
-  //     break
-  //   default:
-  //     color = "#ff9800"
-  //     colorBack = "#fff4e5"
-  //     break
-  // }
+  let color = ""
+  let colorBack = ""
+  switch (status) {
+    case true:
+    case "success":
+      color = "#4CAF50"
+      colorBack = "#edf7ed"
+      break
+    case false:
+    case "error":
+      color = "#f44336"
+      colorBack = "#fdecea"
+      break
+    default:
+      color = "#ff9800"
+      colorBack = "#fff4e5"
+      break
+  }
 
   return (
     <Snackbar

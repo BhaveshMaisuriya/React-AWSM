@@ -20,6 +20,7 @@ import AWSMAlert from "../../../components/Common/AWSMAlert/index"
 import { isScheduler } from "../../../helpers/auth_helper"
 import CloseButton from "../../../components/Common/CloseButton"
 
+import SimpleBar from "simplebar-react"
 import {
   getRoadTankerDetail,
   updateRoadTankerDetail,
@@ -44,6 +45,7 @@ class InformationModal extends Component {
       updateSuccess: props?.isUpdateSuccess,
       data: props?.currentRoadTanker,
       isConfirm: false,
+      alertMsg: "",
     }
   }
 
@@ -79,6 +81,20 @@ class InformationModal extends Component {
     this.props.onCancel()
   }
 
+  isEmptyDate = date => {
+    if (date?.type === "single" && date?.days?.length === 0) {
+      return true
+    }
+    if (
+      date?.type === "range" &&
+      date?.date_from === null &&
+      date?.date_to === null
+    ) {
+      return true
+    }
+    if (date?.type === "") return true
+    return false
+  }
   render() {
     const { visible, currentRoadTanker, onUpdateRoadTankerDetail } = this.props
     const { activeTab, mode, showAlert, data } = this.state
@@ -111,19 +127,29 @@ class InformationModal extends Component {
 
     const validateTerminal = () => {
       if (
-        ((data?.availability?.other_terminal_mobilization_2_name &&
-          data?.availability?.other_terminal_mobilization_2_name !== "None") &&
+        (data?.availability?.other_terminal_mobilization_2_name &&
+          data?.availability?.other_terminal_mobilization_2_name !== "None" &&
           !data?.availability?.other_terminal_mobilization_2_date) ||
         (data?.availability?.other_terminal_mobilization_2_date &&
           !data?.availability?.other_terminal_mobilization_2_name) ||
-        ((data?.availability?.other_terminal_mobilization_1_name &&
-          data?.availability?.other_terminal_mobilization_2_name !== "None") &&
+        (data?.availability?.other_terminal_mobilization_1_name &&
+          data?.availability?.other_terminal_mobilization_2_name !== "None" &&
           !data?.availability?.other_terminal_mobilization_1_date) ||
         (data?.availability?.other_terminal_mobilization_1_date &&
-          !data?.availability?.other_terminal_mobilization_1_name)) {
-        toggleAlert()
+          !data?.availability?.other_terminal_mobilization_1_name)
+      ) {
+        toggleAlert("Need to put in both date and terminal name to save.")
         return false
       }
+
+      if (
+        data?.availability?.status_awsm === "Temporary Blocked" &&
+        this.isEmptyDate(data?.availability?.block_date_range)
+      ) {
+        toggleAlert("Please fill in Temporary Blocked Date range")
+        return false
+      }
+
       return true
     }
 
@@ -135,8 +161,11 @@ class InformationModal extends Component {
       }
     }
 
-    const toggleAlert = () => {
-      this.setState({ showAlert: !showAlert })
+    const toggleAlert = ergMsg => {
+      this.setState({
+        showAlert: !showAlert,
+        alertMsg: ergMsg,
+      })
     }
 
     const onFieldValueChange = (fieldName, value) => {
@@ -181,7 +210,7 @@ class InformationModal extends Component {
         </ModalHeader>
         <AWSMAlert
           status="error"
-          message="Need to put in both date and terminal name to save."
+          message={this.state.alertMsg}
           openAlert={showAlert}
           closeAlert={() => {
             toggleAlert()
@@ -195,12 +224,12 @@ class InformationModal extends Component {
                 <div className="col-md-6 form-group">
                   <label>VEHICLE OWNER</label>
                   <input
-                    className="form-control"
+                    className="form-control awsm-input"
                     type="text"
                     defaultValue={data?.owner}
                     onChange={e => onFieldValueChange("owner", e.target.value)}
                     disabled={true}
-                  // placeholder="Typing something here..."
+                    // placeholder="Typing something here..."
                   />
                 </div>
               </div>
@@ -283,30 +312,39 @@ class InformationModal extends Component {
                   </NavItem>
                 </Nav>
                 <TabContent activeTab={activeTab}>
-                  <TabPane tabId="1">
-                    <AvailabilityTab
-                      mode={mode}
-                      scheduler={scheduler}
-                      data={data?.availability}
-                      onChange={onFieldValueChange}
-                      isActive={data?.status_sap}
-                    />
+                  <TabPane tabId="1" style={{ marginRight: "-25px" }}>
+                    <SimpleBar className="simple-bar">
+                      <AvailabilityTab
+                        mode={mode}
+                        scheduler={scheduler}
+                        data={data?.availability}
+                        onChange={onFieldValueChange}
+                        isActive={data?.status_sap}
+                      />
+                      <hr style={{ margin: "2em 0" }} />
+                    </SimpleBar>
                   </TabPane>
-                  <TabPane tabId="2">
-                    <SpecificationTab
-                      mode={mode}
-                      scheduler={scheduler}
-                      data={data?.specification}
-                      onChange={onFieldValueChange}
-                    />
+                  <TabPane tabId="2" style={{ marginRight: "-25px" }}>
+                    <SimpleBar className="simple-bar">
+                      <SpecificationTab
+                        mode={mode}
+                        scheduler={scheduler}
+                        data={data?.specification}
+                        onChange={onFieldValueChange}
+                      />
+                      <hr style={{ margin: "2em 0" }} />
+                    </SimpleBar>
                   </TabPane>
-                  <TabPane tabId="3">
-                    <TrailerTab
-                      mode={mode}
-                      scheduler={scheduler}
-                      data={data?.trailer}
-                      onChange={onFieldValueChange}
-                    />
+                  <TabPane tabId="3" style={{ marginRight: "-25px" }}>
+                    <SimpleBar className="simple-bar">
+                      <TrailerTab
+                        mode={mode}
+                        scheduler={scheduler}
+                        data={data?.trailer}
+                        onChange={onFieldValueChange}
+                      />
+                      <hr style={{ margin: "2em 0" }} />
+                    </SimpleBar>
                   </TabPane>
                 </TabContent>
               </>

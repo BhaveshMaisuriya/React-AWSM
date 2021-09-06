@@ -34,7 +34,6 @@
   }
 }
 .dqm-storage-container {
-  padding-right: 1rem;
   .input-header {
     margin-top: 0.75rem;
     color: black;
@@ -118,15 +117,6 @@
   .input-header {
     margin-top: 0.75rem;
     color: black;
-  }
-  .awsm-label-add {
-    margin-top: 0.75rem;
-    cursor: pointer;
-    color: #008f8a;
-    font-size: 0.75rem;
-    &.disabled {
-      color: gray;
-    }
   }
 }
 

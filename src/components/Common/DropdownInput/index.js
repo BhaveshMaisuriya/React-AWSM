@@ -21,7 +21,7 @@ const DropdownInput = ({
     setInputValue(event.target.value)
   }
 
-  const onInputModeChange = (event) => {
+  const onInputModeChange = event => {
     event.stopPropagation()
     if (disabled) {
       return
@@ -29,7 +29,7 @@ const DropdownInput = ({
     setInputMode(true)
   }
 
-  const onAddNewItem = (event) => {
+  const onAddNewItem = event => {
     event.stopPropagation()
     event.preventDefault()
     if (inputValue && isValid) {
@@ -66,20 +66,22 @@ const DropdownInput = ({
 
   const remainChars = useMemo(() => {
     return maxChar - inputValue.length
-  }, [inputValue]);
+  }, [inputValue])
 
   const isValid = useMemo(() => {
     return inputValue && remainChars >= 0
-  }, [remainChars]);
+  }, [remainChars])
 
   return (
     <div className="awsm-dropdown-input w-100">
       <div className="d-flex justify-content-between">
-        <div className="input-header mb-2">{title}</div>
+        <label>{title}</label>
         {inputMode ? (
           <div
             onMouseDown={onAddNewItem}
-            className={`awsm-label-add ${inputValue && isValid ? "" : "disabled"}`}
+            className={`awsm-label-add ${
+              inputValue && isValid ? "" : "disabled"
+            }`}
           >
             Done
           </div>
@@ -99,7 +101,11 @@ const DropdownInput = ({
           ref={inputRef}
           onMouseDown={e => e.stopPropagation()}
         />
-        <span className={`position-absolute awsm-input-right-content ${!isValid ? "out-range " : ""}`}>{`${remainChars >= 0 ? "+" : ""}${remainChars}`}</span>
+        <span
+          className={`position-absolute awsm-input-right-content ${
+            !isValid ? "out-range " : ""
+          }`}
+        >{`${remainChars >= 0 ? "+" : ""}${remainChars}`}</span>
       </div>
       <div className={inputMode ? "d-none" : "d-block"}>
         <AWSMDropdown

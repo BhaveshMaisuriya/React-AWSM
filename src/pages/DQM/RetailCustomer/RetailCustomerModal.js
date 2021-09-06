@@ -12,7 +12,7 @@ import {
   TabPane,
   TabContent,
   Row,
-  Col
+  Col,
 } from "reactstrap"
 
 //Components
@@ -32,12 +32,11 @@ import {
   resetRetailTableInformation,
   updateTableInformation,
 } from "../../../store/actions"
-import AWSMAlert from "../../../components/Common/AWSMAlert"
-import closeIcon from "../../../assets/images/AWSM-Cancel-Icon.svg"
 import { isScheduler } from "../../../helpers/auth_helper"
 import ExitConfirmation from "../../../components/Common/ExitConfirmation"
 import { runValidation } from "../Common/helper"
 import { isEqual } from "lodash"
+import SimpleBar from "simplebar-react"
 
 const RetailCustomerModal = props => {
   const {
@@ -159,143 +158,140 @@ const RetailCustomerModal = props => {
             </ModalHeader>
             <ModalBody>
               {isConfirm && handleExitConfirmation()}
-              <Row>
-                <Col className="col-6">
-                    <label>SHIP TO (COMPANY NAME)</label>
-                    <AWSMInput
-                      disabled
-                      defaultValue={currentRetailDetail.ship_to_company}
-                    />
-                  </Col>
-                  <Col className="col-6">
-                    <label>STATUS IN SAP</label>
-                    <AWSMInput
-                      disabled
-                      defaultValue={currentRetailDetail.status_sap}
-                    />
-                 </Col>
-                 </Row>
-                 <Row>
-                 <Col className="col-12">
-                <label className="mb-2 mt-3">REMARKS</label>
-                <AWSMInput
-                  defaultValue={currentRetailDetail.remarks}
-                  onChange={value => onFieldValueChange("remarks", value)}
-                  disabled={scheduler}
-                  placeholder='Type something here ...'
-                />
-              </Col>
+              <Row className="row">
+                <Col className="col-md-6 form-group">
+                  <label>SHIP TO (COMPANY NAME)</label>
+                  <AWSMInput
+                    disabled
+                    defaultValue={currentRetailDetail.ship_to_company}
+                  />
+                </Col>
+                <Col className="col-md-6 form-group">
+                  <label>STATUS IN SAP</label>
+                  <AWSMInput
+                    disabled
+                    defaultValue={currentRetailDetail.status_sap}
+                  />
+                </Col>
               </Row>
-              <div className="mt-4">
-                <Nav pills justified>
-                  <NavItem>
-                    <NavLink
-                      className={activeTab === "1" ? "active" : ""}
-                      onClick={() => setActiveTab("1")}
-                    >
-                      <span className="d-none d-sm-block">Address</span>
-                    </NavLink>
-                  </NavItem>
-                  <NavItem>
-                    <NavLink
-                      className={activeTab === "2" ? "active" : ""}
-                      onClick={() => setActiveTab("2")}
-                    >
-                      <span className="d-none d-sm-block">Delivery</span>
-                    </NavLink>
-                  </NavItem>
-                  <NavItem>
-                    <NavLink
-                      className={activeTab === "3" ? "active" : ""}
-                      onClick={() => setActiveTab("3")}
-                    >
-                      <span className="d-none d-sm-block">Status</span>
-                    </NavLink>
-                  </NavItem>
-                  <NavItem>
-                    <NavLink
-                      className={activeTab === "4" ? "active" : ""}
-                      onClick={() => setActiveTab("4")}
-                    >
-                      <span className="d-none d-sm-block">Contact</span>
-                    </NavLink>
-                  </NavItem>
-                  <NavItem>
-                    <NavLink
-                      className={activeTab === "5" ? "active" : ""}
-                      onClick={() => setActiveTab("5")}
-                    >
-                      <span className="d-none d-sm-block">Storage</span>
-                    </NavLink>
-                  </NavItem>
-                  <NavItem>
-                    <NavLink
-                      className={activeTab === "6" ? "active" : ""}
-                      onClick={() => {
-                        setActiveTab("6")
-                      }}
-                    >
-                      <span className="d-none d-sm-block">Quota</span>
-                    </NavLink>
-                  </NavItem>
-                </Nav>
-              </div>
+              <Row className="row">
+                <Col className="col-md-12 form-group">
+                  <label>REMARKS</label>
+                  <AWSMInput
+                    defaultValue={currentRetailDetail.remarks}
+                    onChange={value => onFieldValueChange("remarks", value)}
+                    disabled={scheduler}
+                  />
+                </Col>
+              </Row>
+              <Nav pills justified>
+                <NavItem>
+                  <NavLink
+                    className={activeTab === "1" ? "active" : ""}
+                    onClick={() => setActiveTab("1")}
+                  >
+                    <span className="d-none d-sm-block">Address</span>
+                  </NavLink>
+                </NavItem>
+                <NavItem>
+                  <NavLink
+                    className={activeTab === "2" ? "active" : ""}
+                    onClick={() => setActiveTab("2")}
+                  >
+                    <span className="d-none d-sm-block">Delivery</span>
+                  </NavLink>
+                </NavItem>
+                <NavItem>
+                  <NavLink
+                    className={activeTab === "3" ? "active" : ""}
+                    onClick={() => setActiveTab("3")}
+                  >
+                    <span className="d-none d-sm-block">Status</span>
+                  </NavLink>
+                </NavItem>
+                <NavItem>
+                  <NavLink
+                    className={activeTab === "4" ? "active" : ""}
+                    onClick={() => setActiveTab("4")}
+                  >
+                    <span className="d-none d-sm-block">Contact</span>
+                  </NavLink>
+                </NavItem>
+                <NavItem>
+                  <NavLink
+                    className={activeTab === "5" ? "active" : ""}
+                    onClick={() => setActiveTab("5")}
+                  >
+                    <span className="d-none d-sm-block">Storage</span>
+                  </NavLink>
+                </NavItem>
+                <NavItem>
+                  <NavLink
+                    className={activeTab === "6" ? "active" : ""}
+                    onClick={() => {
+                      setActiveTab("6")
+                    }}
+                  >
+                    <span className="d-none d-sm-block">Quota</span>
+                  </NavLink>
+                </NavItem>
+              </Nav>
               <div>
                 <TabContent activeTab={activeTab} className="py-4">
-                  <TabPane tabId="1">
-                    <div className="simple-bar">
+                  <TabPane tabId="1" style={{ marginRight: "-25px" }}>
+                    <SimpleBar className="simple-bar">
                       <TabAddress
                         dataList={dataList}
                         scheduler={scheduler}
                         data={currentRetailDetail}
                         onChange={onFieldValueChange}
                       />
-                    </div>
+                    </SimpleBar>
                   </TabPane>
-                  <TabPane tabId="3">
-                    <div className="simple-bar">
+                  <TabPane tabId="3" style={{ marginRight: "-25px" }}>
+                    <SimpleBar className="simple-bar">
                       <TabStatus
                         scheduler={scheduler}
                         data={currentRetailDetail}
                         onChange={onFieldValueChange}
                       />
-                    </div>
+                    </SimpleBar>
                   </TabPane>
-                  <TabPane tabId="2">
-                    <div className="simple-bar">
+                  <TabPane tabId="2" style={{ marginRight: "-25px" }}>
+                    <SimpleBar className="simple-bar">
                       <TabDelivery
                         scheduler={scheduler}
                         data={currentRetailDetail}
                         onChange={onFieldValueChange}
                       />
-                    </div>
+                    </SimpleBar>
                   </TabPane>
-                  <TabPane tabId="4">
-                    <div className="simple-bar">
+                  <TabPane tabId="4" style={{ marginRight: "-25px" }}>
+                    <SimpleBar className="simple-bar">
                       <TabContact
                         scheduler={scheduler}
                         data={currentRetailDetail}
                         onChange={onFieldValueChange}
                       />
-                    </div>
+                    </SimpleBar>
                   </TabPane>
-                  <TabPane tabId="5">
-                    <div className="simple-bar">
+                  <TabPane tabId="5" style={{ marginRight: "-25px" }}>
+                    <SimpleBar className="simple-bar">
                       <TabStorage
                         scheduler={scheduler}
                         data={currentRetailDetail}
                         onChange={onFieldValueChange}
                       />
-                    </div>
+                    </SimpleBar>
                   </TabPane>
-                  <TabPane tabId="6">
-                    <div className="simple-bar">
+                  <TabPane tabId="6" style={{ marginRight: "-25px" }}>
+                    <SimpleBar className="simple-bar">
                       <TabQuota
                         scheduler={scheduler}
                         data={currentRetailDetail}
                         onChange={onFieldValueChange}
                       />
-                    </div>
+                    </SimpleBar>
                   </TabPane>
                 </TabContent>
               </div>

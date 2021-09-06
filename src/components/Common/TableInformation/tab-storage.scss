@@ -1,5 +1,4 @@
 .dqm-storage-container {
-  padding-right: 1rem;
   user-select: none;
 
   .input-header {
@@ -26,7 +25,7 @@
     cursor: pointer;
     color: red;
   }
-  &>.disabled {
+  & > .disabled {
     background-color: #eee !important;
   }
 }
@@ -38,7 +37,7 @@
 
 .storage_delete_main {
   position: relative;
-  .dqm-storage-confirm-delete{
+  .dqm-storage-confirm-delete {
     position: absolute;
     top: 0;
     width: 100%;

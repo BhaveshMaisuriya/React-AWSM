@@ -14,15 +14,45 @@ class AvailabilityTab extends PureComponent {
 
     this.state = {
       date: new Date(),
+      isDateRangeError: (props?.data?.status_awsm === "Temporary Blocked" && this.isEmptyDate(props?.data?.block_date_range))
     }
+  }
+
+  isEmptyDate = (date) => {
+    if (date?.type === "single" && date?.days?.length === 0) {
+      return true
+    }
+    if (date?.type === "range" && date?.date_from === null && date?.date_to === null) {
+      return true;
+    }
+    if (date?.type === "") return true
+    return false
   }
 
   onChangeHandler = (value, key) => {
     const { data, onChange } = this.props
     let newData = { ...data }
+    if (key === "status_awsm" || key === "block_date_range") {
+      if ((value === "Temporary Blocked" && this.isEmptyDate(data?.block_date_range))
+        || (this.isEmptyDate(value) && data?.status_awsm === "Temporary Blocked")) {
+        this.setState({ isDateRangeError: true })
+      }
+      else {
+        this.setState({ isDateRangeError: false })
+      }
+    }
+
     newData[key] = value
     onChange("availability", newData)
   }
+
+  // onComponentDidMount() {
+  //   const { data } = this.props
+  //   if (data?.status_awsm === "Temporary Blocked" && this.isEmptyDate(data?.block_date_range)) {
+  //     this.setState({ isDateRangeError: true })
+
+  //   }
+  // }
 
   render() {
     const { mode, scheduler, data, isActive } = this.props
@@ -40,7 +70,6 @@ class AvailabilityTab extends PureComponent {
                 onChange={e =>
                   this.onChangeHandler(e.target.value, "default_terminal")
                 }
-                // placeholder="Typing something here..."
               />
             </div>
             <div className="col-md-6 form-group">
@@ -70,7 +99,7 @@ class AvailabilityTab extends PureComponent {
                 onChange={e =>
                   this.onChangeHandler(e.target.value, "daily_available_hours")
                 }
-                // placeholder="Typing something here..."
+              // placeholder="Typing something here..."
               />
             </div>
           </div>
@@ -97,7 +126,9 @@ class AvailabilityTab extends PureComponent {
                 placeholder={!scheduler ? "Select Date" : ""}
                 defaultValue={data?.block_date_range}
                 onChange={v => this.onChangeHandler(v, "block_date_range")}
+                error={this.state.isDateRangeError}
               />
+              <p hidden={!this.state.isDateRangeError} className="error">Please fill in Temporary Blocked Date range</p>
             </div>
           </div>
           <div className="marginTop14 marginBottom22">

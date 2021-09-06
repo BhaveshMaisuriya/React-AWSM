@@ -4,14 +4,13 @@ import { AvForm, AvField } from "availity-reactstrap-validation"
 // import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown"import { ReactSVG } from "react-svg"
 import { ReactSVG } from "react-svg"
 import ArrowDropDownIcon from "../../../assets/images/AWSM-Dropdown.svg"
-
 import styles from "./tabDelivery.module.css"
 import SimplePopover from "./components/SimplePopOver"
 import TimePicker from "./components/TimePicker"
 import DateRangePicker from "../DateRangePicker"
 import DropdownInput from "../DropdownInput"
-import { Checkbox } from "@material-ui/core"
 import AWSMInput from "../Input"
+import AWSMCheckBox from "../../../common/CheckBox"
 
 const timeData = []
 for (let i = 0; i < 24; i++) {
@@ -37,11 +36,7 @@ const RowComponent = ({ onChange, item }) => {
         item.checked ? styles.dropdownChecked : ""
       }`}
     >
-      <Checkbox
-        checked={item.checked}
-        onChange={() => onChange(item)}
-        name={item.name}
-      />
+      <AWSMCheckBox checked={item.checked} onChange={()=> onChange(item)} name={item.name}/>
       <label className="mb-0">{item.name || "-"}</label>
     </div>
   )
@@ -61,7 +56,9 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
     JSON.parse(JSON.stringify(ACTUAL_OPEN_TIME))
   )
 
-  const no_interval_array = [1,2,3,4,5].map((e) => `no_delivery_interval_${e}`)
+  const no_interval_array = [1, 2, 3, 4, 5].map(
+    e => `no_delivery_interval_${e}`
+  )
 
   useEffect(() => {
     setDeliveryData(data.delivery)
@@ -104,16 +101,19 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
     if (
       deliveryData &&
       deliveryData.road_tanker_requirement_items &&
-      Array.isArray(deliveryData.road_tanker_requirement_items)
+      Array.isArray(deliveryData.road_tanker_requirement_items) &&
+      deliveryData.road_tanker_requirement_items?.length > 0
     ) {
-      setTanker(
-        deliveryData.road_tanker_requirement_items.map(item => ({
-          name: item,
-          checked:
-            deliveryData.road_tanker_requirement &&
-            deliveryData.road_tanker_requirement.includes(item),
-        }))
-      )
+     setTanker(
+       deliveryData.road_tanker_requirement_items
+         .map(item => ({
+           name: item,
+           checked:
+             deliveryData.road_tanker_requirement &&
+             deliveryData.road_tanker_requirement.includes(item),
+         }))
+         .filter((item)=> !!item.name)
+       )
     }
   }, [])
 
@@ -237,14 +237,9 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
   }, [deliveryData, openTime3])
 
   return (
-    <div
-      style={{
-        height: "400px",
-        paddingRight: "15px",
-      }}
-    >
-      <Row>
-        <Col className="col-6 mb-3">
+    <>
+      <Row className="row">
+        <Col className="col-md-6 form-group">
           <DropdownInput
             title="ROAD TANKER REQUIREMENT"
             disabled={scheduler}
@@ -258,18 +253,16 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
             onChange={handleChangeTanker}
           />
         </Col>
-        {pathName === "/commercial-customer" && <Col className="col-6" />}
-        <Col className="col-6 mb-3">
-          <div className="input-header mb-2" style={{ marginTop: "0.75rem" }}>
-            ROAD TANKER ACCESSIBILITY
-          </div>
+        {pathName === "/commercial-customer" && <Col className="col-md-6" />}
+        <Col className="col-md-6 form-group">
+          <label>ROAD TANKER ACCESSIBILITY</label>
           <AWSMInput
             value={deliveryData.road_tanker_accessibility || ""}
             disabled
           />
         </Col>
         {pathName === "/commercial-customer" && (
-          <Col className="col-6">
+          <Col className="col-md-6">
             <div className="input-header mb-2" style={{ marginTop: "0.75rem" }}>
               PUMP TYPE
             </div>
@@ -281,8 +274,8 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
           </Col>
         )}
 
-        <Col className="col-6">
-          <h6>DELIVERY OPEN TIME (FROM)</h6>
+        <Col className="col-md-6">
+          <label>DELIVERY OPEN TIME (FROM)</label>
           <TimePicker
             value={
               deliveryData.delivery_open_time_1
@@ -300,8 +293,8 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
             }
           />
         </Col>
-        <Col className="col-6">
-          <h6>DELIVERY OPEN TIME (TO)</h6>
+        <Col className="col-md-6">
+          <label>DELIVERY OPEN TIME (TO)</label>
           <TimePicker
             items={timeData}
             disabled
@@ -314,12 +307,14 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
             }
           />
         </Col>
-        <Col className={`col-12 ${styles.marginTop32} ${styles.marginBottom16}`}>
-          <h6>
+        <Col
+          className={`col-12 ${styles.marginTop32} ${styles.marginBottom16}`}
+        >
+          <label>
             <strong>ACTUAL OPEN TIME 1</strong>
-          </h6>
+          </label>
         </Col>
-        <Col className="col-6">
+        <Col className="col-md-6">
           <SimplePopover
             handleChange={handleActualTime1}
             data={openTime1}
@@ -332,7 +327,9 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
                 label="DAY(S)"
                 value={
                   actualOpenTime1.length > 0
-                    ? (actualOpenTime1.length === 7 ? "Every Day" : actualOpenTime1.map(i => i.name))
+                    ? actualOpenTime1.length === 7
+                      ? "Every Day"
+                      : actualOpenTime1.map(i => i.name)
                     : "Select day(s)"
                 }
                 className={`${styles.field} ${
@@ -347,8 +344,8 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
             </AvForm>
           </SimplePopover>
         </Col>
-        <Col className="col-3">
-          <h6>TIME (FROM)</h6>
+        <Col className="col-md-3">
+          <label>TIME (FROM)</label>
           <TimePicker
             items={timeData}
             disabled={scheduler}
@@ -366,8 +363,8 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
             }
           />
         </Col>
-        <Col className="col-3">
-          <h6>TIME (TO)</h6>
+        <Col className="col-md-3">
+          <label>TIME (TO)</label>
           <TimePicker
             items={timeData}
             disabled={scheduler}
@@ -385,14 +382,17 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
             }
           />
         </Col>
-        {pathName === "/retail-customer" ||  pathName === "/commercial-customer" ? (
+        {pathName === "/retail-customer" ||
+        pathName === "/commercial-customer" ? (
           <React.Fragment>
-            <Col className={`col-12 ${styles.marginTop16} ${styles.marginBottom16}`}>
-              <h6>
+            <Col
+              className={`col-12 ${styles.marginTop16} ${styles.marginBottom16}`}
+            >
+              <label>
                 <strong>ACTUAL OPEN TIME 2</strong>
-              </h6>
+              </label>
             </Col>
-            <Col className="col-6">
+            <Col className="col-md-6">
               <SimplePopover
                 handleChange={handleActualTime2}
                 data={openTime2}
@@ -405,13 +405,15 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
                     label="DAY(S)"
                     value={
                       actualOpenTime2.length > 0
-                        ? (actualOpenTime2.length === 7 ? "Every Day" : actualOpenTime2.map(i => i.name))
+                        ? actualOpenTime2.length === 7
+                          ? "Every Day"
+                          : actualOpenTime2.map(i => i.name)
                         : "Select day(s)"
                     }
                     disabled={scheduler}
                     className={`${styles.field} ${
                       scheduler ? styles.disabled : undefined
-                    } awsm-input` }
+                    } awsm-input`}
                     style={{ height: "40px", marginTop: "-4px" }}
                   />
                   <div className={styles.arrow}>
@@ -420,8 +422,8 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
                 </AvForm>
               </SimplePopover>
             </Col>
-            <Col className="col-3">
-              <h6>TIME (FROM)</h6>
+            <Col className="col-md-3">
+              <label>TIME (FROM)</label>
               <TimePicker
                 items={timeData}
                 disabled={scheduler}
@@ -439,8 +441,8 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
                 }
               />
             </Col>
-            <Col className="col-3">
-              <h6>TIME (TO)</h6>
+            <Col className="col-md-3">
+              <label>TIME (TO)</label>
               <TimePicker
                 items={timeData}
                 disabled={scheduler}
@@ -458,12 +460,14 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
                 }
               />
             </Col>
-            <Col className={`col-12 ${styles.marginTop16} ${styles.marginBottom16}`}>
-              <h6>
+            <Col
+              className={`col-12 ${styles.marginTop16} ${styles.marginBottom16}`}
+            >
+              <label>
                 <strong>ACTUAL OPEN TIME 3</strong>
-              </h6>
+              </label>
             </Col>
-            <Col className="col-6">
+            <Col className="col-md-6">
               <SimplePopover
                 handleChange={handleActualTime3}
                 data={openTime3}
@@ -476,13 +480,15 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
                     label="DAY(S)"
                     value={
                       actualOpenTime3.length > 0
-                        ? (actualOpenTime3.length === 7 ? "Every Day" : actualOpenTime3.map(i => i.name))
+                        ? actualOpenTime3.length === 7
+                          ? "Every Day"
+                          : actualOpenTime3.map(i => i.name)
                         : "Select day(s)"
                     }
                     disabled={scheduler}
                     className={`${styles.field} ${
                       scheduler ? styles.disabled : undefined
-                    } awsm-input` }
+                    } awsm-input`}
                     style={{ height: "40px", marginTop: "-4px" }}
                   />
                   <div className={styles.arrow}>
@@ -491,8 +497,8 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
                 </AvForm>
               </SimplePopover>
             </Col>
-            <Col className="col-3">
-              <h6>TIME (FROM)</h6>
+            <Col className="col-md-3">
+              <label>TIME (FROM)</label>
               <TimePicker
                 items={timeData}
                 disabled={scheduler}
@@ -510,8 +516,8 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
                 }
               />
             </Col>
-            <Col className="col-3">
-              <h6>TIME (TO)</h6>
+            <Col className="col-md-3">
+              <label>TIME (TO)</label>
               <TimePicker
                 items={timeData}
                 disabled={scheduler}
@@ -531,26 +537,26 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
             </Col>
           </React.Fragment>
         ) : null}
-        <Col className="col-6 mb-2">
-          <h6>NO DELIVERY INTERVAL</h6>
+        <Col className="col-md-6">
+          <label>NO DELIVERY INTERVAL</label>
         </Col>
-        <Col className="col-3">
-          <h6>TIME (FROM)</h6>
+        <Col className="col-md-3">
+          <label>TIME (FROM)</label>
         </Col>
-        <Col className="col-3">
-          <h6>TIME (TO)</h6>
+        <Col className="col-md-3">
+          <label>TIME (TO)</label>
         </Col>
         {no_interval_array.map((subKey, index) => {
           return (
             <React.Fragment key={index}>
-              <Col className="col-6 mb-3">
+              <Col className="col-md-6 form-group">
                 <DateRangePicker
                   defaultValue={deliveryData[subKey]}
                   onChange={value => onFieldChange(subKey, value)}
                   disabled={index < 2 ? true : scheduler}
                 />
               </Col>
-              <Col className="col-3">
+              <Col className="col-md-3">
                 <TimePicker
                   items={timeData}
                   disabled={index < 2 ? true : scheduler}
@@ -573,7 +579,7 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
                   }}
                 />
               </Col>
-              <Col className="col-3">
+              <Col className="col-md-3">
                 <TimePicker
                   items={timeData}
                   disabled={index < 2 ? true : scheduler}
@@ -600,7 +606,8 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
           )
         })}
       </Row>
-    </div>
+      <hr style={{ margin: "2em 0" }} />
+    </>
   )
 }
 

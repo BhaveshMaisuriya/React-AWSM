@@ -8,18 +8,18 @@
       background-color: white !important;
     }
     &:focus {
-      border: 1px solid #008F8A;
+      border: 1px solid #008f8a;
       background-color: rgb(240, 249, 249);
-      color: #008F8A;
+      color: #008f8a;
       &.out-range {
-        border-color: #E80000;
+        border-color: #e80000;
         color: #f46a6a;
       }
     }
     padding-right: 1.5rem !important;
   }
   .awsm-input-right-content {
-    color: #008F8A;
+    color: #008f8a;
     font-size: 0.75rem;
     right: 0;
     top: 0;
@@ -34,9 +34,9 @@
     color: black;
   }
   .awsm-label-add {
-    margin-top: 0.75rem;
+    // margin-top: 0.75rem;
     cursor: pointer;
-    color: #008F8A;
+    color: #008f8a;
     font-size: 0.75rem;
     &.disabled {
       color: gray;

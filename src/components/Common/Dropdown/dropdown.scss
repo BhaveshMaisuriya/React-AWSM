@@ -21,13 +21,14 @@
 
 .awsm-select-menu {
   margin-top: 0.5rem;
-  border: 1px solid rgba(0, 0, 0, 0.15);
-  box-shadow: 0 8px 12px 0 rgba(92, 76, 76, 0.16);
+  //border: 1px solid rgba(0, 0, 0, 0.15);
+  //box-shadow: 0 8px 12px 0 rgba(92, 76, 76, 0.16);
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 0.5px 8px 1px rgba(31, 26, 26, 0.1)!important;
   border-radius: 0.25rem;
-  padding-left: 0.25rem;
+  padding: 0.3rem!important;
   max-height: 150px;
   overflow: auto;
-
   .awsm-select-item {
     cursor: pointer;
     padding: 0.5rem;

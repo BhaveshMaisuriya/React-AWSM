@@ -4,7 +4,7 @@ import AWSMDropdown from "../Dropdown"
 import AWSMInput from "../Input"
 import AWSMInputNumber from "../InputNumber"
 import "./tab-storage.scss"
-import { Col } from "reactstrap"
+import { Col, Row } from "reactstrap"
 
 import AWSMAlert from "../AWSMAlert"
 
@@ -136,12 +136,14 @@ const TabStorage = ({ scheduler, data, onChange }) => {
   return (
     <div className="dqm-storage-container" id="dqm-storage-container">
       <div className="w-50">
-        <div className="input-header">END OF DAY</div>
+        <label>END OF DAY</label>
         <AWSMDropdown
           onChange={onEndOfDayChange}
           items={timeData}
           disabled={scheduler}
-          value={storageData.end_of_day?.time_to?.toString().substring(0, 5) || ""}
+          value={
+            storageData.end_of_day?.time_to?.toString().substring(0, 5) || ""
+          }
         />
       </div>
       {Object.keys(storageData).map((key, index) =>
@@ -183,20 +185,24 @@ const TabStorage = ({ scheduler, data, onChange }) => {
                   </button>
                 </div>
               )}
-              <div className="row">
-                <div className="col col-12 col-sm-6 col-lg-3">
-                  <div className="input-header mb-2">PRODUCT CODE</div>
+              <Row className="row">
+                <Col className="col-md-3 form-group">
+                  <label>PRODUCT CODE</label>
                   <AWSMInputNumber
                     defaultValue={
                       storageData[key] ? storageData[key].code || "" : ""
                     }
                     onChange={value => onUpdateField(key, "code", value)}
-                    disabled={!scheduler && pathName =='/commercial-customer' ? false:true}
+                    disabled={
+                      !scheduler && pathName == "/commercial-customer"
+                        ? false
+                        : true
+                    }
                   />
-                </div>
+                </Col>
 
-                <div className="col col-12 col-sm-6 col-lg-3">
-                  <div className="input-header mb-2">TANK CAPACITY</div>
+                <Col className="col-md-3 form-group">
+                  <label>TANK CAPACITY</label>
                   <AWSMInputNumber
                     type="number"
                     defaultValue={
@@ -207,12 +213,16 @@ const TabStorage = ({ scheduler, data, onChange }) => {
                     onChange={value =>
                       onUpdateField(key, "tank_capacity", value)
                     }
-                    disabled={!scheduler && pathName =='/commercial-customer' ? false:true}
+                    disabled={
+                      !scheduler && pathName == "/commercial-customer"
+                        ? false
+                        : true
+                    }
                   />
-                </div>
+                </Col>
 
-                <div className="col col-12 col-sm-6 col-lg-3">
-                  <div className="input-header mb-2">ACTIVE PRODUCT</div>
+                <Col className="col-md-3 form-group">
+                  <label>ACTIVE PRODUCT</label>
                   <AWSMDropdown
                     onChange={value =>
                       onUpdateField(key, "active_product", value)
@@ -225,8 +235,11 @@ const TabStorage = ({ scheduler, data, onChange }) => {
                     items={ACTIVE_PRODUCTS}
                     disabled={scheduler}
                   />
-                </div>
-                <div className="col col-12 col-sm-6 col-lg-3">
+                </Col>
+                <Col
+                  className="col-md-3 form-group"
+                  style={{ fontSize: !scheduler ? "12px" : "" }}
+                >
                   <DropdownInput
                     title="ORDERING CATEGORY"
                     value={
@@ -251,31 +264,39 @@ const TabStorage = ({ scheduler, data, onChange }) => {
                     openAlert={alert}
                     closeAlert={() => setAlert(false)}
                   />
-                </div>
+                </Col>
 
-                <div className="col col-12 col-sm-6 col-lg-3">
-                  <div className="input-header mb-2">TERMINAL</div>
+                <Col className="col-md-3 form-group">
+                  <label>TERMINAL</label>
                   <AWSMInput
                     value={
                       storageData[key] ? storageData[key].terminal || "" : ""
                     }
                     onChange={value => onUpdateField(key, "terminal", value)}
-                    disabled={!scheduler && pathName =='/commercial-customer' ? false:true}
+                    disabled={
+                      !scheduler && pathName == "/commercial-customer"
+                        ? false
+                        : true
+                    }
                   />
-                </div>
-                <div className="col col-12 col-sm-6 col-lg-3">
-                  <div className="input-header mb-2">DISTANCE</div>
+                </Col>
+                <Col className="col-md-3 form-group">
+                  <label>DISTANCE</label>
                   <AWSMInputNumber
                     value={
                       storageData[key] ? storageData[key].distance || "" : ""
                     }
                     onChange={value => onUpdateField(key, "distance", value)}
-                    disabled={!scheduler && pathName =='/commercial-customer' ? false:true}
+                    disabled={
+                      !scheduler && pathName == "/commercial-customer"
+                        ? false
+                        : true
+                    }
                   />
-                </div>
+                </Col>
 
-                <div className="col col-12 col-sm-6 col-lg-3">
-                  <div className="input-header mb-2">DURATION</div>
+                <Col className="col-md-3 form-group">
+                  <label>DURATION</label>
                   <AWSMInputNumber
                     itemKey="duration"
                     type="number"
@@ -285,9 +306,9 @@ const TabStorage = ({ scheduler, data, onChange }) => {
                     onChange={value => onUpdateField(key, "duration", value)}
                     disabled={scheduler}
                   />
-                </div>
-                <div className="col col-12 col-sm-6 col-lg-3">
-                  <div className="input-header mb-2">SALES CATEGORY</div>
+                </Col>
+                <Col className="col-md-3 form-group">
+                  <label>SALES CATEGORY</label>
                   <AWSMDropdown
                     value={
                       storageData[key]
@@ -300,7 +321,7 @@ const TabStorage = ({ scheduler, data, onChange }) => {
                     }
                     disabled={scheduler}
                   />
-                </div>
+                </Col>
                 {pathName === "/commercial-customer" ? (
                   <React.Fragment>
                     <Col className="col-3" style={{ marginTop: "12px" }}>
@@ -346,7 +367,7 @@ const TabStorage = ({ scheduler, data, onChange }) => {
                     pathName === "/retail-customer" ? "col-12" : "col-6"
                   }`}
                 >
-                  <div className="input-header mb-2">REMARKS</div>
+                  <label>REMARKS</label>
                   <AWSMInput
                     placeholder="Write something here..."
                     disabled={scheduler}
@@ -356,7 +377,7 @@ const TabStorage = ({ scheduler, data, onChange }) => {
                     onChange={value => onUpdateField(key, "remarks", value)}
                   />
                 </div>
-              </div>
+              </Row>
             </div>
           </div>
         ) : null

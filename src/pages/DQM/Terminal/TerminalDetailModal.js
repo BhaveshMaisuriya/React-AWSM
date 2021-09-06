@@ -18,21 +18,12 @@ import { isEqual } from "lodash"
 import CloseButton from "../../../components/Common/CloseButton"
 import {
   Col,
-  Field,
-  Form,
-  FormGroup,
-  Input,
-  InputGroup,
-  InputGroupAddon,
-  Media,
   Nav,
   NavItem,
   NavLink,
   Row,
   TabContent,
   TabPane,
-  UncontrolledDropdown,
-  UncontrolledTooltip,
 } from "reactstrap"
 import ExitConfirmation from "../../../components/Common/ExitConfirmation"
 import { runValidation } from "../Common/helper"
@@ -252,9 +243,9 @@ class TerminalDetailModal extends PureComponent {
               <ModalBody>
                 {this.state.isConfirm ? this.handleExitConfirmation() : ""}
                 <Fragment>
-                  <div>
-                    <div className="row">
-                      <div className="col-md-6 form-group">
+                  <>
+                    <Row className="row">
+                      <Col className="col-md-6 form-group">
                         <label>TERMINAL NAME</label>
                         <input
                           placeholder={
@@ -268,13 +259,13 @@ class TerminalDetailModal extends PureComponent {
                             this.onFieldChange("name", e.target.value)
                           }
                         />
-                      </div>
-                      <div className="col-md-6 form-group"></div>
-                    </div>
+                      </Col>
+                      <Col className="col-md-6 form-group"></Col>
+                    </Row>
 
-                    <div className="row">
-                      <div className="col-md-12 form-group">
-                        <label> REMARKS</label>
+                    <Row className="row">
+                      <Col className="col-md-12 form-group">
+                        <label>REMARKS</label>
                         <input
                           placeholder={
                             !isDisabledField && "Type something here..."
@@ -287,9 +278,9 @@ class TerminalDetailModal extends PureComponent {
                             this.onFieldChange("remarks", e.target.value)
                           }
                         />
-                      </div>
-                    </div>
-                  </div>
+                      </Col>
+                    </Row>
+                  </>
                   <Nav pills justified>
                     <NavItem>
                       <NavLink
@@ -351,31 +342,19 @@ class TerminalDetailModal extends PureComponent {
 
                   {/* tab content */}
                   <TabContent activeTab={this.state.activeTab} className="py-4">
-                    <TabPane tabId="1">
-                      <SimpleBar
-                        style={{
-                          height: "350px",
-                          width: "100%",
-                          overflowX: "hidden",
-                        }}
-                      >
+                    <TabPane tabId="1" style={{ marginRight: "-25px" }}>
+                      <SimpleBar className="simple-bar">
                         <AddressTab
                           data={currentTerminal?.address}
                           onChange={value =>
                             this.onFieldChange("address", value)
                           }
                         />
+                        <hr style={{ margin: "2em 0" }} />
                       </SimpleBar>
                     </TabPane>
                     <TabPane tabId="2" style={{ marginRight: "-25px" }}>
-                      <SimpleBar
-                        style={{
-                          height: "350px",
-                          width: "100%",
-                          overflowX: "hidden",
-                          paddingRight: "25px",
-                        }}
-                      >
+                      <SimpleBar className="simple-bar">
                         <StorageTab
                           data={currentTerminal?.storage}
                           onChange={value =>
@@ -385,15 +364,7 @@ class TerminalDetailModal extends PureComponent {
                       </SimpleBar>
                     </TabPane>
                     <TabPane tabId="3" style={{ marginRight: "-25px" }}>
-                      <SimpleBar
-                        style={{
-                          height: "350px",
-                          width: "100%",
-                          overflowX: "hidden",
-                          paddingRight: "25px",
-                          paddingBottom: "5px",
-                        }}
-                      >
+                      <SimpleBar className="simple-bar">
                         <StatusTab
                           data={currentTerminal?.status}
                           onChange={value =>
@@ -402,29 +373,25 @@ class TerminalDetailModal extends PureComponent {
                           handleErrors={this.handleErrors}
                           forceBlur={this.state.forceBlur.statusTab}
                         />
+                        <hr style={{ margin: "2em 0" }} />
                       </SimpleBar>
                     </TabPane>
-                    <TabPane tabId="4">
-                      <SimpleBar
-                        style={{
-                          height: "350px",
-                          width: "100%",
-                          overflowX: "hidden",
-                        }}
-                      >
+                    <TabPane tabId="4" style={{ marginRight: "-25px" }}>
+                      <SimpleBar className="simple-bar">
                         <ContactTab
                           data={currentTerminal?.contact}
                           onChange={value =>
                             this.onFieldChange("contact", value)
                           }
                         />
+                        <hr style={{ margin: "2em 0" }} />
                       </SimpleBar>
                     </TabPane>
                   </TabContent>
                 </Fragment>
               </ModalBody>
               {!isDisabledField && !this.state.isConfirm ? (
-                <ModalFooter className="pr-4">
+                <ModalFooter>
                   <button
                     className="btn-sec"
                     onClick={() => this.setState({ isConfirm: true })}

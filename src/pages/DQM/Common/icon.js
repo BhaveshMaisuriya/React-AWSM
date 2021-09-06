@@ -11,9 +11,9 @@ const DownloadIcon = () => {
       <g
         id="AWSM-Excel"
         stroke="none"
-        stroke-width="1"
+        strokeWidth="1"
         fill="none"
-        fill-rule="evenodd"
+        fillRule="evenodd"
       >
         <g
           id="Group-9"

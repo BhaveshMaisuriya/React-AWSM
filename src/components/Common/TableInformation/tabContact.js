@@ -6,33 +6,41 @@ import "./tabContact.scss"
 const tabContact = ({ scheduler, data, onChange }) => {
   const contactList = useMemo(() => {
     const contactList = []
-    if(!data.contact) {
+    if (!data.contact) {
       return []
     }
     for (const key in data.contact) {
       if (data.contact.hasOwnProperty(key) && /^contact_[1,2,3]$/.test(key)) {
-        contactList.push({ data: data.contact[key] || {}, key: key, disabled: key.split("").pop() === "1" });
+        contactList.push({
+          data: data.contact[key] || {},
+          key: key,
+          disabled: key.split("").pop() === "1",
+        })
       }
     }
     return [0, 1, 2].map(item => {
-      return contactList.length > item ? contactList[item] : {
-        data: {},
-        key: `contact_${item + 1}`,
-        disabled: false
-      };
+      return contactList.length > item
+        ? contactList[item]
+        : {
+            data: {},
+            key: `contact_${item + 1}`,
+            disabled: false,
+          }
     })
-  }, [data]);
+  }, [data])
 
   const onFieldChange = (index, key, value) => {
-      const newContactData = {...data.contact}
-      console.log("pattern::", newContactData)
-      if (!newContactData[`contact_${index + 1}`]) {
-        newContactData[`contact_${index + 1}`] = {}
-      }
-      newContactData[`contact_${index + 1}`] = { ...newContactData[`contact_${index + 1}`], [key]: value }
-      if (onChange) {
-        onChange("contact", newContactData)
-      }
+    const newContactData = { ...data.contact }
+    if (!newContactData[`contact_${index + 1}`]) {
+      newContactData[`contact_${index + 1}`] = {}
+    }
+    newContactData[`contact_${index + 1}`] = {
+      ...newContactData[`contact_${index + 1}`],
+      [key]: value,
+    }
+    if (onChange) {
+      onChange("contact", newContactData)
+    }
   }
 
   const onParentFieldChange = (key, subKey, value) => {
@@ -46,10 +54,12 @@ const tabContact = ({ scheduler, data, onChange }) => {
   const pathName = window.location.pathname
 
   return (
-    <div className='pr-23'>
+    <>
       <div className="d-flex align-items-center justify-content-end">
         <p>
-          <i className="last-updated-sub-title">{`Contact Last Updated By: ${data.contact?.updated_by || ""} on ${data.contact?.updated_at || ""}`}</i>
+          <i className="last-updated-sub-title">{`Contact Last Updated By: ${
+            data.contact?.updated_by || ""
+          } on ${data.contact?.updated_at || ""}`}</i>
         </p>
       </div>
       {contactList.map((item, index) => {
@@ -126,10 +136,20 @@ const tabContact = ({ scheduler, data, onChange }) => {
               <AvField
                 name="contact_name"
                 placeholder="Name (etc: John Doe)"
-                value={data.territory_manager ? data.territory_manager.name || "" : ""}
-                disabled={true}//!!scheduler
+                value={
+                  data.territory_manager
+                    ? data.territory_manager.name || ""
+                    : ""
+                }
+                disabled={true} //!!scheduler
                 className={scheduler ? "disabledField" : "awsm-input"}
-                onChange={e => onParentFieldChange("territory_manager", "name", e.target.value)}
+                onChange={e =>
+                  onParentFieldChange(
+                    "territory_manager",
+                    "name",
+                    e.target.value
+                  )
+                }
               />
             </AvForm>
           </Col>
@@ -138,13 +158,23 @@ const tabContact = ({ scheduler, data, onChange }) => {
               <AvField
                 name="contact_phone"
                 placeholder="Contact No. (etc: 011-234556799)"
-                value={data.territory_manager ? data.territory_manager.number || "" : ""}
-                disabled={true}//!!scheduler
+                value={
+                  data.territory_manager
+                    ? data.territory_manager.number || ""
+                    : ""
+                }
+                disabled={true} //!!scheduler
                 className={scheduler ? "disabledField" : "awsm-input"}
                 validate={{
-                  pattern:{ value: '^\\+?[0-9- ]+$' },
+                  pattern: { value: "^\\+?[0-9- ]+$" },
                 }}
-                onChange={e => onParentFieldChange("territory_manager", "number", e.target.value)}
+                onChange={e =>
+                  onParentFieldChange(
+                    "territory_manager",
+                    "number",
+                    e.target.value
+                  )
+                }
               />
             </AvForm>
           </Col>
@@ -155,8 +185,12 @@ const tabContact = ({ scheduler, data, onChange }) => {
               <AvField
                 name="contact_email"
                 placeholder="Email (etc: johndoe@petronas.com)"
-                value={data.territory_manager ? data.territory_manager.email || "" : ""}
-                disabled={true}//!!scheduler
+                value={
+                  data.territory_manager
+                    ? data.territory_manager.email || ""
+                    : ""
+                }
+                disabled={true} //!!scheduler
                 className={scheduler ? "disabledField" : "awsm-input"}
                 onChange={e => onParentFieldChange("territory_manager", "email", e.target.value)}
                 type='email'
@@ -166,21 +200,31 @@ const tabContact = ({ scheduler, data, onChange }) => {
               />
             </AvForm>
           </Col>
-          <Col className="col-6"/>
+          <Col className="col-6" />
         </Row>
       </div>
-      <div>
-        <h5>Retail Sales Manager</h5>
+      <>
+        <label>Retail Sales Manager</label>
         <Row>
           <Col className="col-6">
             <AvForm>
               <AvField
                 name="contact_name"
                 placeholder="Name (etc: John Doe)"
-                value={data.retail_sales_manager ? data.retail_sales_manager.name || "" : ""}
+                value={
+                  data.retail_sales_manager
+                    ? data.retail_sales_manager.name || ""
+                    : ""
+                }
                 disabled={!!scheduler}
                 className={scheduler ? "disabledField" : "awsm-input"}
-                onChange={e => onParentFieldChange("retail_sales_manager", "name", e.target.value)}
+                onChange={e =>
+                  onParentFieldChange(
+                    "retail_sales_manager",
+                    "name",
+                    e.target.value
+                  )
+                }
               />
             </AvForm>
           </Col>
@@ -189,13 +233,23 @@ const tabContact = ({ scheduler, data, onChange }) => {
               <AvField
                 name="contact_phone"
                 placeholder="Contact No. (etc: 011-234556799)"
-                value={data.retail_sales_manager ? data.retail_sales_manager.number || "" : ""}
+                value={
+                  data.retail_sales_manager
+                    ? data.retail_sales_manager.number || ""
+                    : ""
+                }
                 disabled={!!scheduler}
                 className={scheduler ? "disabledField" : "awsm-input"}
                 validate={{
-                  pattern:{ value: '^\\+?[0-9- ]+$' },
+                  pattern: { value: "^\\+?[0-9- ]+$" },
                 }}
-                onChange={e => onParentFieldChange("retail_sales_manager", "number", e.target.value)}
+                onChange={e =>
+                  onParentFieldChange(
+                    "retail_sales_manager",
+                    "number",
+                    e.target.value
+                  )
+                }
               />
             </AvForm>
           </Col>
@@ -206,7 +260,11 @@ const tabContact = ({ scheduler, data, onChange }) => {
               <AvField
                 name="contact_email"
                 placeholder="Email (etc: johndoe@petronas.com)"
-                value={data.retail_sales_manager ? data.retail_sales_manager.email || "" : ""}
+                value={
+                  data.retail_sales_manager
+                    ? data.retail_sales_manager.email || ""
+                    : ""
+                }
                 disabled={!!scheduler}
                 className={scheduler ? "disabledField" : "awsm-input"}
                 onChange={e => onParentFieldChange("retail_sales_manager", "email", e.target.value)}
@@ -217,10 +275,11 @@ const tabContact = ({ scheduler, data, onChange }) => {
               />
             </AvForm>
           </Col>
-          <Col className="col-6"/>
+          <Col className="col-6" />
         </Row>
-      </div>
-    </div>
+        <hr style={{ margin: "2em 0" }} />
+      </>
+    </>
   )
 }
 

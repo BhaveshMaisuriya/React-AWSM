@@ -29,7 +29,7 @@ const realAxiosApi = axios.create({
 realAxiosApi.interceptors.request.use(
   config => {
     config.headers = {
-      Authorization: sessionStorage.getItem("apiAccessToken"),
+      Authorization: sessionStorage.getItem("idToken"),
     }
     return config
   },

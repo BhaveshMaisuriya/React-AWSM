@@ -17,7 +17,9 @@ const VarianceInput = ({ value, disabled = false, onChange }) => {
     }
 
     const onFocus = () => {
-        setIsFocus(true)
+        if(inputRef.current && !isFocus){
+            inputRef.current.blur()
+        }
     }
 
     const onBlur = () => {

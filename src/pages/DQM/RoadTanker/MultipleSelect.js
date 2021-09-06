@@ -3,10 +3,18 @@ import MenuItem from "@material-ui/core/MenuItem"
 import Select from "@material-ui/core/Select"
 import ListItemIcon from "@material-ui/core/ListItemIcon"
 import ListItemText from "@material-ui/core/ListItemText"
-import Checkbox from "@material-ui/core/Checkbox"
 import "./InformationModal.scss"
+import AWSMCheckBox from "../../../common/CheckBox"
+import {withStyles} from "@material-ui/styles";
 
-export default class MultipleSelect extends Component {
+const styles = ()=>({
+  "p-0": {
+    padding: "0!important"
+  }
+})
+
+
+class MultipleSelect extends Component {
   constructor(props) {
     super(props)
 
@@ -28,6 +36,7 @@ export default class MultipleSelect extends Component {
       onDeleteBtnClick,
       onNoClick,
       disabled,
+      classes
     } = this.props
     const { RtRestrictionSelected } = this.state
 
@@ -100,9 +109,9 @@ export default class MultipleSelect extends Component {
         displayEmpty={true}
       >
         {names?.map(name => (
-          <MenuItem key={name} value={name}>
-            <ListItemIcon>
-              <Checkbox checked={RtRestrictionSelected.indexOf(name) !== -1} />
+          <MenuItem key={name} value={name} className={classes["p-0"]} disableRipple={true} disableGutters={true}>
+            <ListItemIcon >
+              <AWSMCheckBox checked={RtRestrictionSelected.indexOf(name) !== -1}/>
             </ListItemIcon>
             <ListItemText id={name} primary={name} />
           </MenuItem>
@@ -111,3 +120,5 @@ export default class MultipleSelect extends Component {
     )
   }
 }
+
+export default withStyles(styles)(MultipleSelect)

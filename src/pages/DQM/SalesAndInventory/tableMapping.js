@@ -51,10 +51,6 @@ const tableMapping = {
       return tagColors[value ? `${value.toUpperCase()}` : "null"] || "secondary"
     },
   },
-  remarks: {
-    label: "REMARKS",
-    columnSize: "cell-text",
-  },
   actual_sales: {
     label: "ACTUAL SALES (L)",
     columnSize: "cell-text",
@@ -112,7 +108,7 @@ const tableMapping = {
     columnSize: "cell-text",
   },
   dipping_to_midnight_diversion_remarks: {
-    label: "DIPPING TO MIDNIGHT DIVERSION (L) REMARKS",
+    label: "DIPPING TO MIDNIGHT DIVERSION REMARKS (L)",
     columnSize: "cell-text",
   },
   dipping_adjustment: {
@@ -120,7 +116,7 @@ const tableMapping = {
     columnSize: "cell-text",
   },
   dipping_adjustment_remarks: {
-    label: "DIPPING ADJUSTMENT (L) REMARKS",
+    label: "DIPPING ADJUSTMENT REMARKS",
     columnSize: "cell-text",
   },
   delivery_adjustment: {
@@ -128,7 +124,7 @@ const tableMapping = {
     columnSize: "cell-text",
   },
   delivery_adjustment_remarks: {
-    label: "DELIVERY ADJUSTMENT (L) REMARKS",
+    label: "DELIVERY ADJUSTMENT REMARKS",
     columnSize: "cell-text",
   },
   opening_inventory: {
@@ -136,7 +132,7 @@ const tableMapping = {
     columnSize: "cell-text",
   },
   yesterday_opening_inventory: {
-    label: "YESTERDAY'S OPENING INVENTORY @12AM (L)",
+    label: "YESTERDAY'S OPENING INVENTORY (L)",
     columnSize: "cell-text",
   },
   yesterday_final_sales_figure: {
@@ -152,7 +148,7 @@ const tableMapping = {
     columnSize: "cell-text",
   },
   yesterday_diversion_remarks: {
-    label: "YESTERDAY DIVERSION (L) REMARKS",
+    label: "YESTERDAY DIVERSION REMARKS",
     columnSize: "cell-text",
   },
   yesterday_delivery_adjustment: {
@@ -187,10 +183,10 @@ const tableMapping = {
       return Math.abs(value) <= threshold ? "green-text" : "red-text"
     },
   },
-  // total_delivery: {
-  //   label: "",
-  //   columnSize: "cell-text",
-  // },
+  remarks: {
+    label: "REMARKS",
+    columnSize: "cell-text",
+  },
   inventory_correction_volume: {
     label: "INVENTORY CORRECTION VOLUME",
     columnSize: "cell-text",
@@ -199,11 +195,6 @@ const tableMapping = {
     label: "INVENTORY CORRECTION REMARKS",
     columnSize: "cell-text",
   },
-  // region: {
-  //   label: "",
-  //   columnSize: "cell-text",
-  // },
-  // terminal: [],
 }
 
 export { tableMapping, tableColumns }

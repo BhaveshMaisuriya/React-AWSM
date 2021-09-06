@@ -1,27 +1,29 @@
 .disabledField {
-    background-color: #eee !important;
-    color: rgba(16, 16, 16, 0.3) !important;
-  }
+  background-color: #eee !important;
+  color: rgba(16, 16, 16, 0.3) !important;
+  height: 2.5rem !important;
+  padding: 0.5rem !important;
+  border-radius: 0.25rem !important;
+}
 
-  label[for="monthly_quota"] {
-    color: #495057 !important;
-  }
-  input[type="number"]::-webkit-inner-spin-button,
-  input[type="number"]::-webkit-outer-spin-button {
-    opacity: 0;
-  }
-  .was-validated .form-control:invalid,
-  .form-control.is-invalid {
-    background-image: url(../../../assets/images/warning.svg) !important;
-    background-repeat: no-repeat;
-  }
-  .form-control:focus {
-    color: #495057;
-    border-color: #00A19C!important;
-    outline: 0;
-    box-shadow: none;
+label[for="monthly_quota"] {
+  color: #495057 !important;
+}
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  opacity: 0;
+}
+.was-validated .form-control:invalid,
+.form-control.is-invalid {
+  background-image: url(../../../assets/images/warning.svg) !important;
+  background-repeat: no-repeat;
+}
+.form-control:focus {
+  color: #495057;
+  border-color: #00a19c !important;
+  outline: 0;
+  box-shadow: none;
 }
 .pr-23 {
   padding-right: 15px;
 }
-

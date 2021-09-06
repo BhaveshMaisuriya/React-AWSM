@@ -3,8 +3,6 @@ import styles from "./storageTab.module.css"
 import Product from "./Product"
 import { isScheduler } from "../../../../helpers/auth_helper"
 import AWSMInputNumber from "../../../../components/Common/InputNumber"
-import { maxTime } from 'date-fns'
-import { AvField, AvForm } from "availity-reactstrap-validation"
 
 const newProductTemplate = {
   id: null,
@@ -60,14 +58,19 @@ const StorageTab = ({ data, onChange }) => {
   }
 
   const productList = useMemo(
-    () => Object.keys(storageData).filter(key => {
-      if(key !== 'product_dropdown') return key.startsWith("product_")
-    }),
+    () =>
+      Object.keys(storageData).filter(key => {
+        if (key !== "product_dropdown") return key.startsWith("product_")
+      }),
     [storageData]
   )
   function renderExceedError(key, max) {
     if (storageData?.[key] > max) {
-      return <p style={{ color: "#f46a6a" , fontSize: "80%", marginTop: "5px"  }}>Must not exceed {max}</p>
+      return (
+        <p style={{ color: "#f46a6a", fontSize: "80%", marginTop: "5px" }}>
+          Must not exceed {max}
+        </p>
+      )
     }
     return null
   }
@@ -75,11 +78,7 @@ const StorageTab = ({ data, onChange }) => {
     <div>
       <div className="d-flex">
         <div className="w-50 mr-12">
-          <label
-            className={`${
-              renderExceedError("loading_bay_no", 100)
-            }`}
-          >
+          <label className={`${renderExceedError("loading_bay_no", 100)}`}>
             NO OF LOADING BAY
           </label>
           <AWSMInputNumber
@@ -104,11 +103,7 @@ const StorageTab = ({ data, onChange }) => {
       </div>
       <div className="d-flex mt-3">
         <div className="w-50 mr-12">
-          <label
-            className={`${
-              renderExceedError("loading_time", 1440)
-            }`}
-          >
+          <label className={`${renderExceedError("loading_time", 1440)}`}>
             LOADING TIME (MIN)
           </label>
           <AWSMInputNumber
@@ -122,11 +117,7 @@ const StorageTab = ({ data, onChange }) => {
           {renderExceedError("loading_time", 1440)}
         </div>
         <div className="w-50 ml-12">
-          <label
-            className={`${
-              renderExceedError("turnaround_time", 1440)
-            }`}
-          >
+          <label className={`${renderExceedError("turnaround_time", 1440)}`}>
             TURNAROUND TIME (MIN)
           </label>
           <AWSMInputNumber
@@ -148,7 +139,7 @@ const StorageTab = ({ data, onChange }) => {
               onClick={onAddProduct}
               disabled={scheduler}
             >
-              + ADD PRODUCT
+              + Add Product
             </btn>
           </div>
         </div>
@@ -162,20 +153,15 @@ const StorageTab = ({ data, onChange }) => {
             scheduler={scheduler}
             onDelete={() => onDeleteProduct(key)}
             onChange={value => onFieldChange(key, value)}
-            productsList = {data?.product_dropdown || []}
+            productsList={data?.product_dropdown || []}
           />
         )
       })}
-      {productList.length > 0 && !scheduler &&(
-        <button
-          disabled={scheduler}
-          onClick={onAddProduct}
-          className={`${styles.btnAddSmall} ${
-            scheduler ? styles.btnAddSmallDisabled : ""
-          }`}
-        >
-          + ADD PRODUCT
-        </button>
+      <hr style={{ margin: "2em 0" }} />
+      {productList.length > 0 && !scheduler && (
+        <div onClick={onAddProduct} className="mt-4 dqm-product-add">
+          + Add product
+        </div>
       )}
     </div>
   )

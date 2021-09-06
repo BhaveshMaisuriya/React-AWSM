@@ -287,7 +287,8 @@
 
 .modal-footer {
   padding-bottom: 25px !important;
-  padding-top: 25px !important;
+  padding-top: 0px !important;
+  border-top: none !important;
 }
 
 .pdf-btn {
@@ -305,5 +306,13 @@
     .download-button-message {
       margin: auto;
     }
+  }
+}
+
+.tab-pane.active {
+  .simple-bar {
+    max-height: 32vh;
+    overflow-x: hidden;
+    padding-right: 25px;
   }
 }

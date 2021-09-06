@@ -80,6 +80,7 @@ export async function getAPIaccessToken() {
     return myMSALObj.acquireTokenSilent(request).then(
         response => {
             sessionStorage.setItem('apiAccessToken', response.accessToken)
+            sessionStorage.setItem('idToken', response.idToken)
                         // getUserUPN();
             store.dispatch(getUserProperties());
             return response.accessToken;

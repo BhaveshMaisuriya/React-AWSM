@@ -88,24 +88,18 @@ export const runValidation = data => {
     }
   }
   if (data.contact) {
-    const validateContact = Object.keys(data.contact).map(key => {
-      if (key.startsWith("contact_") && data.contact[key]) {        
-        if (
-          data.contact[key].number &&
-          !/^\+?[0-9- ]+$/.test(data.contact[key].number)
-        ) {
-          return false
-        }
-        if(data.contact[key].email && !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(data.contact[key].email)){
-          return false
-        }
+    const validateContact = Object.keys(data.contact).every(key => {
+      if (key.startsWith("contact_") && data.contact[key]) {
+        return (
+          !data.contact[key].number ||
+          /^\+?[0-9- ]+$/.test(data.contact[key].number)
+        )
       }
       return true
     })
-    if (validateContact.includes(false)) {
-      return false
+    if (!validateContact) {
+      return validateContact
     }
-    return true;
   }
   // if (data.status && data.status.status_awsm === "Temporarily Closed") {
   //   if (
@@ -134,7 +128,7 @@ export const runValidation = data => {
   ) {
     return false
   }
-  // return true
+  return true
 }
 
 export const removeKeywords = string => {

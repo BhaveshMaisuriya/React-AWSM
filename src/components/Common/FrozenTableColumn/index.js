@@ -94,7 +94,7 @@ class FixedCoulmnTable extends Component {
         <td className="h-145"></td>
       </tr>
     ) : (
-      arr && arr.map((e, index) => {
+      arr.map((e, index) => {
         return <tr key={index}>{this.renderFrozenTd(e, index)}</tr>
       })
     )

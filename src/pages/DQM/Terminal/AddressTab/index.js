@@ -85,9 +85,9 @@ const AddressTab = (props) => {
                 <label htmlFor="region">REGION</label>
                 <Field
                   type="text"
-                  id="region_name"
+                  id="region_group"
                   className="form-control awsm-input"
-                  value={data?.region_name}
+                  value={data?.region_group}
                   onChange={(e) => handleOnChangeValue(e)}
                   disabled
                   // placeholder={isDisabledField ? "" : placeholderNormalText}

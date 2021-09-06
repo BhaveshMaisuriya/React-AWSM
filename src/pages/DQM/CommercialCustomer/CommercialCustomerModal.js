@@ -14,7 +14,6 @@ import {
   Row,
   Col,
 } from "reactstrap"
-
 //Components
 import AWSMInput from "../../../components/Common/Input"
 import TabAddress from "../../../components/Common/TableInformation/tabAddress"
@@ -24,7 +23,6 @@ import TabContact from "../../../components/Common/TableInformation/tabContact"
 import TabStorage from "../../../components/Common/TableInformation/tabStorage"
 import TabQuota from "../../../components/Common/TableInformation/tabQuota"
 import ExitConfirmation from "../../../components/Common/ExitConfirmation"
-
 //CSS
 import "./CommercialCustomerModal.scss"
 import { Skeleton } from "@material-ui/core"

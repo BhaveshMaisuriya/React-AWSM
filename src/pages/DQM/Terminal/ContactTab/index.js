@@ -3,6 +3,8 @@ import { Formik, Form, Field, ErrorMessage } from "formik"
 import { isScheduler } from "../../../../helpers/auth_helper"
 import { isEqual } from "lodash"
 import { allowOnlyPhoneNumber, formatNumberInput } from "../format_number_input_helper"
+import AvField from "availity-reactstrap-validation/lib/AvField"
+import AvForm from "availity-reactstrap-validation/lib/AvForm"
 
 const ContactTab = (props) => {
   const [data,setData] = useState(props.data)
@@ -32,6 +34,7 @@ const ContactTab = (props) => {
           }
           props.handleChange(evt)
         }
+
         return (
           <Form onSubmit={handleSubmit}>
             <div className="row">
@@ -68,19 +71,23 @@ const ContactTab = (props) => {
               </div>
             </div>
             <div className="row">
-              <div className="col-md-6 form-group">
+              <div className="col-md-6 form-group">                
+                <AvForm>
                 <label htmlFor="supervisor.email">SUPERVISOR EMAIL</label>
-                <Field
-                  type="email"
-                  id="supervisorEmail"
-                  name="supervisor.email"
-                  className="form-control awsm-input"
-                  value={props?.values?.supervisor?.email}
-                  onChange={props.handleChange}
-                  placeholder={isDisabledField ? "" : "Email (etc: johndoe@petronas.com"}
-                  disabled={isDisabledField}
-                />
-                <ErrorMessage name="supervisorEmail" component="div" />
+                    <AvField
+                      name="email"
+                      placeholder="Email (etc: johndoe@petronas.com)"
+                      name="supervisor.email"
+                      value={props?.values?.supervisor?.email}
+                      disabled={isDisabledField}
+                      className="form-control awsm-input"
+                      type='email'
+                      validate={{
+                        pattern: {value: '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$', errorMessage: 'Incorrect format,please re-check the email address'},
+                      }}
+                      onChange={props.handleChange}
+                    />
+                  </AvForm>
               </div>
             </div>
 
@@ -121,7 +128,24 @@ const ContactTab = (props) => {
             </div>
             <div className="row">
               <div className="col-md-6 form-group">
-                <label htmlFor="superintendant.email">
+              <AvForm>
+                <label htmlFor="supervisor.email"> SUPERINTENDANT EMAIL</label>
+                    <AvField
+                      name="email"
+                      name="superintendant.email"
+                      placeholder="Email (etc: johndoe@petronas.com)"
+                      value={props?.values?.superintendant?.email}
+                      disabled={isDisabledField}
+                      className="form-control awsm-input"
+                      type='email'
+                      validate={{
+                        pattern: {value: '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$', errorMessage: 'Incorrect format,please re-check the email address'},
+                      }}
+                      onChange={props.handleChange}
+                    />
+                  </AvForm>
+
+                {/* <label htmlFor="superintendant.email">
                   SUPERINTENDANT EMAIL
                 </label>
                 <Field
@@ -134,7 +158,7 @@ const ContactTab = (props) => {
                   onChange={props.handleChange}
                   disabled={isDisabledField}
                 />
-                <ErrorMessage name="superintendant.email" component="div" />
+                <ErrorMessage name="superintendant.email" component="div" /> */}
               </div>
             </div>
           </Form>

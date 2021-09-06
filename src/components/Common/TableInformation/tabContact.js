@@ -93,9 +93,10 @@ const tabContact = ({ scheduler, data, onChange }) => {
                       placeholder="Email (etc: johndoe@petronas.com)"
                       value={item.data.email || ""}
                       disabled={!!(item.disabled || scheduler)}
-                      className={item.disabled || scheduler ? "disabledField" : "awsm-input"}                     
+                      className={item.disabled || scheduler ? "disabledField" : "awsm-input"}   
+                      type='email'
                       validate={{
-                        pattern:{value: '/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/'},
+                        pattern: {value: '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$', errorMessage: 'Incorrect format,please re-check the email address'},
                       }}
                       onChange={e => onFieldChange(index, "email", e.target.value)}
                     />
@@ -158,8 +159,9 @@ const tabContact = ({ scheduler, data, onChange }) => {
                 disabled={true}//!!scheduler
                 className={scheduler ? "disabledField" : "awsm-input"}
                 onChange={e => onParentFieldChange("territory_manager", "email", e.target.value)}
+                type='email'
                 validate={{
-                  pattern:{value: ' /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/'},
+                  pattern: {value: '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$', errorMessage: 'Incorrect format,please re-check the email address'},
                 }}
               />
             </AvForm>
@@ -208,8 +210,9 @@ const tabContact = ({ scheduler, data, onChange }) => {
                 disabled={!!scheduler}
                 className={scheduler ? "disabledField" : "awsm-input"}
                 onChange={e => onParentFieldChange("retail_sales_manager", "email", e.target.value)}
+                type='email'
                 validate={{
-                  pattern:{value: ' /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/'},
+                  pattern: {value: '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$', errorMessage: 'Incorrect format,please re-check the email address'},
                 }}
               />
             </AvForm>

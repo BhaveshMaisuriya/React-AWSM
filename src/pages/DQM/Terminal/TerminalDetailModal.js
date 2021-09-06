@@ -26,7 +26,7 @@ import {
   TabPane,
 } from "reactstrap"
 import ExitConfirmation from "../../../components/Common/ExitConfirmation"
-import { runValidation } from "../Common/helper"
+import AWSMAlert from "components/Common/AWSMAlert"
 
 class TerminalDetailModal extends PureComponent {
   constructor(props) {
@@ -39,6 +39,8 @@ class TerminalDetailModal extends PureComponent {
       isConfirm: false,
       dataSource: props.currentTerminal,
       isValidated: false,
+      error_code: '',
+      error_code_display: false,
       forceBlur: {
         statusTab: {
           inactive_date_range_1: false,
@@ -104,6 +106,18 @@ class TerminalDetailModal extends PureComponent {
       } 
       if(dataSource?.contact?.superintendant?.email && !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(dataSource?.contact?.superintendant?.email)){
         this.setState({ isValidated: false })
+        return
+      }
+      let error_code = [];
+      const validateStorage = Object.keys(dataSource?.storage).every(key => {
+        if (key.startsWith("product_") && dataSource.storage[key] &&  dataSource.storage[key].code === null) {
+          error_code.push('1');
+        }
+        return true
+      })
+      if(error_code.length > 0){
+        this.setState({error_code: 'Please fill the product code'})
+        this.setState({error_code_display: true})
         return
       }
     await this.props.onUpdateTableInformation({
@@ -360,6 +374,7 @@ class TerminalDetailModal extends PureComponent {
                           onChange={value =>
                             this.onFieldChange("storage", value)
                           }
+                          error_code={this.state.error_code}
                         />
                       </SimpleBar>
                     </TabPane>
@@ -410,6 +425,14 @@ class TerminalDetailModal extends PureComponent {
             </>
           ) : null}
         </>
+        {this.state.error_code_display !== "" && (
+          <AWSMAlert
+            status="error"
+            message={'Please fill in necessary data in Storage to save'}
+            openAlert={this.state.error_code_display}
+            closeAlert={() => this.setState({ error_code_display: false })}
+          />
+        )}
       </Modal>
     )
   }

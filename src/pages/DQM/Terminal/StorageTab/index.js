@@ -19,7 +19,7 @@ const newProductTemplate = {
   code: null,
 }
 
-const StorageTab = ({ data, onChange }) => {
+const StorageTab = ({ data, onChange, error_code }) => {
   const [storageData, setStorageData] = useState(data)
   const scheduler = isScheduler()
 
@@ -154,6 +154,7 @@ const StorageTab = ({ data, onChange }) => {
             onDelete={() => onDeleteProduct(key)}
             onChange={value => onFieldChange(key, value)}
             productsList={data?.product_dropdown || []}
+            error_code={error_code}
           />
         )
       })}

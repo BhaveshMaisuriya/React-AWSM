@@ -21,6 +21,7 @@ const Product = ({
   scheduler,
   onDelete,
   productsList,
+  error_code
 }) => {
   const [isConfirmDelete, setIsConfirmDelete] = useState(false)
 
@@ -78,7 +79,7 @@ const Product = ({
       </div>
       <div className="row">
         <div className="col-3 form-group mb-0">
-          <label htmlFor="productCode">PRODUCT CODE</label>
+          <label htmlFor="productCode">PRODUCT CODE<span className='red-error'>*</span></label>
           {isDisabledField ? 
           <AWSMInput
             key={value.code}
@@ -95,7 +96,8 @@ const Product = ({
             placeholder={!isDisabledField && placeholderSelect}
             disabled={isDisabledField}
           />
-}
+          }
+          {value.code === null && <small className='red-error'>{error_code}</small>}
         </div>
         <div className="col-3 form-group mb-0 h-40">
           <label htmlFor="productName">PRODUCT NAME</label>

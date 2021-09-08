@@ -45,10 +45,8 @@ class SalesInventory extends Component {
     }
     const payload = {
       limit: 6,
-      pagination: 0,
-      sort_dir: "desc",
-      sort_field: "created",
-      q: "retail_customer",
+      page: 1,
+      module: "sales-and-inventory",
     }
     onGetSaleAndInventory(params)
     onGetSalesAuditLog(payload)

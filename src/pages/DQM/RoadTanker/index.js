@@ -11,7 +11,7 @@ import {
 import { tableColumns, tableMapping } from "./tableMapping"
 import InformationModal from "./InformationModal"
 import { transformArrayToString, getCookieByKey } from "./../Common/helper"
-import { auditsRoadTanker, address } from "../../../common/data/roadTanker"
+import { address } from "../../../common/data/roadTanker"
 import Loader from "../../../components/Common/Loader"
 
 const RoadTankerTableName = "road-tanker-table"
@@ -42,10 +42,8 @@ class RoadTanker extends Component {
     }
     const payload = {
       limit: 6,
-      pagination: 0,
-      sort_dir: "desc",
-      sort_field: "created",
-      q: "commercial_customer",
+      page: 1,
+      module: "road-tanker",
     }
     onGetRoadTanker(params)
     onGetRoadTankerAuditLog(payload)
@@ -70,9 +68,10 @@ class RoadTanker extends Component {
       filterRoadTanker,
       downloadRoadTanker,
       roadTanker,
+      auditsRoadTanker,
       roadTankerIsLoading,
     } = this.props
-
+console.log("auditsRoadTanker::", auditsRoadTanker)
     const { searchFields } = this.state
 
     return (
@@ -110,6 +109,7 @@ const mapStateToProps = ({ roadTanker }) => ({
   roadTankerIsLoading: roadTanker.isLoading,
   filterRoadTanker: roadTanker.filterRoadTanker,
   downloadRoadTanker: roadTanker.downloadRoadTanker,
+  auditsRoadTanker: roadTanker.auditsRoadTanker
 })
 
 const mapDispatchToProps = dispatch => ({

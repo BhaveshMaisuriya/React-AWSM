@@ -56,8 +56,9 @@ export const getDownloadRoadTankerFail = error => ({
   payload: error,
 })
 
-export const getRoadTankerAuditLog = () => ({
+export const getRoadTankerAuditLog = (params) => ({
   type: GET_ROADTANKER_AUDITLOG,
+  params,
 })
 
 export const getRoadTankerAuditLogSuccess = response => ({

@@ -50,8 +50,9 @@ export const getDownloadTerminalFail = error => ({
   payload: error,
 })
 
-export const getTerminalAuditLog = () => ({
+export const getTerminalAuditLog = (params) => ({
   type: GET_TERMINAL_AUDITLOG,
+  params,
 })
 
 export const getTerminalAuditLogSuccess = response => ({

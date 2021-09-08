@@ -81,10 +81,8 @@ class SLA extends Component {
     }
     const payload = {
       limit: 6,
-      pagination: 0,
-      sort_dir: "desc",
-      sort_field: "created",
-      q: "sla",
+      page: 1,
+      module: "sla",
     }
     onGetSLAItems(params)
     onGetSLAAuditLog(payload)
@@ -151,7 +149,7 @@ class SLA extends Component {
         <AuditLog
           rowsAudit={rowsAudit}
           currentAuditPage={currentAuditPage}
-          data={audits.list}
+          data={audits.data.list}
           closeModal={this.closeHandler}
           handlePageChange={this.handleChangeAuditPage}
         />

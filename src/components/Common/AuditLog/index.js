@@ -6,6 +6,7 @@ import TablePagination from "../DataTable/tablePagination"
 // import ModalPagination from "./auditModalPagination"
 import lineIcon from "../../../assets/images/auditlog-line.svg"
 import "./style.scss"
+import { getMonth, getYear } from "date-fns"
 
 const styles = {
   profilePic: {
@@ -53,6 +54,7 @@ class AuditLog extends Component {
    */
   getBackgroundColor = index => (index % 2 !== 0 ? "#F8F8F8" : "transparent")
 
+
   /**
    * Displaying the data in audit log
    */
@@ -60,23 +62,22 @@ class AuditLog extends Component {
     //cut to get name from string
     let text = audit.description
     let firstWord = text.trim().split(" ")
-    let theName = firstWord.shift()
+    let theName = audit.user
 
     //cut action from string
     let action = firstWord.shift()
 
+    const Month = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "octomber", "November", "December"];
+
     //cut date from string
-    let date = audit.created
-    let cutDate = date.trim().split(" ")
-    let cutDate1 = cutDate[1]
-    let cutDate2 = cutDate[2]
-    let cutDate3 = cutDate[3]
-    let finalDate = cutDate1 + " " + cutDate2 + " " + cutDate3
+    let date = new Date(audit.created)
+    let finalDate = date.getDate() + " " + Month[date.getMonth() + 1] + " " + date.getFullYear()
 
     //cut time from string
-    let cutTime1 = cutDate[4]
-    let cutTime2 = cutDate[5]
-    let finalTime = cutTime1 + " " + cutTime2
+    var ampm = (date.getHours() >= 12) ? "PM" : "AM";
+    var hour = date.getHours().toString().length == 1 ? "0" + date.getHours() : date.getHours();
+    var mins = date.getMinutes().toString().length == 1 ? "0" + date.getMinutes() : date.getMinutes();
+    let finalTime = hour + ":" + mins + " " + ampm
 
     const { classes } = this.props
     return (
@@ -106,7 +107,7 @@ class AuditLog extends Component {
             <div className="tracking-content">
               <b>{theName}</b>
               <span>
-                {theName} <b>{action}</b> {firstWord.join(" ")}
+                {text}
               </span>
             </div>
           </div>
@@ -122,8 +123,7 @@ class AuditLog extends Component {
       currentAuditPage,
       rowsAudit,
       handlePageChange,
-    } = this.props
-
+    } = this.props    
     return (
       <React.Fragment>
         <div className="tracking-list">
@@ -132,10 +132,13 @@ class AuditLog extends Component {
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <b>ACTION</b>
           </div>
-          {data.length === 0 ? null : (
+          {data.length === 0 ? 
+          <div>
+            <p>No Records Found!</p>
+            </div>
+          : (
             <div className="container-data">
-              {data
-                .map((audit, idx) => (
+              {data.map((audit, idx) => (
                   <div key={idx} className="tracking-item">
                     {" "}
                     {this.modalData(audit, idx)}

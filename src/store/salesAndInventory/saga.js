@@ -34,7 +34,7 @@ import {
   updateSaleAndInventoryVarianceControl,
   updateSaleAndInventoryTankStatusModal,
   getSaleAndInventory,
-  getSalesAuditLog,
+  getAuditLog,
   getDownloadSales,
   getSaleAndInventoryDetail,
   updateSaleAndInventoryDetail
@@ -90,9 +90,9 @@ function* onUpdateSalesAndInventoryTankStatusModal(payload) {
   }
 }
 
-function* onGetSalesAuditLog() {
+function* onGetSalesAuditLog(params) {
   try {
-    const response = yield call(getSalesAuditLog)
+    const response = yield call(getAuditLog, params.params)
     yield put(getSalesAuditLogSuccess(response))
   } catch (error) {
     yield put(getSalesAuditLogFail(error))

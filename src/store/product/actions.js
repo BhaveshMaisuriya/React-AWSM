@@ -50,8 +50,9 @@ export const getDownloadProductFail = error => ({
   payload: error
 })
 
-export const getProductAuditLog = () => ({
+export const getProductAuditLog = (params) => ({
   type: GET_PRODUCT_AUDITLOG,
+  params,
 })
 
 export const getProductAuditLogSuccess = response => ({

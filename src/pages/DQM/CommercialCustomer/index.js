@@ -35,11 +35,9 @@ class CommercialCustomer extends Component {
       search_fields: transformArrayToString(searchFields),
     }
     const payload = {
-      limit: 6,
-      pagination: 0,
-      sort_dir: "desc",
-      sort_field: "created",
-      q: "commercial_customer",
+      limit: 10,
+      page: 1,
+      module: "commercial-customer",
     }
     await onGetCommercialCustomer(params)
     await onGetCommercialAuditLog(payload)
@@ -67,7 +65,7 @@ class CommercialCustomer extends Component {
       filterCom,
       address,
       commercialCustomerIsLoading,
-    } = this.props
+    } = this.props    
     const { searchFields } = this.state
     return (
       <Fragment>

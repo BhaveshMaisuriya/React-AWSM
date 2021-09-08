@@ -35,7 +35,7 @@ import {
 
 import {
   getSlaItems,
-  getSlaAuditLog,
+  getAuditLog,
   updateSlaItem,
   updateSLASection,
   getSLASection,
@@ -46,9 +46,9 @@ import {
   updateSLARecord
 } from "../../helpers/fakebackend_helper"
 
-function* onGetSLAAuditLog() {
+function* onGetSLAAuditLog(params) {
   try {
-    const response = yield call(getSlaAuditLog)
+    const response = yield call(getAuditLog, params.params)
     yield put(getSlaAuditLogSuccess(response))
   } catch (error) {
     yield put(getSlaAuditLogFail(error))

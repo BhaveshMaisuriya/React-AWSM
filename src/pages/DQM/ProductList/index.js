@@ -36,10 +36,8 @@ class Product extends Component {
     }
     const payload = {
       limit: 6,
-      pagination: 0,
-      sort_dir: "desc",
-      sort_field: "created",
-      q: "product",
+      page: 1,
+      module: "product",
     }
     onGetProducts(params)
     onGetProductAuditLog(payload)

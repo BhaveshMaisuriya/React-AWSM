@@ -38,10 +38,8 @@ class Terminal extends Component {
     }
     const payload = {
       limit: 6,
-      pagination: 0,
-      sort_dir: "desc",
-      sort_field: "created",
-      q: "product",
+      page: 1,
+      module: "terminal",
     }
     onGetTerminal(params)
     onGetTerminalAuditLog(payload)

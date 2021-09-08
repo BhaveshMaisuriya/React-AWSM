@@ -257,8 +257,10 @@ export const getRetailAuditLog = payload =>
   get(url.GET_RETAIL_AUDITLOG, { payload: payload })
 
 // get DQM Master Commercial Cust Audit Log
-export const getCommercialAuditLog = payload =>
-  get(url.GET_COMMERCIAL_AUDITLOG, { payload: payload })
+export const getAuditLog = (params) =>
+axios.get(
+  `https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/audit-log?module=${params.module}&page=${params.page}&limit=${params.limit}`
+)
 
 // get DQM Master Commercial Cust Audit Log
 export const getSalesAuditLog = payload =>

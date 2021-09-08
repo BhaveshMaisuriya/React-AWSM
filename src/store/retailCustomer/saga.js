@@ -25,7 +25,7 @@ import {
 
 import {
   getRetailCustomer,
-  getRetailAuditLog,
+  getAuditLog,
   getTableInformation,
   updateTableInformation,
   getDownloadRetailCustomer,
@@ -54,9 +54,9 @@ function* onGetDownloadRetailCustomer({ params = {} }) {
   }
 }
 
-function* onGetRetailAuditLog() {
+function* onGetRetailAuditLog(params) {
   try {
-    const response = yield call(getRetailAuditLog)
+    const response = yield call(getAuditLog, params.params)
     yield put(getRetailAuditLogSuccess(response))
   } catch (error) {
     yield put(getRetailAuditLogFail(error))

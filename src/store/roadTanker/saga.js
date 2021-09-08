@@ -32,7 +32,7 @@ import {
 
 import {
   getRoadTanker,
-  getRoadTankerAuditLog,
+  getAuditLog,
   getTableInformation,
   updateTableInformation,
   getDownloadRoadTanker,
@@ -63,9 +63,9 @@ function* onGetDownloadRoadTanker({ params = {} }) {
   }
 }
 
-function* onGetRoadTankerAuditLog() {
+function* onGetRoadTankerAuditLog(params) {
   try {
-    const response = yield call(getRoadTankerAuditLog)
+    const response = yield call(getAuditLog, params.params)
     yield put(getRoadTankerAuditLogSuccess(response))
   } catch (error) {
     yield put(getRoadTankerAuditLogFail(error))

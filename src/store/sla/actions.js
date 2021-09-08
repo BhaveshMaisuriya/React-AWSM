@@ -42,8 +42,9 @@ export const getSlaItemsFail = error => ({
   payload: error,
 })
 
-export const getSLAAuditLog = () => ({
+export const getSLAAuditLog = (params) => ({
   type: GET_SLA_AUDITLOG,
+  params,
 })
 
 export const getSlaAuditLogSuccess = response => ({

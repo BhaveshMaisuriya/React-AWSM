@@ -21,7 +21,7 @@ const DatePicker = ({
   startDate = null,
   endDate = null,
 }) => {
-  const [date, setDate] = useState(value ? new Date(value) : null)
+  const [date, setDate] = useState(value ? new Date(value) : new Date())
   const [anchorEl, setAnchorEl] = React.useState(null)
   const [dateButton, setDateButton] = useState(
     value ? new Date(value) : new Date()
@@ -30,7 +30,7 @@ const DatePicker = ({
   const open = Boolean(anchorEl)
   const id = Date.now().toString()
   useEffect(() => {
-    setDate(value ? new Date(value) : null)
+    setDate(value ? new Date(value) : new Date)
   }, [value])
   const [initialDate] = useState(value ? new Date(value) : null)
 

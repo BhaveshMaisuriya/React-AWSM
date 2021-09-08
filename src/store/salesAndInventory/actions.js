@@ -118,8 +118,9 @@ export const getSaleAndInventoryFilterFail = error => ({
   type: GET_SALES_AND_INVENTORY_FILTER_FAIL,
   payload: error,
 })
-export const getSalesAuditLog = () => ({
+export const getSalesAuditLog = (params) => ({
   type: GET_SALES_AUDITLOG,
+  params,
 })
 
 export const getSalesAuditLogSuccess = response => ({

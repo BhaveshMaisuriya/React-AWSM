@@ -24,15 +24,15 @@ import {
 
 import {
   getProducts,
-  getProductAuditLog,
+  getAuditLog,
   getProductDetail,
   updateProductDetail,
   getDownloadProducts,
 } from "../../helpers/fakebackend_helper"
 
-function* onGetProductAuditLog() {
+function* onGetProductAuditLog(params) {
   try {
-    const response = yield call(getProductAuditLog)
+    const response = yield call(getAuditLog, params.params)
     yield put(getProductAuditLogSuccess(response))
   } catch (error) {
     yield put(getProductAuditLogFail(error))

@@ -79,6 +79,7 @@ class Pages extends Component {
       tankStatusModal: false,
       region: null,
       terminal: null,
+      sales_date: new Date(),
     }
     this.toggle = this.toggle.bind(this)
     this.toggleTI = this.toggleTI.bind(this)
@@ -198,10 +199,11 @@ class Pages extends Component {
         >
           <h3>Audit Log</h3>
         </ModalHeader>
+        {console.log("audits:::", audits)}
         <AuditLog
           rowsAudit={rowsAudit}
           currentAuditPage={currentAuditPage}
-          data={audits.list}
+          data={audits?.data?.list}
           closeModal={this.closeHandler}
           handlePageChange={this.handleChangeAuditPage}
         />
@@ -402,7 +404,14 @@ class Pages extends Component {
                         <div className="d-flex align-items-center w-100 mt-4 mb-2">
                           <div className="col-4 p-0">
                             <label>DATE</label>
-                            <DatePicker showButtons={true} isTypeFor="sales" />
+                            <DatePicker showButtons={true} isTypeFor="sales"
+                            value={this.state.sales_date}
+                             onChange={value =>
+                              this.setState({
+                                ...this.state,
+                                sales_date: value,
+                              })
+            } />
                           </div>
                           <div className="col-6 p-0 ml-4">
                             <label>REGION & TERMINAL</label>

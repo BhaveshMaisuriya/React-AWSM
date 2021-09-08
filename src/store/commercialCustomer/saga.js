@@ -26,7 +26,7 @@ import {
 import {
   getCommercialCustomer,
   getDownloadCommercialCustomer,
-  getCommercialAuditLog,
+  getAuditLog,
   getCommercialDetail,
   putCommercialDetail,
 } from "../../helpers/fakebackend_helper"
@@ -54,9 +54,9 @@ function* onGetDownloadCommercialCustomer({ params = {} }) {
   }
 }
 
-function* onGetCommercialAuditLog() {
+function* onGetCommercialAuditLog(params) {
   try {
-    const response = yield call(getCommercialAuditLog)
+    const response = yield call(getAuditLog, params.params)
     yield put(getCommercialAuditLogSuccess(response))
   } catch (error) {
     yield put(getCommercialAuditLogFail(error))

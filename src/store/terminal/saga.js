@@ -26,7 +26,7 @@ import {
 
 import {
   getTerminal,
-  getTerminalAuditLog,
+  getAuditLog,
   getTableInformation,
   updateTableInformation,
   getTerminalTableInformation,
@@ -58,9 +58,9 @@ function* onGetDownloadTerminal({ params = {} }) {
   }
 }
 
-function* onGetTerminalAuditLog() {
+function* onGetTerminalAuditLog(params) {
   try {
-    const response = yield call(getTerminalAuditLog)
+    const response = yield call(getAuditLog, params.params)
     yield put(getTerminalAuditLogSuccess(response))
   } catch (error) {
     yield put(getTerminalAuditLogFail(error))

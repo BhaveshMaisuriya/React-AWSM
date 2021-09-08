@@ -56,16 +56,19 @@ const TankStatusModal = props => {
     updateSalesAndInventoryTankStatusModal,
   } = props
   const [modalConfirm, setModalConfirm] = useState(false)
+  const [unmodifiedStatus, setUnmodifiedStatus] = useState(true)
   const [data, setData] = useState(mockDataOfTankStatus.tableData)
   const [capacity, setCapacity] = useState(mockDataOfTankStatus.capacity)
-
   const handleUpdateButtonOnclick = () => {
     updateSalesAndInventoryTankStatusModal(data)
+    setUnmodifiedStatus(true)
+    if (handleClose) handleClose()
   }
 
   const handleOnchangeValueData = (value, index, fieldName) => {
     data[index][fieldName] = value
     setData([...data])
+    setUnmodifiedStatus(false)
   }
 
   const handleCancelModalConfirm = () => {
@@ -73,10 +76,20 @@ const TankStatusModal = props => {
   }
 
   const handleExitModalConfirm = () => {
-    handleClose()
-    setTimeout(() => {
-      setModalConfirm(false)
-    }, 500)
+    setModalConfirm(false)
+    setUnmodifiedStatus(true)
+    if (handleClose) handleClose()
+  }
+
+  const showExitConfirmation = () => {
+    return !unmodifiedStatus ? (
+      <ExitConfirmation
+        onExit={handleExitModalConfirm}
+        onCancel={handleCancelModalConfirm}
+      />
+    ) : (
+      handleExitModalConfirm()
+    )
   }
 
   return (
@@ -84,24 +97,13 @@ const TankStatusModal = props => {
       <div className={`tank_status`}>
         <Modal isOpen={open} size={`lg`} className="tank-status-modal">
           <div className="variance-control-container">
-            {/* <div className="d-flex align-items-center justify-content-between px-4 pt-4 pb-2">
-            <h3 className="variance-label">{modalTitle}</h3>
-            <div className="d-flex align-items-center">
-            <CloseButton handleClose={() => setModalConfirm(true)} />
-            </div>
-            </div> */}
             <ModalHeader
               close={<CloseButton handleClose={() => setModalConfirm(true)} />}
             >
               <h3>{modalTitle}</h3>
             </ModalHeader>
             <ModalBody className="variance-control-content position-relative">
-              {modalConfirm && (
-                <ExitConfirmation
-                  onExit={handleExitModalConfirm}
-                  onCancel={handleCancelModalConfirm}
-                />
-              )}
+              {modalConfirm && showExitConfirmation()}
               <div className="w-100">
                 <div className="px-2">
                   <Table responsive className="tank-status-table">
@@ -171,18 +173,22 @@ const TankStatusModal = props => {
                   />
                 </div>
                 <div className="d-flex align-items-center justify-content-end mt-5 mb-3 tank-status-footer">
-                  <button
-                    className="btn btn-outline-primary px-4"
-                    onClick={() => setModalConfirm(true)}
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    className="btn btn-primary ml-4 px-4"
-                    onClick={handleUpdateButtonOnclick}
-                  >
-                    Update
-                  </button>
+                  {!modalConfirm && !scheduler && (
+                    <>
+                      <button
+                        className="btn btn-outline-primary px-4"
+                        onClick={() => setModalConfirm(true)}
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        className="btn btn-primary ml-4 px-4"
+                        onClick={handleUpdateButtonOnclick}
+                      >
+                        Update
+                      </button>
+                    </>
+                  )}
                 </div>
               </div>
             </ModalBody>

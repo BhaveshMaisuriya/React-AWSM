@@ -26,6 +26,8 @@ const initialState = {
   varianceControlData: null,
   varianceControlError: null,
   mainTableData: [],
+  error: {},
+  tableError: null,
   filter: {},
   tankStatusModalError: null,
   auditsCom: [],
@@ -67,12 +69,13 @@ const SaleAndInventory = (state = initialState, action) => {
       return {
         ...state,
         mainTableData: action.payload,
+        tableError: null,
         isLoading: false,
       }
     case GET_SALES_AND_INVENTORY_FAIL:
       return {
         ...state,
-        mainTableData: action.payload,
+        tableError: action.payload,
         isLoading: false,
       }
     case GET_SALES_AND_INVENTORY_FILTER_SUCCESS:

@@ -37,7 +37,7 @@ import {
   getAuditLog,
   getDownloadSales,
   getSaleAndInventoryDetail,
-  updateSaleAndInventoryDetail
+  updateSaleAndInventoryDetail, getSaleAndInventoryByRecordId
 } from "../../helpers/fakebackend_helper"
 
 function* onGetSalesAndInventory({ params = {} }) {

@@ -311,7 +311,7 @@ class InformationModal extends Component {
                     </NavLink>
                   </NavItem>
                 </Nav>
-                <TabContent activeTab={activeTab}>
+                <TabContent activeTab={activeTab} className="py-4">
                   <TabPane tabId="1" style={{ marginRight: "-25px" }}>
                     <SimpleBar className="simple-bar">
                       <AvailabilityTab

@@ -19,6 +19,7 @@ import { ToastSuccess, ToastError } from "../../helpers/swal"
 const initialState = {
   commercialCustomers: [],
   error: {},
+  tableError: null,
   auditsCom: [],
   filterCom: [],
   currentCommercialDetail: null,
@@ -40,12 +41,13 @@ const CommercialCustomer = (state = initialState, action) => {
       return {
         ...state,
         commercialCustomers: action.payload,
+        tableError: null,
         isLoading: false,
       }
     case GET_COMMERCIAL_CUSTOMER_FAIL:
       return {
         ...state,
-        commercialCustomers: action.payload,
+        tableError: action.payload,
         isLoading: false,
       }
 

@@ -187,48 +187,48 @@ export const deleteOrderBankDetail = (params) => params
 // get retail customer
 export const getRetailCustomer = params =>
   axios.post(
-    "https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/retail-customer",
+    "/retail-customer",
     { ...params }
   )
 
 export const getDownloadRetailCustomer = params =>
   axios.post(
-    "https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/retail-customer",
+    "/retail-customer",
     { ...params }
   )
 
 export const getCommercialCustomer = params =>
   axios.post(
-    "https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/commercial-customer",
+    "/commercial-customer",
     { ...params }
   )
 
 export const getDownloadCommercialCustomer = params =>
   axios.post(
-    "https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/commercial-customer",
+    "/commercial-customer",
     { ...params }
   )
 
 export const getDownloadSales = params =>
   axios.post(
-    "https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/commercial-customer",
+    "/commercial-customer",
     { ...params }
   )
 
 export const getRoadTanker = params =>
   axios.post(
-    "https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/road-tanker",
+    "/road-tanker",
     { ...params }
   )
 
 export const getRoadTankerDetail = vehical_id =>
   axios.get(
-    `https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/road-tanker/${vehical_id}`,
+    `/road-tanker/${vehical_id}`,
   )
 
 export const updateRoadTankerDetail = payload => {
   return axios.put(
-    `https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/road-tanker/${payload?.vehicle_name}`,
+    `/road-tanker/${payload.vehicle_name}`,
     payload.data
   )
 }
@@ -236,19 +236,19 @@ export const updateRoadTankerDetail = payload => {
 
 export const getDownloadRoadTanker = params =>
   axios.post(
-    "https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/road-tanker",
+    "/road-tanker",
     { ...params }
   )
 
 export const getTerminal = params =>
   axios.post(
-    "https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/terminal",
+    "/terminal",
     { ...params }
   )
 
 export const getDownloadTerminal = params =>
   axios.post(
-    "https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/terminal",
+    "/terminal",
     { ...params }
   )
 
@@ -280,7 +280,7 @@ export const getTerminalAuditLog = payload =>
 export const getTerminalTableInformation = code =>
   axios
     .get(
-      `https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/terminal/${code}`
+      `/terminal/${code}`
     )
     .then(response => response.data)
 
@@ -288,21 +288,21 @@ export const getTerminalTableInformation = code =>
 export const getTableInformation = code =>
   code !== undefined && axios
     .get(
-      `https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/retail-customer/${code}`
+      `/retail-customer/${code}`
     )
     .then(response => response.data)
 
 // update Table Information
 export const updateTableInformation = event => {
   return axios.put(
-    `https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/retail-customer/${event.ship_to_party}`,
+    `/retail-customer/${event.preValue.ship_to_party}`,
     event
   )
 }
 export const updateTerminalDetail = event => {
   return axios.put(
-    `https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/terminal/${event.ship_to_party}`,
-    event.body
+    `/terminal/${event.preValue.code}`,
+    event
   )
 }
 
@@ -325,13 +325,13 @@ export const getTerminalFilter = params => {
 // export const getProducts = params => get(url.GET_PRODUCTS, { params: params })
 export const getProducts = params =>
   axios.post(
-    "https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/product",
+    "/product",
     { ...params }
   )
 
 export const getDownloadProducts = params =>
   axios.post(
-    "https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/product",
+    "/product",
     { ...params }
   )
 
@@ -349,7 +349,7 @@ export const getProductFilter = params =>
 
 export const getProductDetail = productCode =>
   axios.get(
-    `https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/product/${productCode}`
+    `/product/${productCode}`
   )
 
 // export const updateProductDetail = payload =>
@@ -357,21 +357,21 @@ export const getProductDetail = productCode =>
 
 export const updateProductDetail = payload =>
   axios.put(
-    `https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/product/${payload.code}`,
-    payload.body
+    `/product/${payload.preValue.code}`,
+    payload
   )
 
 export const getCommercialDetail = code =>
   axios
     .get(
-      `https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/commercial-customer/${code}`
+      `/commercial-customer/${code}`
     )
     .then(response => response.data)
 
 export const putCommercialDetail = data =>
   axios
     .put(
-      `https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/commercial-customer/${data.ship_to_party}`,
+      `/commercial-customer/${data.preValue.ship_to_party}`,
       data
     )
     .then(response => response.data)
@@ -383,6 +383,7 @@ export const getRoadTankerFilter = params => {
 
 export const getSaleAndInventoryVarianceControl = () =>
   get(`${url.GET_SALES_AND_INVENTORY_VARIANCE_CONTROL}`)
+
 export const updateSaleAndInventoryVarianceControl = () =>
   put(`${url.GET_SALES_AND_INVENTORY_VARIANCE_CONTROL}`)
 
@@ -397,38 +398,43 @@ export const updateSaleAndInventoryDetail = () =>
   put(`/sales_and_inventory_detail`)
 
 // get sales and inventory table data
+// "https://6073f3f2066e7e0017e78a3d.mockapi.io/api/v1/sales"
 export const getSaleAndInventory = params =>
-  axios.get(
-    "https://6073f3f2066e7e0017e78a3d.mockapi.io/api/v1/sales",
+  axios.post(
+    "/sales-inventory",
     { ...params }
   )
 
+export const getSaleAndInventoryByRecordId = recordId =>{
+  axios.get(`/sales-inventory/${recordId}`)
+}
+
 export const getSlaItems = params =>
   axios
-    .get("https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/sla")
+    .get("/sla")
     .then(response => response.data)
 
 export const updateSLASection = ({ category, id, data }) =>
   axios
     .put(
-      `https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/sla/${category}/section/${id}`,
+      `/sla/${category}/section/${id}`,
       data
     )
     .then(response => response.data)
 
 export const getSLASection = ({ category }) =>
-  axios.get(`https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/sla/${category}`)
+  axios.get(`/sla/${category}`)
     .then(response => response.data)
 
 export const deleteSLASection = ({ category, id }) =>
   axios
-    .delete(`https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/sla/${category}/section/${id}`)
+    .delete(`/sla/${category}/section/${id}`)
     .then(response => response.data)
 
 export const createSLASection = ({ category, data }) =>
   axios
     .post(
-      `https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/sla/${category}/section`,
+      `/sla/${category}/section`,
       data
     )
     .then(response => response.data)
@@ -436,21 +442,21 @@ export const createSLASection = ({ category, data }) =>
 export const createSLATableRecord = (data) =>
   axios
     .post(
-      `https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/sla/${data.category}/section/${data.sectionId}/record`,
+      `/sla/${data.category}/section/${data.sectionId}/record`,
       data.recordValue
     )
     .then(response => response.data)
 
 export const deleteSLARecord = ({ category, id, recordId }) =>
   axios
-    .delete(`https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/sla/${category}/section/${id}/record/${recordId}`)
+    .delete(`/sla/${category}/section/${id}/record/${recordId}`)
     .then(response => response.data)
 
 
 export const updateSLARecord = (data) =>
   axios
     .put(
-      `https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/sla/${data.category}/section/${data.sectionId}/record/${data.recordId}`,
+      `/sla/${data.category}/section/${data.sectionId}/record/${data.recordId}`,
       data.recordValue
     )
     .then(response => response.data)

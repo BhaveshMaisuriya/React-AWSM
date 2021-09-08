@@ -74,7 +74,7 @@ class SalesInventory extends Component {
       downloadtableData,
       audits,
       filter,
-      address,
+      tableError,
       varianceControlData,
       saleAndInventoryIsLoading,
       overrideStatusInActionColumn,
@@ -82,9 +82,8 @@ class SalesInventory extends Component {
     const { searchFields } = this.state
     return (
       <Fragment>
-        {saleAndInventory && saleAndInventory.length === 0 && <Loader />}
         {saleAndInventoryIsLoading ? <Loader /> : ""}
-        {saleAndInventory && saleAndInventory.list && (
+        {saleAndInventory.list && (
           <Page
             tableName={tableName}
             onGetMainTable={onGetSaleAndInventory}
@@ -98,7 +97,6 @@ class SalesInventory extends Component {
             downloadtableData={downloadtableData}
             audits={audits}
             filter={filter}
-            address={address}
             headerTitle="Sales & Inventory"
             cardTitle="Sales & Inventory List"
             modalComponent={SalesAndInventoryModal}
@@ -108,18 +106,28 @@ class SalesInventory extends Component {
             overrideActionColumn={overrideStatusInActionColumn}
           />
         )}
+        {tableError && (
+          <div className="page-content">
+            <div className="container-fluid">
+              <p>
+                There's some issue loading the data. Please refresh the page or
+                try again later
+              </p>
+            </div>
+          </div>
+        )}
       </Fragment>
     )
   }
 }
 
-const mapStateToProps = ({ retailCustomer, saleAndInventory }) => ({
+const mapStateToProps = ({ saleAndInventory }) => ({
   saleAndInventory: saleAndInventory.mainTableData,
+  tableError: saleAndInventory.tableError,
   saleAndInventoryIsLoading: saleAndInventory.isLoading,
   audits: saleAndInventory.auditsCom,
   downloadtableData: saleAndInventory.downloadtableData,
   filter: saleAndInventory.filter,
-  address: retailCustomer.address,
   varianceControlData: saleAndInventory.varianceControlData,
 })
 

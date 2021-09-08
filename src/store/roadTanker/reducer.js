@@ -22,6 +22,7 @@ import { ToastSuccess, ToastError } from "../../helpers/swal"
 const initialState = {
   roadTanker: [],
   error: {},
+  tableError: null,
   auditsRoadTanker: [],
   address: [],
   filterRoadTanker: [],
@@ -42,6 +43,7 @@ const RoadTanker = (state = initialState, action) => {
       return {
         ...state,
         roadTanker: action.payload,
+        tableError: null,
         isLoading: false,
         isUpdateSuccess: false,
       }
@@ -49,7 +51,7 @@ const RoadTanker = (state = initialState, action) => {
     case GET_ROAD_TANKER_FAIL:
       return {
         ...state,
-        roadTanker: action.payload,
+        tableError: action.payload,
         isLoading: false,
       }
 

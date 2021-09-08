@@ -26,15 +26,19 @@ const TabStatus = ({ scheduler, data, onChange }) => {
   const onFieldChange = (key, subKey, value) => {
     const newStatusData = { ...statusData }
     if (subKey) {
-      if (key === "close_period" && !newStatusData[key]) {
-        newStatusData[key] = {
-          id: null,
-          type: "range",
-          days: "",
-          date_from: null,
-          date_to: null,
-          time_from: null,
-          time_to: null,
+      if (key === "close_period") {
+        if (!newStatusData[key]) {
+          newStatusData[key] = {
+            id: null,
+            type: "range",
+            days: "",
+            date_from: null,
+            date_to: null,
+            time_from: null,
+            time_to: null,
+          }
+        } else {
+          newStatusData[key] = { ...newStatusData[key]}
         }
       }
       newStatusData[key][subKey] = value
@@ -140,6 +144,7 @@ const TabStatus = ({ scheduler, data, onChange }) => {
         <Col className="col-3">
           <label>TIME</label>
           <AWSMDropdown
+            flip={true}
             items={timeData}
             optionValue={true}
             value={
@@ -177,6 +182,7 @@ const TabStatus = ({ scheduler, data, onChange }) => {
         <Col className="col-3">
           <label>TIME</label>
           <AWSMDropdown
+            flip={true}
             items={timeData}
             value={
               statusData.close_period

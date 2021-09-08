@@ -28,7 +28,7 @@ const CustomRadioButton = ({
     width: `${size}px`,
     height: `${size}px`
   }
-  // console.log(checked + value)
+
   return (
     <label
       className={`d-block custom-radio-button-aws position-relative user-select-none rounded-circle ml-3 ${classes}`}

@@ -181,6 +181,7 @@ const RetailCustomerModal = props => {
                     defaultValue={currentRetailDetail.remarks}
                     onChange={value => onFieldValueChange("remarks", value)}
                     disabled={scheduler}
+                    placeholder='Type something here ...'
                   />
                 </Col>
               </Row>

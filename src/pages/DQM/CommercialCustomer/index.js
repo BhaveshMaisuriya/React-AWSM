@@ -62,16 +62,15 @@ class CommercialCustomer extends Component {
       commercialCustomer,
       downloadCommercialCustomer,
       auditsCom,
+      tableError,
       filterCom,
-      address,
       commercialCustomerIsLoading,
     } = this.props    
     const { searchFields } = this.state
     return (
       <Fragment>
-        {commercialCustomer && commercialCustomer.length === 0 && <Loader />}
         {commercialCustomerIsLoading ? <Loader /> : ""}
-        {commercialCustomer && (
+        {commercialCustomer.list && (
           <Page
             onGetMainTable={onGetCommercialCustomer}
             onGetAuditLog={onGetCommercialAuditLog}
@@ -84,7 +83,6 @@ class CommercialCustomer extends Component {
             downloadtableData={downloadCommercialCustomer}
             audits={auditsCom}
             filter={filterCom}
-            address={address}
             headerTitle="Commercial Customer"
             cardTitle="Commercial Customer List"
             tableName={CommercialCustomerTableName}
@@ -92,17 +90,27 @@ class CommercialCustomer extends Component {
             onGetDownloadCustomer={this.GetonDownload}
           />
         )}
+        {tableError && (
+          <div className="page-content">
+            <div className="container-fluid">
+              <p>
+                There's some issue loading the data. Please refresh the page or
+                try again later
+              </p>
+            </div>
+          </div>
+        )}
       </Fragment>
     )
   }
 }
 
-const mapStateToProps = ({ commercialCustomer, retailCustomer }) => ({
+const mapStateToProps = ({ commercialCustomer }) => ({
   commercialCustomer: commercialCustomer.commercialCustomers,
+  tableError: commercialCustomer.tableError,
   commercialCustomerIsLoading: commercialCustomer.isLoading,
   auditsCom: commercialCustomer.auditsCom,
   filterCom: commercialCustomer.filterCom,
-  address: retailCustomer.address,
   downloadCommercialCustomer: commercialCustomer.downloadCommercialCustomer,
 })
 

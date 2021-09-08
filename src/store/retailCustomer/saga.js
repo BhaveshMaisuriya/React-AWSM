@@ -1,4 +1,4 @@
-import { takeLatest, put, call, takeEvery } from "redux-saga/effects"
+import { takeLatest, put, call, takeEvery, select } from "redux-saga/effects"
 import Factory from "./factory"
 import {
   GET_RETAIL_CUSTOMER,
@@ -75,7 +75,8 @@ function* onGetTableInformation({ params }) {
 
 function* onUpdateTableInformation({ payload }) {
   try {
-    const response = yield call(updateTableInformation, payload)
+    let preValue = yield select(store => store.retailCustomer.currentRetailDetail)
+    const response = yield call(updateTableInformation, { updateValue: payload, preValue })
     yield put(updateTableInformationSuccess(response))
   } catch (error) {
     yield put(updateTableInformationFail(error))

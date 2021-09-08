@@ -87,9 +87,11 @@
       color: #9EA0A5;
     }
   }
-.border-none {
-  border: unset !important;
-}
+  
+  .border-none {
+    border: unset !important;
+  }  
+
   .add-note-content-container {
     position: relative;
     height: 200px;

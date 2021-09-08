@@ -1,4 +1,4 @@
-import { put, call, takeEvery } from "redux-saga/effects"
+import { put, call, takeEvery, select } from "redux-saga/effects"
 import factory from "./factory"
 import {
   GET_PRODUCT_AUDITLOG,
@@ -73,7 +73,8 @@ function* onGetProductDetail(action) {
 
 function* onUpdateProductDetail(action) {
   try {
-    const response = yield call(updateProductDetail, action.params)
+    const preValue = yield select(store => store.products.currentProduct)
+    const response = yield call(updateProductDetail, { updateValue: action.params.body, preValue })
     yield put(updateProductDetailSuccess(response))
   } catch (error) {
     yield put(updateProductDetailFail(error))

@@ -62,15 +62,15 @@ class Product extends Component {
       products,
       audits,
       filter,
+      tableError,
       downloadProduct,
       productsIsLoading,
     } = this.props
     const { searchFields } = this.state
     return (
       <Fragment>
-        {products && products.length === 0 && <Loader />}
         {productsIsLoading ? <Loader /> : ""}
-        {products && (
+        {products.list && (
           <Page
             headerTitle="Product"
             cardTitle="Product List"
@@ -90,6 +90,16 @@ class Product extends Component {
             onGetDownloadCustomer={this.GetonDownload}
           />
         )}
+        {tableError && (
+          <div className="page-content">
+            <div className="container-fluid">
+              <p>
+                There's some issue loading the data. Please refresh the page or
+                try again later
+              </p>
+            </div>
+          </div>
+        )}
       </Fragment>
     )
   }
@@ -97,6 +107,7 @@ class Product extends Component {
 
 const mapStateToProps = ({ products }) => ({
   products: products.dataList,
+  tableError: products.tableError,
   productsIsLoading: products.isLoading,
   audits: products.productAuditLog,
   filter: products.productFilter,

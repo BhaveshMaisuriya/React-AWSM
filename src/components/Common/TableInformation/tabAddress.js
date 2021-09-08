@@ -109,7 +109,7 @@ const TabAddress = ({ scheduler, data, onChange }) => {
           <label>REGION</label>
           <AWSMInput
             value={
-              addressData.address ? addressData.address.region_name || "" : ""
+              addressData.address ? addressData.address.region_group || "" : ""
             }
             disabled
           />

@@ -146,6 +146,7 @@ const VarianceControl = ({
   updateSalesAndInventoryVarianceControl,
 }) => {
   const scheduler = isScheduler()
+  const [unmodifiedStatus, setUnmodifiedStatus] = useState(true)
   const [data, setData] = useState({
     ...varianceControlData,
     date: format(new Date(), "yyyy-MM-dd"),
@@ -162,18 +163,12 @@ const VarianceControl = ({
     }
   }, [open])
 
-  const showConfirm = () => {
-    if (scheduler && closeDialog) {
-      return closeDialog()
-    }
-    setIsConfirm(true)
-  }
-
-  const onCancel = () => {
+  const handleCancel = () => {
     setIsConfirm(false)
   }
 
-  const onExit = () => {
+  const handleExit = () => {
+    setUnmodifiedStatus(true)
     setIsConfirm(false)
     if (closeDialog) {
       closeDialog()
@@ -185,16 +180,27 @@ const VarianceControl = ({
       onChange()
     }
     updateSalesAndInventoryVarianceControl(data)
-    if (closeDialog) {
-      closeDialog()
-    }
+    handleExit()
   }
+
+  const onModifyData = newValue => {
+    setData(newValue)
+    setUnmodifiedStatus(false)
+  }
+
+  const showExitConfirmation = () => {
+    return !unmodifiedStatus ? (
+      <ExitConfirmation onExit={handleExit} onCancel={handleCancel} />
+    ) : (
+      handleExit()
+    )
+  }
+
   return (
     <Modal isOpen={open} className="variance-control-modal">
       <div className="variance-control-container">
         <ModalHeader
-          // toggle={showConfirm}
-          close={<CloseButton handleClose={showConfirm} />}
+          close={<CloseButton handleClose={() => setIsConfirm(true)} />}
         >
           <h3>Variance Control</h3>
           <span className="last-updated-sub-title flex-grow-1">
@@ -202,9 +208,7 @@ const VarianceControl = ({
           </span>
         </ModalHeader>
         <ModalBody className="variance-control-content position-relative">
-          {isConfirm && (
-            <ExitConfirmation onExit={onExit} onCancel={onCancel} />
-          )}
+          {isConfirm && showExitConfirmation()}
           <div className="w-100">
             <div>
               <div className="px-2">
@@ -215,7 +219,7 @@ const VarianceControl = ({
                     headers={headers}
                     scheduler={scheduler}
                     rowKey="station_tank_status"
-                    onChange={value => setData({ ...data, sales: value })}
+                    onChange={value => onModifyData({ ...data, sales: value })}
                   />
                 )}
               </div>
@@ -229,17 +233,19 @@ const VarianceControl = ({
                     headers={headers}
                     scheduler={scheduler}
                     rowKey="station_tank_status"
-                    onChange={value => setData({ ...data, inventory: value })}
+                    onChange={value =>
+                      onModifyData({ ...data, inventory: value })
+                    }
                   />
                 )}
               </div>
             </div>
             <div className="d-flex align-items-center justify-content-end mt-4 mb-4 px-4">
-              {!scheduler && (
+              {!isConfirm && !scheduler && (
                 <>
                   <button
                     className="btn btn-outline-primary px-4"
-                    onClick={showConfirm}
+                    onClick={() => setIsConfirm(true)}
                   >
                     Cancel
                   </button>

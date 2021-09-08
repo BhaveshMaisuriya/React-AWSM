@@ -1,4 +1,4 @@
-import { takeLatest, put, call, takeEvery } from "redux-saga/effects"
+import { takeLatest, put, call, takeEvery, select } from "redux-saga/effects"
 import Factory, { mergeFilterValues } from "./factory"
 import {
   GET_TERMINAL,
@@ -78,7 +78,8 @@ function* fetchTableInformation({ code }) {
 
 function* onUpdateTableInformation({ payload: event }) {
   try {
-    const response = yield call(updateTerminalDetail, event)
+    const preValue = yield select(store => store.terminal.currentTerminal)
+    const response = yield call(updateTerminalDetail, { updateValue: event.body, preValue })
     yield put(updateTableInformationSuccess(response))
   } catch (error) {
     yield put(updateTableInformationFail(error))

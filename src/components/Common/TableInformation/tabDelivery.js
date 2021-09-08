@@ -12,7 +12,7 @@ import DropdownInput from "../DropdownInput"
 import AWSMInput from "../Input"
 import AWSMCheckBox from "../../../common/CheckBox"
 
-const timeData = []
+const timeData = ["None"]
 for (let i = 0; i < 24; i++) {
   timeData.push(`${i.toString().padStart(2, "0")}:00`)
   timeData.push(`${i.toString().padStart(2, "0")}:30`)
@@ -558,6 +558,7 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
               </Col>
               <Col className="col-md-3">
                 <TimePicker
+                  flip={true}
                   items={timeData}
                   disabled={index < 2 ? true : scheduler}
                   value={deliveryData[subKey]?.time_from}
@@ -581,6 +582,7 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
               </Col>
               <Col className="col-md-3">
                 <TimePicker
+                  flip={true}
                   items={timeData}
                   disabled={index < 2 ? true : scheduler}
                   value={deliveryData[subKey]?.time_to}

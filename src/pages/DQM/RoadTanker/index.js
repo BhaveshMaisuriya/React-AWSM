@@ -11,7 +11,7 @@ import {
 import { tableColumns, tableMapping } from "./tableMapping"
 import InformationModal from "./InformationModal"
 import { transformArrayToString, getCookieByKey } from "./../Common/helper"
-import { auditsRoadTanker, address } from "../../../common/data/roadTanker"
+import { auditsRoadTanker } from "../../../common/data/roadTanker"
 import Loader from "../../../components/Common/Loader"
 
 const RoadTankerTableName = "road-tanker-table"
@@ -70,6 +70,7 @@ class RoadTanker extends Component {
       filterRoadTanker,
       downloadRoadTanker,
       roadTanker,
+      tableError,
       roadTankerIsLoading,
     } = this.props
 
@@ -77,9 +78,8 @@ class RoadTanker extends Component {
 
     return (
       <Fragment>
-        {roadTanker && roadTanker.length === 0 && <Loader />}
         {roadTankerIsLoading ? <Loader /> : ""}
-        {roadTanker && (
+        {roadTanker.list && (
           <Page
             onGetMainTable={onGetRoadTanker}
             onGetAuditLog={onGetRoadTankerAuditLog}
@@ -93,12 +93,21 @@ class RoadTanker extends Component {
             downloadtableData={downloadRoadTanker}
             audits={auditsRoadTanker}
             filter={filterRoadTanker}
-            address={address}
             headerTitle="Road Tanker"
             cardTitle="Road Tanker List"
             modalComponent={InformationModal}
             onGetDownloadCustomer={this.GetonDownload}
           />
+        )}
+        {tableError && (
+          <div className="page-content">
+            <div className="container-fluid">
+              <p>
+                There's some issue loading the data. Please refresh the page or
+                try again later
+              </p>
+            </div>
+          </div>
         )}
       </Fragment>
     )
@@ -107,6 +116,7 @@ class RoadTanker extends Component {
 
 const mapStateToProps = ({ roadTanker }) => ({
   roadTanker: roadTanker.roadTanker,
+  tableError: roadTanker.tableError,
   roadTankerIsLoading: roadTanker.isLoading,
   filterRoadTanker: roadTanker.filterRoadTanker,
   downloadRoadTanker: roadTanker.downloadRoadTanker,

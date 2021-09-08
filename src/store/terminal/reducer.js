@@ -19,6 +19,7 @@ import { ToastSuccess, ToastError } from "../../helpers/swal"
 const initialState = {
   terminal: [],
   error: {},
+  tableError: null,
   auditsTerminal: [],
   address: [],
   filterTerminal: [],
@@ -40,13 +41,14 @@ const Terminal = (state = initialState, action) => {
         ...state,
         terminal: action.payload,
         isLoading: false,
+        tableError: null,
         isFetchDataAfterChange: false,
       }
 
     case GET_TERMINAL_FAIL:
       return {
         ...state,
-        error: action.payload,
+        tableError: action.payload,
         isLoading: false,
       }
 

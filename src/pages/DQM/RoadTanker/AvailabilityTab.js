@@ -14,7 +14,7 @@ class AvailabilityTab extends PureComponent {
 
     this.state = {
       date: new Date(),
-      isDateRangeError: (props?.data?.status_awsm === "Temporary Blocked" && this.isEmptyDate(props?.data?.block_date_range))
+      isDateRangeError: !(props?.data?.status_awsm === "Temporary Blocked" && this.isEmptyDate(props?.data?.block_date_range))
     }
   }
 
@@ -45,14 +45,6 @@ class AvailabilityTab extends PureComponent {
     newData[key] = value
     onChange("availability", newData)
   }
-
-  // onComponentDidMount() {
-  //   const { data } = this.props
-  //   if (data?.status_awsm === "Temporary Blocked" && this.isEmptyDate(data?.block_date_range)) {
-  //     this.setState({ isDateRangeError: true })
-
-  //   }
-  // }
 
   render() {
     const { mode, scheduler, data, isActive } = this.props

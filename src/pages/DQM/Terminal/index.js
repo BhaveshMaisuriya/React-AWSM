@@ -64,6 +64,7 @@ class Terminal extends Component {
       onGetTableInformation,
       onUpdateTableInformation,
       terminalTable,
+      tableError,
       auditsTerminal,
       downloadTerminal,
       filterTerminal,
@@ -73,9 +74,8 @@ class Terminal extends Component {
     const { searchFields } = this.state
     return (
       <Fragment>
-        {terminalTable && terminalTable.length === 0 && <Loader />}
         {terminalTableIsLoading ? <Loader /> : ""}
-        {terminalTable && (
+        {terminalTable.list && (
           <Page
             headerTitle="Terminal"
             cardTitle="Terminal List"
@@ -96,6 +96,16 @@ class Terminal extends Component {
             resetCurrentTerminalDetail={resetCurrentTerminalDetail}
           />
         )}
+        {tableError && (
+          <div className="page-content">
+            <div className="container-fluid">
+              <p>
+                There's some issue loading the data. Please refresh the page or
+                try again later
+              </p>
+            </div>
+          </div>
+        )}
       </Fragment>
     )
   }
@@ -103,6 +113,7 @@ class Terminal extends Component {
 
 const mapStateToProps = ({ terminal }) => ({
   terminalTable: terminal.terminal,
+  tableError: terminal.tableError,
   terminalTableIsLoading: terminal.isLoading,
   auditsTerminal: terminal.auditsTerminal,
   filterTerminal: terminal.filterTerminal,

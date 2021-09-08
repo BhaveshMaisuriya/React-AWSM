@@ -66,15 +66,14 @@ class RetailCustomer extends Component {
       retailCustomer,
       audits,
       filter,
-      address,
+      tableError,
       downloadretailCustomer,
     } = this.props
     const { searchFields } = this.state
     return (
       <Fragment>
-        {retailCustomer && retailCustomer.length === 0 && <Loader />}
         {retailCustomerIsLoading ? <Loader /> : ""}
-        {retailCustomer && (
+        {retailCustomer.list && (
           <Page
             tableName={RetailTableName}
             onGetMainTable={onGetRetailCustomer}
@@ -88,12 +87,21 @@ class RetailCustomer extends Component {
             downloadtableData={downloadretailCustomer}
             audits={audits}
             filter={filter}
-            address={address}
             headerTitle="Retail Customer"
             cardTitle="Retail Customer List"
             modalComponent={RetailCustomerModal}
             onGetDownloadCustomer={this.GetonDownload}
           />
+        )}
+        {tableError && (
+          <div className="page-content">
+            <div className="container-fluid">
+              <p>
+                There's some issue loading the data. Please refresh the page or
+                try again later
+              </p>
+            </div>
+          </div>
         )}
       </Fragment>
     )
@@ -102,10 +110,10 @@ class RetailCustomer extends Component {
 
 const mapStateToProps = ({ retailCustomer }) => ({
   retailCustomer: retailCustomer.retailCustomers,
+  tableError: retailCustomer.tableError,
   retailCustomerIsLoading: retailCustomer.isLoading,
   audits: retailCustomer.audits,
   filter: retailCustomer.filter,
-  address: retailCustomer.address,
   downloadretailCustomer: retailCustomer.downloadretailCustomers,
 })
 

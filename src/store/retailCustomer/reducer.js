@@ -17,6 +17,7 @@ import {
 const initialState = {
   retailCustomers: [],
   error: {},
+  tableError: null,
   audits: [],
   address: [],
   filter: [],
@@ -39,13 +40,14 @@ const RetailCustomer = (state = initialState, action) => {
       return {
         ...state,
         retailCustomers: action.payload,
+        tableError: null,
         isLoading: false,
       }
 
     case GET_RETAIL_CUSTOMER_FAIL:
       return {
         ...state,
-        retailCustomers: action.payload,
+        tableError: action.payload,
         isLoading: false,
       }
 

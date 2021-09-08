@@ -94,7 +94,7 @@ class FixedCoulmnTable extends Component {
         <td className="h-145"></td>
       </tr>
     ) : (
-      arr.map((e, index) => {
+      arr && arr.map((e, index) => {
         return <tr key={index}>{this.renderFrozenTd(e, index)}</tr>
       })
     )
@@ -123,9 +123,10 @@ class FixedCoulmnTable extends Component {
     const { overrideActionColumn } = this.props
     let result
     if (
-      Math.abs(data.sales_variance) > salesValue.variance_value ||
-      Math.abs(data.inventory_variance) > inventoryValue.variance_value ||
-      Math.abs(data.sales_variance_percentage) > salesValue.variance_percentage
+      data && salesValue && inventoryValue &&
+      (Math.abs(data.sales_variance) > salesValue?.variance_value ||
+      Math.abs(data.inventory_variance) > inventoryValue?.variance_value ||
+      Math.abs(data.sales_variance_percentage) > salesValue?.variance_percentage)
     ) {
       result = (
         <div

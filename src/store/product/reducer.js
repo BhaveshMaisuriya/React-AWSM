@@ -19,6 +19,7 @@ import { ToastSuccess, ToastError } from "../../helpers/swal"
 const initialState = {
   dataList: [],
   error: null,
+  tableError: null,
   productAuditLog: [],
   productFilter: [],
   currentProduct: null,
@@ -39,13 +40,14 @@ const Product = (state = initialState, action) => {
         ...state,
         dataList: action.payload,
         isLoading: false,
+        tableError: null,
         updateStatus: false,
       }
 
     case GET_PRODUCT_FAIL:
       return {
         ...state,
-        dataList: action.payload,
+        tableError: action.payload,
         isLoading: false,
       }
 

@@ -1,4 +1,4 @@
-import { takeLatest, put, call, takeEvery } from "redux-saga/effects"
+import { takeLatest, put, call, takeEvery, select } from "redux-saga/effects"
 import { Factory } from "./factory"
 import {
   GET_DOWNLOAD_ROAD_TANKER,
@@ -101,7 +101,8 @@ function* onGetRoadTankerDetail({ params }) {
 
 function* onUpdateRoadTankerDetail({ params }) {
   try {
-    const response = yield call(updateRoadTankerDetail, params)
+    const preValue = yield select(store => store.roadTanker.currentRoadTanker.data)
+    const response = yield call(updateRoadTankerDetail, { ...params, data: { preValue, updateValue: params.data}})
     yield put(updateRoadTankerDetailSuccess(response))
   } catch (error) {
     yield put(updateRoadTankerDetailFail(error))

@@ -542,7 +542,6 @@ Pages.propType = {
   tableData: PropTypes.object.isRequired,
   audits: PropTypes.object.isRequired,
   filter: PropTypes.array.isRequired,
-  address: PropTypes.object.isRequired,
   headerTitle: PropTypes.string.isRequired,
   cardTitle: PropTypes.string.isRequired,
   tableName: PropTypes.string.isRequired,

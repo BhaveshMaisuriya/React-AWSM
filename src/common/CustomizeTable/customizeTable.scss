@@ -1,8 +1,20 @@
+#customize_popup {
+  font-family: "Museo Sans", serif;
+  .modal-title {
+    color: #000000;
+    font-size: 24px;
+    letter-spacing: 0;
+    line-height: 26px;
+    padding: 0px !important;
+  }
+}
+
 .customize-table-container {
   overflow: hidden;
-  height: 75vh;
-  width: 800px;
-
+  max-height: 75vh;
+  max-width: 800px;
+  padding-top: 4px !important;
+  padding-bottom: 0px !important;
   .customize-table-title {
     h3 {
       color: black;
@@ -22,7 +34,7 @@
   }
 
   .customize-table-content {
-    max-height: 85%;
+    max-height: 60vh;
     display: flex;
 
     & > div {
@@ -47,7 +59,8 @@
 
     div[data-rbd-droppable-id="droppable"] {
       background-color: white;
-      width: 100%;
+      width: 90%;
+      padding-left: 8px;
 
       .drag-content {
         display: flex;
@@ -88,21 +101,39 @@
       }
     }
   }
+}
+.customize-table-footer {
+  display: flex;
+  flex-direction: column;
+  .customize-table-footer-error {
+    display: flex;
+    width: 100%;
+    justify-content: flex-start;
+    height: 1rem;
+    color: red;
+    margin-top: 0.2rem;
+    padding-bottom: 1.5rem;
 
-  .customize-table-footer {
-    .customize-table-footer-error {
+    & > div {
+      margin-left: 0.5rem;
+    }
+
+    & > svg {
+      width: 0.9rem;
+    }
+  }
+  .customize-table-footer-buttons {
+    padding: 0px !important;
+    display: flex;
+    width: 100%;
+    .default-button {
       display: flex;
-      height: 1rem;
-      color: red;
-      margin-top: 0.2rem;
-
-      & > div {
-        margin-left: 0.5rem;
-      }
-
-      & > svg {
-        width: 0.9rem;
-      }
+      justify-content: flex-start;
+      padding-left: 0px !important;
+    }
+    .cancel-save-buttons {
+      display: flex;
+      justify-content: flex-end;
     }
   }
 }
@@ -119,10 +150,9 @@
 }
 #customize_popup.modal-dialog {
   max-width: 810px !important;
-  width: 100%;
 }
 
 .btn-size {
-  height: 42px;
+  height: 40px;
   width: 120px;
 }

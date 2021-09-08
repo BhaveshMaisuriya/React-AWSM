@@ -204,7 +204,7 @@ const SLAAddNote = ({ data, onSubmit, onDeleteNote, disabled }) => {
         </div>
       )}
       
-        <div className={onEditing ? "add-note-content-container" : "d-none"}>
+        <div className={onEditing ? !showExitConfirm ? "add-note-content-container" : "add-note-content-container border-none" : "d-none"}>
         {showExitConfirm ? 
       <ExitConfirmation onExit={onCancelConfirm} onCancel={onConfirmCancel} /> : (
         <CKEditor

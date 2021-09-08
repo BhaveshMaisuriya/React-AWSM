@@ -7,7 +7,14 @@ import { XIcon, AlertIcon, EllipsisIcon, RefreshDotIcon } from "./icons"
 import CloseButton from "../../components/Common/CloseButton"
 // Css
 import "./customizeTable.scss"
-import { Modal, ModalBody, ModalHeader } from "reactstrap"
+import {
+  Modal,
+  ModalBody,
+  ModalHeader,
+  ModalFooter,
+  Col,
+  Row,
+} from "reactstrap"
 /**
  * Select item component
  * @param item
@@ -243,6 +250,7 @@ const CustomizeTableModal = ({
       ...item,
       disabled: false,
     }))
+    const pathName = window.location.pathname
     const dragIndex = newItemToDrag.findIndex(element => element.id === item.id)
     if (item.checked && dragIndex < 0) {
       newItemToDrag.push(item)
@@ -276,6 +284,10 @@ const CustomizeTableModal = ({
           item.checked ? { ...item, disabled: true } : item
         )
       )
+      if (pathName === "/sales-inventory")
+        return setError(
+          `Must not be less than ${defaultMetric.length - 2} metrics`
+        )
       return setError(
         `Must not be less than ${defaultMetric.length - 1} metrics`
       )
@@ -322,6 +334,13 @@ const CustomizeTableModal = ({
     if (closeDialog) {
       closeDialog()
     }
+  }
+
+  /**
+   * On key down
+   */
+  const onKeyPress = e => {
+    if (e.key === "Escape") onExit()
   }
 
   /**
@@ -373,10 +392,10 @@ const CustomizeTableModal = ({
   }
 
   return (
-    <div>
+    <div onKeyDown={onKeyPress}>
       <Modal isOpen={open} id="customize_popup">
         <ModalHeader close={<CloseButton handleClose={onExit} />}>
-          <h3>Customise Column</h3>
+          <div>Customise Column</div>
         </ModalHeader>
         <ModalBody className="customize-table-container">
           <div className="customize-table-content">
@@ -403,16 +422,18 @@ const CustomizeTableModal = ({
               />
             </div>
           </div>
-          <div className="customize-table-footer">
-            <div className="customize-table-footer-error">
-              {error && (
-                <>
-                  <AlertIcon />
-                  <div>{error}</div>
-                </>
-              )}
-            </div>
-            <div className="d-flex align-items-center justify-content-between mt-4">
+        </ModalBody>
+        <ModalFooter className="customize-table-footer">
+          <Row className="customize-table-footer-error">
+            {error && (
+              <>
+                <AlertIcon />
+                <Col>{error}</Col>
+              </>
+            )}
+          </Row>
+          <Row className="customize-table-footer-buttons">
+            <Col className="default-button">
               <button
                 onClick={onRevertToDefault}
                 className="btn btn-outline-primary px-4 btn-size"
@@ -422,24 +443,24 @@ const CustomizeTableModal = ({
                   <div>Default</div>
                 </div>
               </button>
-              <div className="d-flex align-items-center">
-                <button
-                  onClick={onExit}
-                  className="btn btn-outline-primary px-4 mr-2 btn-size"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={onSave}
-                  className="btn btn-primary px-4 btn-size"
-                  disabled={error}
-                >
-                  Save
-                </button>
-              </div>
-            </div>
-          </div>
-        </ModalBody>
+            </Col>
+            <Col className="cancel-save-buttons ">
+              <button
+                onClick={onExit}
+                className="btn btn-outline-primary px-4 mr-2 btn-size"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={onSave}
+                className="btn btn-primary px-4 btn-size"
+                disabled={error}
+              >
+                Save
+              </button>
+            </Col>
+          </Row>
+        </ModalFooter>
       </Modal>
     </div>
   )

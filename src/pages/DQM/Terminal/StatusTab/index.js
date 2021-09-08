@@ -304,6 +304,7 @@ const TabStatus = props => {
           <div className="col-12 col-sm-3">
             <label>TIME (FROM) 1</label>
             <TimePicker
+              flip={true}
               items={timeData}
               onChange={value =>
                 onchangeHandler("no_delivery_interval_1.time_from", value)
@@ -316,6 +317,7 @@ const TabStatus = props => {
           <div className="col-12 col-sm-3">
             <label>TIME (TO) 1</label>
             <TimePicker
+              flip={true}
               items={timeData}
               onChange={value =>
                 onchangeHandler("no_delivery_interval_1.time_to", value)
@@ -342,6 +344,7 @@ const TabStatus = props => {
           <div className="col-12 col-sm-3">
             <label>TIME (FROM) 2</label>
             <TimePicker
+              flip={true}
               items={timeData}
               onChange={value =>
                 onchangeHandler("no_delivery_interval_2.time_from", value)
@@ -354,6 +357,7 @@ const TabStatus = props => {
           <div className="col-12 col-sm-3">
             <label>TIME (TO) 2</label>
             <TimePicker
+              flip={true}
               items={timeData}
               onChange={value =>
                 onchangeHandler("no_delivery_interval_2.time_to", value)
@@ -380,6 +384,7 @@ const TabStatus = props => {
           <div className="col-12 col-sm-3">
             <label>TIME (FROM) 3</label>
             <TimePicker
+              flip={true}
               items={timeData}
               onChange={value =>
                 onchangeHandler("no_delivery_interval_3.time_from", value)
@@ -418,6 +423,7 @@ const TabStatus = props => {
           <div className="col-12 col-sm-3">
             <label>TIME (FROM) 4</label>
             <TimePicker
+              flip={true}
               items={timeData}
               onChange={value =>
                 onchangeHandler("no_delivery_interval_4.time_from", value)
@@ -430,6 +436,7 @@ const TabStatus = props => {
           <div className="col-12 col-sm-3">
             <label>TIME (TO) 4</label>
             <TimePicker
+              flip={true  }
               items={timeData}
               onChange={value =>
                 onchangeHandler("no_delivery_interval_4.time_to", value)

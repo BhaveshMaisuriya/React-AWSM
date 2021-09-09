@@ -46,7 +46,7 @@ class InformationModal extends Component {
       data: props?.currentRoadTanker,
       isConfirm: false,
       alertMsg: "",
-      showError: "",
+      showError: [],
     }
   }
 
@@ -126,24 +126,29 @@ class InformationModal extends Component {
     }
 
     const validateTerminal = () => {
+      let temp = [];
+      temp = [...temp];
       if (
         data?.availability?.status_awsm === "Temporary Blocked" &&
         this.isEmptyDate(data?.availability?.block_date_range)
       ) {
-        showNameError('block_date_range');
+        temp.push('block_date_range');
+        // showNameError('block_date_range');
         toggleAlert("Please fill in Temporary Blocked Date range")
-        return false
+        // return false
       }
 
       if(data?.availability?.other_terminal_mobilization_1_date && data?.availability?.other_terminal_mobilization_1_name === 'None'){
-        showNameError('other_terminal_mobilization_1_name');
+        temp.push('other_terminal_mobilization_1_name');
+        // showNameError('other_terminal_mobilization_1_name');
         toggleAlert("Need to put in both date and terminal name to save.")
-        return false
+        // return false
       }
       if(data?.availability?.other_terminal_mobilization_2_date && data?.availability?.other_terminal_mobilization_2_name === 'None'){
-        showNameError('other_terminal_mobilization_2_name');
+        temp.push('other_terminal_mobilization_2_name');
+        // showNameError('other_terminal_mobilization_2_name');
         toggleAlert("Need to put in both date and terminal name to save.")
-        return false
+        // return false
       }
 
       if (
@@ -161,14 +166,21 @@ class InformationModal extends Component {
         toggleAlert("Need to put in both date and terminal name to save.")
         return false
       }
-
-      return true
+      console.log("temp::", temp)
+      if(temp.length === 0) {
+        return true
+      } else {
+        this.setState({
+          showError: temp,
+        })
+        return false
+      }
     }
 
     const handleUpdate = async e => {
       // e.preventDefault()
       if (validateTerminal()) {
-        this.setState({showError: ''});
+        this.setState({showError: []});
         await onUpdateRoadTankerDetail({ vehicle_name: data.vehicle, data })
         // this.props.onCancel()
       }
@@ -182,8 +194,10 @@ class InformationModal extends Component {
     }
 
     const showNameError = ergMsg => {
+      let temp = [...this.state.showError];
+      temp.push(ergMsg);
       this.setState({
-        showError: ergMsg,
+        showError: temp,
       })
     }    
 

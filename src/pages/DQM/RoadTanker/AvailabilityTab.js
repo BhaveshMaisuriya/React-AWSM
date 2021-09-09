@@ -51,6 +51,7 @@ class AvailabilityTab extends PureComponent {
 
   render() {
     const { mode, scheduler, data, isActive, showError } = this.props
+    console.log("showError::", showError)
     return (
       <div className="availability">
         <form>
@@ -121,9 +122,9 @@ class AvailabilityTab extends PureComponent {
                 placeholder={!scheduler ? "Select Date" : ""}
                 defaultValue={data?.block_date_range}
                 onChange={v => this.onChangeHandler(v, "block_date_range")}
-                error={((mode === MODE.VIEW_AND_AMEND ? true : false) || !scheduler) && (showError && showError === 'block_date_range')}
+                error={((mode === MODE.VIEW_AND_AMEND ? true : false) || !scheduler) && (showError && showError.indexOf('block_date_range') !== -1)}
               />
-              {((mode === MODE.VIEW_AND_AMEND ? true : false) || !scheduler) && showError && showError === 'block_date_range' &&
+              {((mode === MODE.VIEW_AND_AMEND ? true : false) || !scheduler) && showError && showError.indexOf('block_date_range')  !== -1 &&
               <p className="error">Please fill in Temporary Blocked Date range</p>}
             </div>
           </div>
@@ -157,9 +158,9 @@ class AvailabilityTab extends PureComponent {
                 }
                 className="form-control awsm-input"
                 placeholder={!scheduler ? "Select" : ""}
-                error={showError && showError === 'other_terminal_mobilization_1_name'}
+                error={showError && showError.indexOf('other_terminal_mobilization_1_name') !== -1 }
               />
-              {(showError && showError === 'other_terminal_mobilization_1_name') && <p className="error">Please select MOBILIZED TERMINAL NAME 1</p>}
+              {(showError && showError.indexOf('other_terminal_mobilization_1_name') !== -1) && <p className="error">Please select MOBILIZED TERMINAL NAME 1</p>}
             </div>
           </div>
           <div className="row">
@@ -189,9 +190,9 @@ class AvailabilityTab extends PureComponent {
                 }
                 className="form-control awsm-input"
                 placeholder={!scheduler ? "Select" : ""}
-                error={showError && showError === 'other_terminal_mobilization_2_name'}
+                error={showError && showError.indexOf('other_terminal_mobilization_2_name') !== -1}
               />
-              {(showError && showError === 'other_terminal_mobilization_2_name') && <p className="error">Please select MOBILIZED TERMINAL NAME 2</p>}
+              {(showError && showError.indexOf('other_terminal_mobilization_2_name') !== -1) && <p className="error">Please select MOBILIZED TERMINAL NAME 2</p>}
             </div>
           </div>
         </form>

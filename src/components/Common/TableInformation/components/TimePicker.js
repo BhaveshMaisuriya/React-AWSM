@@ -67,7 +67,7 @@ const AWSMDropdown = ({
             disabled ? "disabled" : ""
           }`}
         >
-          <div>{value ? value.toString().substring(0, 5) : disabled ? "" : "Select time"}</div>
+          <div>{value && value !== "None" ? value.toString().substring(0, 5) : disabled ? "" : "Select time"}</div>
           {!disabled && <ReactSVG src={ArrowDropDownIcon} className="awsm-dropdown-arrow" />}
         </div>
       </DropdownToggle>

@@ -427,7 +427,10 @@ class Pages extends Component {
                             <div className="d-flex">
                               <div className="col-4 p-0">
                                 <AWSMDropdown
-                                  items={REGION_TERMINAL.map(e => e.region)}
+                                  placeholder=""
+                                  items={REGION_TERMINAL
+                                    .filter((option)=> option.region !== "Special Product")
+                                    .map(e => e.region)}
                                   value={this.state.region}
                                   onChange={value =>
                                     this.setState({
@@ -440,10 +443,10 @@ class Pages extends Component {
                               </div>
                               <div className="col-8 p-0 ml-2">
                                 <AWSMDropdown
+                                  placeholder=""
                                   items={
-                                    REGION_TERMINAL.find(
-                                      e => e.region === this.state.region
-                                    )?.terminal
+                                    REGION_TERMINAL
+                                      .find(e => e.region === this.state.region)?.terminal
                                   }
                                   value={this.state.terminal}
                                   onChange={value =>

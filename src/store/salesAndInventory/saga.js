@@ -101,10 +101,10 @@ function* onGetSalesAuditLog(params) {
 
 function* onGetDownloadSales({ params = {} }) {
   try {
-    const response = yield call(updateSaleAndInventoryDetails, params)
+    const response = yield call(getDownloadSales, params)
     yield put(getDownloadSalesSuccess(response.data))
-  } catch (error) {
-    yield put(getDownloadSalesFail(error))
+  } catch (error) {    
+    yield put(getDownloadSalesFail(error?.response?.data?.message))
   }
 }
 

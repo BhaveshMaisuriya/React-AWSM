@@ -327,6 +327,14 @@ class Pages extends Component {
               getAlert={this.getAlert}
             />
           )}
+          {typeof downloadtableData === 'string' &&
+           <DownloadExcel
+           tableData={tableData}
+           tableName={tableName}
+           getLoader={this.getLoader}
+           getAlert={this.getAlert}
+         />
+          }
         {this.state.DownloadTableData === true && (
           <DownloadExcel
             tableData={tableData}
@@ -364,6 +372,7 @@ class Pages extends Component {
                   <button
                     className="btn btn-outline-primary excel-btn-container"
                     onClick={() => this.downloadExcel()}
+                    // disabled={this.state.loader}
                   >
                     <div className="excel-download-btn">
                       <span className="download-icon">

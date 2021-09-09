@@ -14,19 +14,22 @@ class AvailabilityTab extends PureComponent {
 
     this.state = {
       date: new Date(),
-      isDateRangeError: !(props?.data?.status_awsm === "Temporary Blocked" && this.isEmptyDate(props?.data?.block_date_range))
+      isDateRangeError: false,
     }
   }
-
+// !(props?.data?.status_awsm === "Temporary Blocked" && this.isEmptyDate(props?.data?.block_date_range)
   isEmptyDate = (date) => {
     if (date?.type === "single" && date?.days?.length === 0) {
       return true
-    }
-    if (date?.type === "range" && date?.date_from === null && date?.date_to === null) {
+    } else if (date?.type === "range" && date?.date_from === null && date?.date_to === null) {
       return true;
+    } else if (date?.type === "") { 
+      return true
+    } else if (date === null) { 
+      return true
+    } else {
+      return false
     }
-    if (date?.type === "") return true
-    return false
   }
 
   onChangeHandler = (value, key) => {
@@ -47,7 +50,7 @@ class AvailabilityTab extends PureComponent {
   }
 
   render() {
-    const { mode, scheduler, data, isActive } = this.props
+    const { mode, scheduler, data, isActive, showError } = this.props
     return (
       <div className="availability">
         <form>
@@ -118,9 +121,10 @@ class AvailabilityTab extends PureComponent {
                 placeholder={!scheduler ? "Select Date" : ""}
                 defaultValue={data?.block_date_range}
                 onChange={v => this.onChangeHandler(v, "block_date_range")}
-                error={this.state.isDateRangeError}
+                error={((mode === MODE.VIEW_AND_AMEND ? true : false) || !scheduler) && (showError && showError === 'block_date_range')}
               />
-              <p hidden={!this.state.isDateRangeError} className="error">Please fill in Temporary Blocked Date range</p>
+              {((mode === MODE.VIEW_AND_AMEND ? true : false) || !scheduler) && showError && showError === 'block_date_range' &&
+              <p className="error">Please fill in Temporary Blocked Date range</p>}
             </div>
           </div>
           <div className="marginTop14 marginBottom22">
@@ -153,7 +157,9 @@ class AvailabilityTab extends PureComponent {
                 }
                 className="form-control awsm-input"
                 placeholder={!scheduler ? "Select" : ""}
+                error={showError && showError === 'other_terminal_mobilization_1_name'}
               />
+              {(showError && showError === 'other_terminal_mobilization_1_name') && <p className="error">Please select MOBILIZED TERMINAL NAME 1</p>}
             </div>
           </div>
           <div className="row">
@@ -183,7 +189,9 @@ class AvailabilityTab extends PureComponent {
                 }
                 className="form-control awsm-input"
                 placeholder={!scheduler ? "Select" : ""}
+                error={showError && showError === 'other_terminal_mobilization_2_name'}
               />
+              {(showError && showError === 'other_terminal_mobilization_2_name') && <p className="error">Please select MOBILIZED TERMINAL NAME 2</p>}
             </div>
           </div>
         </form>

@@ -46,6 +46,7 @@ class InformationModal extends Component {
       data: props?.currentRoadTanker,
       isConfirm: false,
       alertMsg: "",
+      showError: [],
     }
   }
 
@@ -83,16 +84,15 @@ class InformationModal extends Component {
   isEmptyDate = date => {
     if (date?.type === "single" && date?.days?.length === 0) {
       return true
-    }
-    if (
-      date?.type === "range" &&
-      date?.date_from === null &&
-      date?.date_to === null
-    ) {
+    } else if (date?.type === "range" && date?.date_from === null && date?.date_to === null) {
+      return true;
+    } else if (date?.type === "") { 
       return true
+    } else if (date === null) { 
+      return true
+    } else {
+      return false
     }
-    if (date?.type === "") return true
-    return false
   }
   render() {
     const { visible, currentRoadTanker, onUpdateRoadTankerDetail } = this.props
@@ -125,6 +125,31 @@ class InformationModal extends Component {
     }
 
     const validateTerminal = () => {
+      let temp = [];
+      temp = [...temp];
+      if (
+        data?.availability?.status_awsm === "Temporary Blocked" &&
+        this.isEmptyDate(data?.availability?.block_date_range)
+      ) {
+        temp.push('block_date_range');
+        // showNameError('block_date_range');
+        toggleAlert("Please fill in Temporary Blocked Date range")
+        // return false
+      }
+
+      if(data?.availability?.other_terminal_mobilization_1_date && data?.availability?.other_terminal_mobilization_1_name === 'None'){
+        temp.push('other_terminal_mobilization_1_name');
+        // showNameError('other_terminal_mobilization_1_name');
+        toggleAlert("Need to put in both date and terminal name to save.")
+        // return false
+      }
+      if(data?.availability?.other_terminal_mobilization_2_date && data?.availability?.other_terminal_mobilization_2_name === 'None'){
+        temp.push('other_terminal_mobilization_2_name');
+        // showNameError('other_terminal_mobilization_2_name');
+        toggleAlert("Need to put in both date and terminal name to save.")
+        // return false
+      }
+
       if (
         (data?.availability?.other_terminal_mobilization_2_name &&
           data?.availability?.other_terminal_mobilization_2_name !== "None" &&
@@ -140,21 +165,21 @@ class InformationModal extends Component {
         toggleAlert("Need to put in both date and terminal name to save.")
         return false
       }
-
-      if (
-        data?.availability?.status_awsm === "Temporary Blocked" &&
-        this.isEmptyDate(data?.availability?.block_date_range)
-      ) {
-        toggleAlert("Please fill in Temporary Blocked Date range")
+      console.log("temp::", temp)
+      if(temp.length === 0) {
+        return true
+      } else {
+        this.setState({
+          showError: temp,
+        })
         return false
       }
-
-      return true
     }
 
     const handleUpdate = async e => {
       // e.preventDefault()
       if (validateTerminal()) {
+        this.setState({showError: []});
         await onUpdateRoadTankerDetail({ vehicle_name: data.vehicle, data })
         // this.props.onCancel()
       }
@@ -167,11 +192,20 @@ class InformationModal extends Component {
       })
     }
 
+    const showNameError = ergMsg => {
+      let temp = [...this.state.showError];
+      temp.push(ergMsg);
+      this.setState({
+        showError: temp,
+      })
+    }    
+
     const onFieldValueChange = (fieldName, value) => {
       const newData = { ...data }
       newData[fieldName] = value
       this.setState({ data: newData })
     }
+
     const modalFooter = () => {
       const footer =
         !scheduler && !this.state.isConfirm ? (
@@ -290,6 +324,7 @@ class InformationModal extends Component {
                     </NavLink>
                   </NavItem>
                   <NavItem>
+                    {console.log("showError::1", this.state.showError)}
                     <NavLink
                       className={activeTab === "2" ? "active" : null}
                       onClick={() => {
@@ -319,7 +354,8 @@ class InformationModal extends Component {
                         data={data?.availability}
                         defaultData={currentRoadTanker?.availability}
                         onChange={onFieldValueChange}
-                        statusSap={data?.status_sap}
+                        isActive={data?.status_sap}
+                        showError={this.state.showError}
                       />
                       <hr style={{ margin: "2em 0" }} />
                     </SimpleBar>

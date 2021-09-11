@@ -31,7 +31,7 @@ const initialState = {
   filter: {},
   tankStatusModalError: null,
   auditsCom: [],
-  downloadtableData: [],
+  downloadtableData: null,
   currentSalesAndInventory: {},
   isUpdateSuccess: false,
   isLoading: false,
@@ -106,7 +106,7 @@ const SaleAndInventory = (state = initialState, action) => {
     case GET_DOWNLOAD_SALES_FAIL:
       return {
         ...state,
-        error: action.payload,
+        downloadtableData: action.payload,
       }
     case GET_DETAIL_SALES_SUCCESS:
       return {

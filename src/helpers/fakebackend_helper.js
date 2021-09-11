@@ -211,7 +211,7 @@ export const getDownloadCommercialCustomer = params =>
 
 export const getDownloadSales = params =>
   axios.post(
-    "/commercial-customer",
+    "/sales-inventory",
     { ...params }
   )
 

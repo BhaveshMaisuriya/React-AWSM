@@ -17,6 +17,7 @@ import ArrowDropDownIcon from "../../../assets/images/AWSM-Dropdown.svg"
 const AWSMDropdown = ({
   items,
   value,
+  error = false,
   onChange,
   disabled = false,
   RowComponent = null,
@@ -57,7 +58,7 @@ const AWSMDropdown = ({
         disabled={disabled}
       >
         <div
-          className={`d-flex align-items-center awsm-select-toggle p-2 position-relative ${disabled ? "disabled" : ""
+          className={`d-flex align-items-center awsm-select-toggle ${error === true ? 'border-danger' : '' } p-2 position-relative ${disabled ? "disabled" : ""
             }`}
         >
           <div>{(!value || value === "None") && !RowComponent ? placeholder : value}</div>

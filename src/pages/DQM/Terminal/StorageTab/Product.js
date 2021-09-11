@@ -79,7 +79,7 @@ const Product = ({
       </div>
       <div className="row">
         <div className="col-3 form-group mb-0">
-          <label htmlFor="productCode">PRODUCT CODE<span className='red-error'>*</span></label>
+          <label htmlFor="productCode">PRODUCT CODE {isDisabledField ? "" : <span className='red-error'>*</span>}</label>
           {isDisabledField ? 
           <AWSMInput
             key={value.code}

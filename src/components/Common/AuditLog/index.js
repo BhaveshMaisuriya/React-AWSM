@@ -54,7 +54,6 @@ class AuditLog extends Component {
    */
   getBackgroundColor = index => (index % 2 !== 0 ? "#F8F8F8" : "transparent")
 
-
   /**
    * Displaying the data in audit log
    */

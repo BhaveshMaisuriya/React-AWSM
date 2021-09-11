@@ -119,12 +119,14 @@ const SaleAndInventory = (state = initialState, action) => {
         error: action.payload,
       }
     case UPDATE_SALES_AND_INVENTORY_VARIANCE_CONTROL_SUCCESS:
+      ToastSuccess.fire()
       return {
         ...state,
         varianceControlData: action.payload,
         varianceControlError: null,
       }
     case UPDATE_SALES_AND_INVENTORY_VARIANCE_CONTROL_FAILED:
+      ToastError.fire()
       return {
         ...state,
         varianceControlData: null,

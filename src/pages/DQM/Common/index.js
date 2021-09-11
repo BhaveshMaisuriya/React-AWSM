@@ -37,6 +37,7 @@ import AWSMDropdown from "../../../components/Common/Dropdown"
 import DatePicker from "../../../components/Common/DatePicker"
 import REGION_TERMINAL from "../../../common/data/regionAndTerminal"
 import CloseButton from "../../../components/Common/CloseButton"
+import { format } from "date-fns"
 
 const styles = {
   headerText: {
@@ -56,6 +57,9 @@ const styles = {
   },
 }
 class Pages extends Component {
+  defaultRegion = REGION_TERMINAL.find((option)=> option.region === "Central")?.region
+  defaultTerminal = REGION_TERMINAL
+    .find((option)=> option.region === "Central")?.terminal?.find((term)=> term === "KVDT")
   constructor(props) {
     super(props)
     this.state = {
@@ -77,8 +81,8 @@ class Pages extends Component {
       DownloadTableData: false,
       varianceControl: false,
       tankStatusModal: false,
-      region: null,
-      terminal: null,
+      region: this.defaultRegion ? this.defaultRegion : null,
+      terminal: this.defaultTerminal ? this.defaultTerminal : null,
       sales_date: new Date(),
     }
     this.toggle = this.toggle.bind(this)
@@ -355,11 +359,13 @@ class Pages extends Component {
         <VarianceControl
           open={this.state.varianceControl}
           closeDialog={() => this.setState({ varianceControl: false })}
+          selectedDate={format(this.state.sales_date, "yyyy-MM-dd")}
         />
         <TankStatusModal
           open={this.state.tankStatusModal}
           handleClose={() => this.setState({ tankStatusModal: false })}
           modalTitle={`Tank Status`}
+          selectedDate={format(this.state.sales_date, "yyyy-MM-dd")}
         />
         <div className="page-content">
           <div className="container-fluid">
@@ -413,14 +419,17 @@ class Pages extends Component {
                         <div className="d-flex align-items-center w-100 mt-4 mb-2">
                           <div className="col-4 p-0">
                             <label>DATE</label>
-                            <DatePicker showButtons={true} isTypeFor="sales"
-                            value={this.state.sales_date}
-                             onChange={value =>
-                              this.setState({
-                                ...this.state,
-                                sales_date: value,
-                              })
-            } />
+                            <DatePicker
+                              showButtons={true}
+                              isTypeFor="sales"
+                              value={this.state.sales_date}
+                              onChange={value =>
+                                this.setState({
+                                  ...this.state,
+                                  sales_date: value,
+                                })
+                              }
+                            />
                           </div>
                           <div className="col-6 p-0 ml-4">
                             <label>REGION & TERMINAL</label>
@@ -436,7 +445,8 @@ class Pages extends Component {
                                     this.setState({
                                       ...this.state,
                                       region: value,
-                                      terminal: null,
+                                      terminal: REGION_TERMINAL
+                                        .find((option)=> option.region === value)?.terminal?.[0],
                                     })
                                   }
                                 />
@@ -445,8 +455,9 @@ class Pages extends Component {
                                 <AWSMDropdown
                                   placeholder=""
                                   items={
-                                    REGION_TERMINAL
-                                      .find(e => e.region === this.state.region)?.terminal
+                                    REGION_TERMINAL.find(
+                                      e => e.region === this.state.region
+                                    )?.terminal
                                   }
                                   value={this.state.terminal}
                                   onChange={value =>

@@ -181,10 +181,10 @@ class FixedCoulmnTable extends Component {
         case "color": {
           if (pathName === "/sales-inventory") {
             let threshold
-            const salesValue = varianceControlData.sales.find(
+            const salesValue = varianceControlData?.sales?.find(
               e => e.station_tank_status === arr.station_tank_status
             )
-            const inventoryValue = varianceControlData.inventory.find(
+            const inventoryValue = varianceControlData?.inventory?.find(
               e => e.station_tank_status === arr.station_tank_status
             )
             switch (e) {

@@ -15,6 +15,7 @@ import { updateSalesAndInventoryTankStatusModal } from "store/actions"
 import { XIcon } from "common/CustomizeTable/icons"
 import CloseButton from "../../../../components/Common/CloseButton"
 import { isScheduler } from "helpers/auth_helper"
+import { format } from "date-fns"
 
 const mockDataOfTankStatus = {
   date: "2020-02-06",
@@ -54,11 +55,14 @@ const TankStatusModal = props => {
     open,
     handleClose,
     updateSalesAndInventoryTankStatusModal,
+    selectedDate,
   } = props
   const [modalConfirm, setModalConfirm] = useState(false)
   const [unmodifiedStatus, setUnmodifiedStatus] = useState(true)
   const [data, setData] = useState(mockDataOfTankStatus.tableData)
   const [capacity, setCapacity] = useState(mockDataOfTankStatus.capacity)
+  const currentDate = format(new Date(), "yyyy-MM-dd")
+  const isHistoricalDate = selectedDate !== currentDate
   const handleUpdateButtonOnclick = () => {
     updateSalesAndInventoryTankStatusModal(data)
     setUnmodifiedStatus(true)
@@ -132,7 +136,7 @@ const TankStatusModal = props => {
                                   TextOnChangeValue={handleOnchangeValueData}
                                   index={i}
                                   fieldName={"lower_value"}
-                                  isEdit={!scheduler}
+                                  isEdit={!scheduler && !isHistoricalDate}
                                 />
                               </td>
                               <td className="item">
@@ -141,7 +145,7 @@ const TankStatusModal = props => {
                                   TextOnChangeValue={handleOnchangeValueData}
                                   index={i}
                                   fieldName={"upper_value"}
-                                  isEdit={!scheduler}
+                                  isEdit={!scheduler && !isHistoricalDate}
                                 />
                               </td>
                               <td className="item last-item">
@@ -150,7 +154,7 @@ const TankStatusModal = props => {
                                   TextOnChangeValue={handleOnchangeValueData}
                                   index={i}
                                   fieldName={"percentage"}
-                                  isEdit={!scheduler}
+                                  isEdit={!scheduler && !isHistoricalDate}
                                 />
                               </td>
                             </tr>
@@ -168,12 +172,12 @@ const TankStatusModal = props => {
                     value={capacity}
                     inputType={`baseInput`}
                     TextOnChangeValue={v => setCapacity(v)}
-                    isEdit={!scheduler}
+                    isEdit={!scheduler && !isHistoricalDate}
                     disable={scheduler}
                   />
                 </div>
                 <div className="d-flex align-items-center justify-content-end mt-5 mb-3 tank-status-footer">
-                  {!modalConfirm && !scheduler && (
+                  {!modalConfirm && !scheduler && !isHistoricalDate && (
                     <>
                       <button
                         className="btn btn-outline-primary px-4"

@@ -1,19 +1,20 @@
 .table-information {
   // height: 879px;
   border-radius: 4px;
-  box-shadow: 0 2px 10px 0 rgba(0,0,0,0.05);
-  .form-control:disabled, .form-control[readonly] {
-      border: 1px solid #D9D9D9;
-      background-color: #EEEEEE;
+  box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.05);
+  .form-control:disabled,
+  .form-control[readonly] {
+    border: 1px solid #d9d9d9;
+    background-color: #eeeeee;
   }
-  .header-content{
+  .header-content {
     width: 100%;
     display: grid;
     grid-template-columns: auto auto;
   }
 }
 
-.close{
+.close {
   padding-right: 0px !important;
   margin-right: 0px !important;
   display: flex;
@@ -35,7 +36,7 @@
 }
 
 .modal-title {
-  padding-left: 12px;
+  // padding-left: 12px;
   height: 26px;
   width: 230px;
   color: #000000;
@@ -47,41 +48,40 @@
 
 .modal-lg {
   button {
-    height:40px;
+    height: 40px;
     width: 120px;
   }
 
   .btn-sec {
     box-sizing: border-box;
-    border: 1px solid #CBEFED;
+    border: 1px solid #cbefed;
     border-radius: 4px;
     background-color: white;
-    color: #00A19C !important;
-    :hover{
+    color: #00a19c !important;
+    :hover {
       background-color: white;
     }
   }
 
   .btn-dan {
     box-sizing: border-box;
-    border: 1px solid #F46A6A;
+    border: 1px solid #f46a6a;
     border-radius: 4px;
     background-color: white;
-    color: #F46A6A !important;
-    :hover{
+    color: #f46a6a !important;
+    :hover {
       background-color: white;
     }
   }
-
 }
 
 .active {
   border-radius: 4px 4px 0px 0px;
   .nav-link {
     span {
-        color: white;
+      color: white;
     }
-    background-color: #00A19C;
+    background-color: #00a19c;
   }
 }
 
@@ -99,21 +99,21 @@
   margin-top: 20px;
 }
 
-.specification{
+.specification {
   margin-top: 20px;
 }
-.close-modal{
+.close-modal {
   width: 100%;
   justify-content: flex-end;
   transform: translateY(-5px);
-  .close-button{
+  .close-button {
     border: none;
     background: none;
-    color:#9E9E9E
+    color: #9e9e9e;
   }
 }
 
-.header-title{
+.header-title {
   padding-left: 0;
   height: 26px;
   color: #000000;
@@ -122,7 +122,7 @@
   letter-spacing: 0;
   line-height: 26px;
 }
-.header-subtitle{
+.header-subtitle {
   text-align: right;
   height: 16px;
   color: #757575;
@@ -137,8 +137,8 @@
   margin-left: 10px;
   padding-right: 15px;
 }
-.terminal-detail-modal{
-  .modal-title{
+.terminal-detail-modal {
+  .modal-title {
     justify-content: space-between;
   }
 }

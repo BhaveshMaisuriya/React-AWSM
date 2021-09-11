@@ -30,7 +30,7 @@ const DatePicker = ({
   const open = Boolean(anchorEl)
   const id = Date.now().toString()
   useEffect(() => {
-    setDate(value ? new Date(value) : new Date)
+    setDate(value ? new Date(value) : new Date())
   }, [value])
   const [initialDate] = useState(value ? new Date(value) : null)
 

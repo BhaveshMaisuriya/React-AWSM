@@ -5,6 +5,7 @@ import { Modal, ModalBody, ModalHeader } from "reactstrap"
 import ExitConfirmation from "../../../../components/Common/ExitConfirmation"
 import {
   getSalesAndInventoryVarianceControl,
+  updateSaleAndInventoryVarianceControlSuccess,
   updateSalesAndInventoryVarianceControl,
 } from "../../../../store/salesAndInventory/actions"
 import AWSMEditIcon from "../../../../assets/images/AWSM-Edit-Icon.svg"
@@ -141,25 +142,32 @@ const VarianceControl = ({
   open,
   closeDialog,
   onChange,
+  selectedDate,
   getSalesAndInventoryVarianceControl,
   varianceControlData,
   updateSalesAndInventoryVarianceControl,
 }) => {
   const scheduler = isScheduler()
+  const currentDate = format(new Date(), "yyyy-MM-dd")
+  const isHistoricalDate = selectedDate !== currentDate
   const [unmodifiedStatus, setUnmodifiedStatus] = useState(true)
   const [data, setData] = useState({
     ...varianceControlData,
-    date: format(new Date(), "yyyy-MM-dd"),
+    date: selectedDate,
   })
   const [isConfirm, setIsConfirm] = useState(false)
 
   useEffect(() => {
-    setData({ ...varianceControlData, date: format(new Date(), "yyyy-MM-dd") })
+    if (varianceControlData){
+      setData({ ...varianceControlData, date: selectedDate })
+    }
   }, [varianceControlData])
 
   useEffect(() => {
+    /*Call Api when the modal is opened */
     if (open) {
-      getSalesAndInventoryVarianceControl(format(new Date(), "yyyy-MM-dd"))
+      /* Wait for real API */
+      // getSalesAndInventoryVarianceControl(selectedDate)
     }
   }, [open])
 
@@ -203,9 +211,6 @@ const VarianceControl = ({
           close={<CloseButton handleClose={() => setIsConfirm(true)} />}
         >
           <h3>Variance Control</h3>
-          <span className="last-updated-sub-title flex-grow-1">
-            Last Updated: Nur Izzati on 17 Mar 2021
-          </span>
         </ModalHeader>
         <ModalBody className="variance-control-content position-relative">
           {isConfirm && showExitConfirmation()}
@@ -217,7 +222,7 @@ const VarianceControl = ({
                   <VarianceTable
                     items={data.sales}
                     headers={headers}
-                    scheduler={scheduler}
+                    scheduler={scheduler || isHistoricalDate}
                     rowKey="station_tank_status"
                     onChange={value => onModifyData({ ...data, sales: value })}
                   />
@@ -231,7 +236,7 @@ const VarianceControl = ({
                   <VarianceTable
                     items={data.inventory}
                     headers={headers}
-                    scheduler={scheduler}
+                    scheduler={scheduler || isHistoricalDate}
                     rowKey="station_tank_status"
                     onChange={value =>
                       onModifyData({ ...data, inventory: value })
@@ -241,7 +246,7 @@ const VarianceControl = ({
               </div>
             </div>
             <div className="d-flex align-items-center justify-content-end mt-4 mb-4 px-4">
-              {!isConfirm && !scheduler && (
+              {!isConfirm && !scheduler && !isHistoricalDate && (
                 <>
                   <button
                     className="btn btn-outline-primary px-4"
@@ -274,7 +279,10 @@ const mapDispatchToProps = dispatch => ({
   getSalesAndInventoryVarianceControl: date =>
     dispatch(getSalesAndInventoryVarianceControl(date)),
   updateSalesAndInventoryVarianceControl: data =>
-    dispatch(updateSalesAndInventoryVarianceControl(data)),
+    /* Wait for real api*/
+    // dispatch(updateSalesAndInventoryVarianceControl(data)),
+    /* Test dispatch to be able to see the change in variance control modal*/
+    dispatch(updateSaleAndInventoryVarianceControlSuccess(data)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(VarianceControl)

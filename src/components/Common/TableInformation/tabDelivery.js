@@ -308,7 +308,7 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
           />
         </Col>
         <Col
-          className={`col-12 ${styles.marginTop32} ${styles.marginBottom16}`}
+          className={`col-12 ${styles.marginTop30} ${styles.marginBottom14}`}
         >
           <label>
             <strong>ACTUAL OPEN TIME 1</strong>
@@ -386,7 +386,7 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
         pathName === "/commercial-customer" ? (
           <React.Fragment>
             <Col
-              className={`col-12 ${styles.marginTop16} ${styles.marginBottom16}`}
+              className={`col-12 ${styles.marginTop14} ${styles.marginBottom14}`}
             >
               <label>
                 <strong>ACTUAL OPEN TIME 2</strong>
@@ -461,7 +461,7 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
               />
             </Col>
             <Col
-              className={`col-12 ${styles.marginTop16} ${styles.marginBottom16}`}
+              className={`col-12 ${styles.marginTop14} ${styles.marginBottom14}`}
             >
               <label>
                 <strong>ACTUAL OPEN TIME 3</strong>

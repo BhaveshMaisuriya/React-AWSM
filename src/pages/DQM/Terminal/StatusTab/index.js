@@ -288,7 +288,7 @@ const TabStatus = props => {
       </div>
       <div className={styles.marginTop14}>
         <strong className="font-weight-bolder">NO DELIVERY INTERVAL</strong>
-        <div className={`row ${styles.marginTop20}`}>
+        <div className={`row ${styles.marginTop22}`}>
           <div className="col-12 col-sm-6">
             <label>DATE 1</label>
             <DateRangePicker

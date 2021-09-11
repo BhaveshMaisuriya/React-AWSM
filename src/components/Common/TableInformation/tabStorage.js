@@ -135,23 +135,25 @@ const TabStorage = ({ scheduler, data, onChange }) => {
 
   return (
     <div className="dqm-storage-container" id="dqm-storage-container">
-      <div className="w-50">
-        <label>END OF DAY</label>
-        <AWSMDropdown
-          onChange={onEndOfDayChange}
-          items={timeData}
-          disabled={scheduler}
-          value={
-            storageData.end_of_day?.time_to?.toString().substring(0, 5) || ""
-          }
-        />
-      </div>
+      <Row className="row">
+        <Col className="col-md-6 form-group">
+          <label>END OF DAY</label>
+          <AWSMDropdown
+            onChange={onEndOfDayChange}
+            items={timeData}
+            disabled={scheduler}
+            value={
+              storageData.end_of_day?.time_to?.toString().substring(0, 5) || ""
+            }
+          />
+        </Col>
+      </Row>
       {Object.keys(storageData).map((key, index) =>
         key.startsWith("storage_") ? (
           <div key={index}>
             <div
               className="d-flex justify-content-between align-items-center"
-              style={{ margin: "30px 0 10px 0" }}
+              style={{ margin: "30px 0 22px 0" }}
             >
               <div className="section-header">{`STORAGE ${
                 key.split("_")[1]

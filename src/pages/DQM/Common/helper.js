@@ -89,14 +89,14 @@ export const runValidation = data => {
   }
   if (data.contact) {
     const validateContact = Object.keys(data.contact).map(key => {
-      if (key.startsWith("contact_") && data.contact[key]) {        
+      if (key.startsWith("contact_") && data.contact[key]) {
         if (
           data.contact[key].number &&
           !/^\+?[0-9- ]+$/.test(data.contact[key].number)
         ) {
           return false
         }
-        if(data.contact[key].email && !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(data.contact[key].email)){
+        if (data.contact[key].email && !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(data.contact[key].email)) {
           return false
         }
       }
@@ -141,22 +141,23 @@ export const removeKeywords = string => {
   const newString = string
   return newString
     ? newString
-        .toString()
-        .replace(
-          "every Sunday,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday",
-          "Every day"
-        )
-        .replace(
-          "every Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday",
-          "Every day"
-        )
-        .replace("every ", "")
-        .replace("daily ", "Every day")
-        .replace("daily", "Every day")
-        .replace("range ", "")
-        .replace("single ", "")
-        .replace("0:00", "0")
-        .replace("null", "-")
+      .toString()
+      .replace(
+        "every Sunday,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday",
+        "Every day"
+      )
+      .replace(
+        "every Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday",
+        "Every day"
+      )
+      .replace("every ", "")
+      .replace("daily ", "Every day")
+      .replace("daily", "Every day")
+      .replace("range ", "")
+      .replace("single ", "")
+      .replace("0:00", "0")
+      .replace("null", "-")
+      .replace("None", "-")
     : newString
 }
 

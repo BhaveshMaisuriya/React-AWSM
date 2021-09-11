@@ -75,7 +75,7 @@ function* onGetSalesAndInventoryVarianceControl({ date }) {
 function* onUpdateSalesAndInventoryVarianceControl({ data }) {
   try {
     const response = yield call(updateSaleAndInventoryVarianceControl, data)
-    yield put(updateSalesAndInventoryTankStatusModalSuccess(data))
+    yield put(updateSaleAndInventoryVarianceControlSuccess(response))
   } catch (error) {
     yield put(updateSalesAndInventoryVarianceControlFailed(error))
   }
@@ -101,7 +101,7 @@ function* onGetSalesAuditLog(params) {
 
 function* onGetDownloadSales({ params = {} }) {
   try {
-    const response = yield call(updateSaleAndInventoryDetails, params)
+    const response = yield call(getDownloadSales, params)
     yield put(getDownloadSalesSuccess(response.data))
   } catch (error) {
     yield put(getDownloadSalesFail(error))
@@ -135,6 +135,7 @@ function* saleAndInventorySaga() {
   yield takeLatest(GET_SALES_AND_INVENTORY, onGetSalesAndInventory)
   yield takeLatest(GET_DETAIL_SALES, onGetSalesAndInventoryDetail)
   yield takeLatest(UPDATE_SALES_AND_INVENTORY_DETAIL, onUpdateSalesAndInventoryDetail)
+  yield takeLatest(UPDATE_SALES_AND_INVENTORY_VARIANCE_CONTROL,onUpdateSalesAndInventoryVarianceControl)
 
 }
 

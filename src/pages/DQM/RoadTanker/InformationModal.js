@@ -54,10 +54,9 @@ class InformationModal extends Component {
   }
 
   componentDidMount() {
-    const { mode } = this.props
+    const { onGetRoadTankerDetail, mode, data } = this.props
     let modalMode = mode ? mode : MODE.VIEW_AND_AMEND
     this.setState({ mode: modalMode })
-    const { onGetRoadTankerDetail, data } = this.props
     onGetRoadTankerDetail(data.vehicle)
   }
 
@@ -318,8 +317,9 @@ class InformationModal extends Component {
                         mode={mode}
                         scheduler={scheduler}
                         data={data?.availability}
+                        defaultData={currentRoadTanker?.availability}
                         onChange={onFieldValueChange}
-                        isActive={data?.status_sap}
+                        statusSap={data?.status_sap}
                       />
                       <hr style={{ margin: "2em 0" }} />
                     </SimpleBar>

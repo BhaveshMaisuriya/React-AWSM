@@ -17,8 +17,10 @@ import InventoryTab from "./inventoryTab"
 import DeliveryTab from "./deliveryTab"
 import {
   getDetailsSales,
+  updateSalesAndInventoryDetail,
 } from "../../../../store/salesAndInventory/actions"
 import { connect } from "react-redux"
+import { isScheduler } from "../../../../helpers/auth_helper"
 import CloseButton from "../../../../components/Common/CloseButton"
 import ExitConfirmation from "../../../../components/Common/ExitConfirmation"
 
@@ -28,19 +30,20 @@ class SalesAndInventoryTableInformation extends Component {
 
     this.state = {
       activeTab: "1",
+      isDataModified: false,
       isConfirm: false,
       updateSuccess: false,
       data: props.currentSalesAndInventory,
     }
 
-    this.handleEvent = this.handleEvent.bind(this)
+    // this.handleEvent = this.handleEvent.bind(this)
   }
   onConfirmCancel = () => {
     this.setState({ isConfirm: false })
   }
 
   onConfirmExit = () => {
-    this.setState({ isConfirm: false })
+    this.setState({ isConfirm: false, isDataModified: false })
     if (this.props.onCancel()) {
       this.props.onCancel()
     }
@@ -64,20 +67,15 @@ class SalesAndInventoryTableInformation extends Component {
     }
   }
 
-  componentWillUnmount() { }
-
-  // Prototype methods, Bind in Constructor (ES2015)
-  handleEvent() { }
-
   // Class Properties (Stage 3 Proposal)
   handler = () => {
     this.setState()
   }
 
   render() {
-    const { onCancel, visible, onUpdateSalesAndInventoryModal } = this.props
-
-    const { activeTab, data } = this.state
+    const scheduler = isScheduler()
+    const { visible, onUpdateSalesAndInventoryDetail } = this.props
+    const { activeTab, data, isConfirm } = this.state
 
     const toggle = tab => {
       if (activeTab !== tab) {
@@ -88,24 +86,35 @@ class SalesAndInventoryTableInformation extends Component {
     const onFieldValueChange = (fieldName, value) => {
       const newData = { ...data }
       newData[fieldName] = value
-      this.setState({ data: newData })
+      this.setState({ data: newData, isDataModified: true })
     }
 
     const handleUpdate = event => {
-      e.preventDefault()
+      event.preventDefault()
       onUpdateSalesAndInventoryDetail(data)
       this.onConfirmExit()
     }
 
+    const handleExitConfirmation = () => {
+      return this.state.isDataModified ? (
+        <ExitConfirmation
+          onExit={this.onConfirmExit}
+          onCancel={this.onConfirmCancel}
+        />
+      ) : (
+        this.onConfirmExit()
+      )
+    }
+
     return (
       <>
-        <Modal
-          isOpen={visible}
-          className="commercial-customer-modal modal-lg"
-        >
-          <ModalHeader close={<CloseButton
-            handleClose={() => this.setState({ isConfirm: true })}
-          />}
+        <Modal isOpen={visible} className="commercial-customer-modal modal-lg">
+          <ModalHeader
+            close={
+              <CloseButton
+                handleClose={() => this.setState({ isConfirm: true })}
+              />
+            }
           >
             <span className="modal-title">Record ID: 123456789</span>
             <span className="date-sub-title">| Date: 12 Mar 2021</span>
@@ -115,44 +124,47 @@ class SalesAndInventoryTableInformation extends Component {
           </ModalHeader>
 
           <ModalBody>
-            {this.state.isConfirm && (
-              <ExitConfirmation
-                onExit={this.onConfirmExit}
-                onCancel={this.onConfirmCancel}
-              />
-            )}
+            {this.state.isConfirm && handleExitConfirmation()}
             <Fragment>
               <div>
                 <Nav pills justified>
                   <NavItem>
-                    <NavLink className={activeTab === "1" ? "active" : null}
+                    <NavLink
+                      className={activeTab === "1" ? "active" : null}
                       onClick={() => {
                         toggle("1")
-                      }}>
+                      }}
+                    >
                       <span>Details</span>
                     </NavLink>
                   </NavItem>
                   <NavItem>
-                    <NavLink className={activeTab === "2" ? "active" : null}
+                    <NavLink
+                      className={activeTab === "2" ? "active" : null}
                       onClick={() => {
                         toggle("2")
-                      }}>
+                      }}
+                    >
                       <span>Sales</span>
                     </NavLink>
                   </NavItem>
                   <NavItem>
-                    <NavLink className={activeTab === "3" ? "active" : null}
+                    <NavLink
+                      className={activeTab === "3" ? "active" : null}
                       onClick={() => {
                         toggle("3")
-                      }}>
+                      }}
+                    >
                       <span>Inventory</span>
                     </NavLink>
                   </NavItem>
                   <NavItem>
-                    <NavLink className={activeTab === "4" ? "active" : null}
+                    <NavLink
+                      className={activeTab === "4" ? "active" : null}
                       onClick={() => {
                         toggle("4")
-                      }}>
+                      }}
+                    >
                       <span>Delivery</span>
                     </NavLink>
                   </NavItem>
@@ -194,22 +206,24 @@ class SalesAndInventoryTableInformation extends Component {
               </div>
             </Fragment>
           </ModalBody>
-          <ModalFooter>
-            <div className="d-flex align-items-center justify-content-end mt-4 mb-4 px-4">
-              <button
-                className="btn btn-outline-primary px-4"
-                onClick={() => this.setState({ isConfirm: true })}
-              >
-                Cancel
-              </button>
-              <button
-                className="btn btn-primary ml-4 px-4"
-                onClick={e => handleUpdate(e)}
-              >
-                Update
-              </button>
-            </div>
-          </ModalFooter>
+          {!scheduler && !isConfirm && (
+            <ModalFooter>
+              <div className="d-flex align-items-center justify-content-end mt-4 mb-4 px-4">
+                <button
+                  className="btn btn-outline-primary px-4"
+                  onClick={() => this.setState({ isConfirm: true })}
+                >
+                  Cancel
+                </button>
+                <button
+                  className="btn btn-primary ml-4 px-4"
+                  onClick={e => handleUpdate(e)}
+                >
+                  Update
+                </button>
+              </div>
+            </ModalFooter>
+          )}
         </Modal>
       </>
     )
@@ -223,10 +237,10 @@ const mapStateToProps = ({ saleAndInventory }) => ({
 
 const mapDispatchToProps = dispatch => ({
   onGetSalesAndInventoryDetail: params => dispatch(getDetailsSales(params)),
-  onUpdateSalesAndInventoryDetail: params =>
-    dispatch(updateSalesAndInventoryDetail(params)),
-  onResetSalesAndInventoryDetail: () =>
-    dispatch(resetCurrentSalesAndInventoryData()),
+  onUpdateSalesAndInventoryDetail: data =>
+    dispatch(updateSalesAndInventoryDetail(data)),
+  // onResetSalesAndInventoryDetail: () =>
+  //   dispatch(resetCurrentSalesAndInventoryData()),
 })
 
 export default connect(

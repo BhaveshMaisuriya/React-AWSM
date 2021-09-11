@@ -117,7 +117,7 @@ const TabStatus = ({ scheduler, data, onChange }) => {
           <Col className="col-6" />
         )}
       </Row>
-      <div className="marginTop30 marginBottom16">
+      <div className="marginTop30 marginBottom14">
         <label>
           <strong>CLOSE PERIOD</strong>
         </label>

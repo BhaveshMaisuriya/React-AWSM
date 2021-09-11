@@ -14,30 +14,52 @@ class AvailabilityTab extends PureComponent {
 
     this.state = {
       date: new Date(),
-      isDateRangeError: !(props?.data?.status_awsm === "Temporary Blocked" && this.isEmptyDate(props?.data?.block_date_range))
+      isDateRangeError:
+        props?.data?.status_awsm === "Temporary Blocked" &&
+        this.isEmptyDate(props?.data?.block_date_range),
     }
   }
 
-  isEmptyDate = (date) => {
+  isEmptyDate = date => {
     if (date?.type === "single" && date?.days?.length === 0) {
       return true
     }
-    if (date?.type === "range" && date?.date_from === null && date?.date_to === null) {
-      return true;
+    if (
+      date?.type === "range" &&
+      date?.date_from === null &&
+      date?.date_to === null
+    ) {
+      return true
     }
-    if (date?.type === "") return true
+    if (date?.type === "" || date === null) {
+      return true
+    }
     return false
+  }
+
+  componentDidUpdate() {
+    const { data } = this.props
+    if (
+      data?.status_awsm === "Temporary Blocked" &&
+      this.isEmptyDate(data?.block_date_range)
+    ) {
+      this.setState({
+        isDateRangeError: true,
+      })
+    }
   }
 
   onChangeHandler = (value, key) => {
     const { data, onChange } = this.props
     let newData = { ...data }
     if (key === "status_awsm" || key === "block_date_range") {
-      if ((value === "Temporary Blocked" && this.isEmptyDate(data?.block_date_range))
-        || (this.isEmptyDate(value) && data?.status_awsm === "Temporary Blocked")) {
+      if (
+        (value === "Temporary Blocked" &&
+          this.isEmptyDate(data?.block_date_range)) ||
+        (this.isEmptyDate(value) && data?.status_awsm === "Temporary Blocked")
+      ) {
         this.setState({ isDateRangeError: true })
-      }
-      else {
+      } else {
         this.setState({ isDateRangeError: false })
       }
     }
@@ -46,8 +68,22 @@ class AvailabilityTab extends PureComponent {
     onChange("availability", newData)
   }
 
+  onChangeStatusAWSM = value => {
+    const { data, defaultData, onChange } = this.props
+    let newData = { ...data }
+    newData["status_awsm"] = value
+    if (value === "Active") {
+      newData["daily_available_hours"] = defaultData?.daily_available_hours
+      newData["shift_type"] = defaultData?.shift_type
+    } else {
+      newData["daily_available_hours"] = null
+      newData["shift_type"] = null
+    }
+    onChange("availability", newData)
+  }
+
   render() {
-    const { mode, scheduler, data, isActive } = this.props
+    const { mode, scheduler, data, statusSap } = this.props
     return (
       <div className="availability">
         <form>
@@ -70,13 +106,9 @@ class AvailabilityTab extends PureComponent {
                 value={data?.shift_type}
                 items={SHIFT_TYPE_DROPDOWN_VALUE}
                 onChange={e => this.onChangeHandler(e, "shift_type")}
-                disabled={
-                  ((mode === MODE.VIEW_AND_AMEND ? false : true) ||
-                    scheduler) &&
-                  (isActive === "Active" ? true : false)
-                }
+                disabled={true}
                 className="form-control awsm-input"
-                placeholder={!scheduler ? "Select" : ""}
+                placeholder={data?.shift_type ? data.shift_type : "-"}
               />
             </div>
           </div>
@@ -86,12 +118,18 @@ class AvailabilityTab extends PureComponent {
               <input
                 className="form-control awsm-input"
                 type="text"
-                defaultValue={data?.daily_available_hours}
+                defaultValue={
+                  data?.daily_available_hours
+                    ? data.daily_available_hours
+                    : null
+                }
                 disabled={true}
                 onChange={e =>
                   this.onChangeHandler(e.target.value, "daily_available_hours")
                 }
-              // placeholder="Typing something here..."
+                placeholder={
+                  data?.daily_available_hours ? data.daily_available_hours : "-"
+                }
               />
             </div>
           </div>
@@ -101,30 +139,37 @@ class AvailabilityTab extends PureComponent {
               <AWSMDropdown
                 value={data?.status_awsm}
                 items={RT_STATUS_IN_AWSM_DROPDOWN_VALUE}
-                onChange={e => this.onChangeHandler(e, "status_awsm")}
-                disabled={
-                  (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
-                }
+                onChange={e => this.onChangeStatusAWSM(e, "status_awsm")}
+                disabled={scheduler || statusSap?.toUpperCase() === "INACTIVE"}
                 className="form-control awsm-input"
-                placeholder={!scheduler ? "Select" : ""}
+              // placeholder={!scheduler ? "Select" : ""}
               />
             </div>
             <div className="col-md-6 form-group">
-              <label> Date </label>
+              <label>
+                INACTIVE DATE
+                {data?.status_awsm === "Active" && !scheduler && (
+                  <span className="error">*</span>
+                )}
+              </label>
               <DateRangePicker
                 disabled={
                   (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
                 }
-                placeholder={!scheduler ? "Select Date" : ""}
+                placeholder={!scheduler ? "Select date" : ""}
                 defaultValue={data?.block_date_range}
                 onChange={v => this.onChangeHandler(v, "block_date_range")}
                 error={this.state.isDateRangeError}
               />
-              <p hidden={!this.state.isDateRangeError} className="error">Please fill in Temporary Blocked Date range</p>
+              <p hidden={!this.state.isDateRangeError} className="error">
+                Please fill in Temporary Blocked Date range
+              </p>
             </div>
           </div>
           <div className="marginTop14 marginBottom22">
-            <strong className="font-weight-bolder">OTHER TERMINAL MOBILIZATION</strong>
+            <strong className="font-weight-bolder">
+              OTHER TERMINAL MOBILIZATION
+            </strong>
           </div>
           <div className="row">
             <div className="col-md-6 form-group">

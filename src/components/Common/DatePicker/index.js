@@ -155,7 +155,7 @@ const DatePicker = ({
   }
 
   return (
-    <div className="awsm-date-picker-container">
+    <div className="awsm-date-picker-container" style={{width: `${showButtons ? '75%' : '100%'}`}} >
       <button
         type="button"
         disabled={disabled}

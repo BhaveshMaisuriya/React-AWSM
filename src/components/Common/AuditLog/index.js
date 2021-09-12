@@ -132,7 +132,7 @@ class AuditLog extends Component {
             <b>ACTION</b>
           </div>
           {data.length === 0 ? 
-          <div>
+          <div className="audit-no-records">
             <p>No Records Found!</p>
             </div>
           : (

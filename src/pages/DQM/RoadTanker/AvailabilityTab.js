@@ -158,9 +158,11 @@ class AvailabilityTab extends PureComponent {
                 onChange={v => this.onChangeHandler(v, "block_date_range")}
                 error={((mode === MODE.VIEW_AND_AMEND ? true : false) || !scheduler) && (showError && showError.indexOf('block_date_range') !== -1)}
               />
-              <p hidden={!this.state.isDateRangeError} className="error">
-                Please fill in Temporary Blocked Date range
-              </p>
+              {((mode === MODE.VIEW_AND_AMEND ? true : false) || !scheduler) && (showError && showError.indexOf('block_date_range') !== -1) && 
+                <p className="error">
+                  Please fill in Temporary Blocked Date range
+                </p>
+              }              
             </div>
           </div>
           <div className="marginTop14 marginBottom22">

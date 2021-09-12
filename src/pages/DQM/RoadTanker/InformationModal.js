@@ -82,6 +82,7 @@ class InformationModal extends Component {
   }
 
   isEmptyDate = date => {
+    console.log("date::", date);
     if (date?.type === "single" && date?.days?.length === 0) {
       return true
     } else if (date?.type === "range" && date?.date_from === null && date?.date_to === null) {
@@ -94,6 +95,7 @@ class InformationModal extends Component {
       return false
     }
   }
+
   render() {
     const { visible, currentRoadTanker, onUpdateRoadTankerDetail } = this.props
     const { activeTab, mode, showAlert, data } = this.state

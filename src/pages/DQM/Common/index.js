@@ -415,71 +415,14 @@ class Pages extends Component {
                         {cardTitle}
                       </CardTitle>
                       <Divider />
-                      {locationPath === "/sales-inventory" && (
-                        <div className="d-flex align-items-center w-100 mt-4 mb-2">
-                          <div className="col-4 p-0">
-                            <label>DATE</label>
-                            <DatePicker
-                              showButtons={true}
-                              isTypeFor="sales"
-                              value={this.state.sales_date}
-                              onChange={value =>
-                                this.setState({
-                                  ...this.state,
-                                  sales_date: value,
-                                })
-                              }
-                            />
-                          </div>
-                          <div className="col-6 p-0 ml-4">
-                            <label>REGION & TERMINAL</label>
-                            <div className="d-flex">
-                              <div className="col-4 p-0">
-                                <AWSMDropdown
-                                  placeholder=""
-                                  items={REGION_TERMINAL
-                                    .filter((option)=> option.region !== "Special Product")
-                                    .map(e => e.region)}
-                                  value={this.state.region}
-                                  onChange={value =>
-                                    this.setState({
-                                      ...this.state,
-                                      region: value,
-                                      terminal: REGION_TERMINAL
-                                        .find((option)=> option.region === value)?.terminal?.[0],
-                                    })
-                                  }
-                                />
-                              </div>
-                              <div className="col-8 p-0 ml-2">
-                                <AWSMDropdown
-                                  placeholder=""
-                                  items={
-                                    REGION_TERMINAL.find(
-                                      e => e.region === this.state.region
-                                    )?.terminal
-                                  }
-                                  value={this.state.terminal}
-                                  onChange={value =>
-                                    this.setState({
-                                      ...this.state,
-                                      terminal: value,
-                                    })
-                                  }
-                                />
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      )}
                       <div className="d-flex justify-content-between align-items-center">
                         <SearchBar
                           searchOnClickHandler={this.handleSearchButton}
                           searchOnChangeHandler={this.handleSearchBox}
                         />
                       </div>
-                      <div className="table-top-bar">
-                        <div className="top-page-number">
+                      <div className="table-top-bar row">
+                        <div className={`top-page-number ${locationPath === "/sales-inventory" && 'sales-first col-lg-2 col-sm-12 col-xs-12'}`}>
                           <div className="enteriesText">
                             {`${currentPage * rowsPerPage + 1} to ${
                               tableData.total_rows -
@@ -490,7 +433,64 @@ class Pages extends Component {
                             } of ${tableData.total_rows} enteries`}
                           </div>
                         </div>
-                        <div className="d-flex align-items-center">
+                        {locationPath === "/sales-inventory" && (
+                          <div className={`d-flex align-items-center w-100 ${locationPath === "/sales-inventory" && 'border-left col-lg-7 col-sm-12 col-xs-12' }`}>
+                            <div className="col-4 p-0 d-flex align-items-center">
+                              <label className="mb-0 pr-2">DATE</label>
+                              <DatePicker
+                                showButtons={true}
+                                isTypeFor="sales"
+                                value={this.state.sales_date}
+                                onChange={value =>
+                                  this.setState({
+                                    ...this.state,
+                                    sales_date: value,
+                                  })
+                                }
+                              />
+                            </div>
+                            <div className="col-8 p-0 d-flex align-items-center">
+                              <label className="mb-0 pr-2 w-50">REGION & TERMINAL</label>
+                              <div className="d-flex w-100">
+                                <div className="col-4 p-0">
+                                  <AWSMDropdown
+                                    placeholder=""
+                                    items={REGION_TERMINAL
+                                      .filter((option)=> option.region !== "Special Product")
+                                      .map(e => e.region)}
+                                    value={this.state.region}
+                                    onChange={value =>
+                                      this.setState({
+                                        ...this.state,
+                                        region: value,
+                                        terminal: REGION_TERMINAL
+                                          .find((option)=> option.region === value)?.terminal?.[0],
+                                      })
+                                    }
+                                  />
+                                </div>
+                                <div className="col-6 p-0 ml-2">
+                                  <AWSMDropdown
+                                    placeholder=""
+                                    items={
+                                      REGION_TERMINAL.find(
+                                        e => e.region === this.state.region
+                                      )?.terminal
+                                    }
+                                    value={this.state.terminal}
+                                    onChange={value =>
+                                      this.setState({
+                                        ...this.state,
+                                        terminal: value,
+                                      })
+                                    }
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                        <div className={`d-flex align-items-center ${locationPath === "/sales-inventory" && 'sales-first  col-lg-3 col-sm-12 col-xs-12'}`}>
                           <IconButton
                             aria-label="delete"
                             onClick={this.handleOpenCustomizeTable}

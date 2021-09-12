@@ -112,3 +112,13 @@
     background-color: transparent;
   }
 }
+
+.audit-no-records {
+  height: 100px;
+    display: flex;
+    align-items: center;
+    p{
+      margin-left: 10px;
+      margin-bottom: 0;
+    }
+}

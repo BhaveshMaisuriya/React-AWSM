@@ -378,7 +378,6 @@ class Pages extends Component {
                   <button
                     className="btn btn-outline-primary excel-btn-container"
                     onClick={() => this.downloadExcel()}
-                    // disabled={this.state.loader}
                   >
                     <div className="excel-download-btn">
                       <span className="download-icon">

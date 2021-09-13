@@ -54,9 +54,9 @@ function* onGetSalesAndInventory({ params = {} }) {
   }
 }
 
-function* onGetSalesAndInventoryDetail({ params }) {
+function* onGetSalesAndInventoryDetail({ recordId }) {
   try {
-    const response = yield call(getSaleAndInventoryDetail, params)
+    const response = yield call(getSaleAndInventoryDetail, recordId)
     yield put(getDetailsSalesSuccess(response))
   } catch (error) {
     yield put(getDetailsSalesFail(error))

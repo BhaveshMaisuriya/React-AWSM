@@ -384,7 +384,7 @@ export const getRoadTankerFilter = params => {
 export const getSaleAndInventoryVarianceControl = () =>
   get(`${url.GET_SALES_AND_INVENTORY_VARIANCE_CONTROL}`)
 
-export const updateSaleAndInventoryVarianceControl = (data) =>
+export const updateSaleAndInventoryVarianceControl = () =>
   put(`${url.GET_SALES_AND_INVENTORY_VARIANCE_CONTROL}`)
 
 export const getSaleAndInventoryDetail = () =>

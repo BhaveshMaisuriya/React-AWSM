@@ -148,9 +148,9 @@ export const getDownloadSalesFail = error => ({
   payload: error,
 })
 
-export const getDetailsSales = params => ({
+export const getDetailsSales = recordId => ({
   type: GET_DETAIL_SALES,
-  params,
+  recordId,
 })
 
 export const getDetailsSalesSuccess = response => ({

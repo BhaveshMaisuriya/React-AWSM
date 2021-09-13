@@ -259,7 +259,7 @@ export const getRetailAuditLog = payload =>
 // get DQM Master Commercial Cust Audit Log
 export const getAuditLog = (params) =>
 axios.get(
-  `/audit-log?module=${params.module}&page=${params.page}&limit=${params.limit}`
+  `https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev/audit-log?module=${params.module}&page=${params.page}&limit=${params.limit}`
 )
 
 // get DQM Master Commercial Cust Audit Log
@@ -384,7 +384,7 @@ export const getRoadTankerFilter = params => {
 export const getSaleAndInventoryVarianceControl = () =>
   get(`${url.GET_SALES_AND_INVENTORY_VARIANCE_CONTROL}`)
 
-export const updateSaleAndInventoryVarianceControl = (data) =>
+export const updateSaleAndInventoryVarianceControl = () =>
   put(`${url.GET_SALES_AND_INVENTORY_VARIANCE_CONTROL}`)
 
 export const getSaleAndInventoryDetail = () =>

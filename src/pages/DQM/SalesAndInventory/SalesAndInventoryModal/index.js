@@ -50,20 +50,26 @@ class SalesAndInventoryTableInformation extends Component {
   }
 
   componentDidMount() {
-    const {
-      onGetSalesAndInventoryDetail,
-      currentSalesAndInventory,
-    } = this.props
-    if (onGetSalesAndInventoryDetail()) {
-      this.setState({
-        data: currentSalesAndInventory,
-      })
+    const { onGetSalesAndInventoryDetail,data:{record_id: recordId} } = this.props
+    /*
+      dispatch action to run saga for calling api for getting detail of record.
+     */
+    if (recordId){ // just mock record Id. Wait for backend
+      onGetSalesAndInventoryDetail(/*recordId*/)
     }
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
+    const {currentSalesAndInventory} = this.props;
+    const {currentSalesAndInventory:previousSalesAndInventory} = prevProps;
+
     if (prevState.name !== this.state.name) {
       this.handler()
+    }
+    if (JSON.stringify(currentSalesAndInventory) !== JSON.stringify(previousSalesAndInventory)){
+      this.setState({
+        data:currentSalesAndInventory
+      })
     }
   }
 
@@ -74,7 +80,7 @@ class SalesAndInventoryTableInformation extends Component {
 
   render() {
     const scheduler = isScheduler()
-    const { visible, onUpdateSalesAndInventoryDetail } = this.props
+    const { visible, onUpdateSalesAndInventoryDetail,data:{record_id:recordId} } = this.props
     const { activeTab, data, isConfirm } = this.state
 
     const toggle = tab => {
@@ -116,7 +122,7 @@ class SalesAndInventoryTableInformation extends Component {
               />
             }
           >
-            <span className="modal-title">Record ID: 123456789</span>
+            <span className="modal-title">Record ID: {`${recordId}`}</span>
             <span className="date-sub-title">| Date: 12 Mar 2021</span>
             <span className="last-updated-sub-title">
               Last Updated By: Nur Izzati on 3rd March 2021
@@ -236,7 +242,7 @@ const mapStateToProps = ({ saleAndInventory }) => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  onGetSalesAndInventoryDetail: params => dispatch(getDetailsSales(params)),
+  onGetSalesAndInventoryDetail: recordId => dispatch(getDetailsSales(recordId)),
   onUpdateSalesAndInventoryDetail: data =>
     dispatch(updateSalesAndInventoryDetail(data)),
   // onResetSalesAndInventoryDetail: () =>

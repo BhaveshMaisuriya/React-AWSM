@@ -165,7 +165,6 @@ class InformationModal extends Component {
         toggleAlert("Need to put in both date and terminal name to save.")
         return false
       }
-      console.log("temp::", temp)
       if(temp.length === 0) {
         return true
       } else {
@@ -324,7 +323,6 @@ class InformationModal extends Component {
                     </NavLink>
                   </NavItem>
                   <NavItem>
-                    {console.log("showError::1", this.state.showError)}
                     <NavLink
                       className={activeTab === "2" ? "active" : null}
                       onClick={() => {
@@ -354,7 +352,7 @@ class InformationModal extends Component {
                         data={data?.availability}
                         defaultData={currentRoadTanker?.availability}
                         onChange={onFieldValueChange}
-                        isActive={data?.status_sap}
+                        statusSap={data?.status_sap}
                         showError={this.state.showError}
                       />
                       <hr style={{ margin: "2em 0" }} />

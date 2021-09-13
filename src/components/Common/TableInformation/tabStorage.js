@@ -153,7 +153,7 @@ const TabStorage = ({ scheduler, data, onChange }) => {
           <div key={index}>
             <div
               className="d-flex justify-content-between align-items-center"
-              style={{ margin: "30px 0 22px 0" }}
+              style={{ margin: "16x 0 22px 0" }}
             >
               <div className="section-header">{`STORAGE ${
                 key.split("_")[1]

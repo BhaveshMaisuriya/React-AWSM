@@ -210,7 +210,10 @@ const VarianceControl = ({
         <ModalHeader
           close={<CloseButton handleClose={() => setIsConfirm(true)} />}
         >
-          <h3>Variance Control</h3>
+          <span className="modal-title">Variance Control</span> 
+          <span className="last-updated-sub-title">
+              Last Updated By: Nur Izzati on 3rd March 2021 
+            </span>
         </ModalHeader>
         <ModalBody className="variance-control-content position-relative">
           {isConfirm && showExitConfirmation()}

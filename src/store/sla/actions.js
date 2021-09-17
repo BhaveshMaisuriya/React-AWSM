@@ -24,12 +24,30 @@ import {
   DELETE_SLA_SECTION_FAIL,
   DELETE_SLA_RECORD,
   DELETE_SLA_RECORD_SUCCESS,
-  DELETE_SLA_RECORD_FAIL
+  DELETE_SLA_RECORD_FAIL,
+  GET_SLA_ATTACHMENTS,
+  GET_SLA_ATTACHMENTS_SUCCESS,
+  GET_SLA_ATTACHMENTS_FAIL
 } from "./actionTypes"
 
 export const getSLAItems = params => ({
   type: GET_SLA_ITEMS,
   params,
+})
+
+export const getSLAAttchments = params => ({
+  type: GET_SLA_ATTACHMENTS,
+  params,
+})
+
+export const getSLAAttchmentsSuccess = response => ({
+  type: GET_SLA_ATTACHMENTS_SUCCESS,
+  params: response,
+})
+
+export const getSLAAttchmentsFail = error => ({
+  type: GET_SLA_ATTACHMENTS_FAIL,
+  payload: error,
 })
 
 export const getSlaItemsSuccess = response => ({

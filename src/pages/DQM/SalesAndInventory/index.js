@@ -29,6 +29,15 @@ class SalesInventory extends Component {
     }
   }
 
+  formatDate = (date) => {
+    var result = date.toLocaleDateString("en-GB", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    });
+    return result.split('/')[2] + "-" + result.split('/')[1] + "-" + result.split('/')[0];
+  }
+
   componentDidMount() {
     const {
       onGetSaleAndInventory,
@@ -38,7 +47,7 @@ class SalesInventory extends Component {
     const { searchFields } = this.state
     const params = {
       limit: 10,
-      page: 0,
+      page: 1,
       sort_dir: "asc",
       sort_field: "ship_to_party",
       search_fields: transformArrayToString(searchFields),

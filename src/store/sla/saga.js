@@ -10,6 +10,7 @@ import {
   CREATE_SLA_SECTION,
   DELETE_SLA_RECORD,
   CREATE_SLA_RECORD,
+  GET_SLA_ATTACHMENTS,
 } from "./actionTypes"
 
 import {
@@ -31,6 +32,8 @@ import {
     createSLARecordFail,
     deleteSLARecordSuccess,
     deleteSLARecordFail,
+    getSLAAttchmentsSuccess,
+    getSLAAttchmentsFail
 } from "./actions"
 
 import {
@@ -43,7 +46,8 @@ import {
   createSLASection,
   createSLATableRecord,
   deleteSLARecord,
-  updateSLARecord
+  updateSLARecord,
+  getAttchments
 } from "../../helpers/fakebackend_helper"
 
 function* onGetSLAAuditLog(params) {
@@ -52,6 +56,15 @@ function* onGetSLAAuditLog(params) {
     yield put(getSlaAuditLogSuccess(response))
   } catch (error) {
     yield put(getSlaAuditLogFail(error))
+  }
+}
+
+function* onGetSLAAttachments(params) {
+  try {
+    const response = yield call(getAttchments, params.params)
+    yield put(getSLAAttchmentsSuccess(response))
+  } catch (error) {
+    yield put(getSLAAttchmentsFail(error))
   }
 }
 
@@ -156,6 +169,7 @@ function* SLASaga() {
   yield takeEvery(UPDATE_SECTION_TAB, onUpdateSectionTab)
   yield takeEvery(CREATE_SLA_RECORD, onCreateSLARecord)
   yield takeEvery(DELETE_SLA_SECTION, onDeleteSLASection)
+  yield takeEvery(GET_SLA_ATTACHMENTS, onGetSLAAttachments)
 }
 
 export default SLASaga

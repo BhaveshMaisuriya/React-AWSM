@@ -252,6 +252,12 @@ export const getDownloadTerminal = params =>
     { ...params }
   )
 
+export const getAttchments = params =>
+  axios.post(
+    "/file/upload",
+    { ...params }
+  )  
+
 // get DQM Master Retail Cust Audit Log
 export const getRetailAuditLog = payload =>
   get(url.GET_RETAIL_AUDITLOG, { payload: payload })

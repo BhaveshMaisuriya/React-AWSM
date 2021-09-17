@@ -18,7 +18,7 @@ export default function FileUpload(props) {
     isDragActive,
     acceptedFiles,
     fileRejections,
-  } = useDropzone({ onDrop, accept: props.acceptedFormat })
+  } = useDropzone({ onDrop, accept: props.acceptedFormat, multiple: false })
 
   let allErrors = []
 

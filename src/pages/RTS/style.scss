@@ -156,6 +156,11 @@
         width: 150px;
     }
 }
+
+#order-bank-main .order-bank-transform {
+    transform: unset !important;
+}
+
 .order-scroll {
     height: 75%;
 }

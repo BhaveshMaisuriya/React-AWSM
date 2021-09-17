@@ -10,6 +10,10 @@
 }
 .field {
   cursor: pointer;
+  height: 2.5rem !important;
+  border-radius: 0.25rem !important;
+  border: 1px solid #d8d8d8;
+  padding: 0.5rem !important
 }
 .add {
   background-color: transparent !important;
@@ -63,4 +67,10 @@
 }
 .marginBottom20 {
   margin-bottom: 20px;
+}
+
+.fieldError {
+  position: absolute;
+  bottom: -2px;
+  color: red;
 }

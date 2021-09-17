@@ -23,8 +23,10 @@ const AWSMDropdown = ({
   disabled = false,
   defaultEmpty = true,
   value,
-  flip = false
+  flip = false,
   //   defaultValue,
+  hasNone = false,
+  error = null,
 }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const toggle = () => setDropdownOpen(prevState => !prevState)
@@ -34,11 +36,11 @@ const AWSMDropdown = ({
   const itemsRef = React.createRef()
   itemsRef.current = []
 
-  const onValueChange = item => {
+  const onValueChange = (item, index) => {
     setValue(item)
     setDropdownOpen(false)
     if (onChange) {
-      onChange(item)
+      onChange(hasNone && index === 0 ? null : item)
     }
   }
 
@@ -65,19 +67,22 @@ const AWSMDropdown = ({
         <div
           className={`awsm-select-toggle p-2 position-relative  ${
             disabled ? "disabled" : ""
-          }`}
+          } ${!disabled && error ? "border-danger" : ""}`}
         >
           <div>{value && value !== "None" ? value.toString().substring(0, 5) : disabled ? "" : "Select time"}</div>
           {!disabled && <ReactSVG src={ArrowDropDownIcon} className="awsm-dropdown-arrow" />}
+          {!disabled && error && <div className="time-error">
+            {error}
+          </div>}
         </div>
       </DropdownToggle>
       <DropdownMenu className="awsm-select-menu w-100" flip={flip}>
         {items &&
-          items.map((item, index) => (
+        (hasNone ? ["None"].concat(items) : items).map((item, index) => (
             <div
               ref={ref => itemsRef.current.push(ref)}
               key={index}
-              onClick={() => onValueChange(item)}
+              onClick={() => onValueChange(item, index)}
               // highlight selected item here
               className={`awsm-select-item 
               ${(itemSelected === item || 

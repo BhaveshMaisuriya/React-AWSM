@@ -18,9 +18,9 @@ input[type="number"]::-webkit-outer-spin-button {
   background-image: url(../../../assets/images/warning.svg) !important;
   background-repeat: no-repeat;
 }
-.form-control:focus {
+.form-control:not(.av-invalid):focus {
   color: #495057;
-  border-color: #00a19c !important;
+  border-color: #00a19c;
   outline: 0;
   box-shadow: none;
 }

@@ -95,9 +95,10 @@ const Product = ({
             onChange={value => onFieldChange("code", value)}
             placeholder={!isDisabledField && placeholderSelect}
             disabled={isDisabledField}
+            error={error_code !== "" && value.code === null}
           />
           }
-          {value.code === null && <small className='red-error'>{error_code}</small>}
+          {value.code === null && <p className='red-error'>{error_code}</p>}
         </div>
         <div className="col-3 form-group mb-0 h-40">
           <label htmlFor="productName">PRODUCT NAME</label>

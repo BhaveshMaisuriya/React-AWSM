@@ -136,7 +136,7 @@ const TabStorage = ({ scheduler, data, onChange }) => {
   return (
     <div className="dqm-storage-container" id="dqm-storage-container">
       <Row className="row">
-        <Col className="col-md-6 form-group">
+        <Col className="col-md-6 form-group mb-0">
           <label>END OF DAY</label>
           <AWSMDropdown
             onChange={onEndOfDayChange}
@@ -145,6 +145,7 @@ const TabStorage = ({ scheduler, data, onChange }) => {
             value={
               storageData.end_of_day?.time_to?.toString().substring(0, 5) || ""
             }
+            placeholder="Select time"
           />
         </Col>
       </Row>
@@ -326,7 +327,7 @@ const TabStorage = ({ scheduler, data, onChange }) => {
                 </Col>
                 {pathName === "/commercial-customer" ? (
                   <React.Fragment>
-                    <Col className="col-3" style={{ marginTop: "12px" }}>
+                    <Col className="col-3">
                       <div>
                         <label>DEADSTOCK</label>
                         <AWSMInputNumber
@@ -344,7 +345,7 @@ const TabStorage = ({ scheduler, data, onChange }) => {
                         />
                       </div>
                     </Col>
-                    <Col className="col-3 " style={{ marginTop: "12px" }}>
+                    <Col className="col-3 ">
                       <div>
                         <label>SAFE FILL</label>
                         <AWSMInputNumber
@@ -371,7 +372,6 @@ const TabStorage = ({ scheduler, data, onChange }) => {
                 >
                   <label>REMARKS</label>
                   <AWSMInput
-                    placeholder="Write something here..."
                     disabled={scheduler}
                     defaultValue={
                       storageData[key] ? storageData[key].remarks || "" : ""

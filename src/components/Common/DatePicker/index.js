@@ -20,6 +20,7 @@ const DatePicker = ({
   isTypeFor,
   startDate = null,
   endDate = null,
+  placeholder = "Select date"
 }) => {
   const [date, setDate] = useState(value ? new Date(value) : new Date())
   const [anchorEl, setAnchorEl] = React.useState(null)
@@ -166,7 +167,7 @@ const DatePicker = ({
           disabled ? "disabled" : ""
         }`}
       >
-        <div className="date-picker-label">{label}</div>
+        <div className="date-picker-label">{!label && !disabled ? placeholder : label}</div>
         {!disabled && <ReactSVG className="date-picker-icon" src={AWSM_Calendar} />}
       </button>
       <Popover

@@ -19,6 +19,7 @@ import {
   RESET_CURRENT_ROAD_TANKER_DATA,
 } from "./actionTypes"
 import { ToastSuccess, ToastError } from "../../helpers/swal"
+import formatDateResponseList from "../../helpers/format-response-data/format-date-response.helper"
 const initialState = {
   roadTanker: [],
   error: {},
@@ -40,6 +41,10 @@ const RoadTanker = (state = initialState, action) => {
         isLoading: true,
       }
     case GET_ROAD_TANKER_SUCCESS:
+      const list = action.payload?.list;
+      if(list && list.length > 0){
+        action.payload = {...action.payload,list: formatDateResponseList(list)}
+      }
       return {
         ...state,
         roadTanker: action.payload,

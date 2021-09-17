@@ -33,6 +33,7 @@ import AWSMAlert from "../../../components/Common/AWSMAlert"
 import VarianceControl from "../SalesAndInventory/VarianceControl"
 import TankStatusModal from "../SalesAndInventory/TankStatusModal/TankStatusModal"
 import VarianceIcon from "../../../assets/images/AWSM-Variance-Control.svg"
+import TankIcon from "../../../assets/images/AWSM-Tank-Status.svg"
 import AWSMDropdown from "../../../components/Common/Dropdown"
 import DatePicker from "../../../components/Common/DatePicker"
 import REGION_TERMINAL from "../../../common/data/regionAndTerminal"
@@ -83,7 +84,7 @@ class Pages extends Component {
       tankStatusModal: false,
       region: this.defaultRegion ? this.defaultRegion : null,
       terminal: this.defaultTerminal ? this.defaultTerminal : null,
-      sales_date: new Date(),
+      sales_date: new Date()
     }
     this.toggle = this.toggle.bind(this)
     this.toggleTI = this.toggleTI.bind(this)
@@ -91,9 +92,10 @@ class Pages extends Component {
   }
 
   getCustomerData = async () => {
-    const { onGetMainTable } = this.props
+    const { onGetMainTable, /*salesDate*/ } = this.props
     const { currentPage, searchTerm, sortField } = this.state
     const { sortDir, searchFields, q } = this.state
+    const pathName = window.location.pathname
     const params = {
       limit: 10,
       page: currentPage,
@@ -102,6 +104,11 @@ class Pages extends Component {
       q: transformObjectToStringSentence(q),
       sort_dir: sortDir,
       sort_field: sortField,
+    }
+    if (pathName === "/sales-inventory"){
+        params.search_date = "2021-04-08"
+       /* must be (format(salesDate,"YYYY-MM-DD")) // because data is only available
+       for date 2021-04-08, not for today. so just a test */
     }
     if (params.q.length < 1) delete params.q
     window.scrollTo(0, 0)
@@ -301,6 +308,11 @@ class Pages extends Component {
     this.setState({ alert: true })
     this.setState({ error_message: "" })
   }
+  updateSalesDate = (newDate)=>{
+    if(this.props.updateSalesDate){
+      this.props.updateSalesDate(newDate);
+    }
+  }
 
   render() {
     const locationPath = window.location.pathname
@@ -359,13 +371,15 @@ class Pages extends Component {
         <VarianceControl
           open={this.state.varianceControl}
           closeDialog={() => this.setState({ varianceControl: false })}
-          selectedDate={format(this.state.sales_date, "yyyy-MM-dd")}
+          selectedDate={format(locationPath === "/sales-inventory" ?
+            this.props.salesDate : this.state.sales_date, "yyyy-MM-dd")}
         />
         <TankStatusModal
           open={this.state.tankStatusModal}
           handleClose={() => this.setState({ tankStatusModal: false })}
           modalTitle={`Tank Status`}
-          selectedDate={format(this.state.sales_date, "yyyy-MM-dd")}
+          selectedDate={format(locationPath === "/sales-inventory" ?
+            this.props.salesDate : this.state.sales_date, "yyyy-MM-dd")}
         />
         <div className="page-content">
           <div className="container-fluid">
@@ -440,13 +454,8 @@ class Pages extends Component {
                               <DatePicker
                                 showButtons={true}
                                 isTypeFor="sales"
-                                value={this.state.sales_date}
-                                onChange={value =>
-                                  this.setState({
-                                    ...this.state,
-                                    sales_date: value,
-                                  })
-                                }
+                                value={this.props.salesDate}
+                                onChange={this.updateSalesDate}
                               />
                             </div>
                             <div className="col-8 p-0 d-flex align-items-center">
@@ -491,7 +500,7 @@ class Pages extends Component {
                           </div>
                         )}
                         <div className={`d-flex align-items-center ${locationPath === "/sales-inventory" && 'sales-first  col-lg-3 col-sm-12 col-xs-12'}`}>
-                          <IconButton
+                           <IconButton
                             aria-label="delete"
                             onClick={this.handleOpenCustomizeTable}
                           >
@@ -515,6 +524,7 @@ class Pages extends Component {
                                   this.setState({ tankStatusModal: true })
                                 }
                               >
+                                <ReactSVG src={TankIcon} />
                                 Tank Status
                               </button>
                             </>

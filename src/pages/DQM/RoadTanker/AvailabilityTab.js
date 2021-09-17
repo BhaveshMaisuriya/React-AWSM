@@ -25,9 +25,9 @@ class AvailabilityTab extends PureComponent {
       return true
     } else if (date?.type === "range" && date?.date_from === null && date?.date_to === null) {
       return true;
-    } else if (date?.type === "") { 
+    } else if (date?.type === "") {
       return true
-    } else if (date === null) { 
+    } else if (date === null) {
       return true
     } else {
       return false
@@ -80,7 +80,7 @@ class AvailabilityTab extends PureComponent {
   }
 
   render() {
-    const { mode, scheduler, data, statusSap, isActive, showError  } = this.props
+    const { mode, scheduler, data, statusSap, isActive, showError } = this.props
     return (
       <div className="availability">
         <form>
@@ -139,13 +139,12 @@ class AvailabilityTab extends PureComponent {
                 onChange={e => this.onChangeStatusAWSM(e, "status_awsm")}
                 disabled={scheduler || statusSap?.toUpperCase() === "INACTIVE"}
                 className="form-control awsm-input"
-              // placeholder={!scheduler ? "Select" : ""}
               />
             </div>
             <div className="col-md-6 form-group">
               <label>
                 INACTIVE DATE
-                {data?.status_awsm === "Active" && !scheduler && (
+                {data?.status_awsm === "Temporary Blocked" && !scheduler && statusSap?.toUpperCase() === "ACTIVE" && (
                   <span className="error">*</span>
                 )}
               </label>
@@ -156,13 +155,13 @@ class AvailabilityTab extends PureComponent {
                 placeholder={!scheduler ? "Select date" : ""}
                 defaultValue={data?.block_date_range}
                 onChange={v => this.onChangeHandler(v, "block_date_range")}
-                error={((mode === MODE.VIEW_AND_AMEND ? true : false) || !scheduler) && (showError && showError.indexOf('block_date_range') !== -1)}
+                error={((mode === MODE.VIEW_AND_AMEND ? true : false) || !scheduler) && (showError && showError.indexOf('block_date_range') !== -1) && statusSap?.toUpperCase() === "ACTIVE"}
               />
-              {((mode === MODE.VIEW_AND_AMEND ? true : false) || !scheduler) && (showError && showError.indexOf('block_date_range') !== -1) && 
+              {((mode === MODE.VIEW_AND_AMEND ? true : false) || !scheduler) && (showError && showError.indexOf('block_date_range') !== -1) && statusSap?.toUpperCase() === "ACTIVE" &&
                 <p className="error">
                   Please fill in Temporary Blocked Date range
                 </p>
-              }              
+              }
             </div>
           </div>
           <div className="marginTop14 marginBottom22">
@@ -182,7 +181,10 @@ class AvailabilityTab extends PureComponent {
                   this.onChangeHandler(e, "other_terminal_mobilization_1_date")
                 }}
                 defaultValue={data?.other_terminal_mobilization_1_date}
+                error={showError && showError.indexOf('other_terminal_mobilization_1_date') !== -1}
               />
+              {(showError && showError.indexOf('other_terminal_mobilization_1_date') !== -1) && <p className="error">Please select MOBILIZED TERMINAL DATE 1</p>}
+
             </div>
             <div className="col-md-6 form-group">
               <label> MOBILIZED TERMINAL NAME 1</label>
@@ -197,7 +199,7 @@ class AvailabilityTab extends PureComponent {
                 }
                 className="form-control awsm-input"
                 placeholder={!scheduler ? "Select" : ""}
-                error={showError && showError.indexOf('other_terminal_mobilization_1_name') !== -1 }
+                error={showError && showError.indexOf('other_terminal_mobilization_1_name') !== -1}
               />
               {(showError && showError.indexOf('other_terminal_mobilization_1_name') !== -1) && <p className="error">Please select MOBILIZED TERMINAL NAME 1</p>}
             </div>
@@ -214,7 +216,9 @@ class AvailabilityTab extends PureComponent {
                 onChange={v =>
                   this.onChangeHandler(v, "other_terminal_mobilization_2_date")
                 }
+                error={showError && showError.indexOf('other_terminal_mobilization_2_date') !== -1}
               />
+              {(showError && showError.indexOf('other_terminal_mobilization_2_date') !== -1) && <p className="error">Please select MOBILIZED TERMINAL DATE 2</p>}
             </div>
             <div className="col-md-6 form-group">
               <label> MOBILIZED TERMINAL NAME 2</label>

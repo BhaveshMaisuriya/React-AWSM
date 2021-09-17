@@ -9,7 +9,6 @@ import DropdownInput from "../DropdownInput"
 const STATUS_IN_AWSM = ["Active", "Temporarily Closed", "Inactive"]
 
 const timeData = []
-timeData.push(`None`)
 for (let i = 0; i < 24; i++) {
   timeData.push(`${i.toString().padStart(2, "0")}:00`)
   timeData.push(`${i.toString().padStart(2, "0")}:30`)
@@ -84,6 +83,7 @@ const TabStatus = ({ scheduler, data, onChange }) => {
             onChange={value => onFieldChange("status_awsm", null, value)}
             value={statusData.status_awsm}
             disabled={scheduler}
+            placeholder="Select status"
           />
         </Col>
         {pathName === "/commercial-customer" && (
@@ -159,6 +159,8 @@ const TabStatus = ({ scheduler, data, onChange }) => {
             }
             disabled={scheduler || statusData.status_awsm === "Inactive"}
             required
+            placeholder="Select time"
+            hasNone
           />
         </Col>
         <Col className="col-3">
@@ -193,6 +195,8 @@ const TabStatus = ({ scheduler, data, onChange }) => {
             onChange={value => onFieldChange("close_period", "time_to", value)}
             disabled={scheduler || statusData.status_awsm === "Inactive"}
             required
+            placeholder="Select time"
+            hasNone
           />
         </Col>
       </Row>

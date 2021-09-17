@@ -96,6 +96,13 @@
     &.disabled {
       background-color: #EEEEEE
     }
+    position: relative;
+    .calendar-error {
+      position: absolute;
+      bottom: -18px;
+      left: 0;
+      color: red;
+    }
   }
 
   .date-picker-icon {
@@ -121,5 +128,11 @@
 
   .DayPicker-Day--today {
     color: rgba(0, 0, 0, 0.87);
+  }
+}
+
+.date-range-popover {
+  .MuiPopover-paper {
+    width: 380px !important;
   }
 }

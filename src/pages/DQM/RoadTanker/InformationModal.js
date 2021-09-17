@@ -47,7 +47,10 @@ class InformationModal extends Component {
       isConfirm: false,
       alertMsg: "",
       showError: [],
+      isUpdateAble: false
     }
+    
+    this.validateTerminal = this.validateTerminal.bind(this)
   }
 
   componentWillUnmount() {
@@ -70,6 +73,67 @@ class InformationModal extends Component {
       this.setState({ data: nextProps.currentRoadTanker })
     }
   }
+  
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (!isEqual(prevState.data, this.state.data)) {
+      if (this.validateTerminal()) {
+        this.setState({
+          showError: [],
+          isUpdateAble: true,
+        })
+      } else {
+        this.setState({
+          isUpdateAble: false
+        })
+      }
+    }
+  }
+  
+  isValidDate = (date) => {
+    if (!date || typeof date !== "object") {
+      return false
+    }
+    return ((date.type === "every" || date.type === "single") && date.days && date.days.length > 0) ||
+      (date.type === "range" && (date.date_to || date.date_from)) ||
+      date.type === "daily"
+  }
+  
+  validateTerminal = () => {
+    const { data } = this.state
+    let temp = [];
+    temp = [...temp];
+    if (
+      data?.availability?.status_awsm === "Temporary Blocked" &&
+      !this.isValidDate(data?.availability?.block_date_range)
+    ) {
+      temp.push('block_date_range');
+    }
+
+    if (this.isValidDate(data?.availability?.other_terminal_mobilization_1_date) && data?.availability?.other_terminal_mobilization_1_name === 'None') {
+      temp.push('other_terminal_mobilization_1_name');
+    }
+
+    if (this.isValidDate(data?.availability?.other_terminal_mobilization_2_date) && data?.availability?.other_terminal_mobilization_2_name === 'None') {
+      temp.push('other_terminal_mobilization_2_name');
+    }
+
+    if (!this.isValidDate(data?.availability?.other_terminal_mobilization_2_date) && data?.availability?.other_terminal_mobilization_2_name !== "None") {
+      temp.push('other_terminal_mobilization_2_date');
+    }
+    
+    if (!this.isValidDate(data?.availability?.other_terminal_mobilization_1_date) && data?.availability?.other_terminal_mobilization_1_name !== "None") {
+      temp.push('other_terminal_mobilization_1_date');
+    }
+    
+    if (temp.length === 0) {
+      return true
+    } else {
+      this.setState({
+        showError: temp,
+      })
+      return false
+    }
+  }
 
   onConfirmCancel = () => {
     this.setState({ isConfirm: false })
@@ -82,20 +146,18 @@ class InformationModal extends Component {
   }
 
   isEmptyDate = date => {
-    console.log("date::", date);
     if (date?.type === "single" && date?.days?.length === 0) {
       return true
     } else if (date?.type === "range" && date?.date_from === null && date?.date_to === null) {
       return true;
-    } else if (date?.type === "") { 
+    } else if (date?.type === "") {
       return true
-    } else if (date === null) { 
+    } else if (date === null) {
       return true
     } else {
       return false
     }
   }
-
   render() {
     const { visible, currentRoadTanker, onUpdateRoadTankerDetail } = this.props
     const { activeTab, mode, showAlert, data } = this.state
@@ -126,62 +188,12 @@ class InformationModal extends Component {
       else this.onConfirmExit()
     }
 
-    const validateTerminal = () => {
-      let temp = [];
-      temp = [...temp];
-      if (
-        data?.availability?.status_awsm === "Temporary Blocked" &&
-        this.isEmptyDate(data?.availability?.block_date_range)
-      ) {
-        temp.push('block_date_range');
-        // showNameError('block_date_range');
-        toggleAlert("Please fill in Temporary Blocked Date range")
-        // return false
-      }
-
-      if(data?.availability?.other_terminal_mobilization_1_date && data?.availability?.other_terminal_mobilization_1_name === 'None'){
-        temp.push('other_terminal_mobilization_1_name');
-        // showNameError('other_terminal_mobilization_1_name');
-        toggleAlert("Need to put in both date and terminal name to save.")
-        // return false
-      }
-      if(data?.availability?.other_terminal_mobilization_2_date && data?.availability?.other_terminal_mobilization_2_name === 'None'){
-        temp.push('other_terminal_mobilization_2_name');
-        // showNameError('other_terminal_mobilization_2_name');
-        toggleAlert("Need to put in both date and terminal name to save.")
-        // return false
-      }
-
-      if (
-        (data?.availability?.other_terminal_mobilization_2_name &&
-          data?.availability?.other_terminal_mobilization_2_name !== "None" &&
-          !data?.availability?.other_terminal_mobilization_2_date) ||
-        (data?.availability?.other_terminal_mobilization_2_date &&
-          !data?.availability?.other_terminal_mobilization_2_name) ||
-        (data?.availability?.other_terminal_mobilization_1_name &&
-          data?.availability?.other_terminal_mobilization_2_name !== "None" &&
-          !data?.availability?.other_terminal_mobilization_1_date) ||
-        (data?.availability?.other_terminal_mobilization_1_date &&
-          !data?.availability?.other_terminal_mobilization_1_name)
-      ) {
-        toggleAlert("Need to put in both date and terminal name to save.")
-        return false
-      }
-      console.log("temp::", temp)
-      if(temp.length === 0) {
-        return true
-      } else {
-        this.setState({
-          showError: temp,
-        })
-        return false
-      }
-    }
+    
 
     const handleUpdate = async e => {
       // e.preventDefault()
-      if (validateTerminal()) {
-        this.setState({showError: []});
+      if (this.validateTerminal()) {
+        this.setState({ showError: [] });
         await onUpdateRoadTankerDetail({ vehicle_name: data.vehicle, data })
         // this.props.onCancel()
       }
@@ -200,7 +212,7 @@ class InformationModal extends Component {
       this.setState({
         showError: temp,
       })
-    }    
+    }
 
     const onFieldValueChange = (fieldName, value) => {
       const newData = { ...data }
@@ -223,6 +235,7 @@ class InformationModal extends Component {
                 color="primary"
                 type="submit"
                 onClick={e => handleUpdate(e)}
+                disabled={!this.state.isUpdateAble}
               >
                 Update
               </Button>
@@ -264,7 +277,7 @@ class InformationModal extends Component {
                     defaultValue={data?.owner}
                     onChange={e => onFieldValueChange("owner", e.target.value)}
                     disabled={true}
-                    // placeholder="Typing something here..."
+                  // placeholder="Typing something here..."
                   />
                 </div>
               </div>
@@ -326,7 +339,6 @@ class InformationModal extends Component {
                     </NavLink>
                   </NavItem>
                   <NavItem>
-                    {console.log("showError::1", this.state.showError)}
                     <NavLink
                       className={activeTab === "2" ? "active" : null}
                       onClick={() => {
@@ -356,7 +368,7 @@ class InformationModal extends Component {
                         data={data?.availability}
                         defaultData={currentRoadTanker?.availability}
                         onChange={onFieldValueChange}
-                        isActive={data?.status_sap}
+                        statusSap={data?.status_sap}
                         showError={this.state.showError}
                       />
                       <hr style={{ margin: "2em 0" }} />

@@ -15,7 +15,7 @@ const SAVE_DATE_FORMAT = "yyyy-MM-dd"
 
 const dateObjectTemplate = {
   id: null,
-  type: "single",
+  type: "",
   time_from: null,
   time_to: null,
   days: [],
@@ -32,9 +32,10 @@ const DateRangePicker = ({
   types = ["single", "range", "every", "daily"],
   startDate = new Date(),
   endDate = null,
-  placeholder,
+  placeholder = "Select date",
   disablePreviousDayBeforeSelect = false,
   error = false,
+  validateTime = false
 }) => {
   const [value, setValue] = useState(defaultValue || dateObjectTemplate)
   const [month, setMonth] = useState(defaultMonth)
@@ -98,11 +99,14 @@ const DateRangePicker = ({
   }, [selectedWeekDays, defaultValue, value, startDate, endDate])
 
   const labelValue = useMemo(() => {
+    if (!value || typeof value !== "object") {
+      return ""
+    }
     if (value.type === "every") {
       if (value.days.length === 7) {
         return "Every day"
       }
-      return `Every ${value.days.join(", ")}`
+      return value.days && value.days.length > 0 ? `Every ${value.days.join(", ")}` : ""
     } else if (value.type === "range") {
       return `From ${
         value.date_from
@@ -135,10 +139,10 @@ const DateRangePicker = ({
     }
     setValue({
       ...value,
-      type: "every",
-      days: newSelectedDays
+      type: newSelectedDays.length > 0 ? "every" : null,
+      days: newSelectedDays.length > 0 ? newSelectedDays
         .sort()
-        .map(day => format(addDays(startOfWeek(Date.now()), day), "cccc")),
+        .map(day => format(addDays(startOfWeek(Date.now()), day), "cccc")) : [],
       date_from: null,
       date_to: null,
     })
@@ -194,7 +198,7 @@ const DateRangePicker = ({
         }`}
         role="columnheader"
       >
-        <div title="Wednesday">{WEEK_DAYS[weekday]}</div>
+        <div title={WEEK_DAYS[weekday]}>{WEEK_DAYS[weekday]}</div>
       </div>
     )
   }
@@ -202,7 +206,7 @@ const DateRangePicker = ({
   const captionElement = ({ date }) => {
     return (
       <div className="DayPicker-caption">
-        <div className="d-flex justify-content-between align-items-center pb-4 pt-4">
+        <div className="d-flex justify-content-between align-items-center pb-4 pt-2">
           <div onClick={() => setMonth(addMonths(month, -1))}>
             <svg
               className="DayPicker-icon prev"
@@ -272,6 +276,14 @@ const DateRangePicker = ({
     }
     setAnchorEl(null)
   }
+  
+  const dateError = useMemo(() => {
+    if (validateTime && value && (value.time_from || value.time_to) && !value.type) {
+      return "Please select date"
+    }
+    return false
+  }, [value])
+  
 
   return (
     <div className="awsm-date-range-picker">
@@ -283,13 +295,16 @@ const DateRangePicker = ({
         onClick={handleClick}
         onBlur={onBlur}
         className={`d-flex justify-content-between align-items-center py-2 w-100 calendar-label ${
-          error && "border-danger"
+          (error || dateError) && !disabled && "border-danger"
         } ${disabled ? "disabled" : ""}`}
       >
-        <div className="date-picker-label">{labelValue || placeholder}</div>
+        <div className="date-picker-label">{!disabled && !labelValue ? placeholder : labelValue}</div>
         {!disabled && (
           <ReactSVG className="date-picker-icon" src={AWSM_Calendar} />
         )}
+        {dateError && !disabled && <div className="calendar-error">
+          {dateError}
+        </div>}
       </button>
       <Popover
         id={id}
@@ -304,6 +319,7 @@ const DateRangePicker = ({
           vertical: "top",
           horizontal: "center",
         }}
+        className="date-range-popover"
       >
         <div className="awsm-date-range-picker">
           <DayPicker

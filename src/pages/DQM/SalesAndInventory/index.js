@@ -16,6 +16,7 @@ import {
   getSalesAndInventoryVarianceControl,
   overrideStatusInActionColumn,
 } from "../../../store/actions"
+// import { format } from "date-fns"
 
 const tableName = "salesinventory-table"
 
@@ -26,6 +27,7 @@ class SalesInventory extends Component {
       searchFields: getCookieByKey(tableName)
         ? JSON.parse(getCookieByKey(tableName))
         : tableColumns,
+      salesDate: new Date()
     }
   }
 
@@ -39,6 +41,20 @@ class SalesInventory extends Component {
   }
 
   componentDidMount() {
+    this.onGetMainTableAndAuditLog()
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    const {salesDate} = this.state.salesDate;
+    const {salesDate: prevStateDate} = prevState;
+    if (salesDate !== prevStateDate){
+      // this.onGetMainTableAndAuditLog()
+      /*This will be called when sales date change. But now we only have data for date
+       2021-04-08. So jut let it be commented*/
+    }
+  }
+
+  onGetMainTableAndAuditLog = () =>{
     const {
       onGetSaleAndInventory,
       onGetSalesAuditLog,
@@ -51,6 +67,10 @@ class SalesInventory extends Component {
       sort_dir: "asc",
       sort_field: "ship_to_party",
       search_fields: transformArrayToString(searchFields),
+      search_date:"2021-04-08"
+      // search_date:format(new Date(), "yyyy-MM-dd")
+      /* must be (format(sales_date,"YYYY-MM-DD")) // because data is only available
+      for date 2021-04-08, not for today. so just a test */
     }
     const payload = {
       limit: 6,
@@ -73,6 +93,12 @@ class SalesInventory extends Component {
     await onGetDownloadSales(downloadParams)
   }
 
+  onUpdateSalesDate = (newDate)=>{
+    this.setState({
+      salesDate: newDate
+    })
+  }
+
   render() {
     const {
       onGetSaleAndInventory,
@@ -89,7 +115,7 @@ class SalesInventory extends Component {
       saleAndInventoryIsLoading,
       overrideStatusInActionColumn,
     } = this.props
-    const { searchFields } = this.state
+    const { searchFields,salesDate } = this.state
     return (
       <Fragment>
         {saleAndInventoryIsLoading ? <Loader /> : ""}
@@ -114,6 +140,8 @@ class SalesInventory extends Component {
             frozenColNum={2}
             varianceControlData={varianceControlData}
             overrideActionColumn={overrideStatusInActionColumn}
+            salesDate={salesDate}
+            updateSalesDate={this.onUpdateSalesDate}
           />
         )}
         {tableError && (

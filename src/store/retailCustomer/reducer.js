@@ -28,6 +28,7 @@ const initialState = {
   isLoading: false,
 }
 import { ToastSuccess, ToastError } from "../../helpers/swal"
+import formatDateResponseList from "../../helpers/format-response-data/format-date-response.helper"
 
 const RetailCustomer = (state = initialState, action) => {
   switch (action.type) {
@@ -37,6 +38,15 @@ const RetailCustomer = (state = initialState, action) => {
         isLoading: true,
       }
     case GET_RETAIL_CUSTOMER_SUCCESS:
+      const list = action.payload?.list;
+      if (list && list.length > 0){
+        /*
+          all response date field are in format "YYYY-MM-DD" , "single YYYY-MM-DD", "from
+          YYYY-MM-DD to YYYY-MM-DD. Must be format to "DD-MM-YYYY"
+        */
+        const formattedList = formatDateResponseList(list);
+        action.payload = {...action.payload,list:formattedList}
+      }
       return {
         ...state,
         retailCustomers: action.payload,

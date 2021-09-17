@@ -12,6 +12,7 @@ const DropdownInput = ({
   RowComponent = null,
   disabled,
   maxChar = 20,
+  placeholder="Select"
 }) => {
   const [inputMode, setInputMode] = useState(false)
   const [inputValue, setInputValue] = useState("")
@@ -114,6 +115,7 @@ const DropdownInput = ({
           onChange={onChange}
           items={items}
           RowComponent={RowComponent}
+          placeholder={placeholder}
         />
       </div>
     </div>

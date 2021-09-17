@@ -6,18 +6,19 @@ import ExitConfirmation from "../../../../components/Common/ExitConfirmation"
 import {
   getSalesAndInventoryVarianceControl,
   updateSaleAndInventoryVarianceControlSuccess,
-  updateSalesAndInventoryVarianceControl,
+  updateSalesAndInventoryVarianceControl
 } from "../../../../store/salesAndInventory/actions"
 import AWSMEditIcon from "../../../../assets/images/AWSM-Edit-Icon.svg"
 import { ReactSVG } from "react-svg"
 import { format } from "date-fns"
 import CloseButton from "../../../../components/Common/CloseButton"
 import { isScheduler } from "../../../../helpers/auth_helper"
+import { formatUpdateVarianceControlUploadData } from "./format-update-data.helper"
 
 const headers = [
   { label: "STATION TANK STATUS", value: "station_tank_status" },
   { label: "VARIANCE VALUE (L)", value: "variance_value" },
-  { label: "VARIANCE PERCENTAGE (%)", value: "variance_percentage" },
+  { label: "VARIANCE PERCENTAGE (%)", value: "variance_percentage" }
 ]
 
 const VarianceInput = ({ value, disabled, onChange }) => {
@@ -89,12 +90,12 @@ const VarianceInput = ({ value, disabled, onChange }) => {
 }
 
 const VarianceTable = ({
-  headers = [],
-  items = [],
-  scheduler,
-  onChange,
-  rowKey = "id",
-}) => {
+                         headers = [],
+                         items = [],
+                         scheduler,
+                         onChange,
+                         rowKey = "id"
+                       }) => {
   const onValueChange = (index, key, value) => {
     const newItems = [...items]
     newItems[index][key] = value
@@ -105,61 +106,63 @@ const VarianceTable = ({
   return (
     <table className="w-100 variance-table">
       <thead>
-        <tr>
-          {headers.map(({ label, key }) => {
-            return <th key={key}>{label}</th>
-          })}
-        </tr>
+      <tr>
+        {headers.map(({ label, key }) => {
+          return <th key={key}>{label}</th>
+        })}
+      </tr>
       </thead>
       <tbody>
-        {items.map((item, row) => {
-          return (
-            <tr key={item[rowKey]}>
-              {headers.map((header, col) => (
-                <td key={header.value}>
-                  {col === 0 ? (
-                    <div className="pl-3">{item[header.value] || ""}</div>
-                  ) : (
-                    <VarianceInput
-                      disabled={scheduler}
-                      value={item[header.value] || ""}
-                      onChange={value =>
-                        onValueChange(row, header.value, value)
-                      }
-                    />
-                  )}
-                </td>
-              ))}
-            </tr>
-          )
-        })}
+      {items.map((item, row) => {
+        return (
+          <tr key={item[rowKey]}>
+            {headers.map((header, col) => (
+              <td key={header.value}>
+                {col === 0 ? (
+                  <div className="pl-3">{item[header.value] || ""}</div>
+                ) : (
+                  <VarianceInput
+                    disabled={scheduler}
+                    value={item[header.value] || ""}
+                    onChange={value =>
+                      onValueChange(row, header.value, value)
+                    }
+                  />
+                )}
+              </td>
+            ))}
+          </tr>
+        )
+      })}
       </tbody>
     </table>
   )
 }
 
 const VarianceControl = ({
-  open,
-  closeDialog,
-  onChange,
-  selectedDate,
-  getSalesAndInventoryVarianceControl,
-  varianceControlData,
-  updateSalesAndInventoryVarianceControl,
-}) => {
+                           open,
+                           closeDialog,
+                           onChange,
+                           selectedDate,
+                           getSalesAndInventoryVarianceControl,
+                           varianceControlData,
+                           updateSalesAndInventoryVarianceControl
+                         }) => {
   const scheduler = isScheduler()
   const currentDate = format(new Date(), "yyyy-MM-dd")
   const isHistoricalDate = selectedDate !== currentDate
   const [unmodifiedStatus, setUnmodifiedStatus] = useState(true)
   const [data, setData] = useState({
     ...varianceControlData,
-    date: selectedDate,
+    date: selectedDate
   })
   const [isConfirm, setIsConfirm] = useState(false)
 
   useEffect(() => {
-    if (varianceControlData){
+    if (varianceControlData) {
       setData({ ...varianceControlData, date: selectedDate })
+    }else{
+      setData(null)
     }
   }, [varianceControlData])
 
@@ -167,7 +170,8 @@ const VarianceControl = ({
     /*Call Api when the modal is opened */
     if (open) {
       /* Wait for real API */
-      // getSalesAndInventoryVarianceControl(selectedDate)
+      const queryDate = selectedDate ? selectedDate : currentDate
+      getSalesAndInventoryVarianceControl(queryDate)
     }
   }, [open])
 
@@ -187,7 +191,12 @@ const VarianceControl = ({
     if (onChange) {
       onChange()
     }
-    updateSalesAndInventoryVarianceControl(data)
+    const { date, ...uploadData } = data
+    const formattedData = formatUpdateVarianceControlUploadData(uploadData)
+
+    if (formattedData) {
+      updateSalesAndInventoryVarianceControl(formattedData)
+    }
     handleExit()
   }
 
@@ -221,7 +230,7 @@ const VarianceControl = ({
             <div>
               <div className="px-2">
                 <label className="variance-table-label">Sales Variance</label>
-                {data && (
+                {data ? (
                   <VarianceTable
                     items={data.sales}
                     headers={headers}
@@ -229,13 +238,13 @@ const VarianceControl = ({
                     rowKey="station_tank_status"
                     onChange={value => onModifyData({ ...data, sales: value })}
                   />
-                )}
+                ) : <div>On {selectedDate && format(new Date(selectedDate),"do LLL yyyy")}, there is no data for Sales</div>}
               </div>
               <div className="px-2">
                 <label className="variance-table-label">
                   Inventory Variance
                 </label>
-                {data && (
+                {data? (
                   <VarianceTable
                     items={data.inventory}
                     headers={headers}
@@ -245,7 +254,7 @@ const VarianceControl = ({
                       onModifyData({ ...data, inventory: value })
                     }
                   />
-                )}
+                ) : <div>On {selectedDate && format(new Date(selectedDate),"do LLL yyyy")}, there is no data for Inventory</div>}
               </div>
             </div>
             <div className="d-flex align-items-center justify-content-end mt-4 mb-4 px-4">
@@ -275,7 +284,7 @@ const VarianceControl = ({
 
 const mapStateToProps = ({ saleAndInventory }) => ({
   varianceControlData: saleAndInventory.varianceControlData,
-  varianceControlError: saleAndInventory.varianceControlError,
+  varianceControlError: saleAndInventory.varianceControlError
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -283,9 +292,9 @@ const mapDispatchToProps = dispatch => ({
     dispatch(getSalesAndInventoryVarianceControl(date)),
   updateSalesAndInventoryVarianceControl: data =>
     /* Wait for real api*/
-    // dispatch(updateSalesAndInventoryVarianceControl(data)),
-    /* Test dispatch to be able to see the change in variance control modal*/
-    dispatch(updateSaleAndInventoryVarianceControlSuccess(data)),
+    dispatch(updateSalesAndInventoryVarianceControl(data))
+  /* Test dispatch to be able to see the change in variance control modal*/
+  // dispatch(updateSaleAndInventoryVarianceControlSuccess(data)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(VarianceControl)

@@ -16,6 +16,7 @@ import {
 } from "./actionTypes"
 
 import { ToastSuccess, ToastError } from "../../helpers/swal"
+import formatDateResponseList from "../../helpers/format-response-data/format-date-response.helper"
 const initialState = {
   dataList: [],
   error: null,
@@ -36,6 +37,10 @@ const Product = (state = initialState, action) => {
         isLoading: true,
       }
     case GET_PRODUCT_SUCCESS:
+      const list = action.payload?.list;
+      if(list && list.length > 0){
+        action.payload = {...action.payload,list: formatDateResponseList(list)}
+      }
       return {
         ...state,
         dataList: action.payload,

@@ -1,51 +1,27 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { connect } from "react-redux"
-import {
-  Button,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  Table,
-} from "reactstrap"
+import { Modal, ModalHeader, ModalBody, ModalFooter, Table } from "reactstrap"
 import InputWithSuffix from "../../../../components/Common/TankStatusModal/InputWithSuffix"
 import ExitConfirmation from "../../../../components/Common/ExitConfirmation/index"
 import "./TankStatusModal.scss"
-import { updateSalesAndInventoryTankStatusModal } from "store/actions"
-import { XIcon } from "common/CustomizeTable/icons"
+import {
+  updateSalesAndInventoryTankStatus,
+  getSalesAndInventoryTankStatus,
+} from "store/actions"
 import CloseButton from "../../../../components/Common/CloseButton"
 import { isScheduler } from "helpers/auth_helper"
 import { format } from "date-fns"
 
-const mockDataOfTankStatus = {
-  date: "2020-02-06",
-  tableData: [
-    {
-      status: "LV1",
-      lower_value: "3080",
-      upper_value: "00000",
-      percentage: false,
-    },
-    {
-      status: "LV2",
-      lower_value: "12000",
-      upper_value: "00000",
-      percentage: false,
-    },
-    {
-      status: "Normal",
-      lower_value: "56678",
-      upper_value: false,
-      percentage: false,
-    },
-    {
-      status: "TC",
-      lower_value: false,
-      upper_value: false,
-      percentage: "00000",
-    },
-  ],
-  capacity: "100",
+const strArray = ["LV1", "LV2", "Normal", "TC"]
+
+const realmockdata = {
+  lv1_lower_value: 0,
+  lv1_upper_value: 4999,
+  lv2_lower_value: 5000,
+  lv2_upper_value: 9999,
+  normal_lower_value: 10000,
+  tc_percentage: 30,
+  absolute_tank_capacity: 30,
 }
 
 const TankStatusModal = props => {
@@ -54,24 +30,36 @@ const TankStatusModal = props => {
     modalTitle,
     open,
     handleClose,
-    updateSalesAndInventoryTankStatusModal,
+    onGetSalesAndInventoryTankStatus,
+    onUpdateSalesAndInventoryTankStatus,
     selectedDate,
+    tankStatus
   } = props
   const [modalConfirm, setModalConfirm] = useState(false)
   const [unmodifiedStatus, setUnmodifiedStatus] = useState(true)
-  const [data, setData] = useState(mockDataOfTankStatus.tableData)
-  const [capacity, setCapacity] = useState(mockDataOfTankStatus.capacity)
+  const [data, setData] = useState()
   const currentDate = format(new Date(), "yyyy-MM-dd")
   const isHistoricalDate = selectedDate !== currentDate
   const handleUpdateButtonOnclick = () => {
-    updateSalesAndInventoryTankStatusModal(data)
+    onUpdateSalesAndInventoryTankStatus(data)
     setUnmodifiedStatus(true)
     if (handleClose) handleClose()
   }
+  useEffect(async () => {
+    if (open) {
+     await onGetSalesAndInventoryTankStatus(selectedDate)
+    }
+  }, [open])
 
-  const handleOnchangeValueData = (value, index, fieldName) => {
-    data[index][fieldName] = value
-    setData([...data])
+  useEffect(()=>{
+    if(tankStatus){
+      setData(tankStatus)
+  }
+  },[tankStatus])
+
+  const handleOnchangeValueData = (value, _, fieldName) => {
+    data[fieldName] = value
+    setData({ ...data })
     setUnmodifiedStatus(false)
   }
 
@@ -81,6 +69,7 @@ const TankStatusModal = props => {
 
   const handleExitModalConfirm = () => {
     setModalConfirm(false)
+    setData(tankStatus)
     setUnmodifiedStatus(true)
     if (handleClose) handleClose()
   }
@@ -125,35 +114,34 @@ const TankStatusModal = props => {
                     </thead>
                     <tbody>
                       {data &&
-                        data.length &&
-                        data.map((v, i) => {
+                        strArray.map((v, i) => {
                           return (
                             <tr key={i}>
-                              <td className="item first-item">{v?.status}</td>
+                              <td className="item first-item">{v}</td>
                               <td className="item">
                                 <InputWithSuffix
-                                  value={v?.lower_value}
+                                  value={data[`${v.toLowerCase()}_lower_value`]}
                                   TextOnChangeValue={handleOnchangeValueData}
                                   index={i}
-                                  fieldName={"lower_value"}
+                                  fieldName={`${v.toLowerCase()}_lower_value`}
                                   isEdit={!scheduler && !isHistoricalDate}
                                 />
                               </td>
                               <td className="item">
                                 <InputWithSuffix
-                                  value={v?.upper_value}
+                                  value={data[`${v.toLowerCase()}_upper_value`]}
                                   TextOnChangeValue={handleOnchangeValueData}
                                   index={i}
-                                  fieldName={"upper_value"}
+                                  fieldName={`${v.toLowerCase()}_upper_value`}
                                   isEdit={!scheduler && !isHistoricalDate}
                                 />
                               </td>
                               <td className="item last-item">
                                 <InputWithSuffix
-                                  value={v?.percentage}
+                                  value={data[`${v.toLowerCase()}_percentage`]}
                                   TextOnChangeValue={handleOnchangeValueData}
                                   index={i}
-                                  fieldName={"percentage"}
+                                  fieldName={`${v.toLowerCase()}_percentage`}
                                   isEdit={!scheduler && !isHistoricalDate}
                                 />
                               </td>
@@ -169,9 +157,10 @@ const TankStatusModal = props => {
                     Absolute Tank Capacity (%)
                   </div>
                   <InputWithSuffix
-                    value={capacity}
+                    value={data?.absolute_tank_capacity}
+                    fieldName={"absolute_tank_capacity"}
                     inputType={`baseInput`}
-                    TextOnChangeValue={v => setCapacity(v)}
+                    TextOnChangeValue={handleOnchangeValueData}
                     isEdit={!scheduler && !isHistoricalDate}
                     disable={scheduler}
                   />
@@ -203,11 +192,15 @@ const TankStatusModal = props => {
   )
 }
 
-const mapStateToProps = () => ({})
+const mapStateToProps = saleAndInventory => ({
+  tankStatus: saleAndInventory.saleAndInventory.tankStatusData,
+})
 
 const mapDispatchToProps = dispatch => ({
-  updateSalesAndInventoryTankStatusModal: data =>
-    dispatch(updateSalesAndInventoryTankStatusModal(data)),
+  onGetSalesAndInventoryTankStatus: date =>
+    dispatch(getSalesAndInventoryTankStatus(date)),
+  onUpdateSalesAndInventoryTankStatus: data =>
+    dispatch(updateSalesAndInventoryTankStatus(data)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(TankStatusModal)

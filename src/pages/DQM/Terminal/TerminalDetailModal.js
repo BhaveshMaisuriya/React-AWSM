@@ -27,6 +27,7 @@ import {
 } from "reactstrap"
 import ExitConfirmation from "../../../components/Common/ExitConfirmation"
 import AWSMAlert from "components/Common/AWSMAlert"
+import { isValidDate } from "../Common/helper"
 
 class TerminalDetailModal extends PureComponent {
   constructor(props) {
@@ -48,8 +49,10 @@ class TerminalDetailModal extends PureComponent {
       },
     }
     this.errors = {
+      addressTab:[],
       statusTab: [],
       contactTab: [],
+      storageTab:[],
     }
   }
 
@@ -95,31 +98,50 @@ class TerminalDetailModal extends PureComponent {
             }
           })
         })
-        return
       }
 
       const { code } = this.props.data
       const { dataSource } = this.state
-      if(dataSource?.contact?.email && !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(dataSource?.contact?.email)){
-        this.setState({ isValidated: false })
-        return
-      } 
-      if(dataSource?.contact?.superintendant?.email && !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(dataSource?.contact?.superintendant?.email)){
-        this.setState({ isValidated: false })
-        return
-      }
+
       let error_code = [];
-      const validateStorage = Object.keys(dataSource?.storage).every(key => {
-        if (key.startsWith("product_") && dataSource.storage[key] &&  dataSource.storage[key].code === null) {
-          error_code.push('1');
+      if(dataSource?.storage){
+        for(const key in dataSource.storage){
+          if (key.startsWith("product_") &&
+            dataSource.storage[key] &&
+            dataSource.storage[key].code === null){
+            this.errors.storageTab.push({field:key})
+            error_code.push('1')
+          }
         }
-        return true
-      })
+      }
       if(error_code.length > 0){
-        this.setState({error_code: 'Please fill the product code'})
-        this.setState({error_code_display: true})
+        this.errors.storageTab.push({field:"product"})
+        this.setState({error_code: 'Please fill product code'})
+        this.setState({ isValidated: true })
+      }
+      if(dataSource?.contact?.supervisor?.email && !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,4}$/.test(dataSource?.contact?.supervisor?.email)){
+        error_code.push('1')
+        this.errors.contactTab.push({field:"email"})
+        this.setState({ isValidated: true })
+        }
+
+      if(dataSource?.contact?.superintendant?.email && !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,4}$/.test(dataSource?.contact?.superintendant?.email)){
+        error_code.push('1')
+        this.errors.contactTab.push({field:"email"})
+        this.setState({ isValidated: true })
+      }
+
+      if(Object.keys(this.errors).some(key => this.errors[key].length > 0)){
+        this.setState({error_code_display:true, isValidated:true},
+          ()=> {
+            setTimeout(()=> this.setState({error_code_display:false}),3000)
+            for (const tab in this.errors){
+              this.errors[tab] = []
+            }
+          })
         return
       }
+
     await this.props.onUpdateTableInformation({
       ship_to_party: code,
       body: dataSource,
@@ -159,6 +181,7 @@ class TerminalDetailModal extends PureComponent {
       storage?.loading_time > 1440 ||
       storage?.turnaround_time > 1440
     ) {
+      this.errors.storageTab.push({field:"product"})
       exceedValues.push(1)
     }
     for (let i = 1; i < 50; i++) {
@@ -169,6 +192,7 @@ class TerminalDetailModal extends PureComponent {
           storage?.[`product_${i}`]?.volume_capping_volume_2 > 10000000
         ) {
           exceedValues.push(1)
+          this.errors.storageTab.push({field:"product"})
         }
       } else {
         break
@@ -193,8 +217,19 @@ class TerminalDetailModal extends PureComponent {
         exceedValues.push(1)
       }
     }
+    if (status && typeof status === "object") {
+      const isValidDates = Object.keys(status).every(key => {
+        if (key.startsWith("no_delivery_interval")) {
+          return isValidDate(status[key])
+        }
+        return true
+      })
+      if (!isValidDates) {
+        exceedValues.push(2)
+      }
+    }
     if (exceedValues.length > 0) {
-      this.setState({ isValidated: true })
+      this.setState({ isValidated: false })
     } else {
       this.setState({ isValidated: false })
     }
@@ -226,7 +261,7 @@ class TerminalDetailModal extends PureComponent {
   }
 
   render() {
-    const { activeTab } = this.state
+    const { activeTab, isValidated } = this.state
     const toggle = tab => {
       if (activeTab !== tab) {
         this.setState({ activeTab: tab })
@@ -414,7 +449,7 @@ class TerminalDetailModal extends PureComponent {
                     Cancel
                   </button>
                   <Button
-                    disabled={this.state.isValidated}
+                    disabled={isValidated}
                     onClick={this.handleUpdate.bind(this)}
                     color="primary"
                   >
@@ -428,7 +463,11 @@ class TerminalDetailModal extends PureComponent {
         {this.state.error_code_display !== "" && (
           <AWSMAlert
             status="error"
-            message={'Please fill in necessary data in Storage to save'}
+            message={`Please fill in necessary data in ${
+              Object.keys(this.errors)
+                .filter((key)=> this.errors[key].length > 0)
+                .map((key)=> key.charAt(0).toUpperCase() + key.slice(1,-"tab".length))
+                .join(", ")} to save`}
             openAlert={this.state.error_code_display}
             closeAlert={() => this.setState({ error_code_display: false })}
           />

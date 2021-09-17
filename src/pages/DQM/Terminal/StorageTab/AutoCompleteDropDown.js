@@ -22,6 +22,7 @@ const AWSMDropdown = ({
   disabled = false,
   RowComponent = null,
   placeholder,
+  error = false
 }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const toggle = () => setDropdownOpen(prevState => !prevState)
@@ -56,7 +57,7 @@ const AWSMDropdown = ({
         <div
           className={`awsm-select-toggle p-2 position-relative ${
             disabled ? "disabled" : ""
-          }`}
+          } ${error ? "border-danger" : ""}`}
         >
           <Input
             defaultValue={value ? value : placeholder}

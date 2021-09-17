@@ -158,6 +158,7 @@ class ProductDetailModal extends PureComponent {
                     }}
                     disabled={isDisabledField}
                     className="form-control awsm-input"
+                    placeholder="Select status"
                   />
                 </div>
               </div>

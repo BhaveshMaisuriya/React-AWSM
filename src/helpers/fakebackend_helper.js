@@ -381,21 +381,30 @@ export const getRoadTankerFilter = params => {
   return get(url.GET_ROADTANKER_FILTER, { params: params })
 }
 
-export const getSaleAndInventoryVarianceControl = () =>
-  get(`${url.GET_SALES_AND_INVENTORY_VARIANCE_CONTROL}`)
 
-export const updateSaleAndInventoryVarianceControl = () =>
-  put(`${url.GET_SALES_AND_INVENTORY_VARIANCE_CONTROL}`)
+export const getSaleAndInventoryVarianceControl = (date) =>
+  // get(`${url.GET_SALES_AND_INVENTORY_VARIANCE_CONTROL}`)
+  axios.get(`/sales-inventory/variance-control/${date}`)
 
-export const getSaleAndInventoryDetail = () =>
-  get(`${url.GET_SALES_AND_INVENTORY_DETAIL}`)
+export const updateSaleAndInventoryVarianceControl = data =>
+  // put(`${url.GET_SALES_AND_INVENTORY_VARIANCE_CONTROL}`)
+  axios.put("/sales-inventory/variance-control", data)
+
+export const getSaleAndInventoryDetail = recordId =>
+  // get(`${url.GET_SALES_AND_INVENTORY_DETAIL}`)
+  axios.get(`/sales-inventory/${recordId}`)
 
 // update tank status modal
-export const updateSaleAndInventoryTankStatusModal = () =>
-  put(`/sales_and_inventory_tank_status_modal`)
+export const getSaleAndInventoryTankStatus = date =>
+  axios.get(`/sales-inventory/tank-status-settings/${date}`)
 
-export const updateSaleAndInventoryDetail = () =>
-  put(`/sales_and_inventory_detail`)
+// update tank status modal
+export const updateSaleAndInventoryTankStatusModal = data =>
+  axios.put(`sales-inventory/tank-status-settings`, data)
+
+export const updateSaleAndInventoryDetail = (recordId, payload) =>
+  // put(`/sales_and_inventory_detail`)
+  axios.put(`/sales-inventory/${recordId}`,payload)
 
 // get sales and inventory table data
 // "https://6073f3f2066e7e0017e78a3d.mockapi.io/api/v1/sales"

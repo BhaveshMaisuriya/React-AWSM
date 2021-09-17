@@ -1,8 +1,12 @@
 import {
   GET_SALES_AND_INVENTORY_VARIANCE_CONTROL_FAILED,
   GET_SALES_AND_INVENTORY_VARIANCE_CONTROL_SUCCESS,
-  GET_SALES_AND_INVENTORY_TANK_STATUS_MODAL_SUCCESS,
-  GET_SALES_AND_INVENTORY_TANK_STATUS_MODAL_FAILED,
+  GET_SALES_AND_INVENTORY_TANK_STATUS_SUCCESS,
+  GET_SALES_AND_INVENTORY_TANK_STATUS_FAILED,
+  GET_SALES_AND_INVENTORY_TANK_STATUS,
+  UPDATE_SALES_AND_INVENTORY_TANK_STATUS,
+  UPDATE_SALES_AND_INVENTORY_TANK_STATUS_SUCCESS,
+  UPDATE_SALES_AND_INVENTORY_TANK_STATUS_FAILED,
   GET_SALES_AND_INVENTORY,
   GET_SALES_AND_INVENTORY_SUCCESS,
   GET_SALES_AND_INVENTORY_FAIL,
@@ -21,10 +25,13 @@ import {
   OVERRIDE_STATUS_IN_ACTION_COLUMN,
 } from "./actionTypes"
 import { ToastSuccess, ToastError } from "../../helpers/swal"
+import formatDateResponseList from "../../helpers/format-response-data/format-date-response.helper"
 
 const initialState = {
   varianceControlData: null,
   varianceControlError: null,
+  tankStatusData: null,
+  tankStatusError: null,
   mainTableData: [],
   error: {},
   tableError: null,
@@ -45,6 +52,7 @@ const SaleAndInventory = (state = initialState, action) => {
         isLoading: true,
       }
     case GET_SALES_AND_INVENTORY_VARIANCE_CONTROL_SUCCESS:
+      // ToastSuccess.fire()
       return {
         ...state,
         varianceControlData: action.payload,
@@ -56,16 +64,25 @@ const SaleAndInventory = (state = initialState, action) => {
         varianceControlError: action.payload,
         varianceControlData: null,
       }
-    case GET_SALES_AND_INVENTORY_TANK_STATUS_MODAL_SUCCESS:
+    case GET_SALES_AND_INVENTORY_TANK_STATUS:
       return {
         ...state,
       }
-    case GET_SALES_AND_INVENTORY_TANK_STATUS_MODAL_FAILED:
+    case GET_SALES_AND_INVENTORY_TANK_STATUS_SUCCESS:
+      return {
+        ...state,
+        tankStatusData:action.payload,
+      }
+    case GET_SALES_AND_INVENTORY_TANK_STATUS_FAILED:
       return {
         ...state,
         tankStatusModalError: action.payload,
       }
     case GET_SALES_AND_INVENTORY_SUCCESS:
+      const list = action.payload?.list;
+      if(list && list.length > 0){
+        action.payload = {...action.payload,list: formatDateResponseList(list)}
+      }
       return {
         ...state,
         mainTableData: action.payload,
@@ -132,39 +149,77 @@ const SaleAndInventory = (state = initialState, action) => {
         varianceControlData: null,
         varianceControlError: action.payload,
       }
-
-    case UPDATE_SALES_AND_INVENTORY_DETAIL_SUCCESS:
-      ToastSuccess.fire()
-      let newSaleAndInventory = { ...state.mainTableData }
-      let newData2 = newSaleAndInventory.list
-      const index = newSaleAndInventory.findIndex(
-        v => v.record_id === action?.payload?.data?.record_id
-      )
-      newData2[index] = action?.payload?.data
+    case UPDATE_SALES_AND_INVENTORY_TANK_STATUS:
       return {
         ...state,
-        mainTableData: newSaleAndInventory,
-        isUpdateSuccess: true,
       }
-
-    case UPDATE_SALES_AND_INVENTORY_DETAIL_FAIL:
+    case UPDATE_SALES_AND_INVENTORY_TANK_STATUS_SUCCESS:
+      ToastSuccess.fire()
+      return {
+        ...state,
+        tankStatusData: action.payload,
+        tankStatusError: null,
+      }
+    case UPDATE_SALES_AND_INVENTORY_TANK_STATUS_FAILED:
       ToastError.fire()
       return {
         ...state,
-        error: action.payload,
+        tankStatusData: null,
+        tankStatusError: action.payload,
       }
 
-    case OVERRIDE_STATUS_IN_ACTION_COLUMN:
-      const listData = { ...state.mainTableData }
-      const newData = [...listData.list]
-      newData[action.payload].overrideAction = true
-      return {
-        ...state,
-        mainTableData: listData,
-      }
-    default:
-      return state
-  }
-}
-
-export default SaleAndInventory
+    case UPDATE_SALES_AND_INVENTORY_DETAIL_SUCCESS:
+      /*payload is all information from record. So we must filter which columns are in view and
+       update the view*/
+       const currentTableColumns = Object.keys(state.mainTableData.list[0]);
+       let newList = [...state.mainTableData.list]
+       if(action.payload?.data){
+         const {trans_id} = action.payload?.data
+         const columnsInDetail = findMatchedColumns(action.payload?.data?.details,currentTableColumns)
+         const columnsInSales = findMatchedColumns(action.payload?.data?.sales,currentTableColumns)
+         const columnsInInventory = findMatchedColumns(action.payload?.data?.inventory,currentTableColumns)
+         // For the information from delivery Tab, need example data in List to filter
+         const updatedRecordRow = {...columnsInDetail,...columnsInSales,...columnsInInventory, trans_id}
+         const updatedIndex = newList.findIndex((row)=> row.trans_id === trans_id);
+         if(updatedIndex !== -1){
+           newList[updatedIndex] = updatedRecordRow
+         }
+       }
+       ToastSuccess.fire()
+       return {
+         ...state,
+         mainTableData: {...state.mainTableData,list:newList},
+         isUpdateSuccess: true,
+       }
+ 
+     case UPDATE_SALES_AND_INVENTORY_DETAIL_FAIL:
+       ToastError.fire()
+       return {
+         ...state,
+         error: action.payload,
+       }
+ 
+     case OVERRIDE_STATUS_IN_ACTION_COLUMN:
+       const listData = { ...state.mainTableData }
+       const newData = [...listData.list]
+       newData[action.payload].overrideAction = true
+       return {
+         ...state,
+         mainTableData: listData,
+       }
+     default:
+       return state
+   }
+ }
+ 
+ export default SaleAndInventory
+ 
+ function findMatchedColumns(object,columns){
+   return Object.keys(object).reduce((result,key)=>{
+     if(columns.indexOf(key) !==-1){
+       result[key] = object[key]
+     }
+     return result
+   },{})
+ }
+ 

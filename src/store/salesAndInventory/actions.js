@@ -5,9 +5,12 @@ import {
   UPDATE_SALES_AND_INVENTORY_VARIANCE_CONTROL,
   UPDATE_SALES_AND_INVENTORY_VARIANCE_CONTROL_SUCCESS,
   UPDATE_SALES_AND_INVENTORY_VARIANCE_CONTROL_FAILED,
-  UPDATE_SALES_AND_INVENTORY_TANK_STATUS_MODAL,
-  UPDATE_SALES_AND_INVENTORY_TANK_STATUS_MODAL_SUCCESS,
-  UPDATE_SALES_AND_INVENTORY_TANK_STATUS_MODAL_FAILED,
+  GET_SALES_AND_INVENTORY_TANK_STATUS,
+  GET_SALES_AND_INVENTORY_TANK_STATUS_FAILED,
+  GET_SALES_AND_INVENTORY_TANK_STATUS_SUCCESS,
+  UPDATE_SALES_AND_INVENTORY_TANK_STATUS,
+  UPDATE_SALES_AND_INVENTORY_TANK_STATUS_SUCCESS,
+  UPDATE_SALES_AND_INVENTORY_TANK_STATUS_FAILED,
   GET_SALES_AND_INVENTORY,
   GET_SALES_AND_INVENTORY_SUCCESS,
   GET_SALES_AND_INVENTORY_FAIL,
@@ -25,7 +28,7 @@ import {
   UPDATE_SALES_AND_INVENTORY_DETAIL,
   UPDATE_SALES_AND_INVENTORY_DETAIL_SUCCESS,
   UPDATE_SALES_AND_INVENTORY_DETAIL_FAIL,
-  OVERRIDE_STATUS_IN_ACTION_COLUMN
+  OVERRIDE_STATUS_IN_ACTION_COLUMN,
 } from "./actionTypes"
 
 export const getSalesAndInventoryVarianceControl = date => {
@@ -49,7 +52,7 @@ export const getSalesAndInventoryVarianceControlFailed = error => {
   }
 }
 
-export const updateSalesAndInventoryVarianceControl = (data) => {
+export const updateSalesAndInventoryVarianceControl = data => {
   return {
     type: UPDATE_SALES_AND_INVENTORY_VARIANCE_CONTROL,
     data,
@@ -69,23 +72,43 @@ export const updateSalesAndInventoryVarianceControlFailed = error => {
   }
 }
 
-export const updateSalesAndInventoryTankStatusModal = data => {
+export const updateSalesAndInventoryTankStatus = data => {
   return {
-    type: UPDATE_SALES_AND_INVENTORY_TANK_STATUS_MODAL,
+    type: UPDATE_SALES_AND_INVENTORY_TANK_STATUS,
     payload: data,
   }
 }
-export const updateSalesAndInventoryTankStatusModalSuccess = data => {
+export const updateSalesAndInventoryTankStatusSuccess = data => {
   return {
-    type: UPDATE_SALES_AND_INVENTORY_TANK_STATUS_MODAL_SUCCESS,
+    type: UPDATE_SALES_AND_INVENTORY_TANK_STATUS_SUCCESS,
     payload: data,
   }
 }
 
-export const updateSalesAndInventoryTankStatusModalFailed = error => {
+export const updateSalesAndInventoryTankStatusFailed = error => {
   return {
-    type: UPDATE_SALES_AND_INVENTORY_TANK_STATUS_MODAL_FAILED,
-    payload: error,
+    type: UPDATE_SALES_AND_INVENTORY_TANK_STATUS_FAILED,
+    error: error,
+  }
+}
+
+export const getSalesAndInventoryTankStatus = data => {
+  return {
+    type: GET_SALES_AND_INVENTORY_TANK_STATUS,
+    payload: data,
+  }
+}
+export const getSalesAndInventoryTankStatusSuccess = data => {
+  return {
+    type: GET_SALES_AND_INVENTORY_TANK_STATUS_SUCCESS,
+    payload: data,
+  }
+}
+
+export const getSalesAndInventoryTankStatusFailed = error => {
+  return {
+    type: GET_SALES_AND_INVENTORY_TANK_STATUS_FAILED,
+    error: error,
   }
 }
 
@@ -118,7 +141,7 @@ export const getSaleAndInventoryFilterFail = error => ({
   type: GET_SALES_AND_INVENTORY_FILTER_FAIL,
   payload: error,
 })
-export const getSalesAuditLog = (params) => ({
+export const getSalesAuditLog = params => ({
   type: GET_SALES_AUDITLOG,
   params,
 })
@@ -163,9 +186,10 @@ export const getDetailsSalesFail = error => ({
   payload: error,
 })
 
-export const updateSalesAndInventoryDetail = data => ({
+export const updateSalesAndInventoryDetail = (recordId, payload) => ({
   type: UPDATE_SALES_AND_INVENTORY_DETAIL,
-  payload: data,
+  payload,
+  recordId,
 })
 
 export const updateSalesAndInventoryDetailSuccess = data => ({

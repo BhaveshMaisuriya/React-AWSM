@@ -12,7 +12,7 @@ import DropdownInput from "../DropdownInput"
 import AWSMInput from "../Input"
 import AWSMCheckBox from "../../../common/CheckBox"
 
-const timeData = ["None"]
+const timeData = []
 for (let i = 0; i < 24; i++) {
   timeData.push(`${i.toString().padStart(2, "0")}:00`)
   timeData.push(`${i.toString().padStart(2, "0")}:30`)
@@ -36,7 +36,11 @@ const RowComponent = ({ onChange, item }) => {
         item.checked ? styles.dropdownChecked : ""
       }`}
     >
-      <AWSMCheckBox checked={item.checked} onChange={()=> onChange(item)} name={item.name}/>
+      <AWSMCheckBox
+        checked={item.checked}
+        onChange={() => onChange(item)}
+        name={item.name}
+      />
       <label className="mb-0">{item.name || "-"}</label>
     </div>
   )
@@ -104,16 +108,16 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
       Array.isArray(deliveryData.road_tanker_requirement_items) &&
       deliveryData.road_tanker_requirement_items?.length > 0
     ) {
-     setTanker(
-       deliveryData.road_tanker_requirement_items
-         .map(item => ({
-           name: item,
-           checked:
-             deliveryData.road_tanker_requirement &&
-             deliveryData.road_tanker_requirement.includes(item),
-         }))
-         .filter((item)=> !!item.name)
-       )
+      setTanker(
+        deliveryData.road_tanker_requirement_items
+          .map(item => ({
+            name: item,
+            checked:
+              deliveryData.road_tanker_requirement &&
+              deliveryData.road_tanker_requirement.includes(item),
+          }))
+          .filter(item => !!item.name)
+      )
     }
   }, [])
 
@@ -235,6 +239,20 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
       return item.checked === true
     })
   }, [deliveryData, openTime3])
+  
+  const getDateError = (date) => {
+    if (date && (date.time_from || date.time_to) && (!date.days || date.days.length === 0)) {
+      return "Please select date"
+    }
+    return  null
+  }
+  
+  const getTimeError = (date, key) => {
+    if (date && date.type && date.days?.length > 0 && !date[key]) {
+      return "Please select time"
+    }
+    return null
+  }
 
   return (
     <>
@@ -263,9 +281,7 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
         </Col>
         {pathName === "/commercial-customer" && (
           <Col className="col-md-6">
-            <div className="input-header mb-2" style={{ marginTop: "0.75rem" }}>
-              PUMP TYPE
-            </div>
+            <label>PUMP TYPE</label>
             <AWSMInput
               placeholder="Type something here..."
               disabled
@@ -291,6 +307,7 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
                 time_from: value,
               })
             }
+            hasNone
           />
         </Col>
         <Col className="col-md-6">
@@ -305,6 +322,7 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
                 time_to: value,
               })
             }
+            hasNone
           />
         </Col>
         <Col
@@ -334,13 +352,15 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
                 }
                 className={`${styles.field} ${
                   scheduler ? styles.disabled : ""
-                } awsm-input`}
+                } ${!scheduler && getDateError(deliveryData.actual_open_time_1) ? "border-danger" : ""}`}
                 disabled={!!scheduler}
-                style={{ height: "40px", marginTop: "-4px", cursor: "pointer" }}
               />
               <div className={styles.arrow}>
                 <ReactSVG src={ArrowDropDownIcon} />
               </div>
+              {!scheduler && getDateError(deliveryData.actual_open_time_1) && <div className={styles.fieldError}>
+                Please select date
+              </div>}
             </AvForm>
           </SimplePopover>
         </Col>
@@ -361,6 +381,8 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
                 time_from: value,
               })
             }
+            hasNone
+            error={getTimeError(deliveryData.actual_open_time_1, "time_from")}
           />
         </Col>
         <Col className="col-md-3">
@@ -380,6 +402,8 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
                 time_to: value,
               })
             }
+            hasNone
+            error={getTimeError(deliveryData.actual_open_time_1, "time_to")}
           />
         </Col>
         {pathName === "/retail-customer" ||
@@ -413,12 +437,14 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
                     disabled={scheduler}
                     className={`${styles.field} ${
                       scheduler ? styles.disabled : undefined
-                    } awsm-input`}
-                    style={{ height: "40px", marginTop: "-4px" }}
+                    } ${!scheduler && getDateError(deliveryData.actual_open_time_2) ? "border-danger" : ""}`}
                   />
                   <div className={styles.arrow}>
                     <ReactSVG src={ArrowDropDownIcon} />
                   </div>
+                  {!scheduler && getDateError(deliveryData.actual_open_time_2) && <div className={styles.fieldError}>
+                    Please select date
+                  </div>}
                 </AvForm>
               </SimplePopover>
             </Col>
@@ -439,6 +465,8 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
                     time_from: value,
                   })
                 }
+                hasNone
+                error={getTimeError(deliveryData.actual_open_time_2, "time_from")}
               />
             </Col>
             <Col className="col-md-3">
@@ -458,6 +486,8 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
                     time_to: value,
                   })
                 }
+                hasNone
+                error={getTimeError(deliveryData.actual_open_time_2, "time_to")}
               />
             </Col>
             <Col
@@ -488,12 +518,14 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
                     disabled={scheduler}
                     className={`${styles.field} ${
                       scheduler ? styles.disabled : undefined
-                    } awsm-input`}
-                    style={{ height: "40px", marginTop: "-4px" }}
+                    } ${!scheduler && getDateError(deliveryData.actual_open_time_3) ? "border-danger" : ""}`}
                   />
                   <div className={styles.arrow}>
                     <ReactSVG src={ArrowDropDownIcon} />
                   </div>
+                  {!scheduler && getDateError(deliveryData.actual_open_time_3) && <div className={styles.fieldError}>
+                    Please select date
+                  </div>}
                 </AvForm>
               </SimplePopover>
             </Col>
@@ -514,6 +546,8 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
                     time_from: value,
                   })
                 }
+                error={getTimeError(deliveryData.actual_open_time_3, "time_from")}
+                hasNone
               />
             </Col>
             <Col className="col-md-3">
@@ -533,27 +567,37 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
                     time_to: value,
                   })
                 }
+                hasNone
+                error={getTimeError(deliveryData.actual_open_time_3, "time_to")}
               />
             </Col>
           </React.Fragment>
         ) : null}
-        <Col className="col-md-6">
-          <label>NO DELIVERY INTERVAL</label>
-        </Col>
-        <Col className="col-md-3">
-          <label>TIME (FROM)</label>
-        </Col>
-        <Col className="col-md-3">
-          <label>TIME (TO)</label>
+        <Col
+          className={`col-12 ${styles.marginTop14} ${styles.marginBottom14}`}
+        >
+          <label>
+            <strong>NO DELIVERY INTERVAL</strong>
+          </label>
         </Col>
         {no_interval_array.map((subKey, index) => {
           return (
             <React.Fragment key={index}>
-              <Col className="col-md-6 form-group">
+              <Col className="col-md-6">
+                <label>DATE {index + 1}</label>
+              </Col>
+              <Col className="col-md-3">
+                <label>TIME (FROM) {index + 1}</label>
+              </Col>
+              <Col className="col-md-3">
+                <label>TIME (TO) {index + 1}</label>
+              </Col>
+              <Col className="col-md-6" style={{marginBottom: "1.2rem"}}>
                 <DateRangePicker
                   defaultValue={deliveryData[subKey]}
                   onChange={value => onFieldChange(subKey, value)}
                   disabled={index < 2 ? true : scheduler}
+                  validateTime
                 />
               </Col>
               <Col className="col-md-3">
@@ -578,6 +622,8 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
                       },
                     })
                   }}
+                  hasNone
+                  error={getTimeError(deliveryData[subKey], "time_from")}
                 />
               </Col>
               <Col className="col-md-3">
@@ -602,6 +648,8 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
                       },
                     })
                   }}
+                  hasNone
+                  error={getTimeError(deliveryData[subKey], "time_to")}
                 />
               </Col>
             </React.Fragment>

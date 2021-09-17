@@ -16,7 +16,7 @@ import icon from "../../../assets/images/triangle_error_icon.svg"
 const AWSMInputNumber = ({
   disabled,
   onChange,
-  placeholder,
+  placeholder = "Numeric only",
   value,
   type = "number",
   defaultValue,
@@ -57,7 +57,7 @@ const AWSMInputNumber = ({
       onChange={onValueChange}
       onKeyPress={numberInputValidator}
       defaultValue={defaultValue}
-      className={`awsm-input w-100 ${disabled ? "disabled" : ""} ${
+      className={`awsm-input-number w-100 ${disabled ? "disabled" : ""} ${
         renderExceedError ? "error error-invalid" : ""
       }`}
     />

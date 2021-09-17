@@ -75,6 +75,23 @@ export function getCookieByKey(key) {
   }
 }
 
+export const isValidDate = date => {
+  if (!date || typeof date !== "object") {
+    return false
+  }
+  if (!date.time_from && !date.time_to && !date.date_from && !date.date_to && (!date.days || date.days.length < 1)) {
+    return true
+  }
+  return (
+    date.type &&
+    date.time_from &&
+    date.time_to &&
+    (((date.type === "every" || date.type === "single") && date.days && date.days.length > 0) ||
+      (date.type === "range" && (date.date_to || date.date_from)) ||
+      date.type === "daily")
+  )
+}
+
 export const runValidation = data => {
   if (data.storage) {
     const validateStorage = Object.keys(data.storage).every(key => {
@@ -105,7 +122,7 @@ export const runValidation = data => {
     if (validateContact.includes(false)) {
       return false
     }
-    return true;
+    // return true;
   }
   // if (data.status && data.status.status_awsm === "Temporarily Closed") {
   //   if (
@@ -133,6 +150,14 @@ export const runValidation = data => {
     !/^\+?[0-9- ]+$/.test(data.retail_sales_manager.number)
   ) {
     return false
+  }
+  if (data.delivery) {
+    return Object.keys(data.delivery).every(key => {
+      if (key.startsWith("actual_open_time") || (key.startsWith("no_delivery_interval") && key.split("").pop() > 2)) {
+        return isValidDate(data.delivery[key])
+      }
+      return true
+    })
   }
   // return true
 }

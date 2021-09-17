@@ -21,7 +21,7 @@ const ACTUAL_OPEN_TIME = [
   { name: "Sunday", checked: false }
 ]
 
-const timeData = ['None']
+const timeData = []
 for (let i = 0; i < 24; i++) {
   timeData.push(`${i.toString().padStart(2, "0")}:00`)
   timeData.push(`${i.toString().padStart(2, "0")}:30`)
@@ -65,17 +65,19 @@ const TabStatus = props => {
   }, [])
 
   useEffect(() => {
-    if (!data?.inactive_date_range_1?.type ||
-      (data?.inactive_date_range_1?.type === "single" &&
-        data?.inactive_date_range_1?.days?.length === 0) ||
-      (data?.inactive_date_range_1?.type === "range" &&
-        (!data?.inactive_date_range_1?.date_from ||
-          !data?.inactive_date_range_1?.date_to))) {
-      props.handleErrors({
-        tab: "statusTab",
-        error: "invalid date range",
-        field: "inactive_date_range_1"
-      }, true)
+    if(data?.status_awsm ==="Temp Inactive"){
+      if (!data?.inactive_date_range_1?.type ||
+        (data?.inactive_date_range_1?.type === "single" &&
+          data?.inactive_date_range_1?.days?.length === 0) ||
+        (data?.inactive_date_range_1?.type === "range" &&
+          (!data?.inactive_date_range_1?.date_from ||
+            !data?.inactive_date_range_1?.date_to))) {
+        props.handleErrors({
+          tab: "statusTab",
+          error: "invalid date range",
+          field: "inactive_date_range_1"
+        }, true)
+      }
     }
   }, [])
 
@@ -104,6 +106,8 @@ const TabStatus = props => {
     if (fl.length >= 2) {
       if (!newData[fl[0]]) {
         newData[fl[0]] = {}
+      } else {
+        newData[fl[0]] = { ...newData[fl[0]]}
       }
       newData[fl[0]][fl[1]] = value
     } else {
@@ -206,6 +210,13 @@ const TabStatus = props => {
 
     return valueDate
   }
+  
+  const validateTime = (date, key) => {
+    if (date && date.type && !date[key]) {
+      return "Please select time"
+    }
+    return null
+  }
 
   return (
     <div className="dqm-status-container">
@@ -271,6 +282,7 @@ const TabStatus = props => {
             items={timeData}
             disabled={scheduler}
             placeholder={!scheduler && placeholderSelectTime}
+            hasNone
           />
         </div>
         <div className="col-12 col-sm-3 terminal-input">
@@ -283,6 +295,7 @@ const TabStatus = props => {
             items={timeData}
             disabled={scheduler}
             placeholder={!scheduler && placeholderSelectTime}
+            hasNone
           />
         </div>
       </div>
@@ -299,6 +312,7 @@ const TabStatus = props => {
               defaultValue={data?.no_delivery_interval_1}
               disabled={scheduler}
               placeholder={!scheduler && placeholderSelectCalendar}
+              validateTime
             />
           </div>
           <div className="col-12 col-sm-3">
@@ -312,6 +326,8 @@ const TabStatus = props => {
               value={data?.no_delivery_interval_1?.time_from}
               disabled={scheduler}
               placeholder={!scheduler && placeholderSelectTime}
+              hasNone
+              error={validateTime(data?.no_delivery_interval_1, "time_from")}
             />
           </div>
           <div className="col-12 col-sm-3">
@@ -325,6 +341,8 @@ const TabStatus = props => {
               value={data?.no_delivery_interval_1?.time_to}
               disabled={scheduler}
               placeholder={!scheduler && placeholderSelectTime}
+              hasNone
+              error={validateTime(data?.no_delivery_interval_1, "time_to")}
             />
           </div>
         </div>
@@ -339,6 +357,7 @@ const TabStatus = props => {
               defaultValue={data?.no_delivery_interval_2}
               disabled={scheduler}
               placeholder={!scheduler && placeholderSelectCalendar}
+              validateTime
             />
           </div>
           <div className="col-12 col-sm-3">
@@ -352,6 +371,8 @@ const TabStatus = props => {
               value={data?.no_delivery_interval_2?.time_from}
               disabled={scheduler}
               placeholder={!scheduler && placeholderSelectTime}
+              hasNone
+              error={validateTime(data?.no_delivery_interval_2, "time_from")}
             />
           </div>
           <div className="col-12 col-sm-3">
@@ -365,6 +386,8 @@ const TabStatus = props => {
               value={data?.no_delivery_interval_2?.time_to}
               disabled={scheduler}
               placeholder={!scheduler && placeholderSelectTime}
+              hasNone
+              error={validateTime(data?.no_delivery_interval_2, "time_to")}
             />
           </div>
         </div>
@@ -379,6 +402,7 @@ const TabStatus = props => {
               defaultValue={data?.no_delivery_interval_3}
               disabled={scheduler}
               placeholder={!scheduler && placeholderSelectCalendar}
+              validateTime
             />
           </div>
           <div className="col-12 col-sm-3">
@@ -392,6 +416,8 @@ const TabStatus = props => {
               value={data?.no_delivery_interval_3?.time_from}
               disabled={scheduler}
               placeholder={!scheduler && placeholderSelectTime}
+              hasNone
+              error={validateTime(data?.no_delivery_interval_3, "time_from")}
             />
           </div>
           <div className="col-12 col-sm-3">
@@ -404,6 +430,8 @@ const TabStatus = props => {
               value={data?.no_delivery_interval_3?.time_to}
               disabled={scheduler}
               placeholder={!scheduler && placeholderSelectTime}
+              hasNone
+              error={validateTime(data?.no_delivery_interval_3, "time_to")}
             />
           </div>
         </div>
@@ -418,6 +446,7 @@ const TabStatus = props => {
               defaultValue={data?.no_delivery_interval_4}
               disabled={scheduler}
               placeholder={!scheduler && placeholderSelectCalendar}
+              validateTime
             />
           </div>
           <div className="col-12 col-sm-3">
@@ -431,6 +460,8 @@ const TabStatus = props => {
               value={data?.no_delivery_interval_4?.time_from}
               disabled={scheduler}
               placeholder={!scheduler && placeholderSelectTime}
+              hasNone
+              error={validateTime(data?.no_delivery_interval_4, "time_from")}
             />
           </div>
           <div className="col-12 col-sm-3">
@@ -444,6 +475,8 @@ const TabStatus = props => {
               value={data?.no_delivery_interval_4?.time_to}
               disabled={scheduler}
               placeholder={!scheduler && placeholderSelectTime}
+              hasNone
+              error={validateTime(data?.no_delivery_interval_4, "time_to")}
             />
           </div>
         </div>

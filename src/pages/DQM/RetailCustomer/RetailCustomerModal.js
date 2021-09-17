@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useMemo, useState } from "react"
 import { connect } from "react-redux"
 import {
   Button,
@@ -78,6 +78,10 @@ const RetailCustomerModal = props => {
       onCancel()
     }
   }
+
+  const isUpdateAble = useMemo(() => {
+    return runValidation(currentRetailDetail || {})
+  }, [currentRetailDetail])
 
   const handleClose = () => {
     if (scheduler) {
@@ -308,7 +312,7 @@ const RetailCustomerModal = props => {
             <button onClick={handleClose} className="btn-sec">
               Cancel
             </button>
-            <Button type="submit" color="primary" onClick={handleUpdate}>
+            <Button disabled={!isUpdateAble} type="submit" color="primary" onClick={handleUpdate}>
               Update
             </Button>
           </ModalFooter>

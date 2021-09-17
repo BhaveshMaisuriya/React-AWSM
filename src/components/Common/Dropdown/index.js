@@ -22,7 +22,8 @@ const AWSMDropdown = ({
   disabled = false,
   RowComponent = null,
   flip = false,
-  placeholder = "Select Time"
+  placeholder = "Select",
+  hasNone = false
 }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const toggle = () => setDropdownOpen(prevState => !prevState)
@@ -31,11 +32,12 @@ const AWSMDropdown = ({
   /**
    * Close dropdown then call to onChange event
    * @param item
+   * @param index
    */
-  const onValueChange = item => {
+  const onValueChange = (item, index) => {
     setDropdownOpen(false)
     if (onChange) {
-      onChange(item)
+      onChange(hasNone && index === 0 ? null : item)
     }
   }
   // here using ref to scroll the selected item into view
@@ -61,14 +63,14 @@ const AWSMDropdown = ({
           className={`d-flex align-items-center awsm-select-toggle ${error === true ? 'border-danger' : '' } p-2 position-relative ${disabled ? "disabled" : ""
             }`}
         >
-          <div>{(!value || value === "None") && !RowComponent ? placeholder : value}</div>
+          <div>{(!value || value === "None") && !disabled ? placeholder : value}</div>
           {!disabled && <ReactSVG src={ArrowDropDownIcon} className="awsm-dropdown-arrow" />}
         </div>
       </DropdownToggle>
 
       <DropdownMenu  className="awsm-select-menu w-100" flip={flip}>
         {items &&
-          items.map((item, index) =>
+        (hasNone ? ["None"].concat(items) : items).map((item, index) =>
             RowComponent ? (
               <RowComponent
                 key={index}
@@ -79,7 +81,7 @@ const AWSMDropdown = ({
             ) : (
               <div
                 key={index}
-                onClick={() => onValueChange(item)}
+                onClick={() => onValueChange(item, index)}
                 // highlight selected item here
                 className={`awsm-select-item ${(item === value || !value && item === "None") && 
                 "bg-primary-green text-white"}`}

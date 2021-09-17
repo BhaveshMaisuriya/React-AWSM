@@ -50,12 +50,12 @@ class SalesAndInventoryTableInformation extends Component {
   }
 
   componentDidMount() {
-    const { onGetSalesAndInventoryDetail,data:{record_id: recordId} } = this.props
+    const { onGetSalesAndInventoryDetail,data:{trans_id: recordId} } = this.props
     /*
       dispatch action to run saga for calling api for getting detail of record.
      */
-    if (recordId){ // just mock record Id. Wait for backend
-      onGetSalesAndInventoryDetail(/*recordId*/)
+    if (recordId){
+      onGetSalesAndInventoryDetail(recordId)
     }
   }
 
@@ -80,7 +80,7 @@ class SalesAndInventoryTableInformation extends Component {
 
   render() {
     const scheduler = isScheduler()
-    const { visible, onUpdateSalesAndInventoryDetail,data:{record_id:recordId} } = this.props
+    const { visible, onUpdateSalesAndInventoryDetail,data:{trans_id:recordId}, currentSalesAndInventory } = this.props
     const { activeTab, data, isConfirm } = this.state
 
     const toggle = tab => {
@@ -97,7 +97,13 @@ class SalesAndInventoryTableInformation extends Component {
 
     const handleUpdate = event => {
       event.preventDefault()
-      onUpdateSalesAndInventoryDetail(data)
+      if(data && currentSalesAndInventory && recordId){
+        const uploadData = {
+          updateValue: {...data},
+          preValue: {...currentSalesAndInventory}
+        }
+        onUpdateSalesAndInventoryDetail(recordId, uploadData)
+      }
       this.onConfirmExit()
     }
 
@@ -243,10 +249,8 @@ const mapStateToProps = ({ saleAndInventory }) => ({
 
 const mapDispatchToProps = dispatch => ({
   onGetSalesAndInventoryDetail: recordId => dispatch(getDetailsSales(recordId)),
-  onUpdateSalesAndInventoryDetail: data =>
-    dispatch(updateSalesAndInventoryDetail(data)),
-  // onResetSalesAndInventoryDetail: () =>
-  //   dispatch(resetCurrentSalesAndInventoryData()),
+  onUpdateSalesAndInventoryDetail: (recordId,data) =>
+    dispatch(updateSalesAndInventoryDetail(recordId,data)),
 })
 
 export default connect(

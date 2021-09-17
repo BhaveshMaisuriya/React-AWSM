@@ -1,7 +1,7 @@
 import { tagColors } from "../Common/helper"
 
 const tableColumns = [
-  "record_id",
+  "trans_id",
   "override",
   "ship_to_party",
   "product",
@@ -15,7 +15,7 @@ const tableColumns = [
 ]
 
 const tableMapping = {
-  record_id: {
+  trans_id: {
     label: "RECORD ID",
     columnSize: "cell-text",
     type: "link",

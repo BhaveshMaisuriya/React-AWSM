@@ -587,7 +587,7 @@ function OrderBank({
                               />
                             </div>
                           </Col>
-                          <Col lg={3} className="order-bank-bar right">
+                          <Col lg={3} className="order-bank-bar right" id="order-bank-main">
                             <Dropdown isOpen={dropdownOpen} toggle={toggle}>
                               <DropdownToggle
                                 data-toggle="dropdown"
@@ -608,7 +608,7 @@ function OrderBank({
                               </DropdownToggle>
                               <DropdownMenu
                                 right
-                                className="awsm-option-button-content"
+                                className="awsm-option-button-content order-bank-transform"
                               >
                                 {orderBankSetting.map((option, index) => {
                                   return (

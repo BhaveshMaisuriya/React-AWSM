@@ -74,7 +74,6 @@ class Attachments extends Component {
       "Nov",
       "Dec",
     ];
-    console.log("val::", val)
     const { onGetSLAAttchments } = this.props
     this.fileToBase64(val[0].name, val[0].path).then(async result => {
     const params = {

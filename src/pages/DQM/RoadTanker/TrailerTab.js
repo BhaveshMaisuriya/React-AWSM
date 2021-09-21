@@ -17,7 +17,7 @@ class TrailerTab extends PureComponent {
   render() {
     const { mode, scheduler, data, onChange } = this.props
     return (
-      <div className="trailer">
+
         <form>
           <div className="row">
             <div className="col-md-6 form-group">
@@ -97,7 +97,7 @@ class TrailerTab extends PureComponent {
             </div>
           </div>
         </form>
-      </div>
+
     )
   }
 }

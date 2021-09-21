@@ -30,65 +30,67 @@ const shipmentTableColumns = [
 
 const tableMapping = {
   priority: {
-    label: "priority",
+    label: "Priority",
     columnSize: "cell-text",
+    extraText: "(with SR Remarks)",
     type: "priority_type",
   },
   notes: {
-    label: "",
+    label: "notes",
+    columnSize: "cell-text",
+    key: "frozen",
+  },
+  ship_to: {
+    label: "Ship To",
     columnSize: "cell-text",
   },
   name: {
-    label: "name",
+    label: "Name",
     columnSize: "cell-text",
   },
   cloud: {
-    label: "cloud",
+    label: "Cloud",
     columnSize: "cell-text",
   },
   trip: {
-    label: "trip",
+    label: "Trip",
     columnSize: "cell-text",
   },
   delivery_date: {
-    label: "delivery date",
+    label: "Delivery date",
     columnSize: "cell-text",
   },
   product: {
-    label: "product",
+    label: "Product",
     columnSize: "cell-text",
   },
   volume: {
-    label: "volume (i)",
+    label: "Volume (L)",
     columnSize: "cell-text",
   },
   retain: {
-    label: "retain",
+    label: "Retain",
     columnSize: "cell-text",
   },
   runout: {
-    label: "runout",
+    label: "Runout",
     columnSize: "cell-text",
   },
   product_category: {
-    label: "product category",
+    label: "Product Category",
     columnSize: "cell-text",
   },
   dn_status: {
-    label: "dn status",
+    label: "DN Status",
     columnSize: "cell-text",
     type: "dn_status",
   },
   split_id: {
-    label: "split id",
+    label: "Split ID",
     columnSize: "cell-text",
   },
   order_type: {
-    label: "order type",
-    columnSize: "cell-text",
-  },
-  ship_to: {
-    label: "ship to",
+    label: "Order Type",
     columnSize: "cell-text",
   },
   accessibility: {

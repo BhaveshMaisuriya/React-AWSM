@@ -37,7 +37,7 @@ const ItemSelect = ({ item, onChange }) => {
         checked={item.checked}
         color="primary"
       />
-      <div className="">{item.label}</div>
+      <div className="">{item.label} {item.extraText? <i>{item.extraText}</i>: ""}</div>
     </div>
   )
 }
@@ -101,7 +101,7 @@ const DragContainer = ({ items, onChange, onUpdateOne }) => {
                           <EllipsisIcon />
                           <EllipsisIcon />
                         </div>
-                        <div className="drag-content-label">{item.label}</div>
+                        <div className="drag-content-label">{item.label} {item.extraText? <i>{item.extraText}</i>: ""}</div>
                       </div>
                       <div
                         className="drag-content-x-icon"

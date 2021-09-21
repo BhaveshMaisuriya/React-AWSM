@@ -6,7 +6,7 @@ const tableColumns = [
   "ship_to_party",
   "product",
   "data_source",
-  "station_tank_status",
+  "tank_status",
   "sales_variance",
   "sales_variance_percentage",
   "inventory_variance",
@@ -39,7 +39,7 @@ const tableMapping = {
     label: "SOURCE OF DATA",
     columnSize: "cell-text",
   },
-  station_tank_status: {
+  tank_status: {
     label: "STATION TANK STATUS",
     columnSize: "cell-text",
   },

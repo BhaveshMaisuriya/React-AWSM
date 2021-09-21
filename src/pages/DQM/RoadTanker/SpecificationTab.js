@@ -127,7 +127,7 @@ class SpecificationTab extends PureComponent {
     }
 
     return (
-      <div className="specification">
+
         <form>
           <div className="row">
             <div className="col-md-6 form-group">
@@ -236,7 +236,7 @@ class SpecificationTab extends PureComponent {
             </div>
           </div>
         </form>
-      </div>
+
     )
   }
 }

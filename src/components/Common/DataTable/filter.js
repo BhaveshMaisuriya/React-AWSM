@@ -171,7 +171,7 @@ const FilterDropdown = props => {
    */
   function clickReset() {
     handleClickReset(dataKey)
-    setCheckedCount(dataFilter[dataKey].length)
+    setCheckedCount(dataFilter?.[dataKey]?.length)
     setAppliedFilters([])
     toggle()
   }

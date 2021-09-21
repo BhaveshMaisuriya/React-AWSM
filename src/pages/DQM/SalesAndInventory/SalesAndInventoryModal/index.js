@@ -220,7 +220,6 @@ class SalesAndInventoryTableInformation extends Component {
           </ModalBody>
           {!scheduler && !isConfirm && (
             <ModalFooter>
-              <div className="d-flex align-items-center justify-content-end mt-4 mb-4 px-4">
                 <button
                   className="btn btn-outline-primary px-4"
                   onClick={() => this.setState({ isConfirm: true })}
@@ -233,7 +232,6 @@ class SalesAndInventoryTableInformation extends Component {
                 >
                   Update
                 </button>
-              </div>
             </ModalFooter>
           )}
         </Modal>

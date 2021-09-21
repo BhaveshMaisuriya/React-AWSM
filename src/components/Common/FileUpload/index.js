@@ -1,17 +1,39 @@
-import React, { Fragment, useCallback, useState } from "react"
+import React, { Fragment, useCallback, useEffect, useState } from "react"
 import { ReactSVG } from "react-svg"
 import "./style.scss"
 import { useDropzone } from "react-dropzone"
 import AWSMAlert from "../AWSMAlert"
 import FileUploadIcon from "../../../assets/images/AWSM-Upload.svg"
-export default function FileUpload(props) {
+import { connect } from "react-redux"
+function FileUpload(props) {
   const [alert, setAlert] = useState(true);
   const [successalert, setSuccessAlert] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [alertStatus, setAlertStatus] = useState(null);  
+  const [alertMessage, setAlertMessage] = useState(null);
+
+  useEffect(() => {
+    setSuccessAlert(false);   
+    setUploading(false);
+  }, [])
+
+  useEffect(() => {
+    const { slaAttachments } = props
+     if(slaAttachments !== undefined && slaAttachments !== null) {
+      setTimeout(async function () {        
+        setAlertMessage((slaAttachments.data.statusCode) ? slaAttachments.data.message : 'PDF Uploaded Successfully');
+        setAlertStatus((slaAttachments.data.statusCode) ? 'error' : 'success'); 
+        setSuccessAlert(true);   
+        setUploading(false);
+      }.bind(this), 3000)  
+    }
+  }, [props.slaAttachments])
 
   const onDrop = useCallback(acceptedFiles => {
+    setUploading(true);
     props.allDocuments(acceptedFiles)
-    setSuccessAlert(true);
   }, [])
+
   const {
     getRootProps,
     getInputProps,
@@ -27,12 +49,12 @@ export default function FileUpload(props) {
   )
 
   return (
-    <div className={`${isDragActive ? "file_upload_main_active" : "file_upload_main"}`}>
+    <div className={`${(isDragActive || uploading === true ) ? "file_upload_main_active" : "file_upload_main"}`}>
       <div {...getRootProps()} className="dropzone">
         <input {...getInputProps()} />
         <div className="UploadIcon">
           <ReactSVG src={FileUploadIcon} />
-          {isDragActive ? <p className='drop_text'>Drop the files here ...</p> : <p className='drop_text'>drag & drop your file here or <span>browse</span></p>}
+          {isDragActive ? <p className='drop_text'>Drop the files here ...</p> : uploading === true ? <p className='drop_text'>PDF File is Uploading ...</p> :  <p className='drop_text'>drag & drop your file here or <span>browse</span></p>}
         </div>
       </div>
       <div className="hide_div">{fileRejectionItems}</div>
@@ -44,14 +66,25 @@ export default function FileUpload(props) {
           closeAlert={() => setAlert(false)}
         />
       )}
-      {successalert && 
+      {successalert && !uploading && alertStatus !== null && alertMessage !== null &&
         <AWSMAlert
-          status="success"
-          message={'PDF Uploaded Successfully'}
+          status={alertStatus}
+          message={alertMessage}
           openAlert={successalert}
           closeAlert={() => setSuccessAlert(false)}
-        />      
+        />
       }
     </div>
   )
 }
+
+const mapStateToProps = ({ sla }) => ({
+  slaAttachments: sla.slaAttachments,
+})
+
+const mapDispatchToProps = dispatch => ({})
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(FileUpload)

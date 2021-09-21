@@ -65,7 +65,6 @@ function MyDocument(props) {
     <Document>
       <Page size="A4">
         <Html>{gethtml}</Html>
-        {/* {console.log("data::", props.data)}
       <View style={styles.headersection}>
         <img src={awsmLogo} alt="AWSM Logo" className="vertical-hr-left" />
         <View>

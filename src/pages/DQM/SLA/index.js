@@ -365,7 +365,7 @@ class SLA extends Component {
                   {this.state.activeTab === "3" && (
                     <TabContent activeTab="3" className="p-3 text-muted">
                       <TabPane tabId="3">
-                        <Attachments />
+                        <Attachments activeAttachTab={() => this.setState({activeTab: '3'})} />
                       </TabPane>
                     </TabContent>
                   )}

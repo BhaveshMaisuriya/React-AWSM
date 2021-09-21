@@ -210,7 +210,6 @@ class Pages extends Component {
         >
           <h3>Audit Log</h3>
         </ModalHeader>
-        {console.log("audits:::", audits)}
         <AuditLog
           rowsAudit={rowsAudit}
           currentAuditPage={currentAuditPage}

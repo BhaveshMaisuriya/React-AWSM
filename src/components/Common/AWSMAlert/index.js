@@ -6,9 +6,8 @@ import CloseButton from "./../AlertCloseButton"
 import AlertSuccess from "./../../../assets/images/AWSM-success-alert.svg"
 import { alertConfig } from "./helper"
 
-const AWSMAlert = ({ status = "", message = null, openAlert, closeAlert }) => {
+const AWSMAlert = ({ status, message, openAlert, closeAlert }) => {
   let statusConfig = alertConfig[status] || alertConfig["error"]
-  // console.log(status, message, openAlert, closeAlert)
   let color = ""
   let colorBack = ""
   switch (status) {

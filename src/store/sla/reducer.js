@@ -18,6 +18,8 @@ import {
   CREATE_SLA_RECORD_FAIL,
   GET_SLA_ATTACHMENTS_SUCCESS,
   GET_SLA_ATTACHMENTS_FAIL,
+  GET_SLA_PDFS_SUCCESS,
+  GET_SLA_PDFS_FAIL,  
 } from "./actionTypes"
 
 const initialState = {
@@ -25,7 +27,8 @@ const initialState = {
   error: null,
   slaAuditLog: [],
   updateStatus: null,
-  slaAttachments: null
+  slaAttachments: null,
+  slaPdfs: null,
 }
 import { ToastSuccess, ToastError } from "../../helpers/swal"
 
@@ -66,14 +69,25 @@ const SLA = (state = initialState, action) => {
     case GET_SLA_ATTACHMENTS_SUCCESS:
       return {
         ...state,
-        slaAttachments: action.payload,
+        slaAttachments: action.params,
       }
 
     case GET_SLA_ATTACHMENTS_FAIL:
       return {
         ...state,
+        slaAttachments: action.payload,
+      } 
+    case GET_SLA_PDFS_SUCCESS:
+      return {
+        ...state,
+        slaPdfs: action.params,
+      }
+
+    case GET_SLA_PDFS_FAIL:
+      return {
+        ...state,
         error: action.payload,
-      }      
+      }       
 
     case GET_SLA_AUDITLOG_SUCCESS:
       return {

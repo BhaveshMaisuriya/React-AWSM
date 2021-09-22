@@ -15,6 +15,7 @@ function SLAPdfTable(props) {
   const rowsPerPage = 10
   const [value, setValue] = useState("")
   const [tableDatas, setTableDatas] = useState([])
+  const [filterTableDatas, setFilterTableDatas] = useState([])
   const [tableHeader, setTableHeader] = useState([])
   const [currentPage, setCurrentPage] = useState(0)
   const [collection, setCollection] = useState([])
@@ -97,6 +98,7 @@ function SLAPdfTable(props) {
         }) 
       })
       await setTableDatas(allData) 
+      await setFilterTableDatas(allData)
       await setCollection(cloneDeep(allData.slice(0, rowsPerPage)))
     }
 
@@ -111,6 +113,7 @@ function SLAPdfTable(props) {
     setValue(val)   
       if(val === '') { 
         setCollection(cloneDeep(tableDatas.slice(0, rowsPerPage))) 
+        setFilterTableDatas(tableDatas);
       } else {
         const query = val.toLowerCase()
         setCurrentPage(0)
@@ -120,6 +123,7 @@ function SLAPdfTable(props) {
             .slice(0, rowsPerPage)
         )
         await setCollection(data)
+        await setFilterTableDatas(data);
       }
     
   }
@@ -169,11 +173,11 @@ function SLAPdfTable(props) {
           <div className="top-page-number">
             <div className="enteriesText">
               {`${currentPage * rowsPerPage + 1} to ${
-                tableDatas.length - (currentPage * rowsPerPage + rowsPerPage) <
+                filterTableDatas.length - (currentPage * rowsPerPage + rowsPerPage) <
                 0
-                  ? tableDatas.length
+                  ? filterTableDatas.length
                   : currentPage * rowsPerPage + rowsPerPage
-              } of ${tableDatas.length} enteries`}
+              } of ${filterTableDatas.length} enteries`}
             </div>
           </div>
           <table>
@@ -184,7 +188,7 @@ function SLAPdfTable(props) {
           </table>
           <TablePagination
              totalPages={Math.ceil(
-              tableDatas.length / rowsPerPage
+              filterTableDatas.length / rowsPerPage
             )}
             rowsPerPage={rowsPerPage}
             currentPage={currentPage}

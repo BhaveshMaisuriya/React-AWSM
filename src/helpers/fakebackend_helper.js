@@ -252,6 +252,11 @@ export const getDownloadTerminal = params =>
     { ...params }
   )
 
+export const getSLAPdfs = () =>
+  axios.get(
+    "/file?category=sla"
+  )
+
 export const getAttchments = params =>
   axios.post(
     "/file/upload",

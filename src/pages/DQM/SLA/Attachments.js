@@ -6,15 +6,10 @@ import {
   Row,
   Col,
 } from "reactstrap"
-import eyeIcon from "../../../assets/images/auditlog-eye.svg"
 import "./style.scss"
 import FileUpload from "../../../components/Common/FileUpload"
-import SLATable from "./table"
-import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
-import SystemUpdateAltOutlinedIcon from '@material-ui/icons/SystemUpdateAltOutlined';
-import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
-import VisibilityOutlinedIcon from '@material-ui/icons/VisibilityOutlined';
-import { getSLAAttchments } from "store/actions"
+import { getSLAAttchments, getSLAPdfs } from "store/actions"
+import SLAPdfTable from "./SLAPdfTable"
 
 const styles = {
   headerText: {
@@ -44,6 +39,10 @@ class Attachments extends Component {
     }
   }
 
+  componentDidMount () {
+    this.getAllSLAPdf();
+  }
+
   fileToBase64 = (filename, filepath) => {
     return new Promise((resolve,reject) => {
       var file = new File([filename], filepath);
@@ -58,22 +57,12 @@ class Attachments extends Component {
     });
   };
 
+  getAllSLAPdf = async() => {
+    const { onGetSLAPDFs } = this.props
+    await onGetSLAPDFs()
+  }
+
   allDocuments = async val => {
-    let allData = [...this.state.documents];
-    var months = [
-      "Jan",
-      "Feb",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "Aug",
-      "Sept",
-      "Oct",
-      "Nov",
-      "Dec",
-    ];
     const { onGetSLAAttchments } = this.props
     this.fileToBase64(val[0].name, val[0].path).then(async result => {
     const params = {
@@ -84,59 +73,18 @@ class Attachments extends Component {
     }
     await onGetSLAAttchments(params)
   }).catch()
+shouldComponentUpdate(nextProps){
+  if (nextProps.slaAttachments !== this.props.slaAttachments) {
+    this.getAllSLAPdf();
     
-
-    // val.map((item, index) => {
-      var uploadedDate = ""
-      var uploadedTime = ""
-      var getFullDate = new Date(val[0].lastModified)
-      var hours = getFullDate.getHours()
-      var minutes = getFullDate.getMinutes()
-      var ampm = hours >= 12 ? "pm" : "am"
-      hours = hours % 12
-      hours = hours ? hours : 12 // the hour '0' should be '12'
-      minutes = minutes < 10 ? "0" + minutes : minutes
-      uploadedDate =
-        getFullDate.getDate() +
-        " " +
-        months[getFullDate.getMonth()] +
-        " " +
-        getFullDate.getFullYear()
-      uploadedTime =
-        getFullDate.getHours() + ":" + getFullDate.getMinutes() + " " + ampm
-      allData.push({
-        name: val[0].name,
-        uploadedDate: (
-          <p className="uploaded_time">
-            {uploadedDate}
-            <br />
-            <span> {uploadedTime}</span>
-          </p>
-        ),
-        version: "1",
-        uploadedby: "user",
-        action: (
-          <div className="action">
-            <EditOutlinedIcon />&nbsp;&nbsp;&nbsp;&nbsp;
-            <SystemUpdateAltOutlinedIcon />&nbsp;&nbsp;&nbsp;&nbsp;
-            <VisibilityOutlinedIcon />&nbsp;&nbsp;&nbsp;&nbsp;
-            <DeleteOutlinedIcon />&nbsp;&nbsp;&nbsp;&nbsp;
-          </div>
-        )
-      })
-    // })
-    await this.setState({ documents: allData })
+  } else {
+    return false;
   }
+}
 
-  render() {
-    const tableHead = {
-      name: "FILE NAME",
-      uploadedDate: "TIME UPDATED",
-      version: "VERSION",
-      uploadedby: "UPLOADED BY",
-      action: "ACTION",
-    }
-    const { classes } = this.props
+
+  render() {   
+    const { slaAttachments } = this.props
     return (
       <React.Fragment>
         <Row className="sla_file_upload">
@@ -148,7 +96,7 @@ class Attachments extends Component {
               allDocuments={this.allDocuments}
             />
             <div className="sla_table">
-              <SLATable allData={this.state.documents} tableHead={tableHead} />
+              <SLAPdfTable />
             </div>
           </Col>
         </Row>
@@ -159,10 +107,12 @@ class Attachments extends Component {
 
 const mapStateToProps = ({ sla }) => ({
   slaAttachments: sla.slaAttachments,
+  slaPdfs: sla.slaPdfs,
 })
 
 const mapDispatchToProps = dispatch => ({
   onGetSLAAttchments: params => dispatch(getSLAAttchments(params)),
+  onGetSLAPDFs: () => dispatch(getSLAPdfs()),  
 })
 
 export default connect(

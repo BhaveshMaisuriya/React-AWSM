@@ -27,7 +27,10 @@ import {
   DELETE_SLA_RECORD_FAIL,
   GET_SLA_ATTACHMENTS,
   GET_SLA_ATTACHMENTS_SUCCESS,
-  GET_SLA_ATTACHMENTS_FAIL
+  GET_SLA_ATTACHMENTS_FAIL,
+  GET_SLA_PDFS,
+  GET_SLA_PDFS_SUCCESS,
+  GET_SLA_PDFS_FAIL,  
 } from "./actionTypes"
 
 export const getSLAItems = params => ({
@@ -47,6 +50,20 @@ export const getSLAAttchmentsSuccess = response => ({
 
 export const getSLAAttchmentsFail = error => ({
   type: GET_SLA_ATTACHMENTS_FAIL,
+  payload: error,
+})
+
+export const getSLAPdfs = () => ({
+  type: GET_SLA_PDFS
+})
+
+export const getSLAPdfsSuccess = response => ({
+  type: GET_SLA_PDFS_SUCCESS,
+  params: response,
+})
+
+export const getSLAPdfsFail = error => ({
+  type: GET_SLA_PDFS_FAIL,
   payload: error,
 })
 

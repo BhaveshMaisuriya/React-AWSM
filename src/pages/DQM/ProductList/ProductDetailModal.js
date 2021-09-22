@@ -42,7 +42,6 @@ class ProductDetailModal extends PureComponent {
   }
 
   async handleUpdate(event) {
-    console.log("update::", this.state.updateDictionary)
     if (Object.keys(this.state.updateDictionary).length > 0) {
       const { code } = this.props.data
       await this.props.onUpdateProductDetail({

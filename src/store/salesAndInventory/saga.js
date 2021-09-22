@@ -134,15 +134,12 @@ function* onGetDownloadSales({ params = {} }) {
 function* onUpdateSalesAndInventoryDetail({ recordId, payload }) {
   try {
     const response = yield call(updateSaleAndInventoryDetail, recordId, payload)
-    /*Because response not return updated record. So we must call
-     Api to get the new updated record*/
-    if (response && response.status === 200) {
-      const responseUpdatedRecord = yield call(
-        getSaleAndInventoryDetail,
-        recordId
-      )
-      responseUpdatedRecord.data.trans_id = recordId
-      yield put(updateSalesAndInventoryDetailSuccess(responseUpdatedRecord))
+    if(response && response.status === 200){
+      // optimistic data
+      const updateData = {
+        data:{...payload?.updateValue, trans_id:recordId}
+      }
+      yield put(updateSalesAndInventoryDetailSuccess(updateData))
     }
   } catch (error) {
     yield put(updateSalesAndInventoryDetailFail(error))

@@ -44,13 +44,13 @@ export default function factory(data) {
   }
 }
 
-export function formatResponseDataVarianceControl(obj, prefix, excludeFields) {
+export function formatResponseDataVarianceControl(obj, prefix, excludeFields,fullCapitalStation = ["lv1","lv2","tc"]) {
   const keyValuePairs = getKeyValuePairs(obj,prefix, excludeFields);
   const categories = Array.from(new Set(keyValuePairs.map(([key]) => key?.split("_")?.[0])));
   if (!categories || categories.length === 0 || categories.some((key) => !key)) {
     return null;
   }
-  return mergeCategoryWithData(categories,keyValuePairs)
+  return mergeCategoryWithData(categories,keyValuePairs, fullCapitalStation)
 }
 
 function getKeyValuePairs(obj,prefix,excludeFields){
@@ -61,14 +61,20 @@ function getKeyValuePairs(obj,prefix,excludeFields){
     }).filter(([key]) => excludeFields.indexOf(key) === -1);
 }
 
-function mergeCategoryWithData(categories, keyValuePairs){
+function mergeCategoryWithData(categories, keyValuePairs, fullCapitalStation = ["lv1","lv2","tc"]){
   return categories.reduce((initObj, category) => {
     initObj[category] = [];
     const dataInCategory = keyValuePairs.filter(([key]) => key.indexOf(category) !== -1);
     const stations = Array.from(new Set(dataInCategory.map(([key]) => key.split("_")[1])));
     stations.forEach((station) => {
       const variance_value = dataInCategory.find(([key]) => key.indexOf(`${station}_variance_value`) !== -1)?.[1]
-      const variance_percentage = (dataInCategory.find(([key]) => key.indexOf(`${station}_percentage`) !== -1)?.[1]) * 10
+      const variance_percentage = (dataInCategory.find(([key]) => key.indexOf(`${station}_percentage`) !== -1)?.[1]) * 100
+      // response data is decimal like 0.3. must multiply 100 to show as percentage
+      if (fullCapitalStation.indexOf(station) > -1){
+        station = station.toUpperCase();
+      }else{
+        station = station.charAt(0).toUpperCase() + station.slice(1)
+      }
       initObj[category].push({ station_tank_status: station, variance_value, variance_percentage })
     })
     return initObj;

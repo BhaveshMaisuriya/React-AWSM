@@ -2,7 +2,7 @@ import React, { Component } from "react"
 import { Link } from "react-router-dom"
 import { connect } from "react-redux"
 import { withStyles } from "@material-ui/styles"
-import {
+import {  
   Row,
   Col,
 } from "reactstrap"
@@ -44,14 +44,14 @@ class Attachments extends Component {
   }
 
   fileToBase64 = (filename, filepath) => {
-    return new Promise(resolve => {
+    return new Promise((resolve,reject) => {
       var file = new File([filename], filepath);
       var reader = new FileReader();
       // Read file content on file loaded event
       reader.onload = function(event) {
         resolve(event.target.result);
       };
-      
+      reader.onerror = err => reject(err)
       // Convert data to base64 
       reader.readAsDataURL(file);
     });
@@ -69,7 +69,7 @@ class Attachments extends Component {
           data: result,
           category: "sla",
           filename: val[0].name,
-          remarks: "asfashkdashdkga"
+          remarks: ""
         }
         await onGetSLAAttchments(params)
         })

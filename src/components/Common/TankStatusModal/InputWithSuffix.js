@@ -2,6 +2,7 @@ import React, { Component } from "react"
 import PropTypes from "prop-types"
 import { withStyles } from "@material-ui/styles"
 import InputBase from "@material-ui/core/InputBase"
+import {isNull, isUndefined} from "lodash"
 
 const styles = {
   root: {
@@ -64,7 +65,7 @@ class InputWithSuffix extends Component {
         }}
       >
         {!onActive ? (
-          <span className={`readonly-field`}>{value || "-"}</span>
+          <span className={`readonly-field`}>{!isNull(value) && !isUndefined(value)? value: "-"}</span>
         ) : (
           <InputBase
             onBlur={this.handleHiddenBorder}
@@ -76,7 +77,7 @@ class InputWithSuffix extends Component {
             onKeyPress={this.handleEnterKeyPress}
           />
         )}
-        {!onActive && (value || value === "") && isEdit && (
+        {!onActive && !isNull(value) && !isUndefined(value) && isEdit && (
           <button
             className="button-edit"
             onClick={() => this.handleEditOnClick()}

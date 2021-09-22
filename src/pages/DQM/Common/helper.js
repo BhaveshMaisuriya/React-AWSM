@@ -137,13 +137,13 @@ export const runValidation = data => {
   //     return false
   //   }
   // }
-  if (
-    data.territory_manager &&
-    data.territory_manager.number &&
-    !/^\+?[0-9- ]+$/.test(data.territory_manager.number)
-  ) {
-    return false
-  }
+  // if (
+  //   data.territory_manager &&
+  //   data.territory_manager.number &&
+  //   !/^\+?[0-9- ]+$/.test(data.territory_manager.number)
+  // ) {
+  //   return false
+  // }
   if (
     data.retail_sales_manager &&
     data.retail_sales_manager.number &&
@@ -153,7 +153,8 @@ export const runValidation = data => {
   }
   if (data.delivery) {
     return Object.keys(data.delivery).every(key => {
-      if (key.startsWith("actual_open_time") || (key.startsWith("no_delivery_interval") && key.split("").pop() > 2)) {
+      const intervalNumber = key.split("").pop()
+      if (key.startsWith("actual_open_time") || (key.startsWith("no_delivery_interval") && intervalNumber > 2 && intervalNumber <= 5)) {
         return isValidDate(data.delivery[key])
       }
       return true

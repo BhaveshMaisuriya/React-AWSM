@@ -257,6 +257,11 @@ export const getSLAPdfs = () =>
     "/file?category=sla"
   )
 
+export const getSLAPdfDownload = (params) =>
+  axios.get(
+    `/file/${params}?action=download`
+  )  
+
 export const getAttchments = params =>
   axios.post(
     "/file/upload",

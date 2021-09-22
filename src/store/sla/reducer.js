@@ -20,6 +20,8 @@ import {
   GET_SLA_ATTACHMENTS_FAIL,
   GET_SLA_PDFS_SUCCESS,
   GET_SLA_PDFS_FAIL,  
+  GET_SLA_PDF_DOWNLOAD_SUCCESS,
+  GET_SLA_PDF_DOWNLOAD_FAIL,    
 } from "./actionTypes"
 
 const initialState = {
@@ -29,6 +31,7 @@ const initialState = {
   updateStatus: null,
   slaAttachments: null,
   slaPdfs: null,
+  slaPdfDownload: null,
 }
 import { ToastSuccess, ToastError } from "../../helpers/swal"
 
@@ -84,6 +87,18 @@ const SLA = (state = initialState, action) => {
       }
 
     case GET_SLA_PDFS_FAIL:
+      return {
+        ...state,
+        error: action.payload,
+      } 
+      
+    case GET_SLA_PDF_DOWNLOAD_SUCCESS:
+      return {
+        ...state,
+        slaPdfDownload: action.params,
+      }
+
+    case GET_SLA_PDF_DOWNLOAD_FAIL:
       return {
         ...state,
         error: action.payload,

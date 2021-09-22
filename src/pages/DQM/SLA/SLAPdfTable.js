@@ -6,6 +6,7 @@ import SystemUpdateAltOutlinedIcon from '@material-ui/icons/SystemUpdateAltOutli
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 import VisibilityOutlinedIcon from '@material-ui/icons/VisibilityOutlined';
 import { connect } from "react-redux"
+import { getSLAPdfDownload } from "store/actions"
 import { saveAs } from 'file-saver';
 
 var FileSaver = require('file-saver');
@@ -71,6 +72,7 @@ function SLAPdfTable(props) {
           getFullDate.getFullYear()
           uploadedTime =
           getFullDate.getHours() + ":" + getFullDate.getMinutes() + " " + ampm
+///file/6d9cdc2c-837f-42e1-bcdd-a7d044dc792?action=download
 
           var PdfLink = 'https://www.orimi.com/pdf-test.pdf'; // + item.location;
           allData.push({
@@ -87,7 +89,7 @@ function SLAPdfTable(props) {
             action: (
               <div className="action">
                 <EditOutlinedIcon />&nbsp;&nbsp;&nbsp;&nbsp;
-                <SystemUpdateAltOutlinedIcon onClick={() => downloadPdf(PdfLink, item.filename)} />&nbsp;&nbsp;&nbsp;&nbsp;
+                <SystemUpdateAltOutlinedIcon onClick={() => downloadPdf(item)} />&nbsp;&nbsp;&nbsp;&nbsp;
                 <VisibilityOutlinedIcon onClick={() => window.open(PdfLink, "_blank")} />&nbsp;&nbsp;&nbsp;&nbsp;
                 <DeleteOutlinedIcon />&nbsp;&nbsp;&nbsp;&nbsp;
               </div>
@@ -98,8 +100,10 @@ function SLAPdfTable(props) {
       await setCollection(cloneDeep(allData.slice(0, rowsPerPage)))
     }
 
-    const downloadPdf = (Pdfurl, Pdfname) => {
-      saveAs(Pdfurl, Pdfname);
+    const downloadPdf = async(item) => {
+      // saveAs(Pdfurl, Pdfname);
+      const { onGetSlaPdfDownload } = props;
+      await onGetSlaPdfDownload(item.id);
     }
 
   const GetSearchedValue = async val => {
@@ -195,7 +199,9 @@ const mapStateToProps = ({ sla }) => ({
   slaPdfs: sla.slaPdfs,
 })
 
-const mapDispatchToProps = dispatch => ({})
+const mapDispatchToProps = dispatch => ({
+  onGetSlaPdfDownload: (params) => dispatch(getSLAPdfDownload(params)),  
+})
 
 export default connect(
   mapStateToProps,

@@ -2,7 +2,7 @@ import React, { Component } from "react"
 import { Link } from "react-router-dom"
 import { connect } from "react-redux"
 import { withStyles } from "@material-ui/styles"
-import {
+import {  
   Row,
   Col,
 } from "reactstrap"

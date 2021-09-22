@@ -30,7 +30,11 @@ import {
   GET_SLA_ATTACHMENTS_FAIL,
   GET_SLA_PDFS,
   GET_SLA_PDFS_SUCCESS,
-  GET_SLA_PDFS_FAIL,  
+  GET_SLA_PDFS_FAIL, 
+  GET_SLA_PDF_DOWNLOAD,
+  GET_SLA_PDF_DOWNLOAD_SUCCESS,
+  GET_SLA_PDF_DOWNLOAD_FAIL,   
+  
 } from "./actionTypes"
 
 export const getSLAItems = params => ({
@@ -64,6 +68,21 @@ export const getSLAPdfsSuccess = response => ({
 
 export const getSLAPdfsFail = error => ({
   type: GET_SLA_PDFS_FAIL,
+  payload: error,
+})
+
+export const getSLAPdfDownload = (params) => ({
+  type: GET_SLA_PDF_DOWNLOAD,
+  params,
+})
+
+export const getSLAPdfDownloadSuccess = response => ({
+  type: GET_SLA_PDF_DOWNLOAD_SUCCESS,
+  params: response,
+})
+
+export const getSLAPdfDownloadFail = error => ({
+  type: GET_SLA_PDF_DOWNLOAD_FAIL,
   payload: error,
 })
 

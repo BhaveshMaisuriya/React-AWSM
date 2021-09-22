@@ -170,7 +170,8 @@ const SaleAndInventory = (state = initialState, action) => {
 
     case UPDATE_SALES_AND_INVENTORY_DETAIL_SUCCESS:
       /*payload is all information from record. So we must filter which columns are in view and
-       update the view*/
+       update the view for optimistic. The real data must be get all again but the request time
+       is too long so we must show the changes first in the view */
        const currentTableColumns = Object.keys(state.mainTableData.list[0]);
        let newList = [...state.mainTableData.list]
        if(action.payload?.data){
@@ -189,7 +190,7 @@ const SaleAndInventory = (state = initialState, action) => {
        return {
          ...state,
          mainTableData: {...state.mainTableData,list:newList},
-         isUpdateSuccess: true,
+         isUpdateSuccess: {success:true}, // for each update return a new success object
        }
  
      case UPDATE_SALES_AND_INVENTORY_DETAIL_FAIL:

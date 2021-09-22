@@ -312,6 +312,11 @@
 
 .tab-pane.active {
   .simple-bar {
+    max-height: 41.4vh;
+    overflow-x: hidden;
+    padding-right: 25px;
+  }
+  .simple-bar-smaller {
     max-height: 32vh;
     overflow-x: hidden;
     padding-right: 25px;

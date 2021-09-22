@@ -361,7 +361,7 @@ class InformationModal extends Component {
                 </Nav>
                 <TabContent activeTab={activeTab} className="py-4">
                   <TabPane tabId="1" style={{ marginRight: "-25px" }}>
-                    <SimpleBar className="simple-bar">
+                    <SimpleBar className="simple-bar-smaller">
                       <AvailabilityTab
                         mode={mode}
                         scheduler={scheduler}
@@ -375,7 +375,7 @@ class InformationModal extends Component {
                     </SimpleBar>
                   </TabPane>
                   <TabPane tabId="2" style={{ marginRight: "-25px" }}>
-                    <SimpleBar className="simple-bar">
+                    <SimpleBar className="simple-bar-smaller">
                       <SpecificationTab
                         mode={mode}
                         scheduler={scheduler}
@@ -386,7 +386,7 @@ class InformationModal extends Component {
                     </SimpleBar>
                   </TabPane>
                   <TabPane tabId="3" style={{ marginRight: "-25px" }}>
-                    <SimpleBar className="simple-bar">
+                    <SimpleBar className="simple-bar-smaller">
                       <TrailerTab
                         mode={mode}
                         scheduler={scheduler}

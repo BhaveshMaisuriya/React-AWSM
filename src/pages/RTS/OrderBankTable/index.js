@@ -2,7 +2,7 @@ import React, { Component, useState } from 'react';
 import { connect } from "react-redux"
 import PropTypes from 'prop-types';
 import Filter from "../../../components/Common/DataTable/filter"
-import { tableColumns, tableMapping } from "./tableMapping"
+import { tableMapping } from "./tableMapping"
 import {
   CustomInput,
   Dropdown,
@@ -159,7 +159,7 @@ class index extends Component {
         if(!isEqual(nextProps.dataSource,this.props.dataSource)){
           let data = {}
           const { dataSource } = nextProps
-          tableColumns.forEach((v)=>{
+          nextProps.tableColumns.forEach((v)=>{
               data[v] = []
               dataSource.forEach((a)=>{
                   if(isArray(a[v])){
@@ -209,7 +209,7 @@ class index extends Component {
 
     headerTableConfiguration = () => {
         const { fixedHeaders, filterData, expandSearch, searchText  } = this.state
-        return tableColumns.map(v => {
+        return this.props.tableColumns.map(v => {
           return v != "notes" ? (
             <th>
               <span onClick={() => this.onSorting(v)}>
@@ -278,7 +278,7 @@ class index extends Component {
     }
     RenderTRComponent = (data) => {
       const { expandSearch } = this.state
-      return tableColumns.map((v)=> {
+      return this.props.tableColumns.map((v)=> {
         let typeOfColumn = tableMapping[v].type
         let result;
         switch (typeOfColumn) {
@@ -500,7 +500,9 @@ class index extends Component {
   }
 }
 
-index.propTypes = {}
+index.propTypes = {
+  tableColumns:PropTypes.array.isRequired,
+}
 const mapDispatchToProp = dispatch => ({
   updateOrderBankTableData: payload => dispatch(updateOrderBankTableData(payload)),
   onGetDeleteOrderBankDetail: params => dispatch(deleteOrderBankDetail(params)),

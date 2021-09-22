@@ -52,6 +52,9 @@ class SalesInventory extends Component {
       /*This will be called when sales date change. But now we only have data for date
        2021-04-08. So jut let it be commented*/
     }
+    if (this.props.isUpdateSuccess !== prevProps.isUpdateSuccess){
+      this.onGetMainTableAndAuditLog()
+    }
   }
 
   onGetMainTableAndAuditLog = () =>{
@@ -167,6 +170,7 @@ const mapStateToProps = ({ saleAndInventory }) => ({
   downloadtableData: saleAndInventory.downloadtableData,
   filter: saleAndInventory.filter,
   varianceControlData: saleAndInventory.varianceControlData,
+  isUpdateSuccess: saleAndInventory.isUpdateSuccess
 })
 
 const mapDispatchToProps = dispatch => ({

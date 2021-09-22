@@ -47,6 +47,8 @@ export default class DetailsTab extends Component {
                           disabled={true}
                           onChange={e => this.onChangeHandler(e.target.value, "ship_to_party")}/>
                     </div>
+                </div>
+                <div className="row">
                     <div className="col-md-6 form-group">
                         <label>PRODUCT</label>
                         <input
@@ -55,8 +57,15 @@ export default class DetailsTab extends Component {
                           disabled={true}
                           onChange={e => this.onChangeHandler(e.target.value, "product")}/>
                     </div>
+                    <div className="col-md-6 form-group">
+                        <label>PRODUCT STATUS</label>
+                        <input
+                          value={data?.product_status}
+                          className="form-control awsm-input"
+                          disabled={true}
+                          onChange={e => this.onChangeHandler(e.target.value, "product_status")}/>
+                    </div>
                 </div>
-
                 <div className="row">
                     <div className="col-md-6 form-group">
                         <label>DATA SOURCE</label>
@@ -66,7 +75,7 @@ export default class DetailsTab extends Component {
                           onChange={e => this.onChangeHandler(e.target.value, "data_source")}/>
                     </div>
                     <div className="col-md-6 form-group">
-                        <label>STATION RANK STATUS</label>
+                        <label>STATION TANK STATUS</label>
                         <input value={data?.station_tank_status}
                           className="form-control awsm-input"
                           disabled={true}

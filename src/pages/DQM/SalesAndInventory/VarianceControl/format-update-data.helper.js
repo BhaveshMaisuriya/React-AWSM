@@ -26,7 +26,8 @@ function formatArrayToObj(prefix, array) {
     const valueKey = `${prefixKey}_variance_value`
     const percentKey = `${prefixKey}_percentage`
     initObj[valueKey] = Number(variance_value)
-    initObj[percentKey] = Number(variance_percentage)/10
+    initObj[percentKey] = Number(variance_percentage)/100 // data must be decimal like 0.3. must
+    // divide from percentage to decimal
     return initObj
   }, {})
 }

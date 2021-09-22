@@ -191,6 +191,7 @@ function* onGetRTSOrderBankGanttChart({ params = {} }) {
 function* onDragOrderBankToGanttChart() {
   let dragOrder = yield select(store => store.orderBank?.orderBankTableData?.filter(e => e.isChecked))
   //TODO implement integrate API
+  console.log(dragOrder)
 }
 
 function* orderBankSaga() {

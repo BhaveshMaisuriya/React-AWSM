@@ -102,6 +102,7 @@ function SLAPdfTable(props) {
 
     const downloadPdf = async(item) => {
       // saveAs(Pdfurl, Pdfname);
+      
       const { onGetSlaPdfDownload } = props;
       await onGetSlaPdfDownload(item.id);
     }

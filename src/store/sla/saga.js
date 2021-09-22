@@ -37,7 +37,9 @@ import {
     getSLAAttchmentsSuccess,
     getSLAAttchmentsFail,
     getSLAPdfsSuccess,
-    getSLAPdfsFail,    
+    getSLAPdfsFail,
+    getSLAPdfDownloadSuccess,
+    getSLAPdfDownloadFail, 
 } from "./actions"
 
 import {
@@ -83,10 +85,10 @@ function* onGetSLAPDFs() {
   }
 }
 
-function* onGetSLAPdfDownload(params) {
+function* onGetSLAPdfDownload(params) {  
   try {
     const response = yield call(getSLAPdfDownload, params.params)
-    yield put(getSLAPdfDownloadSuccess(response.data))
+    yield put(getSLAPdfDownloadSuccess(response))
   } catch (error) {
     yield put(getSLAPdfDownloadFail(error))
   }

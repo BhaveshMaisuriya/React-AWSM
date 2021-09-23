@@ -261,7 +261,19 @@ export const getSLAPdfDownload = (params) =>
   axios.get(
     `/file/${params}?action=download`
   )  
+  
+export const getRenamePdf = (params) =>
+  axios.put(
+    `/file/${params.id}`,
+    {"filename": params.filename, "remarks": params.remarks }
+  )  
 
+export const getDeletePdf = (params) =>
+  axios.delete(
+    `/file/${params.id}`
+  )  
+
+  
 export const getAttchments = params =>
   axios.post(
     "/file/upload",

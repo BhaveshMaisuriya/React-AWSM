@@ -13,6 +13,8 @@ import {
   GET_SLA_ATTACHMENTS,
   GET_SLA_PDFS,
   GET_SLA_PDF_DOWNLOAD,
+  GET_SLA_RENAME_PDF,
+  GET_SLA_DELETE_PDF
 } from "./actionTypes"
 
 import {
@@ -40,6 +42,10 @@ import {
     getSLAPdfsFail,
     getSLAPdfDownloadSuccess,
     getSLAPdfDownloadFail, 
+    getDeletePdfSuccess,
+    getDeletePdfFail,
+    getRenamePdfSuccess,
+    getRenamePdfFail,    
 } from "./actions"
 
 import {
@@ -55,7 +61,9 @@ import {
   updateSLARecord,
   getAttchments,
   getSLAPdfs,
-  getSLAPdfDownload
+  getSLAPdfDownload,
+  getRenamePdf,
+  getDeletePdf,
 } from "../../helpers/fakebackend_helper"
 
 function* onGetSLAAuditLog(params) {
@@ -91,6 +99,24 @@ function* onGetSLAPdfDownload(params) {
     yield put(getSLAPdfDownloadSuccess(response))
   } catch (error) {
     yield put(getSLAPdfDownloadFail(error))
+  }
+}
+
+function* onGetRenamePdf(params) {  
+  try {
+    const response = yield call(getRenamePdf, params.params)
+    yield put(getRenamePdfSuccess(response))
+  } catch (error) {
+    yield put(getRenamePdfFail(error))
+  }
+}
+
+function* onGetDeletePdf(params) {  
+  try {
+    const response = yield call(getDeletePdf, params.params)
+    yield put(getDeletePdfSuccess(response))
+  } catch (error) {
+    yield put(getDeletePdfFail(error))
   }
 }
 
@@ -198,6 +224,8 @@ function* SLASaga() {
   yield takeEvery(GET_SLA_ATTACHMENTS, onGetSLAAttachments)
   yield takeEvery(GET_SLA_PDFS, onGetSLAPDFs)
   yield takeEvery(GET_SLA_PDF_DOWNLOAD, onGetSLAPdfDownload)  
+  yield takeEvery(GET_SLA_RENAME_PDF, onGetRenamePdf)    
+  yield takeEvery(GET_SLA_DELETE_PDF, onGetDeletePdf)      
 }
 
 export default SLASaga

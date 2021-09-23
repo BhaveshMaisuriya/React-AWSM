@@ -2,10 +2,7 @@ import React, { Component } from "react"
 import { Link } from "react-router-dom"
 import { connect } from "react-redux"
 import { withStyles } from "@material-ui/styles"
-import {  
-  Row,
-  Col,
-} from "reactstrap"
+import { Row, Col } from "reactstrap"
 import "./style.scss"
 import FileUpload from "../../../components/Common/FileUpload"
 import { getSLAAttchments, getSLAPdfs } from "store/actions"
@@ -65,8 +62,9 @@ class Attachments extends Component {
   allDocuments = async val => {
     const { onGetSLAAttchments } = this.props
     this.fileToBase64(val[0].name, val[0].path).then(async result => {
+      const base64WithoutPrefix = result.substr('data:application/octet-stream;base64,'.length);
         const params = {
-          data: result,
+          data: base64WithoutPrefix,
           category: "sla",
           filename: val[0].name,
           remarks: ""
@@ -85,8 +83,7 @@ shouldComponentUpdate(nextProps){
 }
 
 
-  render() {   
-    const { slaAttachments } = this.props
+  render() {
     return (
       <React.Fragment>
         <Row className="sla_file_upload">
@@ -98,7 +95,7 @@ shouldComponentUpdate(nextProps){
               allDocuments={this.allDocuments}
             />
             <div className="sla_table">
-              <SLAPdfTable />
+              <SLAPdfTable getAllPdf={this.getAllSLAPdf} />
             </div>
           </Col>
         </Row>

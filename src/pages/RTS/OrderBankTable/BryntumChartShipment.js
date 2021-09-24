@@ -12,7 +12,7 @@ import {
   ganttChartTableMapping,
 } from "./tableMapping"
 import "./index.scss"
-import { BryntumSchedulerPro } from "@bryntum/schedulerpro-react"
+import { BryntumSchedulerPro, BryntumGrid } from "@bryntum/schedulerpro-react"
 import "@bryntum/schedulerpro/schedulerpro.classic-dark.css"
 import "@bryntum/schedulerpro/schedulerpro.classic-light.css"
 import "@bryntum/schedulerpro/schedulerpro.classic.css"
@@ -34,6 +34,8 @@ import { DragDropContext, Droppable } from "react-beautiful-dnd"
 import {getCookieByKey} from "../../DQM/Common/helper"
 import OrderBankShipmentModal from "./OrderBankShipmentModal"
 import PlannedLoadTimesModal from "./PlannedLoadTimesModal"
+import BryntumDragDropAreaShipment from "./BryntumDragDropAreaShipment"
+
 
 const EventSchedulerStatus = {
   ARE_YET_CREATED_PAYMENT: 'not yet to be created',
@@ -41,11 +43,11 @@ const EventSchedulerStatus = {
   CANCELLATION: 'Cancellation'
 }
 const EventContextList = {
-    SHIPMENT :'shipment',
-    CANCEL_SHIPMENT :'cancel_shipment',
-    SEND_ORDER :'send_order',
-    TERMINAL_RELAY:'terminal_relay',
-    PLAN_LOAD_TIMES:'planned_load_time'
+  SHIPMENT :'shipment',
+  CANCEL_SHIPMENT :'cancel_shipment',
+  SEND_ORDER :'send_order',
+  TERMINAL_RELAY:'terminal_relay',
+  PLAN_LOAD_TIMES:'planned_load_time'
 }
 
 export const bryntumSchedulerTableNameForCookie = "rts-gantt-chart-bryntum-scheduler"
@@ -103,12 +105,12 @@ const CustomIcon3 = () => {
 }
 
 const ChartColumnFilter = ({
-  filterData = [],
-  filterKey,
-  onApply,
-  onReset,
-  type,
-}) => {
+                             filterData = [],
+                             filterKey,
+                             onApply,
+                             onReset,
+                             type,
+                           }) => {
 
   const originalDataList = useMemo(() => {
     switch (type) {
@@ -200,7 +202,7 @@ const ChartColumnFilter = ({
             e.visible && (
               <div
                 className={`chart-column-select-item ${e.checked ? "checked" : " "
-                  }`}
+                }`}
               >
                 <Checkbox
                   checked={e.checked}
@@ -262,8 +264,10 @@ function BryntumChartTable(props) {
   const [eventsData, setEventsData] = useState([])
   const [shipmentDblclick, setShipmentDblclick] = useState(false)
   const schedulerProRef = useRef()
-	const firstRender = useRef(true)
+  const firstRender = useRef(true)
   const [filterList, setFilterList] = useState([])
+  const [selectedRow,setSelectedRow] = useState(null)
+
   useEffect(() => {
     const { getRTSOderBankGanttChart } = props
     getRTSOderBankGanttChart()
@@ -274,56 +278,10 @@ function BryntumChartTable(props) {
       type: ganttChartTableMapping[e].type,
     })))
   },[bryntumCurrentColumns])
-  useEffect(() => {
-    setTableData(props.ganttChartData.table)
-    setEventsData(props.ganttChartData.event)
-  }, [props.ganttChartData])
 
   const toggle = () => setModal(!modal);
 
-  const updateModalHandler = (type, eventRecord) => {
-    let data = {};
-    switch(type){
-        case EventContextList.SHIPMENT:{
-            data.type = EventContextList.SHIPMENT
-            data.header = 'Create Shipment'
-            data.body = 'proceed for Shipment Creation?'
-            data.styleColor = 'success'
-            break
-        }
-        case EventContextList.CANCEL_SHIPMENT:{
-          data.type = EventContextList.CANCEL_SHIPMENT
-          data.header = 'Cancel Shipment Confirmation'
-          data.body = 'proceed with this shipment cancellation?'
-          data.styleColor = 'danger'
-          data.record = eventRecord
-          break
-        }
-        case EventContextList.SEND_ORDER:{
-          data.type = EventContextList.SEND_ORDER
-          data.header = 'Send Order for DN'
-          data.body = "send this shipment's order for DN?"
-          data.styleColor = 'success'
-          break
-        }
-        case EventContextList.TERMINAL_RELAY:{
-          data.type = EventContextList.TERMINAL_RELAY
-          break
-        }
-        case EventContextList.PLAN_LOAD_TIMES:{
-          data.type = EventContextList.PLAN_LOAD_TIMES
-          break
-        }
-        default:{
-            data.header = ''
-            data.body = ''
-            break
-        }
-    }
-    data.itemSelectedId = eventRecord.data?.id
-    toggle()
-    setDropdownSelectedItem(data)
-  }
+
 
   const removeShipmentHandler = () => {
     const { instance: scheduler } = schedulerProRef.current;
@@ -375,14 +333,10 @@ function BryntumChartTable(props) {
     const scheduler = schedulerProRef.current?.instance
     if (scheduler) {
       if (preventClear) {
-        scheduler.resourceStore.data = updateData
+        scheduler.data = updateData
       } else {
-        scheduler.resourceStore.removeAll()
-        if (!scheduler.eventStore.data) {
-          scheduler.eventStore.data = eventsData
-        }
         updateData.forEach(e => {
-          scheduler.resourceStore.add(e)
+          scheduler?.store?.add(e)
         })
       }
       setTableData(updateData)
@@ -392,151 +346,21 @@ function BryntumChartTable(props) {
   const schedulerproConfig = {
     columns: [],
     autoHeight: true,
+    fullLastRow:false,
     autoLoad: true,
+    columnLine:true,
     autoSync: true,
     autoCommit: true,
     rowHeight: 35,
     barMargin: 0,
-    resourceMargin: 0,
-    autoAdjustTimeAxis: false,
-    fillTicks: true,
+    resourceMargin:  0,
     listeners: {
-      beforeEventEdit({ eventRecord, resourceRecord }) {
-        ShipmentDblclickModal(eventRecord, resourceRecord);
+      cellClick: function(grid) { // click row to select Vehicle shipment
+        const {record} = grid
+        if(record?.data?.vehicle){
+          setSelectedRow({vehicle: record.data.vehicle})
+        }
       }
-    },
-    eventRenderer: ({ eventRecord, renderData }) => {
-      // customize content for event in here
-      if (!eventRecord.data?.highlight) {
-        renderData.cls.add("opacity-20")
-      }
-      if (eventRecord.data?.highlight) {
-        renderData.cls.remove("opacity-20")
-      }
-      return `
-        <div class="eventCustomize" id="eventEllipses" 
-          onmouseover="document.getElementById('gethighlight').style.display = 'flex';" 
-          onmouseout="document.getElementById('gethighlight').style.display = 'none';"
-        >
-          <div class=${renderData.width < 360 ? 'marquee' : ''}>
-            <div class="white-bg brdr-radius">
-              <p>1</p>
-            </div>
-            <div class="blue-bg brdr-radius">
-              <p>M808</p>
-            </div>
-            <div class="white-text brdr-radius">
-              <p>${renderData.resource.hours} hrs</p>
-            </div>
-            <div class="green-bg brdr-radius">
-              <p>eta 09:00</p>
-            </div>
-            <div class="white-text brdr-radius">
-              <p>${renderData.resource.hours} hrs</p>
-            </div>
-            <div class="green-bg brdr-radius">
-              <p>eta 09:00</p>
-            </div>
-          </div>
-        </div>
-      `
-    },
-    features: {
-      eventEdit: {
-        editorConfig: {
-          type: 'myCustomEditorType'
-        }
-      },
-      eventTooltip: {
-        disabled: true
-      },
-      eventCopyPaste: false,
-      eventDrag: {
-        constrainDragToResource: true,
-        nonWorkingTime: true,
-      },
-      nonWorkingTime: true,
-      resourceNonWorkingTime: true,
-      timeRanges: {
-        showCurrentTimeLine: false,
-      },
-    },
-    startDate: "2021-07-23",
-    resourceNonWorkingTimeFeature: true,
-    nonWorkingTimeFeature: true,
-    resourceTimeRangesFeature: true,
-    maxTimeAxisUnit: "hour",
-    eventMenuFeature: {
-      // menuitem of event right click handler
-      processItems({ eventRecord, items }) {
-        if (eventRecord.data?.eventType === EventSchedulerStatus.CANCELLATION || eventRecord.data?.isPending) return false
-        if (!eventRecord.data?.resourceOrder) {
-          items.sendOrderForDS = {
-            hidden: true
-          };
-        }
-        if (eventRecord.data?.resourceOrder) {
-          let check = eventRecord.data?.resourceOrder.filter(v => !v.DNNumber)
-          items.sendOrderForDS = {
-            ...items.sendOrderForDS,
-            disabled: !!check.length
-          };
-        }
-        if (eventRecord.data?.status === EventSchedulerStatus.CREATED_PAYMENT) {
-          items.createShipment.hidden = true
-          items.sendOrderForDS.hidden = true
-          items.terminalRelay.hidden = true
-        }
-      },
-      items: {
-        editEvent : false,
-        deleteEvent : false,
-        sendOrderForDS:{
-          text: 'Send OrderS For DS',
-          onItem({ source, eventRecord }) {
-            updateModalHandler(EventContextList.SEND_ORDER,eventRecord)
-          }
-        },
-        plannedLoadTime:{
-          text: 'Planned Load Times',
-          onItem({ source, eventRecord }) {
-            updateModalHandler(EventContextList.PLAN_LOAD_TIMES,eventRecord)
-          }
-        },
-        terminalRelay:{
-          text: 'Terminal Relay',
-          onItem({ source, eventRecord }) {
-            updateModalHandler(EventContextList.TERMINAL_RELAY,eventRecord)
-          }
-        },
-        createShipment:{
-          text: 'Create Shipment',
-          onItem({ source, eventRecord }) {
-            updateModalHandler(EventContextList.SHIPMENT,eventRecord)
-          }
-        },
-        cancel:{
-          text: 'Cancel',
-          onItem({ source, eventRecord }) {
-            updateModalHandler(EventContextList.CANCEL_SHIPMENT, eventRecord)
-          }
-        },
-      },
-    },
-    viewPreset: {
-      base: "hourAndDay",
-      id: "customHourAndDayPresent",
-      headers: [
-        {
-          unit: "day",
-          dateFormat: "dddd. do MMM YYYY",
-        },
-        {
-          unit: "hour",
-          dateFormat: "HH",
-          increment: 1,
-        },
-      ],
     }
   }
 
@@ -626,56 +450,7 @@ function BryntumChartTable(props) {
     schedulerproConfig.columns.push(generateColumnsObj(tableMap))
   }
 
-  useEffect(() => {
-    let isMounted = true // prevent bryntum maximum render
-    if (schedulerProRef.current && schedulerProRef.current.instance && isMounted && !firstRender.current) {
-      const { instance: scheduler } = schedulerProRef.current
-      const {ganttChartAllRadio} = props
-      if (!ganttChartAllRadio) {
-        setEventsData((prevEventsData) => {
-          const newEventsData = prevEventsData.map((event) => {
-            event.highlight = true
-            return event
-          })
-          scheduler.eventStore.data = newEventsData
-          return newEventsData
-        })
-      }
-      if (ganttChartAllRadio) {
-        setEventsData((prevEventsData) => {
-          const newEventsData = prevEventsData.map((event) => {
-            if(event.eventType === 'Scheduled'){
-              event.highlight = event.eventFilter === ganttChartAllRadio
-            }
-            if(event.eventType !== 'Scheduled'){
-              event.highlight = true
-            }
-            return event
-          })
-          scheduler.eventStore.data = newEventsData
-          return newEventsData
-        })
-      }
-    }
 
-    return () => {
-      isMounted = false
-    }
-  }, [props.ganttChartAllRadio])
-
-  useEffect(()=>{
-    if(schedulerProRef.current && !firstRender.current){
-      const {instance:scheduler} = schedulerProRef.current
-        for (const col of Object.keys(ganttChartTableMapping)){
-          if(scheduler.columns.get(col)){
-            scheduler.columns.get(col).remove()
-          }
-        }
-        for (const newCol of Object.keys(bryntumCurrentColumns)){
-          scheduler.columns.add(generateColumnsObj(newCol))
-        }
-    }
-  },[bryntumCurrentColumns])
 
   useEffect(() => {
     if (props.isSendRequestProcess && dropdownSelectedItem?.itemSelectedId) {
@@ -758,7 +533,7 @@ function BryntumChartTable(props) {
       })
     })
     updateResourceRecords(newTableData)
-  }, [filterCondition])
+  }, [filterCondition, props.currentTab])
 
   return (
     <div className="rts-table-container scroll" id="scrollableDiv">
@@ -766,26 +541,30 @@ function BryntumChartTable(props) {
         className="container-orderbank gant-chart-table"
         style={{ maxWidth: "100%" }}
       >
-        <Row style={{}} className="w-100">
+        <Row className="w-100">
           <Col lg={12}>
-              <Droppable key="gantt-chart" droppableId="gantt-chart">
-                {(provided, snapshot) => {
-                  return (
-                    <div className="rts-gantt-chart" {...provided.droppableProps} ref={provided.innerRef}>
-                      {snapshot.isDraggingOver && <div className="on-dragging"/>}
-                      <BryntumSchedulerPro
-                        {...schedulerproConfig}
-                        events={eventsData}
-                        autoSync
-                        resources={props.ganttChartData.table}
-                        syncDataOnLoad
-                        ref={schedulerProRef}
-                        // other props, event handlers, etc
-                      />
+            <Droppable key="shipment-chart" droppableId="shipment-chart">
+              {(provided, snapshot) => {
+                return (
+                  <div className="rts-gantt-chart border-0" {...provided.droppableProps} ref={provided.innerRef}>
+                    {snapshot.isDraggingOver && <div className="on-dragging"/>}
+                    <div className="w-100 d-flex justify-content-between">
+                      <div className="rounded wrapper-bryntum-shipment-grid border-bryntum-table">
+                        <BryntumGrid
+                          {...schedulerproConfig}
+                          autoSync
+                          resources={props.ganttChartData.table}
+                          syncDataOnLoad
+                          ref={schedulerProRef}
+                        />
+                      </div>
+                      <BryntumDragDropAreaShipment selectedRow={selectedRow}/>
                     </div>
-                  )
-                }}
-              </Droppable>
+                  </div>
+                )
+              }}
+
+            </Droppable>
           </Col>
         </Row>
         {filterList.map(e => {
@@ -803,35 +582,35 @@ function BryntumChartTable(props) {
       </div>
       {
         (dropdownSelectedItem?.type === EventContextList.SHIPMENT
-        || dropdownSelectedItem?.type === EventContextList.CANCEL_SHIPMENT
-        || dropdownSelectedItem?.type === EventContextList.SEND_ORDER) && (
-        <ConfirmDNStatusModal
-          isOpen={modal}
-          onSend={sendRequestsHandler}
-          onCancel={toggle}
-          headerContent={dropdownSelectedItem?.header || ''}
-          bodyContent={`Are you sure you want to ${dropdownSelectedItem?.body || ''}`}
-          styleColor = {dropdownSelectedItem?.styleColor}
+          || dropdownSelectedItem?.type === EventContextList.CANCEL_SHIPMENT
+          || dropdownSelectedItem?.type === EventContextList.SEND_ORDER) && (
+          <ConfirmDNStatusModal
+            isOpen={modal}
+            onSend={sendRequestsHandler}
+            onCancel={toggle}
+            headerContent={dropdownSelectedItem?.header || ''}
+            bodyContent={`Are you sure you want to ${dropdownSelectedItem?.body || ''}`}
+            styleColor = {dropdownSelectedItem?.styleColor}
           />)
       }
       {
         dropdownSelectedItem?.type === EventContextList.TERMINAL_RELAY && (
-        <TerminalRelayModal
-          isOpen={modal}
-          onSend={sendRequestsHandler}
-          onCancel={toggle}
-        />)
+          <TerminalRelayModal
+            isOpen={modal}
+            onSend={sendRequestsHandler}
+            onCancel={toggle}
+          />)
       }
       {
         dropdownSelectedItem?.type === EventContextList.PLAN_LOAD_TIMES && (
-        <PlannedLoadTimesModal
-          isOpen={modal}
-          onSend={sendRequestsHandler}
-          onCancel={toggle}
-        />)
+          <PlannedLoadTimesModal
+            isOpen={modal}
+            onSend={sendRequestsHandler}
+            onCancel={toggle}
+          />)
       }
       {shipmentDblclick &&
-        <OrderBankShipmentModal open={shipmentDblclick} istoggle={toggleShipment} />
+      <OrderBankShipmentModal open={shipmentDblclick} istoggle={toggleShipment} />
       }
     </div>
   )

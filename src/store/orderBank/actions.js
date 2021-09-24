@@ -270,10 +270,12 @@ export const dragOrderBankToGanttChart = () => ({
   type: DRAG_RTS_ORDER_BANK_TO_GANTT_CHART,
 })
 
-export const dragOrderBankToGanttChartSuccess = () => ({
+export const dragOrderBankToGanttChartSuccess = (dropData) => ({
   type: DRAG_RTS_ORDER_BANK_TO_GANTT_CHART_SUCCESS,
+  dropData
 })
 
-export const dragOrderBankToGanttChartFail = () => ({
+export const dragOrderBankToGanttChartFail = (error) => ({
   type: DRAG_RTS_ORDER_BANK_TO_GANTT_CHART_FAIL,
+  error,
 })

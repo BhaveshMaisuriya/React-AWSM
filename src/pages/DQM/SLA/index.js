@@ -30,7 +30,8 @@ import {
 import classnames from "classnames"
 import SLATab from "./SLATab"
 import "./sla.scss"
-import Attachments from "./attachments" 
+import Attachments from "./attachments"
+import SLATable from "./SLATable"
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown"
 import { FormControlLabel } from "@material-ui/core"
 import Checkbox from "@material-ui/core/Checkbox"
@@ -400,14 +401,14 @@ class SLA extends Component {
                             style={{ width: "auto" }}
                             toggle={this.toggleDownload}
                           >
-                            <PopoverBody className="filter-container sla-rbd-download">
+                            <PopoverBody className="sla-rbd-download">
                               <>
                                 {this.state.downloadCheck.length > 0 &&
                                   this.state.downloadCheck.map((row, index) => {
                                     return (
                                       <div
                                         key={row.title}
-                                        className={`d-flex align-items-center filter-selection ${
+                                        className={`d-flex align-items-center ${
                                           row.checked ? "item-checked" : ""
                                         }`}
                                       >

@@ -1,5 +1,5 @@
 import React, { Component, useMemo, useState, useEffect, useCallback } from "react"
-import { connect } from "react-redux"
+import { connect,useSelector } from "react-redux"
 import {
   Row,
   Col,
@@ -28,8 +28,9 @@ import AWSMDropdown from "../../components/Common/Dropdown"
 import OrderBankTable from "./OrderBankTable"
 import REGION_TERMINAL from "../../common/data/regionAndTerminal"
 import customiseTableIcon from "../../assets/images/AWSM-Customise-Table.svg"
-import { Link } from "react-router-dom"
 import CustomizeTableModal from "../../common/CustomizeTable"
+
+
 import {
   ganttChartTableColumns, ganttChartTableDefaultColumns,
   ganttChartTableMapping,
@@ -47,6 +48,7 @@ import {
 import OrderBankActionModal from "./OrderBankActionModal"
 import CrossTerminalModal from "./crossTerminalModal"
 import BryntumChartTable from "./OrderBankTable/BryntumChartTable"
+import BryntumChartShipment from "./OrderBankTable/BryntumChartShipment"
 import OrderBankAuditModal from "./OrderBankAuditModal"
 import CustomRadioButton from "components/Common/CustomRadioButton"
 import OrderBankRunAutoModal from "./OrderBankRunAutoModal"
@@ -171,7 +173,8 @@ function OrderBank({
       label: "All",
     },
   ]
-
+  const ganttChartEvents = useSelector(state => state.orderBank.ganttChart.event)
+  const [orderSummary, setOrderSummary] = useState({DNs : 0,shipment : 0,backlog : 0,SR : 0,HP : 0})
   const [activeTab, setActiveTab] = useState("1")
   const [dropdownOpen, setOpen] = useState(false)
   const [crossTerminal, setCrossTerminal] = useState(false)
@@ -210,6 +213,17 @@ function OrderBank({
     })
     return columns
   })
+  useEffect(()=>{
+    const results = {DNs : 3,shipment : 2,backlog : 0,SR : 0,HP : 0};
+    if(ganttChartEvents){
+      ganttChartEvents.forEach(item => {
+        if(item.eventFilter === "backlog") results.backlog++;
+        if(item.eventFilter === "request") results.SR ++;
+        if(item.eventFilter === "high") results.HP ++;
+      })
+    }
+    setOrderSummary(results)
+  },[ganttChartEvents])
   const toggle = () => setOpen(!dropdownOpen)
   const terminalList = useMemo(() => {
     const currentRegion = REGION_TERMINAL.find(e => e.region === region)
@@ -260,7 +274,6 @@ function OrderBank({
       setOrderBankSetting(temp)
     }
   }
-
   useEffect(() => {
     const payload = {
       limit: 6,
@@ -382,7 +395,8 @@ function OrderBank({
     }
   }
 
-  const onDragEnd = ({ destination }) => {
+  const onDragEnd = ({ destination,source }) => {
+       console.log(source)
      if (destination) {
        dragOrderBankToGanttChart()
      }
@@ -393,7 +407,7 @@ function OrderBank({
       <DragDropContext onDragEnd={onDragEnd}>
       <div className="order-bank-page-content">
         <div className="container-fluid">
-          <Card className="order_bank_main">
+          <Card className="order_bank_main d-block">
             <CardBody>
               <Row className="border_btm">
                 <Col lg={3} md={3} sm={12}>
@@ -494,7 +508,7 @@ function OrderBank({
                     <img src={customiseTableIcon} alt="" />
                   </IconButton>
                   {
-                    activeTab === "1" &&  <><div className='d-flex align-items-center justify-content-between radio_option m-0 order-bank-label'>
+                    activeTab === "1"  && <div className='d-flex align-items-center justify-content-between radio_option m-0 order-bank-label'>
                       {
                         GanttChartFilterButtons && GanttChartFilterButtons.length > 0 &&
                         GanttChartFilterButtons.map((button,index)=>{
@@ -507,18 +521,19 @@ function OrderBank({
                         })
                       }
                     </div>
-                      <span className="m-0 order-bank-label" style={{fontSize:"13px"}}>
-                    141 DNs, 3 shipments, 3 special request, 5 higpriority
-                    </span></>
                   }
+                  <span className="m-0 order-bank-label">
+                    {`${orderSummary.DNs} DNs, ${orderSummary.shipment} shipments, ${orderSummary.backlog} backlog, ${orderSummary.SR} SR, ${orderSummary.HP} HP`}
+                    </span>
                 </Col>
               </Row>
               <div>
                 <TabContent activeTab={activeTab} className="pt-2">
                   <TabPane tabId="1">
                     <div className="gantt_chart_main">
-                      <div className="gantt_chart_first pb-4">
+                      <div className="gantt_chart_first">
                         <BryntumChartTable
+                          currentTab={activeTab}
                           ganttChartAllRadio={ganttChartAllRadio}
                           bryntumCurrentColumns={bryntumCurrentColumns}
                         />
@@ -526,9 +541,7 @@ function OrderBank({
                           {GanttChartBottom.map((item, index) => {
                             return (
                               <div className="d-flex align-items-center mr-2">
-                                <div
-                                  className={`square ${item.color} mr-1 ml-2`}
-                                ></div>
+                                <div className={`square ${item.color} mr-1 ml-2`} />
                                 {item.title}
                               </div>
                             )
@@ -537,9 +550,7 @@ function OrderBank({
                             {GanttChartBottomHover.map((item, index) => {
                               return (
                                 <div className="d-flex align-items-center mr-2">
-                                  <div
-                                    className={`square ${item.color} mr-1 ml-2`}
-                                  ></div>
+                                  <div className={`square ${item.color} mr-1 ml-2`} />
                                   {item.title}
                                 </div>
                               )
@@ -550,7 +561,39 @@ function OrderBank({
                     </div>
                   </TabPane>
                   <TabPane tabId="2">
-                    <div className="shipment_main" />
+                    <div className="shipment_main">
+                      <div className="gantt_chart_first pb-4">
+                        <BryntumChartShipment
+                          currentTab={activeTab}
+                          ganttChartAllRadio={ganttChartAllRadio}
+                          bryntumCurrentColumns={bryntumCurrentColumns}
+                        />
+                        {
+                          activeTab === "1" && (
+                            <div className="square_border">
+                              {GanttChartBottom.map((item, index) => {
+                                return (
+                                  <div className="d-flex align-items-center mr-2">
+                                    <div className={`square ${item.color} mr-1 ml-2`} />
+                                    {item.title}
+                                  </div>
+                                )
+                              })}
+                              <div id="gethighlight" className="hover_display">
+                                {GanttChartBottomHover.map((item, index) => {
+                                  return (
+                                    <div className="d-flex align-items-center mr-2">
+                                      <div className={`square ${item.color} mr-1 ml-2`} />
+                                      {item.title}
+                                    </div>
+                                  )
+                                })}
+                              </div>
+                            </div>
+                          )
+                        }
+                      </div>
+                    </div>
                   </TabPane>
                 </TabContent>
               </div>

@@ -8,6 +8,7 @@ const placeholderNumberOnly = "Numeric only"
 const AddressTab = (props) => {
   const [data, setData] = useState(props.data)
   const handleSubmit = values => {
+    console.log(values)
   }
 
   useEffect(() => {

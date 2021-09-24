@@ -14,7 +14,7 @@ const ContactTab = (props) => {
   }, [data])
 
   const handleSubmit = values => {
-    
+    console.log(values)
   }
 
   const isDisabledField = isScheduler()

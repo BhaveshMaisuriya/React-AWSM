@@ -63,7 +63,7 @@ const AWSMDropdown = ({
           className={`d-flex align-items-center awsm-select-toggle ${error === true ? 'border-danger' : '' } p-2 position-relative ${disabled ? "disabled" : ""
             }`}
         >
-          <div>{(!value || value === "None") && !disabled ? placeholder : value}</div>
+          <div>{(!value || value === "None")  ? placeholder : value}</div>
           {!disabled && <ReactSVG src={ArrowDropDownIcon} className="awsm-dropdown-arrow" />}
         </div>
       </DropdownToggle>

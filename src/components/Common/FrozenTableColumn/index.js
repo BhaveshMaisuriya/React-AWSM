@@ -123,7 +123,6 @@ class FixedCoulmnTable extends Component {
     const { overrideActionColumn } = this.props
     let result
     if (
-      data && salesValue && inventoryValue &&
       (Math.abs(data.sales_variance) > salesValue?.variance_value ||
       Math.abs(data.inventory_variance) > inventoryValue?.variance_value ||
       Math.abs(data.sales_variance_percentage) > salesValue?.variance_percentage)
@@ -182,7 +181,9 @@ class FixedCoulmnTable extends Component {
           if (pathName === "/sales-inventory") {
             let threshold
             const salesValue = varianceControlData?.sales?.find(
-              e => e.station_tank_status === arr.station_tank_status
+              e => {
+                return e.station_tank_status === arr.tank_status
+              }
             )
             const inventoryValue = varianceControlData?.inventory?.find(
               e => e.station_tank_status === arr.station_tank_status

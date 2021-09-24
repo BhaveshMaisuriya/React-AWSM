@@ -73,7 +73,7 @@ function* onGetSalesAndInventoryDetail({ recordId }) {
 
 function* onGetSalesAndInventoryVarianceControl({ date }) {
   try {
-    const response = yield call(getSaleAndInventoryVarianceControl, date)
+    const response = yield call(getSaleAndInventoryVarianceControl, date ? date : "")
     const convertResponse = formatResponseDataVarianceControl(response.data,"vc_",["id","created_at"])
     if (convertResponse){
       convertResponse.date = response.data?.vc_created_at

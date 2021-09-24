@@ -144,10 +144,14 @@
 }
 
 .sla-rbd-download {
-  width: 170px !important;
-  max-height: 320px;
-  height: 100%;
+  width: 220px !important;
   overflow-y: auto;
+  box-shadow: 0 3px 10px rgb(204, 199, 199);
+}
+
+.item-checked {
+  background-color: #e0f4f3;
+  border-radius: 2px;
 }
 
 .pdf-wid {

@@ -2,7 +2,7 @@ import {
   GET_RTS_ORDER_BANK_TABLE_DATA_SUCCESS,
   GET_RTS_ORDER_BANK_TABLE_DATA_FAIL,
   GET_SHIPMENT_ORDER_BANK_TABLE_DATA_SUCCESS,
-  GET_SHIPMENT_ORDER_BANK_TABLE_DATA_FAIL,  
+  GET_SHIPMENT_ORDER_BANK_TABLE_DATA_FAIL,
   GET_ORDERBANK_FAIL,
   GET_ORDERBANK_SUCCESS,
   GET_ORDERBANK_TABLE_INFORMATION_SUCCESS,
@@ -22,7 +22,7 @@ import {
   SEND_ORDER_IN_GANTT_CHART_SUCCESS,
   SEND_ORDER_IN_GANTT_CHART_FAIL,
   GET_RTS_GANTT_CHART_DATA_SUCCESS,
-  GET_RTS_GANTT_CHART_DATA_FAIL,
+  GET_RTS_GANTT_CHART_DATA_FAIL, DRAG_RTS_ORDER_BANK_TO_GANTT_CHART_SUCCESS
 
 } from "./actionTypes"
 
@@ -32,6 +32,7 @@ const initialState = {
   shipmentOrderBankTableData: null,
   error: null,
   currentOrderDetail: null,
+  shipmentOrderDropFromOrderBank:null,
   updateSuccess: false,
   isSendRequestProcess: false,
   auditsCom: null,
@@ -191,6 +192,12 @@ const RTSOrderBank = (state = initialState, action) => {
           event: [],
         },
         error: action.payload
+      }
+    }
+    case DRAG_RTS_ORDER_BANK_TO_GANTT_CHART_SUCCESS:{
+      return {
+        ...state,
+        shipmentOrderDropFromOrderBank:  action.dropData
       }
     }
     default:

@@ -34,7 +34,12 @@ import {
   GET_SLA_PDF_DOWNLOAD,
   GET_SLA_PDF_DOWNLOAD_SUCCESS,
   GET_SLA_PDF_DOWNLOAD_FAIL,   
-  
+  GET_SLA_RENAME_PDF,
+  GET_SLA_RENAME_PDF_SUCCESS,
+  GET_SLA_RENAME_PDF_FAIL,
+  GET_SLA_DELETE_PDF,
+  GET_SLA_DELETE_PDF_SUCCESS,
+  GET_SLA_DELETE_PDF_FAIL,
 } from "./actionTypes"
 
 export const getSLAItems = params => ({
@@ -83,6 +88,36 @@ export const getSLAPdfDownloadSuccess = response => ({
 
 export const getSLAPdfDownloadFail = error => ({
   type: GET_SLA_PDF_DOWNLOAD_FAIL,
+  payload: error,
+})
+
+export const getRenamePdf = (params) => ({
+  type: GET_SLA_RENAME_PDF,
+  params,
+})
+
+export const getRenamePdfSuccess = response => ({
+  type: GET_SLA_RENAME_PDF_SUCCESS,
+  params: response,
+})
+
+export const getRenamePdfFail = error => ({
+  type: GET_SLA_RENAME_PDF_FAIL,
+  payload: error,
+})
+
+export const getDeletePdf = (params) => ({
+  type: GET_SLA_DELETE_PDF,
+  params,
+})
+
+export const getDeletePdfSuccess = response => ({
+  type: GET_SLA_DELETE_PDF_SUCCESS,
+  params: response,
+})
+
+export const getDeletePdfFail = error => ({
+  type: GET_SLA_DELETE_PDF_FAIL,
   payload: error,
 })
 

@@ -33,7 +33,7 @@ import { updateOrderBankTableData, deleteOrderBankDetail, sendDNStatusRequest } 
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd"
 
 
-class TableGroupEvent extends React.Component {
+export class TableGroupEvent extends React.Component {
   constructor(props) {
     super(props)
     this.state = {

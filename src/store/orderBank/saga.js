@@ -4,6 +4,7 @@ import {
   GET_ORDERBANK,
   GET_ORDERBANK_TABLE_INFORMATION,
   GET_SHIPMENT_ORDER_BANK_TABLE_DATA,
+  DRAG_RTS_ORDER_BANK_TO_GANTT_CHART_SUCCESS,
   UPDATE_ORDERBANK_TABLE_INFORMATION,
   DELETE_ORDERBANK_DETAIL,
   GET_RTS_ORDER_BANK_TABLE_DATA,
@@ -46,7 +47,7 @@ import {
   sendOrderInGanttChartSuccess,
   sendOrderInGanttChartFail,
   getRTSOderBankGanttChartSuccess,
-  getRTSOderBankGanttChartFail,
+  getRTSOderBankGanttChartFail, dragOrderBankToGanttChartSuccess
 } from "./actions"
 import {
   getOrderBank,
@@ -191,6 +192,14 @@ function* onGetRTSOrderBankGanttChart({ params = {} }) {
 function* onDragOrderBankToGanttChart() {
   let dragOrder = yield select(store => store.orderBank?.orderBankTableData?.filter(e => e.isChecked))
   //TODO implement integrate API
+  // here just for mock data
+  try{
+    if (dragOrder && dragOrder.length > 0){
+      yield put(dragOrderBankToGanttChartSuccess(dragOrder))
+    }
+  }catch (error){
+
+  }
 }
 
 function* orderBankSaga() {

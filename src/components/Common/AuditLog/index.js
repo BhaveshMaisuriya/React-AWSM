@@ -66,11 +66,11 @@ class AuditLog extends Component {
     //cut action from string
     let action = firstWord.shift()
 
-    const Month = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "octomber", "November", "December"];
+    const Month = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
     //cut date from string
     let date = new Date(audit.created)
-    let finalDate = date.getDate() + " " + Month[date.getMonth() + 1] + " " + date.getFullYear()
+    let finalDate = date.getDate() + " " + Month[date.getMonth()] + " " + date.getFullYear()
 
     //cut time from string
     var ampm = (date.getHours() >= 12) ? "PM" : "AM";

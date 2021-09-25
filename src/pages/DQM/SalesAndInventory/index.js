@@ -76,7 +76,7 @@ class SalesInventory extends Component {
    
     onGetSaleAndInventory(params)
     /*Call Variance Control only when the modal is opened, not on the page load*/
-    // getSalesAndInventoryVarianceControl()
+    getSalesAndInventoryVarianceControl()
   }
 
   GetonDownload = async currentPage => {

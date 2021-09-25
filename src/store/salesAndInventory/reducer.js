@@ -37,7 +37,7 @@ const initialState = {
   tableError: null,
   filter: {},
   tankStatusModalError: null,
-  auditsCom: [],
+  auditsCom: null,
   downloadtableData: null,
   currentSalesAndInventory: {},
   isUpdateSuccess: false,

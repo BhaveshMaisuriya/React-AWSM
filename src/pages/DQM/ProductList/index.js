@@ -25,7 +25,7 @@ class Product extends Component {
   }
 
   componentDidMount() {
-    const { onGetProducts, onGetProductAuditLog } = this.props
+    const { onGetProducts } = this.props
     const { searchFields } = this.state
     const params = {
       limit: 10,
@@ -34,13 +34,7 @@ class Product extends Component {
       sort_field: "code",
       search_fields: transformArrayToString(searchFields),
     }
-    const payload = {
-      limit: 6,
-      page: 1,
-      module: "product",
-    }
     onGetProducts(params)
-    onGetProductAuditLog(payload)
   }
 
   GetonDownload = async currentPage => {
@@ -67,11 +61,17 @@ class Product extends Component {
       productsIsLoading,
     } = this.props
     const { searchFields } = this.state
+    const payload = {
+      limit: 6,
+      page: 1,
+      module: "product",
+    }
     return (
       <Fragment>
         {productsIsLoading ? <Loader /> : ""}
         {products.list && (
           <Page
+          auditPayload={payload}
             headerTitle="Product"
             cardTitle="Product List"
             tableName={ProductTableName}

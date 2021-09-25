@@ -71,27 +71,27 @@ class SLA extends Component {
   }
 
   componentDidMount() {
-    const { onGetSLAItems, onGetSLAAuditLog } = this.props
+    const { onGetSLAItems } = this.props
     const params = {
       limit: 10,
       page: 0,
       sort_dir: "asc",
       sort_field: "code",
     }
-    const payload = {
-      limit: 6,
-      page: 1,
-      module: "sla",
-    }
     onGetSLAItems(params)
-    onGetSLAAuditLog(payload)
-
   }
 
   /**
    * Handling the modal state when modal is click
    */
   modalHandler = () => {
+    const { onGetSLAAuditLog } = this.props;
+    const payload = {
+      limit: 6,
+      page: 1,
+      module: "sla",
+    }
+    onGetSLAAuditLog(payload)
     this.setState({
       modal: true,
     })
@@ -135,25 +135,27 @@ class SLA extends Component {
   runAuditLogModal = () => {
     const { modal, rowsAudit, currentAuditPage } = this.state
     const audits = this.props.slaAuditLog
-    return modal ? (
-      <Modal
-        isOpen={this.state.modal}
-        toggle={this.toggle}
-        id="auditLog-modal"
-        contentClassName="modalContainer"
-      >
-        <ModalHeader toggle={this.toggle}>
-          <h3>Audit Log</h3>
-        </ModalHeader>
-        <AuditLog
-          rowsAudit={rowsAudit}
-          currentAuditPage={currentAuditPage}
-          data={audits.data.list}
-          closeModal={this.closeHandler}
-          handlePageChange={this.handleChangeAuditPage}
-        />
-      </Modal>
-    ) : null
+    if(audits !== undefined && audits !== null){
+      return modal ? (
+        <Modal
+          isOpen={this.state.modal}
+          toggle={this.toggle}
+          id="auditLog-modal"
+          contentClassName="modalContainer"
+        >
+          <ModalHeader toggle={this.toggle}>
+            <h3>Audit Log</h3>
+          </ModalHeader>
+          <AuditLog
+            rowsAudit={rowsAudit}
+            currentAuditPage={currentAuditPage}
+            data={audits.data.list}
+            closeModal={this.closeHandler}
+            handlePageChange={this.handleChangeAuditPage}
+          />
+        </Modal>
+      ) : null
+    }
   }
 
   toggleTabs(tab) {

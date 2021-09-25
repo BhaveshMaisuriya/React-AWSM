@@ -26,7 +26,7 @@ class RetailCustomer extends Component {
   }
 
   componentDidMount() {
-    const { onGetRetailCustomer, onGetRetailAuditLog } = this.props
+    const { onGetRetailCustomer } = this.props
     const { searchFields } = this.state
     const params = {
       limit: 10,
@@ -35,13 +35,8 @@ class RetailCustomer extends Component {
       sort_field: "ship_to_party",
       search_fields: transformArrayToString(searchFields),
     }
-    const payload = {
-      limit: 6,
-      page: 1,
-      module: "retail-customer",
-    }
+    
     onGetRetailCustomer(params)
-    onGetRetailAuditLog(payload)
   }
 
   GetonDownload = async currentPage => {
@@ -68,11 +63,17 @@ class RetailCustomer extends Component {
       downloadretailCustomer,
     } = this.props
     const { searchFields } = this.state
+    const payload = {
+      limit: 6,
+      page: 1,
+      module: "retail-customer",
+    }
     return (
       <Fragment>
         {retailCustomerIsLoading ? <Loader /> : ""}
         {retailCustomer.list && (
           <Page
+            auditPayload={payload}
             tableName={RetailTableName}
             onGetMainTable={onGetRetailCustomer}
             onGetAuditLog={onGetRetailAuditLog}

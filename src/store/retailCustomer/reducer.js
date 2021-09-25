@@ -18,7 +18,7 @@ const initialState = {
   retailCustomers: [],
   error: {},
   tableError: null,
-  audits: [],
+  audits: null,
   address: [],
   filter: [],
   currentRetailDetail: null,

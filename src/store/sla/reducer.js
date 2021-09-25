@@ -31,7 +31,7 @@ import {
 const initialState = {
   data: {},
   error: null,
-  slaAuditLog: [],
+  slaAuditLog: null,
   updateStatus: null,
   slaAttachments: null,
   slaPdfs: null,
@@ -84,7 +84,7 @@ const SLA = (state = initialState, action) => {
     case GET_SLA_ATTACHMENTS_FAIL:
       return {
         ...state,
-        slaAttachments: action.payload,
+        slaAttachments: false,
       } 
     case GET_SLA_PDFS_SUCCESS:
       return {

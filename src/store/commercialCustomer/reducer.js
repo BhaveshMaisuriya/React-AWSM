@@ -21,7 +21,7 @@ const initialState = {
   commercialCustomers: [],
   error: {},
   tableError: null,
-  auditsCom: [],
+  auditsCom: null,
   filterCom: [],
   currentCommercialDetail: null,
   updateSuccess: null,

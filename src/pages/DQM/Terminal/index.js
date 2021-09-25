@@ -27,7 +27,7 @@ class Terminal extends Component {
   }
 
   componentDidMount() {
-    const { onGetTerminal, onGetTerminalAuditLog } = this.props
+    const { onGetTerminal } = this.props
     const { searchFields } = this.state
     const params = {
       limit: 10,
@@ -36,13 +36,7 @@ class Terminal extends Component {
       sort_field: "code",
       search_fields: transformArrayToString(searchFields),
     }
-    const payload = {
-      limit: 6,
-      page: 1,
-      module: "terminal",
-    }
     onGetTerminal(params)
-    onGetTerminalAuditLog(payload)
   }
 
   GetonDownload = async currentPage => {
@@ -70,11 +64,17 @@ class Terminal extends Component {
       resetCurrentTerminalDetail,
     } = this.props
     const { searchFields } = this.state
+    const payload = {
+      limit: 6,
+      page: 1,
+      module: "terminal",
+    }
     return (
       <Fragment>
         {terminalTableIsLoading ? <Loader /> : ""}
         {terminalTable.list && (
           <Page
+            auditPayload={payload}
             headerTitle="Terminal"
             cardTitle="Terminal List"
             tableName={TerminalTableName}

@@ -97,7 +97,7 @@ function* onGetSLAPdfDownload(params) {
   try {
     const response = yield call(getSLAPdfDownload, params.params)
     yield put(getSLAPdfDownloadSuccess(response))
-  } catch (error) {
+  } catch (error) {    
     yield put(getSLAPdfDownloadFail(error))
   }
 }

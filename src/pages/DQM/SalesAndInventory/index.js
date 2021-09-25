@@ -60,8 +60,6 @@ class SalesInventory extends Component {
   onGetMainTableAndAuditLog = () =>{
     const {
       onGetSaleAndInventory,
-      onGetSalesAuditLog,
-      getSalesAndInventoryVarianceControl,
     } = this.props
     const { searchFields } = this.state
     const params = {
@@ -75,13 +73,8 @@ class SalesInventory extends Component {
       /* must be (format(sales_date,"YYYY-MM-DD")) // because data is only available
       for date 2021-04-08, not for today. so just a test */
     }
-    const payload = {
-      limit: 6,
-      page: 1,
-      module: "sales-and-inventory",
-    }
+   
     onGetSaleAndInventory(params)
-    onGetSalesAuditLog(payload)
     /*Call Variance Control only when the modal is opened, not on the page load*/
     // getSalesAndInventoryVarianceControl()
   }
@@ -119,11 +112,17 @@ class SalesInventory extends Component {
       overrideStatusInActionColumn,
     } = this.props
     const { searchFields,salesDate } = this.state
+    const payload = {
+      limit: 6,
+      page: 1,
+      module: "sales-and-inventory",
+    }
     return (
       <Fragment>
         {saleAndInventoryIsLoading ? <Loader /> : ""}
         {saleAndInventory.list && (
           <Page
+            auditPayload={payload}
             tableName={tableName}
             onGetMainTable={onGetSaleAndInventory}
             onGetAuditLog={onGetSalesAuditLog}

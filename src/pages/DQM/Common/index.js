@@ -152,6 +152,8 @@ class Pages extends Component {
    * Handling the modal state when modal is click
    */
   modalHandler = () => {
+    const {onGetAuditLog, auditPayload} = this.props;
+    onGetAuditLog(auditPayload)
     this.setState({
       modal: true,
     })
@@ -197,6 +199,7 @@ class Pages extends Component {
   runAuditLogModal = () => {
     const { modal, rowsAudit, currentAuditPage } = this.state
     const { audits } = this.props
+    if(audits !== undefined && audits !== null){
     const modalContent = modal ? (
       <Modal
         isOpen={this.state.modal}
@@ -220,6 +223,7 @@ class Pages extends Component {
       </Modal>
     ) : null
     return modalContent
+  }
   }
 
   /**
@@ -391,7 +395,7 @@ class Pages extends Component {
                   <button
                     className="btn btn-outline-primary excel-btn-container"
                     onClick={() => this.downloadExcel()}
-                    // disabled={this.state.loader}
+                    disabled={this.state.loader}
                   >
                     <div className="excel-download-btn">
                       <span className="download-icon">

@@ -25,7 +25,7 @@ class CommercialCustomer extends Component {
   }
 
   componentDidMount = async () => {
-    const { onGetCommercialCustomer, onGetCommercialAuditLog } = this.props
+    const { onGetCommercialCustomer } = this.props
     const { searchFields } = this.state
     const params = {
       limit: 10,
@@ -34,13 +34,7 @@ class CommercialCustomer extends Component {
       sort_field: "ship_to_party",
       search_fields: transformArrayToString(searchFields),
     }
-    const payload = {
-      limit: 10,
-      page: 1,
-      module: "commercial-customer",
-    }
     await onGetCommercialCustomer(params)
-    await onGetCommercialAuditLog(payload)
   }
 
   GetonDownload = async currentPage => {
@@ -67,11 +61,17 @@ class CommercialCustomer extends Component {
       commercialCustomerIsLoading,
     } = this.props    
     const { searchFields } = this.state
+    const payload = {
+      limit: 10,
+      page: 1,
+      module: "commercial-customer",
+    }
     return (
       <Fragment>
         {commercialCustomerIsLoading ? <Loader /> : ""}
         {commercialCustomer.list && (
           <Page
+            auditPayload={payload}
             onGetMainTable={onGetCommercialCustomer}
             onGetAuditLog={onGetCommercialAuditLog}
             onGetTableInformation={onGetTableInformation}

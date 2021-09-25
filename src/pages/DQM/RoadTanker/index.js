@@ -28,7 +28,6 @@ class RoadTanker extends Component {
   componentDidMount() {
     const {
       onGetRoadTanker,
-      onGetRoadTankerAuditLog,
       onGetTableInformation,
     } = this.props
     const { searchFields } = this.state
@@ -39,13 +38,7 @@ class RoadTanker extends Component {
       sort_field: "vehicle",
       search_fields: transformArrayToString(searchFields),
     }
-    const payload = {
-      limit: 6,
-      page: 1,
-      module: "road-tanker",
-    }
     onGetRoadTanker(params)
-    onGetRoadTankerAuditLog(payload)
   }
 
   GetonDownload = async currentPage => {
@@ -72,12 +65,17 @@ class RoadTanker extends Component {
       roadTankerIsLoading,
     } = this.props
     const { searchFields } = this.state
-
+    const payload = {
+      limit: 6,
+      page: 1,
+      module: "road-tanker",
+    }
     return (
       <Fragment>
         {roadTankerIsLoading ? <Loader /> : ""}
         {roadTanker.list && (
           <Page
+            auditPayload={payload}
             onGetMainTable={onGetRoadTanker}
             onGetAuditLog={onGetRoadTankerAuditLog}
             onGetTableInformation={onGetTableInformation}

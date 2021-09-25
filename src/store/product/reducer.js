@@ -21,7 +21,7 @@ const initialState = {
   dataList: [],
   error: null,
   tableError: null,
-  productAuditLog: [],
+  productAuditLog: null,
   productFilter: [],
   currentProduct: null,
   updateStatus: null,

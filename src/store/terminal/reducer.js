@@ -21,7 +21,7 @@ const initialState = {
   terminal: [],
   error: {},
   tableError: null,
-  auditsTerminal: [],
+  auditsTerminal: null,
   address: [],
   filterTerminal: [],
   currentTerminal: null,

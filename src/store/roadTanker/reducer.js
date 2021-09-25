@@ -24,7 +24,7 @@ const initialState = {
   roadTanker: [],
   error: {},
   tableError: null,
-  auditsRoadTanker: [],
+  auditsRoadTanker: null,
   address: [],
   filterRoadTanker: [],
   downloadRoadTanker: [],

@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from "react"
+import { format } from "date-fns"
 import {
   Modal,
   ModalHeader,
@@ -82,7 +83,6 @@ class SalesAndInventoryTableInformation extends Component {
     const scheduler = isScheduler()
     const { visible, onUpdateSalesAndInventoryDetail,data:{trans_id:recordId}, currentSalesAndInventory } = this.props
     const { activeTab, data, isConfirm } = this.state
-
     const toggle = tab => {
       if (activeTab !== tab) {
         this.setState({ activeTab: tab })
@@ -131,7 +131,7 @@ class SalesAndInventoryTableInformation extends Component {
             <span className="modal-title">Record ID: {`${recordId}`}</span>
             <span className="date-sub-title">| Date: 12 Mar 2021</span>
             <span className="last-updated-sub-title">
-              Last Updated By: Nur Izzati on 3rd March 2021
+            {`Last Updated By: ${currentSalesAndInventory.updated_by?.split("@")[0] || "Unknown"} on ${currentSalesAndInventory.updated_at && format(new Date(currentSalesAndInventory.updated_at), "do LLL yyyy") || ""}`}
             </span>
           </ModalHeader>
 

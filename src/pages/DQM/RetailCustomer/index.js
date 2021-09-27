@@ -3,7 +3,6 @@ import { connect } from "react-redux"
 import Page from "../Common"
 import {
   getRetailCustomer,
-  getRetailAuditLog,
   getTableInformation,
   updateTableInformation,
   getDownloadRetailCustomer,
@@ -22,11 +21,12 @@ class RetailCustomer extends Component {
       searchFields: getCookieByKey(RetailTableName)
         ? JSON.parse(getCookieByKey(RetailTableName))
         : tableColumns,
+      subModule: "retail-customer",
     }
   }
 
   componentDidMount() {
-    const { onGetRetailCustomer, onGetRetailAuditLog } = this.props
+    const { onGetRetailCustomer } = this.props
     const { searchFields } = this.state
     const params = {
       limit: 10,
@@ -35,13 +35,7 @@ class RetailCustomer extends Component {
       sort_field: "ship_to_party",
       search_fields: transformArrayToString(searchFields),
     }
-    const payload = {
-      limit: 6,
-      page: 1,
-      module: "retail-customer",
-    }
     onGetRetailCustomer(params)
-    onGetRetailAuditLog(payload)
   }
 
   GetonDownload = async currentPage => {
@@ -57,17 +51,15 @@ class RetailCustomer extends Component {
   render() {
     const {
       onGetRetailCustomer,
-      onGetRetailAuditLog,
       retailCustomerIsLoading,
       onGetTableInformation,
       onUpdateTableInformation,
       retailCustomer,
-      audits,
       filter,
       tableError,
       downloadretailCustomer,
     } = this.props
-    const { searchFields } = this.state
+    const { searchFields, subModule } = this.state
     return (
       <Fragment>
         {retailCustomerIsLoading ? <Loader /> : ""}
@@ -75,7 +67,6 @@ class RetailCustomer extends Component {
           <Page
             tableName={RetailTableName}
             onGetMainTable={onGetRetailCustomer}
-            onGetAuditLog={onGetRetailAuditLog}
             onGetTableInformation={onGetTableInformation}
             onUpdateTableInformation={onUpdateTableInformation}
             tableColumns={searchFields}
@@ -83,12 +74,12 @@ class RetailCustomer extends Component {
             tableMapping={tableMapping}
             tableData={retailCustomer}
             downloadtableData={downloadretailCustomer}
-            audits={audits}
             filter={filter}
             headerTitle="Retail Customer"
             cardTitle="Retail Customer List"
             modalComponent={RetailCustomerModal}
             onGetDownloadCustomer={this.GetonDownload}
+            subModule={subModule}
           />
         )}
         {tableError && (
@@ -110,14 +101,12 @@ const mapStateToProps = ({ retailCustomer }) => ({
   retailCustomer: retailCustomer.retailCustomers,
   tableError: retailCustomer.tableError,
   retailCustomerIsLoading: retailCustomer.isLoading,
-  audits: retailCustomer.audits,
   filter: retailCustomer.filter,
   downloadretailCustomer: retailCustomer.downloadretailCustomers,
 })
 
 const mapDispatchToProps = dispatch => ({
   onGetRetailCustomer: params => dispatch(getRetailCustomer(params)),
-  onGetRetailAuditLog: payload => dispatch(getRetailAuditLog(payload)),
   onGetTableInformation: () => dispatch(getTableInformation()),
   onUpdateTableInformation: event => dispatch(updateTableInformation(event)),
   onGetDownloadRetailCustomer: params =>

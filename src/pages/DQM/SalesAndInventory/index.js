@@ -5,7 +5,6 @@ import {
   getSaleAndInventory,
   getTableInformation,
   updateTableInformation,
-  getSalesAuditLog,
   getDownloadSales,
 } from "../../../store/actions"
 import { tableColumns, tableMapping } from "./tableMapping"
@@ -27,7 +26,8 @@ class SalesInventory extends Component {
       searchFields: getCookieByKey(tableName)
         ? JSON.parse(getCookieByKey(tableName))
         : tableColumns,
-      salesDate: new Date()
+      salesDate: new Date(),
+      subModule: "sales-and-inventory"
     }
   }
 
@@ -44,7 +44,7 @@ class SalesInventory extends Component {
     this.onGetMainTableAndAuditLog()
   }
 
-  componentDidUpdate(prevProps, prevState, snapshot) {
+  componentDidUpdate(prevProps, prevState) {
     const {salesDate} = this.state.salesDate;
     const {salesDate: prevStateDate} = prevState;
     if (salesDate !== prevStateDate){
@@ -60,7 +60,6 @@ class SalesInventory extends Component {
   onGetMainTableAndAuditLog = () =>{
     const {
       onGetSaleAndInventory,
-      onGetSalesAuditLog,
       getSalesAndInventoryVarianceControl,
     } = this.props
     const { searchFields } = this.state
@@ -75,13 +74,7 @@ class SalesInventory extends Component {
       /* must be (format(sales_date,"YYYY-MM-DD")) // because data is only available
       for date 2021-04-08, not for today. so just a test */
     }
-    const payload = {
-      limit: 6,
-      page: 1,
-      module: "sales-and-inventory",
-    }
     onGetSaleAndInventory(params)
-    onGetSalesAuditLog(payload)
     /*Call Variance Control only when the modal is opened, not on the page load*/
     getSalesAndInventoryVarianceControl()
   }
@@ -105,20 +98,17 @@ class SalesInventory extends Component {
   render() {
     const {
       onGetSaleAndInventory,
-      onGetSalesAuditLog,
-      // onGetRetailFilter,
       onGetTableInformation,
       onUpdateTableInformation,
       saleAndInventory,
       downloadtableData,
-      audits,
       filter,
       tableError,
       varianceControlData,
       saleAndInventoryIsLoading,
       overrideStatusInActionColumn,
     } = this.props
-    const { searchFields,salesDate } = this.state
+    const { searchFields, salesDate, subModule } = this.state
     return (
       <Fragment>
         {saleAndInventoryIsLoading ? <Loader /> : ""}
@@ -126,7 +116,6 @@ class SalesInventory extends Component {
           <Page
             tableName={tableName}
             onGetMainTable={onGetSaleAndInventory}
-            onGetAuditLog={onGetSalesAuditLog}
             onGetTableInformation={onGetTableInformation}
             onUpdateTableInformation={onUpdateTableInformation}
             tableColumns={searchFields}
@@ -134,7 +123,6 @@ class SalesInventory extends Component {
             tableMapping={tableMapping}
             tableData={saleAndInventory}
             downloadtableData={downloadtableData}
-            audits={audits}
             filter={filter}
             headerTitle="Sales & Inventory"
             cardTitle="Sales & Inventory List"
@@ -145,6 +133,7 @@ class SalesInventory extends Component {
             overrideActionColumn={overrideStatusInActionColumn}
             salesDate={salesDate}
             updateSalesDate={this.onUpdateSalesDate}
+            subModule={subModule}
           />
         )}
         {tableError && (
@@ -166,7 +155,6 @@ const mapStateToProps = ({ saleAndInventory }) => ({
   saleAndInventory: saleAndInventory.mainTableData,
   tableError: saleAndInventory.tableError,
   saleAndInventoryIsLoading: saleAndInventory.isLoading,
-  audits: saleAndInventory.auditsCom,
   downloadtableData: saleAndInventory.downloadtableData,
   filter: saleAndInventory.filter,
   varianceControlData: saleAndInventory.varianceControlData,
@@ -177,7 +165,6 @@ const mapDispatchToProps = dispatch => ({
   onGetSaleAndInventory: params => dispatch(getSaleAndInventory(params)),
   onGetTableInformation: () => dispatch(getTableInformation()),
   onUpdateTableInformation: event => dispatch(updateTableInformation(event)),
-  onGetSalesAuditLog: payload => dispatch(getSalesAuditLog(payload)),
   onGetDownloadSales: params => dispatch(getDownloadSales(params)),
   getSalesAndInventoryVarianceControl: () =>
     dispatch(getSalesAndInventoryVarianceControl()),

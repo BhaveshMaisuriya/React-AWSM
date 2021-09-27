@@ -2,7 +2,7 @@ import React, { useEffect, useMemo } from "react"
 import { AvField, AvForm } from "availity-reactstrap-validation"
 import { Col, Row } from "reactstrap"
 import "./tabContact.scss"
-
+import { format } from "date-fns"
 const tabContact = ({ scheduler, data, onChange }) => {
   const contactList = useMemo(() => {
     const contactList = []
@@ -57,8 +57,8 @@ const tabContact = ({ scheduler, data, onChange }) => {
     <>
       <div className="d-flex align-items-center justify-content-end">
         <p>
-          <i className="last-updated-sub-title">{`Contact Last Updated By: ${data.contact?.updated_by || ""
-            } on ${data.contact?.updated_at || ""}`}</i>
+          <i className="last-updated-sub-title">{`Contact Last Updated By: ${data.contact?.updated_by?.split("@")[0] || "Unknown"
+            } on ${format(new Date(data.contact?.updated_at), "do LLL yyyy") || ""}`}</i>
         </p>
       </div>
       {contactList.map((item, index) => {

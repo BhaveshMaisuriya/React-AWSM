@@ -1,7 +1,7 @@
 import React, { Fragment, PureComponent } from "react"
 import { connect } from "react-redux"
 import { Button, Modal, ModalFooter, ModalBody, ModalHeader } from "reactstrap"
-
+import { format } from "date-fns"
 import { isScheduler } from "../../../helpers/auth_helper"
 import {
   getTableInformation,
@@ -283,7 +283,7 @@ class TerminalDetailModal extends PureComponent {
         >
           <div className="header-title">Terminal Code: {data.code}</div>
           <div className="header-subtitle">
-            Last Updated By: Nur Izzati on 3rd March 2021
+          {`Last Updated By: ${currentTerminal?.updated_by?.split("@")[0] || "Unknown"} on ${currentTerminal?.updated_at && format(new Date(currentTerminal?.updated_at), "do LLL yyyy") || ""}`}
           </div>
         </ModalHeader>
         <>

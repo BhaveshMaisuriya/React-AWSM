@@ -108,6 +108,18 @@ export const ganttChartTableData =[
     shift: "ON",
     cap: "21480",
     rtcode: "1003"
+  },
+  {
+    id: 8,
+    vehicle: 'WA 5560V',
+    hours: '05',
+    status: "On1",
+    size: '21840',
+    type: '1003',
+    rate: '00',
+    shift: "ON",
+    cap: "21480",
+    rtcode: "1003"
   }
 ]
 

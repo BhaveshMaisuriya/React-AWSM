@@ -1,6 +1,7 @@
 import { Input } from "@material-ui/core"
 import React, { Fragment, useEffect, useState } from "react"
 import { connect } from "react-redux"
+import { format } from "date-fns"
 import {
   Button,
   Modal,
@@ -71,13 +72,13 @@ const EditOrderBankModal = props => {
     newOrderData[key] = value
     setOrderData(newOrderData)
   }
-
+console.log(editOrderData)
   return (
     <Modal isOpen={open} className="new-order-modal">
       <ModalHeader toggle={toggle}>
         <span className="modal-title">View/Edit Details: Order ID 36114489</span>
         <span className="last-updated-sub-title">
-          Last Updated By: Nur Izzati on 3rd March 2021
+        {`Last Updated By: ${editOrderData?.updated_by?.split("@")[0] || "Unknown"} on ${editOrderData?.updated_at && format(new Date(editOrderData?.updated_at), "do LLL yyyy") || ""}`}
         </span>
       </ModalHeader>
 

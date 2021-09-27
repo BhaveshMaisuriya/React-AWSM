@@ -71,7 +71,6 @@ class Pages extends Component {
       sortDir: "",
       searchFields: this.props.tableColumns,
       q: {},
-      rowsAudit: 6,
       currentAuditPage: 0,
       modal: false,
       customizeModalOpen: false,
@@ -195,8 +194,8 @@ class Pages extends Component {
    * Will run the audit log modal
    */
   runAuditLogModal = () => {
-    const { modal, rowsAudit, currentAuditPage } = this.state
-    const { audits } = this.props
+    const { modal, currentAuditPage } = this.state
+    const { subModule } = this.props
     const modalContent = modal ? (
       <Modal
         isOpen={this.state.modal}
@@ -211,11 +210,11 @@ class Pages extends Component {
           <h3>Audit Log</h3>
         </ModalHeader>
         <AuditLog
-          rowsAudit={rowsAudit}
+          rowsAudit={6}
           currentAuditPage={currentAuditPage}
-          data={audits?.data?.list}
           closeModal={this.closeHandler}
           handlePageChange={this.handleChangeAuditPage}
+          subModule={subModule}
         />
       </Modal>
     ) : null
@@ -575,13 +574,11 @@ class Pages extends Component {
 
 Pages.propType = {
   onGetMainTable: PropTypes.func.isRequired,
-  onGetAuditLog: PropTypes.func.isRequired,
   onGetTableInformation: PropTypes.func.isRequired,
   onUpdateTableInformation: PropTypes.func.isRequired,
   tableColumns: PropTypes.array.isRequired,
   tableMapping: PropTypes.object.isRequired,
   tableData: PropTypes.object.isRequired,
-  audits: PropTypes.object.isRequired,
   filter: PropTypes.array.isRequired,
   headerTitle: PropTypes.string.isRequired,
   cardTitle: PropTypes.string.isRequired,
@@ -591,6 +588,7 @@ Pages.propType = {
   frozenColNum: PropTypes.number,
   varianceControlData: PropTypes.object,
   overrideActionColumn: PropTypes.func,
+  subModule: PropTypes.string.isRequired,
 }
 
 Pages.defaultProps = {

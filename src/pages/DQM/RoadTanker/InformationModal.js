@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from "react"
+import { format } from "date-fns"
 import {
   Button,
   Modal,
@@ -162,7 +163,6 @@ class InformationModal extends Component {
     const { visible, currentRoadTanker, onUpdateRoadTankerDetail } = this.props
     const { activeTab, mode, showAlert, data } = this.state
     const { scheduler } = this.state.userRole
-
     const toggle = tab => {
       if (activeTab !== tab) {
         this.setState({ activeTab: tab })
@@ -253,7 +253,7 @@ class InformationModal extends Component {
             Vehicle Id: {currentRoadTanker?.vehicle}
           </span>
           <span className="last-updated-sub-title">
-            Last Updated By: Nur Izzati on 3rd March 2021
+          {`Last Updated By: ${currentRoadTanker?.updated_by?.split("@")[0] || "Unknown"} on ${currentRoadTanker?.updated_at && format(new Date(currentRoadTanker?.updated_at), "do LLL yyyy") || ""}`}
           </span>
         </ModalHeader>
         <AWSMAlert

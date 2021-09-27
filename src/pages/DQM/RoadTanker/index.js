@@ -3,7 +3,6 @@ import { connect } from "react-redux"
 import Page from "./../Common"
 import {
   getRoadTanker,
-  getRoadTankerAuditLog,
   getDownloadRoadTanker,
   getTableInformation,
   updateTableInformation,
@@ -22,14 +21,13 @@ class RoadTanker extends Component {
         ? JSON.parse(getCookieByKey(RoadTankerTableName))
         : tableColumns,
       isRoadTankerTIVisible: true,
+      subModule: "road-tanker",
     }
   }
 
   componentDidMount() {
     const {
       onGetRoadTanker,
-      onGetRoadTankerAuditLog,
-      onGetTableInformation,
     } = this.props
     const { searchFields } = this.state
     const params = {
@@ -39,13 +37,7 @@ class RoadTanker extends Component {
       sort_field: "vehicle",
       search_fields: transformArrayToString(searchFields),
     }
-    const payload = {
-      limit: 6,
-      page: 1,
-      module: "road-tanker",
-    }
     onGetRoadTanker(params)
-    onGetRoadTankerAuditLog(payload)
   }
 
   GetonDownload = async currentPage => {
@@ -61,17 +53,15 @@ class RoadTanker extends Component {
   render() {
     const {
       onGetRoadTanker,
-      onGetRoadTankerAuditLog,
       onGetTableInformation,
       onUpdateTableInformation,
       filterRoadTanker,
       downloadRoadTanker,
       roadTanker,
-      auditsRoadTanker,
       tableError,
       roadTankerIsLoading,
     } = this.props
-    const { searchFields } = this.state
+    const { searchFields, subModule } = this.state
 
     return (
       <Fragment>
@@ -79,7 +69,6 @@ class RoadTanker extends Component {
         {roadTanker.list && (
           <Page
             onGetMainTable={onGetRoadTanker}
-            onGetAuditLog={onGetRoadTankerAuditLog}
             onGetTableInformation={onGetTableInformation}
             onUpdateTableInformation={onUpdateTableInformation}
             tableColumns={searchFields}
@@ -88,12 +77,12 @@ class RoadTanker extends Component {
             tableData={roadTanker}
             tableName={RoadTankerTableName}
             downloadtableData={downloadRoadTanker}
-            audits={auditsRoadTanker}
             filter={filterRoadTanker}
             headerTitle="Road Tanker"
             cardTitle="Road Tanker List"
             modalComponent={InformationModal}
             onGetDownloadCustomer={this.GetonDownload}
+            subModule={subModule}
           />
         )}
         {tableError && (
@@ -117,12 +106,10 @@ const mapStateToProps = ({ roadTanker }) => ({
   roadTankerIsLoading: roadTanker.isLoading,
   filterRoadTanker: roadTanker.filterRoadTanker,
   downloadRoadTanker: roadTanker.downloadRoadTanker,
-  auditsRoadTanker: roadTanker.auditsRoadTanker
 })
 
 const mapDispatchToProps = dispatch => ({
   onGetRoadTanker: params => dispatch(getRoadTanker(params)),
-  onGetRoadTankerAuditLog: payload => dispatch(getRoadTankerAuditLog(payload)),
   onGetTableInformation: () => dispatch(getTableInformation()),
   onUpdateTableInformation: event => dispatch(updateTableInformation(event)),
   onGetDownloadRoadTanker: params => dispatch(getDownloadRoadTanker(params)),

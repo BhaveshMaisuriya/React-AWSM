@@ -1,12 +1,12 @@
-import React, { Component, Fragment } from "react"
+import React, { Component } from "react"
 import { connect } from "react-redux"
+import { compose } from "redux"
 import PropTypes from "prop-types"
 import { withStyles } from "@material-ui/styles"
 import TablePagination from "../DataTable/tablePagination"
-// import ModalPagination from "./auditModalPagination"
 import lineIcon from "../../../assets/images/auditlog-line.svg"
+import { getRetailAuditLog } from "store/actions"
 import "./style.scss"
-import { getMonth, getYear } from "date-fns"
 
 const styles = {
   profilePic: {
@@ -38,6 +38,27 @@ class AuditLog extends Component {
       currentPage: 0,
     }
   }
+
+  componentDidMount() {
+    const { onGetAuditLog, subModule } = this.props
+    const payload = {
+      limit: 6,
+      page: 0,
+      module: subModule,
+    }
+    onGetAuditLog(payload)
+  }
+
+  // getAuditLogData = async () => {
+  //   const { currentPage } = this.state
+  //   const { onGetAuditLog, subModule } = this.props
+  //   const payload = {
+  //     limit: 6,
+  //     page: currentPage,
+  //     module: subModule,
+  //   }
+  //   onGetAuditLog(payload)
+  // }
 
   /**
    * Get user name initial
@@ -117,11 +138,10 @@ class AuditLog extends Component {
 
   render() {
     const {
-      data,
-      classes,
       currentAuditPage,
       rowsAudit,
       handlePageChange,
+      auditLog,
     } = this.props    
     return (
       <React.Fragment>
@@ -131,13 +151,13 @@ class AuditLog extends Component {
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <b>ACTION</b>
           </div>
-          {data.length === 0 ? 
+          {auditLog?.list.length === 0 ? 
           <div className="audit-no-records">
             <p>No Records Found!</p>
             </div>
           : (
             <div className="container-data">
-              {data.map((audit, idx) => (
+              {auditLog?.list.map((audit, idx) => (
                   <div key={idx} className="tracking-item">
                     {" "}
                     {this.modalData(audit, idx)}
@@ -154,7 +174,7 @@ class AuditLog extends Component {
             rowsPerPage={rowsAudit}
             currentPage={currentAuditPage}
             onChangePage={handlePageChange}
-            totalPages={Math.ceil(data.length / rowsAudit)}
+            totalPages={Math.ceil(auditLog?.total_rows / rowsAudit)}
             numShownPages={9}
           />
         </div>
@@ -163,12 +183,19 @@ class AuditLog extends Component {
   }
 }
 
+const mapStateToProps = ({ retailCustomer }) => ({
+  auditLog : retailCustomer.audits.data,
+})
+
+const mapDispatchToProps = dispatch => ({
+  onGetAuditLog: payload => dispatch(getRetailAuditLog(payload)),
+})
+
 AuditLog.propType = {
   closeModal: PropTypes.func.isRequired,
   rowsAudit: PropTypes.number.isRequired,
   currentAuditPage: PropTypes.number.isRequired,
-  data: PropTypes.array.isRequired,
   handlePageChange: PropTypes.func.isRequired,
+  subModule: PropTypes.string.isRequired,
 }
-
-export default withStyles(styles)(AuditLog)
+export default compose(connect(mapStateToProps,mapDispatchToProps), withStyles(styles))(AuditLog)

@@ -4,6 +4,8 @@ import { Row, Col } from "reactstrap"
 import { connect } from "react-redux"
 import selectAllIcon from "../../../assets/images/AWSM-Select-all-Checkbox.svg"
 import { Draggable, Droppable, DragDropContext } from "react-beautiful-dnd"
+import { TableGroupEvent } from "./index"
+import CloseButton from "components/Common/CloseButton"
 /*
 * @params currentDate
 * @params selectedRow
@@ -59,15 +61,17 @@ const BryntumDragDropAreaShipment = ({ selectedRow, currentDate, dropData }) => 
   return (
     <div
       className="wrapper-bryntum-shipment-dragdrop-area border-bryntum-table
-      rounded overflow-hidden">
-      <Row className={`${selectedRow ? "bg-primary-green-100 rounded" : "rounded"}`}>
-        <Col xs={12} className="font-weight-bold text-uppercase">
+      rounded">
+      <Row className={`${selectedRow ? "bg-primary-green-100" : ""} rounded h-100 justify-content-start align-items-start`}>
+        <Col xs={12} className="font-weight-bold text-uppercase" style={{height:"18%"}}>
           <DragDropAreaHeader vehicle={selectedRow?.vehicle} currentDate={currentDate} />
         </Col>
-        <Col xs={12} className="py-2 px-4">
-          <div className={`drag-drop-area d-flex align-items-center
-            justify-content-center text-uppercase
-            text-primary-green font-weight-bold text-center ${dropData && selectedRow ? "" : "dash-green-border"}`}>
+        <Col xs={12} className="px-4" style={{height:"77%"}}>
+          <div className={`drag-drop-area d-flex 
+             text-uppercase
+            text-primary-green font-weight-bold text-center 
+            ${dropData && selectedRow ? "align-items-start justify-content-start" : 
+            "dash-green-border align-items-center justify-content-center"}`}>
             {renderDragDropBody()}
           </div>
         </Col>
@@ -100,22 +104,26 @@ const OrderTableDropArea = ({ dropData, showTableColumns }) => {
 
   const renderTableHeadings = () => {
     return showTableColumns &&
-    showTableColumns.length > 0 ? showTableColumns.map(({ label }, index) => {
-      return (
-        <th key={index} className="text-center fw-600">
-          {label}
-        </th>
-      )
-    }) : null
+      showTableColumns.length > 0 ? showTableColumns.map(({ label }, index) => {
+        return (
+          <th key={index} className="text-left fw-600">
+            {label}
+          </th>
+        )
+      }) : null
   }
 
   const filterShowData = () => {
     return dropData && dropData.length > 0 &&
-    showTableColumns && showTableColumns.length > 0 ? dropData.map((order) => {
-      const filteredItem = { id: order?.id }
-      showTableColumns.forEach(({ objKey }) => filteredItem[objKey] = order[objKey])
-      return filteredItem
-    }) : []
+      showTableColumns && showTableColumns.length > 0 ? dropData.map((order) => {
+        const filteredItem = { id: order?.id }
+        showTableColumns.forEach(({ objKey }) => filteredItem[objKey] = order[objKey])
+        return filteredItem
+      }) : []
+  }
+
+  const onRemoveOrder = () => {
+
   }
 
   const renderBodyRow = () => {
@@ -130,21 +138,24 @@ const OrderTableDropArea = ({ dropData, showTableColumns }) => {
                 <td key={key}>
                   {dataRow[key]
                     .map((value, index) => <span key={index}
-                                                 className={`circle ${value}`}>{value}</span>)}
+                      className={`circle ${value}`}>{value}</span>)}
                 </td>
               )
             }
             return <td key={key}>{dataRow[key]}</td>
           })
-        dataCells.unshift(<td/>)
+        dataCells.push(<td className="text-right pr-4"><CloseButton handleClose={onRemoveOrder} /></td>)
+        const optionCell = <td className="d-flex align-items-center"><TableGroupEvent/></td>
+        dataCells.unshift(optionCell)
         return (
           <Draggable index={index} key={dataRow?.id} draggableId={`shipment-order-${dataRow?.id}`}>
             {
-              (provided) => {
+              (provided,{isDragging}) => {
                 return (
                   <tr {...provided.draggableProps}
-                      {...provided.dragHandleProps}
-                      ref={provided.innerRef}
+                    {...provided.dragHandleProps}
+                    ref={provided.innerRef}
+                      className={`text-left ${isDragging? "" : "table-row-shadow"}`}
                   >{dataCells}
                   </tr>
                 )
@@ -156,35 +167,35 @@ const OrderTableDropArea = ({ dropData, showTableColumns }) => {
     ) : null
   }
 
-  renderBodyRow()
   return (
-    <DragDropContext>
-      <table className="fixed w-100">
+      <table className="w-100">
         <thead>
-        <tr className="text-dark ">
-          <th>
-            <img src={selectAllIcon} className="header-select-icon" alt="icon" />
-          </th>
-          {renderTableHeadings()}
-        </tr>
+          <tr className="text-dark ">
+            <th>
+              <img src={selectAllIcon} className="header-select-icon" alt="icon" />
+            </th>
+            {renderTableHeadings()}
+            <th></th>
+          </tr>
         </thead>
-        <Droppable droppableId="shipment-drop-area">
-          {
-            ((provided) => {
-              return (
-                <tbody
-                  {...provided.droppableProps}
-                  ref={provided.innerRef}
-                >
-                {renderBodyRow()}
-                {provided.placeholder}
-                </tbody>
-              )
-            })
-          }
-        </Droppable>
+        <DragDropContext>
+          <Droppable droppableId="shipment-drop-area">
+            {
+              ((provided) => {
+                return (
+                  <tbody
+                    {...provided.droppableProps}
+                    ref={provided.innerRef}
+                  >
+                  {renderBodyRow()}
+                  {provided.placeholder}
+                  </tbody>
+                )
+              })
+            }
+          </Droppable>
+        </DragDropContext>
       </table>
-    </DragDropContext>
   )
 }
 

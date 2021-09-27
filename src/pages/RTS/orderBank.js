@@ -395,8 +395,7 @@ function OrderBank({
     }
   }
 
-  const onDragEnd = ({ destination,source }) => {
-       console.log(source)
+  const onDragEnd = ({ destination }) => {
      if (destination) {
        dragOrderBankToGanttChart()
      }
@@ -531,7 +530,7 @@ function OrderBank({
                 <TabContent activeTab={activeTab} className="pt-2">
                   <TabPane tabId="1">
                     <div className="gantt_chart_main">
-                      <div className="gantt_chart_first">
+                      <div className="gantt_chart_first pb-4">
                         <BryntumChartTable
                           currentTab={activeTab}
                           ganttChartAllRadio={ganttChartAllRadio}

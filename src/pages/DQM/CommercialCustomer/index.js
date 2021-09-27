@@ -4,7 +4,6 @@ import Page from "./../Common"
 import {
   getCommercialCustomer,
   getDownloadCommercialCustomer,
-  getCommercialAuditLog,
   getTableInformation,
   updateTableInformation,
 } from "../../../store/actions"
@@ -21,11 +20,12 @@ class CommercialCustomer extends Component {
       searchFields: getCookieByKey(CommercialCustomerTableName)
         ? JSON.parse(getCookieByKey(CommercialCustomerTableName))
         : tableColumns,
+      subModule: "commercial-customer",
     }
   }
 
   componentDidMount = async () => {
-    const { onGetCommercialCustomer, onGetCommercialAuditLog } = this.props
+    const { onGetCommercialCustomer } = this.props
     const { searchFields } = this.state
     const params = {
       limit: 10,
@@ -34,13 +34,7 @@ class CommercialCustomer extends Component {
       sort_field: "ship_to_party",
       search_fields: transformArrayToString(searchFields),
     }
-    const payload = {
-      limit: 10,
-      page: 1,
-      module: "commercial-customer",
-    }
     await onGetCommercialCustomer(params)
-    await onGetCommercialAuditLog(payload)
   }
 
   GetonDownload = async currentPage => {
@@ -56,24 +50,21 @@ class CommercialCustomer extends Component {
   render() {
     const {
       onGetCommercialCustomer,
-      onGetCommercialAuditLog,
       onGetTableInformation,
       onUpdateTableInformation,
       commercialCustomer,
       downloadCommercialCustomer,
-      auditsCom,
       tableError,
       filterCom,
       commercialCustomerIsLoading,
     } = this.props    
-    const { searchFields } = this.state
+    const { searchFields, subModule } = this.state
     return (
       <Fragment>
         {commercialCustomerIsLoading ? <Loader /> : ""}
         {commercialCustomer.list && (
           <Page
             onGetMainTable={onGetCommercialCustomer}
-            onGetAuditLog={onGetCommercialAuditLog}
             onGetTableInformation={onGetTableInformation}
             onUpdateTableInformation={onUpdateTableInformation}
             tableColumns={searchFields}
@@ -81,13 +72,13 @@ class CommercialCustomer extends Component {
             tableMapping={tableMapping}
             tableData={commercialCustomer}
             downloadtableData={downloadCommercialCustomer}
-            audits={auditsCom}
             filter={filterCom}
             headerTitle="Commercial Customer"
             cardTitle="Commercial Customer List"
             tableName={CommercialCustomerTableName}
             modalComponent={CommercialCustomerModal}
             onGetDownloadCustomer={this.GetonDownload}
+            subModule={subModule}
           />
         )}
         {tableError && (
@@ -109,14 +100,12 @@ const mapStateToProps = ({ commercialCustomer }) => ({
   commercialCustomer: commercialCustomer.commercialCustomers,
   tableError: commercialCustomer.tableError,
   commercialCustomerIsLoading: commercialCustomer.isLoading,
-  auditsCom: commercialCustomer.auditsCom,
   filterCom: commercialCustomer.filterCom,
   downloadCommercialCustomer: commercialCustomer.downloadCommercialCustomer,
 })
 
 const mapDispatchToProps = dispatch => ({
   onGetCommercialCustomer: params => dispatch(getCommercialCustomer(params)),
-  onGetCommercialAuditLog: payload => dispatch(getCommercialAuditLog(payload)),
   onGetTableInformation: () => dispatch(getTableInformation()),
   onUpdateTableInformation: event => dispatch(updateTableInformation(event)),
   onGetDownloadCommercialCustomer: params =>

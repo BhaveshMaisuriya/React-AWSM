@@ -32,25 +32,6 @@
                     td{
                         padding-left: 5px;
                         height: 40px;
-                        .circle{
-                            display: inline-block;
-                            height: 18px;
-                            width: 18px;
-                            color:#FFFFFF;
-                            border-radius: 50%;
-                            font-size: 10px;
-                            text-align: center;
-                            line-height: 18px;
-                            text-transform: uppercase;
-                        }
-                        .hp{
-                            margin-left: 10px;
-                            background: red;
-                        }
-                        .sr{
-                            margin-left: 10px;
-                            background: orange;
-                        }
                         .status{
                             display: flex;
                             height: 20px;
@@ -145,7 +126,25 @@
         }
     }
 }
-
+.circle{
+    display: inline-block;
+    height: 18px;
+    width: 18px;
+    color:#FFFFFF;
+    border-radius: 50%;
+    font-size: 10px;
+    text-align: center;
+    line-height: 18px;
+    text-transform: uppercase;
+}
+.hp{
+    margin-left: 10px;
+    background: red;
+}
+.sr{
+    margin-left: 10px;
+    background: orange;
+}
 .rts-search{
     min-width: 150px;
     img{
@@ -343,9 +342,14 @@ span.b-sch-header-text.b-sticky-header {
 .fw-600{
     font-weight: 600!important;
 }
+.table-row-shadow{
+    box-shadow: 0 0 6px rgba(0,0,0,0.2);
+}
 .wrapper-bryntum-shipment-dragdrop-area{
     width: 65%;
     background-color: #F8F9FA;
+    overflow-x: hidden;
+    max-height: 100%;
     div.drag-drop-header{
         @extend .border-bottom-gray;
         background-color: #F8F9FA!important;
@@ -355,6 +359,26 @@ span.b-sch-header-text.b-sticky-header {
     }
     div.drag-drop-area{
         width: 100%;
-        height: 235px;
+        height: 100%;
+        table{
+            border-collapse: separate;
+            border-spacing: 0 0.75rem;
+            margin-top: -1.2rem;
+            max-height: 100%;
+            overflow: auto;
+            tbody{
+                tr{
+                    border:none;
+                    outline: none;
+                    background-color: #fff;
+                    td{
+                        border:none!important;
+                        outline: none!important;
+                        height: 40px;
+                    }
+                }
+            }
+        }
+
     }
 }

@@ -3,7 +3,6 @@ import { connect } from "react-redux"
 import Page from "../Common"
 import {
   getProducts,
-  getProductAuditLog,
   getTableInformation,
   updateTableInformation,
   getDownloadProducts,
@@ -21,11 +20,12 @@ class Product extends Component {
       searchFields: getCookieByKey(ProductTableName)
         ? JSON.parse(getCookieByKey(ProductTableName))
         : tableColumns,
+      subModule: "product",
     }
   }
 
   componentDidMount() {
-    const { onGetProducts, onGetProductAuditLog } = this.props
+    const { onGetProducts } = this.props
     const { searchFields } = this.state
     const params = {
       limit: 10,
@@ -34,13 +34,7 @@ class Product extends Component {
       sort_field: "code",
       search_fields: transformArrayToString(searchFields),
     }
-    const payload = {
-      limit: 6,
-      page: 1,
-      module: "product",
-    }
     onGetProducts(params)
-    onGetProductAuditLog(payload)
   }
 
   GetonDownload = async currentPage => {
@@ -56,17 +50,15 @@ class Product extends Component {
   render() {
     const {
       onGetProducts,
-      onGetProductAuditLog,
       onGetTableInformation,
       onUpdateTableInformation,
       products,
-      audits,
       filter,
       tableError,
       downloadProduct,
       productsIsLoading,
     } = this.props
-    const { searchFields } = this.state
+    const { searchFields, subModule } = this.state
     return (
       <Fragment>
         {productsIsLoading ? <Loader /> : ""}
@@ -76,7 +68,6 @@ class Product extends Component {
             cardTitle="Product List"
             tableName={ProductTableName}
             onGetMainTable={onGetProducts}
-            onGetAuditLog={onGetProductAuditLog}
             onGetTableInformation={onGetTableInformation}
             onUpdateTableInformation={onUpdateTableInformation}
             tableColumns={searchFields}
@@ -84,10 +75,10 @@ class Product extends Component {
             tableMapping={tableMapping}
             tableData={products}
             downloadtableData={downloadProduct}
-            audits={audits}
             filter={filter}
             modalComponent={ProductDetailModal}
             onGetDownloadCustomer={this.GetonDownload}
+            subModule={subModule}
           />
         )}
         {tableError && (
@@ -109,14 +100,12 @@ const mapStateToProps = ({ products }) => ({
   products: products.dataList,
   tableError: products.tableError,
   productsIsLoading: products.isLoading,
-  audits: products.productAuditLog,
   filter: products.productFilter,
   downloadProduct: products.downloadProducts,
 })
 
 const mapDispatchToProps = dispatch => ({
   onGetProducts: params => dispatch(getProducts(params)),
-  onGetProductAuditLog: payload => dispatch(getProductAuditLog(payload)),
   onGetTableInformation: () => dispatch(getTableInformation()),
   onUpdateTableInformation: event => dispatch(updateTableInformation(event)),
   onGetDownloadProducts: params => dispatch(getDownloadProducts(params)),

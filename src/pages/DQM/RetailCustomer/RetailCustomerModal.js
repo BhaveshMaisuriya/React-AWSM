@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react"
 import { connect } from "react-redux"
+import { format } from "date-fns"
 import {
   Button,
   Modal,
@@ -157,7 +158,7 @@ const RetailCustomerModal = props => {
                 Ship To Party: {currentRetailDetail.ship_to_party}
               </span>
               <span className="last-updated-sub-title">
-                Last Updated By: Nur Izzati on 3rd March 2021
+                {`Last Updated By: ${currentRetailDetail.updated_by?.split("@")[0] || "Unknown"} on ${format(new Date(currentRetailDetail.updated_at), "do LLL yyyy") || ""}`}
               </span>
             </ModalHeader>
             <ModalBody>

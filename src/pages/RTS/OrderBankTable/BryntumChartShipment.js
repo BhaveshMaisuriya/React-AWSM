@@ -541,7 +541,7 @@ function BryntumChartTable(props) {
         className="container-orderbank gant-chart-table"
         style={{ maxWidth: "100%" }}
       >
-        <Row className="w-100">
+        <Row className="w-100" style={{height:"100%"}}>
           <Col lg={12}>
             <Droppable key="shipment-chart" droppableId="shipment-chart">
               {(provided, snapshot) => {

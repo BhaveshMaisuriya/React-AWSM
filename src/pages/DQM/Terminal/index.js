@@ -3,7 +3,6 @@ import { connect } from "react-redux"
 import Page from "../Common"
 import {
   getTerminal,
-  getTerminalAuditLog,
   getTableInformation,
   getDownloadTerminal,
   updateTableInformation,
@@ -23,11 +22,12 @@ class Terminal extends Component {
       searchFields: getCookieByKey(TerminalTableName)
         ? JSON.parse(getCookieByKey(TerminalTableName))
         : tableColumns,
+      subModule: "terminal"
     }
   }
 
   componentDidMount() {
-    const { onGetTerminal, onGetTerminalAuditLog } = this.props
+    const { onGetTerminal } = this.props
     const { searchFields } = this.state
     const params = {
       limit: 10,
@@ -36,13 +36,7 @@ class Terminal extends Component {
       sort_field: "code",
       search_fields: transformArrayToString(searchFields),
     }
-    const payload = {
-      limit: 6,
-      page: 1,
-      module: "terminal",
-    }
     onGetTerminal(params)
-    onGetTerminalAuditLog(payload)
   }
 
   GetonDownload = async currentPage => {
@@ -58,18 +52,16 @@ class Terminal extends Component {
   render() {
     const {
       onGetTerminal,
-      onGetTerminalAuditLog,
       onGetTableInformation,
       onUpdateTableInformation,
       terminalTable,
       tableError,
-      auditsTerminal,
       downloadTerminal,
       filterTerminal,
       terminalTableIsLoading,
       resetCurrentTerminalDetail,
     } = this.props
-    const { searchFields } = this.state
+    const { searchFields, subModule } = this.state
     return (
       <Fragment>
         {terminalTableIsLoading ? <Loader /> : ""}
@@ -79,19 +71,18 @@ class Terminal extends Component {
             cardTitle="Terminal List"
             tableName={TerminalTableName}
             onGetMainTable={onGetTerminal}
-            onGetAuditLog={onGetTerminalAuditLog}
             onGetTableInformation={onGetTableInformation}
             onUpdateTableInformation={onUpdateTableInformation}
             tableColumns={searchFields}
             defaultColumns={tableColumns}
             tableMapping={tableMapping}
             tableData={terminalTable}
-            audits={auditsTerminal}
             downloadtableData={downloadTerminal}
             filter={filterTerminal}
             modalComponent={TerminalDetailModal}
             onGetDownloadCustomer={this.GetonDownload}
             resetCurrentTerminalDetail={resetCurrentTerminalDetail}
+            subModule={subModule}
           />
         )}
         {tableError && (
@@ -113,14 +104,12 @@ const mapStateToProps = ({ terminal }) => ({
   terminalTable: terminal.terminal,
   tableError: terminal.tableError,
   terminalTableIsLoading: terminal.isLoading,
-  auditsTerminal: terminal.auditsTerminal,
   filterTerminal: terminal.filterTerminal,
   downloadTerminal: terminal.downloadTerminal,
 })
 
 const mapDispatchToProps = dispatch => ({
   onGetTerminal: params => dispatch(getTerminal(params)),
-  onGetTerminalAuditLog: payload => dispatch(getTerminalAuditLog(payload)),
   onGetTableInformation: () => dispatch(getTableInformation()),
   onUpdateTableInformation: event => dispatch(updateTableInformation(event)),
   onGetDownloadTerminal: params => dispatch(getDownloadTerminal(params)),

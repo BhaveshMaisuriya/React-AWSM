@@ -136,7 +136,7 @@ function SLAPdfTable(props) {
         action: (
           <div className="action">
             <Tooltip title="Rename PdDF">
-              <EditOutlinedIcon onClick={() => reNamePdf(item)} />
+              <EditOutlinedIcon onClick={() => openRenamePdf(item)} />
             </Tooltip>
             &nbsp;&nbsp;&nbsp;&nbsp;
             <Tooltip title="Download PdDF">
@@ -164,13 +164,13 @@ function SLAPdfTable(props) {
     await setCollection(cloneDeep(allData.slice(0, rowsPerPage)))
   }
 
-  const reNamePdf = async item => {
+  const openRenamePdf = async item => {
     setRenameFileName(item.filename.split(".pdf")[0])
     setRenameOpen(!renameOpen)
     setSelectedItem(item)
   }
 
-  const RenamePdf = async () => {
+  const renamePdf = async () => {
     const { onGetRenamePdf } = props
     await onGetRenamePdf({
       id: selectedItem.id,
@@ -339,7 +339,7 @@ function SLAPdfTable(props) {
               >
                 Cancel
               </button>
-              <button className="btn btn-primary" onClick={RenamePdf}>
+              <button className="btn btn-primary" onClick={renamePdf}>
                 Rename
               </button>
             </div>
@@ -359,8 +359,8 @@ function SLAPdfTable(props) {
         </ModalHeader>
         <ModalBody>
           <Row>
-            <h6 className='mb-3'>Lorem ipsum {currentFileName}</h6>
-            <p className='text-error'>Are You sure you want to delete file? This action cannot be undo.</p>
+            <h6 className='mb-3'>{currentFileName}</h6>
+            <p className='text-error'>Are you sure you want to delete file? This action cannot be undo.</p>
           </Row>
         </ModalBody>
         <Row>

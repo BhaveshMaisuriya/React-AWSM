@@ -1,5 +1,6 @@
 import React, { PureComponent } from "react"
 import { connect } from "react-redux"
+import { format } from "date-fns"
 import { Button, Modal, ModalFooter, ModalBody, ModalHeader, Col, Row } from "reactstrap"
 import CloseButton from "../../../components/Common/CloseButton"
 import { isScheduler } from "../../../helpers/auth_helper"
@@ -293,7 +294,7 @@ class ProductDetailModal extends PureComponent {
             Product Code: {updateDictionary.code}
           </span>
           <span className="last-updated-sub-title">
-            Last Updated By: Nur Izzati on 3rd March 2021
+          {`Last Updated By: ${currentProduct?.updated_by?.split("@")[0] || "Unknown"} on ${currentProduct?.updated_at && format(new Date(currentProduct?.updated_at), "do LLL yyyy") || ""}`}
           </span>
         </ModalHeader>
         {this.state.displayConfirmationBox

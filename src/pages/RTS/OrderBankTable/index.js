@@ -310,7 +310,7 @@ class index extends Component {
         return dataSource.map((v,i)=>{
             return <tr key={i} className={v.isChecked ? "selected-row" : "bg-white"}>
                 <th>
-                <TableGroupEvent index={i} allData={v} isChecked={v.isChecked} Onchange={this.OnChangeCheckBoxHandler} deleteRecords={this.OnDeleteRecords} />
+                  <TableGroupEvent index={i} allData={v} isChecked={v.isChecked} Onchange={this.OnChangeCheckBoxHandler} deleteRecords={this.OnDeleteRecords} />
                 </th>
            </tr>
         })

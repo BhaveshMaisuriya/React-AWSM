@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import * as FileSaver from 'file-saver';
 import * as XLSX from 'xlsx';
-import { removeKeywords } from 'pages/DQM/Common/helper';
+import { removeKeywords, isValidDate } from '../../../pages/DQM/Common/helper';
 
 const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
 const fileExtension = '.xlsx';
@@ -13,13 +13,45 @@ class DownloadExcel extends Component {
     }
 
     componentDidMount = async() => {
-        
         const { tableData, tableName, getLoader, getAlert } = await this.props;
         if(tableData.list && tableData.list.length > 0){
             tableData.list.map((item, index) => {
-                if(item.terminal_operating_days_value){
+                if(item.terminal_operating_days_value) {
                     item.terminal_operating_days_value = removeKeywords(item.terminal_operating_days_value);
-                }                          
+                }
+                if(item.inactive_date_range_value) {
+                    item.inactive_date_range_value = removeKeywords(item.inactive_date_range_value);
+                } 
+                if(item.no_delivery_interval_1_value) {
+                    item.no_delivery_interval_1_value = removeKeywords(item.no_delivery_interval_1_value);
+                } 
+                if(item.no_delivery_interval_2_value) {
+                    item.no_delivery_interval_2_value = removeKeywords(item.no_delivery_interval_2_value);
+                } 
+                if(item.no_delivery_interval_3_value) {
+                    item.no_delivery_interval_3_value = removeKeywords(item.no_delivery_interval_3_value);
+                } 
+                if(item.no_delivery_interval_4_value) {
+                    item.no_delivery_interval_4_value = removeKeywords(item.no_delivery_interval_4_value);
+                } 
+                if(item.actual_open_time_1_value) {
+                    item.actual_open_time_1_value = removeKeywords(item.actual_open_time_1_value);
+                } 
+                if(item.actual_open_time_2_value) {
+                    item.actual_open_time_2_value = removeKeywords(item.actual_open_time_2_value);
+                } 
+                if(item.actual_open_time_3_value) {
+                    item.actual_open_time_3_value = removeKeywords(item.actual_open_time_3_value);
+                } 
+                if(item.no_delivery_interval_3_value) {
+                    item.no_delivery_interval_3_value = removeKeywords(item.no_delivery_interval_3_value);
+                } 
+                if(item.no_delivery_interval_4_value) {
+                    item.no_delivery_interval_4_value = removeKeywords(item.no_delivery_interval_4_value);
+                } 
+                if(item.no_delivery_interval_5_value) {
+                    item.no_delivery_interval_5_value = removeKeywords(item.no_delivery_interval_5_value);
+                }
             })
           const ws = XLSX.utils.json_to_sheet(tableData.list);
           const wb = { Sheets: { 'data': ws }, SheetNames: ['data'] };

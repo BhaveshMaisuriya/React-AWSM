@@ -30,7 +30,7 @@ import {
 import classnames from "classnames"
 import SLATab from "./SLATab"
 import "./sla.scss"
-import Attachments from "./attachments"
+import Attachments from "./attachments";
 import SLATable from "./SLATable"
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown"
 import { FormControlLabel } from "@material-ui/core"

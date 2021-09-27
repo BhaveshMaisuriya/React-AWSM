@@ -62,13 +62,13 @@ const BryntumDragDropAreaShipment = ({ selectedRow, currentDate, dropData }) => 
     <div
       className="wrapper-bryntum-shipment-dragdrop-area border-bryntum-table
       rounded">
-      <Row className={`${selectedRow ? "bg-primary-green-100" : ""} rounded h-100 justify-content-start align-items-start`}>
+      <Row className={`${selectedRow ? "bg-primary-green-100" : ""} rounded h-100 
+      justify-content-start align-items-start`}>
         <Col xs={12} className="font-weight-bold text-uppercase" style={{height:"18%"}}>
           <DragDropAreaHeader vehicle={selectedRow?.vehicle} currentDate={currentDate} />
         </Col>
         <Col xs={12} className="px-4" style={{height:"77%"}}>
-          <div className={`drag-drop-area d-flex 
-             text-uppercase
+          <div className={`drag-drop-area d-flex text-uppercase
             text-primary-green font-weight-bold text-center 
             ${dropData && selectedRow ? "align-items-start justify-content-start" : 
             "dash-green-border align-items-center justify-content-center"}`}>

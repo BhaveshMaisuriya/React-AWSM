@@ -191,7 +191,7 @@ const VarianceControl = ({
     if (onChange) {
       onChange()
     }
-    const { date, ...uploadData } = data
+    const { date,updated_at, updated_by,...uploadData } = data
     const formattedData = formatUpdateVarianceControlUploadData(uploadData)
 
     if (formattedData) {
@@ -212,6 +212,10 @@ const VarianceControl = ({
       handleExit()
     )
   }
+  const updatedInformation = React.useMemo(()=>(
+    `Last Updated By: ${data.updated_by ? data?.updated_by?.toString()?.split("@")[0] : "Unknown"}
+    ${data.updated_at ? `on ${format(new Date(data?.updated_at),"do LLL yyyy")}` : ""}`
+  ),[data?.updated_at, data?.updated_by]);
 
   return (
     <Modal isOpen={open} className="variance-control-modal">
@@ -221,7 +225,7 @@ const VarianceControl = ({
         >
           <span className="modal-title">Variance Control</span> 
           <span className="last-updated-sub-title">
-              Last Updated By: Nur Izzati on 3rd March 2021 
+             {updatedInformation}
             </span>
         </ModalHeader>
         <ModalBody className="variance-control-content position-relative">

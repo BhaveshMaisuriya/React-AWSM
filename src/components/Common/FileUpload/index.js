@@ -5,6 +5,7 @@ import { useDropzone } from "react-dropzone"
 import AWSMAlert from "../AWSMAlert"
 import FileUploadIcon from "../../../assets/images/AWSM-Upload.svg"
 import { connect } from "react-redux"
+
 function FileUpload(props) {
   const [alert, setAlert] = useState(true);
   const [successalert, setSuccessAlert] = useState(false);
@@ -19,13 +20,13 @@ function FileUpload(props) {
 
   useEffect(() => {
     const { slaAttachments } = props
-     if(slaAttachments !== undefined && slaAttachments !== null) {
-      setTimeout(async function () {        
-        setAlertMessage((slaAttachments.data.statusCode) ? slaAttachments.data.message : 'PDF Uploaded Successfully');
-        setAlertStatus((slaAttachments.data.statusCode) ? 'error' : 'success'); 
+     if(slaAttachments !== undefined && slaAttachments !== null) {   
+      setTimeout(async function () {          
+        setAlertMessage(slaAttachments === false ? 'There is Something Wrong Please try again!' : (slaAttachments?.data?.statusCode) ? slaAttachments.data.message : 'PDF Uploaded Successfully');
+        setAlertStatus(slaAttachments === false ? 'error' : (slaAttachments?.data?.statusCode) ? 'error' : 'success'); 
         setSuccessAlert(true);   
         setUploading(false);
-      }.bind(this), 3000)  
+      }.bind(this), 2000)  
     }
   }, [props.slaAttachments])
 

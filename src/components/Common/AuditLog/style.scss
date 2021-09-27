@@ -32,9 +32,35 @@
   padding: 3rem 0;
 }
 
+.tracking-profic-pic {
+  width: 42px;
+  height: 42px;
+}
+
 .tracking-list {
   padding-top: 5px;
 }
+
+.tracking-content {
+  height: 100%;
+  max-height: 70px;
+  max-width: 90%;
+  padding-top: 10px;
+  .content-text {
+    min-height: 32px;
+    padding-top: 6px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3; /* number of lines to show */
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    font-size: 12px;
+    color: #6f6f6f;
+    letter-spacing: 0;
+    line-height: 13px;
+  }
+}
+
 .tracking-item {
   // border-left: 1px solid #00a19c;
   position: relative;

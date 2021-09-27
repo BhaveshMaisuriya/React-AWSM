@@ -40,19 +40,16 @@ class Attachments extends Component {
     this.getAllSLAPdf();
   }
 
-  fileToBase64 = (filename, filepath) => {
-    return new Promise((resolve,reject) => {
-      var file = new File([filename], filepath);
-      var reader = new FileReader();
-      // Read file content on file loaded event
-      reader.onload = function(event) {
-        resolve(event.target.result);
-      };
-      reader.onerror = err => reject(err)
-      // Convert data to base64 
-      reader.readAsDataURL(file);
-    });
-  };
+  fileToBase64 = (file, cb) => {
+    const reader = new FileReader()
+    reader.readAsDataURL(file)
+    reader.onload = function () {
+      cb(null, reader.result)
+    }
+    reader.onerror = function (error) {
+      cb(error, null)
+    }
+  }
 
   getAllSLAPdf = async() => {
     const { onGetSLAPDFs } = this.props
@@ -61,8 +58,9 @@ class Attachments extends Component {
 
   allDocuments = async val => {
     const { onGetSLAAttchments } = this.props
-    this.fileToBase64(val[0].name, val[0].path).then(async result => {
-      const base64WithoutPrefix = result.substr('data:application/octet-stream;base64,'.length);
+    this.fileToBase64(val[0], async(err, result) => {
+      if (result) {
+        const base64WithoutPrefix = result.substr('data:application/pdf;base64,'.length);
         const params = {
           data: base64WithoutPrefix,
           category: "sla",
@@ -70,7 +68,8 @@ class Attachments extends Component {
           remarks: ""
         }
         await onGetSLAAttchments(params)
-        })
+      }
+    });
   }
 
 shouldComponentUpdate(nextProps){

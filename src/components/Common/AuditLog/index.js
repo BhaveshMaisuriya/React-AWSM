@@ -10,7 +10,6 @@ import "./style.scss"
 
 const styles = {
   profilePic: {
-    cursor: "pointer",
     display: "flex",
     flexGrow: 1,
     alignItems: "center",
@@ -49,16 +48,16 @@ class AuditLog extends Component {
     onGetAuditLog(payload)
   }
 
-  // getAuditLogData = async () => {
-  //   const { currentPage } = this.state
-  //   const { onGetAuditLog, subModule } = this.props
-  //   const payload = {
-  //     limit: 6,
-  //     page: currentPage,
-  //     module: subModule,
-  //   }
-  //   onGetAuditLog(payload)
-  // }
+  getAuditLogData = () => {
+    const { currentPage } = this.state
+    const { onGetAuditLog, subModule } = this.props
+    const payload = {
+      limit: 6,
+      page: currentPage,
+      module: subModule,
+    }
+    onGetAuditLog(payload)
+  }
 
   /**
    * Get user name initial
@@ -76,6 +75,16 @@ class AuditLog extends Component {
   getBackgroundColor = index => (index % 2 !== 0 ? "#F8F8F8" : "transparent")
 
   /**
+   * 
+   * @param {*} audit 
+   * @param {*} idx 
+   * @returns 
+   */
+  handlePageChange = (event, currentPage) => {
+    this.setState({ currentPage}, () => this.getAuditLogData())
+  }
+
+  /**
    * Displaying the data in audit log
    */
   modalData = (audit, idx) => {
@@ -83,7 +92,6 @@ class AuditLog extends Component {
     let text = audit.description
     let firstWord = text.trim().split(" ")
     let theName = audit.user
-
     //cut action from string
     let action = firstWord.shift()
 
@@ -116,19 +124,19 @@ class AuditLog extends Component {
           style={{
             backgroundColor: this.getBackgroundColor(idx),
             height: "75px",
-            paddingLeft: "18px",
-            paddingTop: "15px",
+            paddingTop: "auto",
+            display: "flex",
           }}
         >
           <div className={classes.profilePic}>
-            <div className={classes.profilePicImg}>
-              {this.getUserInitials(theName)}
+            <div className={`${classes.profilePicImg} tracking-profic-pic`}>
+              {this.getUserInitials(theName || "Null")}
             </div>
             <div className="tracking-content">
-              <b>{theName}</b>
-              <span>
+              <b>{theName || "Null"}</b>
+              <p className="content-text">
                 {text}
-              </span>
+              </p>
             </div>
           </div>
         </div>
@@ -138,11 +146,10 @@ class AuditLog extends Component {
 
   render() {
     const {
-      currentAuditPage,
       rowsAudit,
-      handlePageChange,
       auditLog,
-    } = this.props    
+    } = this.props  
+    const { currentPage } = this.state  
     return (
       <React.Fragment>
         <div className="tracking-list">
@@ -162,18 +169,14 @@ class AuditLog extends Component {
                     {" "}
                     {this.modalData(audit, idx)}
                   </div>
-                ))
-                .slice(
-                  currentAuditPage * rowsAudit,
-                  currentAuditPage * rowsAudit + rowsAudit
-                )}
+                ))}
             </div>
           )}
           <div>&nbsp;</div>
           <TablePagination
             rowsPerPage={rowsAudit}
-            currentPage={currentAuditPage}
-            onChangePage={handlePageChange}
+            currentPage={currentPage}
+            onChangePage={this.handlePageChange}
             totalPages={Math.ceil(auditLog?.total_rows / rowsAudit)}
             numShownPages={9}
           />
@@ -194,8 +197,6 @@ const mapDispatchToProps = dispatch => ({
 AuditLog.propType = {
   closeModal: PropTypes.func.isRequired,
   rowsAudit: PropTypes.number.isRequired,
-  currentAuditPage: PropTypes.number.isRequired,
-  handlePageChange: PropTypes.func.isRequired,
   subModule: PropTypes.string.isRequired,
 }
 export default compose(connect(mapStateToProps,mapDispatchToProps), withStyles(styles))(AuditLog)

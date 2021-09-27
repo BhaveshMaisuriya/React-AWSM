@@ -19,6 +19,9 @@ class DownloadExcel extends Component {
                 if(item.terminal_operating_days_value) {
                     item.terminal_operating_days_value = removeKeywords(item.terminal_operating_days_value);
                 }
+                if(item.temporary_product_date_range) {
+                    item.temporary_product_date_range = removeKeywords(item.temporary_product_date_range);
+                }
                 if(item.inactive_date_range_value) {
                     item.inactive_date_range_value = removeKeywords(item.inactive_date_range_value);
                 } 

@@ -26,7 +26,7 @@ import EditIcon from "../../../assets/images/AWSM-Edit-Icon.svg"
 import TrashIcon from "../../../assets/images/AWSM-Trash-Icon.svg"
 import NoDataIcon from "../../../assets/images/AWSM-No-Data-Available.svg"
 import DeleteOrderBankConfirmation from "../deleteOrderBankModal"
-import EditOrderBankModal from "../editOrderBankModal.js";
+import EditOrderBankModal from "../editOrderBankModal"
 import ConfirmDNStatusModal from "./confirmDNStatusModal"
 import { isEqual } from "lodash"
 import { updateOrderBankTableData, deleteOrderBankDetail, sendDNStatusRequest } from "../../../store/actions"

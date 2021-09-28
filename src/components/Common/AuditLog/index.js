@@ -6,6 +6,8 @@ import { withStyles } from "@material-ui/styles"
 import TablePagination from "../DataTable/tablePagination"
 import lineIcon from "../../../assets/images/auditlog-line.svg"
 import { getRetailAuditLog } from "store/actions"
+import { Modal, ModalHeader } from "reactstrap"
+import CloseButton from "../../../components/Common/CloseButton"
 import "./style.scss"
 
 const styles = {
@@ -148,39 +150,53 @@ class AuditLog extends Component {
     const {
       rowsAudit,
       auditLog,
+      isOpen,
+      toggle,
     } = this.props  
     const { currentPage } = this.state  
     return (
       <React.Fragment>
-        <div className="tracking-list">
-          <div className="date-time">
-            <b>DATE/TIME</b>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <b>ACTION</b>
+        <Modal
+          isOpen={isOpen}
+          toggle={toggle}
+          id="auditLog-modal"
+          contentClassName="modalContainer"
+        >
+          <ModalHeader
+            close={<CloseButton handleClose={toggle} />}
+          >
+            <h3>Audit Log</h3>
+          </ModalHeader>
+          <div className="tracking-list">
+            <div className="date-time">
+              <b>DATE/TIME</b>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <b>ACTION</b>
+            </div>
+            {auditLog?.list.length === 0 ? 
+            <div className="audit-no-records">
+              <p>No Records Found!</p>
+              </div>
+            : (
+              <div className="container-data">
+                {auditLog?.list.map((audit, idx) => (
+                    <div key={idx} className="tracking-item">
+                      {" "}
+                      {this.modalData(audit, idx)}
+                    </div>
+                  ))}
+              </div>
+            )}
+            <div>&nbsp;</div>
+            <TablePagination
+              rowsPerPage={rowsAudit}
+              currentPage={currentPage}
+              onChangePage={this.handlePageChange}
+              totalPages={Math.ceil(auditLog?.total_rows / rowsAudit)}
+              numShownPages={9}
+            />
           </div>
-          {auditLog?.list.length === 0 ? 
-          <div className="audit-no-records">
-            <p>No Records Found!</p>
-            </div>
-          : (
-            <div className="container-data">
-              {auditLog?.list.map((audit, idx) => (
-                  <div key={idx} className="tracking-item">
-                    {" "}
-                    {this.modalData(audit, idx)}
-                  </div>
-                ))}
-            </div>
-          )}
-          <div>&nbsp;</div>
-          <TablePagination
-            rowsPerPage={rowsAudit}
-            currentPage={currentPage}
-            onChangePage={this.handlePageChange}
-            totalPages={Math.ceil(auditLog?.total_rows / rowsAudit)}
-            numShownPages={9}
-          />
-        </div>
+        </Modal>
       </React.Fragment>
     )
   }
@@ -195,8 +211,9 @@ const mapDispatchToProps = dispatch => ({
 })
 
 AuditLog.propType = {
-  closeModal: PropTypes.func.isRequired,
   rowsAudit: PropTypes.number.isRequired,
   subModule: PropTypes.string.isRequired,
+  isOpen: PropTypes.bool.isRequired,
+  toggle: PropTypes.func.isRequired,
 }
 export default compose(connect(mapStateToProps,mapDispatchToProps), withStyles(styles))(AuditLog)

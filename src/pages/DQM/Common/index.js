@@ -37,7 +37,6 @@ import TankIcon from "../../../assets/images/AWSM-Tank-Status.svg"
 import AWSMDropdown from "../../../components/Common/Dropdown"
 import DatePicker from "../../../components/Common/DatePicker"
 import REGION_TERMINAL from "../../../common/data/regionAndTerminal"
-import CloseButton from "../../../components/Common/CloseButton"
 import { format } from "date-fns"
 
 const styles = {
@@ -71,7 +70,6 @@ class Pages extends Component {
       sortDir: "",
       searchFields: this.props.tableColumns,
       q: {},
-      currentAuditPage: 0,
       modal: false,
       customizeModalOpen: false,
       selectedItem: null,
@@ -174,13 +172,6 @@ class Pages extends Component {
     })
   }
 
-  /**
-   * Handling the change page in Audit Log
-   */
-  handleChangeAuditPage = (event, currentAuditPage) => {
-    this.setState({ currentAuditPage })
-  }
-
   handleOpenCustomizeTable = () => {
     this.setState(prevState => ({
       customizeModalOpen: !prevState.customizeModalOpen,
@@ -194,29 +185,15 @@ class Pages extends Component {
    * Will run the audit log modal
    */
   runAuditLogModal = () => {
-    const { modal, currentAuditPage } = this.state
+    const { modal } = this.state
     const { subModule } = this.props
     const modalContent = modal ? (
-      <Modal
-        isOpen={this.state.modal}
-        toggle={this.toggle}
-        id="auditLog-modal"
-        contentClassName="modalContainer"
-      >
-        <ModalHeader
-          toggle={this.toggle}
-          close={<CloseButton handleClose={this.toggle} />}
-        >
-          <h3>Audit Log</h3>
-        </ModalHeader>
         <AuditLog
           rowsAudit={6}
-          currentAuditPage={currentAuditPage}
-          closeModal={this.closeHandler}
-          handlePageChange={this.handleChangeAuditPage}
           subModule={subModule}
+          isOpen={this.state.modal}
+          toggle={this.toggle}
         />
-      </Modal>
     ) : null
     return modalContent
   }

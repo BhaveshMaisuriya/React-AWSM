@@ -17,6 +17,7 @@ import {
   DropdownToggle,
   Button,
 } from "reactstrap"
+import AuditLog from "components/Common/AuditLog";
 import "./style.scss"
 import MoreVertIcon from "@material-ui/icons/MoreVert"
 import { IconButton, Menu, MenuItem } from "@material-ui/core"
@@ -49,7 +50,6 @@ import OrderBankActionModal from "./OrderBankActionModal"
 import CrossTerminalModal from "./crossTerminalModal"
 import BryntumChartTable from "./OrderBankTable/BryntumChartTable"
 import BryntumChartShipment from "./OrderBankTable/BryntumChartShipment"
-import OrderBankAuditModal from "./OrderBankAuditModal"
 import CustomRadioButton from "components/Common/CustomRadioButton"
 import OrderBankRunAutoModal from "./OrderBankRunAutoModal"
 import OrderBankSendBulkModal from "./OrderBankSendBulkModal"
@@ -739,10 +739,11 @@ function OrderBank({
               type="RefreshDN"
             />
             {showAuditModal && (
-              <OrderBankAuditModal
-                open={showAuditModal}
-                istoggle={istoggle}
-                CloseModal={CloseModal}
+              <AuditLog
+                rowsAudit={6}
+                subModule="order-bank"
+                isOpen={showAuditModal}
+                toggle={istoggle}
               />
             )}
             {displayAutoModal && (

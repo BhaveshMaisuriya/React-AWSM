@@ -90,8 +90,8 @@ const DateRangePicker = ({
         outRange: outRange,
       }
     } else if (value.type === "single") {
-      return value.days[0]
-        ? [new Date(value.days[0]), null, null, outRange]
+      return value.date_from
+        ? [new Date(value.date_from), null, null, outRange]
         : [null, null, null, outRange]
     } else {
       return { outRange: outRange }
@@ -118,8 +118,8 @@ const DateRangePicker = ({
           : format(new Date(value.date_to), DISPLAY_DATE_FORMAT)
       }`
     } else if (value.type === "single") {
-      return value.days[0]
-        ? format(new Date(value.days[0]), DISPLAY_DATE_FORMAT)
+      return value.date_from
+        ? format(new Date(value.date_from), DISPLAY_DATE_FORMAT)
         : ""
     } else if (value.type === "daily") {
       return "Every day"
@@ -169,8 +169,10 @@ const DateRangePicker = ({
       }
     } else {
       newValue.type = "single"
-      newValue.days = [format(day, SAVE_DATE_FORMAT)]
+      newValue.date_from = format(day, SAVE_DATE_FORMAT)
+      newValue.date_to = null
     }
+    newValue.days = null
     setValue(newValue)
   }
   const [anchorEl, setAnchorEl] = React.useState(null)
@@ -340,7 +342,9 @@ const DateRangePicker = ({
                     setValue({
                       ...value,
                       type: !isRange ? "range" : "single",
-                      days: [],
+                      days: null,
+                      date_from: null,
+                      date_to: null,
                     })
                   }
                 />

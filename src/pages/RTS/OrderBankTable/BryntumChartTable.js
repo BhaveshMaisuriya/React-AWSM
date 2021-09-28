@@ -188,7 +188,7 @@ const ChartColumnFilter = ({
   return (
     <div
       className={`chart-column-filter hide`}
-      id={`chart-tooltip-${filterKey}`}
+      id={`gantt-chart-tooltip-${filterKey}`}
     >
       <div className="chart-column-input-search">
         <input onChange={onInputSearchChange} />
@@ -608,7 +608,7 @@ function BryntumChartTable(props) {
         return `
                 <div class="d-flex align-items-center chart-header" id="chart-column-${column.data.field}">
                   <div>${column.data.text}</div>
-                  <button id="chart-column-${column.data.field}-button">
+                  <button id="gantt-chart-column-${column.data.field}-button">
                     <svg width="22px" height="22px" viewBox="0 0 22 22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                         <g id="AWSM-Calendar" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                             <g id="TF-Icon---Dropdown" transform="translate(1.000000, 3.000000)" fill="currentColor">
@@ -690,12 +690,12 @@ function BryntumChartTable(props) {
   useEffect(() => {
     if(bryntumCurrentColumns){
       Object.keys(bryntumCurrentColumns).forEach(e => {
-        const el = document.getElementById(`chart-column-${e}-button`)
+        const el = document.getElementById(`gantt-chart-column-${e}-button`)
         if (el) {
           el.addEventListener("click", event => {
             event.stopPropagation()
             event.preventDefault()
-            const tooltip = document.getElementById(`chart-tooltip-${e}`)
+            const tooltip = document.getElementById(`gantt-chart-tooltip-${e}`)
             createPopper(el, tooltip, {
               placement: "bottom",
               modifiers: [
@@ -710,7 +710,7 @@ function BryntumChartTable(props) {
             tooltip.classList.toggle("hide")
             Object.keys(bryntumCurrentColumns).forEach(f => {
               if (f !== e) {
-                const hideEl = document.getElementById(`chart-tooltip-${f}`)
+                const hideEl = document.getElementById(`gantt-chart-tooltip-${f}`)
                 hideEl.classList.add("hide")
               }
             })
@@ -722,7 +722,7 @@ function BryntumChartTable(props) {
   }, [bryntumCurrentColumns])
 
   const hideFilterElement = (dataKey) => {
-    const hideEl = document.getElementById(`chart-tooltip-${dataKey}`)
+    const hideEl = document.getElementById(`gantt-chart-tooltip-${dataKey}`)
     if (hideEl) {
       hideEl.classList.add("hide")
     }

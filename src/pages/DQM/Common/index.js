@@ -410,8 +410,8 @@ class Pages extends Component {
                           searchOnChangeHandler={this.handleSearchBox}
                         />
                       </div>
-                      <div className="table-top-bar row">
-                        <div className={`top-page-number ${locationPath === "/sales-inventory" && 'sales-first col-lg-2 col-sm-12 col-xs-12'}`}>
+                      <div className={`table-top-bar`}>
+                        <div className={`top-page-number ${locationPath === "/sales-inventory" && 'sales-first'}`}>
                           <div className="enteriesText">
                             {`${currentPage * rowsPerPage + 1} to ${
                               tableData.total_rows -
@@ -423,7 +423,7 @@ class Pages extends Component {
                           </div>
                         </div>
                         {locationPath === "/sales-inventory" && (
-                          <div className={`d-flex align-items-center w-100 ${locationPath === "/sales-inventory" && 'border-left col-lg-7 col-sm-12 col-xs-12' }`}>
+                          <div className={`d-flex align-items-center w-100 ${locationPath === "/sales-inventory" && 'border-left flex-50' }`}>
                             <div className="col-4 p-0 d-flex align-items-center">
                               <label className="mb-0 pr-2">DATE</label>
                               <DatePicker
@@ -434,7 +434,7 @@ class Pages extends Component {
                               />
                             </div>
                             <div className="col-8 p-0 d-flex align-items-center">
-                              <label className="mb-0 pr-2 w-50">REGION & TERMINAL</label>
+                              <label className="mb-0 pr-2 w-min">REGION & TERMINAL</label>
                               <div className="d-flex w-100">
                                 <div className="col-4 p-0">
                                   <AWSMDropdown
@@ -474,7 +474,8 @@ class Pages extends Component {
                             </div>
                           </div>
                         )}
-                        <div className={`d-flex align-items-center ${locationPath === "/sales-inventory" && 'sales-first  col-lg-3 col-sm-12 col-xs-12'}`}>
+                        {locationPath === "/sales-inventory" && <div className='flex-20'></div>}
+                        <div className={`d-flex align-items-center ${locationPath === "/sales-inventory" && 'sales-first'}`}>
                            <IconButton
                             aria-label="delete"
                             onClick={this.handleOpenCustomizeTable}

@@ -25,7 +25,7 @@ var dt = new Date();
             <div className='desc'>
               <p>: {' '} Data Quality Management</p>
               <p>: {' '} 12 Mar 2021</p>
-              <p>: {' '} {dt.getDate() + ' ' + months[dt.getMonth() + 1] + ' ' + dt.getFullYear()}</p>
+              <p>: {' '} {dt.getDate() + ' ' + months[dt.getMonth()] + ' ' + dt.getFullYear()}</p>
             </div>
           </div>
         </Col>
@@ -34,7 +34,7 @@ var dt = new Date();
             <h6>Service Level Agreement (SLA)</h6>
             <p>Retail Business Division (RBD)</p>
            </div>
-         
+
          <div className='third-sec'>
            <p>SLA on Customer Order Fulfilment (COF) between Retail Business Division (RBD), Supply & distribution (SSD), Finance Division (FDN) & Customer Experience Department</p>
          </div>

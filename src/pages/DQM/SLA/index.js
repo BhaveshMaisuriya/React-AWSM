@@ -218,25 +218,45 @@ class SLA extends Component {
     const input = document.getElementById("sla_pdf")   
 
     html2canvas(input).then(async canvas => {
-      const imgData = canvas.toDataURL("image/png")
+      const imgData = canvas.toDataURL("image/jpeg", 1.0);
 
-      var imgWidth = 210
-      var pageHeight = 295
-      var imgHeight = (canvas.height * imgWidth) / canvas.width
-      var heightLeft = imgHeight + 50;
+      var imgHeight = 0;
+      var imgWidth = 210;
+      var pageHeight = 295;
+      imgHeight = (canvas.height * imgWidth) / canvas.width;
+      var heightLeft = imgHeight;
 
-      var doc = new jsPDF("p", "mm")
-      var position = 0
 
-      doc.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight+30)
-      heightLeft -= pageHeight
+      // var imgWidth = 210
+      // var pageHeight = 295
+      // var imgHeight = (canvas.height * imgWidth) / canvas.width
+      // var heightLeft = imgHeight + 50;
 
-      while (heightLeft >= 0) {
-        position = heightLeft - imgHeight
-        doc.addPage()
-        doc.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight+30)
-        heightLeft -= pageHeight
+      var totalPages = Math.ceil(imgHeight / pageHeight) - 1;
+      var doc = new jsPDF("p", "mm", [pageHeight, imgWidth]);
+      var position = 0;
+
+      // var doc = new jsPDF("p", "mm")
+      // var position = 0
+
+      doc.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
+  
+      for (var i = 1; i <= totalPages; i++) {
+        position = (heightLeft - imgHeight);
+        doc.addPage();
+        doc.addImage(imgData, "JPG", 0, (position * i), imgWidth, imgHeight);
       }
+
+      // doc.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight+30)
+      // heightLeft -= pageHeight
+
+      // while (heightLeft >= 0) {
+      //   position = heightLeft - imgHeight
+      //   doc.addPage()
+      //   doc.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight+30)
+      //   heightLeft -= pageHeight
+      // }
       let all = [];
        this.state.checkedValues.map(item => {
         all.push(item.title);

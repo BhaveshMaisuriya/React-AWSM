@@ -325,4 +325,22 @@
 
 .border-left {
   border-left: 1px solid #ccc;
+  padding-left: 10px;
+}
+
+.w-min { 
+  width: min-content !important;
+}
+
+.flex-50 {
+  flex: 0 0 50%;
+}
+.flex-10 {
+  flex: 0 0 15%;
+}
+.flex-20 {
+  flex: 0 0 10%;
+}
+.flex-40 {
+  flex: 0 0 35%;
 }

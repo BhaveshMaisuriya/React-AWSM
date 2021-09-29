@@ -72,27 +72,21 @@ class SLA extends Component {
   }
 
   componentDidMount() {
-    const { onGetSLAItems, onGetSLAAuditLog } = this.props
+    const { onGetSLAItems } = this.props
     const params = {
       limit: 10,
       page: 0,
       sort_dir: "asc",
       sort_field: "code",
     }
-    const payload = {
-      limit: 6,
-      page: 1,
-      module: "sla",
-    }
+   
     onGetSLAItems(params)
-    onGetSLAAuditLog(payload)
-
   }
 
   /**
    * Handling the modal state when modal is click
    */
-  modalHandler = () => {
+  modalHandler = async() => {
     this.setState({
       modal: true,
     })
@@ -134,27 +128,13 @@ class SLA extends Component {
   }
 
   runAuditLogModal = () => {
-    const { modal, rowsAudit, currentAuditPage } = this.state
-    const audits = this.props.slaAuditLog
-    return modal ? (
-      <Modal
+    const { modal } = this.state 
+      return modal ? (<AuditLog
+        rowsAudit={6}
+        subModule='sla'
         isOpen={this.state.modal}
         toggle={this.toggle}
-        id="auditLog-modal"
-        contentClassName="modalContainer"
-      >
-        <ModalHeader toggle={this.toggle}>
-          <h3>Audit Log</h3>
-        </ModalHeader>
-        <AuditLog
-          rowsAudit={rowsAudit}
-          currentAuditPage={currentAuditPage}
-          data={audits.data.list}
-          closeModal={this.closeHandler}
-          handlePageChange={this.handleChangeAuditPage}
-        />
-      </Modal>
-    ) : null
+             />  ) : null
   }
 
   toggleTabs(tab) {
@@ -285,7 +265,6 @@ class SLA extends Component {
   render() {
     const { slaData } = this.props
     if (!slaData || !slaData.rbd) return <Loader />
-    
     return (
       <Fragment>
         {this.state.downloading === true && <Loader />}
@@ -515,7 +494,6 @@ const mapStateToProps = ({ sla }) => ({
 
 const mapDispatchToProps = dispatch => ({
   onGetSLAItems: params => dispatch(getSLAItems(params)),
-  onGetSLAAuditLog: payload => dispatch(getSLAAuditLog(payload)),
   onUpdateSLAItem: event => dispatch(updateSLAItem(event)),
 })
 

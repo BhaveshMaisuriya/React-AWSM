@@ -227,17 +227,10 @@ class SLA extends Component {
       var heightLeft = imgHeight;
 
 
-      // var imgWidth = 210
-      // var pageHeight = 295
-      // var imgHeight = (canvas.height * imgWidth) / canvas.width
-      // var heightLeft = imgHeight + 50;
 
       var totalPages = Math.ceil(imgHeight / pageHeight) - 1;
       var doc = new jsPDF("p", "mm", [pageHeight, imgWidth]);
       var position = 0;
-
-      // var doc = new jsPDF("p", "mm")
-      // var position = 0
 
       doc.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight);
       heightLeft -= pageHeight;
@@ -247,16 +240,6 @@ class SLA extends Component {
         doc.addPage();
         doc.addImage(imgData, "JPG", 0, (position * i), imgWidth, imgHeight);
       }
-
-      // doc.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight+30)
-      // heightLeft -= pageHeight
-
-      // while (heightLeft >= 0) {
-      //   position = heightLeft - imgHeight
-      //   doc.addPage()
-      //   doc.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight+30)
-      //   heightLeft -= pageHeight
-      // }
       let all = [];
        this.state.checkedValues.map(item => {
         all.push(item.title);
@@ -408,7 +391,7 @@ class SLA extends Component {
                                 <DownloadIcon />
                               </span>
                               <span className="download-button-message">
-                                Download Excel
+                                Download 
                                 <ArrowDropDownIcon />
                               </span>
                             </div>

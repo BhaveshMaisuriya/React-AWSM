@@ -14,8 +14,18 @@ pool:
   vmImage: ubuntu-latest
 
 steps:
+  - script: rm .env && cp .env.staging .env && cat .env && cat .env.staging
+    displayName: "Add Staging Environment"
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  - script: cp .npmrc.trial ~/.npmrc
+    displayName: "Add Bryntum Repo"
+  - script: npm install @bryntum/schedulerpro@npm:@bryntum/schedulerpro-trial
+    displayName: "Install Bryntum Trial Version"
   - script: npm install
     displayName: "Install NPM Packages"
+  - script: cat ~/.npmrc && ls node_modules && ls node_modules/@bryntum && ls node_modules/@bryntum/schedulerpro
+  #- script: ls node_module
+   # displayName: "Debug"
   - script: npm run lint
     displayName: "Lint Source Code"
   - script: npm test

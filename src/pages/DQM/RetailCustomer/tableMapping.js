@@ -242,334 +242,334 @@ const tableMapping = {
     apiKey: "end_of_day",
     columnSize: "cell-text",
   },
-  storage_1_code: {
+  product_1_code: {
     label: "PRODUCT 1 CODE",
-    apiKey: "storage_1.product_code",
+    apiKey: "product_1.product_code",
     columnSize: "cell-text",
   },
-  storage_1_name: {
+  product_1_name: {
     label: "PRODUCT 1 NAME",
-    apiKey: "storage_1.product_name",
+    apiKey: "product_1.product_name",
     columnSize: "cell-text-big",
   },
-  storage_1_tank_capacity: {
+  product_1_tank_capacity: {
     label: "PRODUCT 1 TANK CAPACITY",
-    apiKey: "storage_1.tank_capacity",
+    apiKey: "product_1.tank_capacity",
     columnSize: "cell-text",
   },
-  storage_1_active_product: {
+  product_1_active_product: {
     label: "PRODUCT 1 STATUS",
-    apiKey: "storage_1.active_product",
+    apiKey: "product_1.active_product",
     columnSize: "cell-text",
   },
-  storage_1_ordering_category: {
+  product_1_ordering_category: {
     label: "PRODUCT 1 ORDERING CATEGORY",
-    apiKey: "storage_1.ordering_category",
+    apiKey: "product_1.ordering_category",
     columnSize: "cell-text",
   },
-  storage_1_terminal: {
+  product_1_terminal: {
     label: "PRODUCT 1 TERMINAL",
-    apiKey: "storage_1.terminal",
+    apiKey: "product_1.terminal",
     columnSize: "cell-text-big",
   },
-  storage_1_distance: {
+  product_1_distance: {
     label: "PRODUCT 1 DISTANCE FROM TERMINAL(KM)",
-    apiKey: "storage_1.distance",
+    apiKey: "product_1.distance",
     columnSize: "cell-text",
   },
-  storage_1_duration: {
+  product_1_duration: {
     label: "PRODUCT 1 DURATION FROM TERMINAL(HRS)",
-    apiKey: "storage_1.duration",
+    apiKey: "product_1.duration",
     columnSize: "cell-text",
   },
-  storage_1_sales_category: {
+  product_1_sales_category: {
     label: "PRODUCT 1 SALES CATEGORY",
-    apiKey: "storage_1.station_sales_category",
+    apiKey: "product_1.station_sales_category",
     columnSize: "cell-text",
   },
-  storage_1_monthly_fixed_quota: {
+  product_1_monthly_fixed_quota: {
     label: "PRODUCT 1 MONTHLY FIXED QUOTA",
-    apiKey: "storage_1.product_code_quota",
+    apiKey: "product_1.product_code_quota",
     columnSize: "cell-text",
   },
-  storage_1_remarks: {
+  product_1_remarks: {
     label: "PRODUCT 1 REMARKS",
-    apiKey: "storage_1.remarks",
+    apiKey: "product_1.remarks",
     columnSize: "cell-text-big",
   },
-  storage_2_code: {
+  product_2_code: {
     label: "PRODUCT 2 CODE",
-    apiKey: "storage_2.product_code",
+    apiKey: "product_2.product_code",
     columnSize: "cell-text",
   },
-  storage_2_name: {
+  product_2_name: {
     label: "PRODUCT 2 NAME",
-    apiKey: "storage_2.product_name",
+    apiKey: "product_2.product_name",
     columnSize: "cell-text-big",
   },
-  storage_2_tank_capacity: {
+  product_2_tank_capacity: {
     label: "PRODUCT 2 TANK CAPACITY",
-    apiKey: "storage_2.tank_capacity",
+    apiKey: "product_2.tank_capacity",
     columnSize: "cell-text",
   },
-  storage_2_active_product: {
+  product_2_active_product: {
     label: "PRODUCT 2 STATUS",
-    apiKey: "storage_2.active_product",
+    apiKey: "product_2.active_product",
     columnSize: "cell-text",
   },
-  storage_2_ordering_category: {
+  product_2_ordering_category: {
     label: "PRODUCT 2 ORDERING CATEGORY",
-    apiKey: "storage_2.ordering_category",
+    apiKey: "product_2.ordering_category",
     columnSize: "cell-text",
   },
-  storage_2_terminal: {
+  product_2_terminal: {
     label: "PRODUCT 2 TERMINAL",
-    apiKey: "storage_2.terminal",
+    apiKey: "product_2.terminal",
     columnSize: "cell-text-big",
   },
-  storage_2_distance: {
+  product_2_distance: {
     label: "PRODUCT 2 DISTANCE FROM TERMINAL(KM)",
-    apiKey: "storage_2.distance",
+    apiKey: "product_2.distance",
     columnSize: "cell-text",
   },
-  storage_2_duration: {
+  product_2_duration: {
     label: "PRODUCT 2 DURATION FROM TERMINAL(HRS)",
-    apiKey: "storage_2.duration",
+    apiKey: "product_2.duration",
     columnSize: "cell-text",
   },
-  storage_2_sales_category: {
+  product_2_sales_category: {
     label: "PRODUCT 2 SALES CATEGORY",
-    apiKey: "storage_2.station_sales_category",
+    apiKey: "product_2.station_sales_category",
     columnSize: "cell-text",
   },
-  storage_2_monthly_fixed_quota: {
+  product_2_monthly_fixed_quota: {
     label: "PRODUCT 2 MONTHLY FIXED QUOTA",
-    apiKey: "storage_2.product_code_quota",
+    apiKey: "product_2.product_code_quota",
     columnSize: "cell-text",
   },
-  storage_2_remarks: {
+  product_2_remarks: {
     label: "PRODUCT 2 REMARKS",
-    apiKey: "storage_2.remarks",
+    apiKey: "product_2.remarks",
     columnSize: "cell-text-big",
   },
-  storage_3_code: {
+  product_3_code: {
     label: "PRODUCT 3 CODE",
-    apiKey: "storage_3.product_code",
+    apiKey: "product_3.product_code",
     columnSize: "cell-text",
   },
-  storage_3_name: {
+  product_3_name: {
     label: "PRODUCT 3 NAME",
-    apiKey: "storage_3.product_name",
+    apiKey: "product_3.product_name",
     columnSize: "cell-text-big",
   },
-  storage_3_tank_capacity: {
+  product_3_tank_capacity: {
     label: "PRODUCT 3 TANK CAPACITY",
-    apiKey: "storage_3.tank_capacity",
+    apiKey: "product_3.tank_capacity",
     columnSize: "cell-text",
   },
-  storage_3_active_product: {
+  product_3_active_product: {
     label: "PRODUCT 3 STATUS",
-    apiKey: "storage_3.active_product",
+    apiKey: "product_3.active_product",
     columnSize: "cell-text",
   },
-  storage_3_ordering_category: {
+  product_3_ordering_category: {
     label: "PRODUCT 3 ORDERING CATEGORY",
-    apiKey: "storage_3.ordering_category",
+    apiKey: "product_3.ordering_category",
     columnSize: "cell-text",
   },
-  storage_3_terminal: {
+  product_3_terminal: {
     label: "PRODUCT 3 TERMINAL",
-    apiKey: "storage_3.terminal",
+    apiKey: "product_3.terminal",
     columnSize: "cell-text-big",
   },
-  storage_3_distance: {
+  product_3_distance: {
     label: "PRODUCT 3 DISTANCE FROM TERMINAL(KM)",
-    apiKey: "storage_3.distance",
+    apiKey: "product_3.distance",
     columnSize: "cell-text",
   },
-  storage_3_duration: {
+  product_3_duration: {
     label: "PRODUCT 3 DURATION FROM TERMINAL(HRS)",
-    apiKey: "storage_3.duration",
+    apiKey: "product_3.duration",
     columnSize: "cell-text",
   },
-  storage_3_sales_category: {
+  product_3_sales_category: {
     label: "PRODUCT 3 SALES CATEGORY",
-    apiKey: "storage_3.station_sales_category",
+    apiKey: "product_3.station_sales_category",
     columnSize: "cell-text",
   },
-  storage_3_monthly_fixed_quota: {
+  product_3_monthly_fixed_quota: {
     label: "PRODUCT 3 MONTHLY FIXED QUOTA",
-    apiKey: "storage_3.product_code_quota",
+    apiKey: "product_3.product_code_quota",
     columnSize: "cell-text",
   },
-  storage_3_remarks: {
+  product_3_remarks: {
     label: "PRODUCT 3 REMARKS",
-    apiKey: "storage_3.remarks",
+    apiKey: "product_3.remarks",
     columnSize: "cell-text-big",
   },
-  storage_4_code: {
+  product_4_code: {
     label: "PRODUCT 4 CODE",
-    apiKey: "storage_4.product_code",
+    apiKey: "product_4.product_code",
     columnSize: "cell-text",
   },
-  storage_4_name: {
+  product_4_name: {
     label: "PRODUCT 4 NAME",
-    apiKey: "storage_4.product_name",
+    apiKey: "product_4.product_name",
     columnSize: "cell-text-big",
   },
-  storage_4_tank_capacity: {
+  product_4_tank_capacity: {
     label: "PRODUCT 4 TANK CAPACITY",
-    apiKey: "storage_4.tank_capacity",
+    apiKey: "product_4.tank_capacity",
     columnSize: "cell-text",
   },
-  storage_4_active_product: {
+  product_4_active_product: {
     label: "PRODUCT 4 STATUS",
-    apiKey: "storage_4.active_product",
+    apiKey: "product_4.active_product",
     columnSize: "cell-text",
   },
-  storage_4_ordering_category: {
+  product_4_ordering_category: {
     label: "PRODUCT 4 ORDERING CATEGORY",
-    apiKey: "storage_4.ordering_category",
+    apiKey: "product_4.ordering_category",
     columnSize: "cell-text",
   },
-  storage_4_terminal: {
+  product_4_terminal: {
     label: "PRODUCT 4 TERMINAL",
-    apiKey: "storage_4.terminal",
+    apiKey: "product_4.terminal",
     columnSize: "cell-text-big",
   },
-  storage_4_distance: {
+  product_4_distance: {
     label: "PRODUCT 4 DISTANCE FROM TERMINAL(KM)",
-    apiKey: "storage_4.distance",
+    apiKey: "product_4.distance",
     columnSize: "cell-text",
   },
-  storage_4_duration: {
+  product_4_duration: {
     label: "PRODUCT 4 DURATION FROM TERMINAL(HRS)",
-    apiKey: "storage_4.duration",
+    apiKey: "product_4.duration",
     columnSize: "cell-text",
   },
-  storage_4_sales_category: {
+  product_4_sales_category: {
     label: "PRODUCT 4 SALES CATEGORY",
-    apiKey: "storage_4.station_sales_category",
+    apiKey: "product_4.station_sales_category",
     columnSize: "cell-text",
   },
-  storage_4_monthly_fixed_quota: {
+  product_4_monthly_fixed_quota: {
     label: "PRODUCT 4 MONTHLY FIXED QUOTA",
-    apiKey: "storage_4.product_code_quota",
+    apiKey: "product_4.product_code_quota",
     columnSize: "cell-text",
   },
-  storage_4_remarks: {
+  product_4_remarks: {
     label: "PRODUCT 4 REMARKS",
-    apiKey: "storage_4.remarks",
+    apiKey: "product_4.remarks",
     columnSize: "cell-text-big",
   },
-  storage_5_code: {
+  product_5_code: {
     label: "PRODUCT 5 CODE",
-    apiKey: "storage_5.product_code",
+    apiKey: "product_5.product_code",
     columnSize: "cell-text",
   },
-  storage_5_name: {
+  product_5_name: {
     label: "PRODUCT 5 NAME",
-    apiKey: "storage_5.product_name",
+    apiKey: "product_5.product_name",
     columnSize: "cell-text-big",
   },
-  storage_5_tank_capacity: {
+  product_5_tank_capacity: {
     label: "PRODUCT 5 TANK CAPACITY",
-    apiKey: "storage_5.tank_capacity",
+    apiKey: "product_5.tank_capacity",
     columnSize: "cell-text",
   },
-  storage_5_active_product: {
+  product_5_active_product: {
     label: "PRODUCT 5 STATUS",
-    apiKey: "storage_5.active_product",
+    apiKey: "product_5.active_product",
     columnSize: "cell-text",
   },
-  storage_5_ordering_category: {
+  product_5_ordering_category: {
     label: "PRODUCT 5 ORDERING CATEGORY",
-    apiKey: "storage_5.ordering_category",
+    apiKey: "product_5.ordering_category",
     columnSize: "cell-text",
   },
-  storage_5_terminal: {
+  product_5_terminal: {
     label: "PRODUCT 5 TERMINAL",
-    apiKey: "storage_5.terminal",
+    apiKey: "product_5.terminal",
     columnSize: "cell-text-big",
   },
-  storage_5_distance: {
+  product_5_distance: {
     label: "PRODUCT 5 DISTANCE FROM TERMINAL(KM)",
-    apiKey: "storage_5.distance",
+    apiKey: "product_5.distance",
     columnSize: "cell-text",
   },
-  storage_5_duration: {
+  product_5_duration: {
     label: "PRODUCT 5 DURATION FROM TERMINAL(HRS)",
-    apiKey: "storage_5.duration",
+    apiKey: "product_5.duration",
     columnSize: "cell-text",
   },
-  storage_5_sales_category: {
+  product_5_sales_category: {
     label: "PRODUCT 5 SALES CATEGORY",
-    apiKey: "storage_5.station_sales_category",
+    apiKey: "product_5.station_sales_category",
     columnSize: "cell-text",
   },
-  storage_5_monthly_fixed_quota: {
+  product_5_monthly_fixed_quota: {
     label: "PRODUCT 5 MONTHLY FIXED QUOTA",
-    apiKey: "storage_5.product_code_quota",
+    apiKey: "product_5.product_code_quota",
     columnSize: "cell-text",
   },
-  storage_5_remarks: {
+  product_5_remarks: {
     label: "PRODUCT 5 REMARKS",
-    apiKey: "storage_5.remarks",
+    apiKey: "product_5.remarks",
     columnSize: "cell-text-big",
   },
-  storage_6_code: {
+  product_6_code: {
     label: "PRODUCT 6 CODE",
-    apiKey: "storage_6.product_code",
+    apiKey: "product_6.product_code",
     columnSize: "cell-text",
   },
-  storage_6_name: {
+  product_6_name: {
     label: "PRODUCT 6 NAME",
-    apiKey: "storage_6.product_name",
+    apiKey: "product_6.product_name",
     columnSize: "cell-text-big",
   },
-  storage_6_tank_capacity: {
+  product_6_tank_capacity: {
     label: "PRODUCT 6 TANK CAPACITY",
-    apiKey: "storage_6.tank_capacity",
+    apiKey: "product_6.tank_capacity",
     columnSize: "cell-text",
   },
-  storage_6_active_product: {
+  product_6_active_product: {
     label: "PRODUCT 6 STATUS",
-    apiKey: "storage_6.active_product",
+    apiKey: "product_6.active_product",
     columnSize: "cell-text",
   },
-  storage_6_ordering_category: {
+  product_6_ordering_category: {
     label: "PRODUCT 6 ORDERING CATEGORY",
-    apiKey: "storage_6.ordering_category",
+    apiKey: "product_6.ordering_category",
     columnSize: "cell-text",
   },
-  storage_6_terminal: {
+  product_6_terminal: {
     label: "PRODUCT 6 TERMINAL",
-    apiKey: "storage_6.terminal",
+    apiKey: "product_6.terminal",
     columnSize: "cell-text-big",
   },
-  storage_6_distance: {
+  product_6_distance: {
     label: "PRODUCT 6 DISTANCE FROM TERMINAL(KM)",
-    apiKey: "storage_6.distance",
+    apiKey: "product_6.distance",
     columnSize: "cell-text",
   },
-  storage_6_duration: {
+  product_6_duration: {
     label: "PRODUCT 6 DURATION FROM TERMINAL(HRS)",
-    apiKey: "storage_6.duration",
+    apiKey: "product_6.duration",
     columnSize: "cell-text",
   },
-  storage_6_sales_category: {
+  product_6_sales_category: {
     label: "PRODUCT 6 SALES CATEGORY",
-    apiKey: "storage_6.station_sales_category",
+    apiKey: "product_6.station_sales_category",
     columnSize: "cell-text",
   },
-  storage_6_monthly_fixed_quota: {
+  product_6_monthly_fixed_quota: {
     label: "PRODUCT 6 MONTHLY FIXED QUOTA",
-    apiKey: "storage_6.product_code_quota",
+    apiKey: "product_6.product_code_quota",
     columnSize: "cell-text",
   },
-  storage_6_remarks: {
+  product_6_remarks: {
     label: "PRODUCT 6 REMARKS",
-    apiKey: "storage_6.remarks",
+    apiKey: "product_6.remarks",
     columnSize: "cell-text-big",
   },
   road_tanker_requirement: {

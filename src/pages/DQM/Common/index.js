@@ -197,7 +197,6 @@ class Pages extends Component {
     ) : null
     return modalContent
   }
-
   /**
    * Handling the modal state when modal is click
    */

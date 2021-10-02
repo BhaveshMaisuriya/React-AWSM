@@ -1,7 +1,7 @@
-import React, { memo } from "react"
+import React, { memo, useEffect, useState } from "react"
 import "./index.scss"
 import { Row, Col } from "reactstrap"
-import { connect } from "react-redux"
+import {  useSelector } from "react-redux"
 import selectAllIcon from "../../../assets/images/AWSM-Select-all-Checkbox.svg"
 import { Draggable, Droppable, DragDropContext } from "react-beautiful-dnd"
 import { TableGroupEvent } from "./index"
@@ -48,32 +48,19 @@ const testCurrentTableColumns = [
   }
 ]
 
-const BryntumDragDropAreaShipment = ({ selectedRow, currentDate, dropData }) => {
-  const renderDragDropBody = () => {
-    if (dropData && selectedRow) { // if drop Data available , return directly Table
-      return <OrderTableDropArea dropData={dropData} showTableColumns={testCurrentTableColumns} />
-    }
-    return selectedRow ?
-      (<span>Drag & drop the oder here <br /> from order bank</span>) :
-      (<span>Please select a vehicle <br /> to assign shipment</span>)
-  }
-
+const BryntumDragDropAreaShipment = ({ currentDate }) => {
+  const selectedVehicle = useSelector((state)=> state?.orderBank?.selectedVehicleShipment)
   return (
     <div
       className="wrapper-bryntum-shipment-dragdrop-area border-bryntum-table
       rounded">
-      <Row className={`${selectedRow ? "bg-primary-green-100" : ""} rounded h-100 
+      <Row className={`${selectedVehicle ? "bg-primary-green-100" : ""} rounded h-100 
       justify-content-start align-items-start`}>
-        <Col xs={12} className="font-weight-bold text-uppercase" style={{height:"18%"}}>
-          <DragDropAreaHeader vehicle={selectedRow?.vehicle} currentDate={currentDate} />
+        <Col xs={12} className="font-weight-bold text-uppercase" style={{ height: "18%" }}>
+          <DragDropAreaHeader vehicle={selectedVehicle?.vehicle} currentDate={currentDate} />
         </Col>
-        <Col xs={12} className="px-4" style={{height:"77%"}}>
-          <div className={`drag-drop-area d-flex text-uppercase
-            text-primary-green font-weight-bold text-center 
-            ${dropData && selectedRow ? "align-items-start justify-content-start" : 
-            "dash-green-border align-items-center justify-content-center"}`}>
-            {renderDragDropBody()}
-          </div>
+        <Col xs={12} className="px-4" style={{ height: "77%" }}>
+            <OrderTableDropArea showTableColumns={testCurrentTableColumns}/>
         </Col>
       </Row>
     </div>
@@ -100,26 +87,46 @@ const DragDropAreaHeader = memo(({ vehicle, currentDate }) => {
 })
 
 // if drag drop data available
-const OrderTableDropArea = ({ dropData, showTableColumns }) => {
+const OrderTableDropArea = ({ showTableColumns }) => {
+  // resource Id is
+  // the id of gantt chart table object in redux. that matched for resource Id in gantt chart events
+  const ganttChartEvents = useSelector(state => state?.orderBank?.ganttChart?.event)
+  const resourceId = useSelector(state => state?.orderBank?.selectedVehicleShipment?.resourceId)
+  const [dropData, setDropData] = useState([])
+
+  useEffect(() => { // merge all orders from all events that belong to resource Id ( vehicle)
+    if (resourceId && Array.isArray(ganttChartEvents) && ganttChartEvents.length > 0) {
+      const matchedEvents = ganttChartEvents.filter(({ resourceId: id }) => resourceId === id)
+      if (matchedEvents && matchedEvents.length > 0) {
+        const allOrders = matchedEvents.reduce((initArr, event) => {
+          const { shipments } = event
+          if (!shipments) return initArr
+          const shipmentOrders = shipments.reduce((shipmentsArr, { orders }) => [...shipmentsArr, ...orders], [])
+          return [...initArr, ...shipmentOrders]
+        }, [])
+        setDropData(allOrders)
+      }
+    }
+  }, [resourceId, ganttChartEvents])
 
   const renderTableHeadings = () => {
     return showTableColumns &&
-      showTableColumns.length > 0 ? showTableColumns.map(({ label }, index) => {
-        return (
-          <th key={index} className="text-left fw-600">
-            {label}
-          </th>
-        )
-      }) : null
+    showTableColumns.length > 0 ? showTableColumns.map(({ label }, index) => {
+      return (
+        <th key={index} className="text-left fw-600">
+          {label}
+        </th>
+      )
+    }) : null
   }
 
   const filterShowData = () => {
     return dropData && dropData.length > 0 &&
-      showTableColumns && showTableColumns.length > 0 ? dropData.map((order) => {
-        const filteredItem = { id: order?.id }
-        showTableColumns.forEach(({ objKey }) => filteredItem[objKey] = order[objKey])
-        return filteredItem
-      }) : []
+    showTableColumns && showTableColumns.length > 0 ? dropData.map((order) => {
+      const filteredItem = { id: order?.id }
+      showTableColumns.forEach(({ objKey }) => filteredItem[objKey] = order[objKey])
+      return filteredItem
+    }) : []
   }
 
   const onRemoveOrder = () => {
@@ -138,24 +145,25 @@ const OrderTableDropArea = ({ dropData, showTableColumns }) => {
                 <td key={key}>
                   {dataRow[key]
                     .map((value, index) => <span key={index}
-                      className={`circle ${value}`}>{value}</span>)}
+                                                 className={`circle ${value}`}>{value}</span>)}
                 </td>
               )
             }
             return <td key={key}>{dataRow[key]}</td>
           })
-        dataCells.push(<td className="text-right pr-4"><CloseButton handleClose={onRemoveOrder} /></td>)
-        const optionCell = <td className="d-flex align-items-center"><TableGroupEvent/></td>
+        dataCells.push(<td className="text-right pr-4"><CloseButton handleClose={onRemoveOrder} />
+        </td>)
+        const optionCell = <td className="d-flex align-items-center justify-content-around"><TableGroupEvent editable={false}/></td>
         dataCells.unshift(optionCell)
         return (
           <Draggable index={index} key={dataRow?.id} draggableId={`shipment-order-${dataRow?.id}`}>
             {
-              (provided,{isDragging}) => {
+              (provided, { isDragging }) => {
                 return (
                   <tr {...provided.draggableProps}
-                    {...provided.dragHandleProps}
-                    ref={provided.innerRef}
-                      className={`text-left ${isDragging? "" : "table-row-shadow"}`}
+                      {...provided.dragHandleProps}
+                      ref={provided.innerRef}
+                      className={`text-left ${isDragging ? "" : "table-row-shadow"}`}
                   >{dataCells}
                   </tr>
                 )
@@ -167,16 +175,17 @@ const OrderTableDropArea = ({ dropData, showTableColumns }) => {
     ) : null
   }
 
-  return (
+  const renderTable = () => {
+    return (
       <table className="w-100">
         <thead>
-          <tr className="text-dark ">
-            <th>
-              <img src={selectAllIcon} className="header-select-icon" alt="icon" />
-            </th>
-            {renderTableHeadings()}
-            <th></th>
-          </tr>
+        <tr className="text-dark ">
+          <th>
+            <img src={selectAllIcon} className="header-select-icon" alt="icon" />
+          </th>
+          {renderTableHeadings()}
+          <th />
+        </tr>
         </thead>
         <DragDropContext>
           <Droppable droppableId="shipment-drop-area">
@@ -196,13 +205,21 @@ const OrderTableDropArea = ({ dropData, showTableColumns }) => {
           </Droppable>
         </DragDropContext>
       </table>
+    )
+  }
+
+  return (
+    <div className={`drag-drop-area d-flex
+            text-primary-green font-weight-bold text-center 
+            ${dropData && dropData.length > 0 && resourceId ? "align-items-start justify-content-start" :
+      "dash-green-border align-items-center justify-content-center"}`}>
+      {
+        dropData && dropData.length > 0 && resourceId ? renderTable() : resourceId ? (
+          <span className="text-uppercase">Drag & drop the oder here <br /> from order bank</span>) : (
+          <span className="text-uppercase">Please select a vehicle <br /> to assign shipment</span>)
+      }
+    </div>
+
   )
 }
-
-
-const mapStateToProps = (state) => (
-  {
-    dropData: state.orderBank.shipmentOrderDropFromOrderBank
-  }
-)
-export default connect(mapStateToProps, null)(BryntumDragDropAreaShipment)
+export default (BryntumDragDropAreaShipment)

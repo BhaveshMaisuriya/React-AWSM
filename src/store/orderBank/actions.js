@@ -45,6 +45,8 @@ import {
   DRAG_RTS_ORDER_BANK_TO_GANTT_CHART,
   DRAG_RTS_ORDER_BANK_TO_GANTT_CHART_SUCCESS,
   DRAG_RTS_ORDER_BANK_TO_GANTT_CHART_FAIL,
+  SELECT_VEHICLE_RTS_SHIPMENT,
+  DESELECT_VEHICLE_RTS_SHIPMENT
 } from "./actionTypes"
 
 export const getRTSOrderBankTableData = (params) => ({
@@ -278,4 +280,14 @@ export const dragOrderBankToGanttChartSuccess = (dropData) => ({
 export const dragOrderBankToGanttChartFail = (error) => ({
   type: DRAG_RTS_ORDER_BANK_TO_GANTT_CHART_FAIL,
   error,
+})
+
+export const selectVehicleShipment = ({vehicle, resourceId})=> ({
+  type: SELECT_VEHICLE_RTS_SHIPMENT,
+  vehicle,
+  resourceId
+})
+
+export const deselectVehicleShipment = ()=>({
+  type:DESELECT_VEHICLE_RTS_SHIPMENT
 })

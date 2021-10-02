@@ -33,6 +33,7 @@ import { cloneDeep } from 'lodash'
 import { DragDropContext, Droppable } from "react-beautiful-dnd"
 import {getCookieByKey} from "../../DQM/Common/helper"
 import OrderBankShipmentModal from "./OrderBankShipmentModal"
+import OrderBankRoadTankerModal from "./OrderBankRoadTankerModal"
 import PlannedLoadTimesModal from "./PlannedLoadTimesModal"
 
 const EventSchedulerStatus = {
@@ -261,6 +262,8 @@ function BryntumChartTable(props) {
   const [filterCondition, setFilterCondition] = useState([])
   const [eventsData, setEventsData] = useState([])
   const [shipmentDblclick, setShipmentDblclick] = useState(false)
+  const [roadTankerModalShow, setRoadTankerModal] = useState(false)
+  const [selectedVehicleID, setSelectedVehicleID] = useState(null)
   const schedulerProRef = useRef()
 	const firstRender = useRef(true)
   const [filterList, setFilterList] = useState([])
@@ -553,6 +556,15 @@ function BryntumChartTable(props) {
     setShipmentDblclick(!shipmentDblclick);
   }
 
+  function showRoadTanker(event) {
+    setSelectedVehicleID(event.target.innerText)
+    toggleRoadTanker()
+  }
+
+  function toggleRoadTanker() {
+    setRoadTankerModal(!roadTankerModalShow);
+  }
+
   function onShiftDateChange(recordId, value) {
     const currentTableData = tableData.current
     const recordIndex = currentTableData.findIndex(e => e.id === recordId)
@@ -582,7 +594,7 @@ function BryntumChartTable(props) {
           case "vehicle": {
             return (
               <div className="chart-vehicle-cell">
-                <div className="value">{value}</div>
+                <div className="value" onClick={showRoadTanker} style={{cursor: "pointer"}}>{value}</div>
                 {record.pto && <div className="suffix">{record.pto}</div>}
               </div>
             )
@@ -832,6 +844,9 @@ function BryntumChartTable(props) {
       }
       {shipmentDblclick &&
         <OrderBankShipmentModal open={shipmentDblclick} istoggle={toggleShipment} />
+      }
+      {roadTankerModalShow &&
+        <OrderBankRoadTankerModal isOpen={roadTankerModalShow} toggle={toggleRoadTanker} selectedVehicleID={selectedVehicleID}/>
       }
     </div>
   )

@@ -67,48 +67,50 @@ export class TableGroupEvent extends React.Component {
 
   render() {
     const { openDropDown } = this.state
-    const { index, isChecked } = this.props
+    const { index, isChecked, editable = true } = this.props
     return (
       <>
         <DragIndicatorIcon
           style={{ color: "#D9D9D9", transform: "translateX(5px)" }}
         />
-        <Dropdown isOpen={openDropDown} toggle={this.toggle}>
-          <DropdownToggle
-            data-toggle="dropdown"
-            tag="div"
-            aria-expanded={openDropDown}
-          >
-            <IconButton
-              color="primary"
-              aria-label="Setting"
-              component="span"
-              className="setting_icon"
-              fontSize="large"
-              style={{ color: "rgba(0,0,0,0.5)" }}
-              aria-haspopup="true"
+        {
+          editable ? ( <Dropdown isOpen={openDropDown} toggle={this.toggle}>
+            <DropdownToggle
+              data-toggle="dropdown"
+              tag="div"
+              aria-expanded={openDropDown}
             >
-              <MoreVertIcon />
-            </IconButton>
-          </DropdownToggle>
-          <DropdownMenu>
-            <DropdownItem>
-              <div className="event-content" onClick={this.OnClickEditHandler}>
-                <ReactSVG className="mr-2" src={EditIcon} />
-                View/Edit Details
-              </div>
-            </DropdownItem>
-            <DropdownItem>
-              <div
-                className="event-content"
-                onClick={() => this.OnClickRemoveHandler()}
+              <IconButton
+                color="primary"
+                aria-label="Setting"
+                component="span"
+                className="setting_icon"
+                fontSize="large"
+                style={{ color: "rgba(0,0,0,0.5)" }}
+                aria-haspopup="true"
               >
-                <ReactSVG className="mr-2" src={TrashIcon} />
-                Delete Order
-              </div>
-            </DropdownItem>
-          </DropdownMenu>
-        </Dropdown>
+                <MoreVertIcon />
+              </IconButton>
+            </DropdownToggle>
+            <DropdownMenu>
+              <DropdownItem>
+                <div className="event-content" onClick={this.OnClickEditHandler}>
+                  <ReactSVG className="mr-2" src={EditIcon} />
+                  View/Edit Details
+                </div>
+              </DropdownItem>
+              <DropdownItem>
+                <div
+                  className="event-content"
+                  onClick={() => this.OnClickRemoveHandler()}
+                >
+                  <ReactSVG className="mr-2" src={TrashIcon} />
+                  Delete Order
+                </div>
+              </DropdownItem>
+            </DropdownMenu>
+          </Dropdown>) : null
+        }
         <CustomInput
           type="checkbox"
           id={`customRadio${index}`}

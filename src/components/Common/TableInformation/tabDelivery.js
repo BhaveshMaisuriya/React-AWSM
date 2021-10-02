@@ -11,6 +11,7 @@ import DateRangePicker from "../DateRangePicker"
 import DropdownInput from "../DropdownInput"
 import AWSMInput from "../Input"
 import AWSMCheckBox from "../../../common/CheckBox"
+import { isValidDate } from "../../../pages/DQM/Common/helper"
 
 const timeData = []
 for (let i = 0; i < 24; i++) {
@@ -241,14 +242,14 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
   }, [deliveryData, openTime3])
   
   const getDateError = (date) => {
-    if (date && (date.time_from || date.time_to) && (!date.days || date.days.length === 0)) {
+    if (date && (date.time_from || date.time_to) && !isValidDate(date)) {
       return "Please select date"
     }
     return  null
   }
   
   const getTimeError = (date, key) => {
-    if (date && date.type && date.days?.length > 0 && !date[key]) {
+    if (isValidDate(date) && !date[key]) {
       return "Please select time"
     }
     return null

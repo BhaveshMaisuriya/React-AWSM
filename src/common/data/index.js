@@ -16,17 +16,6 @@ import {
 import { chats, contacts, groups, messages } from "./chat"
 import { calenderDefaultCategories, events } from "./calender"
 import { users, userProfile } from "./contacts"
-import {
-  commercialCustomers,
-  auditsCom,
-  filterCom,
-  customerPayload,
-} from "./commercialCustomer"
-import { retailCustomers, audits, address, filter } from "./retailCustomer"
-import { roadTanker, auditsRoadTanker, filterRoadTanker, currentRoadTanker } from "./roadTanker"
-import { terminal, auditsTerminal, filterTerminal } from "./terminal"
-import { productList } from "./product"
-import { varianceControl, currentSaleAndInventory } from "./salesAndInventory"
 import { slaData } from "./sla"
 import { orderBank, ganttChartTableData, ganttChartTableEvents, shipmentTableData } from "./orderBank"
 export {
@@ -51,24 +40,6 @@ export {
   tasks,
   users,
   userProfile,
-  retailCustomers,
-  audits,
-  auditsCom,
-  address,
-  customerPayload,
-  filter,
-  filterCom,
-  filterTerminal,
-  commercialCustomers,
-  auditsRoadTanker,
-  roadTanker,
-  filterRoadTanker,
-  currentRoadTanker,
-  productList,
-  terminal,
-  auditsTerminal,
-  varianceControl,
-  currentSaleAndInventory,
   slaData,
   orderBank,
   ganttChartTableData,

@@ -124,7 +124,48 @@ export const ganttChartTableData =[
 ]
 
 export const ganttChartTableEvents = [
-  { id : 1, resourceId : 1, name : 'RT13098 Drag true', startDate : '2021-07-23 00:00', endDate : '2021-07-23 12:00', eventColor: '#84B0E9', eventType: 'Scheduled',highlight:true,eventFilter:"high", status:'not yet to be created',resourceOrder:[{DNNumber:1},{DNNumber:1}]},
+  { id : 1,
+    resourceId : 1,
+    name : 'RT13098 Drag true',
+    startDate : '2021-07-23 00:00',
+    endDate : '2021-07-23 12:00',
+    eventColor: '#84B0E9',
+    eventType: 'Scheduled',
+    highlight:true,
+    eventFilter:"high",
+    status:'not yet to be created',
+    resourceOrder:[{DNNumber:1},{DNNumber:1}],
+    shipments: [
+      {
+        'no': 1,
+        station: {
+          'id': 36114489,
+          'name': 'maju gas trending',
+          'load_time': '09:00',
+          'loading_time': 1,
+          'duration': '3',
+          'eta': '13:00',
+        },
+        orders:[
+          {id: 1, priority:['hp','sr'],notes:'Shaziman only',name:'Umaten biz enterprise',cloud:'00',trip:'00',delivery_date:'1234',product:'Primax 95 Premium', volume:'1234',retain:'00',runout:'00',product_category:'1234',dn_status:['Send for DN'],split_id:'00',order_type:'ASR',ship_to:'36114489',accessibility:'1234',remarks:"remark",order_status:"scheduled"},
+        ]
+      },
+      {
+        'no': 1,
+        station: {
+          'id': 36114489,
+          'name': 'maju gas trending',
+          'load_time': '09:00',
+          'loading_time': 1,
+          'duration': '3',
+          'eta': '13:00',
+        },
+        orders:[
+          {id: 1, priority:['hp','sr'],notes:'Shaziman only',name:'Umaten biz enterprise',cloud:'00',trip:'00',delivery_date:'1234',product:'Primax 95 Premium', volume:'1234',retain:'00',runout:'00',product_category:'1234',dn_status:['Send for DN'],split_id:'00',order_type:'ASR',ship_to:'36114489',accessibility:'1234',remarks:"remark",order_status:"scheduled"},
+        ]
+      },
+    ]
+  },
   { id : 2, resourceId : 3, name : 'RT11940 Drag true', startDate : '2021-07-23 12:00', endDate : '2021-07-23 14:59', eventColor: 'green', eventType: 'RT Availability',highlight:true,eventFilter:"future",status:'not yet to be created',resourceOrder:[{DNNumber:1},{test:0}] },
   { id : 3, resourceId : 2, name : 'RT11940 Drag true', startDate : '2021-07-23 00:00', endDate : '2021-07-23 09:00', eventColor: '#9F79B7', eventType: 'Pending Shipment',highlight:true,eventFilter:"backlog",status:'created' },
   { id : 4, resourceId : 5, name : 'RT11940 Drag true', startDate : '2021-07-23 00:00', endDate : '2021-07-23 09:00', eventColor: '#615E9B', eventType: 'Shipment Created',highlight:true ,eventFilter:"request"},
@@ -150,10 +191,7 @@ export const shipmentTableData = [
     'eta': '13:00',
     },
     order1: {
-      'product': 'Primax 97 Premium',
-      'volume': '546OL',
-      'station_cat': 'LV1',
-      'DN': 1234,
+      data:{id: 1, priority:['hp','sr'],notes:'Shaziman only',name:'Umaten biz enterprise',cloud:'00',trip:'00',delivery_date:'1234',product:'Primax 95 Premium', volume:'1234',retain:'00',runout:'00',product_category:'1234',dn_status:['Send for DN'],split_id:'00',order_type:'ASR',ship_to:'36114489',accessibility:'1234',remarks:"remark",order_status:"scheduled"},
     },
     order2:null,
     order3:null,

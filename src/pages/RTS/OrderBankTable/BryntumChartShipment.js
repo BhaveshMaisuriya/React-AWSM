@@ -8,11 +8,10 @@ import {
 } from "reactstrap"
 import { createPopper } from "@popperjs/core"
 import {
-  ganttChartTableDefaultColumns,
   ganttChartTableMapping,
 } from "./tableMapping"
 import "./index.scss"
-import { BryntumSchedulerPro, BryntumGrid } from "@bryntum/schedulerpro-react"
+import {  BryntumGrid } from "@bryntum/schedulerpro-react"
 import "@bryntum/schedulerpro/schedulerpro.classic-dark.css"
 import "@bryntum/schedulerpro/schedulerpro.classic-light.css"
 import "@bryntum/schedulerpro/schedulerpro.classic.css"
@@ -28,7 +27,14 @@ import selectAllIcon2 from "../../../assets/images/AWSM-Checked-box.svg"
 import selectAllIcon from "../../../assets/images/AWSM-Select-all-Checkbox.svg"
 import ConfirmDNStatusModal from "./confirmDNStatusModal"
 import TerminalRelayModal from "./TerminalRelayModal"
-import { processPaymentInGanttChart, cancelPaymentInGanttChart, sendOrderInGanttChart, getRTSOderBankGanttChart, getShipmentOfOderBankGanttChart } from "../../../store/actions"
+import {
+  processPaymentInGanttChart,
+  cancelPaymentInGanttChart,
+  sendOrderInGanttChart,
+  getRTSOderBankGanttChart,
+  getShipmentOfOderBankGanttChart,
+  selectVehicleShipment, deselectVehicleShipment
+} from "../../../store/actions"
 import { cloneDeep } from 'lodash'
 import { DragDropContext, Droppable } from "react-beautiful-dnd"
 import {getCookieByKey} from "../../DQM/Common/helper"
@@ -252,7 +258,7 @@ const ChartColumnFilter = ({
 
 function BryntumChartTable(props) {
   // const [tableData, setTableData] = useState([])
-  const {bryntumCurrentColumns} = props
+  const {bryntumCurrentColumns, onSelectVehicle, onDeselectVehicle} = props
   const tableData = useRef([])
   const setTableData = (newData) => {
     tableData.current = newData
@@ -357,8 +363,9 @@ function BryntumChartTable(props) {
     listeners: {
       cellClick: function(grid) { // click row to select Vehicle shipment
         const {record} = grid
-        if(record?.data?.vehicle){
-          setSelectedRow({vehicle: record.data.vehicle})
+        if(record?.data?.vehicle && record?.data?.id){
+          const {id:resourceId,vehicle} = record.data
+          onSelectVehicle({resourceId,vehicle})
         }
       }
     }
@@ -449,9 +456,6 @@ function BryntumChartTable(props) {
   for (const tableMap of Object.keys(colsRef.current)) {
     schedulerproConfig.columns.push(generateColumnsObj(tableMap))
   }
-
-
-
   useEffect(() => {
     if (props.isSendRequestProcess && dropdownSelectedItem?.itemSelectedId) {
       if (dropdownSelectedItem.type === EventContextList.CANCEL_SHIPMENT) {
@@ -629,7 +633,9 @@ const mapDispatchToProps = (dispatch) => {
     processCancelPaymentInGanttChart: (params) => dispatch(cancelPaymentInGanttChart(params)),
     processSendOrderInGanttChart: (params) => dispatch(sendOrderInGanttChart(params)),
     getRTSOderBankGanttChart: (params) => dispatch(getRTSOderBankGanttChart(params)),
-    getShipmentOfOderBankGanttChart: (params) => dispatch(getShipmentOfOderBankGanttChart(params))
+    getShipmentOfOderBankGanttChart: (params) => dispatch(getShipmentOfOderBankGanttChart(params)),
+    onSelectVehicle: (params)=> dispatch(selectVehicleShipment(params)),
+    onDeselectVehicle: ()=> dispatch(deselectVehicleShipment())
   }
 }
 

@@ -172,7 +172,7 @@ const DateRangePicker = ({
       newValue.date_from = format(day, SAVE_DATE_FORMAT)
       newValue.date_to = null
     }
-    newValue.days = null
+    newValue.days = []
     setValue(newValue)
   }
   const [anchorEl, setAnchorEl] = React.useState(null)
@@ -342,7 +342,7 @@ const DateRangePicker = ({
                     setValue({
                       ...value,
                       type: !isRange ? "range" : "single",
-                      days: null,
+                      days: [],
                       date_from: null,
                       date_to: null,
                     })

@@ -133,7 +133,11 @@ const SLAAddNote = ({ data, onSubmit, onDeleteNote, disabled }) => {
   const [value, setValue] = useState(data.notes || "");
   const [editor, setEditor] = useState(null)
   const [viewEditor, setViewEditor] = useState(null)
-
+  
+  useEffect(() => {
+    setValue(data.notes || "")
+  }, [data])
+  
   const onOptionClick = option => {
     if (option.label === "Edit") {
       setOnEditing(true)
@@ -405,7 +409,7 @@ class SLATab extends Component {
   onDeleteNote() {
     const { updateSLASection, category, data } = this.props
     this.setState({ ...this.state, deleteNoteModal: false })
-    updateSLASection({ id: data[this.state.activeTab].id, category: category, title: data[this.state.activeTab].title, data: { notes: null }, action: "note-deleted" })
+    updateSLASection({ id: data[this.state.activeTab].id, category: category, title: data[this.state.activeTab].title, data: { notes: "" }, action: "note-deleted" })
   }
 
   onOptionClick(option){

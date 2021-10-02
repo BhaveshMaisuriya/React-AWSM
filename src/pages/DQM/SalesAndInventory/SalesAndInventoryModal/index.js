@@ -9,7 +9,7 @@ import {
   NavLink,
   NavItem,
   TabContent,
-  TabPane,
+  TabPane
 } from "reactstrap"
 import "./index.scss"
 import DetailsTab from "./detailsTab"
@@ -18,7 +18,7 @@ import InventoryTab from "./inventoryTab"
 import DeliveryTab from "./deliveryTab"
 import {
   getDetailsSales,
-  updateSalesAndInventoryDetail,
+  updateSalesAndInventoryDetail
 } from "../../../../store/salesAndInventory/actions"
 import { connect } from "react-redux"
 import { isScheduler } from "../../../../helpers/auth_helper"
@@ -34,11 +34,12 @@ class SalesAndInventoryTableInformation extends Component {
       isDataModified: false,
       isConfirm: false,
       updateSuccess: false,
-      data: props.currentSalesAndInventory,
+      data: props.currentSalesAndInventory
     }
 
     // this.handleEvent = this.handleEvent.bind(this)
   }
+
   onConfirmCancel = () => {
     this.setState({ isConfirm: false })
   }
@@ -51,25 +52,25 @@ class SalesAndInventoryTableInformation extends Component {
   }
 
   componentDidMount() {
-    const { onGetSalesAndInventoryDetail,data:{trans_id: recordId} } = this.props
+    const { onGetSalesAndInventoryDetail, data: { trans_id: recordId } } = this.props
     /*
       dispatch action to run saga for calling api for getting detail of record.
      */
-    if (recordId){
+    if (recordId) {
       onGetSalesAndInventoryDetail(recordId)
     }
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
-    const {currentSalesAndInventory} = this.props;
-    const {currentSalesAndInventory:previousSalesAndInventory} = prevProps;
+    const { currentSalesAndInventory } = this.props
+    const { currentSalesAndInventory: previousSalesAndInventory } = prevProps
 
     if (prevState.name !== this.state.name) {
       this.handler()
     }
-    if (JSON.stringify(currentSalesAndInventory) !== JSON.stringify(previousSalesAndInventory)){
+    if (JSON.stringify(currentSalesAndInventory) !== JSON.stringify(previousSalesAndInventory)) {
       this.setState({
-        data:currentSalesAndInventory
+        data: currentSalesAndInventory
       })
     }
   }
@@ -81,7 +82,12 @@ class SalesAndInventoryTableInformation extends Component {
 
   render() {
     const scheduler = isScheduler()
-    const { visible, onUpdateSalesAndInventoryDetail,data:{trans_id:recordId}, currentSalesAndInventory } = this.props
+    const {
+      visible,
+      onUpdateSalesAndInventoryDetail,
+      data: { trans_id: recordId },
+      currentSalesAndInventory
+    } = this.props
     const { activeTab, data, isConfirm } = this.state
     const toggle = tab => {
       if (activeTab !== tab) {
@@ -97,10 +103,16 @@ class SalesAndInventoryTableInformation extends Component {
 
     const handleUpdate = event => {
       event.preventDefault()
-      if(data && currentSalesAndInventory && recordId){
+      if (data && currentSalesAndInventory && recordId) {
+        const {
+          updated_at: prev_updated_at,
+          updated_by: prev_updated_by,
+          ...preValue
+        } = currentSalesAndInventory
+        const { updated_at, updated_by, ...updateValue } = data
         const uploadData = {
-          updateValue: {...data},
-          preValue: {...currentSalesAndInventory}
+          updateValue,
+          preValue
         }
         onUpdateSalesAndInventoryDetail(recordId, uploadData)
       }
@@ -220,18 +232,18 @@ class SalesAndInventoryTableInformation extends Component {
           </ModalBody>
           {!scheduler && !isConfirm && (
             <ModalFooter>
-                <button
-                  className="btn btn-outline-primary px-4"
-                  onClick={() => this.setState({ isConfirm: true })}
-                >
-                  Cancel
-                </button>
-                <button
-                  className="btn btn-primary ml-4 px-4"
-                  onClick={e => handleUpdate(e)}
-                >
-                  Update
-                </button>
+              <button
+                className="btn btn-outline-primary px-4"
+                onClick={() => this.setState({ isConfirm: true })}
+              >
+                Cancel
+              </button>
+              <button
+                className="btn btn-primary ml-4 px-4"
+                onClick={e => handleUpdate(e)}
+              >
+                Update
+              </button>
             </ModalFooter>
           )}
         </Modal>
@@ -242,13 +254,13 @@ class SalesAndInventoryTableInformation extends Component {
 
 const mapStateToProps = ({ saleAndInventory }) => ({
   currentSalesAndInventory: saleAndInventory?.currentSalesAndInventory,
-  isUpdateSuccess: saleAndInventory.currentSalesAndInventory?.isUpdateSuccess,
+  isUpdateSuccess: saleAndInventory.currentSalesAndInventory?.isUpdateSuccess
 })
 
 const mapDispatchToProps = dispatch => ({
   onGetSalesAndInventoryDetail: recordId => dispatch(getDetailsSales(recordId)),
-  onUpdateSalesAndInventoryDetail: (recordId,data) =>
-    dispatch(updateSalesAndInventoryDetail(recordId,data)),
+  onUpdateSalesAndInventoryDetail: (recordId, data) =>
+    dispatch(updateSalesAndInventoryDetail(recordId, data))
 })
 
 export default connect(

@@ -1,4 +1,4 @@
-import React, { useState, Fragment, useEffect } from "react"
+import React, { useState, Fragment, useEffect, useCallback } from "react"
 import { Button, Popover, PopoverBody, Input } from "reactstrap"
 import searchIcon from "../../../assets/images/AWSM-search.svg"
 import selectAllIcon from "../../../assets/images/AWSM-Select-all-Checkbox.svg"
@@ -114,7 +114,7 @@ const FilterDropdown = props => {
           appliedFiltersList.length > 0
             ? appliedFiltersList.includes(item)
             : true,
-        visibility: true,
+        visibility: true
       })
     })
     return newArr.sort((a, b) => b.checked - a.checked)
@@ -227,6 +227,10 @@ const FilterDropdown = props => {
     }
   }
 
+  const checkNullValue = useCallback((text) =>
+    (isNull(text) || isEmpty(text.toString()) || text.toString().includes("null"))
+    ,[])
+
   return (
     <Fragment>
       <Button
@@ -251,7 +255,7 @@ const FilterDropdown = props => {
               onChange={onSearchTextChange}
               style={{
                 fontFamily: "Museo Sans",
-                fontSize: "12px",
+                fontSize: "12px"
               }}
             />
             <img
@@ -259,7 +263,7 @@ const FilterDropdown = props => {
               src={searchIcon}
               alt="search"
               style={{
-                paddingRight: "8px",
+                paddingRight: "8px"
               }}
             />
           </div>
@@ -276,49 +280,54 @@ const FilterDropdown = props => {
                   style={{
                     maxHeight: "160px",
                     width: "100%",
-                    overflow: "auto",
+                    overflow: "auto"
                   }}
                 >
                   {current.length > 0 && !isNull(current) && !isRemark
                     ? current.map((row, index) => {
-                        return (
-                          row.visibility && (
-                            <div
+
+                      const renderLabel = () => {
+                        if (dataKey === "override") {
+                         return checkNullValue(row.text) ? "Accurate" : removeKeywords(row.text)
+                        }
+
+                        if (dataKey !== "override") {
+                         return checkNullValue(row.text) ? "-" : removeKeywords(row.text)
+                        }
+                      }
+
+                      return (
+                        row.visibility && (
+                          <div
+                            key={`${row.text}${index}`}
+                            className={`d-flex align-items-center filter-selection ${
+                              row.checked ? "item-checked" : ""
+                            }`}
+                          >
+                            <FormControlLabel
                               key={`${row.text}${index}`}
-                              className={`d-flex align-items-center filter-selection ${
-                                row.checked ? "item-checked" : ""
-                              }`}
-                            >
-                              <FormControlLabel
-                                key={`${row.text}${index}`}
-                                value={isNull(row.text) ? "-null" : row.text}
-                                onChange={onInputChange}
-                                checked={row.checked}
-                                className="checkmark"
-                                control={
-                                  <Checkbox
-                                    icon={<UntickIcon />}
-                                    checkedIcon={<CheckedIcon />}
-                                    style={{
-                                      height: "20px",
-                                      width: "5px",
-                                      marginLeft: "16px",
-                                      marginTop: "8px",
-                                    }}
-                                  />
-                                }
-                                label={
-                                  isNull(row.text) ||
-                                  isEmpty(row.text.toString()) ||
-                                  row.text.toString().includes("null")
-                                    ? "-"
-                                    : removeKeywords(row.text)
-                                }
-                              />
-                            </div>
-                          )
+                              value={isNull(row.text) ? "-null" : row.text}
+                              onChange={onInputChange}
+                              checked={row.checked}
+                              className="checkmark"
+                              control={
+                                <Checkbox
+                                  icon={<UntickIcon />}
+                                  checkedIcon={<CheckedIcon />}
+                                  style={{
+                                    height: "20px",
+                                    width: "5px",
+                                    marginLeft: "16px",
+                                    marginTop: "8px"
+                                  }}
+                                />
+                              }
+                              label={renderLabel()}
+                            />
+                          </div>
                         )
-                      })
+                      )
+                    })
                     : ResultsMessage()}
                   {hasMore && (
                     <IconButton
@@ -332,7 +341,7 @@ const FilterDropdown = props => {
                     </IconButton>
                   )}
                 </SimpleBar>
-                <p style={{ marginTop: "-10px" }}></p>
+                <p style={{ marginTop: "-10px" }}/>
               </Fragment>
             )}
             <div style={{ height: "25px" }}>
@@ -347,14 +356,14 @@ const FilterDropdown = props => {
                       height: "20px",
                       width: "5px",
                       marginLeft: "5px",
-                      marginTop: "-1px",
+                      marginTop: "-1px"
                     }}
                   />
                   <label
                     style={{
                       color: "#008F8A",
                       fontFamily: "Museo Sans",
-                      margin: "3px auto auto 8px",
+                      margin: "3px auto auto 8px"
                     }}
                   >
                     Select All
@@ -365,7 +374,7 @@ const FilterDropdown = props => {
                 type="submit"
                 className="filter-popover-button filter-popover-button-apply"
                 onClick={clickApply}
-                disabled={visibilityCount && checkedCount ? false : true}
+                disabled={!(visibilityCount && checkedCount)}
               >
                 Apply
               </Button>
@@ -386,8 +395,10 @@ const FilterDropdown = props => {
 }
 
 FilterDropdown.defaultProps = {
-  handleClickApply: () => {},
-  handleClickReset: () => {},
+  handleClickApply: () => {
+  },
+  handleClickReset: () => {
+  }
 }
 
 export default FilterDropdown

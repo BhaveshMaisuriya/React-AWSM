@@ -72,21 +72,14 @@ class SLA extends Component {
   }
 
   componentDidMount() {
-    const { onGetSLAItems, onGetSLAAuditLog } = this.props
+    const { onGetSLAItems } = this.props
     const params = {
       limit: 10,
       page: 0,
       sort_dir: "asc",
       sort_field: "code",
     }
-    const payload = {
-      limit: 6,
-      page: 1,
-      module: "sla",
-    }
     onGetSLAItems(params)
-    onGetSLAAuditLog(payload)
-
   }
 
   /**
@@ -133,28 +126,20 @@ class SLA extends Component {
     }))
   }
 
-  runAuditLogModal = () => {
-    const { modal, rowsAudit, currentAuditPage } = this.state
-    const audits = this.props.slaAuditLog
-    return modal ? (
-      <Modal
-        isOpen={this.state.modal}
-        toggle={this.toggle}
-        id="auditLog-modal"
-        contentClassName="modalContainer"
-      >
-        <ModalHeader toggle={this.toggle}>
-          <h3>Audit Log</h3>
-        </ModalHeader>
+  /**
+   * Will run the audit log modal
+   */
+   runAuditLogModal = () => {
+    const { modal } = this.state
+    const modalContent = modal ? (
         <AuditLog
-          rowsAudit={rowsAudit}
-          currentAuditPage={currentAuditPage}
-          data={audits.data.list}
-          closeModal={this.closeHandler}
-          handlePageChange={this.handleChangeAuditPage}
+          rowsAudit={6}
+          subModule={"sla"}
+          isOpen={this.state.modal}
+          toggle={this.toggle}
         />
-      </Modal>
     ) : null
+    return modalContent
   }
 
   toggleTabs(tab) {
@@ -515,7 +500,6 @@ const mapStateToProps = ({ sla }) => ({
 
 const mapDispatchToProps = dispatch => ({
   onGetSLAItems: params => dispatch(getSLAItems(params)),
-  onGetSLAAuditLog: payload => dispatch(getSLAAuditLog(payload)),
   onUpdateSLAItem: event => dispatch(updateSLAItem(event)),
 })
 

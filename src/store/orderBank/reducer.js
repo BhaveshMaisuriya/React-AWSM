@@ -22,8 +22,10 @@ import {
   SEND_ORDER_IN_GANTT_CHART_SUCCESS,
   SEND_ORDER_IN_GANTT_CHART_FAIL,
   GET_RTS_GANTT_CHART_DATA_SUCCESS,
-  GET_RTS_GANTT_CHART_DATA_FAIL, DRAG_RTS_ORDER_BANK_TO_GANTT_CHART_SUCCESS
-
+  GET_RTS_GANTT_CHART_DATA_FAIL,
+  DRAG_RTS_ORDER_BANK_TO_GANTT_CHART_SUCCESS,
+  SELECT_VEHICLE_RTS_SHIPMENT,
+  DESELECT_VEHICLE_RTS_SHIPMENT
 } from "./actionTypes"
 
 const initialState = {
@@ -32,13 +34,13 @@ const initialState = {
   shipmentOrderBankTableData: null,
   error: null,
   currentOrderDetail: null,
-  shipmentOrderDropFromOrderBank:null,
+  selectedVehicleShipment: null,
   updateSuccess: false,
   isSendRequestProcess: false,
   auditsCom: null,
   ganttChart: {
     table: [],
-    event: [],
+    event: []
   }
 }
 
@@ -50,46 +52,46 @@ const RTSOrderBank = (state = initialState, action) => {
       return {
         ...state,
         orderBankTableData: action.payload,
-        error: null,
+        error: null
       }
     case GET_RTS_ORDER_BANK_TABLE_DATA_FAIL:
       return {
         ...state,
         orderBankTableData: null,
-        error: action.payload,
+        error: action.payload
       }
     case GET_SHIPMENT_ORDER_BANK_TABLE_DATA_SUCCESS:
       return {
         ...state,
         shipmentOrderBankTableData: action.payload,
-        error: null,
+        error: null
       }
     case GET_SHIPMENT_ORDER_BANK_TABLE_DATA_FAIL:
       return {
         ...state,
         shipmentOrderBankTableData: null,
-        error: action.payload,
-      }      
+        error: action.payload
+      }
     case GET_ORDERBANK_SUCCESS:
       return {
         ...state,
-        orderBankData: action.payload,
+        orderBankData: action.payload
       }
     case GET_ORDERBANK_FAIL:
       return {
         ...state,
-        orderBankData: action.payload,
+        orderBankData: action.payload
       }
     case GET_ORDERBANK_TABLE_INFORMATION_SUCCESS:
       return {
         ...state,
-        currentOrderDetail: action.payload,
+        currentOrderDetail: action.payload
       }
 
     case GET_ORDERBANK_TABLE_INFORMATION_FAIL:
       return {
         ...state,
-        error: action.payload,
+        error: action.payload
       }
     case UPDATE_ORDERBANK_TABLE_INFORMATION_SUCCESS: {
       notify.success("Record Successfully Updated")
@@ -97,18 +99,18 @@ const RTSOrderBank = (state = initialState, action) => {
         ...state,
         currentOrderDetail: null,
         error: null,
-        updateSuccess: true,
+        updateSuccess: true
       }
     }
     case UPDATE_ORDERBANK_TABLE_INFORMATION_FAIL:
       return {
         ...state,
-        error: action.payload,
+        error: action.payload
       }
     case UPDATE_ORDER_BANK_TABLE_DATA:
       return {
         ...state,
-        orderBankTableData: action.payload,
+        orderBankTableData: action.payload
       }
     case DELETE_ORDERBANK_DETAIL_SUCCESS: {
       notify.success("Record Successfully Deleted")
@@ -116,13 +118,13 @@ const RTSOrderBank = (state = initialState, action) => {
         ...state,
         currentOrderDetail: null,
         error: null,
-        updateSuccess: true,
+        updateSuccess: true
       }
     }
     case DELETE_ORDERBANK_DETAIL_FAIL:
       return {
         ...state,
-        error: action.payload,
+        error: action.payload
       }
     case SEND_DN_STATUS_REQUEST_SUCCESS:
       notify.success("An order has been successfully sent for DN Creation")
@@ -132,20 +134,20 @@ const RTSOrderBank = (state = initialState, action) => {
     case GET_ORDER_BANK_AUDITLOG_SUCCESS:
       return {
         ...state,
-        auditsCom: action.payload,
+        auditsCom: action.payload
       }
 
     case GET_ORDER_BANK_AUDITLOG_FAIL:
       return {
         ...state,
-        error: action.payload,
+        error: action.payload
       }
 
     case PROCESS_PAYMENT_IN_GANTT_CHART_SUCCESS:
       notify.success("A shipment has been successfully created in SAP")
       return {
         ...state,
-        isSendRequestProcess : state.isSendRequestProcess+1
+        isSendRequestProcess: state.isSendRequestProcess + 1
       }
 
     case PROCESS_PAYMENT_IN_GANTT_CHART_FAIL:
@@ -153,30 +155,30 @@ const RTSOrderBank = (state = initialState, action) => {
       return {
         ...state,
         error: action.payload,
-        isSendRequestProcess : state.isSendRequestProcess+1
+        isSendRequestProcess: state.isSendRequestProcess + 1
       }
     case CANCEL_PAYMENT_IN_GANTT_CHART_SUCCESS:
       notify.success("A shipment has been successfully cancelled from schedule")
       return {
         ...state,
-        isSendRequestProcess : state.isSendRequestProcess+1
+        isSendRequestProcess: state.isSendRequestProcess + 1
       }
     case CANCEL_PAYMENT_IN_GANTT_CHART_FAIL:
       notify.error("A shipment has been fail cancelled in SAP")
       return {
         ...state,
-        error: action.payload,
+        error: action.payload
       }
     case SEND_ORDER_IN_GANTT_CHART_SUCCESS:
       notify.success("A shipment has been successfully sent for Creation")
       return {
-        ...state,
+        ...state
       }
     case SEND_ORDER_IN_GANTT_CHART_FAIL:
       notify.error("A shipment has been fail to sent for Creation")
       return {
         ...state,
-        error: action.payload,
+        error: action.payload
       }
     case GET_RTS_GANTT_CHART_DATA_SUCCESS: {
       return {
@@ -189,15 +191,52 @@ const RTSOrderBank = (state = initialState, action) => {
         ...state,
         ganttChart: {
           table: [],
-          event: [],
+          event: []
         },
         error: action.payload
       }
     }
-    case DRAG_RTS_ORDER_BANK_TO_GANTT_CHART_SUCCESS:{
+
+    case SELECT_VEHICLE_RTS_SHIPMENT: {
+      const { vehicle, resourceId } = action
       return {
         ...state,
-        shipmentOrderDropFromOrderBank:  action.dropData
+        selectedVehicleShipment: {
+          vehicle,
+          resourceId
+        }
+      }
+    }
+
+
+    case DESELECT_VEHICLE_RTS_SHIPMENT: {
+      return {
+        ...state,
+        selectedVehicleShipment: null
+      }
+    }
+
+    case DRAG_RTS_ORDER_BANK_TO_GANTT_CHART_SUCCESS: {
+      if (!state.selectedVehicleShipment || !state.selectedVehicleShipment?.resourceId) return state
+      const newOrderBankTableData = state.orderBankTableData && [...state.orderBankTableData].filter((record) => !record.isChecked)
+      const { resourceId } = state.selectedVehicleShipment
+      const resourceEventIndex = state.ganttChart.event &&
+        state.ganttChart.event.length > 0 &&
+        state.ganttChart.event.findIndex(({ resourceId: id }) => id === resourceId)
+      if (resourceEventIndex < 0) return state
+      if (!state.ganttChart.event[resourceEventIndex].shipments) {
+        state.ganttChart.event[resourceEventIndex].shipments = []
+        state.ganttChart.event[resourceEventIndex].shipments.push({orders:action.dropData})
+      }else{
+        state.ganttChart.event[resourceEventIndex].shipments.push({orders:action.dropData})
+      }
+      return {
+        ...state,
+        orderBankTableData: newOrderBankTableData ? newOrderBankTableData : state.orderBankTableData,
+        ganttChart:{
+          ...state.ganttChart,
+          event: [...state.ganttChart.event]
+        }
       }
     }
     default:

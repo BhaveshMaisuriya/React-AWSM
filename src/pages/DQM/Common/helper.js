@@ -75,7 +75,18 @@ export function getCookieByKey(key) {
   }
 }
 
-export const isValidDate = date => {
+export const isValidDate = (date) => {
+  return date && (
+    date.type &&
+    ((date.type === "every" && date.days && date.days.length > 0) ||
+      (date.type === "range" && (date.date_to || date.date_from)) ||
+      date.type === "daily" ||
+      date.type === "single" && date.date_from
+    )
+  )
+}
+
+export const isValidDateTime = date => {
   if (!date || typeof date !== "object") {
     return false
   }
@@ -86,9 +97,7 @@ export const isValidDate = date => {
     date.type &&
     date.time_from &&
     date.time_to &&
-    (((date.type === "every" || date.type === "single") && date.days && date.days.length > 0) ||
-      (date.type === "range" && (date.date_to || date.date_from)) ||
-      date.type === "daily")
+    isValidDate(date)
   )
 }
 
@@ -106,7 +115,8 @@ export const runValidation = data => {
   }
   if (data.contact) {
     const validateContact = Object.keys(data.contact).map(key => {
-      if (key.startsWith("contact_") && data.contact[key]) {
+      const contactKey = key.split("").pop()
+      if (key.startsWith("contact_") && data.contact[key] && contactKey > 1 && contactKey < 4) {
         if (
           data.contact[key].number &&
           !/^\+?[0-9- ]+$/.test(data.contact[key].number)
@@ -154,8 +164,8 @@ export const runValidation = data => {
   if (data.delivery) {
     return Object.keys(data.delivery).every(key => {
       const intervalNumber = key.split("").pop()
-      if (key.startsWith("actual_open_time") || (key.startsWith("no_delivery_interval") && intervalNumber > 2 && intervalNumber <= 5)) {
-        return isValidDate(data.delivery[key])
+      if ((key.startsWith("actual_open_time") && intervalNumber < 3) || (key.startsWith("no_delivery_interval") && intervalNumber > 2 && intervalNumber <= 5)) {
+        return isValidDateTime(data.delivery[key])
       }
       return true
     })

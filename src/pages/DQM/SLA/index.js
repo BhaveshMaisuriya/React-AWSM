@@ -79,7 +79,6 @@ class SLA extends Component {
       sort_dir: "asc",
       sort_field: "code",
     }
-   
     onGetSLAItems(params)
   }
 
@@ -127,14 +126,20 @@ class SLA extends Component {
     }))
   }
 
-  runAuditLogModal = () => {
-    const { modal } = this.state 
-      return modal ? (<AuditLog
-        rowsAudit={6}
-        subModule='sla'
-        isOpen={this.state.modal}
-        toggle={this.toggle}
-             />  ) : null
+  /**
+   * Will run the audit log modal
+   */
+   runAuditLogModal = () => {
+    const { modal } = this.state
+    const modalContent = modal ? (
+        <AuditLog
+          rowsAudit={6}
+          subModule={"sla"}
+          isOpen={this.state.modal}
+          toggle={this.toggle}
+        />
+    ) : null
+    return modalContent
   }
 
   toggleTabs(tab) {

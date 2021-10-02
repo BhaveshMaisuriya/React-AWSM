@@ -30,6 +30,7 @@ import {
 import { connect } from "react-redux"
 import ExitConfirmation from "../../../components/Common/ExitConfirmation"
 import { isEqual } from "lodash"
+import { isValidDate } from "../Common/helper"
 
 // Information Modal
 class InformationModal extends Component {
@@ -90,39 +91,30 @@ class InformationModal extends Component {
     }
   }
   
-  isValidDate = (date) => {
-    if (!date || typeof date !== "object") {
-      return false
-    }
-    return ((date.type === "every" || date.type === "single") && date.days && date.days.length > 0) ||
-      (date.type === "range" && (date.date_to || date.date_from)) ||
-      date.type === "daily"
-  }
-  
   validateTerminal = () => {
     const { data } = this.state
     let temp = [];
     temp = [...temp];
     if (
       data?.availability?.status_awsm === "Temporary Blocked" &&
-      !this.isValidDate(data?.availability?.block_date_range)
+      !isValidDate(data?.availability?.block_date_range)
     ) {
       temp.push('block_date_range');
     }
 
-    if (this.isValidDate(data?.availability?.other_terminal_mobilization_1_date) && data?.availability?.other_terminal_mobilization_1_name === 'None') {
+    if (isValidDate(data?.availability?.other_terminal_mobilization_1_date) && data?.availability?.other_terminal_mobilization_1_name === 'None') {
       temp.push('other_terminal_mobilization_1_name');
     }
 
-    if (this.isValidDate(data?.availability?.other_terminal_mobilization_2_date) && data?.availability?.other_terminal_mobilization_2_name === 'None') {
+    if (isValidDate(data?.availability?.other_terminal_mobilization_2_date) && data?.availability?.other_terminal_mobilization_2_name === 'None') {
       temp.push('other_terminal_mobilization_2_name');
     }
 
-    if (!this.isValidDate(data?.availability?.other_terminal_mobilization_2_date) && data?.availability?.other_terminal_mobilization_2_name !== "None") {
+    if (!isValidDate(data?.availability?.other_terminal_mobilization_2_date) && data?.availability?.other_terminal_mobilization_2_name !== "None") {
       temp.push('other_terminal_mobilization_2_date');
     }
     
-    if (!this.isValidDate(data?.availability?.other_terminal_mobilization_1_date) && data?.availability?.other_terminal_mobilization_1_name !== "None") {
+    if (!isValidDate(data?.availability?.other_terminal_mobilization_1_date) && data?.availability?.other_terminal_mobilization_1_name !== "None") {
       temp.push('other_terminal_mobilization_1_date');
     }
     

@@ -119,10 +119,9 @@ class TablePaginationActions extends Component {
           {currentPage >= numShownPages - 1 ? this.renderPage(firstPage) : ""}
           {currentPage >= numShownPages - 1 ? this.renderPageDots() : ""}
           {newpageNumbers.map(number => this.renderPage(number))}
-          {totalPages - currentPage > numShownPages - 1 || currentPage < 8
-            ? this.renderPageDots()
+          {totalPages - currentPage > numShownPages - 1 ? this.renderPageDots()
             : ""}
-          {totalPages - currentPage > numShownPages - 1 || currentPage < 8
+          {totalPages - currentPage > numShownPages - 1 
             ? this.renderPage(totalPages)
             : ""}
           {this.renderDivider()}

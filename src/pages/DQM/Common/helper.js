@@ -183,6 +183,10 @@ export const removeKeywords = string => {
         "Every day"
       )
       .replace(
+        "Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday",
+        "Every day"
+      )
+      .replace(
         "every Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday",
         "Every day"
       )

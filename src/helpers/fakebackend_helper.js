@@ -177,7 +177,12 @@ export const getUsers = () => get(url.GET_USERS)
 export const getUserProfile = () => get(url.GET_USER_PROFILE)
 
 // get order bank
-export const getOrderBank = (params) => orderDetails
+export const getOrderBank = code =>
+code !== undefined && axios
+  .get(
+    `/retail-customer/${code}`
+  )
+  .then(response => response.data)
 
 // get single order bank
 export const getOrderBankDetail = (params) => viewOrderDetails

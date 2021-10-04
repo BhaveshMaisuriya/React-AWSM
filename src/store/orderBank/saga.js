@@ -65,9 +65,9 @@ import {
 function* onGetOrderbank({ params = {} }) {
   try {
     const response = yield call(getOrderBank, params)
-    yield put(getOrderBankSuccess(Factory(response, params)))
+    yield put(getOrderBankSuccess(response, params))
   } catch (error) {
-    yield put(getOrderBankFail(error))
+    yield put(getOrderBankFail(error.response))
   }
 }
 

@@ -20,7 +20,8 @@ const DatePicker = ({
   isTypeFor,
   startDate = null,
   endDate = null,
-  placeholder = "Select date"
+  placeholder = "Select date",
+  orderBankShiftDate = false,
 }) => {
   const [date, setDate] = useState(value ? new Date(value) : new Date())
   const [anchorEl, setAnchorEl] = React.useState(null)
@@ -155,6 +156,14 @@ const DatePicker = ({
     setDate(date)
   }
 
+  const onDayClickShift = (date) => {
+    const tomorrow = new Date(new Date().getTime() + 24 * 60 * 60 * 1000);
+    if (dateFnsFormat(date, DATE_FORMAT) < dateFnsFormat(tomorrow, DATE_FORMAT)) {
+      return false;
+    }
+    setDate(date)
+  }
+
   return (
     <div className="awsm-date-picker-container" style={{width: `${showButtons ? '75%' : '100%'}`}} >
       <button
@@ -194,6 +203,17 @@ const DatePicker = ({
               minDate={minDate}
               maxDate={maxDate}
             />
+          ) : orderBankShiftDate === true ? (
+            <DayPicker
+              selectedDays={new Date(date)}
+              month={month}
+              captionElement={captionElement}
+              weekdayElement={weekdayElement}
+              onDayClick={onDayClickShift}
+              navbarElement={() => null}
+              modifiers={modifiers}
+              disabledDays={{ before: new Date(new Date().getTime() + 24 * 60 * 60 * 1000) }}
+            />
           ) : (
             <DayPicker
               selectedDays={new Date(date)}
@@ -204,7 +224,8 @@ const DatePicker = ({
               month={month}
               modifiers={modifiers}
             />
-          )}
+          )       
+        }
         </div>
 
         {showButtons ? (

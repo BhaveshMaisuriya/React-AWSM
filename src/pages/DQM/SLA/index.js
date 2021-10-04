@@ -85,7 +85,7 @@ class SLA extends Component {
   /**
    * Handling the modal state when modal is click
    */
-  modalHandler = () => {
+  modalHandler = async() => {
     this.setState({
       modal: true,
     })
@@ -197,13 +197,13 @@ class SLA extends Component {
   async generatePdf() {
     this.setState({ downloading: true });
     this.setState({ showDownloadOption: !this.state.showDownloadOption })
-
+   
     const showDiv = document.getElementById("showPDf")
     showDiv.style.display = "block"
     const input = document.getElementById("sla_pdf")   
 
     html2canvas(input).then(async canvas => {
-      const imgData = canvas.toDataURL("image/jpeg", 1.0);
+      const imgData = canvas.toDataURL("image/jpg", 1.0);
 
       var imgHeight = 0;
       var imgWidth = 210;
@@ -211,19 +211,17 @@ class SLA extends Component {
       imgHeight = (canvas.height * imgWidth) / canvas.width;
       var heightLeft = imgHeight;
 
-
-
       var totalPages = Math.ceil(imgHeight / pageHeight) - 1;
-      var doc = new jsPDF("p", "mm", [pageHeight, imgWidth]);
+      var doc = new jsPDF("p", "mm", 'a4');
       var position = 0;
 
-      doc.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight);
+      doc.addImage(imgData, "PNG", 10, position, imgWidth, imgHeight);
       heightLeft -= pageHeight;
   
       for (var i = 1; i <= totalPages; i++) {
         position = (heightLeft - imgHeight);
         doc.addPage();
-        doc.addImage(imgData, "JPG", 0, (position * i), imgWidth, imgHeight);
+        doc.addImage(imgData, "PNG", 10, (position * i), imgWidth, imgHeight);
       }
       let all = [];
        this.state.checkedValues.map(item => {
@@ -270,7 +268,6 @@ class SLA extends Component {
   render() {
     const { slaData } = this.props
     if (!slaData || !slaData.rbd) return <Loader />
-    
     return (
       <Fragment>
         {this.state.downloading === true && <Loader />}

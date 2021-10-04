@@ -401,6 +401,19 @@ function OrderBank({
      }
   }
 
+  const onStatusChange = (value) => {
+    setStatusDropdown(value);
+    let temp = [...orderBankSetting]
+    temp.map(function (item, index) {
+      if (item.value === "newOrder" && value === 'Scheduled') {
+        item.disabled = true
+      } else {
+        item.disabled = false
+      }
+    })
+    setOrderBankSetting(temp)
+  }
+
   return (
     <React.Fragment>
       <DragDropContext onDragEnd={onDragEnd}>
@@ -634,7 +647,7 @@ function OrderBank({
                   <div className="order-bank-region">
                     <AWSMDropdown
                       value={status}
-                      onChange={value => setStatusDropdown(value)}
+                      onChange={value => onStatusChange(value)}
                       items={orderBankStatus.map(e => e.label)}
                     />
                   </div>

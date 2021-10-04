@@ -81,7 +81,6 @@ const NewOrderBankModal = props => {
 
   useEffect(async () => {
     if (props.orderBankData !== null) {
-      console.log("order::", props.orderBankData)
       if (typeof props.orderBankData === 'object' && props.orderBankData.ship_to_party === shiptoNo) {
         setTimeout(async function () {
           await setShowAlert(true)

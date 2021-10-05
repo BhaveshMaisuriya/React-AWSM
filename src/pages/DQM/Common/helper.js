@@ -159,11 +159,11 @@ export const removeKeywords = string => {
     ? newString
       .toString()
       .replace(
-        "every Sunday,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday",
+        "Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday",
         "Every day"
       )
       .replace(
-        "Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday",
+        "every Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday",
         "Every day"
       )
       .replace(

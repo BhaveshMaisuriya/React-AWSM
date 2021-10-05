@@ -132,23 +132,23 @@ function SLAPdfTable(props) {
         created_by: "user",
         action: (
           <div className="action">
-            <Tooltip title="Rename PdDF">
+            <Tooltip title="Rename PDF">
               <EditOutlinedIcon onClick={() => reNamePdf(item)} />
             </Tooltip>
             &nbsp;&nbsp;&nbsp;&nbsp;
-            <Tooltip title="Download PdDF">
+            <Tooltip title="Download PDF">
               <SystemUpdateAltOutlinedIcon
                 onClick={() => downloadViewPdf(item, "download")}
               />
             </Tooltip>
             &nbsp;&nbsp;&nbsp;&nbsp;
-            <Tooltip title="View PdDF">
+            <Tooltip title="View PDF">
               <VisibilityOutlinedIcon
                 onClick={() => downloadViewPdf(item, "view")}
               />
             </Tooltip>
             &nbsp;&nbsp;&nbsp;&nbsp;
-            <Tooltip title="Delete PdDF">
+            <Tooltip title="Delete PDF">
               <DeleteOutlinedIcon onClick={() => deletePdf(item)} />
             </Tooltip>
             &nbsp;&nbsp;&nbsp;&nbsp;

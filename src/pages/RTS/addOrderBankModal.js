@@ -35,9 +35,10 @@ const NewOrderBankModal = props => {
   const [isConfirm, setIsConfirm] = useState(false)
   const [currentState, setCurrentState] = useState("")
   const [orderData, setOrderData] = useState({})
-  const [shiptoNo, setShiptoNo] = useState(0)
+  const [shiptoNo, setShiptoNo] = useState('')
   const [progress, setProgress] = useState(0)
   const [showAlert, setShowAlert] = useState(false)
+  const [shiftDate, setShiftDate] = useState(new Date(new Date().getTime() + 24 * 60 * 60 * 1000))
 
   const onConfirmCancel = () => {
     setIsConfirm(false)
@@ -119,7 +120,12 @@ const NewOrderBankModal = props => {
             <div className="d-flex justify-content-between align-item-baseline">
               <div className="col-4 p-0">
                 <label>SHIFT DATE</label>
-                <DatePicker />
+                <DatePicker
+                  className="form-control awsm-input"
+                  value={shiftDate}
+                  onChange={date => setShiftDate(date)}
+                  orderBankShiftDate={true}
+                />
               </div>
               <div className="col-4 p-0 ml-4">
                 <label>
@@ -130,6 +136,7 @@ const NewOrderBankModal = props => {
                   defaultValue=""
                   placeholder="Numeric Only"
                   onChange={val => setShiptoNo(val)}
+                  value={shiptoNo}
                 />
               </div>
               <div className="col-4 p-0">
@@ -137,6 +144,7 @@ const NewOrderBankModal = props => {
                   color="primary"
                   className="mt-27 ml-3 p-1320"
                   onClick={() => onSearchOrder()}
+                  disabled={ shiftDate === '' ? shiptoNo === '' ? true : false : shiptoNo === '' ? true : false }
                 >
                   Search
                 </Button>
@@ -430,7 +438,7 @@ const NewOrderBankModal = props => {
                       : "bg-loading"
                   }`}
               >
-                <div className="relative table_cell h-100">
+                <div className="relative table_cell h-100 verticle-middle">
                   <FileCopyIcon />
                   <p className="text-18">
                     {currentState === "" ? (

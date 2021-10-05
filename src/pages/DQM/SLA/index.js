@@ -99,7 +99,7 @@ class SLA extends Component {
   /**
    * Handling the modal state when modal is click
    */
-  modalHandler = async () => {
+  modalHandler = () => {
     this.setState({
       modal: true,
     })
@@ -461,6 +461,7 @@ class SLA extends Component {
   render() {
     const { slaData } = this.props
     if (!slaData || !slaData.rbd) return <Loader />
+    
     return (
       <Fragment>
         {this.state.downloading === true && <Loader />}

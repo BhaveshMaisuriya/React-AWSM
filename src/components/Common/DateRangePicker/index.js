@@ -5,9 +5,9 @@ import "react-day-picker/lib/style.css"
 import "./day-picker.scss"
 import CheckBox from "@material-ui/core/Checkbox"
 import Popover from "@material-ui/core/Popover"
-// import CALENDAR_ICON from "../../../assets/images/calendar-alt-regular.svg"
 import AWSM_Calendar from "../../../assets/images/AWSM-Calendar.svg"
 import { ReactSVG } from "react-svg"
+import { isValidDate } from "../../../pages/DQM/Common/helper"
 
 const WEEK_DAYS = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"]
 const DISPLAY_DATE_FORMAT = "do MMM yyyy"
@@ -280,7 +280,7 @@ const DateRangePicker = ({
   }
   
   const dateError = useMemo(() => {
-    if (validateTime && value && (value.time_from || value.time_to) && !value.type) {
+    if (validateTime && value && (value.time_from || value.time_to) &&!isValidDate(value)) {
       return "Please select date"
     }
     return false

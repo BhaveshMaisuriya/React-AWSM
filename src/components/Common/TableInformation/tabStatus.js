@@ -30,7 +30,7 @@ const TabStatus = ({ scheduler, data, onChange }) => {
           newStatusData[key] = {
             id: null,
             type: "range",
-            days: "",
+            days: [],
             date_from: null,
             date_to: null,
             time_from: null,
@@ -39,6 +39,7 @@ const TabStatus = ({ scheduler, data, onChange }) => {
         } else {
           newStatusData[key] = { ...newStatusData[key]}
         }
+        newStatusData[key].type = "range"
       }
       newStatusData[key][subKey] = value
       if (

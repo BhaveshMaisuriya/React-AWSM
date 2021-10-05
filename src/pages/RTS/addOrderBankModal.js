@@ -52,6 +52,7 @@ const NewOrderBankModal = props => {
   const onConfirmExit = () => {
     setIsConfirm(false)
     setCurrentState("")
+    setShiptoNo('')
     if (onCancel) {
       onCancel()
     }
@@ -99,11 +100,11 @@ const NewOrderBankModal = props => {
     }
   }, [props.orderBankData])
 
-  // const onCancel = () => {
-  //   setIsConfirm(true);
-  //   setShiptoNo('')
-  //   setCurrentState("")
-  // }
+  const onCancelClick = () => {
+    shiptoNo !== '' ? setIsConfirm(true) : onCancel();
+    setShiptoNo('')
+    setCurrentState("")
+  }
 
   return (
     <Modal isOpen={open} className="new-order-modal">
@@ -462,7 +463,7 @@ const NewOrderBankModal = props => {
             color="light-primary"
             className="light-primary p-1320"
             outline
-            onClick={() => setIsConfirm(true)}
+            onClick={onCancelClick}
           >
             Cancel
           </Button>

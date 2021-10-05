@@ -90,7 +90,8 @@ export const isValidDateTime = date => {
   if (!date || typeof date !== "object") {
     return false
   }
-  if (!date.time_from && !date.time_to && !date.date_from && !date.date_to && (!date.days || date.days.length < 1)) {
+  // Empty date
+  if (!date.time_from && !date.time_to && !isValidDate(date)) {
     return true
   }
   return (
@@ -115,7 +116,7 @@ export const runValidation = data => {
   }
   if (data.contact) {
     const validateContact = Object.keys(data.contact).map(key => {
-      const contactKey = key.split("").pop()
+      const contactKey = key.split("_").pop()
       if (key.startsWith("contact_") && data.contact[key] && contactKey > 1 && contactKey < 4) {
         if (
           data.contact[key].number &&
@@ -132,28 +133,7 @@ export const runValidation = data => {
     if (validateContact.includes(false)) {
       return false
     }
-    // return true;
   }
-  // if (data.status && data.status.status_awsm === "Temporarily Closed") {
-  //   if (
-  //     !data.status.close_period ||
-  //     !(
-  //       data.status.close_period.date_from &&
-  //       data.status.close_period.date_to &&
-  //       data.status.close_period.time_from &&
-  //       data.status.close_period.time_to
-  //     )
-  //   ) {
-  //     return false
-  //   }
-  // }
-  // if (
-  //   data.territory_manager &&
-  //   data.territory_manager.number &&
-  //   !/^\+?[0-9- ]+$/.test(data.territory_manager.number)
-  // ) {
-  //   return false
-  // }
   if (
     data.retail_sales_manager &&
     data.retail_sales_manager.number &&
@@ -163,7 +143,7 @@ export const runValidation = data => {
   }
   if (data.delivery) {
     return Object.keys(data.delivery).every(key => {
-      const intervalNumber = key.split("").pop()
+      const intervalNumber = key.split("_").pop()
       if ((key.startsWith("actual_open_time") && intervalNumber < 3) || (key.startsWith("no_delivery_interval") && intervalNumber > 2 && intervalNumber <= 5)) {
         return isValidDateTime(data.delivery[key])
       }

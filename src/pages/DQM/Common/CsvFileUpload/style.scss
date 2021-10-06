@@ -1,0 +1,68 @@
+.file_upload_main {
+    background-color: #cccccc38;
+    padding: 10px;
+    .dropzone {
+    border: 2px dashed #35ddd6;
+    border-radius: unset;
+    background-color: #f8f9fa;
+    position: relative;
+    cursor: pointer;
+}
+}
+.csv_file_upload_main_active {
+    background-color: #ccc;
+    padding: 10px;
+    .dropzone {
+        border: 2px dashed rgb(116, 113, 113);
+        background-color: #ccc;
+        border-radius: 3px;
+        position: relative;
+        cursor: pointer;
+    }
+}
+
+.hide_div{
+    color: #ebf9f9;
+    position: absolute;
+}
+.CsvUploadIcon {
+    text-align: center;
+    min-height: 230px;
+    height: 100%;
+    width: 100%;
+    padding: 55px 0;
+}
+.drop_text {
+    position: relative;
+    top: 10px;
+    font-weight: 500;
+    font-size: 15px;
+    text-transform: uppercase;
+    span {
+        color: #00a19c;
+        font-weight: bold;
+    }
+}
+
+.box-border {
+    border: 1px solid #ccc;
+    margin-top: 5em;
+    padding: 25px;
+}
+.cancel-upload {
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.primary .MuiLinearProgress-bar {
+    background-color: #00a19c;
+}
+.successColor .MuiLinearProgress-bar {
+    background-color: green;
+}
+.red .MuiLinearProgress-bar {
+    background-color: red;
+}
+
+

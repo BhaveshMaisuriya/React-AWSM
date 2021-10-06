@@ -13,6 +13,8 @@ import {
   GET_RETAIL_FILTER_FAIL,
   GET_DOWNLOAD_RETAIL_CUSTOMER_SUCCESS,
   GET_DOWNLOAD_RETAIL_CUSTOMER_FAIL,
+  GET_UPLOAD_CSV_SUCCESS,
+  GET_UPLOAD_CSV_FAIL,  
 } from "./actionTypes"
 const initialState = {
   retailCustomers: [],
@@ -26,6 +28,7 @@ const initialState = {
   updateAlert: null,
   downloadretailCustomers: [],
   isLoading: false,
+  uploadCsv: null,
 }
 import { ToastSuccess, ToastError } from "../../helpers/swal"
 import formatDateResponseList from "../../helpers/format-response-data/format-date-response.helper"
@@ -71,6 +74,18 @@ const RetailCustomer = (state = initialState, action) => {
       return {
         ...state,
         downloadretailCustomers: action.payload,
+      }
+      
+    case GET_UPLOAD_CSV_SUCCESS:
+      return {
+        ...state,
+        uploadCsv: action.params,
+      }
+
+    case GET_UPLOAD_CSV_FAIL:
+      return {
+        ...state,
+        uploadCsv: action.payload,
       }
 
     case GET_RETAIL_AUDITLOG_SUCCESS:

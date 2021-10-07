@@ -11,13 +11,13 @@ const AppRoute = ({
   <Route
     {...rest}
     render={props => {
-      // if (isAuthProtected && !localStorage.getItem("authUser")) {
-      //   return (
-      //     <Redirect
-      //       to={{ pathname: "/login", state: { from: props.location } }}
-      //     />
-      //   )
-      // }
+      if (isAuthProtected && !sessionStorage.getItem("authUser")) {
+        return (
+          <Redirect
+            to={{ pathname: "/login", state: { from: props.location } }}
+          />
+        )
+      }
 
       return (
         <Layout>

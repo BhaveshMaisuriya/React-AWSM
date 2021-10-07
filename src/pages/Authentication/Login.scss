@@ -1,0 +1,11 @@
+.login-page {
+  background: url("../../assets/images/login-background.png") no-repeat center/cover;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.login-item {
+  display: flex;
+  flex-direction: column;
+}

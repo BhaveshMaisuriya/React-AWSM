@@ -26,7 +26,7 @@ const AWSMAlert = ({ status, message, openAlert, closeAlert }) => {
       colorBack = "#fff4e5"
       break
   }
-
+console.log("snack::", openAlert);
   return (
     <Snackbar
       style={{

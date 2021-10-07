@@ -202,6 +202,12 @@ export const getDownloadRetailCustomer = params =>
     { ...params }
   )
 
+export const getUploadCsv = params =>
+  axios.post(
+    `${params.api}/upload`,
+    {'data': params.data}
+  )  
+
 export const getCommercialCustomer = params =>
   axios.post(
     "/commercial-customer",

@@ -6,6 +6,7 @@ import {
   GET_TABLE_INFORMATION,
   UPDATE_TABLE_INFORMATION,
   GET_DOWNLOAD_RETAIL_CUSTOMER,
+  GET_UPLOAD_CSV,
 } from "./actionTypes"
 
 import {
@@ -21,6 +22,8 @@ import {
   getRetailFilterSuccess,
   getDownloadRetailCustomerSuccess,
   getDownloadRetailCustomerFail,
+  getUploadCsvSuccess,
+  getUploadCsvFail,  
 } from "./actions"
 
 import {
@@ -29,6 +32,7 @@ import {
   getTableInformation,
   updateTableInformation,
   getDownloadRetailCustomer,
+  getUploadCsv,
 } from "../../helpers/fakebackend_helper"
 
 function* onGetRetailCustomer({ params = {} }) {
@@ -51,6 +55,15 @@ function* onGetDownloadRetailCustomer({ params = {} }) {
     yield put(getDownloadRetailCustomerSuccess(response.data))
   } catch (error) {
     yield put(getDownloadRetailCustomerFail(error))
+  }
+}
+
+function* onGetUploadCsv({ params = {} }) {
+  try {
+    const response = yield call(getUploadCsv, params)
+    yield put(getUploadCsvSuccess(response.data))
+  } catch (error) {
+    yield put(getUploadCsvFail(error))
   }
 }
 
@@ -90,6 +103,7 @@ function* retailCustomerSaga() {
   yield takeLatest(GET_TABLE_INFORMATION, onGetTableInformation)
   yield takeEvery(UPDATE_TABLE_INFORMATION, onUpdateTableInformation)
   yield takeLatest(GET_DOWNLOAD_RETAIL_CUSTOMER, onGetDownloadRetailCustomer)
+  yield takeLatest(GET_UPLOAD_CSV, onGetUploadCsv)
 }
 
 export default retailCustomerSaga

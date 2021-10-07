@@ -13,6 +13,8 @@ import {
   CardTitle,
   Modal,
   ModalHeader,
+  Popover,
+  PopoverBody,
 } from "reactstrap"
 import { ReactSVG } from "react-svg"
 import { Link } from "react-router-dom"
@@ -38,6 +40,7 @@ import AWSMDropdown from "../../../components/Common/Dropdown"
 import DatePicker from "../../../components/Common/DatePicker"
 import REGION_TERMINAL from "../../../common/data/regionAndTerminal"
 import { format } from "date-fns"
+import CsvFileUpload from "./CsvFileUpload"
 
 const styles = {
   headerText: {
@@ -81,9 +84,12 @@ class Pages extends Component {
       tankStatusModal: false,
       region: this.defaultRegion ? this.defaultRegion : null,
       terminal: this.defaultTerminal ? this.defaultTerminal : null,
-      sales_date: new Date()
+      sales_date: new Date(),
+      openCsvModal: false,
+      showDownloadOption: false,
     }
     this.toggle = this.toggle.bind(this)
+    this.toggleCsvModal = this.toggleCsvModal.bind(this)    
     this.toggleTI = this.toggleTI.bind(this)
     this.downloadExcel = this.downloadExcel.bind(this)
   }
@@ -162,6 +168,16 @@ class Pages extends Component {
       modal: !prevState.modal,
     }))
   }
+
+  toggleCsvModal() {
+    this.setState(prevState => ({
+      openCsvModal: !prevState.openCsvModal,
+    }))
+  }  
+
+  getListCall() {
+    this.getCustomerData()
+  }    
 
   /**
    * Handling to close the modal and change state
@@ -288,6 +304,10 @@ class Pages extends Component {
     }
   }
 
+  uploadCSV = () => {
+    this.setState({ openCsvModal : true });
+  }
+
   render() {
     const locationPath = window.location.pathname
     const { currentPage, rowsPerPage, searchFields } = this.state
@@ -363,7 +383,41 @@ class Pages extends Component {
                 className={`${classes.headerText} d-flex justify-content-between align-items-center`}
               >
                 <div className="vertical-hr-right">
-                  <button
+                {(locationPath === "/retail-customer" || locationPath === "/commercial-customer") &&
+                    <>
+                    <button
+                      className="btn btn-outline-primary excel-btn-container"
+                      id='CsvUploadDownload'
+                      // disabled={this.state.loader}
+                    >
+                      <div className="excel-download-btn">
+                        <span className="download-icon">
+                          <DownloadIcon />
+                        </span>
+                          <span className="download-button-message">
+                            Upload CSV
+                          </span>
+                      </div>
+                    </button>
+                    <Popover
+                            target="CsvUploadDownload"
+                            placement="bottom"
+                            isOpen={this.state.showDownloadOption}
+                            trigger="legacy"
+                            style={{ width: "auto" }}
+                            toggle={() => this.setState({showDownloadOption: !this.state.showDownloadOption})}
+                          >
+                            <PopoverBody>
+                              <div className="csvDropdown">
+                                <p>Download CSV</p>
+                                  <p onClick={() => this.uploadCSV()}>Upload CSV</p>
+                              </div>
+                            </PopoverBody>
+                          </Popover>
+                    </>
+                  }
+
+                <button
                     className="btn btn-outline-primary excel-btn-container"
                     onClick={() => this.downloadExcel()}
                     // disabled={this.state.loader}
@@ -540,6 +594,14 @@ class Pages extends Component {
                   />
                 )}
             </Row>
+            {this.state.openCsvModal === true && 
+              <CsvFileUpload
+                currentPage = {locationPath}  
+                isOpen={this.state.openCsvModal}
+                toggle={this.toggleCsvModal} 
+                getListCall={() => this.getCustomerData()}
+              />
+            }
             {this.runAuditLogModal()}
             {this.runTableInformation()}
           </div>

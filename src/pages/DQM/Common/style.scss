@@ -318,8 +318,17 @@
   flex: 0 0 35%;
 }
 
-.csvDropdown p{
+.csvDropdown p:hover {
+  background-color: #00a19c;
+  color: #fff;
+}
+.csvDropdown p {
   cursor: pointer;
   font-size: 13px;
-  margin: 10px 0;
+  margin: 0;
+  padding: 10px 0;
 }
+
+
+
+

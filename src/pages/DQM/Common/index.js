@@ -19,6 +19,7 @@ import { Link } from "react-router-dom"
 import eyeIcon from "../../../assets/images/auditlog-eye.svg"
 import customiseTableIcon from "../../../assets/images/AWSM-Customise-Table.svg"
 import AuditLog from "../../../components/Common/AuditLog"
+import Loader from "../../../components/Common/Loader"
 import FixedColumnTable from "../../../components/Common/FrozenTableColumn"
 import CustomizeTableModal from "../../../common/CustomizeTable"
 import {
@@ -83,6 +84,10 @@ class Pages extends Component {
       sales_date: new Date(),
       openCsvModal: false,
       showDownloadOption: false,
+      downloadCsv: false,
+      csvMessage: null,
+      csvStatus: null,
+      csvAlert: false,
     }
     this.toggle = this.toggle.bind(this)
     this.toggleCsvModal = this.toggleCsvModal.bind(this)    
@@ -274,6 +279,16 @@ class Pages extends Component {
     this.setState({ openCsvModal : true });
   }
 
+  downloadCSV = () => {
+    this.setState({ downloadCsv : true });
+  }
+  
+  csvAlertShow = (msg, status) => {
+    this.setState({ csvMessage : msg });
+    this.setState({ csvStatus : status });
+    this.setState({ csvAlert : true });
+  }
+
   render() {
     const locationPath = window.location.pathname
     const { currentPage, rowsPerPage, searchFields } = this.state
@@ -292,6 +307,7 @@ class Pages extends Component {
     if (!tableData || tableData.length === 0) return ""
     return (
       <React.Fragment>
+        {this.state.downloadCsv === true && <Loader />}
         <CustomizeTableModal
           tableName={this.props.tableName}
           onChange={this.onTableColumnsChange}
@@ -343,12 +359,12 @@ class Pages extends Component {
                             placement="bottom"
                             isOpen={this.state.showDownloadOption}
                             trigger="legacy"
-                            style={{ width: "auto" }}
+                            style={{ width: "150px", textAlign: 'center', boxShadow: '#ccc 2px 1px 10px' }}
                             toggle={() => this.setState({showDownloadOption: !this.state.showDownloadOption})}
                           >
-                            <PopoverBody>
+                            <PopoverBody className='mainCsv'>
                               <div className="csvDropdown">
-                                <p>Download CSV</p>
+                              <p onClick={() => this.downloadCSV()}>Download CSV</p>
                                   <p onClick={() => this.uploadCSV()}>Upload CSV</p>
                               </div>
                             </PopoverBody>
@@ -511,13 +527,22 @@ class Pages extends Component {
                     closeAlert={() => this.setState({ alert: false })}
                   />
                 )}
+                 <AWSMAlert
+                    status={this.state.csvStatus}
+                    message={this.state.csvMessage}
+                    openAlert={this.state.csvAlert}
+                    closeAlert={() => this.setState({ csvAlert: false })}
+                  />
             </Row>
-            {this.state.openCsvModal === true && 
+            {(this.state.openCsvModal === true || this.state.downloadCsv === true) && 
               <CsvFileUpload
                 currentPage = {locationPath}  
                 isOpen={this.state.openCsvModal}
                 toggle={this.toggleCsvModal} 
                 getListCall={() => this.getCustomerData()}
+                callDownloadCsv={this.state.downloadCsv}
+                toggleDownloadCsv={() => this.setState({downloadCsv: false})}
+                alertShow={this.csvAlertShow}
               />
             }
             {this.runAuditLogModal()}

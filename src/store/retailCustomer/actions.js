@@ -20,7 +20,13 @@ import {
   GET_DOWNLOAD_RETAIL_CUSTOMER_FAIL,
   GET_UPLOAD_CSV,
   GET_UPLOAD_CSV_SUCCESS,
-  GET_UPLOAD_CSV_FAIL,  
+  GET_UPLOAD_CSV_FAIL, 
+  SET_UPLOAD_CSV,
+  SET_UPLOAD_CSV_SUCCESS,
+  SET_UPLOAD_CSV_FAIL,
+  GET_DOWNLOAD_CSV,
+  GET_DOWNLOAD_CSV_SUCCESS,
+  GET_DOWNLOAD_CSV_FAIL,    
 } from "./actionTypes"
 
 export const getRetailCustomer = params => ({
@@ -40,6 +46,30 @@ export const getUploadCsvSuccess = params => ({
 
 export const getUploadCsvFail = params => ({
   type: GET_UPLOAD_CSV_FAIL,
+  params,
+})
+
+export const setUploadCsv = () => ({
+  type: SET_UPLOAD_CSV,
+})
+
+export const setUploadCsvSuccess = params => ({
+  type: SET_UPLOAD_CSV_SUCCESS,
+  params,
+})
+
+export const getDownloadCsv = params => ({
+  type: GET_DOWNLOAD_CSV,
+  params,
+})
+
+export const getDownloadCsvSuccess = params => ({
+  type: GET_DOWNLOAD_CSV_SUCCESS,
+  params,
+})
+
+export const getDownloadCsvFail = params => ({
+  type: GET_DOWNLOAD_CSV_FAIL,
   params,
 })
 

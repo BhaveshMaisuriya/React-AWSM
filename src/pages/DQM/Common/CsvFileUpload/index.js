@@ -6,6 +6,7 @@ import FileUploadIcon from "../../../../assets/images/AWSM-Upload.svg"
 import { connect } from "react-redux"
 import { Modal, ModalHeader, ModalBody } from "reactstrap"
 import AWSMAlert from "components/Common/AWSMAlert"
+import Loader from "components/Common/Loader"
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
@@ -13,6 +14,8 @@ import CloseIcon from '@material-ui/icons/Close';
 import CheckIcon from '@material-ui/icons/Check';
 import {
   getUploadCsv,
+  getDownloadCsv,
+  setUploadCsv,
 } from "../../../../store/actions"
 import { isEqual } from "lodash"
 
@@ -44,28 +47,28 @@ function CsvFileUpload(props) {
       const { getUploadCsv } = props;
       await getUploadCsv(base64String);
       setProgressColor('successColor');
-
-      // const timer1 = setInterval(() => {
-      //   setProgressColor('green');
-      // }, 500);
-      // return () => {
-      //   clearInterval(timer1);
-      // };
     }
   }, [progress]);
 
-  useEffect(() => {
+  useEffect(async() => {
     const {uploadCsv} = props;
-    // console.log("::", !isEqual(uploadCsv, uploadCsvData), uploadCsv, uploadCsvData)
-    if(uploadCsv !== null && (!isEqual(uploadCsv, uploadCsvData))){
+    if(uploadCsv !== null){
       props.toggle();
+      props.alertShow('Excel Uploaded Successfully!', 'success');
       props.getListCall();
-      // setUploadCsvData(uploadCsv);
+      setUploadCsvData(uploadCsv);
+
+      const { setUploadCsv } = props;
+      await setUploadCsv();
+
       setProgressColor('primary');
       setProgress(10);
       setShowProgressbar(false);
       setUploading(false);  
-    }  
+      // setSuccessAlert(true);
+      // setAlertMessage('Excel Uploaded Successfully!')
+      // setAlertStatus('success');
+    }
   }, [props.uploadCsv])
 
   const cancelUpload = () => {
@@ -81,10 +84,33 @@ function CsvFileUpload(props) {
     // }
   }
 
-  useEffect(() => {
-    setSuccessAlert(false);   
-    setUploading(false);
-  }, [])
+  useEffect(async() => {
+    if(props.callDownloadCsv === true){      
+      const { getDownloadCsv } = props;
+      await getDownloadCsv({api: props.currentPage});
+    }
+  }, [props.callDownloadCsv])
+  const locationPath = window.location.pathname
+
+  useEffect(async() => {
+    if(props.downloadCsv !== null && props.callDownloadCsv === true){
+      const url = props.downloadCsv.url;
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `${locationPath}`);
+      document.body.appendChild(link);
+      link.click();
+      props.alertShow('Excel Download Successfully!', 'success');
+      // await setSuccessAlert(true);
+      // await setAlertMessage('Excel Download Successfully!');
+      // await setAlertStatus('success');
+
+      const { setUploadCsv } = props;
+      await setUploadCsv();
+
+      props.toggleDownloadCsv();
+    }
+  }, [props.downloadCsv])  
 
   const fileToBase64 = (file, cb) => {
     const reader = new FileReader()
@@ -132,13 +158,21 @@ function CsvFileUpload(props) {
   )
 
   return (
-    <React.Fragment>
-    <Modal
-      isOpen={props.isOpen}
-      toggle={props.toggle}
-      id="auditLog-modal"
-      contentClassName="modalContainer"
-    >
+    <React.Fragment>    
+      {allErrors.length !== 0 && (
+        <AWSMAlert
+          status="error"
+          message={allErrors.join(",")}
+          openAlert={alert}
+          closeAlert={() => setAlert(false)}
+        />
+      )}
+      <Modal
+        isOpen={props.isOpen}
+        toggle={props.toggle}
+        id="auditLog-modal"
+        contentClassName="modalContainer"
+      >
       <ModalHeader toggle={props.toggle}>
         <h3>Upload CSV File</h3>
       </ModalHeader>
@@ -166,22 +200,6 @@ function CsvFileUpload(props) {
           </div>
         }
       <div className="hide_div">{fileRejectionItems}</div>
-      {allErrors.length !== 0 && (
-        <AWSMAlert
-          status="error"
-          message={allErrors.join(",")}
-          openAlert={alert}
-          closeAlert={() => setAlert(false)}
-        />
-      )}
-      {successalert && !uploading && alertStatus !== null && alertMessage !== null &&
-        <AWSMAlert
-          status={alertStatus}
-          message={alertMessage}
-          openAlert={successalert}
-          closeAlert={() => setSuccessAlert(false)}
-        />
-      }
     </ModalBody>
     </Modal>
     </React.Fragment>
@@ -190,10 +208,13 @@ function CsvFileUpload(props) {
 
 const mapStateToProps = ({ retailCustomer }) => ({
   uploadCsv: retailCustomer.uploadCsv,
+  downloadCsv: retailCustomer.downloadCsv,
 })
 
 const mapDispatchToProps = dispatch => ({
   getUploadCsv: params => dispatch(getUploadCsv(params)),
+  getDownloadCsv: params => dispatch(getDownloadCsv(params)),
+  setUploadCsv: () => dispatch(setUploadCsv()),
 })
 
 export default connect(

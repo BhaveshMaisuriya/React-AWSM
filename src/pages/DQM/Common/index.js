@@ -308,32 +308,6 @@ class Pages extends Component {
     return (
       <React.Fragment>
         {this.state.downloadCsv === true && <Loader />}
-        {downloadtableData &&
-          downloadtableData.length !== 0 &&
-          this.state.loader && (
-            <DownloadExcel
-              tableData={downloadtableData}
-              tableName={tableName}
-              getLoader={this.getLoader}
-              getAlert={this.getAlert}
-            />
-          )}
-          {typeof downloadtableData === 'string' &&
-           <DownloadExcel
-           tableData={tableData}
-           tableName={tableName}
-           getLoader={this.getLoader}
-           getAlert={this.getAlert}
-         />
-          }
-        {this.state.DownloadTableData === true && (
-          <DownloadExcel
-            tableData={tableData}
-            tableName={tableName}
-            getLoader={this.getLoader}
-            getAlert={this.getAlert}
-          />
-        )}
         <CustomizeTableModal
           tableName={this.props.tableName}
           onChange={this.onTableColumnsChange}
@@ -390,7 +364,7 @@ class Pages extends Component {
                           >
                             <PopoverBody className='mainCsv'>
                               <div className="csvDropdown">
-                                <p onClick={() => this.downloadCSV()}>Download CSV</p>
+                              <p onClick={() => this.downloadCSV()}>Download CSV</p>
                                   <p onClick={() => this.uploadCSV()}>Upload CSV</p>
                               </div>
                             </PopoverBody>
@@ -553,7 +527,7 @@ class Pages extends Component {
                     closeAlert={() => this.setState({ alert: false })}
                   />
                 )}
-                  <AWSMAlert
+                 <AWSMAlert
                     status={this.state.csvStatus}
                     message={this.state.csvMessage}
                     openAlert={this.state.csvAlert}

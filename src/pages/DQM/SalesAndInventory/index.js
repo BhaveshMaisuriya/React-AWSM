@@ -15,7 +15,7 @@ import {
   getSalesAndInventoryVarianceControl,
   overrideStatusInActionColumn,
 } from "../../../store/actions"
-// import { format } from "date-fns"
+import { format, subDays } from "date-fns"
 
 const tableName = "salesinventory-table"
 
@@ -26,7 +26,7 @@ class SalesInventory extends Component {
       searchFields: getCookieByKey(tableName)
         ? JSON.parse(getCookieByKey(tableName))
         : tableColumns,
-      salesDate: new Date(),
+      salesDate: subDays(new Date(), 1),
       subModule: "sales-and-inventory"
     }
   }
@@ -45,12 +45,10 @@ class SalesInventory extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const {salesDate} = this.state.salesDate;
+    const {salesDate} = this.state;
     const {salesDate: prevStateDate} = prevState;
     if (salesDate !== prevStateDate){
-      // this.onGetMainTableAndAuditLog()
-      /*This will be called when sales date change. But now we only have data for date
-       2021-04-08. So jut let it be commented*/
+      this.onGetMainTableAndAuditLog()
     }
     if (this.props.isUpdateSuccess !== prevProps.isUpdateSuccess){
       this.onGetMainTableAndAuditLog()
@@ -69,10 +67,7 @@ class SalesInventory extends Component {
       sort_dir: "asc",
       sort_field: "ship_to_party",
       search_fields: transformArrayToString(searchFields),
-      search_date:"2021-04-08"
-      // search_date:format(new Date(), "yyyy-MM-dd")
-      /* must be (format(sales_date,"YYYY-MM-DD")) // because data is only available
-      for date 2021-04-08, not for today. so just a test */
+      search_date: format(this.state.salesDate, "yyyy-MM-dd")
     }
     onGetSaleAndInventory(params)
     /*Call Variance Control only when the modal is opened, not on the page load*/

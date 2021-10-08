@@ -11,8 +11,6 @@ import {
   Card,
   CardBody,
   CardTitle,
-  Modal,
-  ModalHeader,
   Popover,
   PopoverBody,
 } from "reactstrap"
@@ -30,8 +28,7 @@ import {
   filterObject,
 } from "./helper"
 import "./style.scss"
-import { DownloadIcon } from "./icon"
-import DownloadExcel from "../../../components/Common/DownloadExcel"
+import DownloadExcelButton from "./../../../components/Common/DownloadExcelS3"
 import AWSMAlert from "../../../components/Common/AWSMAlert"
 import VarianceControl from "../SalesAndInventory/VarianceControl"
 import TankStatusModal from "../SalesAndInventory/TankStatusModal/TankStatusModal"
@@ -40,9 +37,9 @@ import TankIcon from "../../../assets/images/AWSM-Tank-Status.svg"
 import AWSMDropdown from "../../../components/Common/Dropdown"
 import DatePicker from "../../../components/Common/DatePicker"
 import REGION_TERMINAL from "../../../common/data/regionAndTerminal"
-import { format } from "date-fns"
+import { format, subDays } from "date-fns"
+import { DownloadIcon } from "./icon"
 import CsvFileUpload from "./CsvFileUpload"
-
 const styles = {
   headerText: {
     marginLeft: "15px",
@@ -80,7 +77,6 @@ class Pages extends Component {
       loader: false,
       error_message: "",
       alert: false,
-      DownloadTableData: false,
       varianceControl: false,
       tankStatusModal: false,
       region: this.defaultRegion ? this.defaultRegion : null,
@@ -96,7 +92,6 @@ class Pages extends Component {
     this.toggle = this.toggle.bind(this)
     this.toggleCsvModal = this.toggleCsvModal.bind(this)    
     this.toggleTI = this.toggleTI.bind(this)
-    this.downloadExcel = this.downloadExcel.bind(this)
   }
 
   getCustomerData = async () => {
@@ -114,9 +109,7 @@ class Pages extends Component {
       sort_field: sortField,
     }
     if (pathName === "/sales-inventory"){
-        params.search_date = "2021-04-08"
-       /* must be (format(salesDate,"YYYY-MM-DD")) // because data is only available
-       for date 2021-04-08, not for today. so just a test */
+        params.search_date = format(this.props.salesDate,"yyyy-MM-dd")
     }
     if (params.q.length < 1) delete params.q
     window.scrollTo(0, 0)
@@ -168,7 +161,7 @@ class Pages extends Component {
   /**
    * Handling the modal state
    */
-  toggle() {
+  toggle = () => {
     this.setState(prevState => ({
       modal: !prevState.modal,
     }))
@@ -234,7 +227,7 @@ class Pages extends Component {
   /**
    * Handling the modal state
    */
-  toggleTI() {
+  toggleTI = () => {
     if (this.props.resetCurrentTerminalDetail) {
       this.props.resetCurrentTerminalDetail()
     }
@@ -276,33 +269,6 @@ class Pages extends Component {
     ) : null
   }
 
-  downloadExcel = async () => {
-    this.setState({ loader: true })
-    if (this.props.onGetDownloadCustomer) {
-      if (
-        !this.props.downloadtableData ||
-        (this.props.downloadtableData &&
-          this.props.downloadtableData.length === 0)
-      ) {
-        const { currentPage } = this.state
-        const { onGetDownloadCustomer } = this.props
-        await onGetDownloadCustomer(currentPage)
-      }
-    } else {
-      this.setState({ alert: true })
-      this.setState({ error_message: "Something went wrong.." })
-      this.setState({ loader: false })
-    }
-  }
-
-  getLoader = () => {
-    this.setState({ loader: false })
-  }
-
-  getAlert = () => {
-    this.setState({ alert: true })
-    this.setState({ error_message: "" })
-  }
   updateSalesDate = (newDate)=>{
     if(this.props.updateSalesDate){
       this.props.updateSalesDate(newDate);
@@ -328,16 +294,15 @@ class Pages extends Component {
     const { currentPage, rowsPerPage, searchFields } = this.state
     const {
       tableData,
-      tableName,
       classes,
       filter,
       tableMapping,
       cardTitle,
       headerTitle,
-      downloadtableData,
       frozenColNum,
       varianceControlData,
       overrideActionColumn,
+      subModule,
     } = this.props
     if (!tableData || tableData.length === 0) return ""
     return (
@@ -432,27 +397,7 @@ class Pages extends Component {
                           </Popover>
                     </>
                   }
-
-                <button
-                    className="btn btn-outline-primary excel-btn-container"
-                    onClick={() => this.downloadExcel()}
-                    // disabled={this.state.loader}
-                  >
-                    <div className="excel-download-btn">
-                      <span className="download-icon">
-                        <DownloadIcon />
-                      </span>
-                      {this.state.loader === true ? (
-                        <span className="downloan-button-message">
-                          Downloading ...
-                        </span>
-                      ) : (
-                        <span className="download-button-message">
-                          Download Excel
-                        </span>
-                      )}
-                    </div>
-                  </button>
+                  <DownloadExcelButton subModule={subModule} />
                 </div>
                 <Link
                   to="#"
@@ -496,10 +441,9 @@ class Pages extends Component {
                             <div className="col-4 p-0 d-flex align-items-center">
                               <label className="mb-0 pr-2">DATE</label>
                               <DatePicker
-                                showButtons={true}
-                                isTypeFor="sales"
                                 value={this.props.salesDate}
                                 onChange={this.updateSalesDate}
+                                endDate={subDays(new Date(), 1)}
                               />
                             </div>
                             <div className="col-8 p-0 d-flex align-items-center">

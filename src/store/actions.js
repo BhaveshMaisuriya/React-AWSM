@@ -54,3 +54,6 @@ export * from "./sla/actions"
 
 //RTS Order bank
 export * from "./orderBank/actions"
+
+//DQM Common actions
+export * from "./dqm/actions"

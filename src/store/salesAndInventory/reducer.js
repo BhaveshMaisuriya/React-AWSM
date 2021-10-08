@@ -123,7 +123,7 @@ const SaleAndInventory = (state = initialState, action) => {
     case GET_DOWNLOAD_SALES_FAIL:
       return {
         ...state,
-        downloadtableData: action.payload,
+        downloadtableData: null,
       }
     case GET_DETAIL_SALES_SUCCESS:
       return {

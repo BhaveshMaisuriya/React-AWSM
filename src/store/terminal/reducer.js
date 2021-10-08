@@ -25,7 +25,7 @@ const initialState = {
   address: [],
   filterTerminal: [],
   currentTerminal: null,
-  downloadTerminal: [],
+  downloadTerminal: null,
   isFetchDataAfterChange: false,
   isLoading: false,
 }
@@ -66,7 +66,7 @@ const Terminal = (state = initialState, action) => {
     case GET_DOWNLOAD_TERMINAL_FAIL:
       return {
         ...state,
-        error: action.payload,
+        downloadTerminal: null,
       }
 
     case GET_TERMINAL_AUDITLOG_SUCCESS:

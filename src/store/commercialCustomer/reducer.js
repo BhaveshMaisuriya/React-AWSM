@@ -25,7 +25,7 @@ const initialState = {
   filterCom: [],
   currentCommercialDetail: null,
   updateSuccess: null,
-  downloadCommercialCustomer: [],
+  downloadCommercialCustomer: null,
   isLoading: false,
 }
 
@@ -64,7 +64,7 @@ const CommercialCustomer = (state = initialState, action) => {
     case GET_DOWNLOAD_COMMERCIAL_CUSTOMER_FAIL:
       return {
         ...state,
-        downloadCommercialCustomer: action.payload,
+        downloadCommercialCustomer: null,
       }
 
     case GET_COMMERCIAL_AUDITLOG_SUCCESS:

@@ -1,0 +1,29 @@
+
+
+.excel-btn-container {
+  padding-bottom: 5px !important;
+  .excel-download-btn {
+    display: flex;
+    align-items: center;
+    .download-icon {
+      margin-bottom: 5px;
+      margin-right: 3px;
+    }
+    .download-button-message {
+      margin: auto;
+    }
+  }
+}
+
+.Download-excel {
+  border-right: 1px solid #d9d9d9;
+  button {
+    background: #fff;
+    border: unset;
+    margin-right: 20px;
+    box-shadow: 0px 0px 3px 1px #cccccc36;
+    &:focus {
+      box-shadow: unset;
+    }
+  }
+}

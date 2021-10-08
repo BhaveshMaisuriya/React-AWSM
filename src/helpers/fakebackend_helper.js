@@ -189,6 +189,13 @@ export const getOrderBankDetail = (params) => viewOrderDetails
 
 export const deleteOrderBankDetail = (params) => params
 
+// get dqm main table excel file from s3
+export const getDQMExcel = (params) => 
+  axios.post(
+    `/${params.subModule}/download`,
+    { ...params }
+  )
+
 // get retail customer
 export const getRetailCustomer = params =>
   axios.post(
@@ -198,7 +205,7 @@ export const getRetailCustomer = params =>
 
 export const getDownloadRetailCustomer = params =>
   axios.post(
-    "/retail-customer",
+    "/retail-customer/download",
     { ...params }
   )
 
@@ -216,13 +223,13 @@ export const getCommercialCustomer = params =>
 
 export const getDownloadCommercialCustomer = params =>
   axios.post(
-    "/commercial-customer",
+    "/commercial-customer/download",
     { ...params }
   )
 
 export const getDownloadSales = params =>
   axios.post(
-    "/sales-inventory",
+    "/sales-inventory/download",
     { ...params }
   )
 
@@ -247,7 +254,7 @@ export const updateRoadTankerDetail = payload => {
 
 export const getDownloadRoadTanker = params =>
   axios.post(
-    "/road-tanker",
+    "/road-tanker/download",
     { ...params }
   )
 
@@ -259,7 +266,7 @@ export const getTerminal = params =>
 
 export const getDownloadTerminal = params =>
   axios.post(
-    "/terminal",
+    "/terminal/download",
     { ...params }
   )
 
@@ -370,7 +377,7 @@ export const getProducts = params =>
 
 export const getDownloadProducts = params =>
   axios.post(
-    "/product",
+    "/product/download",
     { ...params }
   )
 

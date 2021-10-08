@@ -23,6 +23,7 @@ import terminalSaga from "./terminal/saga"
 import saleAndInventorySaga from "./salesAndInventory/saga"
 import slaSaga from "./sla/saga"
 import orderBankSaga from "./orderBank/saga"
+import dqmCommonSaga from "./dqm/saga"
 
 export default function* rootSaga() {
   yield all([
@@ -49,5 +50,6 @@ export default function* rootSaga() {
     fork(saleAndInventorySaga),
     fork(slaSaga),
     fork(orderBankSaga),
+    fork(dqmCommonSaga),
   ])
 }

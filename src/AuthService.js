@@ -18,6 +18,25 @@ const msalConfig = {
 
 const myMSALObj = new msal.PublicClientApplication(msalConfig);
 
+export async function getIdToken(userInfo) {
+    const loginRequest = {
+        scopes: []
+    };
+
+    const silentRequest = {
+        scopes: loginRequest.scopes,
+        account: userInfo?.account,
+    }
+
+    try {
+        // using acquireTokenSilent function for best pratice refresh token
+        const tokenResponse = await myMSALObj.acquireTokenSilent(silentRequest)
+        return tokenResponse?.idToken;
+    } catch (e) {
+        console.log(e)
+    }
+}
+
 export async function runValidateUser() {
     try {
         const user = await myMSALObj.handleRedirectPromise();
@@ -28,6 +47,7 @@ export async function runValidateUser() {
             sessionStorage.setItem('userName', user.account.idTokenClaims?.given_name);
             sessionStorage.setItem('userEmail', user.account.idTokenClaims?.email?.toLowerCase());
             sessionStorage.setItem('userUPN', user.account.idTokenClaims?.upn?.toLowerCase());
+            sessionStorage.setItem('extExpiresOn', JSON.stringify(user.extExpiresOn));
             return true;
         }
         return false;

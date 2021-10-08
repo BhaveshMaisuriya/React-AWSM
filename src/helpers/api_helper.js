@@ -1,4 +1,5 @@
 import axios from "axios"
+import { getIdToken, signOut } from "../AuthService"
 
 //apply base url for axios
 // TODO dummy api endpoint
@@ -28,15 +29,20 @@ const realAxiosApi = axios.create({
 })
 
 realAxiosApi.interceptors.request.use(
-  config => {
+  async (config) => {
+    const userSession = sessionStorage.getItem("authUser");
+    if (!userSession) {
+      //TODO: redirect user to login page
+      signOut();
+      return;
+    }
+    const userInfo = JSON.parse(userSession);
     config.headers = {
-      Authorization: sessionStorage.getItem("idToken"),
+      Authorization: await getIdToken(userInfo),
     }
     return config
   },
-  error => {
-    Promise.reject(error)
-  }
+  error => Promise.reject(error)
 )
 
 realAxiosApi.interceptors.response.use(

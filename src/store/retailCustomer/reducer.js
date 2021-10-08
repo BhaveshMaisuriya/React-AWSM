@@ -26,7 +26,7 @@ const initialState = {
   currentRetailDetail: null,
   updateSuccess: null,
   updateAlert: null,
-  downloadretailCustomers: [],
+  downloadretailCustomers: null,
   isLoading: false,
   uploadCsv: null,
 }
@@ -73,7 +73,7 @@ const RetailCustomer = (state = initialState, action) => {
     case GET_DOWNLOAD_RETAIL_CUSTOMER_FAIL:
       return {
         ...state,
-        downloadretailCustomers: action.payload,
+        downloadretailCustomers: null,
       }
       
     case GET_UPLOAD_CSV_SUCCESS:

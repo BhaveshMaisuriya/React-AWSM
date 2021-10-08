@@ -27,7 +27,7 @@ const initialState = {
   auditsRoadTanker: [],
   address: [],
   filterRoadTanker: [],
-  downloadRoadTanker: [],
+  downloadRoadTanker: null,
   currentRoadTanker: {},
   isUpdateSuccess: null,
   isLoading: false,
@@ -69,7 +69,7 @@ const RoadTanker = (state = initialState, action) => {
     case GET_DOWNLOAD_ROAD_TANKER_FAIL:
       return {
         ...state,
-        downloadRoadTanker: action.payload,
+        downloadRoadTanker: null,
       }
 
     case GET_ROADTANKER_AUDITLOG_SUCCESS:

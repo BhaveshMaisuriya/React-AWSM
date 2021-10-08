@@ -54,6 +54,9 @@ import sla from "./sla/reducer"
 //RTS Order bank
 import orderBank from "./orderBank/reducer"
 
+//DQM Common
+import dqmCommon from "./dqm/reducer"
+
 const rootReducer = combineReducers({
   // public
   Layout,
@@ -76,7 +79,8 @@ const rootReducer = combineReducers({
   msGraph,
   saleAndInventory,
   sla,
-  orderBank
+  orderBank,
+  dqmCommon,
 })
 
 export default rootReducer

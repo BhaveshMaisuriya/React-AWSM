@@ -25,7 +25,7 @@ const initialState = {
   productFilter: [],
   currentProduct: null,
   updateStatus: null,
-  downloadProducts: [],
+  downloadProducts: null,
   isLoading: false,
 }
 
@@ -65,7 +65,7 @@ const Product = (state = initialState, action) => {
     case GET_DOWNLOAD_PRODUCTS_FAIL:
       return {
         ...state,
-        downloadProducts: action.payload,
+        downloadProducts: null,
       }
 
     case GET_PRODUCT_AUDITLOG_SUCCESS:

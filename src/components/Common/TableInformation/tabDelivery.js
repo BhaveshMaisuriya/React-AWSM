@@ -74,7 +74,7 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
       setOpenTime1(
         [...openTime1].map(item => ({
           ...item,
-          checked: data.delivery.actual_open_time_1.days.includes(item.name),
+          checked: data.delivery.actual_open_time_1.days.includes(item.name) || data.delivery.actual_open_time_1.type === "daily",
         }))
       )
     }
@@ -85,7 +85,7 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
       setOpenTime2(
         [...openTime2].map(item => ({
           ...item,
-          checked: data.delivery.actual_open_time_2.days.includes(item.name),
+          checked: data.delivery.actual_open_time_2.days.includes(item.name) || data.delivery.actual_open_time_2.type === "daily",
         }))
       )
     }
@@ -96,7 +96,7 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
       setOpenTime3(
         [...openTime3].map(item => ({
           ...item,
-          checked: data.delivery.actual_open_time_3.days.includes(item.name),
+          checked: data.delivery.actual_open_time_3.days.includes(item.name) || data.delivery.actual_open_time_3.type === "daily",
         }))
       )
     }
@@ -117,7 +117,6 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
               deliveryData.road_tanker_requirement &&
               deliveryData.road_tanker_requirement.includes(item),
           }))
-          .filter(item => !!item.name)
       )
     }
   }, [])
@@ -178,12 +177,11 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
     newDays[index].checked = !newDays[index].checked
     setOpenTime1(newDays)
     const actualOpenTime1 = deliveryData.actual_open_time_1 || actualOpenTime
+    const selectedDays =  openTime1.filter(i => i.checked)
     onFieldChange("actual_open_time_1", {
       ...actualOpenTime1,
-      days: openTime1
-        .filter(i => i.checked)
-        .map(i => i.name)
-        .join(","),
+      days: selectedDays.length < 7 ? selectedDays.map(i => i.name).join(",") : [],
+      type: selectedDays.length < 7 ? "every" : "daily"
     })
   }
 
@@ -202,12 +200,11 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
     newDays[index].checked = !newDays[index].checked
     setOpenTime2(newDays)
     const actualOpenTime2 = deliveryData.actual_open_time_2 || actualOpenTime
+    const selectedDays =  openTime2.filter(i => i.checked)
     onFieldChange("actual_open_time_2", {
       ...actualOpenTime2,
-      days: openTime2
-        .filter(i => i.checked)
-        .map(i => i.name)
-        .join(","),
+      days: selectedDays.length < 7 ? selectedDays.map(i => i.name).join(",") : [],
+      type: selectedDays.length < 7 ? "every" : "daily",
     })
   }
 
@@ -226,12 +223,11 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
     newDays[index].checked = !newDays[index].checked
     setOpenTime3(newDays)
     const actualOpenTime3 = deliveryData.actual_open_time_3 || actualOpenTime
+    const selectedDays =  openTime3.filter(i => i.checked)
     onFieldChange("actual_open_time_3", {
       ...actualOpenTime3,
-      days: openTime3
-        .filter(i => i.checked)
-        .map(i => i.name)
-        .join(","),
+      days: selectedDays.length < 7 ? selectedDays.map(i => i.name).join(",") : [],
+      type: selectedDays.length < 7 ? "every" : "daily",
     })
   }
 

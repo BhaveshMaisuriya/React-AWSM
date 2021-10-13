@@ -66,15 +66,10 @@ class TrailerTab extends PureComponent {
             <div className="col-md-6 form-group">
               <label>MAX VOLUME PER COMPARTMENT</label>
               <input
-                type="number"
-                // placeholder="Numeric only"
                 className="form-control awsm-input"
-                disabled={true}
+                disabled
                 defaultValue={data?.compartment_max_vol}
-                onChange={e =>
-                  this.OnChangHandler("compartment_max_vol", e.target.value)
-                }
-              ></input>
+              />
             </div>
           </div>
 

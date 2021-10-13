@@ -10,7 +10,7 @@ const DownloadExcel = ({ excelDownload, onGetDQMExcelDownload, subModule, downlo
     limit: null,
     page: 0,
     search_fields: "*",
-    subModule: subModule,
+    subModule: subModule === "sales-and-inventory" ? "sales-inventory" : subModule,
   }
 
   useEffect(() => {

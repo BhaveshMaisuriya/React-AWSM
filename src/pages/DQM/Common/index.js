@@ -37,9 +37,11 @@ import TankIcon from "../../../assets/images/AWSM-Tank-Status.svg"
 import AWSMDropdown from "../../../components/Common/Dropdown"
 import DatePicker from "../../../components/Common/DatePicker"
 import REGION_TERMINAL from "../../../common/data/regionAndTerminal"
-import { format, subDays } from "date-fns"
+import { format } from "date-fns"
 import { DownloadIcon } from "./icon"
 import CsvFileUpload from "./CsvFileUpload"
+import { TERMINAL_CODE_MAPPING } from "../../../common/data/regionAndTerminal"
+
 const styles = {
   headerText: {
     marginLeft: "15px",
@@ -81,7 +83,7 @@ class Pages extends Component {
       tankStatusModal: false,
       region: this.defaultRegion ? this.defaultRegion : null,
       terminal: this.defaultTerminal ? this.defaultTerminal : null,
-      sales_date: new Date(),
+      salesDate: new Date(),
       openCsvModal: false,
       showDownloadOption: false,
       downloadCsv: false,
@@ -109,7 +111,8 @@ class Pages extends Component {
       sort_field: sortField,
     }
     if (pathName === "/sales-inventory"){
-        params.search_date = format(this.props.salesDate,"yyyy-MM-dd")
+        params.search_date = format(this.state.salesDate,"yyyy-MM-dd")
+        params.terminal = TERMINAL_CODE_MAPPING[this.state.terminal]
     }
     if (params.q.length < 1) delete params.q
     window.scrollTo(0, 0)
@@ -269,12 +272,6 @@ class Pages extends Component {
     ) : null
   }
 
-  updateSalesDate = (newDate)=>{
-    if(this.props.updateSalesDate){
-      this.props.updateSalesDate(newDate);
-    }
-  }
-
   uploadCSV = () => {
     this.setState({ openCsvModal : true });
   }
@@ -287,6 +284,48 @@ class Pages extends Component {
     this.setState({ csvMessage : msg });
     this.setState({ csvStatus : status });
     this.setState({ csvAlert : true });
+  }
+
+  onRegionChange = value => {
+    this.setState({
+      ...this.state,
+      region: value,
+      terminal: REGION_TERMINAL
+        .find((option) => option.region === value)?.terminal?.[0],
+    }, this.onDateAndTerminalChange)
+  }
+  
+  onTerminalChange = value => {
+    this.setState({
+      ...this.state,
+      terminal: value,
+    }, this.onDateAndTerminalChange)
+  }
+  
+  onSalesDateChange = value => {
+    this.setState({
+      salesDate: value
+    }, this.onDateAndTerminalChange)
+  }
+  
+  onDateAndTerminalChange = () => {
+    const { searchFields, salesDate, terminal } = this.state
+    const { onGetMainTable } = this.props
+    const params = {
+      limit: 10,
+      page: 0,
+      sort_dir: "asc",
+      sort_field: "ship_to_party",
+      search_fields: transformArrayToString(searchFields),
+      search_date: format(salesDate, "yyyy-MM-dd"),
+      terminal: TERMINAL_CODE_MAPPING[terminal]
+    }
+    this.setState({
+      currentPage: 0,
+    })
+    if (onGetMainTable) {
+      onGetMainTable(params)
+    }
   }
 
   render() {
@@ -320,15 +359,13 @@ class Pages extends Component {
         <VarianceControl
           open={this.state.varianceControl}
           closeDialog={() => this.setState({ varianceControl: false })}
-          selectedDate={format(locationPath === "/sales-inventory" ?
-            this.props.salesDate : this.state.sales_date, "yyyy-MM-dd")}
+          selectedDate={format(this.state.salesDate, "yyyy-MM-dd")}
         />
         <TankStatusModal
           open={this.state.tankStatusModal}
           handleClose={() => this.setState({ tankStatusModal: false })}
           modalTitle={`Tank Status`}
-          selectedDate={format(locationPath === "/sales-inventory" ?
-            this.props.salesDate : this.state.sales_date, "yyyy-MM-dd")}
+          selectedDate={format(this.state.salesDate, "yyyy-MM-dd")}
         />
         <div className="page-content">
           <div className="container-fluid">
@@ -415,9 +452,9 @@ class Pages extends Component {
                             <div className="col-4 p-0 d-flex align-items-center">
                               <label className="mb-0 pr-2">DATE</label>
                               <DatePicker
-                                value={this.props.salesDate}
-                                onChange={this.updateSalesDate}
-                                endDate={subDays(new Date(), 1)}
+                                value={this.state.salesDate}
+                                onChange={this.onSalesDateChange}
+                                endDate={new Date()}
                               />
                             </div>
                             <div className="col-8 p-0 d-flex align-items-center">
@@ -430,14 +467,7 @@ class Pages extends Component {
                                       .filter((option)=> option.region !== "Special Product")
                                       .map(e => e.region)}
                                     value={this.state.region}
-                                    onChange={value =>
-                                      this.setState({
-                                        ...this.state,
-                                        region: value,
-                                        terminal: REGION_TERMINAL
-                                          .find((option)=> option.region === value)?.terminal?.[0],
-                                      })
-                                    }
+                                    onChange={this.onRegionChange}
                                   />
                                 </div>
                                 <div className="col-6 p-0 ml-2">
@@ -449,12 +479,7 @@ class Pages extends Component {
                                       )?.terminal
                                     }
                                     value={this.state.terminal}
-                                    onChange={value =>
-                                      this.setState({
-                                        ...this.state,
-                                        terminal: value,
-                                      })
-                                    }
+                                    onChange={this.onTerminalChange}
                                   />
                                 </div>
                               </div>

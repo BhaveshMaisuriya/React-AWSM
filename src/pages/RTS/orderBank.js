@@ -30,7 +30,7 @@ import OrderBankTable from "./OrderBankTable"
 import REGION_TERMINAL from "../../common/data/regionAndTerminal"
 import customiseTableIcon from "../../assets/images/AWSM-Customise-Table.svg"
 import CustomizeTableModal from "../../common/CustomizeTable"
-
+import GanttChartBottom from "./helper.js"
 
 import {
   ganttChartTableColumns, ganttChartTableDefaultColumns,
@@ -58,38 +58,7 @@ import AWSMAlert from "../../components/Common/AWSMAlert"
 import {bryntumSchedulerTableNameForCookie} from "./OrderBankTable/BryntumChartTable"
 import { getCookieByKey } from "../DQM/Common/helper"
 import { DragDropContext} from "react-beautiful-dnd"
-
-
-const GanttChartBottom = [
-  {
-    title: "RT Availability",
-    color: "light-sky",
-  },
-  {
-    title: "Scheduled",
-    color: "dark-sky",
-  },
-  {
-    title: "Pending Shipment",
-    color: "lavendar",
-  },
-  {
-    title: "Shipment Created",
-    color: "blue",
-  },
-  {
-    title: "Cancellation",
-    color: "grey",
-  },
-  {
-    title: "Blocked DN",
-    color: "light-red",
-  },
-  {
-    title: "Soft Overrule",
-    color: "yellow",
-  },
-]
+import { ReactSVG } from "react-svg";
 
 const GanttChartBottomHover = [
   {
@@ -540,7 +509,9 @@ function OrderBank({
                           {GanttChartBottom.map((item, index) => {
                             return (
                               <div className="d-flex align-items-center mr-2">
-                                <div className={`square ${item.color} mr-1 ml-2`} />
+                                <div className={`square ${item.color} mr-1 ml-2`} >
+                                  {item.icon && <ReactSVG src={item.icon} className="icon-in-square"/>}
+                                  </div>
                                 {item.title}
                               </div>
                             )
@@ -548,7 +519,7 @@ function OrderBank({
                           <div id="gethighlight" className="hover_display">
                             {GanttChartBottomHover.map((item, index) => {
                               return (
-                                <div className="d-flex align-items-center mr-2">
+                                <div className="d-flex align-items-center mr-2" key={index}>
                                   <div className={`square ${item.color} mr-1 ml-2`} />
                                   {item.title}
                                 </div>
@@ -572,7 +543,7 @@ function OrderBank({
                             <div className="square_border">
                               {GanttChartBottom.map((item, index) => {
                                 return (
-                                  <div className="d-flex align-items-center mr-2">
+                                  <div className="d-flex align-items-center mr-2" key={index}>
                                     <div className={`square ${item.color} mr-1 ml-2`} />
                                     {item.title}
                                   </div>
@@ -581,7 +552,7 @@ function OrderBank({
                               <div id="gethighlight" className="hover_display">
                                 {GanttChartBottomHover.map((item, index) => {
                                   return (
-                                    <div className="d-flex align-items-center mr-2">
+                                    <div className="d-flex align-items-center mr-2" key={index}>
                                       <div className={`square ${item.color} mr-1 ml-2`} />
                                       {item.title}
                                     </div>

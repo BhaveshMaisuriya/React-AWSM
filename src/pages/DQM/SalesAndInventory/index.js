@@ -26,7 +26,7 @@ class SalesInventory extends Component {
       searchFields: getCookieByKey(tableName)
         ? JSON.parse(getCookieByKey(tableName))
         : tableColumns,
-      salesDate: subDays(new Date(), 1),
+      salesDate: new Date(),
       subModule: "sales-and-inventory"
     }
   }

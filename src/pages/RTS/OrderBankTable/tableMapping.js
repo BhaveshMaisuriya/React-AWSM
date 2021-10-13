@@ -405,38 +405,38 @@ const tableMapping = {
       label: "Remarks",
       columnSize: "cell-text",
       },
-  scheduling_status: {
-      label: "Scheduling Status",
-      columnSize: "cell-text",
-      },
+  // scheduling_status: {
+  //     label: "Scheduling Status",
+  //     columnSize: "cell-text",
+  //     },
   sales_order_no: {
       label: "Sales Order No",
       columnSize: "cell-text",
       },
-  total_travelling_time: {
-      label: "Total Travelling Time",
-      columnSize: "cell-text",
-      },
-  terminal_loading_time: {
-      label: "Terminal loading time",
-      columnSize: "cell-text",
-      },
-  offloading_time: {
-      label: "Offloading time",
-      columnSize: "cell-text",
-      },
-  average_speed: {
-      label: "Average speed",
-      columnSize: "cell-text",
-      },
-  region: {
-      label: "Region",
-      columnSize: "cell-text",
-      },
-  terminal: {
-      label: "Terminal",
-      columnSize: "cell-text",
-      },
+  // total_travelling_time: {
+  //     label: "Total Travelling Time",
+  //     columnSize: "cell-text",
+  //     },
+  // terminal_loading_time: {
+  //     label: "Terminal loading time",
+  //     columnSize: "cell-text",
+  //     },
+  // offloading_time: {
+  //     label: "Offloading time",
+  //     columnSize: "cell-text",
+  //     },
+  // average_speed: {
+  //     label: "Average speed",
+  //     columnSize: "cell-text",
+  //     },
+  // region: {
+  //     label: "Region",
+  //     columnSize: "cell-text",
+  //     },
+  // terminal: {
+  //     label: "Terminal",
+  //     columnSize: "cell-text",
+  //     },
   my_remark_1: {
       label: "My Remark 1",
       columnSize: "cell-text",

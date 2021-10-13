@@ -1,24 +1,17 @@
-import React, { useEffect, useMemo, useRef, useState, useCallback } from "react"
-import { connect } from "react-redux"
-import {
-  Row,
-  Col,
-  Popover,
-  PopoverBody,
-} from "reactstrap"
-import { createPopper } from "@popperjs/core"
-import {
-  ganttChartTableMapping,
-} from "./tableMapping"
+import React, {useEffect, useMemo, useRef, useState} from "react"
+import {connect} from "react-redux"
+import {Col, Popover, PopoverBody, Row,} from "reactstrap"
+import {createPopper} from "@popperjs/core"
+import {ganttChartTableMapping,} from "./tableMapping"
 import "./index.scss"
-import {  BryntumGrid } from "@bryntum/schedulerpro-react"
+import {BryntumGrid} from "@bryntum/schedulerpro-react"
 import "@bryntum/schedulerpro/schedulerpro.classic-dark.css"
 import "@bryntum/schedulerpro/schedulerpro.classic-light.css"
 import "@bryntum/schedulerpro/schedulerpro.classic.css"
 import "@bryntum/schedulerpro/schedulerpro.material.css"
 import "@bryntum/schedulerpro/schedulerpro.stockholm.css"
 import "../style.scss"
-import { ReactSVG } from "react-svg"
+import {ReactSVG} from "react-svg"
 import ArrowDropDownIcon from "../../../assets/images/AWSM-Caret-Down-Icon.svg"
 import SearchIcon from "../../../assets/images/AWSM-search.svg"
 import Checkbox from "@material-ui/core/Checkbox"
@@ -28,19 +21,19 @@ import selectAllIcon from "../../../assets/images/AWSM-Select-all-Checkbox.svg"
 import ConfirmDNStatusModal from "./confirmDNStatusModal"
 import TerminalRelayModal from "./TerminalRelayModal"
 import {
-  processPaymentInGanttChart,
   cancelPaymentInGanttChart,
-  sendOrderInGanttChart,
+  deselectVehicleShipment,
   getRTSOderBankGanttChart,
   getShipmentOfOderBankGanttChart,
-  selectVehicleShipment, deselectVehicleShipment
+  processPaymentInGanttChart,
+  selectVehicleShipment,
+  sendOrderInGanttChart
 } from "../../../store/actions"
-import { cloneDeep } from 'lodash'
-import { DragDropContext, Droppable } from "react-beautiful-dnd"
-import {getCookieByKey} from "../../DQM/Common/helper"
+import {cloneDeep} from 'lodash'
+import {Droppable} from "react-beautiful-dnd"
 import OrderBankShipmentModal from "./OrderBankShipmentModal"
 import PlannedLoadTimesModal from "./PlannedLoadTimesModal"
-import BryntumDragDropAreaShipment from "./BryntumDragDropAreaShipment"
+import BryntumDragDropAreaShipment from "./BryntumDragDropAreaShipment/BryntumDragDropAreaShipment"
 
 
 const EventSchedulerStatus = {
@@ -49,25 +42,25 @@ const EventSchedulerStatus = {
   CANCELLATION: 'Cancellation'
 }
 const EventContextList = {
-  SHIPMENT :'shipment',
-  CANCEL_SHIPMENT :'cancel_shipment',
-  SEND_ORDER :'send_order',
-  TERMINAL_RELAY:'terminal_relay',
-  PLAN_LOAD_TIMES:'planned_load_time'
+  SHIPMENT: 'shipment',
+  CANCEL_SHIPMENT: 'cancel_shipment',
+  SEND_ORDER: 'send_order',
+  TERMINAL_RELAY: 'terminal_relay',
+  PLAN_LOAD_TIMES: 'planned_load_time'
 }
 
 export const bryntumSchedulerTableNameForCookie = "rts-gantt-chart-bryntum-scheduler"
 
-const ShiftPopover = ({ record, onChange, type }) => {
+const ShiftPopover = ({record, onChange, type}) => {
   const [popoverOpen, setPopoverOpen] = useState(false)
   const toggle = () => setPopoverOpen(!popoverOpen)
   const buttonRef = useRef()
-  const list = record.shift  === "ON" ? [
+  const list = record.shift === "ON" ? [
     "On",
     "On1",
     "On2",
     "Off"
-  ] : record.shift === "OH" ?  ["ON", "Off"] : []
+  ] : record.shift === "OH" ? ["ON", "Off"] : []
   return (
     <div className="w-100">
       <button
@@ -77,7 +70,7 @@ const ShiftPopover = ({ record, onChange, type }) => {
         onBlur={() => setPopoverOpen(false)}
       >
         <div>{record?.[type]}</div>
-        <ReactSVG src={ArrowDropDownIcon} />
+        <ReactSVG src={ArrowDropDownIcon}/>
       </button>
       <Popover
         placement="bottom"
@@ -99,15 +92,15 @@ const ShiftPopover = ({ record, onChange, type }) => {
 
 const CustomIcon = () => {
   // untick checkbox icon
-  return <img src={selectAllIcon3} alt="icon" />
+  return <img src={selectAllIcon3} alt="icon"/>
 }
 const CustomIcon2 = () => {
   // ticked checkbox icon
-  return <img src={selectAllIcon2} alt="icon" />
+  return <img src={selectAllIcon2} alt="icon"/>
 }
 const CustomIcon3 = () => {
   // indeterminate icon
-  return <img src={selectAllIcon} alt="icon" />
+  return <img src={selectAllIcon} alt="icon"/>
 }
 
 const ChartColumnFilter = ({
@@ -159,7 +152,7 @@ const ChartColumnFilter = ({
   }, [data])
 
   const checkAllChange = () => {
-    setData([...data].map(e => ({ ...e, checked: !isCheckAll })))
+    setData([...data].map(e => ({...e, checked: !isCheckAll})))
   }
 
   const onInputSearchChange = event => {
@@ -190,7 +183,7 @@ const ChartColumnFilter = ({
     if (onReset) {
       onReset(filterKey)
     }
-    setData([...data].map(e => ({ ...e, checked: true })))
+    setData([...data].map(e => ({...e, checked: true})))
   }
 
   return (
@@ -199,8 +192,8 @@ const ChartColumnFilter = ({
       id={`chart-tooltip-${filterKey}`}
     >
       <div className="chart-column-input-search">
-        <input onChange={onInputSearchChange} />
-        <ReactSVG src={SearchIcon} />
+        <input onChange={onInputSearchChange}/>
+        <ReactSVG src={SearchIcon}/>
       </div>
       <div className="chart-column-filter-body">
         {data.map(
@@ -213,8 +206,8 @@ const ChartColumnFilter = ({
                 <Checkbox
                   checked={e.checked}
                   onChange={() => onItemChange(index)}
-                  icon={<CustomIcon />}
-                  checkedIcon={<CustomIcon2 />}
+                  icon={<CustomIcon/>}
+                  checkedIcon={<CustomIcon2/>}
                   style={{
                     height: "20px",
                     width: "5px",
@@ -232,8 +225,8 @@ const ChartColumnFilter = ({
           <Checkbox
             checked={isCheckAll}
             onChange={checkAllChange}
-            icon={<CustomIcon3 />}
-            checkedIcon={<CustomIcon2 />}
+            icon={<CustomIcon3/>}
+            checkedIcon={<CustomIcon2/>}
             style={{
               height: "20px",
               width: "5px",
@@ -265,32 +258,31 @@ function BryntumChartTable(props) {
   }
   const colsRef = useRef(bryntumCurrentColumns)
   const [modal, setModal] = useState(false);
-  const [dropdownSelectedItem, setDropdownSelectedItem] =  useState(null);
+  const [dropdownSelectedItem, setDropdownSelectedItem] = useState(null);
   const [filterCondition, setFilterCondition] = useState([])
   const [eventsData, setEventsData] = useState([])
   const [shipmentDblclick, setShipmentDblclick] = useState(false)
   const schedulerProRef = useRef()
   const firstRender = useRef(true)
   const [filterList, setFilterList] = useState([])
-  const [selectedRow,setSelectedRow] = useState(null)
+  const [selectedRow, setSelectedRow] = useState(null)
 
   useEffect(() => {
-    const { getRTSOderBankGanttChart } = props
+    const {getRTSOderBankGanttChart} = props
     getRTSOderBankGanttChart()
   }, [])
-  useEffect(()=> {
+  useEffect(() => {
     setFilterList(Object.keys(bryntumCurrentColumns).map(e => ({
       key: e,
       type: ganttChartTableMapping[e].type,
     })))
-  },[bryntumCurrentColumns])
+  }, [bryntumCurrentColumns])
 
   const toggle = () => setModal(!modal);
 
 
-
   const removeShipmentHandler = () => {
-    const { instance: scheduler } = schedulerProRef.current;
+    const {instance: scheduler} = schedulerProRef.current;
     const newEventsData = eventsData.filter((v) => v.id !== dropdownSelectedItem.itemSelectedId);
     scheduler.eventStore.remove(dropdownSelectedItem.record);
     scheduler.eventStore.data = newEventsData;
@@ -330,7 +322,8 @@ function BryntumChartTable(props) {
         props.processSendOrderInGanttChart(null)
         break
       }
-      default: break
+      default:
+        break
     }
     toggle()
   }
@@ -352,20 +345,20 @@ function BryntumChartTable(props) {
   const schedulerproConfig = {
     columns: [],
     autoHeight: true,
-    fullLastRow:false,
+    fullLastRow: false,
     autoLoad: true,
-    columnLine:true,
+    columnLine: true,
     autoSync: true,
     autoCommit: true,
     rowHeight: 35,
     barMargin: 0,
-    resourceMargin:  0,
+    resourceMargin: 0,
     listeners: {
-      cellClick: function(grid) { // click row to select Vehicle shipment
+      cellClick: function (grid) { // click row to select Vehicle shipment
         const {record} = grid
-        if(record?.data?.vehicle && record?.data?.id){
-          const {id:resourceId,vehicle} = record.data
-          onSelectVehicle({resourceId,vehicle})
+        if (record?.data?.vehicle && record?.data?.id) {
+          const {id: resourceId, vehicle} = record.data
+          onSelectVehicle({resourceId, vehicle})
         }
       }
     }
@@ -374,7 +367,7 @@ function BryntumChartTable(props) {
   function ShipmentDblclickModal(event, resource) {
     const allowedShipmentModel = ["Blocked DN", "Shipment Created", "Scheduled"]
     if (allowedShipmentModel.includes(event._data.eventType)) {
-      const { getShipmentOfOderBankGanttChart } = props
+      const {getShipmentOfOderBankGanttChart} = props
       getShipmentOfOderBankGanttChart()
       setShipmentDblclick(true);
     }
@@ -388,7 +381,7 @@ function BryntumChartTable(props) {
     const currentTableData = tableData.current
     const recordIndex = currentTableData.findIndex(e => e.id === recordId)
     if (recordIndex >= 0) {
-      currentTableData[recordIndex] = { ...currentTableData[recordIndex], shift: value }
+      currentTableData[recordIndex] = {...currentTableData[recordIndex], shift: value}
     }
     updateResourceRecords([...currentTableData], true)
   }
@@ -397,18 +390,18 @@ function BryntumChartTable(props) {
     const currentTableData = tableData.current
     const recordIndex = currentTableData.findIndex(e => e.id === recordId)
     if (recordIndex >= 0) {
-      currentTableData[recordIndex] = { ...currentTableData[recordIndex], status: value }
+      currentTableData[recordIndex] = {...currentTableData[recordIndex], status: value}
     }
     updateResourceRecords([...currentTableData], true)
   }
 
-  function generateColumnsObj(tableMap){
+  function generateColumnsObj(tableMap) {
     return {
       text: ganttChartTableMapping?.[tableMap]?.label_short ?? ganttChartTableMapping?.[tableMap]?.label,
       field: tableMap,
       width: "100px",
       editor: null,
-      renderer: ({ value, column, record }) => {
+      renderer: ({value, column, record}) => {
         switch (column.field) {
           case "vehicle": {
             return (
@@ -435,7 +428,7 @@ function BryntumChartTable(props) {
         }
         return <div>{value}</div>
       },
-      headerRenderer: ({ column }) => {
+      headerRenderer: ({column}) => {
         return `
                 <div class="d-flex align-items-center chart-header" id="chart-column-${column.data.field}">
                   <div>${column.data.text}</div>
@@ -467,7 +460,7 @@ function BryntumChartTable(props) {
   }, [props.isSendRequestProcess])
 
   useEffect(() => {
-    if(bryntumCurrentColumns){
+    if (bryntumCurrentColumns) {
       Object.keys(bryntumCurrentColumns).forEach(e => {
         const el = document.getElementById(`chart-column-${e}-button`)
         if (el) {
@@ -511,9 +504,9 @@ function BryntumChartTable(props) {
     const index = filterCondition.findIndex(e => e.key === dataKey)
     const newFilterCondition = [...filterCondition]
     if (index >= 0) {
-      newFilterCondition[index] = { ...newFilterCondition[index], data: data }
+      newFilterCondition[index] = {...newFilterCondition[index], data: data}
     } else {
-      newFilterCondition.push({ data, key: dataKey })
+      newFilterCondition.push({data, key: dataKey})
     }
     setFilterCondition(newFilterCondition)
     hideFilterElement(dataKey)
@@ -543,9 +536,9 @@ function BryntumChartTable(props) {
     <div className="rts-table-container scroll" id="scrollableDiv">
       <div
         className="container-orderbank gant-chart-table"
-        style={{ maxWidth: "100%" }}
+        style={{maxWidth: "100%"}}
       >
-        <Row className="w-100" style={{height:"100%"}}>
+        <Row className="w-100" style={{height: "100%"}}>
           <Col lg={12}>
             <Droppable key="shipment-chart" droppableId="shipment-chart">
               {(provided, snapshot) => {
@@ -562,7 +555,7 @@ function BryntumChartTable(props) {
                           ref={schedulerProRef}
                         />
                       </div>
-                      <BryntumDragDropAreaShipment selectedRow={selectedRow}/>
+                      <BryntumDragDropAreaShipment/>
                     </div>
                   </div>
                 )
@@ -594,7 +587,7 @@ function BryntumChartTable(props) {
             onCancel={toggle}
             headerContent={dropdownSelectedItem?.header || ''}
             bodyContent={`Are you sure you want to ${dropdownSelectedItem?.body || ''}`}
-            styleColor = {dropdownSelectedItem?.styleColor}
+            styleColor={dropdownSelectedItem?.styleColor}
           />)
       }
       {
@@ -614,13 +607,13 @@ function BryntumChartTable(props) {
           />)
       }
       {shipmentDblclick &&
-      <OrderBankShipmentModal open={shipmentDblclick} istoggle={toggleShipment} />
+      <OrderBankShipmentModal open={shipmentDblclick} istoggle={toggleShipment}/>
       }
     </div>
   )
 }
 
-const mapStateToProps = ({ orderBank }) => {
+const mapStateToProps = ({orderBank}) => {
   return {
     isSendRequestProcess: orderBank.isSendRequestProcess,
     ganttChartData: orderBank.ganttChart,
@@ -634,8 +627,8 @@ const mapDispatchToProps = (dispatch) => {
     processSendOrderInGanttChart: (params) => dispatch(sendOrderInGanttChart(params)),
     getRTSOderBankGanttChart: (params) => dispatch(getRTSOderBankGanttChart(params)),
     getShipmentOfOderBankGanttChart: (params) => dispatch(getShipmentOfOderBankGanttChart(params)),
-    onSelectVehicle: (params)=> dispatch(selectVehicleShipment(params)),
-    onDeselectVehicle: ()=> dispatch(deselectVehicleShipment())
+    onSelectVehicle: (params) => dispatch(selectVehicleShipment(params)),
+    onDeselectVehicle: () => dispatch(deselectVehicleShipment())
   }
 }
 

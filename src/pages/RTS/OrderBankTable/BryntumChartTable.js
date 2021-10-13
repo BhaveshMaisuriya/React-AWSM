@@ -26,6 +26,8 @@ import Checkbox from "@material-ui/core/Checkbox"
 import selectAllIcon3 from "../../../assets/images/AWSM-Checkbox.svg"
 import selectAllIcon2 from "../../../assets/images/AWSM-Checked-box.svg"
 import selectAllIcon from "../../../assets/images/AWSM-Select-all-Checkbox.svg"
+import RedAlertIcon from "./../../../assets/images/AWSM-Red-Alert.svg"
+import YellowAlertIcon from "./../../../assets/images/AWSM-Soft-Overrule.svg"
 import ConfirmDNStatusModal from "./confirmDNStatusModal"
 import TerminalRelayModal from "./TerminalRelayModal"
 import { processPaymentInGanttChart, cancelPaymentInGanttChart, sendOrderInGanttChart, getRTSOderBankGanttChart, getShipmentOfOderBankGanttChart } from "../../../store/actions"
@@ -33,6 +35,7 @@ import { cloneDeep } from 'lodash'
 import { DragDropContext, Droppable } from "react-beautiful-dnd"
 import {getCookieByKey} from "../../DQM/Common/helper"
 import OrderBankShipmentModal from "./OrderBankShipmentModal"
+import OrderBankSapAlertModal from "./OrderBankSapAlertModal"
 import OrderBankRoadTankerModal from "./OrderBankRoadTankerModal"
 import PlannedLoadTimesModal from "./PlannedLoadTimesModal"
 
@@ -262,6 +265,7 @@ function BryntumChartTable(props) {
   const [filterCondition, setFilterCondition] = useState([])
   const [eventsData, setEventsData] = useState([])
   const [shipmentDblclick, setShipmentDblclick] = useState(false)
+  const [sapAlertDblclick, setSapAlertDblclick] = useState(false)
   const [roadTankerModalShow, setRoadTankerModal] = useState(false)
   const [selectedVehicleID, setSelectedVehicleID] = useState(null)
   const schedulerProRef = useRef()
@@ -417,11 +421,13 @@ function BryntumChartTable(props) {
         renderData.cls.remove("opacity-20")
       }
       return `
-        <div class="eventCustomize" id="eventEllipses" 
+        <div
           onmouseover="document.getElementById('gethighlight').style.display = 'flex';" 
           onmouseout="document.getElementById('gethighlight').style.display = 'none';"
         >
-          <div class=${renderData.width < 360 ? 'marquee' : ''}>
+          ${eventRecord.data.eventType === "SAP Alert" ? `<img src=${RedAlertIcon} />` : ""} 
+          ${eventRecord.data.eventType === "Soft Overrule" ? `<img src=${YellowAlertIcon} />` : ""} 
+          <div class="eventCustomize ${renderData.width < 360 ? 'marquee' : ''}" >
             <div class="white-bg brdr-radius">
               <p>1</p>
             </div>
@@ -550,10 +556,19 @@ function BryntumChartTable(props) {
       getShipmentOfOderBankGanttChart()
       setShipmentDblclick(true);
     }
+    if (event._data.eventType === "SAP Alert") {
+      const { getShipmentOfOderBankGanttChart } = props
+      getShipmentOfOderBankGanttChart()
+      setSapAlertDblclick(true)
+    }
   }
 
   function toggleShipment() {
     setShipmentDblclick(!shipmentDblclick);
+  }
+
+  function toggleSapAlert() {
+    setSapAlertDblclick(!sapAlertDblclick);
   }
 
   function showRoadTanker(event) {
@@ -844,6 +859,9 @@ function BryntumChartTable(props) {
       }
       {shipmentDblclick &&
         <OrderBankShipmentModal open={shipmentDblclick} istoggle={toggleShipment} />
+      }
+      {sapAlertDblclick &&
+        <OrderBankSapAlertModal open={sapAlertDblclick} istoggle={toggleSapAlert} />
       }
       {roadTankerModalShow &&
         <OrderBankRoadTankerModal isOpen={roadTankerModalShow} toggle={toggleRoadTanker} selectedVehicleID={selectedVehicleID}/>

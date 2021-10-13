@@ -217,14 +217,14 @@ class SpecificationTab extends PureComponent {
           <div className="row">
             <div className="col-md-6 form-group">
               <div>
-                <label>RT RESTRICTION</label>
+                <label>RESTRICT CODE</label>
               </div>
               {rtRestriction(
                 (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
               )}
             </div>
-            <div className="form-group col-md-6">
-              <label>RESTRICT CODE</label>
+            <div className="form-group col-md-12">
+              <label>RT RESTRICTION</label>
               <input
                 className="form-control awsm-input"
                 disabled={true}

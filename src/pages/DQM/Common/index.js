@@ -350,7 +350,7 @@ class Pages extends Component {
                           <DownloadIcon />
                         </span>
                           <span className="download-button-message">
-                            Upload CSV
+                            CSV File
                           </span>
                       </div>
                     </button>

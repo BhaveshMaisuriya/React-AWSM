@@ -15,7 +15,7 @@ import searchIcon from "../../../../assets/images/AWSM-search.svg"
  * @returns {JSX.Element}
  * @constructor
  */
-const AWSMDropdown = ({
+const AutoCompleteDropDown = ({
   items,
   value,
   onChange,
@@ -94,4 +94,4 @@ const AWSMDropdown = ({
   )
 }
 
-export default AWSMDropdown
+export default AutoCompleteDropDown

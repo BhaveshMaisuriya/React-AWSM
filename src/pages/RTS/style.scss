@@ -359,6 +359,10 @@
     width: 15px;
     border-radius: 3px;
 }
+.icon-in-square {
+    margin-top: -4px;
+    padding-left: 1px;
+}
 .light-sky {
     background-color: #DBE5F0;
 }
@@ -480,6 +484,9 @@
 }
 
 .chart-header {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
     button {
         color: #00A19C;
         background: inherit;
@@ -602,6 +609,7 @@
         opacity: 0.2;
     }
 }
+
 #b-mask-1 {
     z-index: 99 !important;
 }
@@ -637,4 +645,7 @@
     border-left: 1px solid #D9D9D9 !important;
     border-radius: 0 !important;
     height: 10px;
+}
+.sap-stripes {
+    background-color:#9E9E9E;
 }

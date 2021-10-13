@@ -322,7 +322,7 @@ const TabStorage = ({ scheduler, data, onChange }) => {
                     onChange={value =>
                       onUpdateField(key, "sales_category", value)
                     }
-                    disabled={scheduler}
+                    disabled={scheduler || pathName === "/retail-customer"}
                   />
                 </Col>
                 {pathName === "/commercial-customer" ? (

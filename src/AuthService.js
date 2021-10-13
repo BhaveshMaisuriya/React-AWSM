@@ -1,5 +1,6 @@
 import * as msal from '@azure/msal-browser';
 
+const SCOPE_LOGIN = ["User.Read", "User.Read.All", "Directory.Read.All"];
 const msalConfig = {
     auth: {
         validateAuthority: true,
@@ -19,12 +20,9 @@ const msalConfig = {
 const myMSALObj = new msal.PublicClientApplication(msalConfig);
 
 export async function getIdToken(userInfo) {
-    const loginRequest = {
-        scopes: []
-    };
 
     const silentRequest = {
-        scopes: loginRequest.scopes,
+        scopes: SCOPE_LOGIN,
         account: userInfo?.account,
     }
 
@@ -46,7 +44,7 @@ export async function runValidateUser() {
             sessionStorage.setItem('apiAccessToken', user.accessToken);
             sessionStorage.setItem('userName', user.account.idTokenClaims?.given_name);
             sessionStorage.setItem('userEmail', user.account.idTokenClaims?.email?.toLowerCase());
-            sessionStorage.setItem('userUPN', user.account.idTokenClaims?.upn?.toLowerCase());
+            sessionStorage.setItem('userUPN', user.account.idTokenClaims?.upn?.toLowerCase() || user.account.username);
             sessionStorage.setItem('extExpiresOn', JSON.stringify(user.extExpiresOn));
             return true;
         }
@@ -58,11 +56,8 @@ export async function runValidateUser() {
 
 export async function signIn() {
     const loginRequest = {
-        scopes: ["User.Read", "User.Read.All", "Directory.Read.All"]
+        scopes: SCOPE_LOGIN,
     };
-
-    sessionStorage.setItem('loginState', 'true')
-
     myMSALObj.loginRedirect(loginRequest);
 }
 

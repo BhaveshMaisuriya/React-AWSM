@@ -161,9 +161,15 @@
     color: #888;
 }
 
-.b-sch-event-content {
-    display: none !important;
+// .b-sch-event-content {
+    // display: none !important;
+// }
+
+.b-sch-event:not(.b-milestone) .b-sch-event-content>:not(i) {
+    overflow: visible !important;
+    text-overflow: clip !important;
 }
+
 .b-sch-event:hover .b-sch-event-content {
     display: block !important;
 }

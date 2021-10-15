@@ -109,15 +109,19 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
       Array.isArray(deliveryData.road_tanker_requirement_items) &&
       deliveryData.road_tanker_requirement_items?.length > 0
     ) {
-      setTanker(
-        deliveryData.road_tanker_requirement_items
-          .map(item => ({
-            name: item,
-            checked:
-              deliveryData.road_tanker_requirement &&
-              deliveryData.road_tanker_requirement.includes(item),
-          }))
-      )
+      let temp = [];
+      let defaultVal = deliveryData.road_tanker_requirement && deliveryData.road_tanker_requirement.split(',');
+      deliveryData.road_tanker_requirement_items
+          .map((item, index) => {
+            console.log("item::", defaultVal);
+            temp.push({
+              name: item,
+              checked:
+                defaultVal &&
+                defaultVal.indexOf(item) > -1 ? true : false,
+            });
+          });
+      setTanker(temp);
     }
   }, [])
 

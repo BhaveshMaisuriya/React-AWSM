@@ -22,7 +22,8 @@ import {
   UPDATE_SALES_AND_INVENTORY_VARIANCE_CONTROL_FAILED,
   UPDATE_SALES_AND_INVENTORY_DETAIL_SUCCESS,
   UPDATE_SALES_AND_INVENTORY_DETAIL_FAIL,
-  OVERRIDE_STATUS_IN_ACTION_COLUMN,
+  OVERRIDE_STATUS_IN_ACTION_COLUMN_SUCCESS,
+  OVERRIDE_STATUS_IN_ACTION_COLUMN_FAIL
 } from "./actionTypes"
 import { ToastSuccess, ToastError } from "../../helpers/swal"
 import formatDateResponseList from "../../helpers/format-response-data/format-date-response.helper"
@@ -42,6 +43,7 @@ const initialState = {
   currentSalesAndInventory: {},
   isUpdateSuccess: false,
   isLoading: false,
+  overrideSuccess: null
 }
 
 const SaleAndInventory = (state = initialState, action) => {
@@ -88,6 +90,7 @@ const SaleAndInventory = (state = initialState, action) => {
         mainTableData: action.payload,
         tableError: null,
         isLoading: false,
+        isUpdateSuccess: null,
       }
     case GET_SALES_AND_INVENTORY_FAIL:
       return {
@@ -199,15 +202,27 @@ const SaleAndInventory = (state = initialState, action) => {
          ...state,
          error: action.payload,
        }
- 
-     case OVERRIDE_STATUS_IN_ACTION_COLUMN:
-       const listData = { ...state.mainTableData }
-       const newData = [...listData.list]
-       newData[action.payload].overrideAction = true
-       return {
-         ...state,
-         mainTableData: listData,
-       }
+
+    case OVERRIDE_STATUS_IN_ACTION_COLUMN_SUCCESS: {
+      ToastSuccess.fire()
+      return {
+        ...state,
+        isUpdateSuccess: {
+          success: true
+        },
+      }
+    }
+
+    case OVERRIDE_STATUS_IN_ACTION_COLUMN_FAIL: {
+      ToastError.fire()
+      return {
+        ...state,
+        isUpdateSuccess: {
+          success: false
+        },
+        error: action.payload,
+      }
+    }
      default:
        return state
    }

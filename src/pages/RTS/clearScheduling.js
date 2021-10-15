@@ -23,6 +23,7 @@ function ClearScheduling (props) {
     if(progress === 100){
       onToggleConfirm()
       props.showConfirmAlert();
+      props.toggle();
     }
   }, [progress]);
 

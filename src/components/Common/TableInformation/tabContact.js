@@ -64,7 +64,7 @@ const tabContact = ({ scheduler, data, onChange }) => {
       {contactList.map((item, index) => {
         return (
           <div key={index}>
-            <h5>Contact Person {index + 1}</h5>
+            <h5 className="label-contact">CONTACT PERSON {index + 1}</h5>
             <Row>
               <Col className="col-6">
                 <AvForm>
@@ -128,7 +128,7 @@ const tabContact = ({ scheduler, data, onChange }) => {
         )
       })}
       <div>
-        <h5>Territory Manager</h5>
+        <h5 className="label-contact">TERRITORY MANAGER</h5>
         <Row>
           <Col className="col-6">
             <AvForm>
@@ -203,7 +203,7 @@ const tabContact = ({ scheduler, data, onChange }) => {
         </Row>
       </div>
       <>
-        <label>Retail Sales Manager</label>
+        <label>RETAIL SALES MANAGER</label>
         <Row>
           <Col className="col-6">
             <AvForm>

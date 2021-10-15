@@ -62,16 +62,19 @@ const VarianceInput = ({ value, disabled = false, onChange }) => {
                 onKeyPress={onPress}
             />
 
-            <div class="input-group-append">
-                <button
+            {!disabled ?
+              <div className="input-group-append">
+                  <button
                     className="form-control button-edit"
                     disabled={disabled}
                     onClick={onEditButtonClick}
                     type="button"
                     style={{ display: `${isFocus ? "none" : ""}` }}>
-                    <ReactSVG src={AWSMEditIcon} />
-                </button>
-            </div>
+                      <ReactSVG src={AWSMEditIcon} />
+                  </button>
+              </div> : ""
+            }
+
         </div>
     )
 }

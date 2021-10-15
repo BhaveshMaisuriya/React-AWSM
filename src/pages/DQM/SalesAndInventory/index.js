@@ -44,17 +44,6 @@ class SalesInventory extends Component {
     this.onGetMainTableAndAuditLog()
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    const {salesDate} = this.state;
-    const {salesDate: prevStateDate} = prevState;
-    if (salesDate !== prevStateDate){
-      this.onGetMainTableAndAuditLog()
-    }
-    if (this.props.isUpdateSuccess !== prevProps.isUpdateSuccess){
-      this.onGetMainTableAndAuditLog()
-    }
-  }
-
   onGetMainTableAndAuditLog = () =>{
     const {
       onGetSaleAndInventory,
@@ -102,6 +91,7 @@ class SalesInventory extends Component {
       varianceControlData,
       saleAndInventoryIsLoading,
       overrideStatusInActionColumn,
+      isUpdateSuccess,
     } = this.props
     const { searchFields, salesDate, subModule } = this.state
     return (
@@ -126,9 +116,9 @@ class SalesInventory extends Component {
             frozenColNum={2}
             varianceControlData={varianceControlData}
             overrideActionColumn={overrideStatusInActionColumn}
-            salesDate={salesDate}
             updateSalesDate={this.onUpdateSalesDate}
             subModule={subModule}
+            isUpdateSuccess={isUpdateSuccess}
           />
         )}
         {tableError && (

@@ -465,9 +465,15 @@ export const getSaleAndInventory = params =>
     { ...params }
   )
 
-export const getSaleAndInventoryByRecordId = recordId =>{
-  axios.get(`/sales-inventory/${recordId}`)
-}
+export const getSaleAndInventoryByRecordId = recordId => 
+  axios
+    .get(`/sales-inventory/${recordId}`)
+
+
+export const updateSaleAndInventoryOverride = recordId => 
+  axios
+    .put(`/sales-inventory/${recordId}/override`)
+
 
 export const getSlaItems = params =>
   axios

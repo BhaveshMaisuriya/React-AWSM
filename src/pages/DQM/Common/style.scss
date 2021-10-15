@@ -222,6 +222,7 @@
 }
 
 .Confirmation-box {
+  font-family: "Museo Sans";
   height: 600px;
   background: #f8f9fa;
   div {
@@ -231,10 +232,11 @@
   }
   h3 {
     color: #000;
-    margin-bottom: 15px;
+    margin-bottom: 25px;
   }
   p {
-    margin-bottom: 25px;
+    margin-bottom: 54px;
+    font-size: 14px;
   }
   button {
     width: 120px;
@@ -301,7 +303,7 @@
   padding-left: 10px;
 }
 
-.w-min { 
+.w-min {
   width: min-content !important;
 }
 
@@ -328,6 +330,3 @@
   margin: 0;
   padding: 10px 0;
 }
-
-
-

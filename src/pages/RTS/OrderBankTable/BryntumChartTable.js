@@ -425,7 +425,7 @@ function BryntumChartTable(props) {
           onmouseover="document.getElementById('gethighlight').style.display = 'flex';" 
           onmouseout="document.getElementById('gethighlight').style.display = 'none';"
         >
-          ${eventRecord.data.eventType === "SAP Alert" ? `<img src=${RedAlertIcon} />` : ""} 
+          ${eventRecord.data.eventType === "SAP Alert" ? `<img src=${RedAlertIcon} class="icon-alignment" alt="alerticon"/>` : ""} 
           ${eventRecord.data.eventType === "Soft Overrule" ? `<img src=${YellowAlertIcon} />` : ""} 
           <div class="eventCustomize ${renderData.width < 360 ? 'marquee' : ''}" >
             <div class="white-bg brdr-radius">
@@ -557,8 +557,6 @@ function BryntumChartTable(props) {
       setShipmentDblclick(true);
     }
     if (event._data.eventType === "SAP Alert") {
-      const { getShipmentOfOderBankGanttChart } = props
-      getShipmentOfOderBankGanttChart()
       setSapAlertDblclick(true)
     }
   }

@@ -37,10 +37,11 @@ import TankIcon from "../../../assets/images/AWSM-Tank-Status.svg"
 import AWSMDropdown from "../../../components/Common/Dropdown"
 import DatePicker from "../../../components/Common/DatePicker"
 import REGION_TERMINAL from "../../../common/data/regionAndTerminal"
-import { format } from "date-fns"
+import { format, subDays } from "date-fns"
 import { DownloadIcon } from "./icon"
 import CsvFileUpload from "./CsvFileUpload"
 import { TERMINAL_CODE_MAPPING } from "../../../common/data/regionAndTerminal"
+import { isEqual } from "lodash"
 
 const styles = {
   headerText: {
@@ -92,7 +93,7 @@ class Pages extends Component {
       csvAlert: false,
     }
     this.toggle = this.toggle.bind(this)
-    this.toggleCsvModal = this.toggleCsvModal.bind(this)    
+    this.toggleCsvModal = this.toggleCsvModal.bind(this)
     this.toggleTI = this.toggleTI.bind(this)
   }
 
@@ -174,11 +175,11 @@ class Pages extends Component {
     this.setState(prevState => ({
       openCsvModal: !prevState.openCsvModal,
     }))
-  }  
+  }
 
   getListCall() {
     this.getCustomerData()
-  }    
+  }
 
   /**
    * Handling to close the modal and change state
@@ -265,6 +266,7 @@ class Pages extends Component {
             ? this.props.tableData.list[this.state.selectedItem]
             : null
         }
+        salesDate = {this.state.salesDate}
         visible={modalTI}
         onCancel={this.toggleTI}
         refreshMainTable={this.getCustomerData}
@@ -279,7 +281,7 @@ class Pages extends Component {
   downloadCSV = () => {
     this.setState({ downloadCsv : true });
   }
-  
+
   csvAlertShow = (msg, status) => {
     this.setState({ csvMessage : msg });
     this.setState({ csvStatus : status });
@@ -294,20 +296,24 @@ class Pages extends Component {
         .find((option) => option.region === value)?.terminal?.[0],
     }, this.onDateAndTerminalChange)
   }
-  
+
   onTerminalChange = value => {
     this.setState({
       ...this.state,
       terminal: value,
     }, this.onDateAndTerminalChange)
   }
-  
+
   onSalesDateChange = value => {
+    const { updateSalesDate } = this.props
+    if (updateSalesDate) {
+      updateSalesDate(value)
+    }
     this.setState({
       salesDate: value
     }, this.onDateAndTerminalChange)
   }
-  
+
   onDateAndTerminalChange = () => {
     const { searchFields, salesDate, terminal } = this.state
     const { onGetMainTable } = this.props
@@ -318,13 +324,19 @@ class Pages extends Component {
       sort_field: "ship_to_party",
       search_fields: transformArrayToString(searchFields),
       search_date: format(salesDate, "yyyy-MM-dd"),
-      terminal: TERMINAL_CODE_MAPPING[terminal]
+      terminal: TERMINAL_CODE_MAPPING[terminal],
     }
     this.setState({
       currentPage: 0,
     })
     if (onGetMainTable) {
       onGetMainTable(params)
+    }
+  }
+  
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (!isEqual(this.props.isUpdateSuccess, prevProps.isUpdateSuccess)) {
+      this.getCustomerData()
     }
   }
 
@@ -444,7 +456,7 @@ class Pages extends Component {
                               0
                                 ? tableData.total_rows
                                 : currentPage * rowsPerPage + rowsPerPage
-                            } of ${tableData.total_rows} enteries`}
+                            } of ${tableData.total_rows} entries${locationPath === "/sales-inventory" ? ", 78 record exceeds variance threshold": ""}`}
                           </div>
                         </div>
                         {locationPath === "/sales-inventory" && (
@@ -455,6 +467,7 @@ class Pages extends Component {
                                 value={this.state.salesDate}
                                 onChange={this.onSalesDateChange}
                                 endDate={new Date()}
+                                startDate={subDays(new Date(), 30)}
                               />
                             </div>
                             <div className="col-8 p-0 d-flex align-items-center">
@@ -559,11 +572,11 @@ class Pages extends Component {
                     closeAlert={() => this.setState({ csvAlert: false })}
                   />
             </Row>
-            {(this.state.openCsvModal === true || this.state.downloadCsv === true) && 
+            {(this.state.openCsvModal === true || this.state.downloadCsv === true) &&
               <CsvFileUpload
-                currentPage = {locationPath}  
+                currentPage = {locationPath}
                 isOpen={this.state.openCsvModal}
-                toggle={this.toggleCsvModal} 
+                toggle={this.toggleCsvModal}
                 getListCall={() => this.getCustomerData()}
                 callDownloadCsv={this.state.downloadCsv}
                 toggleDownloadCsv={() => this.setState({downloadCsv: false})}

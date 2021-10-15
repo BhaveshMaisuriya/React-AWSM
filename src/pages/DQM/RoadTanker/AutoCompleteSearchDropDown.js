@@ -34,6 +34,7 @@ const AutoCompleteSearchDropDown = ({
    */
   const onValueChange = item => {
     setDropdownOpen(false)
+    // setData(item)
     if (onChange && item !== null) {
       onChange(item)
     }
@@ -60,10 +61,12 @@ const AutoCompleteSearchDropDown = ({
           } ${error ? "border-danger" : ""}`}
         >
           <Input
-            defaultValue={value ? value.description : placeholder}
+            defaultValue={value && value !== -1 ? value : ''}
+            value={data.code}
             className={
               isDisableValue === "true" ? "addl-value" : "addl-value-storage"
             }
+            placeholder={placeholder}
             onChange={onChangeInput.bind(this)}
           ></Input>
           {searchIcon ? <ReactSVG src={searchIcon} className="awsm-dropdown-arrow" /> : <ReactSVG src={ArrowDropDownIcon} className="awsm-dropdown-arrow" />}
@@ -85,7 +88,7 @@ const AutoCompleteSearchDropDown = ({
                 onClick={() => onValueChange(item)}
                 className="awsm-select-item"
               >
-                {item?.description || "-"}
+                {item?.code || "-"}
               </div>
             )
           )}

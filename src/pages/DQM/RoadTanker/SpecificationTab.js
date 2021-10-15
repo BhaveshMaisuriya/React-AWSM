@@ -15,12 +15,18 @@ class SpecificationTab extends PureComponent {
       restrictionStr: "",
       idDeleteBtnShow: true,
       restrictionCharRemain: 20,
+      restrictionVal: '',
+      restrictionCode: -1,
     }
   }
 
   componentDidMount() { }
 
   onChangeHandler = (value, key) => {
+    if(key === 'restriction') {
+      this.setState({restrictionVal: value.description});
+      this.setState({restrictionCode: value.code});
+    }
     const { data, onChange } = this.props
     let newData = { ...data }
     newData[key] = value
@@ -96,12 +102,13 @@ class SpecificationTab extends PureComponent {
           // />
 
           <AutoCompleteSearchDropDown
-            value={restriction}
+            value={this.state.restrictionCode}
             items={restriction_dropdown}
-            key={restriction}
+            key={this.state.restrictionCode}
             searchIcon={true}
             onChange={e => this.onChangeHandler(e, "restriction")}
             disabled={disabled}
+            placeholder='Please select code'
             // error={error_code !== "" && value.code === null}
           />
         ) : (
@@ -239,10 +246,7 @@ class SpecificationTab extends PureComponent {
               <input
                 className="form-control awsm-input"
                 disabled={true}
-                defaultValue={data?.restriction_code}
-                onChange={e =>
-                  this.onChangeHandler(e.target.value, "restriction_code")
-                }
+                value={this.state.restrictionVal}
               ></input>
             </div>
           </div>

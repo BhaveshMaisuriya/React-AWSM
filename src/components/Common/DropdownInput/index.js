@@ -98,7 +98,7 @@ const DropdownInput = ({
         <input
           onChange={onInputValueChange}
           value={inputValue}
-          className={`awsm-input w-100 ${!isValid ? "out-range " : ""}`}
+          className={`awsm-input w-100 ${(inputValue && !isValid) ? "out-range " : ""}`}
           ref={inputRef}
           onMouseDown={e => e.stopPropagation()}
         />

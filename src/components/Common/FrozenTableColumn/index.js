@@ -123,23 +123,23 @@ class FixedCoulmnTable extends Component {
     const { overrideActionColumn } = this.props
     let result
     if (
-      (Math.abs(data.sales_variance) > salesValue?.variance_value ||
+      Math.abs(data.sales_variance) > salesValue?.variance_value ||
       Math.abs(data.inventory_variance) > inventoryValue?.variance_value ||
-      Math.abs(data.sales_variance_percentage) > salesValue?.variance_percentage)
+      Math.abs(data.sales_variance_percentage) > salesValue?.variance_percentage 
     ) {
       result = (
         <div
           className="cursor-pointer"
-          onClick={() => overrideActionColumn(index)}
+          onClick={() => overrideActionColumn(data)}
         >
-          {data?.overrideAction ? (
+          {data?.override ? (
             <ReactSVG className="d-inline-block mr-2" src={OverrideIcon} />
           ) : (
-            <span className="accurate d-inline-block mr-2"></span>
+            <span className="accurate d-inline-block mr-2"/>
           )}
           <span
             className={`d-inline-block override-text ${
-              data?.overrideAction ? "green" : ""
+              data?.override ? "override-text-green" : ""
             }`}
           >
             Override

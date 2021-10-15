@@ -16,6 +16,8 @@ import {
   DropdownMenu,
   DropdownToggle,
   Button,
+  Popover,
+  PopoverBody,
 } from "reactstrap"
 import AuditLog from "components/Common/AuditLog";
 import "./style.scss"
@@ -30,7 +32,13 @@ import OrderBankTable from "./OrderBankTable"
 import REGION_TERMINAL from "../../common/data/regionAndTerminal"
 import customiseTableIcon from "../../assets/images/AWSM-Customise-Table.svg"
 import CustomizeTableModal from "../../common/CustomizeTable"
+
+import { FormControlLabel } from "@material-ui/core"
+import Checkbox from "@material-ui/core/Checkbox"
+import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown"
+
 import GanttChartBottom from "./helper.js"
+
 
 import {
   ganttChartTableColumns, ganttChartTableDefaultColumns,
@@ -54,11 +62,24 @@ import CustomRadioButton from "components/Common/CustomRadioButton"
 import OrderBankRunAutoModal from "./OrderBankRunAutoModal"
 import OrderBankSendBulkModal from "./OrderBankSendBulkModal"
 import AWSMAlert from "../../components/Common/AWSMAlert"
-
+import selectAllIcon2 from "../../assets/images/AWSM-Checked-box.svg"
+import selectAllIcon3 from "../../assets/images/AWSM-Checkbox.svg"
 import {bryntumSchedulerTableNameForCookie} from "./OrderBankTable/BryntumChartTable"
 import { getCookieByKey } from "../DQM/Common/helper"
 import { DragDropContext} from "react-beautiful-dnd"
+
+import { isNull } from "lodash"
+import { removeKeywords } from "../DQM/Common/helper"
+import ClearScheduling from "./clearScheduling";
+
+
+const UntickIcon = () => <img src={selectAllIcon3} alt="icon" />
+const CheckedIcon = () => <img src={selectAllIcon2} alt="icon" />
+
+
+
 import { ReactSVG } from "react-svg";
+
 
 const GanttChartBottomHover = [
   {
@@ -142,6 +163,18 @@ function OrderBank({
       label: "All",
     },
   ]
+  let deleteCheckOption = [
+    {
+      id: 0,
+      title: 'Manual Scheduling',
+      checked: true,
+    },
+    {
+      id: 1,
+      title: 'Auto Scheduling',
+      checked: false,
+    },
+  ]
   const ganttChartEvents = useSelector(state => state.orderBank.ganttChart.event)
   const [orderSummary, setOrderSummary] = useState({DNs : 0,shipment : 0,backlog : 0,SR : 0,HP : 0})
   const [activeTab, setActiveTab] = useState("1")
@@ -170,7 +203,10 @@ function OrderBank({
   const [snackStatus, setSnackStatus] = useState('')
   const [snackMessage, setSnackMessage] = useState('')
   const [showSnackAlert, setShowSnackAlert] = useState(false)
-
+  const [showDeleteOption, setShowDeleteOption] = useState(false)
+  const [clearScheduling, setClearScheduling] = useState(false)  
+  const [deleteCheck, setDeleteCheck] = useState(deleteCheckOption)
+  const [checkedValue, setCheckedValue] = useState('Manual Scheduling')
   const [isCustomizeGanttModalOpen,setIsCustomizeGanttModalOpen] = useState(false)
   const [bryntumCurrentColumns,setBryntumCurrentColumns] = useState(()=>{
     if (!getCookieByKey(bryntumSchedulerTableNameForCookie)) return ganttChartTableDefaultColumns
@@ -309,6 +345,10 @@ function OrderBank({
     setDisplayBulkModal(false)
   }
 
+  const toggleClear = () => {
+    setClearScheduling(!clearScheduling);
+  }
+
   const onFullScreen = () => {
     if (
       !document.fullscreenElement &&
@@ -368,6 +408,29 @@ function OrderBank({
      if (destination) {
        dragOrderBankToGanttChart()
      }
+  }
+
+  const toggleDownload = () => {
+    setShowDeleteOption(true);
+  }
+
+  const ConfirmClearModal = () => {
+    setClearScheduling(true);
+  }
+
+  const getCheckedDownloadVal = (index) => {
+    const temp = [...deleteCheck];
+    let temp1 = [];
+    temp[index].checked = !temp[index].checked
+    temp.map((item, index) => {
+      if(item.checked === true){
+        temp1.push(item.title);
+      }
+    })
+    var temp2 = temp1.join().split(',');
+    var temp3 = temp2.length > 0 ? temp2[0] + ' and ' + temp2[1] : temp2;
+    setCheckedValue(temp3);
+    setDeleteCheck(temp);
   }
 
   return (
@@ -468,13 +531,86 @@ function OrderBank({
                     />
                   </div>
                 </Col>
+
                 <Col className='order-bank-bar right pl-0'>
                   <IconButton
                     aria-label="delete"
                     onClick={toggleCustomizeModal}
+                    className='delete_btn'
                   >
                     <img src={customiseTableIcon} alt="" />
                   </IconButton>
+
+
+                          <button
+                            id="clear"
+                            className="btn btn-outline-primary excel-btn-container pdf-btn"
+                          >
+                            <div className="excel-download-btn">
+                              <span className="download-button-message">
+                                Clear Scheduling
+                                <ArrowDropDownIcon />
+                              </span> 
+                            </div>
+                          </button>
+                          <Popover
+                            target="clear"
+                            placement="bottom"
+                            isOpen={showDeleteOption}
+                            trigger="legacy"
+                            style={{ width: "auto" }}
+                            toggle={toggleDownload}
+                          >
+                            <PopoverBody className="sla-rbd-download">
+                              <>
+                                {deleteCheck.length > 0 &&
+                                  deleteCheck.map((row, index) => {
+                                    return (
+                                      <div
+                                        key={row.title}
+                                        className={`d-flex align-items-center ${
+                                          row.checked ? "item-checked" : ""
+                                        }`}
+                                      >
+                                        <FormControlLabel
+                                          key={`${row.title}`}
+                                          value={`${row.title}`}
+                                          onChange={() => getCheckedDownloadVal(index)}
+                                          checked={row.checked}
+                                          className="checkmark"
+                                          control={
+                                            <Checkbox
+                                              icon={<UntickIcon />}
+                                              checkedIcon={<CheckedIcon />}
+                                              style={{
+                                                height: "20px",
+                                                width: "5px",
+                                                marginLeft: "16px",
+                                                marginTop: "8px",
+                                              }}
+                                            />
+                                          }
+                                          label={
+                                            isNull(row.title)
+                                              ? "-"
+                                              : removeKeywords(row.title)
+                                          }
+                                        />
+                                      </div>
+                                    )
+                                  })}
+                                <div id="myMm" style={{ height: "1mm" }} />
+                                <div className="pdf-wid">
+                                  <button
+                                    className="btn btn-primary excel-btn-container pdf-btn"
+                                    onClick={ConfirmClearModal}
+                                  > Clear </button>
+                                </div>
+                              </>
+                            </PopoverBody>
+                          </Popover>
+
+
                   {
                     activeTab === "1"  && <div className='d-flex align-items-center justify-content-between radio_option m-0 order-bank-label'>
                       {
@@ -494,6 +630,7 @@ function OrderBank({
                     {`${orderSummary.DNs} DNs, ${orderSummary.shipment} shipments, ${orderSummary.backlog} backlog, ${orderSummary.SR} SR, ${orderSummary.HP} HP`}
                     </span>
                 </Col>
+               
               </Row>
               <div>
                 <TabContent activeTab={activeTab} className="pt-2">
@@ -610,6 +747,8 @@ function OrderBank({
                     />
                   </div>
                 </Col>
+                
+
                 <Col lg={3} className="order-bank-bar right" id="order-bank-main">
                   <Dropdown isOpen={dropdownOpen} toggle={toggle}>
                     <DropdownToggle
@@ -742,6 +881,9 @@ function OrderBank({
           </Card>
         </div>
       </div>
+      {clearScheduling === true && 
+        <ClearScheduling clearScheduling={clearScheduling} checkedValue={checkedValue} toggle={toggleClear} />
+      }
       </DragDropContext>
     </React.Fragment>
   )

@@ -154,7 +154,7 @@ export const runValidation = data => {
 }
 
 export const removeKeywords = string => {
-  const newString = string
+  const newString = string.toString() ? string.toString() : string
   return newString
     ? newString
       .toString()
@@ -178,6 +178,8 @@ export const removeKeywords = string => {
       .replace("0:00", "0")
       .replace("null", "-")
       .replace("None", "-")
+      .replace("true", "Y")
+      .replace("false", "N")
     : newString
 }
 

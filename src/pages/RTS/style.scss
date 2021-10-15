@@ -610,6 +610,42 @@
     }
 }
 
+#b-mask-1 {
+    z-index: 99 !important;
+}
+#clearscheduling-modal .modal-content, #clearschedulingConfirm-modal .modal-content{
+    height: auto;
+    width: 500px !important;
+    padding: 15px;
+}
+#clearscheduling-modal .modal-content .modal-header, #clearschedulingConfirm-modal .modal-content .modal-header {
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+    padding-top: 10px !important;
+}
+#clearscheduling-modal .modal-content .modal-footer{
+    padding-bottom: 0px !important;
+    padding-right: 0 !important;
+}
+#clearschedulingConfirm-modal .modal-content .MuiLinearProgress-bar1Determinate {
+    background-color: #FECE66;
+}
+#clearschedulingConfirm-modal .modal-content .MuiLinearProgress-determinate {
+    border-radius: 20px;
+    height: 15px;
+    background-color: #fece664f;
+ }
+.yellowbar {
+    margin-top: 2em;
+}
+#clear {
+    margin: 0 10px;
+}
+.delete_btn {
+    border-left: 1px solid #D9D9D9 !important;
+    border-radius: 0 !important;
+    height: 10px;
+}
 .sap-stripes {
     background-color:#9E9E9E;
 }

@@ -8,6 +8,7 @@ import {
   GET_DETAIL_SALES,
   UPDATE_SALES_AND_INVENTORY_DETAIL,
   GET_SALES_AND_INVENTORY_TANK_STATUS,
+  OVERRIDE_STATUS_IN_ACTION_COLUMN,
 } from "./actionTypes"
 import Factory, {
   formatResponseDataVarianceControl,
@@ -33,6 +34,8 @@ import {
   getDownloadSalesFail,
   getDetailsSalesSuccess,
   getDetailsSalesFail,
+  overrideStatusInActionColumnSuccess,
+  overrideStatusInActionColumnFail,
 } from "./actions"
 import { call, put, takeLatest } from "redux-saga/effects"
 import {
@@ -45,7 +48,8 @@ import {
   getDownloadSales,
   getSaleAndInventoryDetail,
   updateSaleAndInventoryDetail, 
-  getSaleAndInventoryByRecordId
+  getSaleAndInventoryByRecordId,
+  updateSaleAndInventoryOverride
 } from "../../helpers/fakebackend_helper"
 
 function* onGetSalesAndInventory({ params = {} }) {
@@ -149,6 +153,15 @@ function* onUpdateSalesAndInventoryDetail({ recordId, payload }) {
   }
 }
 
+function* onUpdateSalesAndInventoryOverride({ payload }) {
+  try {
+    yield call(updateSaleAndInventoryOverride, payload.trans_id)
+    yield put(overrideStatusInActionColumnSuccess())
+  } catch (err) {
+    yield put(overrideStatusInActionColumnFail(err))
+  }
+}
+
 function* saleAndInventorySaga() {
   yield takeLatest(
     GET_SALES_AND_INVENTORY_VARIANCE_CONTROL,
@@ -162,7 +175,6 @@ function* saleAndInventorySaga() {
     GET_SALES_AND_INVENTORY_TANK_STATUS,
     onGetSalesAndInventoryTankStatus
   )
-  onGetSalesAndInventoryTankStatus
   yield takeLatest(
     UPDATE_SALES_AND_INVENTORY_TANK_STATUS,
     onUpdateSalesAndInventoryTankStatus
@@ -178,6 +190,10 @@ function* saleAndInventorySaga() {
   yield takeLatest(
     UPDATE_SALES_AND_INVENTORY_VARIANCE_CONTROL,
     onUpdateSalesAndInventoryVarianceControl
+  )
+  yield takeLatest(
+    OVERRIDE_STATUS_IN_ACTION_COLUMN,
+    onUpdateSalesAndInventoryOverride
   )
 }
 

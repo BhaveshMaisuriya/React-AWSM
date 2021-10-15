@@ -4,6 +4,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import DatePicker from "../../../../components/Common/DatePicker"
 import VarianceInput from '../VarianceInput';
 import informationIcon from "../../../../assets/images/AWSM-Information.svg";
+import { differenceInDays } from "date-fns"
 
 export default class InventoryTab extends Component {
     constructor(props) {
@@ -43,6 +44,10 @@ export default class InventoryTab extends Component {
             let newData = { ...data }
             newData[field] = value
             onChange("inventory", newData)
+        }
+        const isDisableInventoryField = () => {
+          const { salesDate } = this.props;
+          return differenceInDays(new Date(), new Date(salesDate)) > 1;
         }
         return (
             <>
@@ -119,6 +124,7 @@ export default class InventoryTab extends Component {
                     <div className="col-md-6 form-group">
                         <label>DIPPING TO MIDNIGHT DIVERSION (L)<span className="extra-lbl">D-1</span></label>
                         <VarianceInput
+                          disabled={isDisableInventoryField()}
                           className="form-control awsm-input"
                           value={data?.dipping_to_midnight_deversion}
                           onChange={(value, field = "dipping_to_midnight_deversion") => onVarianceControlChange(value, field)}/>
@@ -126,6 +132,7 @@ export default class InventoryTab extends Component {
                     <div className="col-md-6 form-group">
                         <label>DIPPING TO MIDNIGHT DIVERSION REMARKS(L)</label>
                         <input
+                          disabled={isDisableInventoryField()}
                           className="form-control awsm-input"
                           value={data?.dipping_to_midnight_diversion_remarks}
                           onChange={e => this.onChangeHandler(e.target.value, "dipping_to_midnight_diversion_remarks")}
@@ -137,6 +144,7 @@ export default class InventoryTab extends Component {
                     <div className="col-md-6 form-group">
                         <label>DIPPING ADJUSTMENT (L)<span className="extra-lbl">D-1</span></label>
                         <VarianceInput
+                          disabled={isDisableInventoryField()}
                           className="form-control awsm-input"
                           value={data?.dipping_adjustment}
                           onChange={(value, field = "dipping_adjustment") => onVarianceControlChange(value, field)}/>
@@ -144,6 +152,7 @@ export default class InventoryTab extends Component {
                     <div className="col-md-6 form-group">
                         <label>DIPPING ADJUSTMENT REMARKS</label>
                         <input
+                          disabled={isDisableInventoryField()}
                           className="form-control awsm-input"
                           selected={data?.dipping_adjustment_remarks}
                           onChange={e => this.onChangeHandler(e.target.value, "dipping_adjustment_remarks")}
@@ -155,15 +164,18 @@ export default class InventoryTab extends Component {
                     <div className="col-md-6 form-group">
                         <label>DELIVERY ADJUSTMENT (L)<span className="extra-lbl">D-1</span></label>
                         <VarianceInput
+                          disabled={isDisableInventoryField()}
                           className="form-control awsm-input"
                           value={data?.delivery_adjustment}
                           onChange={(value, field = "delivery_adjustment") => onVarianceControlChange(value, field)} />
                     </div>
                     <div className="col-md-6 form-group">
                         <label>DELIVERY ADJUSTMENT REMARKS</label>
-                        <input className="form-control awsm-input"
-                               value={data?.delivery_adjustment_remark}
-                               onChange={e => this.onChangeHandler(e.target.value, "delivery_adjustment_remark")}
+                        <input
+                          disabled={isDisableInventoryField()}
+                          className="form-control awsm-input"
+                          value={data?.delivery_adjustment_remark}
+                          onChange={e => this.onChangeHandler(e.target.value, "delivery_adjustment_remark")}
                         />
                     </div>
                 </div>
@@ -216,6 +228,7 @@ export default class InventoryTab extends Component {
                     <div className="col-md-6 form-group">
                         <label>YESTERDAY DIVERSION (L)<span className="extra-lbl">D-1</span></label>
                         <VarianceInput
+                          disabled={isDisableInventoryField()}
                           className="form-control awsm-input"
                           value={data?.yesterday_diversion}
                           onChange={(value, field = "yesterday_diversion") => onVarianceControlChange(value, field)} />
@@ -223,6 +236,7 @@ export default class InventoryTab extends Component {
                     <div className="col-md-6 form-group">
                         <label>YESTERDAY DIVERSION REMARKS</label>
                         <input
+                          disabled={isDisableInventoryField()}
                           className="form-control awsm-input"
                           value={data?.yesterday_diversion_remarks}
                           onChange={e => this.onChangeHandler(e.target.value, "yesterday_diversion_remarks")}
@@ -233,6 +247,7 @@ export default class InventoryTab extends Component {
                     <div className="col-md-6 form-group">
                         <label>YESTERDAY DELIVERY ADJUSTMENT (L)<span className="extra-lbl">D-1</span></label>
                         <VarianceInput
+                          disabled={isDisableInventoryField()}
                           className="form-control awsm-input"
                           value={data?.yesterday_delivery_adjustment}
                           onChange={(value, field = "yesterday_delivery_adjustment") => onVarianceControlChange(value, field)} />
@@ -240,6 +255,7 @@ export default class InventoryTab extends Component {
                     <div className="col-md-6 form-group">
                         <label>YESTERDAY DELIVERY ADJUSTMENT REMARKS</label>
                         <input
+                          disabled={isDisableInventoryField()}
                           className="form-control awsm-input"
                           value={data?.yesterday_delivery_adjustment_remarks}
                           onChange={e => this.onChangeHandler(e.target.value, "yesterday_delivery_adjustment_remarks")}
@@ -250,7 +266,7 @@ export default class InventoryTab extends Component {
                 <div className="row">
                     <div className="col-md-6 form-group">
                         <label>CALCULATED INVENTORY @12AM (L)
-                          <Tooltip title="Calculated Inventory = Yesterday Opening Inventory (L) + Yesterday Final Figure (L) + Yesterday Delivery(L)+ Yesterday Diversion + Yesterday Delivery Adjustment">
+                          <Tooltip title="Calculated Inventory = Yesterday Opening Inventory (L) - Yesterday Sales Final Figure (L) + Yesterday Delivery(L)+ Yesterday Diversion(L) + Yesterday Delivery Adjustment(L)">
                             <img src={informationIcon} alt="calculated inventory"/>
                           </Tooltip>
                           <span className="extra-lbl">D0</span>

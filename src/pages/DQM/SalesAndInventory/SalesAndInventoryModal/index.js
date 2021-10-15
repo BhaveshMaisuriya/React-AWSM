@@ -141,7 +141,9 @@ class SalesAndInventoryTableInformation extends Component {
             }
           >
             <span className="modal-title">Record ID: {`${recordId}`}</span>
-            <span className="date-sub-title">| Date: 12 Mar 2021</span>
+            <span className="date-sub-title">| Date:
+              {this.props.salesDate && format(this.props.salesDate, "do LLL yyyy") || ""}
+            </span>
             <span className="last-updated-sub-title">
             {`Last Updated By: ${currentSalesAndInventory.updated_by?.split("@")[0] || "Unknown"} on ${currentSalesAndInventory.updated_at && format(new Date(currentSalesAndInventory.updated_at), "do LLL yyyy") || ""}`}
             </span>
@@ -215,6 +217,7 @@ class SalesAndInventoryTableInformation extends Component {
                       <InventoryTab
                         data={data?.inventory}
                         onChange={onFieldValueChange}
+                        salesDate={this.props.salesDate}
                       />
                     </div>
                   </TabPane>

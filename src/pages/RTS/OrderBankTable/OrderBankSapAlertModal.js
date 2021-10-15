@@ -1,123 +1,73 @@
-import React, { Fragment, useState } from "react"
-import { Modal, ModalBody, ModalHeader } from "reactstrap"
+import React, { Fragment, useEffect, useState } from "react"
+import { ReactSVG } from "react-svg"
+import { Modal, ModalBody, ModalHeader, ModalFooter, Button } from "reactstrap"
 import { connect } from "react-redux"
+import ConfirmationPopup from "../../../components/Common/DeleteConfirmationPopup"
+import RedAlertIcon from "./../../../assets/images/AWSM-Red-Alert.svg"
 import CloseButton from "../../../components/Common/CloseButton"
+import { getShipmentOfOderBankGanttChart } from "../../../store/actions"
 import { shipmentTableColumns } from "./tableMapping"
 
-const OrderbankSapAlertModal = (props) => {
-  function toggle() {
-    props.istoggle()
+const OrderbankSapAlertModal = ({ istoggle, open, shipmentOrderBankTableData, getShipmentOfOderBankGanttChart}) => {
+  const [showDeleteModal, setDeleteModal] = useState(false)
+  const toggleDeleteModal = () => setDeleteModal(!showDeleteModal)
+  const onClickDeleteShipment = () => {
+    //insert api to delete shipment
+    istoggle()
+  }
+
+  useEffect(()=>{
+    getShipmentOfOderBankGanttChart()
+  },[])
+
+  const orderTemplate = (data) => {
+    return <td>
+      {data !== null ? (
+        <p>Product: {data.product}</p>
+      ) : (
+        <p>N / A</p>
+      )}
+    </td>
   }
   return (
     <Fragment>
       <Modal
-        isOpen={props.open}
-        toggle={toggle}
-        id="auditLog-modal"
-        contentClassName="modalContainer"
+        isOpen={open}
+        toggle={istoggle}
+        className="modal-lg"
       >
-        <ModalHeader close={<CloseButton handleClose={toggle} />}>
-          <h3>Shipment Details: Vehicle No VBF 5559</h3>
+        <ModalHeader close={<CloseButton handleClose={istoggle} />}>
+          <img style={{ paddingBottom:"4px", paddingRight:"3px" }} src={RedAlertIcon}/><h3>SAP Alert: Vehicle No VBF 5559</h3>
         </ModalHeader>
         <ModalBody>
-          <div className="top-shipment-details">
-            <span>
-              Terminal: <b>KVDT M808</b>
-            </span>
-            <span>
-              Shipment No: <b>12345678</b>
-            </span>
-            <span>
-              Planned Load Time: <b>09:00</b>
-            </span>
-          </div>
-          <div className="rts-table-container scroll" id="scrollableDiv">
-            <div className="container-orderbank" style={{ maxWidth: "100%" }}>
-              <table className={`scrollable shipment-main`}>
+          <p style={{ marginBottom: "0px"}}> Looks like somneone has created a shipment via SAP, further details are as following: </p>
+          <div className="rts-table-container">
+            <div className="container-orderbank">
+              <table className={`shipment-main`}>
                 <thead>
                   <tr>
-                    {shipmentTableColumns &&
-                      shipmentTableColumns.map((item, index) => {
-                        return <th className={`${index === 0 ? 'text-center' : ''}`}>{item.toUpperCase()}</th>
+                    {shipmentTableColumns.map((item, index) => {
+                        return <th style={index === 0 ? {textAlign: "center"} : {}}>{item.toUpperCase()}</th>
                       })}
                   </tr>
                 </thead>
                 <tbody>
-                  {props.shipmentOrderBankTableData &&
-                    props.shipmentOrderBankTableData.map(item => {
+                  {shipmentOrderBankTableData &&
+                    shipmentOrderBankTableData.map(item => {
                       return (
                         <tr>
-                          <td className="text-center">
+                          <td style={{ textAlign: "center" }}>
                             <p>{item.no}</p>
                           </td>
                           <td>
                             <p>Cust ID: {item.station.id}</p>
                             <p>Cust Name: {item.station.name}</p>
-                            <p>Planned Load Time: {item.station.load_time}</p>
-                            <p>Loading Time: {item.station.loading_time}</p>
-                            <p>Duration From Terminal: {item.station.duration}</p>
-                            <p>ETA: {item.station.eta}</p>
                           </td>
-                          <td>
-                            {item.order1 !== null ? (
-                              <Fragment>
-                                <p>Product: {item.order1.product}</p>
-                                <p>Volume: {item.order1.volume}</p>
-                                <p>Station Category: {item.order1.station_cat}</p>
-                                <p>DN No.: {item.order1.DN}</p>
-                              </Fragment>
-                            ) : (
-                              <p>N / A</p>
-                            )}
-                          </td>
-                          <td>
-                            {item.order2 !== null ? (
-                              <Fragment>
-                                <p>Product: {item.order2.product}</p>
-                                <p>Volume: {item.order2.volume}</p>
-                                <p>Station Category: {item.order2.station_cat}</p>
-                                <p>DN No.: {item.order2.DN}</p>
-                              </Fragment>
-                            ) : (
-                              <p>N / A</p>
-                            )}
-                          </td>
-                          <td>
-                            {item.order3 !== null ? (
-                              <Fragment>
-                                <p>Product: {item.order3.product}</p>
-                                <p>Volume: {item.order3.volume}</p>
-                                <p>Station Category: {item.order3.station_cat}</p>
-                                <p>DN No.: {item.order3.DN}</p>
-                              </Fragment>
-                            ) : (
-                              <p>N / A</p>
-                            )}
-                          </td>
-                          <td>
-                            {item.order4 !== null ? (
-                              <Fragment>
-                                <p>Product: {item.order4.product}</p>
-                                <p>Volume: {item.order4.volume}</p>
-                                <p>Station Category: {item.order4.station_cat}</p>
-                                <p>DN No.: {item.order4.DN}</p>
-                              </Fragment>
-                            ) : (
-                              <p>N / A</p>
-                            )}
-                          </td>
-                          <td>
-                            {item.order5 !== null ? (
-                              <Fragment>
-                                <p>Product: {item.order5.product}</p>
-                                <p>Volume: {item.order5.volume}</p>
-                                <p>Station Category: {item.order5.station_cat}</p>
-                                <p>DN No.: {item.order5.DN}</p>
-                              </Fragment>
-                            ) : (
-                              <p>N / A</p>
-                            )}
-                          </td>
+                            {orderTemplate(item.order1)}
+                            {orderTemplate(item.order2)}
+                            {orderTemplate(item.order3)}
+                            {orderTemplate(item.order4)}
+                            {orderTemplate(item.order5)}
                         </tr>
                       )
                     })}
@@ -125,8 +75,23 @@ const OrderbankSapAlertModal = (props) => {
               </table>
             </div>
           </div>
+          <p style={{ marginBottom: "0px", marginTop: "10px"}}>You are recommending to delete this shipment, do you want to delete this shipment in SAP?</p>
         </ModalBody>
+        {true ? (
+          <ModalFooter>
+            <button
+              className="btn-sec"
+              onClick={istoggle}
+            >
+              Cancel
+            </button>
+            <Button onClick={setDeleteModal} color="primary">
+              Delete
+            </Button>
+          </ModalFooter>
+        ) : null}
       </Modal>
+      {showDeleteModal && <ConfirmationPopup open={showDeleteModal} istoggle={toggleDeleteModal} deleteFunction={onClickDeleteShipment}/>}
     </Fragment>
   )
 }
@@ -135,7 +100,9 @@ const mapStateToProps = ({ orderBank }) => ({
   shipmentOrderBankTableData: orderBank.shipmentOrderBankTableData,
 })
 
-const mapDispatchToProps = dispatch => ({})
+const mapDispatchToProps = dispatch => ({
+  getShipmentOfOderBankGanttChart: (params) => dispatch(getShipmentOfOderBankGanttChart(params))
+})
 
 export default connect(
   mapStateToProps,

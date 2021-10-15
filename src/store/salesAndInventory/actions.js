@@ -29,6 +29,8 @@ import {
   UPDATE_SALES_AND_INVENTORY_DETAIL_SUCCESS,
   UPDATE_SALES_AND_INVENTORY_DETAIL_FAIL,
   OVERRIDE_STATUS_IN_ACTION_COLUMN,
+  OVERRIDE_STATUS_IN_ACTION_COLUMN_SUCCESS,
+  OVERRIDE_STATUS_IN_ACTION_COLUMN_FAIL,
 } from "./actionTypes"
 
 export const getSalesAndInventoryVarianceControl = date => {
@@ -205,4 +207,13 @@ export const updateSalesAndInventoryDetailFail = error => ({
 export const overrideStatusInActionColumn = params => ({
   type: OVERRIDE_STATUS_IN_ACTION_COLUMN,
   payload: params,
+})
+
+export const overrideStatusInActionColumnSuccess = () =>({
+  type: OVERRIDE_STATUS_IN_ACTION_COLUMN_SUCCESS,
+})
+
+export const overrideStatusInActionColumnFail = (error) =>({
+  type: OVERRIDE_STATUS_IN_ACTION_COLUMN_FAIL,
+  payload: error,
 })

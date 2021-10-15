@@ -2,9 +2,9 @@ import React, { useState } from "react"
 import { Dropdown, DropdownMenu, DropdownToggle, Input } from "reactstrap"
 // import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown"
 import { ReactSVG } from "react-svg"
-import ArrowDropDownIcon from "../../../../assets/images/AWSM-Dropdown.svg"
+import ArrowDropDownIcon from "../../../assets/images/AWSM-Dropdown.svg"
 import { isScheduler } from "helpers/auth_helper"
-import searchIcon from "../../../../assets/images/AWSM-search.svg"
+import searchIcon from "../../../assets/images/AWSM-search.svg"
 
 /**
  * Dropdown menu
@@ -15,7 +15,7 @@ import searchIcon from "../../../../assets/images/AWSM-search.svg"
  * @returns {JSX.Element}
  * @constructor
  */
-const AutoCompleteDropDown = ({
+const AutoCompleteSearchDropDown = ({
   items,
   value,
   onChange,
@@ -60,7 +60,7 @@ const AutoCompleteDropDown = ({
           } ${error ? "border-danger" : ""}`}
         >
           <Input
-            defaultValue={value ? value : placeholder}
+            defaultValue={value ? value.description : placeholder}
             className={
               isDisableValue === "true" ? "addl-value" : "addl-value-storage"
             }
@@ -85,7 +85,7 @@ const AutoCompleteDropDown = ({
                 onClick={() => onValueChange(item)}
                 className="awsm-select-item"
               >
-                {item?.code || "-"}
+                {item?.description || "-"}
               </div>
             )
           )}
@@ -94,4 +94,4 @@ const AutoCompleteDropDown = ({
   )
 }
 
-export default AutoCompleteDropDown
+export default AutoCompleteSearchDropDown

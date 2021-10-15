@@ -22,6 +22,7 @@ function ClearScheduling (props) {
   useEffect(() => {
     if(progress === 100){
       onToggleConfirm()
+      props.showConfirmAlert();
       props.toggle();
     }
   }, [progress]);

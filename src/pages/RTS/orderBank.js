@@ -189,6 +189,7 @@ function OrderBank({
   const [terminal, setTerminal] = useState(REGION_TERMINAL[0].terminal[0])
   const [refreshDNModal, setRefreshDNModal] = useState(false)
   const [displayAutoModal, setDisplayAutoModal] = useState(false)
+  const [showClearAlert, setShowClearAlert] = useState(false)  
   const [displayBulkModal, setDisplayBulkModal] = useState(false)
   const [ganttChartAllRadio, setGanttChartAllRadio] = useState("")
   // {high:false, request: false, future: false, backlog: false}
@@ -349,6 +350,11 @@ function OrderBank({
     setClearScheduling(!clearScheduling);
   }
 
+  const showConfirmAlert = () => {
+    setClearScheduling(!clearScheduling);
+    setShowClearAlert(true);
+  }
+
   const onFullScreen = () => {
     if (
       !document.fullscreenElement &&
@@ -411,10 +417,11 @@ function OrderBank({
   }
 
   const toggleDownload = () => {
-    setShowDeleteOption(true);
+    setShowDeleteOption(!showDeleteOption);
   }
 
   const ConfirmClearModal = () => {
+    setShowDeleteOption(!showDeleteOption);
     setClearScheduling(true);
   }
 
@@ -428,7 +435,7 @@ function OrderBank({
       }
     })
     var temp2 = temp1.join().split(',');
-    var temp3 = temp2.length > 0 ? temp2[0] + ' and ' + temp2[1] : temp2;
+    var temp3 = temp2.length > 0 ? temp2[0] + ' & ' + temp2[1] : temp2;
     setCheckedValue(temp3);
     setDeleteCheck(temp);
   }
@@ -543,7 +550,7 @@ function OrderBank({
 
 
                           <button
-                            id="clear"
+                            id="ClearScheduling"
                             className="btn btn-outline-primary excel-btn-container pdf-btn"
                           >
                             <div className="excel-download-btn">
@@ -554,7 +561,7 @@ function OrderBank({
                             </div>
                           </button>
                           <Popover
-                            target="clear"
+                            target="ClearScheduling"
                             placement="bottom"
                             isOpen={showDeleteOption}
                             trigger="legacy"
@@ -878,11 +885,19 @@ function OrderBank({
                 closeAlert={() => setShowSnackAlert(false)}
               />
             )}
+            {showClearAlert && (
+              <AWSMAlert
+                status='success'
+                message='All scheduling has been successfully cleared'
+                openAlert={showClearAlert}
+                closeAlert={() => setShowClearAlert(false)}
+              />
+            )}            
           </Card>
         </div>
       </div>
       {clearScheduling === true && 
-        <ClearScheduling clearScheduling={clearScheduling} checkedValue={checkedValue} toggle={toggleClear} />
+        <ClearScheduling clearScheduling={clearScheduling} checkedValue={checkedValue} toggle={toggleClear} showConfirmAlert={showConfirmAlert} />
       }
       </DragDropContext>
     </React.Fragment>

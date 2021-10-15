@@ -4,6 +4,8 @@ import AWSMDropdown from "components/Common/Dropdown"
 import { CUSTOMER_TYPE_DROPDOWN_VALUE } from "./constants"
 import MultipleSelect from "./MultipleSelect"
 import { MODE, PRODUCT_TYPE_IN_ASWM } from "./constants"
+import AutoCompleteSearchDropDown from "./AutoCompleteSearchDropDown"
+
 class SpecificationTab extends PureComponent {
   constructor(props) {
     super(props)
@@ -77,21 +79,30 @@ class SpecificationTab extends PureComponent {
         isDeleteBtnShow,
         restrictionStr,
       } = this.state
-
-      let restriction_dropdown = data?.restriction_dropdown
+      let restriction_dropdown = data?.restriction_code_dropdown
       let restriction = data?.restriction
 
       const rtRestriction =
         !isRTRestrictionAdding && restriction_dropdown && restriction ? (
-          <MultipleSelect
-            names={restriction_dropdown}
-            rtRestrictionSelected={restriction}
-            isDeleteBtnShow={isDeleteBtnShow}
-            onDeleteBtnClick={onDeleteBtnClick}
-            onConfirmClick={onConfirmClick}
-            onNoClick={onNoClick}
+          // <MultipleSelect
+          //   names={restriction_dropdown}
+          //   rtRestrictionSelected={restriction}
+          //   isDeleteBtnShow={isDeleteBtnShow}
+          //   onDeleteBtnClick={onDeleteBtnClick}
+          //   onConfirmClick={onConfirmClick}
+          //   onNoClick={onNoClick}
+          //   onChange={e => this.onChangeHandler(e, "restriction")}
+          //   disabled={disabled}
+          // />
+
+          <AutoCompleteSearchDropDown
+            value={restriction}
+            items={restriction_dropdown}
+            key={restriction}
+            searchIcon={true}
             onChange={e => this.onChangeHandler(e, "restriction")}
             disabled={disabled}
+            // error={error_code !== "" && value.code === null}
           />
         ) : (
           <div className="input-group add-restriction">
@@ -217,14 +228,14 @@ class SpecificationTab extends PureComponent {
           <div className="row">
             <div className="col-md-6 form-group">
               <div>
-                <label>RT RESTRICTION</label>
+                <label>RESTRICT CODE</label>
               </div>
               {rtRestriction(
                 (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
               )}
             </div>
-            <div className="form-group col-md-6">
-              <label>RESTRICT CODE</label>
+            <div className="form-group col-md-12">
+              <label>RT RESTRICTION</label>
               <input
                 className="form-control awsm-input"
                 disabled={true}

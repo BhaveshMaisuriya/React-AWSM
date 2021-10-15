@@ -472,7 +472,7 @@ export const getSaleAndInventoryByRecordId = recordId =>
 
 export const updateSaleAndInventoryOverride = recordId => 
   axios
-    .put(`/sales-inventory/${recordId}/override`)
+    .put(`/sales-inventory/${recordId}/override`, { override: true })
 
 
 export const getSlaItems = params =>

@@ -1,3 +1,15 @@
 .override-dragging {
   position: unset !important;
 }
+
+.shipment-line{
+  outline: 0.5px solid lightgrey !important;
+}
+
+.clear-bg-tr{
+  background: transparent !important;
+}
+
+.clear-mb-alert {
+  margin-bottom: 0;
+}

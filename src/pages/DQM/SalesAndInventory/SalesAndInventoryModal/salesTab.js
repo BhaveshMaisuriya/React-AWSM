@@ -100,7 +100,7 @@ export default class SalesTab extends Component {
                     </div>
                     <div className="col-md-6 form-group">
                         <label>SALES VARIANCE (L)
-                            <Tooltip title="(Sales Final Figure - Expected Sales)">
+                            <Tooltip title="Sales Final Figure - Expected Sales">
                                 <img src={informationIcon}  alt="sales variance"/>
                             </Tooltip>
                             <span className="extra-lbl">D-1</span>

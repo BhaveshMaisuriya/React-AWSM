@@ -53,8 +53,9 @@ class SalesInventory extends Component {
     const params = {
       limit: 10,
       page: 1,
-      sort_dir: "asc",
-      sort_field: "ship_to_party",
+      sort_dir: "",
+      sort_field: "",
+      search_term: "",
       search_fields: transformArrayToString(searchFields),
       search_date: format(this.state.salesDate, "yyyy-MM-dd")
     }

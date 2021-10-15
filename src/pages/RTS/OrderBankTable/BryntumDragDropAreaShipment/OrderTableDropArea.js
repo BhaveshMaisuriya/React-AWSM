@@ -6,8 +6,9 @@ import CloseButton from "../../../../components/Common/CloseButton";
 import {DragDropContext, Draggable, Droppable} from "react-beautiful-dnd";
 import selectAllIcon from "../../../../assets/images/AWSM-Select-all-Checkbox.svg";
 import './OrderTableDropArea.scss'
+import ConfirmDNStatusModal from "../confirmDNStatusModal";
 
-const supportReorder = (list, startIdx, endIdx) => {
+const supportReorderShameShipment = (list, startIdx, endIdx) => {
   const result = Array.from(list)
   const [removed] = result.splice(startIdx, 1)
   result.splice(endIdx, 0, removed)
@@ -22,23 +23,37 @@ const OrderTableDropArea = ({showTableColumns}) => {
   const resourceId = useSelector(state => state?.orderBank?.selectedVehicleShipment?.resourceId)
   const [dropData, setDropData] = useState([])
 
+  const [selectedShipment, setSelectedShipment] = useState(null);
+  const [invalidSelectedShipment, setInvalidSelectedShipment] = useState(null)
+  const [shipmentReadyToCancel, setShipmentReadyToCancel] = useState(null) // shipment ready to cancel if all orders in shipment are selected
+
+  const [showCancelPopup, setShowCancelPopup] = useState(false)
+
   useEffect(() => {
     // merge all orders from all events that belong to resource Id ( vehicle)
     if (resourceId && Array.isArray(ganttChartEvents) && ganttChartEvents.length > 0) {
+      let dropDataResult = []
       const matchedEvents = ganttChartEvents.filter(({resourceId: id}) => resourceId === id)
+
       if (matchedEvents && matchedEvents.length > 0) {
-        let allOrders = matchedEvents.reduce((initArr, event) => {
+        for (let event of matchedEvents) {
           const {shipments} = event
-          if (!shipments) return initArr
-          const shipmentOrders = shipments.reduce((shipmentsArr, {orders}) => [...shipmentsArr, ...orders], [])
-          return [...initArr, ...shipmentOrders]
-        }, [])
-        allOrders = allOrders.map(item => {
-          item.isChecked = false
-          return item
-        })
-        setDropData(allOrders)
+          if (shipments && Array.isArray(shipments) && shipments.length > 0) {
+            for (let shipment of shipments) {
+              const shipmentObj = {...shipment}
+              const {orders} = shipment
+              if (orders && Array.isArray(orders) && orders.length > 0) {
+                shipmentObj.orders = orders.map(item => {
+                  item.isChecked = false
+                  return item
+                })
+                dropDataResult.push(shipmentObj)
+              }
+            }
+          }
+        }
       }
+      setDropData(dropDataResult)
     }
   }, [resourceId, ganttChartEvents])
 
@@ -53,30 +68,47 @@ const OrderTableDropArea = ({showTableColumns}) => {
     }) : null
   }
 
-  const filterShowData = () => {
-    return dropData && dropData.length > 0 &&
-    showTableColumns && showTableColumns.length > 0 ? dropData.map((order) => {
-      const filteredItem = {id: order?.id}
-      showTableColumns.forEach(({objKey}) => filteredItem[objKey] = order[objKey])
-      filteredItem['isChecked'] = order['isChecked']
-      return filteredItem
-    }) : []
+  const filterShowData = (shipment) => {
+    const {orders} = shipment
+    if (orders && orders.length > 0 && showTableColumns && showTableColumns.length > 0) {
+      return orders.map(order => {
+        const filteredItem = {id: order?.id}
+        showTableColumns.forEach(({objKey}) => filteredItem[objKey] = order[objKey])
+        filteredItem['isChecked'] = order['isChecked']
+        return filteredItem
+      })
+    }
+
+    return []
   }
 
   const onRemoveOrder = () => {
-
+    alert('On remove')
   }
 
-  const handleCheckBoxChange = (rowData) => {
+  const setSelectedShipmentDependOnOrders = (selectedShip) => {
+    const selectedOrders = selectedShip.orders.filter(item => item.isChecked === true)
+    setSelectedShipment((selectedOrders && selectedOrders.length > 0) ? selectedShip.id : null)
+    setShipmentReadyToCancel(selectedOrders.length === selectedShip.orders.length ? selectedShip.id : null)
+  }
+
+  const handleCheckBoxChange = (order, shipmentId) => {
+    if (selectedShipment && selectedShipment !== shipmentId) {
+      setInvalidSelectedShipment(shipmentId)
+      return
+    }
+    setInvalidSelectedShipment(null)
     const cloneDropData = [...dropData]
-    const checkedItem = cloneDropData.find(item => item.id === rowData.id)
+    const selectedShip = cloneDropData.find(item => item.id === shipmentId)
+    const checkedItem = selectedShip.orders.flat().find(item => item.id === order.id)
     if (checkedItem) {
       checkedItem.isChecked = !checkedItem.isChecked
       setDropData(cloneDropData)
+      setSelectedShipmentDependOnOrders(selectedShip)
     }
   }
 
-  const renderOptionCell = (rowData) => {
+  const renderOptionCell = (order, shipmentId) => {
     return (
       <td className="d-flex align-items-center justify-content-around">
         <DragIndicatorIcon
@@ -84,18 +116,18 @@ const OrderTableDropArea = ({showTableColumns}) => {
         />
         <CustomInput
           type="checkbox"
-          id={rowData.id}
-          checked={rowData.isChecked}
-          onChange={() => handleCheckBoxChange(rowData)}
+          id={order.id}
+          checked={order.isChecked}
+          onChange={() => handleCheckBoxChange(order, shipmentId)}
         />
       </td>
     )
   }
 
-  const renderBodyRow = () => {
-    const showInTableData = filterShowData()
-    return showInTableData.length > 0 ? (
-      showInTableData.map((dataRow, index) => {
+  const renderBodyRow = (shipment) => {
+    const orders = filterShowData(shipment)
+    if (orders.length > 0) {
+      return (orders.map((dataRow, index) => {
         const dataCells = Object.keys(dataRow)
           .filter((key) => key !== "id" && key !== "isChecked")
           .map((key) => {
@@ -103,8 +135,7 @@ const OrderTableDropArea = ({showTableColumns}) => {
               return (
                 <td key={key}>
                   {dataRow[key]
-                    .map((value, index) => <span key={index}
-                                                 className={`circle ${value}`}>{value}</span>)
+                    .map((value, index) => <span key={index} className={`circle ${value}`}>{value}</span>)
                   }
                 </td>
               )
@@ -113,10 +144,12 @@ const OrderTableDropArea = ({showTableColumns}) => {
           })
 
         dataCells.push(<td className="text-right pr-4"><CloseButton handleClose={onRemoveOrder}/></td>)
-        const optionCell = renderOptionCell(dataRow)
+        const optionCell = renderOptionCell(dataRow, shipment.id)
         dataCells.unshift(optionCell)
+
         return (
-          <Draggable index={index} key={dataRow?.id} draggableId={`shipment-order-${dataRow?.id}`} isDragDisabled={!dataRow.isChecked}>
+          <Draggable index={index} key={dataRow?.id} draggableId={`shipment-order-${dataRow?.id}`}
+                     isDragDisabled={!dataRow.isChecked}>
             {
               (provided, {isDragging}) => {
                 return (
@@ -131,53 +164,127 @@ const OrderTableDropArea = ({showTableColumns}) => {
             }
           </Draggable>
         )
-      })
-    ) : null
+      }))
+    }
+    return null
   }
 
   /*Handle drag item end*/
   const handleOnDragEnd = (result) => {
-    debugger
-    if (!result.destination || result.destination.index === result.source.index) return;
-    const reOrderDropData = supportReorder(dropData, result.source.index, result.destination.index)
+    const {destination, source} = result
+    if (!destination) return;
 
-    setDropData([...reOrderDropData])
+    if (destination.droppableId === source.droppableId) {
+      // In the same shipment
+      if (destination.index === source.index) return;
+      const cloneDropData = [...dropData]
+      const selectedShipIndex = cloneDropData.findIndex(item => item.id === selectedShipment)
+      cloneDropData[selectedShipIndex].orders = supportReorderShameShipment(cloneDropData[selectedShipIndex].orders, source.index, destination.index)
+
+      setDropData([...cloneDropData])
+    } else {
+      // Drag order to other shipment
+      // deep clone arr
+      const cloneDropData = JSON.parse(JSON.stringify(dropData))
+
+      const fromShipment = cloneDropData.find(item => +item.id === +source.droppableId)
+      const destinationShipment = cloneDropData.find(item => +item.id === +destination.droppableId)
+
+      const [removed] = fromShipment.orders.splice(source.index, 1)
+      // clear checked and reset selected
+      removed.isChecked = false
+      setSelectedShipment(null)
+      setInvalidSelectedShipment(null)
+
+      destinationShipment.orders.splice(destination.index, 0, {...removed})
+
+      setDropData(cloneDropData)
+    }
   }
 
   const renderTable = () => {
     return (
-      <table className="w-100">
-        <thead>
-        <tr className="text-dark ">
-          <th>
-            <img src={selectAllIcon} className="header-select-icon" alt="icon"/>
-          </th>
-          {renderTableHeadings()}
-          <th/>
-        </tr>
-        </thead>
-        <DragDropContext onDragEnd={handleOnDragEnd}>
-          <Droppable droppableId="shipment-drop-area">
+      <>
+        <table className="w-100">
+          <thead>
+          <tr className="text-dark ">
+            <th>
+              <img src={selectAllIcon} className="header-select-icon" alt="icon"/>
+            </th>
+            {renderTableHeadings()}
+            <th/>
+          </tr>
+          </thead>
+          <DragDropContext onDragEnd={handleOnDragEnd}>
             {
-              ((provided) => {
-                return (
-                  <tbody
-                    {...provided.droppableProps}
-                    ref={provided.innerRef}
-                  >
-                  {renderBodyRow()}
-                  {provided.placeholder}
-                  </tbody>
-                )
+              dropData.map((shipment, index) => {
+                if (shipment.orders && shipment.orders.length > 0) {
+                  return (
+                    <Droppable droppableId={shipment.id.toString()} key={shipment.id}>
+                      {
+                        ((provided) => {
+                          return (
+                            <>
+                              {shipment.id === shipmentReadyToCancel && <tbody>
+                              <tr className='clear-bg-tr'>
+                                <td colSpan={showTableColumns.length + 2}
+                                    style={{textAlign: 'right', color: 'red', height: 'auto'}}>
+                                  <p className='clear-mb-alert'
+                                     style={{cursor: 'pointer'}}
+                                     onClick={() => setShowCancelPopup(true)}>
+                                    Cancel shipment
+                                  </p>
+                                </td>
+                              </tr>
+                              </tbody>}
+
+                              <tbody
+                                {...provided.droppableProps}
+                                ref={provided.innerRef}
+                              >
+                              {renderBodyRow(shipment)}
+                              {provided.placeholder}
+                              </tbody>
+
+                              {shipment.id === invalidSelectedShipment && <tbody>
+                              <tr className='clear-bg-tr'>
+                                <td colSpan="4" style={{textAlign: 'left', color: 'red', height: 'auto'}}>
+                                  <p className='clear-mb-alert'>Cross shipment selection is not allowed</p>
+                                </td>
+                              </tr>
+                              </tbody>}
+
+                              {index !== dropData.length - 1 && <tbody>
+                              <tr className='shipment-line'/>
+                              </tbody>}
+                            </>
+                          )
+                        })
+                      }
+                    </Droppable>
+                  )
+                }
               })
             }
-          </Droppable>
-        </DragDropContext>
-      </table>
+          </DragDropContext>
+          <ConfirmDNStatusModal
+            isOpen={showCancelPopup}
+            headerContent='Cancel Shipment Confirmation'
+            bodyContent='Are you sure you want to proceed with this shipment cancellation? All order under this shipment will be drop back to Unscheduled list in Order Bank'
+            styleColor='danger'
+            onCancel={() => setShowCancelPopup(false)}
+            onSend={() => {
+              alert('Proceeding....')
+              setShowCancelPopup(false)
+            }}
+          />
+
+        </table>
+      </>
     )
   }
 
-  return (
+return (
     <div className={`drag-drop-area d-flex
             text-primary-green font-weight-bold b-text-align-center
             ${dropData && dropData.length > 0 && resourceId ? "align-items-start justify-content-start" :
@@ -187,8 +294,8 @@ const OrderTableDropArea = ({showTableColumns}) => {
           <span className="text-uppercase">Drag & drop the oder here <br/> from order bank</span>) : (
           <span className="text-uppercase">Please select a vehicle <br/> to assign shipment</span>)
       }
-    </div>
-  )
+</div>
+)
 }
 
 export default OrderTableDropArea

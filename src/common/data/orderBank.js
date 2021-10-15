@@ -355,77 +355,7 @@ export const ganttChartTableEvents = [
     highlight: true,
     eventFilter: "high",
     status: "not yet to be created",
-    resourceOrder: [{ DNNumber: 1 }, { DNNumber: 1 }],
-    shipments: [
-      {
-        no: 1,
-        station: {
-          id: 36114489,
-          name: "maju gas trending",
-          load_time: "09:00",
-          loading_time: 1,
-          duration: "3",
-          eta: "13:00",
-        },
-        orders: [
-          {
-            id: 1,
-            priority: ["hp", "sr"],
-            notes: "Shaziman only",
-            name: "Umaten biz enterprise",
-            cloud: "00",
-            trip: "00",
-            dn_date: "1234",
-            product: "Primax 95 Premium",
-            volume: "1234",
-            retain: "00",
-            runout: "00",
-            product_category: "1234",
-            dn_status: ["Send for DN"],
-            split_id: "00",
-            order_type: "ASR",
-            ship_to: "36114489",
-            accessibility: "1234",
-            order_remarks: "remark",
-            order_status: "scheduled",
-          },
-        ],
-      },
-      {
-        no: 1,
-        station: {
-          id: 36114489,
-          name: "maju gas trending",
-          load_time: "09:00",
-          loading_time: 1,
-          duration: "3",
-          eta: "13:00",
-        },
-        orders: [
-          {
-            id: 1,
-            priority: ["hp", "sr"],
-            notes: "Shaziman only",
-            name: "Umaten biz enterprise",
-            cloud: "00",
-            trip: "00",
-            dn_date: "1234",
-            product: "Primax 95 Premium",
-            volume: "1234",
-            retain: "00",
-            runout: "00",
-            product_category: "1234",
-            dn_status: ["Send for DN"],
-            split_id: "00",
-            order_type: "ASR",
-            ship_to: "36114489",
-            accessibility: "1234",
-            order_remarks: "remark",
-            order_status: "scheduled",
-          },
-        ],
-      },
-    ],
+    resourceOrder: [{ DNNumber: 1 }, { DNNumber: 1 }]
   },
   {
     id: 3,
@@ -441,7 +371,7 @@ export const ganttChartTableEvents = [
     resourceOrder: [{DNNumber: 1}, {DNNumber: 1}],
     shipments: [
       {
-        no: 1,
+        id: 100,
         station: {
           id: 36114489,
           name: "maju gas trending",
@@ -455,7 +385,7 @@ export const ganttChartTableEvents = [
             id: 12,
             priority: ["hp", "sr"],
             notes: "Shaziman only",
-            name: "Umaten biz enterprise 01",
+            name: "Umaten biz enterprise event 01 shipment 01-1",
             cloud: "00",
             trip: "00",
             dn_date: "1234",
@@ -475,7 +405,7 @@ export const ganttChartTableEvents = [
         ],
       },
       {
-        no: 1,
+        id: 101,
         station: {
           id: 36114668,
           name: "maju gas trending",
@@ -489,7 +419,7 @@ export const ganttChartTableEvents = [
             id: 14,
             priority: [],
             notes: "Shaziman only 02",
-            name: "Maju gas trading 02",
+            name: "Maju gas trading event 01 shipment 02-1",
             cloud: "00",
             trip: "00",
             dn_date: "1234",
@@ -506,24 +436,11 @@ export const ganttChartTableEvents = [
             order_remarks: "remark",
             order_status: "scheduled",
           },
-        ],
-      },
-      {
-        no: 1,
-        station: {
-          id: 36114668,
-          name: "maju gas trending",
-          load_time: "09:00",
-          loading_time: 1,
-          duration: "3",
-          eta: "13:00",
-        },
-        orders: [
           {
             id: 13,
             priority: [],
             notes: "Shaziman only 01",
-            name: "Maju gas trading 01",
+            name: "Maju gas trading event 01 shipment 02-2",
             cloud: "00",
             trip: "00",
             dn_date: "1234",
@@ -539,9 +456,9 @@ export const ganttChartTableEvents = [
             accessibility: "1234",
             order_remarks: "remark",
             order_status: "scheduled",
-          },
+          }
         ],
-      },
+      }
     ],
   },
   {
@@ -627,6 +544,42 @@ export const ganttChartTableEvents = [
     eventType: "Soft Overrule",
     highlight: true,
     eventFilter: "high",
+    shipments: [
+      {
+        id: 102,
+        station: {
+          id: 36114668,
+          name: "maju gas trending",
+          load_time: "09:00",
+          loading_time: 1,
+          duration: "3",
+          eta: "13:00",
+        },
+        orders: [
+          {
+            id: 15,
+            priority: [],
+            notes: "Shaziman only event 08 shipment 01-1",
+            name: "Maju gas trading 08",
+            cloud: "00",
+            trip: "00",
+            dn_date: "1234",
+            product: "Biodiesel B10 (Camm)",
+            volume: "1234",
+            retain: "00",
+            runout: "00",
+            product_category: "1234",
+            dn_status: ["Late Unblock"],
+            split_id: "00",
+            order_type: "Comm",
+            ship_to: 36114668,
+            accessibility: "1234",
+            order_remarks: "remark",
+            order_status: "scheduled",
+          }
+        ],
+      }
+    ],
   },
   {
     id: 9,

@@ -226,9 +226,9 @@ const RTSOrderBank = (state = initialState, action) => {
       if (resourceEventIndex < 0) return state
       if (!state.ganttChart.event[resourceEventIndex].shipments) {
         state.ganttChart.event[resourceEventIndex].shipments = []
-        state.ganttChart.event[resourceEventIndex].shipments.push({orders:action.dropData})
+        state.ganttChart.event[resourceEventIndex].shipments.push({id: Math.random(), orders:action.dropData})
       }else{
-        state.ganttChart.event[resourceEventIndex].shipments.push({orders:action.dropData})
+        state.ganttChart.event[resourceEventIndex].shipments.push({id: Math.random(), orders:action.dropData})
       }
       return {
         ...state,

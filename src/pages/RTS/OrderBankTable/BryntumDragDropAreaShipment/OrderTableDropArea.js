@@ -34,7 +34,6 @@ const OrderTableDropArea = ({showTableColumns}) => {
     if (resourceId && Array.isArray(ganttChartEvents) && ganttChartEvents.length > 0) {
       let dropDataResult = []
       const matchedEvents = ganttChartEvents.filter(({resourceId: id}) => resourceId === id)
-
       if (matchedEvents && matchedEvents.length > 0) {
         for (let event of matchedEvents) {
           const {shipments} = event
@@ -45,6 +44,7 @@ const OrderTableDropArea = ({showTableColumns}) => {
               if (orders && Array.isArray(orders) && orders.length > 0) {
                 shipmentObj.orders = orders.map(item => {
                   item.isChecked = false
+                  item.isOnRemove = false
                   return item
                 })
                 dropDataResult.push(shipmentObj)
@@ -75,6 +75,7 @@ const OrderTableDropArea = ({showTableColumns}) => {
         const filteredItem = {id: order?.id}
         showTableColumns.forEach(({objKey}) => filteredItem[objKey] = order[objKey])
         filteredItem['isChecked'] = order['isChecked']
+        filteredItem['isOnRemove'] = order['isOnRemove']
         return filteredItem
       })
     }
@@ -82,8 +83,14 @@ const OrderTableDropArea = ({showTableColumns}) => {
     return []
   }
 
-  const onRemoveOrder = () => {
-    alert('On remove')
+  const removeOrderHandler = (order, shipmentId, onRemove = true) => {
+    const cloneDropData = [...dropData]
+    const selectedShip = cloneDropData.find(item => item.id === shipmentId)
+    const checkedItem = selectedShip.orders.flat().find(item => item.id === order.id)
+    if (checkedItem) {
+      checkedItem.isOnRemove = onRemove
+      setDropData(cloneDropData)
+    }
   }
 
   const setSelectedShipmentDependOnOrders = (selectedShip) => {
@@ -128,8 +135,21 @@ const OrderTableDropArea = ({showTableColumns}) => {
     const orders = filterShowData(shipment)
     if (orders.length > 0) {
       return (orders.map((dataRow, index) => {
+        if(dataRow.isOnRemove){
+          return (
+            <tr>
+              <td colSpan={showTableColumns.length + 2}>
+                <div className='d-flex justify-content-center align-items-center'>
+                  <p className='mb-0 mr-4'>Are you sure you want to remove and unschedule this order?</p>
+                  <button className='mr-2 btn btn-outline-danger btn-sm' onClick={() => removeOrderHandler(dataRow, shipment.id, false)}>Cancel</button>
+                  <button className='btn btn-danger btn-sm'>Proceed</button>
+                </div>
+              </td>
+            </tr>
+          )
+        }
         const dataCells = Object.keys(dataRow)
-          .filter((key) => key !== "id" && key !== "isChecked")
+          .filter((key) => key !== "id" && key !== "isChecked" && key !== 'isOnRemove')
           .map((key) => {
             if (key === "priority") {
               return (
@@ -143,7 +163,7 @@ const OrderTableDropArea = ({showTableColumns}) => {
             return <td key={key}>{dataRow[key]}</td>
           })
 
-        dataCells.push(<td className="text-right pr-4"><CloseButton handleClose={onRemoveOrder}/></td>)
+        dataCells.push(<td className="text-right pr-4"><CloseButton handleClose={() => removeOrderHandler(dataRow, shipment.id, true)}/></td>)
         const optionCell = renderOptionCell(dataRow, shipment.id)
         dataCells.unshift(optionCell)
 
@@ -220,7 +240,7 @@ const OrderTableDropArea = ({showTableColumns}) => {
               dropData.map((shipment, index) => {
                 if (shipment.orders && shipment.orders.length > 0) {
                   return (
-                    <Droppable droppableId={shipment.id.toString()} key={shipment.id}>
+                    <Droppable droppableId={shipment.id?.toString()} key={shipment.id}>
                       {
                         ((provided) => {
                           return (

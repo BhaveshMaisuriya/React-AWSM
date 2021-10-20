@@ -259,6 +259,9 @@ class TerminalDetailModal extends PureComponent {
       this.errors = newErrors
     }
   }
+  disabledUpdate = (val) => {
+    this.setState({ isValidated: val })
+  }
 
   render() {
     const { activeTab, isValidated } = this.state
@@ -410,6 +413,7 @@ class TerminalDetailModal extends PureComponent {
                             this.onFieldChange("storage", value)
                           }
                           error_code={this.state.error_code}
+                          disabledUpdate={this.disabledUpdate}
                         />
                       </SimpleBar>
                     </TabPane>

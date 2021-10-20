@@ -913,7 +913,7 @@ const tableMapping = {
   //   columnSize: "cell-text-big",
   // },
 
-  actual_open_time_value: {
+  actual_open_time_1_value: {
     label: "ACTUAL OPEN DAY 1",
     apiKey: "actual_open_time_1.days",
     columnSize: "cell-text-big",

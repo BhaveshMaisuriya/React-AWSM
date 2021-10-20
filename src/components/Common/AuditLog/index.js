@@ -101,13 +101,13 @@ class AuditLog extends Component {
 
     //cut date from string
     let date = new Date(audit.created)
-    let finalDate = date.getDate() + " " + Month[date.getMonth()] + " " + date.getFullYear()
+    let finalDate = date.getDate() + "-" + (date.getMonth() + 1) + "-" + date.getFullYear()
 
     //cut time from string
     var ampm = (date.getHours() >= 12) ? "PM" : "AM";
     var hour = date.getHours().toString().length == 1 ? "0" + date.getHours() : date.getHours();
     var mins = date.getMinutes().toString().length == 1 ? "0" + date.getMinutes() : date.getMinutes();
-    let finalTime = hour + ":" + mins + " " + ampm
+    let finalTime = hour + ":" + mins
 
     const { classes } = this.props
     return (

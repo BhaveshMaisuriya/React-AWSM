@@ -130,7 +130,7 @@ class FixedCoulmnTable extends Component {
       result = (
         <div
           className="cursor-pointer"
-          onClick={!data?.override ? () => overrideActionColumn(data) : () => {}}
+          onClick={() => overrideActionColumn(data)}
         >
           {data?.override ? (
             <ReactSVG className="d-inline-block mr-2" src={OverrideIcon} />

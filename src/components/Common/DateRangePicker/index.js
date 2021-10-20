@@ -108,15 +108,28 @@ const DateRangePicker = ({
       }
       return value.days && value.days.length > 0 ? `Every ${value.days.join(", ")}` : ""
     } else if (value.type === "range") {
-      return `From ${
-        value.date_from
-          ? format(new Date(value.date_from), DISPLAY_DATE_FORMAT)
-          : "Select date"
-      } to ${
-        !value.date_to
-          ? "select another date"
-          : format(new Date(value.date_to), DISPLAY_DATE_FORMAT)
-      }`
+      if(value.date_from > value.date_to){
+        return `From ${
+          value.date_to
+            ? format(new Date(value.date_to), DISPLAY_DATE_FORMAT)
+            : "Select date"
+        } to ${
+          !value.date_from
+            ? "select another date"
+            : format(new Date(value.date_from), DISPLAY_DATE_FORMAT)
+        }`
+      } else {
+        return `From ${
+          value.date_from
+            ? format(new Date(value.date_from), DISPLAY_DATE_FORMAT)
+            : "Select date"
+        } to ${
+          !value.date_to
+            ? "select another date"
+            : format(new Date(value.date_to), DISPLAY_DATE_FORMAT)
+        }`
+      }
+     
     } else if (value.type === "single") {
       return value.date_from
         ? format(new Date(value.date_from), DISPLAY_DATE_FORMAT)

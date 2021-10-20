@@ -13,3 +13,12 @@
 .clear-mb-alert {
   margin-bottom: 0;
 }
+
+.red-outline {
+  outline: 3px solid red !important;
+}
+
+.custom-checkbox .custom-control-input:disabled:checked ~ .custom-control-label::before{
+  background-color:lightgrey !important;
+  border-color: lightgrey !important;
+}

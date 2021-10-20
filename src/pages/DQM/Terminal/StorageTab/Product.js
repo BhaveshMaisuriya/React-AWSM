@@ -21,7 +21,8 @@ const Product = ({
   scheduler,
   onDelete,
   productsList,
-  error_code
+  error_code,
+  disabledUpdate
 }) => {
   const [isConfirmDelete, setIsConfirmDelete] = useState(false)
 
@@ -42,6 +43,7 @@ const Product = ({
   }
   function renderExceedError(key, max) {
     if (value?.[key] > max) {
+      disabledUpdate(true);
       return <p style={{ color: "#f46a6a" }}>Must not exceed {max}</p>
     }
     return null

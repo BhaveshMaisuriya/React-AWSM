@@ -155,7 +155,7 @@ function* onUpdateSalesAndInventoryDetail({ recordId, payload }) {
 
 function* onUpdateSalesAndInventoryOverride({ payload }) {
   try {
-    yield call(updateSaleAndInventoryOverride, payload.trans_id)
+    yield call(updateSaleAndInventoryOverride, payload.trans_id, !payload.override)
     yield put(overrideStatusInActionColumnSuccess())
   } catch (err) {
     yield put(overrideStatusInActionColumnFail(err))

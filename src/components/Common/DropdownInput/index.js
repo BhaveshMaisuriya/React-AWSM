@@ -104,7 +104,7 @@ const DropdownInput = ({
         />
         <span
           className={`position-absolute awsm-input-right-content ${
-            !isValid ? "out-range " : ""
+            (inputValue && !isValid) ? "out-range " : ""
           }`}
         >{`${remainChars >= 0 ? "+" : ""}${remainChars}`}</span>
       </div>

@@ -46,7 +46,10 @@ import {
   DRAG_RTS_ORDER_BANK_TO_GANTT_CHART_SUCCESS,
   DRAG_RTS_ORDER_BANK_TO_GANTT_CHART_FAIL,
   SELECT_VEHICLE_RTS_SHIPMENT,
-  DESELECT_VEHICLE_RTS_SHIPMENT
+  DESELECT_VEHICLE_RTS_SHIPMENT,
+  REMOVE_ORDER_FROM_SHIPMENT,
+  REMOVE_ORDER_FROM_SHIPMENT_SUCCESS,
+  REMOVE_SHIPMENT_FROM_EVENT, REMOVE_SHIPMENT_FROM_EVENT_SUCCESS
 } from "./actionTypes"
 
 export const getRTSOrderBankTableData = (params) => ({
@@ -290,4 +293,25 @@ export const selectVehicleShipment = ({vehicle, resourceId})=> ({
 
 export const deselectVehicleShipment = ()=>({
   type:DESELECT_VEHICLE_RTS_SHIPMENT
+})
+
+export const removeOrderFromShipment = (params) => ({
+  type: REMOVE_ORDER_FROM_SHIPMENT,
+  params
+})
+
+export const removeOrderFromShipmentSuccess = (params) => ({
+  type: REMOVE_ORDER_FROM_SHIPMENT_SUCCESS,
+  params
+})
+
+
+export const removeShipmentFromEvent = (params) => ({
+  type: REMOVE_SHIPMENT_FROM_EVENT,
+  params
+})
+
+export const removeShipmentFromEventSuccess = (params) => ({
+  type: REMOVE_SHIPMENT_FROM_EVENT_SUCCESS,
+  params
 })

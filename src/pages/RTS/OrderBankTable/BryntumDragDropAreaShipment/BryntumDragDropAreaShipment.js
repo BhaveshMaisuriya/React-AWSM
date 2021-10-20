@@ -43,12 +43,11 @@ const testCurrentTableColumns = [
 
 const BryntumDragDropAreaShipment = ({currentDate}) => {
   const selectedVehicle = useSelector((state) => state?.orderBank?.selectedVehicleShipment)
-  console.log(selectedVehicle)
   return (
     <div
       className="wrapper-bryntum-shipment-dragdrop-area border-bryntum-table rounded">
       <Row
-        className={`${selectedVehicle ? "bg-primary-green-100" : ""} rounded h-100 justify-content-start align-items-start`}>
+        className={`${selectedVehicle ? "bg-primary-green-100" : ""} rounded h-100 justify-content-start align-items-start`} style={{overflowY: 'scroll'}}>
         <Col xs={12} className="font-weight-bold text-uppercase" style={{height: "18%"}}>
           <DragDropAreaHeader vehicle={selectedVehicle?.vehicle} currentDate={currentDate}/>
         </Col>

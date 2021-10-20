@@ -24,6 +24,7 @@ import { connect } from "react-redux"
 import { isScheduler } from "../../../../helpers/auth_helper"
 import CloseButton from "../../../../components/Common/CloseButton"
 import ExitConfirmation from "../../../../components/Common/ExitConfirmation"
+import _ from "lodash"
 
 class SalesAndInventoryTableInformation extends Component {
   constructor(props) {
@@ -80,6 +81,18 @@ class SalesAndInventoryTableInformation extends Component {
     this.setState()
   }
 
+  onFieldValueChange = (fieldName, value) => {
+    const newData = { ...this.state.data }
+    if (_.isArray(fieldName)) {
+      for(let i = 0; i < fieldName.length; i++) {
+        newData[fieldName[i]] = value[i]
+      }
+    } else {
+      newData[fieldName] = value
+    }
+    this.setState({ data: newData, isDataModified: true })
+  }
+
   render() {
     const scheduler = isScheduler()
     const {
@@ -95,11 +108,7 @@ class SalesAndInventoryTableInformation extends Component {
       }
     }
 
-    const onFieldValueChange = (fieldName, value) => {
-      const newData = { ...data }
-      newData[fieldName] = value
-      this.setState({ data: newData, isDataModified: true })
-    }
+
 
     const handleUpdate = event => {
       event.preventDefault()
@@ -200,7 +209,7 @@ class SalesAndInventoryTableInformation extends Component {
                     <div className="simple-bar-sale">
                       <DetailsTab
                         data={data?.details}
-                        onChange={onFieldValueChange}
+                        onChange={this.onFieldValueChange}
                       />
                     </div>
                   </TabPane>
@@ -208,7 +217,8 @@ class SalesAndInventoryTableInformation extends Component {
                     <div className="simple-bar-sale">
                       <SalesTab
                         data={data?.sales}
-                        onChange={onFieldValueChange}
+                        inventoryData={data?.inventory}
+                        onChange={this.onFieldValueChange}
                       />
                     </div>
                   </TabPane>
@@ -216,7 +226,7 @@ class SalesAndInventoryTableInformation extends Component {
                     <div className="simple-bar-sale">
                       <InventoryTab
                         data={data?.inventory}
-                        onChange={onFieldValueChange}
+                        onChange={this.onFieldValueChange}
                         salesDate={this.props.salesDate}
                       />
                     </div>
@@ -225,7 +235,7 @@ class SalesAndInventoryTableInformation extends Component {
                     <div className="simple-bar-sale">
                       <DeliveryTab
                         data={data?.delivery}
-                        onChange={onFieldValueChange}
+                        onChange={this.onFieldValueChange}
                       />
                     </div>
                   </TabPane>

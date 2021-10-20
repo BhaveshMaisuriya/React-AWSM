@@ -1,3 +1,24 @@
 .override-dragging {
   position: unset !important;
 }
+
+.shipment-line{
+  outline: 0.5px solid lightgrey !important;
+}
+
+.clear-bg-tr{
+  background: transparent !important;
+}
+
+.clear-mb-alert {
+  margin-bottom: 0;
+}
+
+.red-outline {
+  outline: 3px solid red !important;
+}
+
+.custom-checkbox .custom-control-input:disabled:checked ~ .custom-control-label::before{
+  background-color:lightgrey !important;
+  border-color: lightgrey !important;
+}

@@ -7,7 +7,7 @@ const ConfirmDNStatusModal = ({ isOpen, onSend, onCancel,headerContent,bodyConte
         <ModalHeader toggle={onCancel}>
             {headerContent}
         </ModalHeader>
-        <ModalBody className="pl-4">
+        <ModalBody className="pl-3">
           <h6>{bodyContent}</h6>
           <div className="d-flex align-items-center justify-content-end">
             <button onClick={onCancel} className={`btn btn-outline-${styleColor} mr-2`}>Cancel</button>

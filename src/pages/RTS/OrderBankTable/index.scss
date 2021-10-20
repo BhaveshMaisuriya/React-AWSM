@@ -392,3 +392,11 @@ span.b-sch-header-text.b-sticky-header {
 .icon-alignment{
     padding-bottom: 10px;
 }
+
+.custom-td-overflow{
+    height: 37px;
+    line-height: 37px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}

@@ -39,6 +39,7 @@ const DateRangePicker = ({
 }) => {
   const [value, setValue] = useState(defaultValue || dateObjectTemplate)
   const [month, setMonth] = useState(defaultMonth)
+  const [isApplyDisabled, setIsApplyDisabled] = useState();
 
   const getDay = days => {
     if (!days || !days.length > 0) {
@@ -279,6 +280,8 @@ const DateRangePicker = ({
     if(onBlur){
       onBlur()
     }
+    setAnchorEl(null)
+    setIsApplyDisabled(true)
   }
 
   const onApply = () => {
@@ -299,6 +302,16 @@ const DateRangePicker = ({
     return false
   }, [value])
   
+  const onRangeChange = () => {
+    setValue({
+      ...value,
+      type: !isRange ? "range" : "single",
+      days: [],
+      date_from: null,
+      date_to: null,
+    })
+    setIsApplyDisabled(false);
+  }
 
   return (
     <div className="awsm-date-range-picker">
@@ -351,15 +364,7 @@ const DateRangePicker = ({
               <div className="d-flex align-items-center">
                 <CheckBox
                   checked={isRange}
-                  onChange={() =>
-                    setValue({
-                      ...value,
-                      type: !isRange ? "range" : "single",
-                      days: [],
-                      date_from: null,
-                      date_to: null,
-                    })
-                  }
+                  onChange={() => onRangeChange() }
                 />
                 <label>Start and End date</label>
               </div>
@@ -376,6 +381,7 @@ const DateRangePicker = ({
               <button
                 className="btn btn-primary btn-date-range"
                 onClick={onApply}
+                disabled={isApplyDisabled}
               >
                 Apply
               </button>

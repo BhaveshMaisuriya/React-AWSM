@@ -116,7 +116,7 @@ const AddressTab = (props) => {
                   value={data?.latitude}
                   onChange={(e) => handleOnChangeValue(e)}
                   onKeyDown={formatNumberInput(["e", "E", "+", "-","ê", "Ê"])}
-                  disabled={isDisabledField}
+                  disabled={true} //isDisabledField
                   placeholder={isDisabledField ? "" : placeholderNumberOnly}
                 />
               </div>
@@ -129,7 +129,7 @@ const AddressTab = (props) => {
                   value={data?.longitude}
                   onChange={(e) => handleOnChangeValue(e)}
                   onKeyDown={formatNumberInput(["e", "E", "+", "-","ê", "Ê"])}
-                  disabled={isDisabledField}
+                  disabled={true} //isDisabledField
                   placeholder={isDisabledField ? "" : placeholderNumberOnly}
                 />
               </div>

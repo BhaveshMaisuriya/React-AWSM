@@ -82,14 +82,15 @@ const Product = ({
       <div className="row">
         <div className="col-3 form-group mb-0">
           <label htmlFor="productCode">PRODUCT CODE {isDisabledField ? "" : <span className='red-error'>*</span>}</label>
-          {isDisabledField ? 
+          {/* {isDisabledField ?  */}
           <AWSMInput
             key={value.code}
-            disabled
+            disabled={true}
             value={value.code}
             onChange={value => onFieldChange("code", value)}
-          /> :
-          <AutoCompleteDropDown
+          /> 
+          {/* :
+           <AutoCompleteDropDown
             value={value.code}
             items={productsList}
             key={value.code}
@@ -99,7 +100,7 @@ const Product = ({
             disabled={isDisabledField}
             error={error_code !== "" && value.code === null}
           />
-          }
+          } */}
           {value.code === null && <p className='red-error'>{error_code}</p>}
         </div>
         <div className="col-3 form-group mb-0 h-40">

@@ -46,7 +46,6 @@ function SLAPdfTable(props) {
         const tableHead = {
           filename: "FILE NAME",
           created_at: "TIME UPDATED",
-          category: "VERSION",
           created_by: "UPLOADED BY",
           action: "ACTION",
         }
@@ -272,7 +271,7 @@ function SLAPdfTable(props) {
         <Fragment>
           <div className="search">
             <input
-              placeholder="Search"
+              placeholder="Search File Name"
               value={value}
               onChange={e => GetSearchedValue(e.target.value)}
               className="Search_input"

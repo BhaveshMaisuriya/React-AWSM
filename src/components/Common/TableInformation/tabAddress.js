@@ -46,7 +46,7 @@ const TabAddress = ({ scheduler, data, onChange }) => {
             </Col>
           </>
         )}
-        <Col className="col-md-6 form-group">
+        <Col className="col-md-12 form-group">
           <label>ADDRESS 1</label>
           <AWSMInput
             value={

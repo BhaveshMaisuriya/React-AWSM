@@ -69,6 +69,7 @@ const StorageTab = ({ data, onChange, error_code, disabledUpdate }) => {
   )
   function renderExceedError(key, max) {
     if (storageData?.[key] > max) {
+      disabledUpdate(true);
       return (
         <p style={{ color: "#f46a6a", fontSize: "80%", marginTop: "5px" }}>
           Must not exceed {max}

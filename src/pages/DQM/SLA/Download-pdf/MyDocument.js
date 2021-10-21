@@ -31,7 +31,7 @@ var dt = new Date();
         </Col>
         </Row>
          <div className='second-sec'>           
-            <h6>Service Level Agreement (SLA)</h6>
+            <h6>Service Level Agreement (SLA) / Procedures</h6>
             <p>{props?.type === '0' ? 'Retail Business Division (RBD)' : props?.type === '1' ? 'Commercial Business Division (CBD)' : 'Internal' }</p>
            </div>
 

@@ -470,7 +470,7 @@ class SLA extends Component {
         <div className="page-content">
           <div className="container-fluid">
             <div className="d-flex align-items-center justify-content-between">
-              <h4 className="sla-title">Service Level Agreement (SLA)</h4>
+              <h4 className="sla-title">Service Level Agreement (SLA) / Procedures</h4>
               <div className="d-flex align-items-end">
                 <Link
                   to="#"

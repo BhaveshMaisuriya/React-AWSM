@@ -28,6 +28,8 @@ const DatePicker = ({
     value ? new Date(value) : null
   )
   const [month, setMonth] = useState(date)
+  const [isApplyDisabled, setIsApplyDisabled] = useState();
+
   const open = Boolean(anchorEl)
   const id = Date.now().toString()
   useEffect(() => {
@@ -63,6 +65,7 @@ const DatePicker = ({
 
   const onDateChangeButton = date => {
     setDate(date)
+    setIsApplyDisabled(false)
   }
 
   const applyDate = () => {
@@ -79,9 +82,11 @@ const DatePicker = ({
   }
 
   const onClear = () => {
-    setDate(initialDate)
+    console.log('clear::', initialDate)
+    setDate(null)
+    setIsApplyDisabled(true)
     if (onChange) {
-      onChange(initialDate)
+      onChange(null)
     }
   }
 
@@ -146,6 +151,7 @@ const DatePicker = ({
 
   const DATE_FORMAT = "yyyyMMdd"
   const onDayClick = (date) => {
+    setIsApplyDisabled(false)
     if (startDate && dateFnsFormat(date, DATE_FORMAT) < dateFnsFormat(startDate, DATE_FORMAT)) {
       return
     }
@@ -195,15 +201,18 @@ const DatePicker = ({
               maxDate={maxDate}
             />
           ) : (
-            <DayPicker
-              selectedDays={new Date(date)}
-              onDayClick={onDayClick}
-              captionElement={captionElement}
-              weekdayElement={weekdayElement}
-              navbarElement={() => null}
-              month={month}
-              modifiers={modifiers}
-            />
+            <>
+            {console.log('date::', date)}
+              <DayPicker
+                selectedDays={date}
+                onDayClick={onDayClick}
+                captionElement={captionElement}
+                weekdayElement={weekdayElement}
+                navbarElement={() => null}
+                month={month}
+                modifiers={modifiers}
+              />
+            </>
           )}
         </div>
 
@@ -227,6 +236,7 @@ const DatePicker = ({
             <button
               className="btn btn-primary btn-date-range"
               onClick={applyDate}
+              disabled={isApplyDisabled}
             >
               Apply
             </button>

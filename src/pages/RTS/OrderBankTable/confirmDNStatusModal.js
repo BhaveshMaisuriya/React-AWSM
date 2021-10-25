@@ -1,19 +1,27 @@
 import React from "react"
-import { Modal, ModalBody, ModalHeader } from "reactstrap";
+import CloseButton from "../../../components/Common/CloseButton"
+import { Modal, ModalBody, ModalHeader, ModalFooter,Button } from "reactstrap";
 
 const ConfirmDNStatusModal = ({ isOpen, onSend, onCancel,headerContent,bodyContent,styleColor = 'success' }) => {
     return (
-      <Modal isOpen={isOpen} className='deleteModal'>
-        <ModalHeader toggle={onCancel}>
+      <Modal isOpen={isOpen} style={{top: "30%", maxWidth: "530px"}}>
+        <ModalHeader close={<CloseButton handleClose={onCancel}/>}>
             {headerContent}
         </ModalHeader>
-        <ModalBody className="pl-3">
+        <ModalBody >
           <h6>{bodyContent}</h6>
-          <div className="d-flex align-items-center justify-content-end">
-            <button onClick={onCancel} className={`btn btn-outline-${styleColor} mr-2`}>Cancel</button>
-            <button onClick={onSend} className={`btn btn-${styleColor}`}>Proceed</button>
-          </div>
         </ModalBody>
+        <ModalFooter>
+        <button
+          className={`btn btn-outline-${styleColor} mr-2`}
+          onClick={onCancel}
+        >
+          Cancel
+        </button>
+        <Button className={`btn btn-${styleColor}`} onClick={onSend}>
+          Proceed
+        </Button>
+        </ModalFooter>
       </Modal>
     )
   }

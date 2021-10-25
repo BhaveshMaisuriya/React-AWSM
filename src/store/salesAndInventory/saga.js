@@ -47,7 +47,7 @@ import {
   getAuditLog,
   getDownloadSales,
   getSaleAndInventoryDetail,
-  updateSaleAndInventoryDetail, 
+  updateSaleAndInventoryDetail,
   getSaleAndInventoryByRecordId,
   updateSaleAndInventoryOverride
 } from "../../helpers/fakebackend_helper"
@@ -102,11 +102,11 @@ function* onUpdateSalesAndInventoryVarianceControl({ data }) {
   }
 }
 
-function* onGetSalesAndInventoryTankStatus({ date }) {
+function* onGetSalesAndInventoryTankStatus({date}) {
   try {
     // const response = yield call(getSaleAndInventoryTankStatus, date)
-    const response = yield call(getSaleAndInventory, {search_date: date})
-    yield put(getSalesAndInventoryTankStatusSuccess(response?.data.tank_status_settings))
+    const response = yield call(getSaleAndInventoryTankStatus, date ? date : "")
+    yield put(getSalesAndInventoryTankStatusSuccess(response?.data))
   } catch (error) {
     yield put(getSalesAndInventoryTankStatusFailed(error))
   }

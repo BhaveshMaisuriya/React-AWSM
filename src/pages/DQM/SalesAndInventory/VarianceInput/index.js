@@ -41,8 +41,9 @@ const VarianceInput = ({ value, disabled = false, onChange }) => {
         const theEvent = event || window.event
         let key = theEvent.keyCode || theEvent.which
         key = String.fromCharCode(key)
-        const regex = /[0-9]|\./
-        if (!regex.test(key)) {
+        const regex = /[0-9\.\-]/
+        // Handle include negative number
+        if (!regex.test(key) || (key === "-" && value?.includes("-"))) {
             theEvent.returnValue = false
             if (theEvent.preventDefault) theEvent.preventDefault()
         }

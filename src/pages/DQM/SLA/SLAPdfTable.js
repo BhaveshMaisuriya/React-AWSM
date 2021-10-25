@@ -18,6 +18,13 @@ import {
 } from "reactstrap"
 import AWSMInput from "components/Common/Input"
 import AWSMAlert from "components/Common/AWSMAlert"
+import { ReactSVG } from "react-svg"
+import CustomTrashIcon from "../../../assets/images/AWSM-Trash-Icon-sla.svg"
+import CustomViewIcon from "../../../assets/images/AWSM-View.svg"
+import CustomDownloadIcon from "../../../assets/images/AWSM-Download.svg"
+import CustomEditIcon from "../../../assets/images/AWSM-Edit.svg"
+
+import { Icon } from "@material-ui/core"
 
 function SLAPdfTable(props) {
   const rowsPerPage = 10
@@ -33,10 +40,10 @@ function SLAPdfTable(props) {
   const [renameOpen, setRenameOpen] = useState(false)
   const [deleteOpen, setDeleteOpen] = useState(false)
   const [selectedItem, setSelectedItem] = useState({})
-  const [deleteId, setDeleteId] = useState('') 
-  const [alertMessage, setAlertMessage] = useState('')  
-  const [showAlert, setShowAlert] = useState(false)  
-  const [alertStatus, setAlertStatus] = useState('')  
+  const [deleteId, setDeleteId] = useState("")
+  const [alertMessage, setAlertMessage] = useState("")
+  const [showAlert, setShowAlert] = useState(false)
+  const [alertStatus, setAlertStatus] = useState("")
 
   useEffect(() => {
     async function fetchData() {
@@ -132,29 +139,34 @@ function SLAPdfTable(props) {
         action: (
           <div className="action">
             <Tooltip title="Rename PDF">
-              <EditOutlinedIcon onClick={() => reNamePdf(item)} />
+              <Icon onClick={() => reNamePdf(item)}>
+                <ReactSVG src={CustomEditIcon} />
+              </Icon>
             </Tooltip>
             &nbsp;&nbsp;&nbsp;&nbsp;
             <Tooltip title="Download PDF">
-              <SystemUpdateAltOutlinedIcon
-                onClick={() => downloadViewPdf(item, "download")}
-              />
+              <Icon onClick={() => downloadViewPdf(item, "download")}>
+                <ReactSVG src={CustomDownloadIcon} />
+              </Icon>
             </Tooltip>
             &nbsp;&nbsp;&nbsp;&nbsp;
             <Tooltip title="View PDF">
-              <VisibilityOutlinedIcon
-                onClick={() => downloadViewPdf(item, "view")}
-              />
+              <Icon onClick={() => downloadViewPdf(item, "view")}>
+                <ReactSVG src={CustomViewIcon} />
+              </Icon>
             </Tooltip>
             &nbsp;&nbsp;&nbsp;&nbsp;
             <Tooltip title="Delete PDF">
-              <DeleteOutlinedIcon onClick={() => deletePdf(item)} />
+              <Icon onClick={() => deletePdf(item)}>
+                <ReactSVG src={CustomTrashIcon} />
+              </Icon>
             </Tooltip>
             &nbsp;&nbsp;&nbsp;&nbsp;
           </div>
         ),
       })
     })
+
     await setTableDatas(allData)
     await setFilterTableDatas(allData)
     await setCollection(cloneDeep(allData.slice(0, rowsPerPage)))
@@ -170,37 +182,37 @@ function SLAPdfTable(props) {
     const { onGetRenamePdf } = props
     await onGetRenamePdf({
       id: selectedItem.id,
-      filename: renameFileName + '.pdf',
+      filename: renameFileName + ".pdf",
       remarks: selectedItem.remarks,
     })
     toggleRename()
-    setShowAlert(true);
-    setAlertStatus('success');
-    setAlertMessage('PDF Renamed Successfully.')
+    setShowAlert(true)
+    setAlertStatus("success")
+    setAlertMessage("PDF Renamed Successfully.")
   }
 
   const deletePdf = async item => {
-    setDeleteId(item.id);
-    setCurrentFileName(item.filename);
-    toggleDelete();
+    setDeleteId(item.id)
+    setCurrentFileName(item.filename)
+    toggleDelete()
   }
 
   const DeletePdf = async () => {
     const { onGetDeletePdf } = props
-    await onGetDeletePdf({id: deleteId});
+    await onGetDeletePdf({ id: deleteId })
     toggleDelete()
-    setAlertStatus('success');
-    setShowAlert(true);
-    setAlertMessage('PDF Deleted Successfully.')
+    setAlertStatus("success")
+    setShowAlert(true)
+    setAlertMessage("PDF Deleted Successfully.")
   }
 
   useEffect(() => {
-    props.slaRenamePdf !== null && props.getAllPdf();
+    props.slaRenamePdf !== null && props.getAllPdf()
   }, [props.slaRenamePdf])
 
   useEffect(() => {
-    props.slaDeletePdf !== null && props.getAllPdf();
-  }, [props.slaDeletePdf])  
+    props.slaDeletePdf !== null && props.getAllPdf()
+  }, [props.slaDeletePdf])
 
   const downloadViewPdf = async (item, action) => {
     const { onGetSlaPdfDownload } = props
@@ -223,7 +235,11 @@ function SLAPdfTable(props) {
           .slice(0, rowsPerPage)
       )
       await setCollection(data)
-      await setFilterTableDatas(tableDatas.filter(item => item.filename.toLowerCase().indexOf(query) > -1))
+      await setFilterTableDatas(
+        tableDatas.filter(
+          item => item.filename.toLowerCase().indexOf(query) > -1
+        )
+      )
     }
   }
 
@@ -260,7 +276,7 @@ function SLAPdfTable(props) {
 
   const toggleDelete = () => {
     setDeleteOpen(!deleteOpen)
-  }  
+  }
 
   return (
     <>
@@ -343,7 +359,7 @@ function SLAPdfTable(props) {
         </Row>
       </Modal>
 
-       {/* delete */}
+      {/* delete */}
       <Modal
         isOpen={deleteOpen}
         toggle={toggleDelete}
@@ -355,8 +371,10 @@ function SLAPdfTable(props) {
         </ModalHeader>
         <ModalBody>
           <Row>
-            <h6 className='mb-3'>{currentFileName}</h6>
-            <p className='text-error'>Are You sure you want to delete file? This action cannot be undo.</p>
+            <h6 className="mb-3">{currentFileName}</h6>
+            <p className="text-error">
+              Are You sure you want to delete file? This action cannot be undo.
+            </p>
           </Row>
         </ModalBody>
         <Row>
@@ -381,7 +399,6 @@ function SLAPdfTable(props) {
         openAlert={showAlert}
         closeAlert={() => setShowAlert(false)}
       />
-    
     </>
   )
 }

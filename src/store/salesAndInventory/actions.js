@@ -97,7 +97,7 @@ export const updateSalesAndInventoryTankStatusFailed = error => {
 export const getSalesAndInventoryTankStatus = data => {
   return {
     type: GET_SALES_AND_INVENTORY_TANK_STATUS,
-    payload: data,
+    date: data,
   }
 }
 export const getSalesAndInventoryTankStatusSuccess = data => {

@@ -30,7 +30,16 @@ import DateRangePicker from "../../components/Common/DateRangePicker"
 import AWSMDropdown from "../../components/Common/Dropdown"
 import OrderBankTable from "./OrderBankTable"
 import REGION_TERMINAL from "../../common/data/regionAndTerminal"
+
+//custom icons import
 import customiseTableIcon from "../../assets/images/AWSM-Customise-Table.svg"
+import customiseTableBankIcon from "../../assets/images/AWSM-Customise-Table-Bank.svg"
+import customiseAddIcon from "../../assets/images/AWSM-Add-Order.svg"
+import customiseCrossTerminalIcon from "../../assets/images/AWSM-Cross-Terminal.svg"
+import customiseMultipleDNIcon from "../../assets/images/AWSM-Multiple-DN.svg"
+
+
+
 import CustomizeTableModal from "../../common/CustomizeTable"
 
 import { FormControlLabel } from "@material-ui/core"
@@ -126,6 +135,12 @@ function OrderBank({
       disabled: false,
       value: "newOrder",
       label: "Add New Order",
+      icon: customiseAddIcon,
+    },
+    {
+      disabled: false,
+      value: "uploadDmr",
+      label: "Upload DMR",
       icon: customiseTableIcon,
     },
     {
@@ -138,19 +153,25 @@ function OrderBank({
       disabled: false,
       value: "customizeCol",
       label: "Customize Column",
-      icon: customiseTableIcon,
+      icon: customiseTableBankIcon,
     },
     // {disabled: false, 'value': 'RefreshDN', 'label': 'Refresh Blocked DN', 'icon' : customiseTableIcon },
     {
       disabled: true,
       value: "CrossTerminal",
       label: "Cross Terminal",
-      icon: customiseTableIcon,
+      icon: customiseCrossTerminalIcon,
     },
     {
       disabled: true,
       value: "SendDN",
       label: "Send Multiple for DN",
+      icon: customiseMultipleDNIcon,
+    },
+    {
+      disabled: false,
+      value: "DeleteMultiple",
+      label: "Delete Multiple Order",
       icon: customiseTableIcon,
     },
     {

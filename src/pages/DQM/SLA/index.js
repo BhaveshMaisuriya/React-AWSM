@@ -36,12 +36,13 @@ import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown"
 import { FormControlLabel } from "@material-ui/core"
 import Checkbox from "@material-ui/core/Checkbox"
 import MyDocument from "./Download-pdf/MyDocument"
-import { DownloadIcon } from "../Common/icon"
+import { DownloadIcon , DownloadPDFIcon } from "../Common/icon"
 import { removeKeywords } from "../Common/helper"
 import { isNull } from "lodash"
 import html2canvas from "html2canvas"
 import jsPDF from "jspdf"
 import AWSMAlert from "components/Common/AWSMAlert"
+
 
 const UntickIcon = () => <img src={selectAllIcon3} alt="icon" />
 const CheckedIcon = () => <img src={selectAllIcon2} alt="icon" />
@@ -570,10 +571,10 @@ class SLA extends Component {
                           >
                             <div className="excel-download-btn">
                               <span className="download-icon">
-                                <DownloadIcon />
+                                <DownloadPDFIcon/>
                               </span>
                               <span className="download-button-message">
-                                Download
+                                Download PDF
                                 <ArrowDropDownIcon />
                               </span>
                             </div>
@@ -659,10 +660,10 @@ class SLA extends Component {
                           >
                             <div className="excel-download-btn">
                               <span className="download-icon">
-                                <DownloadIcon />
+                              <DownloadPDFIcon/>
                               </span>
                               <span className="download-button-message">
-                                Download
+                                Download PDF
                                 <ArrowDropDownIcon />
                               </span>
                             </div>
@@ -752,10 +753,10 @@ class SLA extends Component {
                           >
                             <div className="excel-download-btn">
                               <span className="download-icon">
-                                <DownloadIcon />
+                              <DownloadPDFIcon/>
                               </span>
                               <span className="download-button-message">
-                                Download
+                                Download PDF
                                 <ArrowDropDownIcon />
                               </span>
                             </div>

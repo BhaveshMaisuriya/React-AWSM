@@ -49,7 +49,9 @@ import {
   DESELECT_VEHICLE_RTS_SHIPMENT,
   REMOVE_ORDER_FROM_SHIPMENT,
   REMOVE_ORDER_FROM_SHIPMENT_SUCCESS,
-  REMOVE_SHIPMENT_FROM_EVENT, REMOVE_SHIPMENT_FROM_EVENT_SUCCESS
+  REMOVE_SHIPMENT_FROM_EVENT, REMOVE_SHIPMENT_FROM_EVENT_SUCCESS,
+  REMOVE_EVENT,
+  REMOVE_EVENT_SUCCESS,
 } from "./actionTypes"
 
 export const getRTSOrderBankTableData = (params) => ({
@@ -313,5 +315,15 @@ export const removeShipmentFromEvent = (params) => ({
 
 export const removeShipmentFromEventSuccess = (params) => ({
   type: REMOVE_SHIPMENT_FROM_EVENT_SUCCESS,
+  params
+})
+
+export const removeEvent = (params) => ({
+  type: REMOVE_EVENT,
+  params
+})
+
+export const removeEventSuccess = (params) => ({
+  type: REMOVE_EVENT_SUCCESS,
   params
 })

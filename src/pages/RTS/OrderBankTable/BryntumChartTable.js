@@ -266,6 +266,7 @@ function BryntumChartTable(props) {
   const [eventsData, setEventsData] = useState([])
   const [shipmentDblclick, setShipmentDblclick] = useState(false)
   const [sapAlertDblclick, setSapAlertDblclick] = useState(false)
+  const [sapShipmentClicked, setShipmentClicked] = useState(null)
   const [roadTankerModalShow, setRoadTankerModal] = useState(false)
   const [selectedVehicleID, setSelectedVehicleID] = useState(null)
   const schedulerProRef = useRef()
@@ -551,6 +552,7 @@ function BryntumChartTable(props) {
 
   function ShipmentDblclickModal(event, resource) {
     const allowedShipmentModel = ["Blocked DN", "Shipment Created", "Scheduled"]
+    setShipmentClicked(event._data.resourceId)
     if (allowedShipmentModel.includes(event._data.eventType)) {
       const { getShipmentOfOderBankGanttChart } = props
       getShipmentOfOderBankGanttChart()
@@ -858,12 +860,8 @@ function BryntumChartTable(props) {
       {shipmentDblclick &&
         <OrderBankShipmentModal open={shipmentDblclick} istoggle={toggleShipment} />
       }
-      {sapAlertDblclick &&
-        <OrderBankSapAlertModal open={sapAlertDblclick} istoggle={toggleSapAlert} />
-      }
-      {roadTankerModalShow &&
-        <OrderBankRoadTankerModal isOpen={roadTankerModalShow} toggle={toggleRoadTanker} selectedVehicleID={selectedVehicleID}/>
-      }
+      {sapAlertDblclick && <OrderBankSapAlertModal open={sapAlertDblclick} istoggle={toggleSapAlert} shipmentClicked={sapShipmentClicked}/>}
+      <OrderBankRoadTankerModal isOpen={roadTankerModalShow} toggle={toggleRoadTanker} selectedVehicleID={selectedVehicleID}/>
     </div>
   )
 }

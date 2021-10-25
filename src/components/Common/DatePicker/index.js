@@ -1,5 +1,4 @@
 import React, { useState, useMemo, useEffect } from "react"
-import { Calendar } from "react-date-range"
 import "react-date-range/dist/styles.css"
 import "react-date-range/dist/theme/default.css"
 import { Popover } from "@material-ui/core"
@@ -8,7 +7,6 @@ import "./datePicker.scss"
 import AWSM_Calendar from "../../../assets/images/AWSM-Calendar.svg"
 import { ReactSVG } from "react-svg"
 import moment from "moment"
-import { Button } from "reactstrap"
 import { addMonths, format as dateFnsFormat } from "date-fns"
 
 const DatePicker = ({
@@ -16,8 +14,6 @@ const DatePicker = ({
   format = "Do MMM YYYY",
   value,
   onChange,
-  showButtons,
-  isTypeFor,
   startDate = null,
   endDate = null,
   placeholder = "Select date"
@@ -32,22 +28,17 @@ const DatePicker = ({
 
   const open = Boolean(anchorEl)
   const id = Date.now().toString()
+  
   useEffect(() => {
     setDate(value ? new Date(value) : null)
   }, [value])
-  const [initialDate] = useState(value ? new Date(value) : null)
-
-  const minDate =
-    isTypeFor === "sales" ? new Date(moment().subtract(30, "days")) : ""
-  const maxDate = isTypeFor === "sales" ? new Date() : ""
-
+  
   const handleClick = event => {
-    setMonth(date)
+    setMonth(date ?? new Date())
     setAnchorEl(event.currentTarget)
   }
 
   const handleClose = () => {
-    setDate(value ? new Date(value) : null)
     setAnchorEl(null)
   }
 
@@ -72,17 +63,10 @@ const DatePicker = ({
     if (onChange) {
       onChange(date)
     }
-    setDateButton(date)
     handleClose()
   }
-
-  const handleCancel = () => {
-    setDate(dateButton)
-    handleClose()
-  }
-
+  
   const onClear = () => {
-    console.log('clear::', initialDate)
     setDate(null)
     setIsApplyDisabled(true)
     if (onChange) {
@@ -162,7 +146,7 @@ const DatePicker = ({
   }
 
   return (
-    <div className="awsm-date-picker-container" style={{width: `${showButtons ? '75%' : '100%'}`}} >
+    <div className="awsm-date-picker-container">
       <button
         type="button"
         disabled={disabled}

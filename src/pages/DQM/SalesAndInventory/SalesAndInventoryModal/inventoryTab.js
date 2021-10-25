@@ -8,6 +8,8 @@ import { differenceInDays } from "date-fns"
 const INVENTORY_FINAL_FIGURE = "inventory_final_figure";
 const OPENING_INVENTORY = "opening_inventory";
 const CALCULATED_INVENTORY = "calculated_inventory";
+const INVENTORY_VARIANCE_PERCENT = "inventory_variance_percent";
+const INVENTORY_VARIANCE = "inventory_variance";
 
 const InventoryTab = ({ data, onChange, salesDate }) => {
   const onChangeHandler = (value, key) => {
@@ -27,6 +29,12 @@ const InventoryTab = ({ data, onChange, salesDate }) => {
     if (field === "yesterday_diversion" || field === "yesterday_delivery_adjustment") {
       newData[CALCULATED_INVENTORY] = Number(data?.yesterday_opening_inventory) - Number(data?.yesterday_sales_final_figure)
         + Number(data?.yesterday_delivery) + Number(newData?.yesterday_delivery_adjustment) + Number(newData?.yesterday_diversion);
+    }
+    // Calculate inventory variance
+    newData[INVENTORY_VARIANCE] = Number(newData?.inventory_final_figure) - Number(data?.calculated_inventory);
+    // Handle percent inventory field
+    if (newData?.inventory_final_figure > 0 && newData?.calculated_inventory > 0) {
+      newData[INVENTORY_VARIANCE_PERCENT] = ((Number(newData?.inventory_variance) - Number(data?.calculated_inventory)) * 100).toFixed(2);
     }
     onChange("inventory", newData)
   }

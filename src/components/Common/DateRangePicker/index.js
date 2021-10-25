@@ -39,7 +39,6 @@ const DateRangePicker = ({
 }) => {
   const [value, setValue] = useState(defaultValue || dateObjectTemplate)
   const [month, setMonth] = useState(defaultMonth)
-  const [isApplyDisabled, setIsApplyDisabled] = useState();
 
   const getDay = days => {
     if (!days || !days.length > 0) {
@@ -281,7 +280,6 @@ const DateRangePicker = ({
       onBlur()
     }
     setAnchorEl(null)
-    setIsApplyDisabled(true)
   }
 
   const onApply = () => {
@@ -310,8 +308,11 @@ const DateRangePicker = ({
       date_from: null,
       date_to: null,
     })
-    setIsApplyDisabled(false);
   }
+  
+  const isApplyDisabled = useMemo(() => {
+    return !isValidDate(value)
+  }, [value])
 
   return (
     <div className="awsm-date-range-picker">

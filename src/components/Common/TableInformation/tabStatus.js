@@ -137,7 +137,7 @@ const TabStatus = ({ scheduler, data, onChange }) => {
               onFieldChange(
                 "close_period",
                 "date_from",
-                format(value, "yyyy-MM-dd")
+                value ? format(value, "yyyy-MM-dd") : null
               )
             }
           />
@@ -177,7 +177,7 @@ const TabStatus = ({ scheduler, data, onChange }) => {
               onFieldChange(
                 "close_period",
                 "date_to",
-                format(value, "yyyy-MM-dd")
+                value ? format(value, "yyyy-MM-dd") : null
               )
             }
           />

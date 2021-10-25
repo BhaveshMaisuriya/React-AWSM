@@ -1,24 +1,24 @@
 import React, { Fragment, useEffect, useState } from "react"
-import { ReactSVG } from "react-svg"
 import { Modal, ModalBody, ModalHeader, ModalFooter, Button } from "reactstrap"
 import { connect } from "react-redux"
 import ConfirmationPopup from "../../../components/Common/DeleteConfirmationPopup"
 import RedAlertIcon from "./../../../assets/images/AWSM-Red-Alert.svg"
 import CloseButton from "../../../components/Common/CloseButton"
-import { getShipmentOfOderBankGanttChart } from "../../../store/actions"
+import { getShipmentOfOderBankGanttChart, removeEvent } from "../../../store/actions"
 import { shipmentTableColumns } from "./tableMapping"
 
-const OrderbankSapAlertModal = ({ istoggle, open, shipmentOrderBankTableData, getShipmentOfOderBankGanttChart}) => {
+const OrderbankSapAlertModal = ({ istoggle, open, shipmentOrderBankTableData, getShipmentOfOderBankGanttChart, shipmentClicked, onRemoveEvent}) => {
   const [showDeleteModal, setDeleteModal] = useState(false)
   const toggleDeleteModal = () => setDeleteModal(!showDeleteModal)
   const onClickDeleteShipment = () => {
     //insert api to delete shipment
+    onRemoveEvent({id: shipmentClicked})
     istoggle()
   }
 
   useEffect(()=>{
-    getShipmentOfOderBankGanttChart()
-  },[])
+    if(open)getShipmentOfOderBankGanttChart()
+  },[open])
 
   const orderTemplate = (data) => {
     return <td>
@@ -37,7 +37,7 @@ const OrderbankSapAlertModal = ({ istoggle, open, shipmentOrderBankTableData, ge
         className="modal-lg"
       >
         <ModalHeader close={<CloseButton handleClose={istoggle} />}>
-          <img style={{ paddingBottom:"4px", paddingRight:"3px" }} src={RedAlertIcon}/><h3>SAP Alert: Vehicle No VBF 5559</h3>
+          <img style={{ paddingBottom:"4px", paddingRight:"3px" }} src={RedAlertIcon}/><h3>{`SAP Alert: Vehicle No ${shipmentClicked}`}</h3>
         </ModalHeader>
         <ModalBody>
           <p style={{ marginBottom: "0px"}}> Looks like somneone has created a shipment via SAP, further details are as following: </p>
@@ -101,7 +101,8 @@ const mapStateToProps = ({ orderBank }) => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  getShipmentOfOderBankGanttChart: (params) => dispatch(getShipmentOfOderBankGanttChart(params))
+  getShipmentOfOderBankGanttChart: (params) => dispatch(getShipmentOfOderBankGanttChart(params)),
+  onRemoveEvent: (params) => dispatch(removeEvent(params))
 })
 
 export default connect(

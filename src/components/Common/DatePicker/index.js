@@ -1,5 +1,4 @@
 import React, { useState, useMemo, useEffect } from "react"
-import { Calendar } from "react-date-range"
 import "react-date-range/dist/styles.css"
 import "react-date-range/dist/theme/default.css"
 import { Popover } from "@material-ui/core"
@@ -8,7 +7,6 @@ import "./datePicker.scss"
 import AWSM_Calendar from "../../../assets/images/AWSM-Calendar.svg"
 import { ReactSVG } from "react-svg"
 import moment from "moment"
-import { Button } from "reactstrap"
 import { addMonths, format as dateFnsFormat } from "date-fns"
 
 const DatePicker = ({
@@ -16,70 +14,45 @@ const DatePicker = ({
   format = "Do MMM YYYY",
   value,
   onChange,
-  showButtons,
-  isTypeFor,
   startDate = null,
   endDate = null,
   placeholder = "Select date"
 }) => {
   const [date, setDate] = useState(value ? new Date(value) : null)
   const [anchorEl, setAnchorEl] = React.useState(null)
-  const [dateButton, setDateButton] = useState(
-    value ? new Date(value) : null
-  )
-  const [month, setMonth] = useState(date)
+  const [month, setMonth] = useState(date ?? new Date())
+  const [initialDate] = useState(value ? new Date(value) : null)
   const open = Boolean(anchorEl)
   const id = Date.now().toString()
+  
   useEffect(() => {
     setDate(value ? new Date(value) : null)
   }, [value])
-  const [initialDate] = useState(value ? new Date(value) : null)
-
-  const minDate =
-    isTypeFor === "sales" ? new Date(moment().subtract(30, "days")) : ""
-  const maxDate = isTypeFor === "sales" ? new Date() : ""
-
+  
   const handleClick = event => {
-    setMonth(date)
+    setMonth(date ?? new Date())
     setAnchorEl(event.currentTarget)
   }
 
   const handleClose = () => {
-    setDate(value ? new Date(value) : null)
     setAnchorEl(null)
   }
 
   const label = useMemo(() => {
     return date ? moment(date).format(format) : ""
   }, [date])
-
-  const onDateChange = date => {
-    setDate(date)
-    if (onChange) {
-      onChange(date)
-    }
-    isTypeFor !== "sales" && handleClose()
-  }
-
-  const onDateChangeButton = date => {
-    setDate(date)
-  }
+  
 
   const applyDate = () => {
     if (onChange) {
       onChange(date)
     }
-    setDateButton(date)
     handleClose()
   }
-
-  const handleCancel = () => {
-    setDate(dateButton)
-    handleClose()
-  }
-
+  
   const onClear = () => {
     setDate(initialDate)
+    setAnchorEl(null);
     if (onChange) {
       onChange(initialDate)
     }
@@ -156,7 +129,7 @@ const DatePicker = ({
   }
 
   return (
-    <div className="awsm-date-picker-container" style={{width: `${showButtons ? '75%' : '100%'}`}} >
+    <div className="awsm-date-picker-container">
       <button
         type="button"
         disabled={disabled}
@@ -185,53 +158,31 @@ const DatePicker = ({
         }}
       >
         <div className="awsm-date-picker">
-          {isTypeFor === "sales" ? (
-            <Calendar
-              showMonthAndYearPickers={false}
-              date={date}
-              onChange={onDateChangeButton}
-              weekdayDisplayFormat="EEEEEE"
-              minDate={minDate}
-              maxDate={maxDate}
-            />
-          ) : (
-            <DayPicker
-              selectedDays={new Date(date)}
-              onDayClick={onDayClick}
-              captionElement={captionElement}
-              weekdayElement={weekdayElement}
-              navbarElement={() => null}
-              month={month}
-              modifiers={modifiers}
-            />
-          )}
+          <DayPicker
+            selectedDays={date}
+            onDayClick={onDayClick}
+            captionElement={captionElement}
+            weekdayElement={weekdayElement}
+            navbarElement={() => null}
+            month={month}
+            modifiers={modifiers}
+          />
         </div>
 
-        {showButtons ? (
-          <div className="apply_buttons">
-            <Button color={"danger"} onClick={() => handleCancel()}>
-              Cancel
-            </Button>
-            <Button color={"primary"} onClick={() => applyDate()}>
-              Apply
-            </Button>
-          </div>
-        ) : (
-          <div className="d-flex pr-3 justify-content-end align-items-center mb-2">
-            <button
-              className="btn btn-outline-primary mr-2 btn-date-range"
-              onClick={onClear}
-            >
-              Clear
-            </button>
-            <button
-              className="btn btn-primary btn-date-range"
-              onClick={applyDate}
-            >
-              Apply
-            </button>
-          </div>
-        )}
+        <div className="d-flex pr-3 justify-content-end align-items-center mb-2">
+          <button
+            className="btn btn-outline-primary mr-2 btn-date-range"
+            onClick={onClear}
+          >
+            Clear
+          </button>
+          <button
+            className="btn btn-primary btn-date-range"
+            onClick={applyDate}
+          >
+            Apply
+          </button>
+        </div>
       </Popover>
     </div>
   )

@@ -361,7 +361,7 @@ export const ganttChartTableEvents = [
     id: 2,
     resourceId: 1,
     name: "RT13098 Drag true",
-    startDate: "2021-07-23 00:00",
+    startDate: "2021-07-23 06:00",
     endDate: "2021-07-23 12:00",
     eventColor: "#84B0E9",
     eventType: "Scheduled",

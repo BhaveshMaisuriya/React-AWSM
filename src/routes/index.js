@@ -88,7 +88,7 @@ const authProtectedRoutes = [
   { path: "/tables-datatable", component: DatatableTables },
   { path: "/tables-responsive", component: ResponsiveTables },
   { path: "/tables-editable", component: EditableTables },
-  { path: "/", exact: true, component: () => <Redirect to="/dashboard" /> },
+  { path: "/", exact: true, component: () => <Redirect to="/retail-customer" /> },
 ]
 
 const publicRoutes = [

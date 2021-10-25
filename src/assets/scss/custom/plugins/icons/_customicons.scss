@@ -1,0 +1,61 @@
+//coverted custom svg icon into font icon 
+
+// URL to site : https://icomoon.io/app/#/select
+
+
+@font-face {
+  font-family: 'icomoon';
+  src:  url('../../../../fonts/icomoon.eot?391hag');
+  src:  url('../../../../fonts/icomoon.eot?391hag#iefix') format('embedded-opentype'),
+    url('../../../../fonts/icomoon.ttf?391hag') format('truetype'),
+    url('../../../../fonts/icomoon.woff?391hag') format('woff'),
+    url('../../../../fonts/icomoon.svg?391hag#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+.cs
+{
+    font-family: 'icomoon' !important;
+    transform: scale(0.78);
+    font-weight: normal;
+    font-style: normal;
+    font-variant: normal;
+    line-height: 1;
+
+    display: inline-block;
+
+    text-transform: none;
+
+    speak: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+.cs-ul
+{
+    margin-left: 2em;
+    padding-left: 0;
+
+    list-style: none;
+}
+.cs-ul > li
+{
+    position: relative;
+}
+.cs-ul .cs
+{
+    font-size: inherit;
+    line-height: inherit;
+
+    position: absolute;
+    left: -2em;
+
+    width: 2em;
+
+    text-align: center;
+}
+
+.rts-logo:before {
+  content: "\e900";
+}

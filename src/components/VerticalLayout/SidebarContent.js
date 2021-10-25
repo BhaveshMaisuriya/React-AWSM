@@ -94,7 +94,7 @@ class SidebarContent extends Component {
               </Link>
               <ul className="sub-menu" aria-expanded="false">
                 <li>
-                  <Link to="/dashboard">Dashboard</Link>
+                  {/* <Link to="/dashboard">Dashboard</Link> */}
                   <Link to="/sales-inventory">Sales & Inventory</Link>
                   <Link to="/retail-customer">Retail Customer</Link>
                   <Link to="/commercial-customer">Commercial Customer</Link>
@@ -110,8 +110,8 @@ class SidebarContent extends Component {
             </li>
 
             <li>
-              <Link to="/#" className=" waves-effect">
-                <i className="bx bxs-bar-chart-alt-2" />
+              <Link to="/#" className="waves-effect">
+                <i className="cs rts-logo"/>
                 <span>RTS</span>
               </Link>
               <ul className="sub-menu" aria-expanded="false">
@@ -123,7 +123,7 @@ class SidebarContent extends Component {
                 </li>
               </ul>
             </li>
-            <li>
+            {/* <li>
               <Link to="#" className=" waves-effect">
                 <i className="bx bxs-book-content" />
                 <span>OPO</span>
@@ -156,7 +156,7 @@ class SidebarContent extends Component {
                 <i className="bx bxs-user-detail" />
                 <span>EMS</span>
               </Link>
-            </li>
+            </li> */}
 
             {/* <li className="menu-title">{this.props.t("Apps")}</li> */}
 

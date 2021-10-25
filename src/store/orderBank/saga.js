@@ -17,6 +17,7 @@ import {
   SEND_ORDER_IN_GANTT_CHART,
   GET_RTS_GANTT_CHART_DATA,
   DRAG_RTS_ORDER_BANK_TO_GANTT_CHART, REMOVE_ORDER_FROM_SHIPMENT, REMOVE_SHIPMENT_FROM_EVENT,
+  REMOVE_EVENT,
 } from "./actionTypes"
 
 import {
@@ -50,7 +51,8 @@ import {
   getRTSOderBankGanttChartFail,
   dragOrderBankToGanttChartSuccess,
   removeOrderFromShipmentSuccess,
-  removeShipmentFromEventSuccess
+  removeShipmentFromEventSuccess,
+  removeEventSuccess,
 } from "./actions"
 import {
   getOrderBank,
@@ -218,6 +220,13 @@ function* onRemoveShipmentFromEvent(payload){
   yield put(removeShipmentFromEventSuccess(payload.params))
 }
 
+function* onRemoveEvent(payload){
+  // call api to remove shipment here
+  
+  // call success case
+  yield put(removeEventSuccess(payload.params))
+}
+
 function* orderBankSaga() {
   yield takeLatest(GET_ORDERBANK, onGetOrderbank)
   yield takeLatest(GET_RTS_ORDER_BANK_TABLE_DATA, onGetRTSOrderBank)
@@ -245,6 +254,7 @@ function* orderBankSaga() {
   yield takeLatest(DRAG_RTS_ORDER_BANK_TO_GANTT_CHART, onDragOrderBankToGanttChart)
   yield takeLatest(REMOVE_ORDER_FROM_SHIPMENT, onRemoveOrderFromShipment)
   yield takeLatest(REMOVE_SHIPMENT_FROM_EVENT, onRemoveShipmentFromEvent)
+  yield takeLatest(REMOVE_EVENT, onRemoveEvent)
 }
 
 export default orderBankSaga

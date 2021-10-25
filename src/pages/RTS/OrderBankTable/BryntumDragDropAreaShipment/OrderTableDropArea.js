@@ -355,7 +355,7 @@ const OrderTableDropArea = ({
           <ConfirmDNStatusModal
             isOpen={showCancelPopup}
             headerContent='Cancel Shipment Confirmation'
-            bodyContent='Are you sure you want to proceed with this shipment cancellation? All order under this shipment will be drop back to Unscheduled list in Order Bank'
+            bodyContent={['Are you sure you want to proceed with this shipment cancellation?', <br/> ,'All order under this shipment will be drop back to Unscheduled list in Order Bank']}
             styleColor='danger'
             onCancel={() => setShowCancelPopup(false)}
             onSend={() => onRemoveShipmentHandler()}
@@ -363,7 +363,9 @@ const OrderTableDropArea = ({
           <ConfirmDNStatusModal
             isOpen={deleteShipmentList}
             headerContent='Delete Shipment Confirmation'
-            bodyContent='Are you sure you want to proceed with this shipment cancellation? All order under this shipment will be drop back to Unscheduled list in Order Bank'
+            bodyContent={["This action cannot be undone.", <br />,
+            "Are you sure want to proceed with the shipment deletion?", <br />,
+            "This shipment will be deleted in both RTS and SAP."]}
             styleColor='danger'
             onCancel={() => setDeleteShipment(false)}
             onSend={() => onRemoveShipmentHandler()}

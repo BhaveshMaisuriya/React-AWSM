@@ -54,7 +54,7 @@ function CsvFileUpload(props) {
     const {uploadCsv} = props;
     if(uploadCsv !== null){
       props.toggle();
-      props.alertShow('Excel Uploaded Successfully!', 'success');
+      props.alertShow('Data has been successfully updated via CSV', 'success');
       props.getListCall();
       setUploadCsvData(uploadCsv);
 
@@ -100,10 +100,7 @@ function CsvFileUpload(props) {
       link.setAttribute('download', `${locationPath}`);
       document.body.appendChild(link);
       link.click();
-      props.alertShow('Excel Download Successfully!', 'success');
-      // await setSuccessAlert(true);
-      // await setAlertMessage('Excel Download Successfully!');
-      // await setAlertStatus('success');
+      props.alertShow('CSV file has been successfully downloaded', 'success');
 
       const { setUploadCsv } = props;
       await setUploadCsv();

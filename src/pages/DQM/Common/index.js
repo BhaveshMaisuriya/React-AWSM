@@ -415,8 +415,8 @@ class Pages extends Component {
                           >
                             <PopoverBody className='mainCsv'>
                               <div className="csvDropdown">
-                              <p onClick={() => this.downloadCSV()}>Download CSV</p>
-                                  <p onClick={() => this.uploadCSV()}>Upload CSV</p>
+                                <p onClick={() => this.downloadCSV()}>Download CSV</p>
+                                <p onClick={() => this.uploadCSV()}>Upload CSV</p>
                               </div>
                             </PopoverBody>
                           </Popover>

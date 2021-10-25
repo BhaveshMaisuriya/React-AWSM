@@ -13,9 +13,8 @@ import Box from '@material-ui/core/Box';
 import CloseIcon from '@material-ui/icons/Close';
 import CheckIcon from '@material-ui/icons/Check';
 import {
-  getUploadCsv,
-  getDownloadCsv,
-  setUploadCsv,
+  getUploadDMR,
+  setUploadDMR,
 } from "../../store/actions"
 import { isEqual } from "lodash"
 
@@ -41,21 +40,22 @@ function UploadDMRModal(props) {
 
   useEffect(async() => {
     if(progress === 100){
-      const { getUploadCsv } = props;
-      await getUploadCsv(base64String);
+      const { getUploadDMR } = props;
+      await getUploadDMR(base64String);
       setProgressColor('successColor');
     }
   }, [progress]);
 
   useEffect(async() => {
-    const {uploadCsv} = props;
-    if(uploadCsv !== null){
+    const {uploadDMR} = props;
+    if(uploadDMR !== null){
+      props.alertShow();
       props.onCancel();
-      // props.alertShow('Data has been successfully updated via CSV', 'success');
-      setUploadCsvData(uploadCsv);
+      
+      setUploadCsvData(uploadDMR);
 
-      const { setUploadCsv } = props;
-      await setUploadCsv();
+      const { setUploadDMR } = props;
+      await setUploadDMR();
 
       setProgressColor('primary');
       setProgress(10);
@@ -65,7 +65,7 @@ function UploadDMRModal(props) {
       // setAlertMessage('Excel Uploaded Successfully!')
       // setAlertStatus('success');
     }
-  }, [props.uploadCsv])
+  }, [props.uploadDMR])
 
   const cancelUpload = () => {
     //  setProgressColor('red');
@@ -80,30 +80,7 @@ function UploadDMRModal(props) {
     // }
   }
 
-  useEffect(async() => {
-    if(props.callDownloadCsv === true){      
-      const { getDownloadCsv } = props;
-      await getDownloadCsv({api: props.currentPage});
-    }
-  }, [props.callDownloadCsv])
   const locationPath = window.location.pathname
-
-  useEffect(async() => {
-    if(props.downloadCsv !== null && props.callDownloadCsv === true){
-      const url = props.downloadCsv.url;
-      const link = document.createElement('a');
-      link.href = url;
-      link.setAttribute('download', `${locationPath}`);
-      document.body.appendChild(link);
-      link.click();
-      // props.alertShow('CSV file has been successfully downloaded', 'success');
-
-      const { setUploadCsv } = props;
-      await setUploadCsv();
-
-      props.toggleDownloadCsv();
-    }
-  }, [props.downloadCsv])  
 
   const fileToBase64 = (file, cb) => {
     const reader = new FileReader()
@@ -199,15 +176,13 @@ function UploadDMRModal(props) {
   )
 }
 
-const mapStateToProps = ({ retailCustomer }) => ({
-  uploadCsv: retailCustomer.uploadCsv,
-  downloadCsv: retailCustomer.downloadCsv,
+const mapStateToProps = ({ sla }) => ({
+  uploadDMR: sla.uploadDMR,
 })
 
 const mapDispatchToProps = dispatch => ({
-  getUploadCsv: params => dispatch(getUploadCsv(params)),
-  getDownloadCsv: params => dispatch(getDownloadCsv(params)),
-  setUploadCsv: () => dispatch(setUploadCsv()),
+  getUploadDMR: params => dispatch(getUploadDMR(params)),
+  setUploadDMR: () => dispatch(setUploadDMR()),
 })
 
 export default connect(

@@ -215,6 +215,12 @@ export const getUploadCsv = params =>
     {'data': params.data}
   )  
 
+export const getUploadDMR = params =>
+  axios.post(
+    '/upload-dmr',
+    {'data': params.data}
+  )    
+
 export const getDownloadCsv = params =>
   axios.get(
     `${params.api}/download/excel`,

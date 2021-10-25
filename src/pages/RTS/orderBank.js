@@ -228,6 +228,7 @@ function OrderBank({
   const [showSnackAlert, setShowSnackAlert] = useState(false)
   const [showDeleteOption, setShowDeleteOption] = useState(false)
   const [clearScheduling, setClearScheduling] = useState(false)  
+  const [showAlertDMR, setShowAlertDMR] = useState(false)    
   const [deleteCheck, setDeleteCheck] = useState(deleteCheckOption)
   const [checkedValue, setCheckedValue] = useState('Manual Scheduling')
   const [isCustomizeGanttModalOpen,setIsCustomizeGanttModalOpen] = useState(false)
@@ -281,6 +282,10 @@ function OrderBank({
 
   const onCloseUploadDMR = () => {
     setUploadDmr(false)
+  }
+
+  const onGetShowAlert = () => {
+    setShowAlertDMR(!showAlertDMR);
   }
 
   const onCloseDeleteMultiple = () => {
@@ -866,7 +871,8 @@ function OrderBank({
               open={uploadDmr}
               onCancel={onCloseUploadDMR}
               onSave={onCloseUploadDMR}
-            />     
+              alertShow={onGetShowAlert}
+            />
             <DeleteMultipleModal
               open={deleteMultiple}
               onCancel={onCloseDeleteMultiple}
@@ -936,7 +942,15 @@ function OrderBank({
                 openAlert={showClearAlert}
                 closeAlert={() => setShowClearAlert(false)}
               />
-            )}            
+            )}
+            {showAlertDMR && (
+              <AWSMAlert
+                status='success'
+                message='DMR File Uploaded!'
+                openAlert={showAlertDMR}
+                closeAlert={() => setShowAlertDMR(false)}
+              />
+            )}                        
           </Card>
         </div>
       </div>

@@ -17,7 +17,6 @@ import {
   getDownloadCsv,
   setUploadCsv,
 } from "../../../../store/actions"
-import { isEqual } from "lodash"
 
 function CsvFileUpload(props) {
   const [alert, setAlert] = useState(true);
@@ -53,8 +52,9 @@ function CsvFileUpload(props) {
   useEffect(async() => {
     const {uploadCsv} = props;
     if(uploadCsv !== null){
-      props.toggle();
       props.alertShow('Data has been successfully updated via CSV', 'success');
+      props.toggle();
+      
       props.getListCall();
       setUploadCsvData(uploadCsv);
 

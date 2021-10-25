@@ -25,7 +25,10 @@ import {
   GET_SLA_RENAME_PDF_SUCCESS,
   GET_SLA_RENAME_PDF_FAIL,
   GET_SLA_DELETE_PDF_SUCCESS,
-  GET_SLA_DELETE_PDF_FAIL,   
+  GET_SLA_DELETE_PDF_FAIL,
+  GET_UPLOAD_DMR_SUCCESS,
+  GET_UPLOAD_DMR_FAIL,  
+  SET_UPLOAD_DMR_SUCCESS
 } from "./actionTypes"
 
 const initialState = {
@@ -38,6 +41,7 @@ const initialState = {
   slaPdfDownload: null,
   slaRenamePdf: null,
   slaDeletePdf: null,
+  uploadDMR: null,
 }
 import { ToastSuccess, ToastError } from "../../helpers/swal"
 
@@ -97,6 +101,24 @@ const SLA = (state = initialState, action) => {
         ...state,
         error: action.payload,
       } 
+
+      case GET_UPLOAD_DMR_SUCCESS:
+        return {
+          ...state,
+          uploadDMR: action.params,
+        }
+  
+      case GET_UPLOAD_DMR_FAIL:
+        return {
+          ...state,
+          uploadDMR: action.payload,
+        }
+  
+      case SET_UPLOAD_DMR_SUCCESS:
+        return {
+          ...state,
+          uploadDMR: null,
+        }
       
     case GET_SLA_PDF_DOWNLOAD_SUCCESS:
       return {

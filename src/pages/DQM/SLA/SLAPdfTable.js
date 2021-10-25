@@ -128,7 +128,7 @@ function SLAPdfTable(props) {
           </p>
         ),
         category: item.category,
-        created_by: "user",
+        created_by: item.created_by,
         action: (
           <div className="action">
             <Tooltip title="Rename PDF">
@@ -376,11 +376,11 @@ function SLAPdfTable(props) {
         </Row>
       </Modal>
       <AWSMAlert
-              status={alertStatus}
-              message={alertMessage}
-              openAlert={showAlert}
-              closeAlert={() => setShowAlert(false)}
-            />
+        status={alertStatus}
+        message={alertMessage}
+        openAlert={showAlert}
+        closeAlert={() => setShowAlert(false)}
+      />
     
     </>
   )

@@ -145,12 +145,6 @@ function OrderBank({
     },
     {
       disabled: false,
-      value: "uploadDmr",
-      label: "Upload DMR",
-      icon: customiseTableIcon,
-    },
-    {
-      disabled: false,
       value: "customizeCol",
       label: "Customize Column",
       icon: customiseTableBankIcon,
@@ -167,12 +161,6 @@ function OrderBank({
       value: "SendDN",
       label: "Send Multiple for DN",
       icon: customiseMultipleDNIcon,
-    },
-    {
-      disabled: false,
-      value: "DeleteMultiple",
-      label: "Delete Multiple Order",
-      icon: customiseTableIcon,
     },
     {
       disabled: false,

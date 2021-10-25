@@ -30,7 +30,16 @@ import DateRangePicker from "../../components/Common/DateRangePicker"
 import AWSMDropdown from "../../components/Common/Dropdown"
 import OrderBankTable from "./OrderBankTable"
 import REGION_TERMINAL from "../../common/data/regionAndTerminal"
+
+//custom icons import
 import customiseTableIcon from "../../assets/images/AWSM-Customise-Table.svg"
+import customiseTableBankIcon from "../../assets/images/AWSM-Customise-Table-Bank.svg"
+import customiseAddIcon from "../../assets/images/AWSM-Add-Order.svg"
+import customiseCrossTerminalIcon from "../../assets/images/AWSM-Cross-Terminal.svg"
+import customiseMultipleDNIcon from "../../assets/images/AWSM-Multiple-DN.svg"
+
+
+
 import CustomizeTableModal from "../../common/CustomizeTable"
 
 import { FormControlLabel } from "@material-ui/core"
@@ -72,14 +81,12 @@ import { isNull } from "lodash"
 import { removeKeywords } from "../DQM/Common/helper"
 import ClearScheduling from "./clearScheduling";
 
-
 const UntickIcon = () => <img src={selectAllIcon3} alt="icon" />
 const CheckedIcon = () => <img src={selectAllIcon2} alt="icon" />
 
-
-
 import { ReactSVG } from "react-svg";
-
+import UploadDMRModal from "./uploadDMRModal";
+import DeleteMultipleModal from "./deleteMultiple";
 
 const GanttChartBottomHover = [
   {
@@ -114,6 +121,7 @@ const GanttChartFilterButtons = [
     value: "high",
   },
 ]
+
 function OrderBank({
   getRTSOrderBankTableData,
   orderBankTableData,
@@ -127,25 +135,37 @@ function OrderBank({
       disabled: false,
       value: "newOrder",
       label: "Add New Order",
+      icon: customiseAddIcon,
+    },
+    {
+      disabled: false,
+      value: "uploadDmr",
+      label: "Upload DMR",
       icon: customiseTableIcon,
     },
     {
       disabled: false,
       value: "customizeCol",
       label: "Customize Column",
-      icon: customiseTableIcon,
+      icon: customiseTableBankIcon,
     },
     // {disabled: false, 'value': 'RefreshDN', 'label': 'Refresh Blocked DN', 'icon' : customiseTableIcon },
     {
       disabled: true,
       value: "CrossTerminal",
       label: "Cross Terminal",
-      icon: customiseTableIcon,
+      icon: customiseCrossTerminalIcon,
     },
     {
       disabled: true,
       value: "SendDN",
       label: "Send Multiple for DN",
+      icon: customiseMultipleDNIcon,
+    },
+    {
+      disabled: false,
+      value: "DeleteMultiple",
+      label: "Delete Multiple Order",
       icon: customiseTableIcon,
     },
   ]
@@ -180,6 +200,8 @@ function OrderBank({
   const [activeTab, setActiveTab] = useState("1")
   const [dropdownOpen, setOpen] = useState(false)
   const [crossTerminal, setCrossTerminal] = useState(false)
+  const [uploadDmr, setUploadDmr] = useState(false)  
+  const [deleteMultiple, setDeleteMultiple] = useState(false)    
   const [showNewOrder, setShowNewOrder] = useState(false)
   const [showCustomize, setShowCustomize] = useState(false)
   const [searchFields, setSearchFields] = useState(getCookieByKey("Order Bank")
@@ -247,11 +269,23 @@ function OrderBank({
       setSendDNModal(true)
     } else if (val === "CrossTerminal") {
       setCrossTerminal(true)
+    } else if (val === "uploadDmr") {
+      setUploadDmr(true)
+    } else if (val === "DeleteMultiple") {
+      setDeleteMultiple(true)
     }
   }
   const onCloseCustomize = () => {
     setShowCustomize(false)
   }
+
+  const onCloseUploadDMR = () => {
+    setUploadDmr(false)
+  }
+
+  const onCloseDeleteMultiple = () => {
+    setDeleteMultiple(false)
+  }  
 
   const onCloseCrossTerminal = () => {
     setCrossTerminal(false)
@@ -265,7 +299,7 @@ function OrderBank({
     if (val !== 0) {
       let temp = [...orderBankSetting]
       temp.map(function (item, index) {
-        if (item.value === "CrossTerminal" || item.value === "SendDN") {
+        if (item.value === "CrossTerminal" || item.value === "SendDN" || item.value === 'DeleteMultiple') {
           item.disabled = false
         }
       })
@@ -273,7 +307,7 @@ function OrderBank({
     } else {
       let temp = [...orderBankSetting]
       temp.map(function (item, index) {
-        if (item.value === "CrossTerminal" || item.value === "SendDN") {
+        if (item.value === "CrossTerminal" || item.value === "SendDN" || item.value === 'DeleteMultiple') {
           item.disabled = true
         }
       })
@@ -828,6 +862,16 @@ function OrderBank({
               onCancel={onCloseCrossTerminal}
               onSave={onCloseCrossTerminal}
             />
+            <UploadDMRModal
+              open={uploadDmr}
+              onCancel={onCloseUploadDMR}
+              onSave={onCloseUploadDMR}
+            />     
+            <DeleteMultipleModal
+              open={deleteMultiple}
+              onCancel={onCloseDeleteMultiple}
+              onSave={onCloseDeleteMultiple}
+            />                        
             <CustomizeTableModal
               open={showCustomize}
               onCancel={onCloseCustomize}

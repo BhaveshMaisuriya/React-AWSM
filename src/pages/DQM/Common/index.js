@@ -396,12 +396,13 @@ class Pages extends Component {
                       // disabled={this.state.loader}
                     >
                       <div className="excel-download-btn">
-                        <span className="download-icon">
+                        <span className="download-icon-csv">
                           <DownloadIcon />
                         </span>
-                          <span className="download-button-message">
+                          <span className="download-button-message-csv">
                             CSV File
                           </span>
+                          <div className="arrow-down" />
                       </div>
                     </button>
                     <Popover
@@ -414,8 +415,8 @@ class Pages extends Component {
                           >
                             <PopoverBody className='mainCsv'>
                               <div className="csvDropdown">
-                              <p onClick={() => this.downloadCSV()}>Download CSV</p>
-                                  <p onClick={() => this.uploadCSV()}>Upload CSV</p>
+                                <p onClick={() => this.downloadCSV()}>Download CSV</p>
+                                <p onClick={() => this.uploadCSV()}>Upload CSV</p>
                               </div>
                             </PopoverBody>
                           </Popover>

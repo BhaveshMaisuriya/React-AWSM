@@ -17,7 +17,6 @@ import {
   getDownloadCsv,
   setUploadCsv,
 } from "../../../../store/actions"
-import { isEqual } from "lodash"
 
 function CsvFileUpload(props) {
   const [alert, setAlert] = useState(true);
@@ -53,8 +52,9 @@ function CsvFileUpload(props) {
   useEffect(async() => {
     const {uploadCsv} = props;
     if(uploadCsv !== null){
+      props.alertShow('Data has been successfully updated via CSV', 'success');
       props.toggle();
-      props.alertShow('Excel Uploaded Successfully!', 'success');
+      
       props.getListCall();
       setUploadCsvData(uploadCsv);
 
@@ -100,10 +100,7 @@ function CsvFileUpload(props) {
       link.setAttribute('download', `${locationPath}`);
       document.body.appendChild(link);
       link.click();
-      props.alertShow('Excel Download Successfully!', 'success');
-      // await setSuccessAlert(true);
-      // await setAlertMessage('Excel Download Successfully!');
-      // await setAlertStatus('success');
+      props.alertShow('CSV file has been successfully downloaded', 'success');
 
       const { setUploadCsv } = props;
       await setUploadCsv();

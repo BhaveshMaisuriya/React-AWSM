@@ -40,7 +40,36 @@ import {
   GET_SLA_DELETE_PDF,
   GET_SLA_DELETE_PDF_SUCCESS,
   GET_SLA_DELETE_PDF_FAIL,
+  GET_UPLOAD_DMR,
+  GET_UPLOAD_DMR_SUCCESS,
+  GET_UPLOAD_DMR_FAIL, 
+  SET_UPLOAD_DMR,
+  SET_UPLOAD_DMR_SUCCESS,
 } from "./actionTypes"
+
+export const getUploadDMR = params => ({
+  type: GET_UPLOAD_DMR,
+  params,
+})
+
+export const getUploadDMRSuccess = params => ({
+  type: GET_UPLOAD_DMR_SUCCESS,
+  params,
+})
+
+export const getUploadDMRFail = params => ({
+  type: GET_UPLOAD_DMR_FAIL,
+  params,
+})
+
+export const setUploadDMR = () => ({
+  type: SET_UPLOAD_DMR,
+})
+
+export const setUploadDMRSuccess = params => ({
+  type: SET_UPLOAD_DMR_SUCCESS,
+  params,
+})
 
 export const getSLAItems = params => ({
   type: GET_SLA_ITEMS,

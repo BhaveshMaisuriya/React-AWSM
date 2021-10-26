@@ -14,7 +14,9 @@ import {
   GET_SLA_PDFS,
   GET_SLA_PDF_DOWNLOAD,
   GET_SLA_RENAME_PDF,
-  GET_SLA_DELETE_PDF
+  GET_SLA_DELETE_PDF,
+  GET_UPLOAD_DMR,
+  SET_UPLOAD_DMR
 } from "./actionTypes"
 
 import {
@@ -45,7 +47,10 @@ import {
     getDeletePdfSuccess,
     getDeletePdfFail,
     getRenamePdfSuccess,
-    getRenamePdfFail,    
+    getRenamePdfFail,   
+    getUploadDMRSuccess,
+    getUploadDMRFail,
+    setUploadDMRSuccess        
 } from "./actions"
 
 import {
@@ -64,6 +69,7 @@ import {
   getSLAPdfDownload,
   getRenamePdf,
   getDeletePdf,
+  getUploadDMR,
 } from "../../helpers/fakebackend_helper"
 
 function* onGetSLAAuditLog(params) {
@@ -73,6 +79,19 @@ function* onGetSLAAuditLog(params) {
   } catch (error) {
     yield put(getSlaAuditLogFail(error))
   }
+}
+
+function* onGetUploadDMR({ params = {} }) {
+  try {
+    const response = yield call(getUploadDMR, params)
+    yield put(getUploadDMRSuccess(response.data))
+  } catch (error) {
+    yield put(getUploadDMRFail(error))
+  }
+}
+
+function* onSetUploadDMR() {
+  yield put(setUploadDMRSuccess(null))
 }
 
 function* onGetSLAAttachments(params) {
@@ -225,7 +244,9 @@ function* SLASaga() {
   yield takeEvery(GET_SLA_PDFS, onGetSLAPDFs)
   yield takeEvery(GET_SLA_PDF_DOWNLOAD, onGetSLAPdfDownload)  
   yield takeEvery(GET_SLA_RENAME_PDF, onGetRenamePdf)    
-  yield takeEvery(GET_SLA_DELETE_PDF, onGetDeletePdf)      
+  yield takeEvery(GET_SLA_DELETE_PDF, onGetDeletePdf)  
+  yield takeEvery(GET_UPLOAD_DMR, onGetUploadDMR)    
+  yield takeEvery(SET_UPLOAD_DMR, onSetUploadDMR)        
 }
 
 export default SLASaga

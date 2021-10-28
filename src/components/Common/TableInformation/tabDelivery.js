@@ -113,7 +113,7 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
       let defaultVal = deliveryData.road_tanker_requirement && deliveryData.road_tanker_requirement.split(',');
       deliveryData.road_tanker_requirement_items
           .map((item, index) => {
-            console.log("item::", defaultVal);
+            // console.log("item::", defaultVal);
             temp.push({
               name: item,
               checked:

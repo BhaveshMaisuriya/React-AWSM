@@ -1,14 +1,15 @@
-import React, { Component } from "react"
+import React, {Component} from "react"
 import PropTypes from "prop-types"
 import Filter from "../DataTable/filter"
-import { Link } from "react-router-dom"
+import {Link} from "react-router-dom"
 import "./style.scss"
-import { isNull, isUndefined } from "lodash"
-import { Badge } from "reactstrap"
+import {isNull, isUndefined} from "lodash"
+import {Badge} from "reactstrap"
 import OverrideIcon from "../../../assets/images/AWSM-success-alert.svg"
-import { ReactSVG } from "react-svg"
-import { removeKeywords } from "../../../pages/DQM/Common/helper"
+import {ReactSVG} from "react-svg"
+import {removeKeywords} from "../../../pages/DQM/Common/helper"
 import NoDataIcon from "../../../assets/images/AWSM-No-Data-Available.svg"
+import {format} from "date-fns";
 
 class FixedCoulmnTable extends Component {
   constructor(props) {
@@ -27,7 +28,7 @@ class FixedCoulmnTable extends Component {
 
   componentDidUpdate(prevProps) {
     if (this.props.tableData !== prevProps.tableData) {
-      this.setState({ tableDatas: this.props.tableData })
+      this.setState({tableDatas: this.props.tableData})
     }
     if (this.props.headers !== prevProps.headers) {
       const fixedHeaders = this.props.headers.slice(0, this.props.frozen)
@@ -35,36 +36,36 @@ class FixedCoulmnTable extends Component {
         this.props.frozen,
         this.props.headers.length
       )
-      this.setState({ fixedHeaders, regularHeaders })
+      this.setState({fixedHeaders, regularHeaders})
     }
   }
 
   createSortHandler = property => event => {
-    const { headerSortHandler } = this.props
+    const {headerSortHandler} = this.props
     const orderBy = property
     let order = "asc"
 
     if (this.state.orderBy === property && this.state.order === "asc") {
       order = "desc"
     }
-    this.setState({ order, orderBy })
+    this.setState({order, orderBy})
     headerSortHandler(order, orderBy)
   }
 
   handleClickApply = (checkedFilter, dataKey) => {
-    const { filterApplyHandler } = this.props
+    const {filterApplyHandler} = this.props
     const tempObj = {}
     tempObj[dataKey] = checkedFilter
     filterApplyHandler(tempObj, "insert")
   }
 
   handleClickReset = dataKey => {
-    const { filterApplyHandler } = this.props
+    const {filterApplyHandler} = this.props
     filterApplyHandler(dataKey, "remove")
   }
 
   addTd = arr => {
-    const { config, filterData } = this.props
+    const {config, filterData} = this.props
     if (!arr) return null
     return arr.map((e, index) => (
       <td key={index}>
@@ -83,7 +84,7 @@ class FixedCoulmnTable extends Component {
     ))
   }
   renderFrozenTd = (arr, parentIndex) => {
-    const { headers } = this.props
+    const {headers} = this.props
     const sliceArr = headers.slice(0, this.state.fixedHeaders.length)
     return this.getTdType(sliceArr, arr, parentIndex)
   }
@@ -100,7 +101,7 @@ class FixedCoulmnTable extends Component {
     )
   }
   renderRegularTd = arr => {
-    const { headers } = this.props
+    const {headers} = this.props
     const sliceArr = headers.slice(this.state.fixedHeaders.length, arr.length);
     return this.getTdType(sliceArr, arr)
   }
@@ -109,7 +110,7 @@ class FixedCoulmnTable extends Component {
     return typeof arr === "string" ? (
       <tr>
         <td colSpan="0" className="no-data-svg">
-          <ReactSVG src={NoDataIcon} />
+          <ReactSVG src={NoDataIcon}/>
         </td>
       </tr>
     ) : (
@@ -120,12 +121,12 @@ class FixedCoulmnTable extends Component {
   }
 
   AddConditionalForActionColumn = (salesValue, inventoryValue, data, index) => {
-    const { overrideActionColumn } = this.props
+    const {overrideActionColumn} = this.props
     let result
     if (
       Math.abs(data.sales_variance) > salesValue?.variance_value ||
       Math.abs(data.inventory_variance) > inventoryValue?.variance_value ||
-      Math.abs(data.sales_variance_percentage) > salesValue?.variance_percentage 
+      Math.abs(data.sales_variance_percentage) > salesValue?.variance_percentage
     ) {
       result = (
         <div
@@ -133,7 +134,7 @@ class FixedCoulmnTable extends Component {
           onClick={() => overrideActionColumn(data)}
         >
           {data?.override ? (
-            <ReactSVG className="d-inline-block mr-2" src={OverrideIcon} />
+            <ReactSVG className="d-inline-block mr-2" src={OverrideIcon}/>
           ) : (
             <span className="accurate d-inline-block mr-2"/>
           )}
@@ -149,7 +150,7 @@ class FixedCoulmnTable extends Component {
     } else {
       result = (
         <>
-          <ReactSVG className="d-inline-block mr-2" src={OverrideIcon} />
+          <ReactSVG className="d-inline-block mr-2" src={OverrideIcon}/>
           <span className="accurate-text">Accurate</span>
         </>
       )
@@ -159,10 +160,10 @@ class FixedCoulmnTable extends Component {
 
   getTdType = (sliceArr, arr, parentIndex = 0) => {
     const pathName = window.location.pathname
-    const { config, modalPop, varianceControlData } = this.props
+    const {config, modalPop, varianceControlData} = this.props
     return sliceArr.map((e, index) => {
-      const value =
-        isUndefined(arr[e]) || isNull(arr[e]) ? "-" : removeKeywords(arr[e])
+      const value = isUndefined(arr[e]) || isNull(arr[e]) ? "-" : (config[e] && config[e].type === 'date') ?
+        arr[e] : removeKeywords(arr[e])
       switch (config[e] && config[e].type) {
         case "badge":
           return (
@@ -248,6 +249,14 @@ class FixedCoulmnTable extends Component {
               </Link>
             </td>
           )
+        case "date":
+          return (
+            <td key={index}>
+              <div>
+                {value === '-' ? value : format(new Date(value), "do LLL yyyy")}
+              </div>
+            </td>
+          )
         default:
           return (
             <td key={index} className={config[e]?.columnFixed && "product_wid"}>
@@ -259,20 +268,20 @@ class FixedCoulmnTable extends Component {
   }
 
   render() {
-    const { tableData } = this.props
-    const { fixedHeaders, regularHeaders } = this.state
+    const {tableData} = this.props
+    const {fixedHeaders, regularHeaders} = this.state
     return (
-      <div className="container" style={{ maxWidth: "100%" }}>
+      <div className="container" style={{maxWidth: "100%"}}>
         <table className="fixed">
           <thead>
-            <tr>{this.addTd(fixedHeaders)}</tr>
+          <tr>{this.addTd(fixedHeaders)}</tr>
           </thead>
           <tbody>{this.renderFrozenTr(this.state.tableDatas)}</tbody>
         </table>
         <div className="scroll">
           <table className="scrollable">
             <thead>
-              <tr>{this.addTd(regularHeaders)}</tr>
+            <tr>{this.addTd(regularHeaders)}</tr>
             </thead>
             <tbody>{this.renderRegular(this.state.tableDatas)}</tbody>
           </table>
@@ -293,8 +302,10 @@ FixedCoulmnTable.propType = {
 }
 
 FixedCoulmnTable.defaultProps = {
-  headerSortHandler: () => {},
-  filterApplyHandler: () => {},
+  headerSortHandler: () => {
+  },
+  filterApplyHandler: () => {
+  },
 }
 
 export default FixedCoulmnTable

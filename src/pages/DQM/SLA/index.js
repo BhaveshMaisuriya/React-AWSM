@@ -11,6 +11,7 @@ import eyeIcon from "../../../assets/images/auditlog-eye.svg"
 import AuditLog from "../../../components/Common/AuditLog"
 import selectAllIcon2 from "../../../assets/images/AWSM-Checked-box.svg"
 import selectAllIcon3 from "../../../assets/images/AWSM-Checkbox.svg"
+import selectAllIcon4 from "../../../assets/images/AWSM-Checkbox-Indetermine.svg"
 import {
   Popover,
   PopoverBody,
@@ -46,6 +47,7 @@ import AWSMAlert from "components/Common/AWSMAlert"
 
 const UntickIcon = () => <img src={selectAllIcon3} alt="icon" />
 const CheckedIcon = () => <img src={selectAllIcon2} alt="icon" />
+const SelectAllUntick = () => <img src={selectAllIcon4} alt="icon" />
 
 const Header = ({ title }) => {
   return <h4 className="sla-header">{title}</h4>
@@ -595,7 +597,7 @@ class SLA extends Component {
                                       <div
                                         key={row.title}
                                         className={`d-flex align-items-center ${
-                                          row.checked ? "item-checked" : ""
+                                          row.checked && row.title != "Select All" ? "item-checked" : ""
                                         }`}
                                       >
                                         <FormControlLabel
@@ -605,10 +607,16 @@ class SLA extends Component {
                                             this.getCheckedDownloadVal(index)
                                           }
                                           checked={row.checked}
-                                          className="checkmark"
+                                          className={`checkmark ${row.title === "Select All" ? "select-all" : ""}`}
                                           control={
                                             <Checkbox
-                                              icon={<UntickIcon />}
+                                            icon={
+                                                  row.title === "Select All" ? (
+                                                    <SelectAllUntick />
+                                                  ) : (
+                                                    <UntickIcon />
+                                                  )
+                                                }
                                               checkedIcon={<CheckedIcon />}
                                               style={{
                                                 height: "20px",
@@ -685,7 +693,7 @@ class SLA extends Component {
                                         <div
                                           key={row.title}
                                           className={`d-flex align-items-center ${
-                                            row.checked ? "item-checked" : ""
+                                            row.checked && row.title != "Select All" ? "item-checked" : ""
                                           }`}
                                         >
                                           <FormControlLabel
@@ -697,10 +705,16 @@ class SLA extends Component {
                                               )
                                             }
                                             checked={row.checked}
-                                            className="checkmark"
+                                            className={`checkmark ${row.title === "Select All" ? "select-all" : ""}`}
                                             control={
                                               <Checkbox
-                                                icon={<UntickIcon />}
+                                              icon={
+                                                  row.title === "Select All" ? (
+                                                    <SelectAllUntick />
+                                                  ) : (
+                                                    <UntickIcon />
+                                                  )
+                                                }
                                                 checkedIcon={<CheckedIcon />}
                                                 style={{
                                                   height: "20px",
@@ -777,7 +791,7 @@ class SLA extends Component {
                                       <div
                                         key={row.title}
                                         className={`d-flex align-items-center ${
-                                          row.checked ? "item-checked" : ""
+                                          row.checked && row.title != "Select All" ? "item-checked" : ""
                                         }`}
                                       >
                                         <FormControlLabel
@@ -787,10 +801,16 @@ class SLA extends Component {
                                             this.getCheckedDownloadValInternal(index)
                                           }
                                           checked={row.checked}
-                                          className="checkmark"
+                                          className={`checkmark ${row.title === "Select All" ? "select-all" : ""}`}
                                           control={
                                             <Checkbox
-                                              icon={<UntickIcon />}
+                                            icon={
+                                                  row.title === "Select All" ? (
+                                                    <SelectAllUntick />
+                                                  ) : (
+                                                    <UntickIcon />
+                                                  )
+                                                }
                                               checkedIcon={<CheckedIcon />}
                                               style={{
                                                 height: "20px",

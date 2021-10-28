@@ -72,7 +72,6 @@ const EditOrderBankModal = props => {
     newOrderData[key] = value
     setOrderData(newOrderData)
   }
-console.log(editOrderData)
   return (
     <Modal isOpen={open} className="new-order-modal">
       <ModalHeader toggle={toggle}>

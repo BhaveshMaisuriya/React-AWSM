@@ -243,7 +243,7 @@ class SalesAndInventoryTableInformation extends Component {
               </div>
             </Fragment>
           </ModalBody>
-          {!scheduler && !isConfirm && (
+          {!isConfirm && (
             <ModalFooter>
               <button
                 className="btn btn-outline-primary px-4"

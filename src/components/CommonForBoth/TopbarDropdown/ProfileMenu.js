@@ -155,7 +155,7 @@ class ProfileMenu extends Component {
             </Fragment>}
           </DropdownToggle>
           <DropdownMenu left>
-            <DropdownItem tag="a" href="/profile">
+            {/* <DropdownItem tag="a" href="/profile">
               <i className="bx bx-user font-size-16 align-middle mr-1" />
               {this.props.t("Profile")}
             </DropdownItem>
@@ -169,10 +169,10 @@ class ProfileMenu extends Component {
               {this.props.t("Lock screen")}
             </DropdownItem>
             <div className="dropdown-divider" />
-            {/* <Link to="/logout" className="dropdown-item">
+             <Link to="/logout" className="dropdown-item">
               <i className="bx bx-power-off font-size-16 align-middle mr-1 text-danger" />
               <span>{this.props.t("Logout")}</span>
-            </Link> */}
+            </Link>  */}
             <Link to={window.location.href} className="dropdown-item" onClick={signOut}>
               <i className="bx bx-power-off font-size-16 align-middle mr-1 text-danger" />
               <span>{this.props.t("Logout")}</span>

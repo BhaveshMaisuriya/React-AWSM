@@ -11,17 +11,22 @@ const ConfirmDNStatusModal = ({ isOpen, onSend, onCancel,headerContent,bodyConte
         <ModalBody >
           <h6>{bodyContent}</h6>
         </ModalBody>
-        <ModalFooter>
-        <button
-          className={`btn btn-outline-${styleColor} mr-2`}
-          onClick={onCancel}
-        >
-          Cancel
-        </button>
-        <Button className={`btn btn-${styleColor}`} onClick={onSend}>
-          Proceed
-        </Button>
-        </ModalFooter>
+        {(onCancel || onSend) && 
+          <ModalFooter>
+            {onCancel && <button
+              className={`btn btn-outline-${styleColor} mr-2`}
+              onClick={onCancel}
+            >
+              Cancel
+            </button>}
+            {onSend && <Button 
+              className={`btn btn-${styleColor}`} 
+              onClick={onSend}
+            >
+              Proceed
+            </Button>}
+          </ModalFooter>
+        }
       </Modal>
     )
   }

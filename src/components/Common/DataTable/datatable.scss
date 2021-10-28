@@ -23,8 +23,14 @@
   margin-left: 8px !important;
   font-size: 12px !important;
   font-family: "Museo Sans" !important;
+  font-weight: 500;
   max-width: 230px;
   line-height: 1;
+}
+
+.select-all .MuiFormControlLabel-label {
+  color: #008f8a;
+  font-size: 10px !important;
 }
 
 .filter-button {

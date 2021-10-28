@@ -37,7 +37,8 @@ import customiseTableBankIcon from "../../assets/images/AWSM-Customise-Table-Ban
 import customiseAddIcon from "../../assets/images/AWSM-Add-Order.svg"
 import customiseCrossTerminalIcon from "../../assets/images/AWSM-Cross-Terminal.svg"
 import customiseMultipleDNIcon from "../../assets/images/AWSM-Multiple-DN.svg"
-
+import customiseUploadIcon from "../../assets/images/AWSM-Upload-RTS.svg"
+import customiseMultipleDeleteOrderIcon from "../../assets/images/AWSM-Trash-Icon-RTS.svg"
 
 
 import CustomizeTableModal from "../../common/CustomizeTable"
@@ -139,16 +140,17 @@ function OrderBank({
     },
     {
       disabled: false,
-      value: "uploadDmr",
-      label: "Upload DMR",
-      icon: customiseTableIcon,
-    },
-    {
-      disabled: false,
       value: "customizeCol",
       label: "Customize Column",
       icon: customiseTableBankIcon,
     },
+    {
+      disabled: false,
+      value: "uploadDmr",
+      label: "Upload DMR",
+      icon: customiseUploadIcon,
+    },
+
     // {disabled: false, 'value': 'RefreshDN', 'label': 'Refresh Blocked DN', 'icon' : customiseTableIcon },
     {
       disabled: true,
@@ -166,7 +168,7 @@ function OrderBank({
       disabled: false,
       value: "DeleteMultiple",
       label: "Delete Multiple Order",
-      icon: customiseTableIcon,
+      icon: customiseMultipleDeleteOrderIcon,
     },
   ]
   let orderBankStatus = [

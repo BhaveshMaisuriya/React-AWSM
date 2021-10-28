@@ -38,7 +38,7 @@ import AWSMDropdown from "../../../components/Common/Dropdown"
 import DatePicker from "../../../components/Common/DatePicker"
 import REGION_TERMINAL from "../../../common/data/regionAndTerminal"
 import { format, subDays } from "date-fns"
-import { DownloadIcon } from "./icon"
+import { CustomCSVIcon } from "./icon"
 import CsvFileUpload from "./CsvFileUpload"
 import { TERMINAL_CODE_MAPPING } from "../../../common/data/regionAndTerminal"
 import { isEqual } from "lodash"
@@ -397,7 +397,7 @@ class Pages extends Component {
                     >
                       <div className="excel-download-btn">
                         <span className="download-icon-csv">
-                          <DownloadIcon />
+                          <CustomCSVIcon />
                         </span>
                           <span className="download-button-message-csv">
                             CSV File
@@ -410,7 +410,7 @@ class Pages extends Component {
                             placement="bottom"
                             isOpen={this.state.showDownloadOption}
                             trigger="legacy"
-                            style={{ width: "150px", textAlign: 'center', boxShadow: '#ccc 2px 1px 10px' }}
+                            style={{ width: "150px", textAlign: 'left', boxShadow: '#ccc 2px 1px 10px' }}
                             toggle={() => this.setState({showDownloadOption: !this.state.showDownloadOption})}
                           >
                             <PopoverBody className='mainCsv'>

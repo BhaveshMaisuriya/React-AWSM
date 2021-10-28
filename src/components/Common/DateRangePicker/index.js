@@ -184,7 +184,6 @@ const DateRangePicker = ({
       newValue.type = "single"
       newValue.date_from = format(day, SAVE_DATE_FORMAT)
       newValue.date_to = null
-      setIsApplyDisabled(false);
     }
     newValue.days = []
     setValue(newValue)
@@ -193,7 +192,6 @@ const DateRangePicker = ({
 
   const handleClick = event => {
     setAnchorEl(event.currentTarget)
-    setIsApplyDisabled(false)
   }
 
   const handleClose = () => {
@@ -281,9 +279,7 @@ const DateRangePicker = ({
     if(onBlur){
       onBlur()
     }
-    // setAnchorEl(null)
-    setIsApplyDisabled(true)
-    
+    setAnchorEl(null)
   }
 
   const onApply = () => {

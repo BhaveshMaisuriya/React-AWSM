@@ -94,6 +94,7 @@ const tableMapping = {
   dipping_timestamp: {
     label: "DIPPING TIMESTAMP",
     columnSize: "cell-text",
+    type: "date"
   },
   dipping_to_midnight_sales_volume: {
     label: "DIPPING TO MIDNIGHT SALES VOLUME (L)",

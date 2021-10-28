@@ -20,12 +20,8 @@ const DatePicker = ({
 }) => {
   const [date, setDate] = useState(value ? new Date(value) : null)
   const [anchorEl, setAnchorEl] = React.useState(null)
-  const [dateButton, setDateButton] = useState(
-    value ? new Date(value) : null
-  )
-  const [month, setMonth] = useState(date)
-  const [isApplyDisabled, setIsApplyDisabled] = useState();
-
+  const [month, setMonth] = useState(date ?? new Date())
+  const [initialDate] = useState(value ? new Date(value) : null)
   const open = Boolean(anchorEl)
   const id = Date.now().toString()
   
@@ -45,19 +41,7 @@ const DatePicker = ({
   const label = useMemo(() => {
     return date ? moment(date).format(format) : ""
   }, [date])
-
-  const onDateChange = date => {
-    setDate(date)
-    if (onChange) {
-      onChange(date)
-    }
-    isTypeFor !== "sales" && handleClose()
-  }
-
-  const onDateChangeButton = date => {
-    setDate(date)
-    setIsApplyDisabled(false)
-  }
+  
 
   const applyDate = () => {
     if (onChange) {
@@ -67,10 +51,10 @@ const DatePicker = ({
   }
   
   const onClear = () => {
-    setDate(null)
-    setIsApplyDisabled(true)
+    setDate(initialDate)
+    setAnchorEl(null);
     if (onChange) {
-      onChange(null)
+      onChange(initialDate)
     }
   }
 
@@ -135,7 +119,6 @@ const DatePicker = ({
 
   const DATE_FORMAT = "yyyyMMdd"
   const onDayClick = (date) => {
-    setIsApplyDisabled(false)
     if (startDate && dateFnsFormat(date, DATE_FORMAT) < dateFnsFormat(startDate, DATE_FORMAT)) {
       return
     }
@@ -175,57 +158,31 @@ const DatePicker = ({
         }}
       >
         <div className="awsm-date-picker">
-          {isTypeFor === "sales" ? (
-            <Calendar
-              showMonthAndYearPickers={false}
-              date={date}
-              onChange={onDateChangeButton}
-              weekdayDisplayFormat="EEEEEE"
-              minDate={minDate}
-              maxDate={maxDate}
-            />
-          ) : (
-            <>
-            {console.log('date::', date)}
-              <DayPicker
-                selectedDays={date}
-                onDayClick={onDayClick}
-                captionElement={captionElement}
-                weekdayElement={weekdayElement}
-                navbarElement={() => null}
-                month={month}
-                modifiers={modifiers}
-              />
-            </>
-          )}
+          <DayPicker
+            selectedDays={date}
+            onDayClick={onDayClick}
+            captionElement={captionElement}
+            weekdayElement={weekdayElement}
+            navbarElement={() => null}
+            month={month}
+            modifiers={modifiers}
+          />
         </div>
 
-        {showButtons ? (
-          <div className="apply_buttons">
-            <Button color={"danger"} onClick={() => handleCancel()}>
-              Cancel
-            </Button>
-            <Button color={"primary"} onClick={() => applyDate()}>
-              Apply
-            </Button>
-          </div>
-        ) : (
-          <div className="d-flex pr-3 justify-content-end align-items-center mb-2">
-            <button
-              className="btn btn-outline-primary mr-2 btn-date-range"
-              onClick={onClear}
-            >
-              Clear
-            </button>
-            <button
-              className="btn btn-primary btn-date-range"
-              onClick={applyDate}
-              disabled={isApplyDisabled}
-            >
-              Apply
-            </button>
-          </div>
-        )}
+        <div className="d-flex pr-3 justify-content-end align-items-center mb-2">
+          <button
+            className="btn btn-outline-primary mr-2 btn-date-range"
+            onClick={onClear}
+          >
+            Clear
+          </button>
+          <button
+            className="btn btn-primary btn-date-range"
+            onClick={applyDate}
+          >
+            Apply
+          </button>
+        </div>
       </Popover>
     </div>
   )

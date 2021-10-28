@@ -323,8 +323,7 @@
 }
 
 .csvDropdown p:hover {
-  background-color: #00a19c;
-  color: #fff;
+  background-color: #d3eeed;
 }
 .csvDropdown p {
   cursor: pointer;
@@ -335,3 +334,18 @@
 .download-icon-csv, .download-button-message-csv {
   margin-right: 15px;
 }
+.arrow::before, .arrow::after {
+  left: 4em;
+}
+
+
+
+
+
+
+
+
+
+
+
+

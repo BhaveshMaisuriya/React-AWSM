@@ -23,8 +23,8 @@ import CustomTrashIcon from "../../../assets/images/AWSM-Trash-Icon-sla.svg"
 import CustomViewIcon from "../../../assets/images/AWSM-View.svg"
 import CustomDownloadIcon from "../../../assets/images/AWSM-Download.svg"
 import CustomEditIcon from "../../../assets/images/AWSM-Edit.svg"
-
-import { Icon } from "@material-ui/core"
+import { Icon, InputBase, IconButton } from "@material-ui/core"
+import SearchIcon from "../../../assets/images/AWSM-search.svg"
 
 function SLAPdfTable(props) {
   const rowsPerPage = 10
@@ -285,13 +285,15 @@ function SLAPdfTable(props) {
       )}
       {tableDatas.length > 0 && (
         <Fragment>
-          <div className="search">
-            <input
+          <div className="search-sla">
+            <InputBase
+              className="search-input-sla"
               placeholder="Search File Name"
-              value={value}
               onChange={e => GetSearchedValue(e.target.value)}
-              className="Search_input"
             />
+            <IconButton className="search-icon-sla" aria-label="Search">
+              <img src={SearchIcon} alt="" className="rounded-circle" />
+            </IconButton>
           </div>
           <div className="top-page-number">
             <div className="enteriesText">

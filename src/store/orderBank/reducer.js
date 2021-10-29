@@ -30,6 +30,8 @@ import {
   UPDATE_ORDERBANK_TABLE_INFORMATION_SUCCESS,
   REMOVE_EVENT_SUCCESS,
   REMOVE_EVENT_FAIL,
+  UPDATE_OB_EVENT_SUCCESS,
+  UPDATE_OB_EVENT_FAIL,
 } from "./actionTypes"
 import {notify} from "../../helpers/notify"
 import {ToastSuccess,ToastError} from "../../helpers/swal";
@@ -306,12 +308,33 @@ const RTSOrderBank = (state = initialState, action) => {
         orderBankTableData: [...state.orderBankTableData],
         ganttChart: {
           ...state.ganttChart,
-          event: [...state.ganttChart.event]
+          event: [...state.ganttChart.event],
+          table: [...state.ganttChart.table]
         }
       }
     }
     case REMOVE_EVENT_FAIL: {
       ToastError.fire()
+      return {
+        ...state,
+      }
+    }
+
+    case UPDATE_OB_EVENT_SUCCESS: {
+      const {id} = action.params
+      const event = state.ganttChart.event.filter(item => item.id !== id)
+      if(event){
+        state.ganttChart.event = [...event, action.params]
+      }
+      return {
+        ...state,
+        ganttChart: {
+          ...state.ganttChart,
+          event: [...state.ganttChart.event],
+        }
+      }
+    }
+    case UPDATE_OB_EVENT_FAIL: {
       return {
         ...state,
       }

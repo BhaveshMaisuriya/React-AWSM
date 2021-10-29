@@ -11,25 +11,38 @@
   padding-bottom: 10px;
 }
 
-
 .sla_table {
   margin-top: 25px;
-  .action{
+  .action {
     display: flex;
     align-items: center;
     align-content: center;
-    svg{
+    svg {
       cursor: pointer;
     }
   }
-  .Search_input {
-    width: 30%;
-    min-width: 200px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    padding: 10px;
-    font-size: 14px;
+  .search-sla {
+    padding: 2px 4px;
+    display: flex;
+    align-items: center;
+    height: 40px;
+    width: 376px;
+    border: 1px solid #d9d9d9;
+    border-radius: 4px;
+    background-color: #ffffff;
+    margin-top: 20px;
+
+    .search-input-sla {
+      margin-left: 12px;
+      flex: 1;
+      font-size: 13px;
+    }
+
+    .search-icon-sla {
+      padding: 10px;
+    }
   }
+
   table {
     width: 100%;
     padding: 1em;
@@ -64,6 +77,6 @@
   }
 }
 
-.not_found{
+.not_found {
   text-align: center;
 }

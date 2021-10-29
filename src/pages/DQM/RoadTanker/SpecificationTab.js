@@ -20,21 +20,26 @@ class SpecificationTab extends PureComponent {
     }
   }
 
-  componentDidMount() { }
-
   onChangeHandler = (value, key) => {
     if(key === 'restriction') {
-      this.setState({restrictionVal: value.description});
-      this.setState({restrictionCode: value.code});
+      this.setState({ restrictionVal: value.description });
+      this.setState({ restrictionCode: value.code });
+      const { data, onChange } = this.props
+      let newData = { ...data }
+      newData['restriction_code'] = value.code;
+      onChange("specification", newData)
+    } else {
+      const { data, onChange } = this.props
+      let newData = { ...data }
+      newData[key] = value;
+      onChange("specification", newData)
     }
-    const { data, onChange } = this.props
-    let newData = { ...data }
-    newData[key] = value
-    onChange("specification", newData)
   }
 
   render() {
     const { mode, scheduler, data, toggle } = this.props
+
+    // this.setState({ restrictionCode: this.props.data.restriction_code });
 
     function arrayRemove(arr, value) {
       return arr.filter(function (ele) {
@@ -79,6 +84,8 @@ class SpecificationTab extends PureComponent {
       }
     }
 
+    let restriction_value = '';
+
     const rtRestriction = disabled => {
       const {
         isRTRestrictionAdding,
@@ -86,7 +93,9 @@ class SpecificationTab extends PureComponent {
         restrictionStr,
       } = this.state
       let restriction_dropdown = data?.restriction_code_dropdown
-      let restriction = data?.restriction
+      let restriction = data?.restriction_code
+
+      restriction_value = data?.restriction_code_dropdown.find((val) => { return val.code === restriction; })?.description
 
       const rtRestriction =
         !isRTRestrictionAdding && restriction_dropdown && restriction ? (
@@ -102,9 +111,9 @@ class SpecificationTab extends PureComponent {
           // />
 
           <AutoCompleteSearchDropDown
-            value={this.state.restrictionCode}
+            value={restriction}
             items={restriction_dropdown}
-            key={this.state.restrictionCode}
+            key={restriction}
             searchIcon={true}
             onChange={e => this.onChangeHandler(e, "restriction")}
             disabled={disabled}
@@ -246,7 +255,7 @@ class SpecificationTab extends PureComponent {
               <input
                 className="form-control awsm-input"
                 disabled={true}
-                value={this.state.restrictionVal}
+                value={restriction_value}
               ></input>
             </div>
           </div>

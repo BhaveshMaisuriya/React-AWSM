@@ -408,6 +408,7 @@ class Pages extends Component {
                     <Popover
                             target="CsvUploadDownload"
                             placement="bottom"
+                            id='csvMainRight'
                             isOpen={this.state.showDownloadOption}
                             trigger="legacy"
                             style={{ width: "150px", textAlign: 'left', boxShadow: '#ccc 2px 1px 10px' }}
@@ -416,7 +417,7 @@ class Pages extends Component {
                             <PopoverBody className='mainCsv'>
                               <div className="csvDropdown">
                                 <p onClick={() => this.uploadCSV()}>Upload CSV</p>
-                                <p onClick={() => this.downloadCSV()}>Download CSV</p>
+                                <p onClick={() => this.downloadCSV()}>Download CSV</p>                                
                               </div>
                             </PopoverBody>
                           </Popover>

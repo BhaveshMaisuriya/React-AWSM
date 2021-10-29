@@ -87,7 +87,7 @@ shouldComponentUpdate(nextProps){
       <React.Fragment>
         <Row className="sla_file_upload">
           <Col lg={12} md={12} xs={12}>
-            <h4>SLA Approved Documents</h4>
+            {/* <h4>SLA Approved Documents</h4> */}
             <FileUpload
               acceptedFormat={this.state.acceptedFiles}
               filesLimit={1}

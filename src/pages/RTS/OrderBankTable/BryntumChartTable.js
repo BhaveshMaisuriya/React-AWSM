@@ -30,10 +30,10 @@ import RedAlertIcon from "./../../../assets/images/AWSM-Red-Alert.svg"
 import YellowAlertIcon from "./../../../assets/images/AWSM-Soft-Overrule.svg"
 import ConfirmDNStatusModal from "./confirmDNStatusModal"
 import TerminalRelayModal from "./TerminalRelayModal"
-import { processPaymentInGanttChart, cancelPaymentInGanttChart, sendOrderInGanttChart, getRTSOderBankGanttChart, getShipmentOfOderBankGanttChart } from "../../../store/actions"
+import { processPaymentInGanttChart, cancelPaymentInGanttChart, sendOrderInGanttChart, getRTSOderBankGanttChart, getShipmentOfOderBankGanttChart,
+updateOBEvent } from "../../../store/actions"
 import { cloneDeep } from 'lodash'
 import { DragDropContext, Droppable } from "react-beautiful-dnd"
-import {getCookieByKey} from "../../DQM/Common/helper"
 import OrderBankShipmentModal from "./OrderBankShipmentModal"
 import OrderBankSapAlertModal from "./OrderBankSapAlertModal"
 import OrderBankRoadTankerModal from "./OrderBankRoadTankerModal"
@@ -253,8 +253,7 @@ const ChartColumnFilter = ({
 }
 
 function BryntumChartTable(props) {
-  // const [tableData, setTableData] = useState([])
-  const {bryntumCurrentColumns} = props
+  const {bryntumCurrentColumns, updateOBEvent} = props
   const tableData = useRef([])
   const setTableData = (newData) => {
     tableData.current = newData
@@ -411,7 +410,17 @@ function BryntumChartTable(props) {
     listeners: {
       beforeEventEdit({ eventRecord, resourceRecord }) {
         ShipmentDblclickModal(eventRecord, resourceRecord);
-      }
+      },
+      beforeEventDropFinalize: async ({ context }) => {
+        const { eventRecord } = context    
+        context.async = true;
+        context.finalize(true);
+        await updateOBEvent(eventRecord._data)
+        // console.log(eventRecord._data, 'beforeEventDropFinalize', sapAlertDblclick)
+      },
+      beforeEventDrag({eventRecord}) {
+        // console.log(eventRecord._data, 'beforeEventDrag')
+      },
     },
     eventRenderer: ({ eventRecord, renderData }) => {
       // customize content for event in here
@@ -879,7 +888,8 @@ const mapDispatchToProps = (dispatch) => {
     processCancelPaymentInGanttChart: (params) => dispatch(cancelPaymentInGanttChart(params)),
     processSendOrderInGanttChart: (params) => dispatch(sendOrderInGanttChart(params)),
     getRTSOderBankGanttChart: (params) => dispatch(getRTSOderBankGanttChart(params)),
-    getShipmentOfOderBankGanttChart: (params) => dispatch(getShipmentOfOderBankGanttChart(params))
+    getShipmentOfOderBankGanttChart: (params) => dispatch(getShipmentOfOderBankGanttChart(params)),
+    updateOBEvent: (params) => dispatch(updateOBEvent(params)),
   }
 }
 

@@ -52,6 +52,9 @@ import {
   REMOVE_SHIPMENT_FROM_EVENT, REMOVE_SHIPMENT_FROM_EVENT_SUCCESS,
   REMOVE_EVENT,
   REMOVE_EVENT_SUCCESS,
+  UPDATE_OB_EVENT,
+  UPDATE_OB_EVENT_SUCCESS,
+  UPDATE_OB_EVENT_FAIL,
 } from "./actionTypes"
 
 export const getRTSOrderBankTableData = (params) => ({
@@ -325,5 +328,20 @@ export const removeEvent = (params) => ({
 
 export const removeEventSuccess = (params) => ({
   type: REMOVE_EVENT_SUCCESS,
+  params
+})
+
+export const updateOBEvent = (params) => ({
+  type: UPDATE_OB_EVENT,
+  params
+})
+
+export const updateOBEventSuccess = (params) => ({
+  type: UPDATE_OB_EVENT_SUCCESS,
+  params
+})
+
+export const updateOBEventFail = (params) => ({
+  type: UPDATE_OB_EVENT_FAIL,
   params
 })

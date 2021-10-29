@@ -323,14 +323,19 @@
 }
 
 .csvDropdown p:hover {
-  background-color: #d3eeed;
+  background-color: #e0f4f3;
 }
 .csvDropdown p {
   cursor: pointer;
   font-size: 13px;
   margin: 0;
-  padding: 10px 6px;
+  padding: 6px 12px;
 }
+
+.mainCsv{
+  padding:5px !important ;
+}
+
 .download-icon-csv, .download-button-message-csv {
   margin-right: 15px;
 }

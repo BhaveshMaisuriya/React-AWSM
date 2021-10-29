@@ -7,7 +7,7 @@ const tableColumns = [
   "product_type_sap",
   "pump_type",
   "daily_available_hours",
-  "capacity",
+  "max_volume",
   "default_terminal",
   "chartering_type",
   "remarks",
@@ -59,10 +59,9 @@ const tableMapping = {
     apiKey: "daily_available_hours",
     columnSize: "cell-text",
   },
-  capacity: {
+  max_volume: {
     label: "MAX VOLUME",
-    apiKey: "capacity",
-    columnSize: "cell-text",
+    columnSize: "cell-text-big",
   },
   default_terminal: {
     label: "DEFAULT TERMINAL",
@@ -109,14 +108,14 @@ const tableMapping = {
     apiKey: "restriction_code",
     columnSize: "cell-text-big",
   },
-  weight: {
+  unladen_weight: {
     label: "RT UNLADEN WEIGHT",
-    apiKey: "weight",
+    apiKey: "unladen_weight",
     columnSize: "cell-text",
   },
-  legal_weight: {
+  max_weight: {
     label: "RT MAX WEIGHT",
-    apiKey: "legal_weight",
+    apiKey: "max_weight",
     columnSize: "cell-text",
   },
   compartment_no: {

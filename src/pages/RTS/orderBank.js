@@ -871,6 +871,7 @@ function OrderBank({
             />
             <UploadDMRModal
               open={uploadDmr}
+              region={region}
               onCancel={onCloseUploadDMR}
               onSave={onCloseUploadDMR}
               alertShow={onGetShowAlert}

@@ -218,7 +218,7 @@ export const getUploadCsv = params =>
 export const getUploadDMR = params =>
   axios.post(
     '/upload-dmr',
-    {'data': params.data}
+    params
   )    
 
 export const getDownloadCsv = params =>

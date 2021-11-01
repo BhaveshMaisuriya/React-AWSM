@@ -21,6 +21,7 @@ import { isEqual } from "lodash"
 function UploadDMRModal(props) {
   const [alert, setAlert] = useState(true);
   const [uploading, setUploading] = useState(false);
+  const [region, setRegion] = useState('');
   const [base64String, setBase64String] = useState({});
   const [showProgressbar, setShowProgressbar] = useState(false); 
   const [progress, setProgress] = useState(10);
@@ -41,10 +42,16 @@ function UploadDMRModal(props) {
   useEffect(async() => {
     if(progress === 100){
       const { getUploadDMR } = props;
-      await getUploadDMR(base64String);
+      var temp = {...base64String};
+      temp.region = region;
+      await getUploadDMR(temp);
       setProgressColor('successColor');
     }
   }, [progress]);
+
+  useEffect(async() => {
+    setRegion(props.region);
+  }, [props.region]);  
 
   useEffect(async() => {
     const {uploadDMR} = props;
@@ -103,8 +110,9 @@ function UploadDMRModal(props) {
           const base64WithoutPrefix = result.substr('data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,'.length);
           const params = {
             data: base64WithoutPrefix,
-            api: props.currentPage
+            // region: region
           }
+          
           setBase64String(params);
           setShowProgressbar(true);
           // await onGetSLAAttchments(params)
@@ -112,7 +120,7 @@ function UploadDMRModal(props) {
       });
     }
   }, [])
-
+  
   const {
     getRootProps,
     getInputProps,

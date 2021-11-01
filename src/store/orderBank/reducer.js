@@ -32,6 +32,8 @@ import {
   REMOVE_EVENT_FAIL,
   UPDATE_OB_EVENT_SUCCESS,
   UPDATE_OB_EVENT_FAIL,
+  GET_WEB_SOCKET_MESSAGE_SUCCESS,
+  GET_WEB_SOCKET_MESSAGE,
 } from "./actionTypes"
 import {notify} from "../../helpers/notify"
 import {ToastSuccess,ToastError} from "../../helpers/swal";
@@ -337,6 +339,12 @@ const RTSOrderBank = (state = initialState, action) => {
     case UPDATE_OB_EVENT_FAIL: {
       return {
         ...state,
+      }
+    }
+    case GET_WEB_SOCKET_MESSAGE_SUCCESS: {
+      return {
+        ...state,
+        socketData: action.payload,
       }
     }
     default:

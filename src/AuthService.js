@@ -27,11 +27,12 @@ export async function getIdToken(userInfo) {
     }
 
     try {
-        // using acquireTokenSilent function for best pratice refresh token
+        // using acquireTokenSilent function for best practice refresh token
         const tokenResponse = await myMSALObj.acquireTokenSilent(silentRequest)
         return tokenResponse?.idToken;
     } catch (e) {
-        console.log(e)
+        // Handle when refresh function time out
+        signIn();
     }
 }
 

@@ -55,6 +55,8 @@ import {
   UPDATE_OB_EVENT,
   UPDATE_OB_EVENT_SUCCESS,
   UPDATE_OB_EVENT_FAIL,
+  GET_WEB_SOCKET_MESSAGE_SUCCESS,
+  GET_WEB_SOCKET_MESSAGE,
 } from "./actionTypes"
 
 export const getRTSOrderBankTableData = (params) => ({
@@ -344,4 +346,9 @@ export const updateOBEventSuccess = (params) => ({
 export const updateOBEventFail = (params) => ({
   type: UPDATE_OB_EVENT_FAIL,
   params
+})
+
+export const getWebsocketMessageSuccess = (data) => ({
+  type: GET_WEB_SOCKET_MESSAGE_SUCCESS,
+  payload: data,
 })

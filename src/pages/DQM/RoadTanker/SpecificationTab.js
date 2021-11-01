@@ -16,7 +16,7 @@ class SpecificationTab extends PureComponent {
       idDeleteBtnShow: true,
       restrictionCharRemain: 20,
       restrictionVal: '',
-      restrictionCode: -1,
+      restrictionCode: 0,
     }
   }
 
@@ -96,29 +96,16 @@ class SpecificationTab extends PureComponent {
       let restriction = data?.restriction_code
 
       restriction_value = data?.restriction_code_dropdown.find((val) => { return val.code === restriction; })?.description
-
       const rtRestriction =
-        !isRTRestrictionAdding && restriction_dropdown && restriction ? (
-          // <MultipleSelect
-          //   names={restriction_dropdown}
-          //   rtRestrictionSelected={restriction}
-          //   isDeleteBtnShow={isDeleteBtnShow}
-          //   onDeleteBtnClick={onDeleteBtnClick}
-          //   onConfirmClick={onConfirmClick}
-          //   onNoClick={onNoClick}
-          //   onChange={e => this.onChangeHandler(e, "restriction")}
-          //   disabled={disabled}
-          // />
-
+        !isRTRestrictionAdding && restriction_dropdown ? (
           <AutoCompleteSearchDropDown
-            value={restriction}
+            value={this.state.restrictionCode || restriction }
             items={restriction_dropdown}
             key={restriction}
             searchIcon={true}
             onChange={e => this.onChangeHandler(e, "restriction")}
             disabled={disabled}
             placeholder='Please select code'
-            // error={error_code !== "" && value.code === null}
           />
         ) : (
           <div className="input-group add-restriction">
@@ -243,20 +230,24 @@ class SpecificationTab extends PureComponent {
 
           <div className="row">
             <div className="col-md-6 form-group">
-              <div>
-                <label>RESTRICT CODE</label>
-              </div>
+              <label>RESTRICT CODE</label>
               {rtRestriction(
                 (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
               )}
             </div>
-            <div className="form-group col-md-12">
+          </div>
+          
+          <div className="row">
+            <div className="form-group col-md-12 mb-6">
               <label>RT RESTRICTION</label>
               <input
                 className="form-control awsm-input"
                 disabled={true}
-                value={restriction_value}
+                value={this.state.restrictionVal || data?.restriction}
               ></input>
+            </div>
+            <div className="form-group col-md-12 mb-6">
+              <br/>
             </div>
           </div>
         </form>

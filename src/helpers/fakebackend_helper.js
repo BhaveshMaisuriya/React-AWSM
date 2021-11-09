@@ -325,6 +325,18 @@ export const getSalesAuditLog = payload =>
 
   export const getOrderBankAuditLog = payload =>
   get(url.GET_COMMERCIAL_AUDITLOG, { payload: payload })
+  
+  export const getClearScheduling = payload =>
+  get(url.GET_COMMERCIAL_AUDITLOG, { payload: payload })
+
+  export const getSendBulkShipment = payload =>
+  get(url.GET_COMMERCIAL_AUDITLOG, { payload: payload })  
+
+  export const getRunAutoScheduling = payload =>
+  get(url.GET_COMMERCIAL_AUDITLOG, { payload: payload })    
+
+  export const getdeleteMultipleOrder = payload =>
+  get(url.GET_COMMERCIAL_AUDITLOG, { payload: payload })  
 
 // get DQM Road Tanker Audit Log
 export const getRoadTankerAuditLog = payload =>

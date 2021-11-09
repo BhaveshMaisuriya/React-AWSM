@@ -2,6 +2,7 @@ import store from "./store/index";
 const URL_CONNECTION = "wss://gaimtnhvwf.execute-api.ap-southeast-1.amazonaws.com/dev";
 let webSocket = null;
 import { getWebsocketMessageSuccess } from "./store/orderBank/actions"
+
 async function initWebsocket() {
   return new Promise((resolve, reject) => {
     webSocket = new WebSocket(URL_CONNECTION);
@@ -18,6 +19,7 @@ async function initWebsocket() {
     }
   })
 }
+
 function sendMessage(message) {
   if (webSocket && webSocket.readyState === 1) {
     webSocket.send(message);
@@ -33,6 +35,7 @@ function sendMessage(message) {
     }
   }
 }
+
 export {
   initWebsocket,
   sendMessage

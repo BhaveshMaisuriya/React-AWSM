@@ -127,7 +127,7 @@ function UploadDMRModal(props) {
     isDragActive,
     acceptedFiles,
     fileRejections,
-  } = useDropzone({ onDrop, accept: [".csv", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "application/vnd.ms-excel"], multiple: false })
+  } = useDropzone({ onDrop, accept: [".csv", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "application/vnd.ms-excel", ".xlsb"], multiple: false })
 
   let allErrors = []
 

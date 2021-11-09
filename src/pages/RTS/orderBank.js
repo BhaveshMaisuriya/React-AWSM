@@ -40,7 +40,6 @@ import customiseMultipleDNIcon from "../../assets/images/AWSM-Multiple-DN.svg"
 import customiseUploadIcon from "../../assets/images/AWSM-Upload-RTS.svg"
 import customiseMultipleDeleteOrderIcon from "../../assets/images/AWSM-Trash-Icon-RTS.svg"
 
-
 import CustomizeTableModal from "../../common/CustomizeTable"
 
 import { FormControlLabel } from "@material-ui/core"
@@ -49,10 +48,9 @@ import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown"
 
 import GanttChartBottom from "./helper.js"
 
-
 import {
   ganttChartTableColumns, ganttChartTableDefaultColumns,
-  ganttChartTableMapping,
+  ganttChartTableMapping, 
   tableColumns,
   tableMapping
 } from "./OrderBankTable/tableMapping"
@@ -63,6 +61,10 @@ import {
   refreshOderBankDN,
   getOrderBankAuditLog,
   dragOrderBankToGanttChart,
+  getClearScheduling,
+  getdeleteMultipleOrder,
+  getSendBulkShipment,
+  getRunAutoScheduling,
 } from "../../store/orderBank/actions"
 import OrderBankActionModal from "./OrderBankActionModal"
 import CrossTerminalModal from "./crossTerminalModal"
@@ -129,6 +131,10 @@ function OrderBank({
   sendOrderBankDN,
   refreshOderBankDN,
   onGetOrderBankAuditLog,
+  onGetClearScheduling,
+  onGetSendBulkShipment,
+  onGetRunAutoScheduling,
+  onGetDeleteMultipleOrder,
   dragOrderBankToGanttChart,
 }) {
   let orderBankSettings = [
@@ -293,6 +299,18 @@ function OrderBank({
   const onCloseDeleteMultiple = () => {
     setDeleteMultiple(false)
   }  
+
+  const onSaveDeleteMultiple = async() => {
+    const payload = {
+      limit: 6,
+      pagination: 0,
+      sort_dir: "desc",
+      sort_field: "created",
+      q: "commercial_customer",
+    }
+    await onGetDeleteMultipleOrder(payload);
+    setDeleteMultiple(false)
+  }    
 
   const onCloseCrossTerminal = () => {
     setCrossTerminal(false)
@@ -461,9 +479,11 @@ function OrderBank({
     setShowDeleteOption(!showDeleteOption);
   }
 
-  const ConfirmClearModal = () => {
+  const ConfirmClearModal = async() => {
     setShowDeleteOption(!showDeleteOption);
     setClearScheduling(true);
+    const payload = {};
+    await onGetClearScheduling(payload);
   }
 
   const getCheckedDownloadVal = (index) => {
@@ -480,6 +500,18 @@ function OrderBank({
     setCheckedValue(temp3);
     setDeleteCheck(temp);
   }
+
+  const onClickSendBulkShipment = async() => {
+    setDisplayBulkModal(!displayBulkModal);
+    const payload = {}
+    await onGetSendBulkShipment(payload);
+  }
+
+  const onClickRunAutoScheduling = async() => {
+    setDisplayAutoModal(!displayAutoModal)
+    const payload = {}
+    await onGetRunAutoScheduling(payload);
+  }  
 
   return (
     <React.Fragment>
@@ -531,7 +563,7 @@ function OrderBank({
                     <span className="bl-1-grey-half plr-15">
                       <Button
                         color={"primary"}
-                        onClick={() => setDisplayAutoModal(!displayAutoModal)}
+                        onClick={() => onClickRunAutoScheduling()}
                       >
                         Run Auto Schedule
                       </Button>
@@ -539,7 +571,7 @@ function OrderBank({
                     <span className="bl-1-grey-half plr-15">
                       <Button
                         color={"primary"}
-                        onClick={() => setDisplayBulkModal(!displayBulkModal)}
+                        onClick={() => onClickSendBulkShipment()}
                       >
                         Send Bulk Shipment
                       </Button>
@@ -879,7 +911,7 @@ function OrderBank({
             <DeleteMultipleModal
               open={deleteMultiple}
               onCancel={onCloseDeleteMultiple}
-              onSave={onCloseDeleteMultiple}
+              onSave={onSaveDeleteMultiple}
             />                        
             <CustomizeTableModal
               open={showCustomize}
@@ -971,7 +1003,11 @@ const mapDispatchToProps = dispatch => ({
   refreshOderBankDN: params => dispatch(refreshOderBankDN(params)),
   sendOrderBankDN: params => dispatch(sendOrderBankDN(params)),
   onGetOrderBankAuditLog: payload => dispatch(getOrderBankAuditLog(payload)),
-  dragOrderBankToGanttChart: () => dispatch(dragOrderBankToGanttChart())
+  dragOrderBankToGanttChart: () => dispatch(dragOrderBankToGanttChart()),
+  onGetClearScheduling: payload => dispatch(getClearScheduling(payload)),
+  onGetSendBulkShipment: payload => dispatch(getSendBulkShipment(payload)),  
+  onGetRunAutoScheduling: payload => dispatch(getRunAutoScheduling(payload)),    
+  onGetDeleteMultipleOrder: payload => dispatch(getdeleteMultipleOrder(payload)),
 })
 
 const mapStateToProps = ({ orderBank }) => ({

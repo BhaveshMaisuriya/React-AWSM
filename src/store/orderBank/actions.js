@@ -30,6 +30,12 @@ import {
   GET_ORDER_BANK_AUDITLOG,
   GET_ORDER_BANK_AUDITLOG_SUCCESS,
   GET_ORDER_BANK_AUDITLOG_FAIL,
+  GET_CLEAR_SCHEDULING,
+  GET_CLEAR_SCHEDULING_SUCCESS,
+  GET_CLEAR_SCHEDULING_FAIL,  
+  GET_DELETE_MULTIPLE_ORDER,
+  GET_DELETE_MULTIPLE_ORDER_SUCCESS,
+  GET_DELETE_MULTIPLE_ORDER_FAIL,
   PROCESS_PAYMENT_IN_GANTT_CHART,
   PROCESS_PAYMENT_IN_GANTT_CHART_SUCCESS,
   PROCESS_PAYMENT_IN_GANTT_CHART_FAIL,
@@ -215,6 +221,66 @@ export const getOrderBankAuditLogSuccess = response => ({
 
 export const getOrderBankAuditLogFail = error => ({
   type: GET_ORDER_BANK_AUDITLOG_FAIL,
+  payload: error,
+})
+
+export const getClearScheduling = params => ({
+  type: GET_CLEAR_SCHEDULING,
+  params,
+})
+
+export const getClearSchedulingSuccess = response => ({
+  type: GET_CLEAR_SCHEDULING_SUCCESS,
+  payload: response,
+})
+
+export const getClearSchedulingFail = error => ({
+  type: GET_CLEAR_SCHEDULING_FAIL,
+  payload: error,
+})
+
+export const getSendBulkShipment = params => ({
+  type: GET_SEND_BULK_SHIPMENT,
+  params,
+})
+
+export const getSendBulkShipmentSuccess = response => ({
+  type: GET_SEND_BULK_SHIPMENT_SUCCESS,
+  payload: response,
+})
+
+export const getSendBulkShipmentFail = error => ({
+  type: GET_SEND_BULK_SHIPMENT_FAIL,
+  payload: error,
+})
+
+export const getRunAutoScheduling = params => ({
+  type: GET_RUN_AUTO_SCHEDULING,
+  params,
+})
+
+export const getRunAutoSchedulingSuccess = response => ({
+  type: GET_RUN_AUTO_SCHEDULING_SUCCESS,
+  payload: response,
+})
+
+export const getRunAutoSchedulingFail = error => ({
+  type: GET_RUN_AUTO_SCHEDULING_FAIL,
+  payload: error,
+})
+
+export const getdeleteMultipleOrder = params => ({
+  type: GET_DELETE_MULTIPLE_ORDER,
+  params,
+})
+
+export const getdeleteMultipleOrderSuccess = response => ({
+  type: GET_DELETE_MULTIPLE_ORDER_SUCCESS,
+  payload: response,
+})
+
+export const getdeleteMultipleOrderFail = error => ({
+  type: GET_DELETE_MULTIPLE_ORDER_FAIL,
   payload: error,
 })
 

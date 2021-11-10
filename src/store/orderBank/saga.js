@@ -16,6 +16,7 @@ import {
   GET_SEND_BULK_SHIPMENT,
   GET_RUN_AUTO_SCHEDULING,
   GET_DELETE_MULTIPLE_ORDER,
+  GET_CROSS_TERMINAL,
   PROCESS_PAYMENT_IN_GANTT_CHART,
   CANCEL_PAYMENT_IN_GANTT_CHART,
   SEND_ORDER_IN_GANTT_CHART,
@@ -78,6 +79,7 @@ import {
   getSendBulkShipment,
   getRunAutoScheduling,
   getdeleteMultipleOrder,
+  getCrossTerminal,
   getRTSOderBankGanttChart,
 } from "../../helpers/fakebackend_helper"
 
@@ -207,6 +209,15 @@ function* onGetDeleteMultipleOrder(params) {
   }
 }
 
+function* onGetCrossTerminal(params) {
+  try {
+    const response = yield call(getCrossTerminal, params)
+    yield put(getCrossTerminalSuccess(response))
+  } catch (error) {
+    yield put(getCrossTerminalFail(error))
+  }
+}
+
 function* sendRequestPaymentInGanttChart({ params={} }){
   try {
     // send request
@@ -320,6 +331,7 @@ function* orderBankSaga() {
   yield takeLatest(GET_SEND_BULK_SHIPMENT, onGetSendBulkShipment)
   yield takeLatest(GET_RUN_AUTO_SCHEDULING, onGetRunAutoScheduling)  
   yield takeLatest(GET_DELETE_MULTIPLE_ORDER, onGetDeleteMultipleOrder)
+  yield takeLatest(GET_CROSS_TERMINAL, onGetCrossTerminal)
   yield takeLatest(PROCESS_PAYMENT_IN_GANTT_CHART , sendRequestPaymentInGanttChart)
   yield takeLatest(CANCEL_PAYMENT_IN_GANTT_CHART , sendRequestCancelPaymentInGanttChart)
   yield takeLatest(SEND_ORDER_IN_GANTT_CHART , sendRequestOrderPaymentInGanttChart)

@@ -36,6 +36,9 @@ import {
   GET_DELETE_MULTIPLE_ORDER,
   GET_DELETE_MULTIPLE_ORDER_SUCCESS,
   GET_DELETE_MULTIPLE_ORDER_FAIL,
+  GET_CROSS_TERMINALR,
+  GET_CROSS_TERMINALR_SUCCESS,
+  GET_CROSS_TERMINALR_FAIL,  
   PROCESS_PAYMENT_IN_GANTT_CHART,
   PROCESS_PAYMENT_IN_GANTT_CHART_SUCCESS,
   PROCESS_PAYMENT_IN_GANTT_CHART_FAIL,
@@ -287,6 +290,21 @@ export const getdeleteMultipleOrderSuccess = response => ({
 
 export const getdeleteMultipleOrderFail = error => ({
   type: GET_DELETE_MULTIPLE_ORDER_FAIL,
+  payload: error,
+})
+
+export const getCrossTerminal = params => ({
+  type: GET_CROSS_TERMINAL,
+  params,
+})
+
+export const getCrossTerminalSuccess = response => ({
+  type: GET_CROSS_TERMINAL_SUCCESS,
+  payload: response,
+})
+
+export const getCrossTerminalFail = error => ({
+  type: GET_CROSS_TERMINAL_FAIL,
   payload: error,
 })
 

@@ -63,6 +63,7 @@ import {
   dragOrderBankToGanttChart,
   getClearScheduling,
   getdeleteMultipleOrder,
+  getCrossTerminal,
   getSendBulkShipment,
   getRunAutoScheduling,
 } from "../../store/orderBank/actions"
@@ -136,6 +137,7 @@ function OrderBank({
   onGetSendBulkShipment,
   onGetRunAutoScheduling,
   onGetDeleteMultipleOrder,
+  onGetCrossTerminal,
   dragOrderBankToGanttChart,
   socketData
 }) {
@@ -173,7 +175,7 @@ function OrderBank({
       icon: customiseMultipleDNIcon,
     },
     {
-      disabled: false,
+      disabled: true,
       value: "DeleteMultiple",
       label: "Delete Multiple Order",
       icon: customiseMultipleDeleteOrderIcon,
@@ -331,13 +333,7 @@ function OrderBank({
   }
 
   const onSaveDeleteMultiple = async() => {
-    const payload = {
-      limit: 6,
-      pagination: 0,
-      sort_dir: "desc",
-      sort_field: "created",
-      q: "commercial_customer",
-    }
+    const payload = {}
     await onGetDeleteMultipleOrder(payload);
     setDeleteMultiple(false)
   }    
@@ -345,6 +341,12 @@ function OrderBank({
   const onCloseCrossTerminal = () => {
     setCrossTerminal(false)
   }
+
+  const onSaveCrossTerminal = async() => {
+    const payload = {}
+    await onGetCrossTerminal(payload);
+    setCrossTerminal(false)
+  }  
 
   const onCloseNewOrder = () => {
     setShowNewOrder(false)
@@ -354,7 +356,7 @@ function OrderBank({
     if (val !== 0) {
       let temp = [...orderBankSetting]
       temp.map(function (item, index) {
-        if (item.value === "CrossTerminal" || item.value === "SendDN" || item.value === 'DeleteMultiple') {
+        if (item.value === "CrossTerminal" || item.value === "SendDN") {
           item.disabled = false
         }
       })
@@ -362,13 +364,33 @@ function OrderBank({
     } else {
       let temp = [...orderBankSetting]
       temp.map(function (item, index) {
-        if (item.value === "CrossTerminal" || item.value === "SendDN" || item.value === 'DeleteMultiple') {
+        if (item.value === "CrossTerminal" || item.value === "SendDN") {
           item.disabled = true
         }
       })
       setOrderBankSetting(temp)
     }
   }
+
+  const deleteEnable = val => {
+    if (val > 0) {
+      let temp = [...orderBankSetting]
+      temp.map(function (item, index) {
+        if (item.value === 'DeleteMultiple') {
+          item.disabled = false
+        }
+      })
+      setOrderBankSetting(temp)
+    } else {
+      let temp = [...orderBankSetting]
+      temp.map(function (item, index) {
+        if (item.value === 'DeleteMultiple') {
+          item.disabled = true
+        }
+      })
+      setOrderBankSetting(temp)
+    }
+  }  
 
   const onTableColumnsChange = columns => {
     setSearchFields(columns)
@@ -897,6 +919,7 @@ function OrderBank({
                 tableColumns={searchFields}
                 dataSource={socketData || []}
                 enabledCross={enabledCross}
+                deleteEnable={deleteEnable}
                 currentPage={currentPage}
                 onChangeCurrentPage={onChangeCurrentPage}
               />
@@ -915,7 +938,7 @@ function OrderBank({
             <CrossTerminalModal
               open={crossTerminal}
               onCancel={onCloseCrossTerminal}
-              onSave={onCloseCrossTerminal}
+              onSave={onSaveCrossTerminal}
             />
             <UploadDMRModal
               open={uploadDmr}
@@ -1024,6 +1047,7 @@ const mapDispatchToProps = dispatch => ({
   onGetSendBulkShipment: payload => dispatch(getSendBulkShipment(payload)),  
   onGetRunAutoScheduling: payload => dispatch(getRunAutoScheduling(payload)),    
   onGetDeleteMultipleOrder: payload => dispatch(getdeleteMultipleOrder(payload)),
+  onGetCrossTerminal: payload => dispatch(getCrossTerminal(payload)),
 })
 
 const mapStateToProps = ({ orderBank }) => ({

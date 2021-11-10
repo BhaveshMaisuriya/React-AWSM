@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 import Tooltip from '@material-ui/core/Tooltip';
 import informationIcon from "../../../../assets/images/AWSM-Information.svg";
+import {format} from "date-fns";
 export default class DeliveryTab extends Component {
     constructor(props) {
         super(props)
@@ -46,7 +47,7 @@ export default class DeliveryTab extends Component {
                     <tbody>
                         {data?.map(record => {
                             return <tr>
-                                <td>{record?.date}</td>
+                                <td>{format(new Date(record?.date), "do LLL yyyy")}</td>
                                 <td>{record?.volume}</td>
                                 <td>{record?.volume_adjustment}</td>
                                 <td>{record?.total_delivery}</td>

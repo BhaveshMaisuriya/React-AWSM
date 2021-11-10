@@ -14,23 +14,26 @@
 
 .swal2-container {
   transform: translate(-13px, 80px);
+  width: auto !important;
 }
 
 .swal2-popup {
   padding: 0 !important;
-  width: 320px !important;
   height: 48px !important;
+  width: 100% !important;
 }
 
 .swal2-title {
   font-size: 14px !important;
+  margin-left: -10px !important;
+  max-width: 600px !important;
   font-family: "Museo Sans" !important;
-  width: fit-content !important;
-  margin-top: 6.3% !important;
+  top: 53% !important;
+  transform: translateY(-50%) !important;
 }
 
 .swal2-toast {
-  grid-template-columns: 1fr 6fr 1fr !important;
+  grid-template-columns: 60px 6fr 60px !important;
 }
 
 .success-popup {

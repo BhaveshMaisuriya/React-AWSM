@@ -34,6 +34,10 @@ import {
   UPDATE_OB_EVENT_FAIL,
   GET_WEB_SOCKET_MESSAGE_SUCCESS,
   GET_WEB_SOCKET_MESSAGE,
+  GET_OB_RT_DETAILS_SUCCESS,
+  GET_OB_RT_DETAILS_FAIL,
+  UPDATE_OB_RT_DETAILS_SUCCESS,
+  UPDATE_OB_RT_DETAILS_FAIL,
 } from "./actionTypes"
 import {notify} from "../../helpers/notify"
 import {ToastSuccess,ToastError} from "../../helpers/swal";
@@ -51,7 +55,10 @@ const initialState = {
   ganttChart: {
     table: [],
     event: []
-  }
+  },
+  orderBankRTDetails: null,
+  socketData: [],
+  totalRow: 0,
 }
 
 const RTSOrderBank = (state = initialState, action) => {
@@ -307,12 +314,6 @@ const RTSOrderBank = (state = initialState, action) => {
 
       return {
         ...state,
-        orderBankTableData: [...state.orderBankTableData],
-        ganttChart: {
-          ...state.ganttChart,
-          event: [...state.ganttChart.event],
-          table: [...state.ganttChart.table]
-        }
       }
     }
     case REMOVE_EVENT_FAIL: {
@@ -342,9 +343,39 @@ const RTSOrderBank = (state = initialState, action) => {
       }
     }
     case GET_WEB_SOCKET_MESSAGE_SUCCESS: {
+      if (state.socketData.length === 0) {
+        return {
+          ...state,
+          socketData: action.payload.list,
+          totalRow: action.payload.total_rows,
+        }
+      }
       return {
         ...state,
-        socketData: action.payload,
+        socketData: [...state.socketData, ...action.payload.list],
+        totalRow: action.payload.total_rows,
+      }
+    }
+    case GET_OB_RT_DETAILS_SUCCESS: {
+      return {
+        ...state,
+        orderBankRTDetails: action.payload,
+      }
+    }
+    case GET_OB_RT_DETAILS_FAIL: {
+      return {
+        ...state,
+      }
+    }
+    case UPDATE_OB_RT_DETAILS_SUCCESS: {
+      return {
+        ...state,
+        orderBankRTDetails: action.params ,
+      }
+    }
+    case UPDATE_OB_RT_DETAILS_FAIL: {
+      return {
+        ...state,
       }
     }
     default:

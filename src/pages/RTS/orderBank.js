@@ -88,6 +88,7 @@ const CheckedIcon = () => <img src={selectAllIcon2} alt="icon" />
 import { ReactSVG } from "react-svg";
 import UploadDMRModal from "./uploadDMRModal";
 import DeleteMultipleModal from "./deleteMultiple";
+import {sendMessage} from "../../SocketService";
 
 const GanttChartBottomHover = [
   {
@@ -130,6 +131,7 @@ function OrderBank({
   refreshOderBankDN,
   onGetOrderBankAuditLog,
   dragOrderBankToGanttChart,
+  socketData
 }) {
   let orderBankSettings = [
     {
@@ -202,8 +204,8 @@ function OrderBank({
   const [activeTab, setActiveTab] = useState("1")
   const [dropdownOpen, setOpen] = useState(false)
   const [crossTerminal, setCrossTerminal] = useState(false)
-  const [uploadDmr, setUploadDmr] = useState(false)  
-  const [deleteMultiple, setDeleteMultiple] = useState(false)    
+  const [uploadDmr, setUploadDmr] = useState(false)
+  const [deleteMultiple, setDeleteMultiple] = useState(false)
   const [showNewOrder, setShowNewOrder] = useState(false)
   const [showCustomize, setShowCustomize] = useState(false)
   const [searchFields, setSearchFields] = useState(getCookieByKey("Order Bank")
@@ -213,7 +215,7 @@ function OrderBank({
   const [terminal, setTerminal] = useState(REGION_TERMINAL[0].terminal[0])
   const [refreshDNModal, setRefreshDNModal] = useState(false)
   const [displayAutoModal, setDisplayAutoModal] = useState(false)
-  const [showClearAlert, setShowClearAlert] = useState(false)  
+  const [showClearAlert, setShowClearAlert] = useState(false)
   const [displayBulkModal, setDisplayBulkModal] = useState(false)
   const [ganttChartAllRadio, setGanttChartAllRadio] = useState("")
   // {high:false, request: false, future: false, backlog: false}
@@ -229,8 +231,8 @@ function OrderBank({
   const [snackMessage, setSnackMessage] = useState('')
   const [showSnackAlert, setShowSnackAlert] = useState(false)
   const [showDeleteOption, setShowDeleteOption] = useState(false)
-  const [clearScheduling, setClearScheduling] = useState(false)  
-  const [showAlertDMR, setShowAlertDMR] = useState(false)    
+  const [clearScheduling, setClearScheduling] = useState(false)
+  const [showAlertDMR, setShowAlertDMR] = useState(false)
   const [deleteCheck, setDeleteCheck] = useState(deleteCheckOption)
   const [checkedValue, setCheckedValue] = useState('Manual Scheduling')
   const [isCustomizeGanttModalOpen,setIsCustomizeGanttModalOpen] = useState(false)
@@ -244,6 +246,8 @@ function OrderBank({
     })
     return columns
   })
+  const [currentPage, setCurrentPage] = useState(1)
+
   useEffect(()=>{
     const results = {DNs : 3,shipment : 2,backlog : 0,SR : 0,HP : 0};
     if(ganttChartEvents){
@@ -255,6 +259,32 @@ function OrderBank({
     }
     setOrderSummary(results)
   },[ganttChartEvents])
+
+  useEffect(() => {
+    const payload = {
+      limit: 6,
+      pagination: 0,
+      sort_dir: "desc",
+      sort_field: "created",
+      q: "commercial_customer",
+    }
+    onGetOrderBankAuditLog(payload)
+  }, [])
+
+  useEffect(() => {
+    sendMessage(JSON.stringify({
+      "action": "getOrderBank",
+      "data": {
+        "region": region,
+        "terminal": terminal,
+        "shift_date": {"type": "range", "date_from": "2020-09-24", "date_to": "2020-09-26"},
+        "dn_status": status,
+        "page": currentPage,
+        "limit": 10,
+      }
+    }))
+  }, [region, terminal, shiftDate, status, currentPage])
+
   const toggle = () => setOpen(!dropdownOpen)
   const terminalList = useMemo(() => {
     const currentRegion = REGION_TERMINAL.find(e => e.region === region)
@@ -292,7 +322,7 @@ function OrderBank({
 
   const onCloseDeleteMultiple = () => {
     setDeleteMultiple(false)
-  }  
+  }
 
   const onCloseCrossTerminal = () => {
     setCrossTerminal(false)
@@ -321,20 +351,6 @@ function OrderBank({
       setOrderBankSetting(temp)
     }
   }
-  useEffect(() => {
-    const payload = {
-      limit: 6,
-      pagination: 0,
-      sort_dir: "desc",
-      sort_field: "created",
-      q: "commercial_customer",
-    }
-    onGetOrderBankAuditLog(payload)
-  }, [])
-
-  useEffect(() => {
-    getRTSOrderBankTableData({ region, terminal, shiftDate, status })
-  }, [region, terminal, shiftDate, status])
 
   const onTableColumnsChange = columns => {
     setSearchFields(columns)
@@ -342,11 +358,11 @@ function OrderBank({
   }
 
   const onSendOrderBankDN = () => {
-    sendOrderBankDN(orderBankTableData.filter(e => e.isChecked))
+    sendOrderBankDN(socketData.filter(e => e.isChecked))
   }
 
   const onRefreshOrderBankDN = () => {
-    refreshOderBankDN(orderBankTableData.filter(e => e.isChecked))
+    refreshOderBankDN(socketData.filter(e => e.isChecked))
   }
 
   const changeGanttChartOption = async (e, val) => {
@@ -481,6 +497,10 @@ function OrderBank({
     setDeleteCheck(temp);
   }
 
+  const onChangeCurrentPage = () => {
+    setCurrentPage(currentPage + 1)
+  }
+
   return (
     <React.Fragment>
       <DragDropContext onDragEnd={onDragEnd}>
@@ -588,8 +608,6 @@ function OrderBank({
                   >
                     <img src={customiseTableIcon} alt="" />
                   </IconButton>
-
-
                           <button
                             id="ClearScheduling"
                             className="btn btn-outline-primary excel-btn-container pdf-btn"
@@ -598,7 +616,7 @@ function OrderBank({
                               <span className="download-button-message">
                                 Clear Scheduling
                                 <ArrowDropDownIcon />
-                              </span> 
+                              </span>
                             </div>
                           </button>
                           <Popover
@@ -657,8 +675,6 @@ function OrderBank({
                               </>
                             </PopoverBody>
                           </Popover>
-
-
                   {
                     activeTab === "1"  && <div className='d-flex align-items-center justify-content-between radio_option m-0 order-bank-label'>
                       {
@@ -678,7 +694,7 @@ function OrderBank({
                     {`${orderSummary.DNs} DNs, ${orderSummary.shipment} shipments, ${orderSummary.backlog} backlog, ${orderSummary.SR} SR, ${orderSummary.HP} HP`}
                     </span>
                 </Col>
-               
+
               </Row>
               <div>
                 <TabContent activeTab={activeTab} className="pt-2">
@@ -795,8 +811,6 @@ function OrderBank({
                     />
                   </div>
                 </Col>
-                
-
                 <Col lg={3} className="order-bank-bar right" id="order-bank-main">
                   <Dropdown isOpen={dropdownOpen} toggle={toggle}>
                     <DropdownToggle
@@ -849,8 +863,10 @@ function OrderBank({
               </Row>
               <OrderBankTable
                 tableColumns={searchFields}
-                dataSource={orderBankTableData || []}
+                dataSource={socketData || []}
                 enabledCross={enabledCross}
+                currentPage={currentPage}
+                onChangeCurrentPage={onChangeCurrentPage}
               />
             </div>
             <NewOrderModal open={showNewOrder} onCancel={onCloseNewOrder} />
@@ -880,7 +896,7 @@ function OrderBank({
               open={deleteMultiple}
               onCancel={onCloseDeleteMultiple}
               onSave={onCloseDeleteMultiple}
-            />                        
+            />
             <CustomizeTableModal
               open={showCustomize}
               onCancel={onCloseCustomize}
@@ -953,11 +969,11 @@ function OrderBank({
                 openAlert={showAlertDMR}
                 closeAlert={() => setShowAlertDMR(false)}
               />
-            )}                        
+            )}
           </Card>
         </div>
       </div>
-      {clearScheduling === true && 
+      {clearScheduling === true &&
         <ClearScheduling clearScheduling={clearScheduling} checkedValue={checkedValue} toggle={toggleClear} showConfirmAlert={showConfirmAlert} />
       }
       </DragDropContext>
@@ -977,6 +993,7 @@ const mapDispatchToProps = dispatch => ({
 const mapStateToProps = ({ orderBank }) => ({
   orderBankTableData: orderBank.orderBankTableData,
   auditsCom: orderBank.auditsCom,
+  socketData: orderBank.socketData
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(OrderBank)

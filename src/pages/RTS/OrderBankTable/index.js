@@ -19,11 +19,11 @@ import EditIcon from "../../../assets/images/AWSM-Edit-Icon.svg"
 import TrashIcon from "../../../assets/images/AWSM-Trash-Icon.svg"
 import NoDataIcon from "../../../assets/images/AWSM-No-Data-Available.svg"
 import DeleteOrderBankConfirmation from "../deleteOrderBankModal"
-import EditOrderBankModal from "../EditOrderBankModal"
+import EditOrderBankModal from "../editOrderBankModal"
 import ConfirmDNStatusModal from "./confirmDNStatusModal"
 import {deleteOrderBankDetail, sendDNStatusRequest, updateOrderBankTableData} from "../../../store/actions"
 import {Draggable, Droppable} from "react-beautiful-dnd"
-
+import InfiniteScroll from "react-infinite-scroll-component"
 
 export class TableGroupEvent extends React.Component {
   constructor(props) {
@@ -146,7 +146,8 @@ class index extends Component {
       currentSort: {
         key: null,
         asc: false,
-      }
+      },
+      currentPage: 1,
     }
   }
 
@@ -417,81 +418,89 @@ class index extends Component {
     };
   }
 
+  handleInfiniteScrolling() {
+    const { currentPage, onChangeCurrentPage } = this.props;
+    onChangeCurrentPage();
+  }
+
   render() {
     const {selectedAllItem, expandSearch, DNStatus} = this.state
     const {dataSource} = this.state
+    const { totalRow } = this.props
     return (
       <div className="rts-table-container scroll" id="scrollableDiv">
-        <div className="container-orderbank" style={{maxWidth: "100%"}}>
-          {dataSource.length ? (<table className="fixed">
-            <thead>
-            <tr>
-              <th>
-                <img src={selectedAllItem ? selectAllIcon2 : selectAllIcon}
-                     className={"header-select-icon"} onClick={this.OnSelectedAllItems} alt="icon"/>
-              </th>
-            </tr>
-            </thead>
-            <tbody>
-            {this.DataOfTableFixed()}
-            </tbody>
-          </table>) : null}
-          <div className="scroll">
-            {/* <DragDropContext onDragEnd={(r) => console.log(r)}> */}
-            <Droppable droppableId="order-bank-table" isDropDisabled={true}>
-              {provided => (
-                <table {...provided.droppableProps} ref={provided.innerRef}
-                       className={`scrollable ${!dataSource.length ? 'bd-left' : ''}`}>
-                  <thead>
-                  <tr>{this.headerTableConfiguration()}</tr>
-                  </thead>
-                  <tbody>
-                  {
-                    dataSource && dataSource.length ? dataSource.map((v, index) => {
-                        return (
-                          <Draggable isDragDisabled={!v.isChecked} key={v.id} draggableId={index.toString()}
-                                     index={index}>
-                            {(provided, snapshot) => (
-                              <>
-                                <tr
-                                  className={`${v.isChecked && !snapshot.isDragging ? "selected-row" : ""} ${snapshot.isDragging ? "tr-dragging" : ""}`}
-                                  ref={provided.innerRef}
-                                  {...provided.draggableProps}
-                                  {...provided.dragHandleProps}
-                                  style={this.getStyle(provided.draggableProps.style, snapshot)}
-                                >
-                                  {this.bodyTableConfiguration(v, snapshot.isDragging)}
-                                </tr>
-                                {snapshot.isDragging && (
-                                  <tr className={`${v.isChecked ? "selected-row" : "bg-white"}`}>
-                                    {this.bodyTableConfiguration(v)}
+        <InfiniteScroll next={this.handleInfiniteScrolling.bind(this)} hasMore={this.props.dataSource?.length < totalRow} loader={<h5>Loading...</h5>} dataLength={dataSource.length} height={450}>
+          <div className="container-orderbank" style={{maxWidth: "100%"}}>
+            {dataSource.length ? (<table className="fixed">
+              <thead>
+              <tr>
+                <th>
+                  <img src={selectedAllItem ? selectAllIcon2 : selectAllIcon}
+                       className={"header-select-icon"} onClick={this.OnSelectedAllItems} alt="icon"/>
+                </th>
+              </tr>
+              </thead>
+              <tbody>
+              {this.DataOfTableFixed()}
+              </tbody>
+            </table>) : null}
+            <div className="scroll">
+              {/* <DragDropContext onDragEnd={(r) => console.log(r)}> */}
+              <Droppable droppableId="order-bank-table" isDropDisabled={true}>
+                {provided => (
+                  <table {...provided.droppableProps} ref={provided.innerRef}
+                         className={`scrollable ${!dataSource.length ? 'bd-left' : ''}`}>
+                    <thead>
+                    <tr>{this.headerTableConfiguration()}</tr>
+                    </thead>
+                    <tbody>
+                    {
+                      dataSource && dataSource.length ? dataSource.map((v, index) => {
+                          return (
+                            <Draggable isDragDisabled={!v.isChecked} key={v.id} draggableId={index.toString()}
+                                       index={index}>
+                              {(provided, snapshot) => (
+                                <>
+                                  <tr
+                                    className={`${v.isChecked && !snapshot.isDragging ? "selected-row" : ""} ${snapshot.isDragging ? "tr-dragging" : ""}`}
+                                    ref={provided.innerRef}
+                                    {...provided.draggableProps}
+                                    {...provided.dragHandleProps}
+                                    style={this.getStyle(provided.draggableProps.style, snapshot)}
+                                  >
+                                    {this.bodyTableConfiguration(v, snapshot.isDragging)}
                                   </tr>
-                                )}
-                              </>
-                            )
-                            }
-                          </Draggable>
-                        )
-                      }) :
-                      (<tr>
-                        <td colSpan={18} className={'rts-table-nodata'}>
-                          <div>
-                            <img
-                              src={NoDataIcon}
-                              alt="No Data"
-                            />
-                          </div>
-                        </td>
-                      </tr>)
-                  }
-                  </tbody>
-                </table>
-              )
-              }
-            </Droppable>
-            {/* </DragDropContext> */}
+                                  {snapshot.isDragging && (
+                                    <tr className={`${v.isChecked ? "selected-row" : "bg-white"}`}>
+                                      {this.bodyTableConfiguration(v)}
+                                    </tr>
+                                  )}
+                                </>
+                              )
+                              }
+                            </Draggable>
+                          )
+                        }) :
+                        (<tr>
+                          <td colSpan={18} className={'rts-table-nodata'}>
+                            <div>
+                              <img
+                                src={NoDataIcon}
+                                alt="No Data"
+                              />
+                            </div>
+                          </td>
+                        </tr>)
+                    }
+                    </tbody>
+                  </table>
+                )
+                }
+              </Droppable>
+              {/* </DragDropContext> */}
+            </div>
           </div>
-        </div>
+        </InfiniteScroll>
         {DNStatus.isOpenConfirmModal && (
           <ConfirmDNStatusModal
             isOpen={DNStatus.isOpenConfirmModal}
@@ -515,4 +524,7 @@ const mapDispatchToProp = dispatch => ({
   onGetDeleteOrderBankDetail: params => dispatch(deleteOrderBankDetail(params)),
   onSendDNStatusRequest: params => dispatch(sendDNStatusRequest(params)),
 })
-export default connect(null, mapDispatchToProp)(index)
+const mapStateToProps = ({ orderBank }) => ({
+  totalRow: orderBank.totalRow,
+})
+export default connect(mapStateToProps, mapDispatchToProp)(index)

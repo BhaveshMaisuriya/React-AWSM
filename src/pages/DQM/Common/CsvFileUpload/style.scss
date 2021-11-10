@@ -12,12 +12,13 @@
 .csv_file_upload_main_active {
     background-color: #ccc;
     padding: 10px;
+    
     .dropzone {
         border: 2px dashed rgb(116, 113, 113);
         background-color: #ccc;
         border-radius: 3px;
         position: relative;
-        cursor: pointer;
+        cursor: unset !important;
     }
 }
 

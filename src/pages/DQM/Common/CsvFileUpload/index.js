@@ -53,7 +53,7 @@ function CsvFileUpload(props) {
     const {uploadCsv} = props;
     if(uploadCsv !== null){
       props.alertShow('Data has been successfully updated via CSV', 'success');
-      props.toggle();
+      // props.toggle();
       
       props.getListCall();
       setUploadCsvData(uploadCsv);
@@ -72,8 +72,8 @@ function CsvFileUpload(props) {
   }, [props.uploadCsv])
 
   const cancelUpload = () => {
-    //  setProgressColor('red');
-    // const timer1 = setInterval(() => {
+    // setProgressColor('red');
+    // const timer1 = setInterval(() => {      
       setUploading(false);
       setProgress(10);
       setShowProgressbar(false);
@@ -81,6 +81,7 @@ function CsvFileUpload(props) {
     // }, 5000);
     // return () => {
     //   clearInterval(timer1);
+
     // }
   }
 
@@ -170,7 +171,7 @@ function CsvFileUpload(props) {
         id="auditLog-modal"
         contentClassName="modalContainer"
       >
-      <ModalHeader toggle={props.toggle}>
+      <ModalHeader toggle={(isDragActive || uploading === true ) ? '' : props.toggle}>
         <h3>Upload CSV File</h3>
       </ModalHeader>
       <ModalBody>
@@ -179,13 +180,13 @@ function CsvFileUpload(props) {
           {(uploading === false) && <input {...getInputProps()} />}
             <div className="CsvUploadIcon">
               <ReactSVG src={FileUploadIcon} />
-              {isDragActive ? <p className='drop_text'>Drop the files here ...</p> : <div> <p className='drop_text'>drag & drop your file here or <span>browse</span></p><span>By Uploading, the data will be directly populated into the system</span></div>}
+              {isDragActive ? <p className='drop_text'>Drop the files here ...</p> : <div> <p className='drop_text'>drag & drop your file here or {(isDragActive || uploading === true ) ? 'Browse' : <span>browse</span>}</p><span>By Uploading, the data will be directly populated into the system</span></div>}
             </div>
           </div>
         </div>
         {showProgressbar === true && 
           <div className={`box-border ${progressColor}`}>
-            <p><strong>Uploading file and populating data into system ...</strong></p>
+            <p><strong>{ progressColor === 'successColor' ? 'Completed!' : 'Uploading file and populating data into system ...'}</strong></p>
              <Box sx={{ display: 'flex', alignItems: 'center'}}>
              <Box sx={{ width: '100%', mr: 1 }}>
                <LinearProgress variant="determinate" value={progress} />

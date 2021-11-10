@@ -12,6 +12,10 @@ import {
   REFRESH_ORDER_BANK_DN,
   SEND_DN_STATUS_REQUEST,
   GET_ORDER_BANK_AUDITLOG,
+  GET_CLEAR_SCHEDULING,
+  GET_SEND_BULK_SHIPMENT,
+  GET_RUN_AUTO_SCHEDULING,
+  GET_DELETE_MULTIPLE_ORDER,
   PROCESS_PAYMENT_IN_GANTT_CHART,
   CANCEL_PAYMENT_IN_GANTT_CHART,
   SEND_ORDER_IN_GANTT_CHART,
@@ -70,6 +74,10 @@ import {
   refreshRTSOrderBank,
   deleteOrderBankDetail,
   getOrderBankAuditLog,
+  getClearScheduling,
+  getSendBulkShipment,
+  getRunAutoScheduling,
+  getdeleteMultipleOrder,
   getRTSOderBankGanttChart,
 } from "../../helpers/fakebackend_helper"
 
@@ -160,6 +168,42 @@ function* onGetOrderBankAuditLog() {
     yield put(getOrderBankAuditLogSuccess(response))
   } catch (error) {
     yield put(getOrderBankAuditLogFail(error))
+  }
+}
+
+function* onGetClearScheduling(params) {
+  try {
+    const response = yield call(getClearScheduling, params)
+    yield put(getClearSchedulingSuccess(response))
+  } catch (error) {
+    yield put(getClearSchedulingFail(error))
+  }
+}
+
+function* onGetSendBulkShipment(params) {
+  try {
+    const response = yield call(getSendBulkShipment, params)
+    yield put(getSendBulkShipmentSuccess(response))
+  } catch (error) {
+    yield put(getSendBulkShipmentFail(error))
+  }
+}
+
+function* onGetRunAutoScheduling(params) {
+  try {
+    const response = yield call(getRunAutoScheduling, params)
+    yield put(getRunAutoSchedulingSuccess(response))
+  } catch (error) {
+    yield put(getRunAutoSchedulingFail(error))
+  }
+}
+
+function* onGetDeleteMultipleOrder(params) {
+  try {
+    const response = yield call(getdeleteMultipleOrder, params)
+    yield put(getdeleteMultipleOrderSuccess(response))
+  } catch (error) {
+    yield put(getdeleteMultipleOrderFail(error))
   }
 }
 
@@ -272,6 +316,10 @@ function* orderBankSaga() {
   yield takeLatest(SEND_ORDER_BANK_DN, onSendOrderBankDN)
   yield takeLatest(SEND_DN_STATUS_REQUEST, onSendDNStatusRequest)
   yield takeLatest(GET_ORDER_BANK_AUDITLOG, onGetOrderBankAuditLog)
+  yield takeLatest(GET_CLEAR_SCHEDULING, onGetClearScheduling) 
+  yield takeLatest(GET_SEND_BULK_SHIPMENT, onGetSendBulkShipment)
+  yield takeLatest(GET_RUN_AUTO_SCHEDULING, onGetRunAutoScheduling)  
+  yield takeLatest(GET_DELETE_MULTIPLE_ORDER, onGetDeleteMultipleOrder)
   yield takeLatest(PROCESS_PAYMENT_IN_GANTT_CHART , sendRequestPaymentInGanttChart)
   yield takeLatest(CANCEL_PAYMENT_IN_GANTT_CHART , sendRequestCancelPaymentInGanttChart)
   yield takeLatest(SEND_ORDER_IN_GANTT_CHART , sendRequestOrderPaymentInGanttChart)

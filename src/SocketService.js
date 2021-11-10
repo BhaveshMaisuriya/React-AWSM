@@ -7,8 +7,10 @@ async function initWebsocket() {
   return new Promise((resolve, reject) => {
     webSocket = new WebSocket(URL_CONNECTION);
     webSocket.onmessage = (event) => {
-      const msg = JSON.parse(event.data);
-      store.dispatch(getWebsocketMessageSuccess(msg))
+      if (event.data) {
+        const msg = JSON.parse(event.data);
+        store.dispatch(getWebsocketMessageSuccess(msg))
+      }
     }
     webSocket.onopen = () => {
       console.log('connected socket')

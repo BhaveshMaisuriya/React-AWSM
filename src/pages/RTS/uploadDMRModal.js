@@ -6,7 +6,6 @@ import FileUploadIcon from "../../assets/images/AWSM-Upload.svg"
 import { connect } from "react-redux"
 import { Modal, ModalHeader, ModalBody } from "reactstrap"
 import AWSMAlert from "components/Common/AWSMAlert"
-import Loader from "components/Common/Loader"
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
@@ -16,18 +15,17 @@ import {
   getUploadDMR,
   setUploadDMR,
 } from "../../store/actions"
-import { isEqual } from "lodash"
 
 function UploadDMRModal(props) {
   const [alert, setAlert] = useState(true);
   const [uploading, setUploading] = useState(false);
   const [region, setRegion] = useState('');
-  const [base64String, setBase64String] = useState({});
   const [showProgressbar, setShowProgressbar] = useState(false); 
   const [progress, setProgress] = useState(10);
   const [progressColor, setProgressColor] = useState('primary');  
   const [uploadCsvData, setUploadCsvData] = useState({});  
-
+  const [uploadFile, setUploadFile] = useState(null);
+  
   useEffect(() => {
     if(showProgressbar === true){
       const timer = setInterval(() => {
@@ -41,10 +39,8 @@ function UploadDMRModal(props) {
 
   useEffect(async() => {
     if(progress === 100){
-      const { getUploadDMR } = props;
-      var temp = {...base64String};
-      temp.region = region;
-      await getUploadDMR(temp);
+      const { getUploadDMR } = props
+      await getUploadDMR({ uploadFile, region });
       setProgressColor('successColor');
     }
   }, [progress]);
@@ -54,9 +50,11 @@ function UploadDMRModal(props) {
   }, [props.region]);  
 
   useEffect(async() => {
-    const {uploadDMR} = props;
-    if(uploadDMR !== null){
-      props.alertShow();
+    const { uploadDMR, uploadDMRError } = props;
+    if(uploadDMR !== null || uploadDMRError !== null){
+      if (!!uploadDMR) {
+        props.alertShow();
+      }
       props.onCancel();
       
       setUploadCsvData(uploadDMR);
@@ -72,7 +70,7 @@ function UploadDMRModal(props) {
       // setAlertMessage('Excel Uploaded Successfully!')
       // setAlertStatus('success');
     }
-  }, [props.uploadDMR])
+  }, [props.uploadDMR, props.uploadDMRError])
 
   const cancelUpload = () => {
     //  setProgressColor('red');
@@ -87,37 +85,13 @@ function UploadDMRModal(props) {
     // }
   }
 
-  const locationPath = window.location.pathname
-
-  const fileToBase64 = (file, cb) => {
-    const reader = new FileReader()
-    reader.readAsDataURL(file)
-    reader.onload = function () {
-      cb(null, reader.result)
-    }
-    reader.onerror = function (error) {
-      cb(error, null)
-    }
-  }
-
   const onDrop = useCallback(acceptedFiles => {
     setUploading(true);
     if(acceptedFiles.length === 0) {
       setUploading(false)
     } else {
-      fileToBase64(acceptedFiles[0], async(err, result) => {
-        if (result) {
-          const base64WithoutPrefix = result.substr('data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,'.length);
-          const params = {
-            data: base64WithoutPrefix,
-            // region: region
-          }
-          
-          setBase64String(params);
-          setShowProgressbar(true);
-          // await onGetSLAAttchments(params)
-        }
-      });
+      setUploadFile(acceptedFiles[0])
+      setShowProgressbar(true);
     }
   }, [])
   
@@ -127,7 +101,7 @@ function UploadDMRModal(props) {
     isDragActive,
     acceptedFiles,
     fileRejections,
-  } = useDropzone({ onDrop, accept: [".csv", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "application/vnd.ms-excel", ".xlsb"], multiple: false })
+  } = useDropzone({ onDrop, accept: [".csv", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "application/vnd.ms-excel", "application/vnd.ms-excel.sheet.binary.macroenabled.12", ".xlsb"], multiple: false })
 
   let allErrors = []
 
@@ -186,6 +160,7 @@ function UploadDMRModal(props) {
 
 const mapStateToProps = ({ sla }) => ({
   uploadDMR: sla.uploadDMR,
+  uploadDMRError: sla.uploadDMRError,
 })
 
 const mapDispatchToProps = dispatch => ({

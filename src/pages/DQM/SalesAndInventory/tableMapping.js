@@ -76,7 +76,7 @@ const tableMapping = {
     columnSize: "cell-text",
     type: "color",
     getColor: (value, threshold) => {
-      return Math.abs(value) <= threshold ? "green-text" : "red-text"
+      return _.isNil(value) || Math.abs(value) <= threshold ? "green-text" : "red-text"
     },
   },
   sales_variance_percentage: {
@@ -84,7 +84,7 @@ const tableMapping = {
     columnSize: "cell-text",
     type: "color",
     getColor: (value, threshold) => {
-      return Math.abs(value) <= threshold ? "green-text" : "red-text"
+      return _.isNil(value) || Math.abs(value) <= threshold ? "green-text" : "red-text"
     },
   },
   dipping_value: {
@@ -173,7 +173,7 @@ const tableMapping = {
     columnSize: "cell-text",
     type: "color",
     getColor: (value, threshold) => {
-      return Math.abs(value) <= threshold ? "green-text" : "red-text"
+      return _.isNil(value) || Math.abs(value) <= threshold ? "green-text" : "red-text"
     },
   },
   inventory_variance_percentage: {
@@ -181,7 +181,7 @@ const tableMapping = {
     columnSize: "cell-text",
     type: "color",
     getColor: (value, threshold) => {
-      return Math.abs(value) <= threshold ? "green-text" : "red-text"
+      return _.isNil(value) || Math.abs(value) <= threshold ? "green-text" : "red-text"
     },
   },
   remarks: {

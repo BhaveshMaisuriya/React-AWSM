@@ -92,6 +92,7 @@ const InventoryTab = ({ data, onChange, salesDate }) => {
           <DatePicker
             className="form-control awsm-input"
             value={data?.dipping_date_time}
+            format={'DD-MM-yyyy , HH:mm:ss'}
             disabled="true"/>
         </div>
       </div>

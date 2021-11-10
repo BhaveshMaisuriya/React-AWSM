@@ -63,6 +63,12 @@ import {
   UPDATE_OB_EVENT_FAIL,
   GET_WEB_SOCKET_MESSAGE_SUCCESS,
   GET_WEB_SOCKET_MESSAGE,
+  GET_OB_RT_DETAILS,
+  GET_OB_RT_DETAILS_SUCCESS,
+  GET_OB_RT_DETAILS_FAIL,
+  UPDATE_OB_RT_DETAILS,
+  UPDATE_OB_RT_DETAILS_SUCCESS,
+  UPDATE_OB_RT_DETAILS_FAIL,
 } from "./actionTypes"
 
 export const getRTSOrderBankTableData = (params) => ({
@@ -417,4 +423,34 @@ export const updateOBEventFail = (params) => ({
 export const getWebsocketMessageSuccess = (data) => ({
   type: GET_WEB_SOCKET_MESSAGE_SUCCESS,
   payload: data,
+})
+
+export const getOBRTDetails = (params) => ({
+  type: GET_OB_RT_DETAILS,
+  params
+})
+
+export const getOBRTDetailsSuccess = (params) => ({
+  type: GET_OB_RT_DETAILS_SUCCESS,
+  params
+})
+
+export const getOBRTDetailsFail = (params) => ({
+  type: GET_OB_RT_DETAILS_FAIL,
+  params
+})
+
+export const updateOBRTDetails = (params) => ({
+  type: UPDATE_OB_RT_DETAILS,
+  params
+})
+
+export const updateOBRTDetailsSuccess = (params) => ({
+  type: UPDATE_OB_RT_DETAILS_SUCCESS,
+  params
+})
+
+export const updateOBRTDetailsFail = (params) => ({
+  type: UPDATE_OB_RT_DETAILS_FAIL,
+  params
 })

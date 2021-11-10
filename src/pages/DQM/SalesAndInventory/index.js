@@ -16,6 +16,7 @@ import {
   overrideStatusInActionColumn,
 } from "../../../store/actions"
 import { format, subDays } from "date-fns"
+import REGION_TERMINAL, {TERMINAL_CODE_MAPPING} from "../../../common/data/regionAndTerminal";
 
 const tableName = "salesinventory-table"
 
@@ -44,7 +45,9 @@ class SalesInventory extends Component {
     this.onGetMainTableAndAuditLog()
   }
 
-  onGetMainTableAndAuditLog = () =>{
+  onGetMainTableAndAuditLog = () =>
+  {
+    const defaultTerminal = REGION_TERMINAL.find((option)=> option.region === "Central")?.terminal?.find((term)=> term === "KVDT")
     const {
       onGetSaleAndInventory,
       getSalesAndInventoryVarianceControl,
@@ -57,7 +60,8 @@ class SalesInventory extends Component {
       sort_field: "",
       search_term: "",
       search_fields: transformArrayToString(searchFields),
-      search_date: format(this.state.salesDate, "yyyy-MM-dd")
+      search_date: format(this.state.salesDate, "yyyy-MM-dd"),
+      terminal: TERMINAL_CODE_MAPPING[defaultTerminal]
     }
     onGetSaleAndInventory(params)
     /*Call Variance Control only when the modal is opened, not on the page load*/

@@ -187,7 +187,7 @@ class FixedCoulmnTable extends Component {
               }
             )
             const inventoryValue = varianceControlData?.inventory?.find(
-              e => e.station_tank_status === arr.station_tank_status
+              e => e.station_tank_status === arr.tank_status
             )
             switch (e) {
               case "sales_variance": {
@@ -253,7 +253,7 @@ class FixedCoulmnTable extends Component {
           return (
             <td key={index}>
               <div>
-                {value === '-' ? value : format(new Date(value), "do LLL yyyy")}
+                {value === '-' ? value : format(new Date(value), "dd-MM-yyyy , HH:mm:ss")}
               </div>
             </td>
           )

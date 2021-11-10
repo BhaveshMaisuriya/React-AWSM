@@ -42,6 +42,7 @@ const initialState = {
   slaRenamePdf: null,
   slaDeletePdf: null,
   uploadDMR: null,
+  uploadDMRError: null
 }
 import { ToastSuccess, ToastError } from "../../helpers/swal"
 
@@ -102,22 +103,27 @@ const SLA = (state = initialState, action) => {
         error: action.payload,
       } 
 
-      case GET_UPLOAD_DMR_SUCCESS:
+      case GET_UPLOAD_DMR_SUCCESS: {
         return {
           ...state,
           uploadDMR: action.params,
+          uploadDMRError: null,
         }
+      }
   
-      case GET_UPLOAD_DMR_FAIL:
+      case GET_UPLOAD_DMR_FAIL: {
         return {
           ...state,
-          uploadDMR: action.payload,
+          uploadDMR: null,
+          uploadDMRError: action.payload,
         }
+      }
   
       case SET_UPLOAD_DMR_SUCCESS:
         return {
           ...state,
           uploadDMR: null,
+          uploadDMRError: null,
         }
       
     case GET_SLA_PDF_DOWNLOAD_SUCCESS:
@@ -249,7 +255,7 @@ const SLA = (state = initialState, action) => {
       ToastSuccess.fire({
         title: `Data in ${
           action.payload.title
-        }, ${action.payload.category.toUpperCase()} has successfully updated`,
+        }, ${action.payload.category.toUpperCase()} has been successfully deleted`,
       })
       const newData = { ...state.data }
       newData[action.payload.category] = action.payload.data

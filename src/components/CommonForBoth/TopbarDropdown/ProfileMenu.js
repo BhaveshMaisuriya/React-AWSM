@@ -154,7 +154,7 @@ class ProfileMenu extends Component {
               <i className="mdi mdi-chevron-down d-none d-xl-inline-block" />
             </Fragment>}
           </DropdownToggle>
-          <DropdownMenu left>
+          <DropdownMenu left="true">
             {/* <DropdownItem tag="a" href="/profile">
               <i className="bx bx-user font-size-16 align-middle mr-1" />
               {this.props.t("Profile")}

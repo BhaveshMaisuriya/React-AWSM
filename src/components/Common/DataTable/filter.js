@@ -11,9 +11,9 @@ import { isEmpty, isNull, isUndefined } from "lodash"
 import { removeKeywords } from "../../../pages/DQM/Common/helper"
 import "./datatable.scss"
 import ReplayIcon from "@material-ui/icons/Replay"
+import {format} from "date-fns";
 
-const FilterDropdown = props => {
-  const { dataFilter, dataKey, handleClickApply, handleClickReset } = props
+const FilterDropdown = ({ dataFilter, dataKey, handleClickApply, handleClickReset, rowsPerLoad = 30 }) => {
   const [popoverOpen, setPopoverOpen] = useState(false)
   const [checkAll, setCheckAll] = useState(true)
   const [data, setData] = useState([])
@@ -25,7 +25,6 @@ const FilterDropdown = props => {
   const [hasMore, setHasMore] = useState(true)
   const [isRemark, setHasRemark] = useState(false)
   const [current, setCurrent] = useState([])
-  let rowsPerLoad = 30
   const UntickIcon = () => <img src={selectAllIcon3} alt="icon" />
   const CheckedIcon = () => <img src={selectAllIcon2} alt="icon" />
   const UndeterminateIcon = () => <img src={selectAllIcon} alt="icon" />
@@ -38,12 +37,6 @@ const FilterDropdown = props => {
         dataKey === "remarks" ? setHasRemark(true) : setHasRemark(false)
         const alldata = getFilterData()
         setData(alldata)
-        const arr = []
-        alldata.map((item, index) => {
-          if (index < rowsPerLoad) {
-            arr.push(item)
-          }
-        })
         setCount(rowsPerLoad)
         appliedFiltersList.length === 0
           ? setCheckedCount(dataFilter[dataKey].length)
@@ -56,18 +49,25 @@ const FilterDropdown = props => {
    * useEffect for loading more dropdown filters
    */
   useEffect(() => {
-    let alldata = [...data]
-    let arr = []
-    let temp = []
-    alldata.map(item => {
-      if (item.visibility === true) temp.push(item)
-    })
-    temp.map((item, index) => {
-      if (index < rowsPerLoad) arr.push(item)
-    })
+    const temp = data.filter(item => (item.visibility === true))
+    const arr = temp.filter((item, index) =>  (index < rowsPerLoad))
     temp.length <= rowsPerLoad ? setHasMore(false) : setHasMore(true)
     setVisibilityCount(arr.length)
-    setCurrent(arr)
+    if (["inventory_variance", "sales_variance", "sales_variance_percentage", "inventory_variance_percentage"].includes(dataKey)) {
+      setCurrent([{
+        "text": "Outside Variance",
+        "checked": (data.find(e => e.text === "Outside Variance"))?.checked ?? false,
+        "visibility": true,
+        disabled: arr.findIndex(e => e.text === "Outside Variance") < 0
+      }, {
+        "text": "Within Variance",
+        "checked": (data.find(e => e.text === "Within Variance"))?.checked ?? false,
+        "visibility": true,
+        disabled: arr.findIndex(e => e.text === "Within Variance") < 0
+      }])
+    } else {
+      setCurrent(arr)
+    }
   }, [data])
 
   /**
@@ -75,9 +75,8 @@ const FilterDropdown = props => {
    */
   useEffect(() => {
     const tempSearch = searchWords === "*" ? "" : searchWords
-    let newData = [...data]
-    // let count = 0
-    newData.map(item => {
+    const newData = [...data]
+    newData.forEach(item => {
       item.visibility =
         item.text !== null &&
         item.text
@@ -88,7 +87,6 @@ const FilterDropdown = props => {
         appliedFiltersList.length > 0
           ? appliedFiltersList.includes(item.text)
           : item.visibility
-      // count = item.checked ? count + 1 : count
     })
     setData(newData)
   }, [searchWords])
@@ -106,8 +104,8 @@ const FilterDropdown = props => {
    * @returns newArr
    */
   function getFilterData() {
-    let newArr = []
-    dataFilter[dataKey]?.map(item => {
+    const newArr = []
+    dataFilter[dataKey]?.forEach(item => {
       newArr.push({
         text: item,
         checked:
@@ -125,10 +123,9 @@ const FilterDropdown = props => {
    * @param event
    */
   function onInputChange(event) {
-    const target = event.target
-    const value = target.value
-    let newData = [...data]
-    newData.map(item => {
+    const value = event.target.value
+    const newData = [...data]
+    newData.forEach(item => {
       const itemText = isNull(item.text) ? "-null" : item.text
       if (value.toString() === itemText.toString()) {
         item.checked = !item.checked
@@ -152,14 +149,9 @@ const FilterDropdown = props => {
    * Handle apply button onclick
    */
   function clickApply() {
-    const newData = [...data]
-    const checkedFilter = newData
-      .filter(item => {
-        return item.checked === true
-      })
-      .map(item => {
-        return item.text
-      })
+    const checkedFilter = data
+      .filter(item => item.checked === true)
+      .map(item => item.text)
     setSearch("")
     setAppliedFilters(checkedFilter)
     setPopoverOpen(!popoverOpen)
@@ -180,8 +172,7 @@ const FilterDropdown = props => {
    * Handle selecct all button onclick
    */
   function clickSelectAll() {
-    let newData = [...data]
-    newData = newData.map(item => ({ ...item, checked: !checkAll }))
+    const newData = data.map(item => ({ ...item, checked: !checkAll }))
     setData(newData)
     setCheckAll(!checkAll)
     !checkAll ? setCheckedCount(dataFilter[dataKey].length) : setCheckedCount(0)
@@ -216,8 +207,8 @@ const FilterDropdown = props => {
     if (data.length <= count) {
       setHasMore(false)
     } else {
-      let arr = [...current]
-      data.map((item, index) => {
+      const arr = [...current]
+      data.forEach((item, index) => {
         if (index + 1 > count + 1 && index - 1 < count + rowsPerLoad) {
           arr.push(item)
         }
@@ -228,7 +219,7 @@ const FilterDropdown = props => {
   }
 
   const checkNullValue = useCallback((text) =>
-    (isNull(text) || isEmpty(text.toString()) || text.toString().includes("null"))
+    (isNull(text) || isEmpty(text?.toString()) || text?.toString().includes("null"))
     ,[])
 
   return (
@@ -287,6 +278,9 @@ const FilterDropdown = props => {
                     ? current.map((row, index) => {
 
                       const renderLabel = () => {
+                        if(dataKey === 'dipping_timestamp') {
+                          return checkNullValue(row.text) ? "-" : format(new Date(row.text), "dd-MM-yyyy , HH:mm:ss")
+                        }
                         if (dataKey === "override") {
                          return checkNullValue(row.text) ? "Accurate" : removeKeywords(row.text)
                         }
@@ -309,6 +303,7 @@ const FilterDropdown = props => {
                               value={isNull(row.text) ? "-null" : row.text}
                               onChange={onInputChange}
                               checked={row.checked}
+                              disabled={row.disabled}
                               className="checkmark"
                               control={
                                 <Checkbox
@@ -348,10 +343,11 @@ const FilterDropdown = props => {
               {!isRemark && current.length > 0 && (
                 <Fragment>
                   <Checkbox
-                    checked={checkAll}
+                    checked={current.every(e => e.disabled) ? false : checkAll}
                     icon={<UndeterminateIcon />}
                     checkedIcon={<CheckedIcon />}
                     onClick={clickSelectAll}
+                    disabled={current.every(e => e.disabled)}
                     style={{
                       height: "20px",
                       width: "5px",

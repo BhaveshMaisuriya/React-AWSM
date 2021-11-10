@@ -16,7 +16,6 @@ import {
 } from "reactstrap"
 import { ReactSVG } from "react-svg"
 import { Link } from "react-router-dom"
-import eyeIcon from "../../../assets/images/auditlog-eye.svg"
 import customiseTableIcon from "../../../assets/images/AWSM-Customise-Table.svg"
 import AuditLog from "../../../components/Common/AuditLog"
 import Loader from "../../../components/Common/Loader"
@@ -38,7 +37,7 @@ import AWSMDropdown from "../../../components/Common/Dropdown"
 import DatePicker from "../../../components/Common/DatePicker"
 import REGION_TERMINAL from "../../../common/data/regionAndTerminal"
 import { format, subDays } from "date-fns"
-import { CustomCSVIcon } from "./icon"
+import { CustomCSVIcon, CustomEyeIcon } from "./icon"
 import CsvFileUpload from "./CsvFileUpload"
 import { TERMINAL_CODE_MAPPING } from "../../../common/data/regionAndTerminal"
 import { isEqual } from "lodash"
@@ -61,9 +60,11 @@ const styles = {
   },
 }
 class Pages extends Component {
-  defaultRegion = REGION_TERMINAL.find((option)=> option.region === "Central")?.region
-  defaultTerminal = REGION_TERMINAL
-    .find((option)=> option.region === "Central")?.terminal?.find((term)=> term === "KVDT")
+  defaultRegion = REGION_TERMINAL.find(option => option.region === "Central")
+    ?.region
+  defaultTerminal = REGION_TERMINAL.find(
+    option => option.region === "Central"
+  )?.terminal?.find(term => term === "KVDT")
   constructor(props) {
     super(props)
     this.state = {
@@ -98,7 +99,7 @@ class Pages extends Component {
   }
 
   getCustomerData = async () => {
-    const { onGetMainTable, /*salesDate*/ } = this.props
+    const { onGetMainTable /*salesDate*/ } = this.props
     const { currentPage, searchTerm, sortField } = this.state
     const { sortDir, searchFields, q } = this.state
     const pathName = window.location.pathname
@@ -111,9 +112,9 @@ class Pages extends Component {
       sort_dir: sortDir,
       sort_field: sortField,
     }
-    if (pathName === "/sales-inventory"){
-        params.search_date = format(this.state.salesDate,"yyyy-MM-dd")
-        params.terminal = TERMINAL_CODE_MAPPING[this.state.terminal]
+    if (pathName === "/sales-inventory") {
+      params.search_date = format(this.state.salesDate, "yyyy-MM-dd")
+      params.terminal = TERMINAL_CODE_MAPPING[this.state.terminal]
     }
     if (params.q.length < 1) delete params.q
     window.scrollTo(0, 0)
@@ -206,12 +207,12 @@ class Pages extends Component {
     const { modal } = this.state
     const { subModule } = this.props
     const modalContent = modal ? (
-        <AuditLog
-          rowsAudit={6}
-          subModule={subModule}
-          isOpen={this.state.modal}
-          toggle={this.toggle}
-        />
+      <AuditLog
+        rowsAudit={6}
+        subModule={subModule}
+        isOpen={this.state.modal}
+        toggle={this.toggle}
+      />
     ) : null
     return modalContent
   }
@@ -266,7 +267,7 @@ class Pages extends Component {
             ? this.props.tableData.list[this.state.selectedItem]
             : null
         }
-        salesDate = {this.state.salesDate}
+        salesDate={this.state.salesDate}
         visible={modalTI}
         onCancel={this.toggleTI}
         refreshMainTable={this.getCustomerData}
@@ -275,33 +276,39 @@ class Pages extends Component {
   }
 
   uploadCSV = () => {
-    this.setState({ openCsvModal : true });
+    this.setState({ openCsvModal: true })
   }
 
   downloadCSV = () => {
-    this.setState({ downloadCsv : true });
+    this.setState({ downloadCsv: true })
   }
 
   csvAlertShow = (msg, status) => {
-    this.setState({ csvMessage : msg });
-    this.setState({ csvStatus : status });
-    this.setState({ csvAlert : true });
+    this.setState({ csvMessage: msg })
+    this.setState({ csvStatus: status })
+    this.setState({ csvAlert: true })
   }
 
   onRegionChange = value => {
-    this.setState({
-      ...this.state,
-      region: value,
-      terminal: REGION_TERMINAL
-        .find((option) => option.region === value)?.terminal?.[0],
-    }, this.onDateAndTerminalChange)
+    this.setState(
+      {
+        ...this.state,
+        region: value,
+        terminal: REGION_TERMINAL.find(option => option.region === value)
+          ?.terminal?.[0],
+      },
+      this.onDateAndTerminalChange
+    )
   }
 
   onTerminalChange = value => {
-    this.setState({
-      ...this.state,
-      terminal: value,
-    }, this.onDateAndTerminalChange)
+    this.setState(
+      {
+        ...this.state,
+        terminal: value,
+      },
+      this.onDateAndTerminalChange
+    )
   }
 
   onSalesDateChange = value => {
@@ -309,9 +316,12 @@ class Pages extends Component {
     if (updateSalesDate) {
       updateSalesDate(value)
     }
-    this.setState({
-      salesDate: value
-    }, this.onDateAndTerminalChange)
+    this.setState(
+      {
+        salesDate: value,
+      },
+      this.onDateAndTerminalChange
+    )
   }
 
   onDateAndTerminalChange = () => {
@@ -334,9 +344,12 @@ class Pages extends Component {
       onGetMainTable(params)
     }
   }
-  
+
   componentDidUpdate(prevProps, prevState, snapshot) {
-    if (this.props.isUpdateSuccess && !isEqual(this.props.isUpdateSuccess, prevProps.isUpdateSuccess)) {
+    if (
+      this.props.isUpdateSuccess &&
+      !isEqual(this.props.isUpdateSuccess, prevProps.isUpdateSuccess)
+    ) {
       this.getCustomerData()
     }
   }
@@ -388,42 +401,54 @@ class Pages extends Component {
                 className={`${classes.headerText} d-flex justify-content-between align-items-center`}
               >
                 <div className="vertical-hr-right">
-                {(locationPath === "/retail-customer" || locationPath === "/commercial-customer") &&
+                  {(locationPath === "/retail-customer" ||
+                    locationPath === "/commercial-customer") && (
                     <>
-                    <button
-                      className="btn btn-outline-primary excel-btn-container"
-                      id='CsvUploadDownload'
-                      // disabled={this.state.loader}
-                    >
-                      <div className="excel-download-btn">
-                        <span className="download-icon-csv">
-                          <CustomCSVIcon />
-                        </span>
+                      <button
+                        className="btn btn-outline-primary excel-btn-container mr-4"
+                        id="CsvUploadDownload"
+                        // disabled={this.state.loader}
+                      >
+                        <div className="excel-download-btn">
+                          <span className="download-icon-csv">
+                            <CustomCSVIcon />
+                          </span>
                           <span className="download-button-message-csv">
                             CSV File
                           </span>
                           <div className="arrow-down" />
-                      </div>
-                    </button>
-                    <Popover
-                            target="CsvUploadDownload"
-                            placement="bottom"
-                            id='csvMainRight'
-                            isOpen={this.state.showDownloadOption}
-                            trigger="legacy"
-                            style={{ width: "150px", textAlign: 'left', boxShadow: '#ccc 2px 1px 10px' }}
-                            toggle={() => this.setState({showDownloadOption: !this.state.showDownloadOption})}
-                          >
-                            <PopoverBody className='mainCsv'>
-                              <div className="csvDropdown">
-                                <p onClick={() => this.uploadCSV()}>Upload CSV</p>
-                                <p onClick={() => this.downloadCSV()}>Download CSV</p>                                
-                              </div>
-                            </PopoverBody>
-                          </Popover>
+                        </div>
+                      </button>
+                      <Popover
+                        target="CsvUploadDownload"
+                        placement="bottom"
+                        id="csvMainRight"
+                        isOpen={this.state.showDownloadOption}
+                        trigger="legacy"
+                        style={{
+                          width: "150px",
+                          textAlign: "left",
+                          boxShadow: "#ccc 2px 1px 10px",
+                        }}
+                        toggle={() =>
+                          this.setState({
+                            showDownloadOption: !this.state.showDownloadOption,
+                          })
+                        }
+                      >
+                        <PopoverBody className="mainCsv">
+                          <div className="csvDropdown">
+                            <p onClick={() => this.uploadCSV()}>Upload CSV</p>
+                            <p onClick={() => this.downloadCSV()}>
+                              Download CSV
+                            </p>
+                          </div>
+                        </PopoverBody>
+                      </Popover>
                     </>
-                  }
+                  )}
                   <DownloadExcelButton subModule={subModule} />
+                  <div className="separate" />
                 </div>
                 <Link
                   to="#"
@@ -431,7 +456,7 @@ class Pages extends Component {
                     this.modalHandler()
                   }}
                 >
-                  <img src={eyeIcon} alt="info" /> View Audit Log
+                  <CustomEyeIcon /> View Audit Log
                 </Link>
               </div>
             </div>
@@ -440,10 +465,6 @@ class Pages extends Component {
                 <Card>
                   {
                     <CardBody className="card-content">
-                      <CardTitle className="table-header">
-                        {cardTitle}
-                      </CardTitle>
-                      <Divider />
                       <div className="d-flex justify-content-between align-items-center">
                         <SearchBar
                           searchOnClickHandler={this.handleSearchButton}
@@ -451,7 +472,12 @@ class Pages extends Component {
                         />
                       </div>
                       <div className={`table-top-bar`}>
-                        <div className={`top-page-number ${locationPath === "/sales-inventory" && 'sales-first'}`}>
+                        <div
+                          className={`top-page-number ${
+                            locationPath === "/sales-inventory" &&
+                            "sales-first col enteriesText-snl p-0"
+                          }`}
+                        >
                           <div className="enteriesText">
                             {`${currentPage * rowsPerPage + 1} to ${
                               tableData.total_rows -
@@ -459,34 +485,42 @@ class Pages extends Component {
                               0
                                 ? tableData.total_rows
                                 : currentPage * rowsPerPage + rowsPerPage
-                            } of ${tableData.total_rows} entries${locationPath === "/sales-inventory" ? ", 78 record exceeds variance threshold": ""}`}
+                            } of ${tableData.total_rows} entries${
+                              locationPath === "/sales-inventory"
+                                ? ", 78 record exceeds variance threshold"
+                                : ""
+                            }`}
+                            {locationPath === "/sales-inventory" && (
+                              <div className="separate-snl" />
+                            )}
                           </div>
-                        </div>
-                        {locationPath === "/sales-inventory" && (
-                          <div className={`d-flex align-items-center w-100 ${locationPath === "/sales-inventory" && 'border-left flex-50' }`}>
-                            <div className="col-4 p-0 d-flex align-items-center">
-                              <label className="mb-0 pr-2">DATE</label>
-                              <DatePicker
-                                value={this.state.salesDate}
-                                onChange={this.onSalesDateChange}
-                                endDate={new Date()}
-                                startDate={subDays(new Date(), 30)}
-                              />
-                            </div>
-                            <div className="col-8 p-0 d-flex align-items-center">
-                              <label className="mb-0 pr-2 w-min">REGION & TERMINAL</label>
+                          {locationPath === "/sales-inventory" && (
+                            <div className="col-10 p-0 d-flex align-items-center ml-4">
+                              <label className=" mb-0 pr-2">DATE</label>
+                              <div className="col-2 w-100 p-0 mr-4">
+                                <DatePicker
+                                  value={this.state.salesDate}
+                                  onChange={this.onSalesDateChange}
+                                  endDate={new Date()}
+                                  startDate={subDays(new Date(), 30)}
+                                />
+                              </div>
+                              <label className="mb-0 pr-2 w-min">
+                                REGION & TERMINAL
+                              </label>
                               <div className="d-flex w-100">
-                                <div className="col-4 p-0">
+                                <div className="col-3 p-0">
                                   <AWSMDropdown
                                     placeholder=""
-                                    items={REGION_TERMINAL
-                                      .filter((option)=> option.region !== "Special Product")
-                                      .map(e => e.region)}
+                                    items={REGION_TERMINAL.filter(
+                                      option =>
+                                        option.region !== "Special Product"
+                                    ).map(e => e.region)}
                                     value={this.state.region}
                                     onChange={this.onRegionChange}
                                   />
                                 </div>
-                                <div className="col-6 p-0 ml-2">
+                                <div className="col-3 p-0 ml-2">
                                   <AWSMDropdown
                                     placeholder=""
                                     items={
@@ -500,11 +534,15 @@ class Pages extends Component {
                                 </div>
                               </div>
                             </div>
-                          </div>
-                        )}
-                        {locationPath === "/sales-inventory" && <div className='flex-20'></div>}
-                        <div className={`d-flex align-items-center ${locationPath === "/sales-inventory" && 'sales-first'}`}>
-                           <IconButton
+                          )}
+                        </div>
+                        <div
+                          className={`d-flex align-items-center ${
+                            locationPath === "/sales-inventory" &&
+                            "sales-first flex-custom"
+                          }`}
+                        >
+                          <IconButton
                             aria-label="delete"
                             onClick={this.handleOpenCustomizeTable}
                           >
@@ -517,7 +555,7 @@ class Pages extends Component {
                                 onClick={() =>
                                   this.setState({ varianceControl: true })
                                 }
-                                className="btn btn-outline-primary modal-button"
+                                className="btn btn-outline-primary ml-2 modal-button"
                               >
                                 Variance Control
                                 <ReactSVG src={VarianceIcon} />
@@ -568,24 +606,25 @@ class Pages extends Component {
                     closeAlert={() => this.setState({ alert: false })}
                   />
                 )}
-                 <AWSMAlert
-                    status={this.state.csvStatus}
-                    message={this.state.csvMessage}
-                    openAlert={this.state.csvAlert}
-                    closeAlert={() => this.setState({ csvAlert: false })}
-                  />
+              <AWSMAlert
+                status={this.state.csvStatus}
+                message={this.state.csvMessage}
+                openAlert={this.state.csvAlert}
+                closeAlert={() => this.setState({ csvAlert: false })}
+              />
             </Row>
-            {(this.state.openCsvModal === true || this.state.downloadCsv === true) &&
+            {(this.state.openCsvModal === true ||
+              this.state.downloadCsv === true) && (
               <CsvFileUpload
-                currentPage = {locationPath}
+                currentPage={locationPath}
                 isOpen={this.state.openCsvModal}
                 toggle={this.toggleCsvModal}
                 getListCall={() => this.getCustomerData()}
                 callDownloadCsv={this.state.downloadCsv}
-                toggleDownloadCsv={() => this.setState({downloadCsv: false})}
+                toggleDownloadCsv={() => this.setState({ downloadCsv: false })}
                 alertShow={this.csvAlertShow}
               />
-            }
+            )}
             {this.runAuditLogModal()}
             {this.runTableInformation()}
           </div>

@@ -1,5 +1,5 @@
-// import axios from "axios"
-import { del, get, post, put, realAxiosApi as axios } from "./api_helper"
+import defaultAxios from "axios"
+import { del, get, post, put, realAxiosApi, realAxiosApi as axios } from "./api_helper"
 import * as url from "./url_helper"
 import { orderDetails, viewOrderDetails } from "../pages/RTS/newOrderData"
 
@@ -215,11 +215,23 @@ export const getUploadCsv = params =>
     {'data': params.data}
   )  
 
-export const getUploadDMR = params =>
-  axios.post(
-    '/upload-dmr',
-    params
-  )    
+export const getUploadDMR = async ({ uploadFile, region }) => {
+  const singedResponse = await realAxiosApi.post("/file", {
+    filename: uploadFile.name,
+    mimetype: uploadFile.type,
+    category: "OrderBank"
+  })
+  const {file, url} = singedResponse.data;
+  await defaultAxios.put(url, uploadFile, {
+    headers: {
+      'Content-Type': uploadFile.type
+    }
+  });
+  return await axios.post("/upload-dmr", {
+    fileId: file.id,
+    region
+  })
+}
 
 export const getDownloadCsv = params =>
   axios.get(

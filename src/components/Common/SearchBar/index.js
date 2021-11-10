@@ -16,7 +16,7 @@ const styles = {
     border: "1px solid #D9D9D9",
     borderRadius: "4px",
     backgroundColor: "#FFFFFF",
-    marginTop: "20px",
+    // marginTop: "20px",
   },
   input: {
     marginLeft: 8,

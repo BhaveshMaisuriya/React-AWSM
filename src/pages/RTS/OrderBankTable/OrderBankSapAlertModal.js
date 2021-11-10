@@ -4,17 +4,12 @@ import { connect } from "react-redux"
 import ConfirmationPopup from "../../../components/Common/DeleteConfirmationPopup"
 import RedAlertIcon from "./../../../assets/images/AWSM-Red-Alert.svg"
 import CloseButton from "../../../components/Common/CloseButton"
-import { getShipmentOfOderBankGanttChart, removeEvent } from "../../../store/actions"
+import { getShipmentOfOderBankGanttChart } from "../../../store/actions"
 import { shipmentTableColumns } from "./tableMapping"
 
-const OrderbankSapAlertModal = ({ istoggle, open, shipmentOrderBankTableData, getShipmentOfOderBankGanttChart, shipmentClicked, onRemoveEvent}) => {
+const OrderbankSapAlertModal = ({ istoggle, open, shipmentOrderBankTableData, getShipmentOfOderBankGanttChart, shipmentClicked, onSend}) => {
   const [showDeleteModal, setDeleteModal] = useState(false)
   const toggleDeleteModal = () => setDeleteModal(!showDeleteModal)
-  const onClickDeleteShipment = () => {
-    //insert api to delete shipment
-    onRemoveEvent({id: shipmentClicked})
-    istoggle()
-  }
 
   useEffect(()=>{
     if(open)getShipmentOfOderBankGanttChart()
@@ -91,7 +86,7 @@ const OrderbankSapAlertModal = ({ istoggle, open, shipmentOrderBankTableData, ge
           </ModalFooter>
         ) : null}
       </Modal>
-      {showDeleteModal && <ConfirmationPopup open={showDeleteModal} istoggle={toggleDeleteModal} deleteFunction={onClickDeleteShipment}/>}
+      {showDeleteModal && <ConfirmationPopup open={showDeleteModal} istoggle={toggleDeleteModal} deleteFunction={onSend}/>}
     </Fragment>
   )
 }
@@ -102,7 +97,6 @@ const mapStateToProps = ({ orderBank }) => ({
 
 const mapDispatchToProps = dispatch => ({
   getShipmentOfOderBankGanttChart: (params) => dispatch(getShipmentOfOderBankGanttChart(params)),
-  onRemoveEvent: (params) => dispatch(removeEvent(params))
 })
 
 export default connect(

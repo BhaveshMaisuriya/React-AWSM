@@ -42,6 +42,7 @@ import { CustomCSVIcon, CustomEyeIcon } from "./icon"
 import CsvFileUpload from "./CsvFileUpload"
 import { TERMINAL_CODE_MAPPING } from "../../../common/data/regionAndTerminal"
 import { isEqual } from "lodash"
+import { isScheduler } from "helpers/auth_helper"
 
 const styles = {
   headerText: {
@@ -98,6 +99,7 @@ class Pages extends Component {
     this.toggleCsvModal = this.toggleCsvModal.bind(this)
     this.toggleTI = this.toggleTI.bind(this)
   }
+
 
   getCustomerData = async () => {
     const { onGetMainTable /*salesDate*/ } = this.props
@@ -371,6 +373,7 @@ class Pages extends Component {
       subModule,
     } = this.props
     if (!tableData || tableData.length === 0) return ""
+    const scheduler = isScheduler();
     return (
       <React.Fragment>
         {this.state.downloadCsv === true && <Loader />}
@@ -403,7 +406,7 @@ class Pages extends Component {
               >
                 <div className="vertical-hr-right">
                   {(locationPath === "/retail-customer" ||
-                    locationPath === "/commercial-customer") && (
+                    locationPath === "/commercial-customer") && !scheduler && (
                     <>
                       <button
                         className="btn btn-outline-primary excel-btn-container mr-4"
@@ -448,7 +451,7 @@ class Pages extends Component {
                       </Popover>
                     </>
                   )}
-                  <DownloadExcelButton subModule={subModule} />
+                  <DownloadExcelButton subModule={subModule} salesDate={this.props.salesDate} />
                   <div className="separate" />
                 </div>
                 <Link

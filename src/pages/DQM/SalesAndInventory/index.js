@@ -123,6 +123,7 @@ class SalesInventory extends Component {
             overrideActionColumn={overrideStatusInActionColumn}
             updateSalesDate={this.onUpdateSalesDate}
             subModule={subModule}
+            salesDate={salesDate}
             isUpdateSuccess={isUpdateSuccess}
           />
         )}

@@ -19,7 +19,7 @@ import EditIcon from "../../../assets/images/AWSM-Edit-Icon.svg"
 import TrashIcon from "../../../assets/images/AWSM-Trash-Icon.svg"
 import NoDataIcon from "../../../assets/images/AWSM-No-Data-Available.svg"
 import DeleteOrderBankConfirmation from "../deleteOrderBankModal"
-import EditOrderBankModal from "../editOrderBankModal"
+import EditOrderBankModal from "../EditOrderBankModal"
 import ConfirmDNStatusModal from "./confirmDNStatusModal"
 import {deleteOrderBankDetail, sendDNStatusRequest, updateOrderBankTableData} from "../../../store/actions"
 import {Draggable, Droppable} from "react-beautiful-dnd"
@@ -377,8 +377,11 @@ class index extends Component {
         checkedData.push(item);
       }
     })
+    console.log('checkedData::', checkedData)
+    let deleteEnable = checkedData.filter((v) => (v.scheduling_status === "Unscheduled"))
     let checkCross = checkedData.filter((v) => (v.product_category === "ASR" || v.product_category === "SMP"))
     this.props.enabledCross(checkCross.length);
+    this.props.deleteEnable(deleteEnable.length);
   }
 
   OnSelectedAllItems = () => {

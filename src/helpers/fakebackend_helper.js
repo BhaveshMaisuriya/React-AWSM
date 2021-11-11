@@ -350,6 +350,9 @@ export const getSalesAuditLog = payload =>
   export const getdeleteMultipleOrder = payload =>
   get(url.GET_COMMERCIAL_AUDITLOG, { payload: payload })  
 
+  export const getCrossTerminal = payload =>
+  get(url.GET_COMMERCIAL_AUDITLOG, { payload: payload })    
+
 // get DQM Road Tanker Audit Log
 export const getRoadTankerAuditLog = payload =>
   get(url.GET_ROADTANKER_AUDITLOG, { payload: payload })

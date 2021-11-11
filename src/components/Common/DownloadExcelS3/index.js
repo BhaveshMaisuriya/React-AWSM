@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react'
 import { DownloadIcon } from "./icon"
 import { getDQMExcelDownload, getDQMExcelDownloadClear } from "store/actions"
 import { connect } from "react-redux"
+import { format } from "date-fns"
 
-const DownloadExcel = ({ excelDownload, onGetDQMExcelDownload, subModule, downloadFail, clearDQMExcelDownload }) => {  
+const DownloadExcel = ({ excelDownload, onGetDQMExcelDownload, subModule, downloadFail, clearDQMExcelDownload, salesDate }) => {  
   const [loader, setLoader] = useState(false)
   
   const downloadParams = {
@@ -12,6 +13,8 @@ const DownloadExcel = ({ excelDownload, onGetDQMExcelDownload, subModule, downlo
     search_fields: "*",
     subModule: subModule === "sales-and-inventory" ? "sales-inventory" : subModule,
   }
+
+ 
 
   useEffect(() => {
     if(excelDownload !== null && excelDownload) {
@@ -29,6 +32,9 @@ const DownloadExcel = ({ excelDownload, onGetDQMExcelDownload, subModule, downlo
   }, [excelDownload])
 
   const downloadExcel = async () => {
+    if( subModule === "sales-and-inventory") {
+      downloadParams.search_date= format(salesDate, "yyyy-MM-dd");
+    }
       setLoader(true)
     if (onGetDQMExcelDownload) {
         await onGetDQMExcelDownload(downloadParams)

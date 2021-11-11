@@ -281,11 +281,11 @@ const FilterDropdown = ({ dataFilter, dataKey, handleClickApply, handleClickRese
                         if(dataKey === 'dipping_timestamp') {
                           return checkNullValue(row.text) ? "-" : format(new Date(row.text), "dd-MM-yyyy , HH:mm:ss")
                         }
-                        if (dataKey === "override") {
-                         return checkNullValue(row.text) ? "Accurate" : removeKeywords(row.text)
+                        if (dataKey === "override_status") {
+                         return checkNullValue(row.text) ? "Accurate" : row.text
                         }
 
-                        if (dataKey !== "override") {
+                        if (dataKey !== "override_status") {
                          return checkNullValue(row.text) ? "-" : removeKeywords(row.text)
                         }
                       }

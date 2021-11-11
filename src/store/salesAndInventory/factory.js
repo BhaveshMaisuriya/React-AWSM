@@ -41,6 +41,7 @@ export default function factory(data) {
   return {
     list: finalData,
     total_rows: getValueFromObj(data.data, "total_rows", "0"),
+    override_count: data?.data?.override_count,
   }
 }
 

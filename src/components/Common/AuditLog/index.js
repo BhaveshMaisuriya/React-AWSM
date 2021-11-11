@@ -77,13 +77,13 @@ class AuditLog extends Component {
   getBackgroundColor = index => (index % 2 !== 0 ? "#F8F8F8" : "transparent")
 
   /**
-   * 
-   * @param {*} audit 
-   * @param {*} idx 
-   * @returns 
+   *
+   * @param {*} audit
+   * @param {*} idx
+   * @returns
    */
   handlePageChange = (event, currentPage) => {
-    this.setState({ currentPage}, () => this.getAuditLogData())
+    this.setState({ currentPage }, () => this.getAuditLogData())
   }
 
   /**
@@ -97,16 +97,30 @@ class AuditLog extends Component {
     //cut action from string
     let action = firstWord.shift()
 
-    const Month = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    const Month = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ]
 
     //cut date from string
     let date = new Date(audit.created)
     let finalDate = date.getDate() + "-" + (date.getMonth() + 1) + "-" + date.getFullYear()
 
     //cut time from string
-    var ampm = (date.getHours() >= 12) ? "PM" : "AM";
-    var hour = date.getHours().toString().length == 1 ? "0" + date.getHours() : date.getHours();
-    var mins = date.getMinutes().toString().length == 1 ? "0" + date.getMinutes() : date.getMinutes();
+    var ampm = date.getHours() >= 12 ? "PM" : "AM"
+    var hour = date.getHours().toString().length == 1 ? "0" + date.getHours() : date.getHours()
+    var mins =
+      date.getMinutes().toString().length == 1 ? "0" + date.getMinutes() : date.getMinutes()
     let finalTime = hour + ":" + mins
 
     const { classes } = this.props
@@ -136,9 +150,7 @@ class AuditLog extends Component {
             </div>
             <div className="tracking-content">
               <b>{theName || "Null"}</b>
-              <p className="content-text">
-                {text}
-              </p>
+              <div className="content-text">{text}</div>
             </div>
           </div>
         </div>
@@ -147,13 +159,8 @@ class AuditLog extends Component {
   }
 
   render() {
-    const {
-      rowsAudit,
-      auditLog,
-      isOpen,
-      toggle,
-    } = this.props  
-    const { currentPage } = this.state  
+    const { rowsAudit, auditLog, isOpen, toggle } = this.props
+    const { currentPage } = this.state
     return (
       <React.Fragment>
         <Modal
@@ -162,9 +169,7 @@ class AuditLog extends Component {
           id="auditLog-modal"
           contentClassName="modalContainer"
         >
-          <ModalHeader
-            close={<CloseButton handleClose={toggle} />}
-          >
+          <ModalHeader close={<CloseButton handleClose={toggle} />}>
             <h3>Audit Log</h3>
           </ModalHeader>
           <div className="tracking-list">
@@ -173,18 +178,18 @@ class AuditLog extends Component {
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
               <b>ACTION</b>
             </div>
-            {auditLog?.list.length === 0 ? 
-            <div className="audit-no-records">
-              <p>No Records Found!</p>
+            {auditLog?.list.length === 0 ? (
+              <div className="audit-no-records">
+                <p>No Records Found!</p>
               </div>
-            : (
+            ) : (
               <div className="container-data">
                 {auditLog?.list.map((audit, idx) => (
-                    <div key={idx} className="tracking-item">
-                      {" "}
-                      {this.modalData(audit, idx)}
-                    </div>
-                  ))}
+                  <div key={idx} className="tracking-item">
+                    {" "}
+                    {this.modalData(audit, idx)}
+                  </div>
+                ))}
               </div>
             )}
             <div>&nbsp;</div>
@@ -203,7 +208,7 @@ class AuditLog extends Component {
 }
 
 const mapStateToProps = ({ retailCustomer }) => ({
-  auditLog : retailCustomer.audits.data,
+  auditLog: retailCustomer.audits.data,
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -216,4 +221,4 @@ AuditLog.propType = {
   isOpen: PropTypes.bool.isRequired,
   toggle: PropTypes.func.isRequired,
 }
-export default compose(connect(mapStateToProps,mapDispatchToProps), withStyles(styles))(AuditLog)
+export default compose(connect(mapStateToProps, mapDispatchToProps), withStyles(styles))(AuditLog)

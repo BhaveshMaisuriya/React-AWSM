@@ -258,6 +258,9 @@
   .container-orderbank thead tr {
     background-color: #f8f9fa;
     height: 64px;
+    // fixed header order bank table
+    position: sticky;
+    top: 0;
     td {
       color: #000000;
       font-weight: 600;

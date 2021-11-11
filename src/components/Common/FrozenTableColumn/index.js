@@ -133,14 +133,14 @@ class FixedCoulmnTable extends Component {
           className="cursor-pointer"
           onClick={() => overrideActionColumn(data)}
         >
-          {data?.override ? (
+          {data?.override_status === "True" ? (
             <ReactSVG className="d-inline-block mr-2" src={OverrideIcon}/>
           ) : (
             <span className="accurate d-inline-block mr-2"/>
           )}
           <span
             className={`d-inline-block override-text ${
-              data?.override ? "override-text-green" : ""
+              data?.override_status === "True" ? "override-text-green" : ""
             }`}
           >
             Override
@@ -177,7 +177,7 @@ class FixedCoulmnTable extends Component {
               </Badge>
             </td>
           )
-        case "override":
+        case "override_status":
         case "color": {
           if (pathName === "/sales-inventory") {
             let threshold
@@ -207,7 +207,7 @@ class FixedCoulmnTable extends Component {
                 break
               }
             }
-            if (config[e].type == "override") {
+            if (config[e].type == "override_status") {
               return (
                 <td key={index}>
                   {this.AddConditionalForActionColumn(

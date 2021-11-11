@@ -436,7 +436,7 @@ class index extends Component {
           <div className="container-orderbank" style={{maxWidth: "100%"}}>
             {dataSource.length ? (<table className="fixed">
               <thead>
-              <tr>
+              <tr style={{zIndex: 2}}>
                 <th>
                   <img src={selectedAllItem ? selectAllIcon2 : selectAllIcon}
                        className={"header-select-icon"} onClick={this.OnSelectedAllItems} alt="icon"/>

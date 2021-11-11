@@ -55,7 +55,7 @@ class SalesInventory extends Component {
     const { searchFields } = this.state
     const params = {
       limit: 10,
-      page: 1,
+      page: 0,
       sort_dir: "",
       sort_field: "",
       search_term: "",

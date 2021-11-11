@@ -5,6 +5,7 @@ import PropTypes from "prop-types"
 import { withStyles } from "@material-ui/styles"
 import IconButton from "@material-ui/core/IconButton"
 import { Divider } from "@material-ui/core"
+import { connect } from "react-redux"
 import {
   Row,
   Col,
@@ -487,7 +488,7 @@ class Pages extends Component {
                                 : currentPage * rowsPerPage + rowsPerPage
                             } of ${tableData.total_rows} entries${
                               locationPath === "/sales-inventory"
-                                ? ", 78 record exceeds variance threshold"
+                                ? `, ${this.props.overrideCount} record exceeds variance threshold`
                                 : ""
                             }`}
                             {locationPath === "/sales-inventory" && (
@@ -657,4 +658,8 @@ Pages.defaultProps = {
   frozenColNum: 1,
 }
 
-export default withStyles(styles)(Pages)
+const mapStateToProps = ({ saleAndInventory }) => ({
+  overrideCount: saleAndInventory?.mainTableData?.override_count,
+})
+
+export default withStyles(styles)(connect(mapStateToProps)(Pages))

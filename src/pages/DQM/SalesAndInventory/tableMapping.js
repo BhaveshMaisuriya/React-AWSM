@@ -2,7 +2,7 @@ import { tagColors } from "../Common/helper"
 
 const tableColumns = [
   "trans_id",
-  "override",
+  "override_status",
   "ship_to_party",
   "product",
   "data_source",
@@ -29,10 +29,10 @@ const tableMapping = {
     label: "PRODUCT",
     columnSize: "cell-text",
   },
-  override: {
+  override_status: {
     label: "OVERRIDE ACTION",
     columnSize: "cell-text",
-    type: "override",
+    type: "override_status",
     key: "frozen",
   },
   data_source: {

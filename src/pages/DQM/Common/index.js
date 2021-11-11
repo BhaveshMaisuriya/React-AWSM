@@ -447,7 +447,7 @@ class Pages extends Component {
                       </Popover>
                     </>
                   )}
-                  <DownloadExcelButton subModule={subModule} />
+                  <DownloadExcelButton subModule={subModule} salesDate={this.props.salesDate} />
                   <div className="separate" />
                 </div>
                 <Link

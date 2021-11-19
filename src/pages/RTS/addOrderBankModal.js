@@ -18,7 +18,7 @@ import ExitConfirmation from "../../components/Common/ExitConfirmation"
 import AWSMInput from "../../components/Common/Input"
 import FileCopyIcon from "@material-ui/icons/FileCopy"
 import AWSMDropdown from "../../components/Common/Dropdown"
-import { orderDetails } from "./newOrderData"
+// import { orderDetails } from "./newOrderData"
 import AWSMAlert from "../../components/Common/AWSMAlert"
 import { getOrderBank } from "../../store/actions"
 import { removeKeywords } from '../../pages/DQM/Common/helper';

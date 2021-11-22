@@ -294,6 +294,7 @@ function OrderBank({
   }, [region, terminal, shiftDate, status, currentPage])
 
   const toggle = () => setOpen(!dropdownOpen)
+  
   const terminalList = useMemo(() => {
     const currentRegion = REGION_TERMINAL.find(e => e.region === region)
     return currentRegion ? currentRegion.terminal : []

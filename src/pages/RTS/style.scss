@@ -664,3 +664,34 @@
 .upload-dmr {
     max-width: 800px !important;
 }
+
+.awsm-input {
+    height: 2.5rem;
+    border-radius: 0.25rem;
+    border: 1px solid #d8d8d8;
+    padding: 0.5rem;
+    &.disabled {
+      background-color: white !important;
+    }
+    &:focus {
+      border: 1px solid #008f8a;
+      background-color: rgb(240, 249, 249);
+      color: #008f8a;
+      &.out-range {
+        border-color: #e80000;
+        color: #f46a6a;
+      }
+    }
+    padding-right: 1.5rem !important;
+  }
+.awsm-input-right-content {
+    color: #008f8a;
+    font-size: 0.75rem;
+    right: 0;
+    top: 0;
+    padding-top: 0.65rem;
+    padding-right: 0.5rem;
+    &.out-range {
+      color: red;
+    }
+  }

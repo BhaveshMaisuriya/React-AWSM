@@ -168,22 +168,6 @@
   }
 }
 
-@media (max-width: 992px) {
-  .vertical-menu {
-    display: none;
-  }
-
-  .main-content {
-    margin-left: 0 !important;
-  }
-
-  body.sidebar-enable {
-    .vertical-menu {
-      display: block;
-    }
-  }
-}
-
 // Enlarge menu
 .p-fixed {
   position: fixed;

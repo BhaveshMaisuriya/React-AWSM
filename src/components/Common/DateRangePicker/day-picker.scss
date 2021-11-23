@@ -94,7 +94,8 @@
     text-align: left;
     background-color: white;
     &.disabled {
-      background-color: #EEEEEE
+      color: #757575 !important;
+      background-color: #EEEEEE;
     }
     position: relative;
     .calendar-error {

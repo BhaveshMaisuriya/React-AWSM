@@ -14,12 +14,11 @@
 }
 
 .filter-selection {
-  height: 32px;
+  height: 42px;
 }
 
 .checkmark .MuiFormControlLabel-label {
   margin-top: 10px !important;
-  margin-bottom: 5px !important;
   margin-left: 8px !important;
   font-size: 12px !important;
   font-family: "Museo Sans" !important;
@@ -90,7 +89,7 @@
   max-width: 280px !important;
   border-radius: 4px;
   box-shadow: 0 0 4px 2px rgba(0, 0, 0, 0.16);
-  padding: 4px !important;
+  padding: 8px !important;
   .search-icon {
     top: 5px;
     right: 0;
@@ -141,4 +140,12 @@
 
 .popover {
   max-width: none !important;
+}
+
+.arrow::after {
+  display: none !important;
+}
+
+.arrow::before {
+  display: none !important;
 }

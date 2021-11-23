@@ -21,7 +21,7 @@ const REGION_TERMINAL = [
   },
   {
     region: "Sarawak",
-    terminal: ["Bintulu Jv", "Miri", "Senari IOT", "Tg Manis CODT"],
+    terminal: ["Bintulu JV", "Miri", "Senari IOT", "Tg Manis CODT"],
   },
   {
     region: "Special Product",

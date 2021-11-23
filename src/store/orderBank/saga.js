@@ -113,7 +113,14 @@ function* onDeleteOrderbankTableInformation({ params }) {
 function* onGetRTSOrderBank({ params = {} }) {
   try {
     const response = yield call(getRTSOderBank, params)
-    yield put(getRTSOrderBankTableDataSuccess(response))
+    let newResponse = {}
+    // when user increase page params -> scrolling action
+    if (params?.page !== 0) {
+      newResponse = { ...response, scrolling: true}
+    } else {
+      newResponse = { ...response, scrolling: false}
+    }
+    yield put(getRTSOrderBankTableDataSuccess(newResponse))
   } catch (error) {
     yield put(getRTSOrderBankTableDataFail(error))
   }

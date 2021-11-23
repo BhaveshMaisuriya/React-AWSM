@@ -7,8 +7,9 @@
   &:after {
     height: 5px;
   }
-  h4, h5 {
-    color: #008F8A;
+  h4,
+  h5 {
+    color: #008f8a;
   }
 }
 
@@ -16,7 +17,7 @@
   color: white;
   font-weight: lighter;
   &.active {
-    color: #7F7F7F;
+    color: #7f7f7f;
   }
 
   font-size: 14px;
@@ -24,7 +25,7 @@
 }
 
 .sla-tab-add {
-  color: #008F8A;
+  color: #008f8a;
 }
 
 .sla-title {
@@ -39,10 +40,10 @@
   align-items: center;
   justify-content: center;
   padding: 4rem;
-  border: 1px solid #E0E0E0;
+  border: 1px solid #e0e0e0;
 
   > h4 {
-    color: #D4D4D4;
+    color: #d4d4d4;
     font-family: Museo Sans, serif;
     font-size: 20px;
   }
@@ -60,12 +61,12 @@
       align-items: center;
       justify-content: center;
       height: 96px;
-      color: #009E8E;
+      color: #009e8e;
       font-size: 18px;
       font-family: Museo Sans, serif;
       font-weight: 500;
-      background-color: #F9F9F9;
-      border: 1px dashed #00A19C;
+      background-color: #f9f9f9;
+      border: 1px dashed #00a19c;
       border-radius: 7px;
       cursor: pointer;
     }
@@ -84,13 +85,13 @@
     }
 
     button {
-      color: #9EA0A5;
+      color: #9ea0a5;
     }
   }
-  
+
   .border-none {
     border: unset !important;
-  }  
+  }
 
   .add-note-content-container {
     position: relative;
@@ -103,7 +104,7 @@
       border: none !important;
     }
 
-    border: 1px solid #00A19C;
+    border: 1px solid #00a19c;
     padding: 1.5rem 0;
     background-color: rgb(240, 249, 249);
 
@@ -118,18 +119,18 @@
       height: 40px;
 
       &:active {
-        box-shadow: none!important;
+        box-shadow: none !important;
         outline: 0;
       }
 
       &.btn-outline-primary {
         background-color: white !important;
-        border: 1px solid #CBEFED !important;
-        color: #00A19C !important;
+        border: 1px solid #cbefed !important;
+        color: #00a19c !important;
         margin-right: 8px;
 
         &:hover {
-          color: #00A19C !important;
+          color: #00a19c !important;
         }
       }
     }
@@ -139,7 +140,7 @@
     border: none !important;
   }
   .ck-read-only {
-    border: 2px solid #D9D9D9 !important;
+    border: 2px solid #d9d9d9 !important;
   }
 }
 
@@ -147,6 +148,10 @@
   width: 190px !important;
   overflow-y: auto;
   box-shadow: 0 3px 10px rgb(204, 199, 199);
+}
+
+.popover-body {
+  padding: 8px !important;
 }
 
 .item-checked {
@@ -169,11 +174,11 @@
 // }
 .sla-header {
   font-weight: 600;
-  font-size: 16px!important;
+  font-size: 16px !important;
   margin-bottom: 32px;
 }
 
-#rename-modal .modalContainer{
+#rename-modal .modalContainer {
   width: 500px !important;
   height: 100%;
   margin-top: 300px;

@@ -207,7 +207,7 @@ class Pages extends Component {
    * Will run the audit log modal
    */
   runAuditLogModal = () => {
-    const { modal } = this.state
+    const { modal, salesDate } = this.state
     const { subModule } = this.props
     const modalContent = modal ? (
       <AuditLog
@@ -215,6 +215,7 @@ class Pages extends Component {
         subModule={subModule}
         isOpen={this.state.modal}
         toggle={this.toggle}
+        salesDate={salesDate}
       />
     ) : null
     return modalContent
@@ -337,7 +338,7 @@ class Pages extends Component {
       sort_field: "",
       search_term: "",
       search_fields: transformArrayToString(searchFields),
-      search_date: format(salesDate, "yyyy-MM-dd"),
+      search_date: salesDate ? format(salesDate, "yyyy-MM-dd") : "",
       terminal: TERMINAL_CODE_MAPPING[terminal],
     }
     this.setState({
@@ -389,13 +390,13 @@ class Pages extends Component {
         <VarianceControl
           open={this.state.varianceControl}
           closeDialog={() => this.setState({ varianceControl: false })}
-          selectedDate={format(this.state.salesDate, "yyyy-MM-dd")}
+          selectedDate={this.state.salesDate ? format(this.state.salesDate, "yyyy-MM-dd") : ""}
         />
         <TankStatusModal
           open={this.state.tankStatusModal}
           handleClose={() => this.setState({ tankStatusModal: false })}
           modalTitle={`Tank Status`}
-          selectedDate={format(this.state.salesDate, "yyyy-MM-dd")}
+          selectedDate={this.state.salesDate ? format(this.state.salesDate, "yyyy-MM-dd") : ""}
         />
         <div className="page-content">
           <div className="container-fluid">
@@ -546,26 +547,19 @@ class Pages extends Component {
                             "sales-first flex-custom"
                           }`}
                         >
-                          <IconButton
-                            aria-label="delete"
-                            onClick={this.handleOpenCustomizeTable}
-                          >
-                            <img src={customiseTableIcon} />
-                          </IconButton>
-                          {locationPath === "/sales-inventory" && (
+                         {locationPath === "/sales-inventory" && (
                             <>
-                              <div className="separate" />
                               <button
                                 onClick={() =>
                                   this.setState({ varianceControl: true })
                                 }
-                                className="btn btn-outline-primary ml-2 modal-button"
+                                className="btn btn-outline-primary modal-button"
                               >
-                                Variance Control
+                                Threshold Control
                                 <ReactSVG src={VarianceIcon} />
                               </button>
                               <button
-                                className="btn btn-outline-primary ml-2 modal-button"
+                                className="btn btn-outline-primary ml-2 mr-2 modal-button"
                                 onClick={() =>
                                   this.setState({ tankStatusModal: true })
                                 }
@@ -573,8 +567,15 @@ class Pages extends Component {
                                 <ReactSVG src={TankIcon} />
                                 Tank Status
                               </button>
+                              <div className="separate" />
                             </>
                           )}
+                          <IconButton
+                            aria-label="delete"
+                            onClick={this.handleOpenCustomizeTable}
+                          >
+                            <img src={customiseTableIcon} />
+                          </IconButton>
                         </div>
                       </div>
                       <FixedColumnTable

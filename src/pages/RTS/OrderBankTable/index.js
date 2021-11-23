@@ -19,7 +19,7 @@ import EditIcon from "../../../assets/images/AWSM-Edit-Icon.svg"
 import TrashIcon from "../../../assets/images/AWSM-Trash-Icon.svg"
 import NoDataIcon from "../../../assets/images/AWSM-No-Data-Available.svg"
 import DeleteOrderBankConfirmation from "../deleteOrderBankModal"
-import EditOrderBankModal from "../EditOrderBankModal"
+import EditOrderBankModal from "../editOrderBankModal"
 import ConfirmDNStatusModal from "./confirmDNStatusModal"
 import {deleteOrderBankDetail, sendDNStatusRequest, updateOrderBankTableData} from "../../../store/actions"
 import {Draggable, Droppable} from "react-beautiful-dnd"
@@ -154,20 +154,7 @@ class index extends Component {
   componentWillReceiveProps(nextProps) {
     // if(!isEqual(nextProps.dataSource,this.props.dataSource)){
     if (nextProps.dataSource !== this.props.dataSource) {
-      let data = {}
-      const {dataSource} = nextProps
-      nextProps.tableColumns.forEach((v) => {
-        data[v] = []
-        dataSource.forEach((a) => {
-          if (isArray(a[v])) {
-            data[v] = [...data[v], ...a[v]]
-          } else {
-            data[v].push(a[v])
-          }
-        })
-        data[v] = [...new Set(data[v])]
-      })
-      this.setState({dataSource: nextProps.dataSource, filterData: data})
+      this.setState({dataSource: nextProps.dataSource, filterData: nextProps.headerFilters})
     }
   }
 

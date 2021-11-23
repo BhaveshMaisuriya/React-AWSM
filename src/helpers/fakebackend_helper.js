@@ -328,7 +328,7 @@ export const getRetailAuditLog = payload =>
 // get DQM Master Commercial Cust Audit Log
 export const getAuditLog = (params) =>
 axios.get(
-  `/audit-log?module=${params.module}&page=${params.page}&limit=${params.limit}`
+  `/audit-log?module=${params.module}&page=${params.page}&limit=${params.limit}${params.module === "sales-and-inventory" ? `&trans_date=${params.trans_date}`: ""}`
 )
 
 // get DQM Master Commercial Cust Audit Log
@@ -565,7 +565,7 @@ export const updateSlaItem = params => put(`${url.SLA_ITEMS}`)
 export const updateSlaSectionNote = notes => put(`${url.SLA_ITEMS}`, notes)
 
 export const getRTSOderBank = params => {
-  return get(url.GET_RTS_ORDER_BANK, { params: params })
+  return axios.post(url.GET_RTS_ORDER_BANK, { ...params })
 }
 
 export const getShipmentOderBank = params => {

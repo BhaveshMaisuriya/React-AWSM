@@ -175,9 +175,10 @@
 }
 
 .modal-footer {
-  padding-bottom: 25px !important;
+  padding-bottom: 20px !important;
   padding-top: 0px !important;
   border-top: none !important;
+  
 }
 
 .pdf-btn {
@@ -233,11 +234,9 @@
   padding: 5px !important ;
 }
 
-.download-icon-csv,
-.download-button-message-csv {
-  margin-right: 15px;
+.download-icon-csv{
+  padding-left: 5px; 
 }
-.arrow::before,
-.arrow::after {
-  left: 4em;
+.download-button-message-csv {
+  padding-left: 4px;
 }

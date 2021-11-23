@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect ,useMemo } from "react"
 import { connect } from "react-redux"
 import { Modal, ModalHeader, ModalBody, ModalFooter, Table } from "reactstrap"
 import InputWithSuffix from "../../../../components/Common/TankStatusModal/InputWithSuffix"
@@ -33,11 +33,11 @@ const TankStatusModal = props => {
     onGetSalesAndInventoryTankStatus,
     onUpdateSalesAndInventoryTankStatus,
     selectedDate,
-    tankStatus
+    tankStatus,
   } = props
   const [modalConfirm, setModalConfirm] = useState(false)
   const [unmodifiedStatus, setUnmodifiedStatus] = useState(true)
-  const [data, setData] = useState()
+  const [data, setData] = useState({...tankStatus})
   const currentDate = format(new Date(), "yyyy-MM-dd")
   const isHistoricalDate = selectedDate !== currentDate
   const handleUpdateButtonOnclick = () => {
@@ -47,15 +47,17 @@ const TankStatusModal = props => {
   }
   useEffect(async () => {
     if (open) {
-     await onGetSalesAndInventoryTankStatus(selectedDate)
+      await onGetSalesAndInventoryTankStatus(selectedDate)
     }
   }, [open])
 
-  useEffect(()=>{
-    if(tankStatus){
-      setData(tankStatus)
-  }
-  },[tankStatus])
+  useEffect(() => {
+    if (tankStatus) {
+      setData({...tankStatus})
+    }else{
+      setData(null)
+    }
+  }, [tankStatus])
 
   const handleOnchangeValueData = (value, _, fieldName) => {
     data[fieldName] = value
@@ -85,6 +87,11 @@ const TankStatusModal = props => {
     )
   }
 
+  const updatedInformation = useMemo(()=>(
+    `Last Updated By: ${data.updated_by ? data?.updated_by?.toString()?.split("@")[0] : "Unknown"}
+    ${data.updated_at ? `on ${format(new Date(data?.updated_at),"do LLL yyyy")}` : ""}`
+  ),[data?.updated_at, data?.updated_by]);
+
   return (
     <>
       <div className={`tank_status`}>
@@ -93,7 +100,10 @@ const TankStatusModal = props => {
             <ModalHeader
               close={<CloseButton handleClose={() => setModalConfirm(true)} />}
             >
-              <h3>{modalTitle}</h3>
+              <span className="modal-title">{modalTitle}</span>
+              <span className="last-updated-sub-title">
+                {updatedInformation}
+              </span>
             </ModalHeader>
             <ModalBody className="variance-control-content position-relative">
               {modalConfirm && showExitConfirmation()}
@@ -125,6 +135,7 @@ const TankStatusModal = props => {
                                   index={i}
                                   fieldName={`${v.toLowerCase()}_lower_value`}
                                   isEdit={!scheduler && !isHistoricalDate}
+                                  isBorder={false}
                                 />
                               </td>
                               <td className="item">
@@ -134,6 +145,7 @@ const TankStatusModal = props => {
                                   index={i}
                                   fieldName={`${v.toLowerCase()}_upper_value`}
                                   isEdit={!scheduler && !isHistoricalDate}
+                                  isBorder={false}
                                 />
                               </td>
                               <td className="item last-item">
@@ -143,6 +155,7 @@ const TankStatusModal = props => {
                                   index={i}
                                   fieldName={`${v.toLowerCase()}_percentage`}
                                   isEdit={!scheduler && !isHistoricalDate}
+                                  isBorder={false}
                                 />
                               </td>
                             </tr>
@@ -163,9 +176,10 @@ const TankStatusModal = props => {
                     TextOnChangeValue={handleOnchangeValueData}
                     isEdit={!scheduler && !isHistoricalDate}
                     disable={scheduler}
+                    isBorder={true}
                   />
                 </div>
-                <div className="d-flex align-items-center justify-content-end mt-5 mb-3 tank-status-footer">
+                <div className="d-flex align-items-center justify-content-end mt-5 mb-4 tank-status-footer">
                   {!modalConfirm && !scheduler && !isHistoricalDate && (
                     <>
                       <button
@@ -175,7 +189,7 @@ const TankStatusModal = props => {
                         Cancel
                       </button>
                       <button
-                        className="btn btn-primary ml-4 px-4"
+                        className="btn btn-primary ml-2 px-4"
                         onClick={handleUpdateButtonOnclick}
                       >
                         Update

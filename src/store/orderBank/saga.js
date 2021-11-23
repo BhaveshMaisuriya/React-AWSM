@@ -1,7 +1,7 @@
 import { takeLatest, put, call, takeEvery, select } from "redux-saga/effects"
-import Factory from "./factory"
 import {
   GET_ORDERBANK,
+  ADD_ORDERBANK,
   GET_ORDERBANK_TABLE_INFORMATION,
   GET_SHIPMENT_ORDER_BANK_TABLE_DATA,
   DRAG_RTS_ORDER_BANK_TO_GANTT_CHART_SUCCESS,
@@ -35,6 +35,8 @@ import {
   getShipmentOfOderBankGanttChartFail,
   getOrderBankSuccess,
   getOrderBankFail,
+  addOrderBankSuccess,
+  addOrderBankFail,  
   getOrderBankDetailFail,
   getOrderBankDetailSuccess,
   deleteOrderBankDetailFail,
@@ -67,6 +69,7 @@ import {
 } from "./actions"
 import {
   getOrderBank,
+  addOrderBank,
   getOrderBankDetail,
   getRTSOderBank,
   getShipmentOderBank,
@@ -89,6 +92,15 @@ function* onGetOrderbank({ params = {} }) {
     yield put(getOrderBankSuccess(response, params))
   } catch (error) {
     yield put(getOrderBankFail(error.response))
+  }
+}
+
+function* onAddOrderbank({ params = {} }) {
+  try {
+    const response = yield call(addOrderBank, params)
+    yield put(addOrderBankSuccess(response, params))
+  } catch (error) {
+    yield put(addOrderBankFail(error.response))
   }
 }
 
@@ -309,6 +321,7 @@ function* onUpdateOBRTDetails(payload){
 
 function* orderBankSaga() {
   yield takeLatest(GET_ORDERBANK, onGetOrderbank)
+  yield takeLatest(ADD_ORDERBANK, onAddOrderbank)  
   yield takeLatest(GET_RTS_ORDER_BANK_TABLE_DATA, onGetRTSOrderBank)
   yield takeLatest(GET_SHIPMENT_ORDER_BANK_TABLE_DATA, onGetShipmentOrderBankData)
   yield takeLatest(

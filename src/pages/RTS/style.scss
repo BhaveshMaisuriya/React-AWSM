@@ -670,9 +670,6 @@
     border-radius: 0.25rem;
     border: 1px solid #d8d8d8;
     padding: 0.5rem;
-    &.disabled {
-      background-color: white !important;
-    }
     &:focus {
       border: 1px solid #008f8a;
       background-color: rgb(240, 249, 249);

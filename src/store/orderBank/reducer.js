@@ -9,6 +9,8 @@ import {
   GET_ORDER_BANK_AUDITLOG_SUCCESS,
   GET_ORDERBANK_FAIL,
   GET_ORDERBANK_SUCCESS,
+  ADD_ORDERBANK_FAIL,
+  ADD_ORDERBANK_SUCCESS,
   GET_ORDERBANK_TABLE_INFORMATION_FAIL,
   GET_ORDERBANK_TABLE_INFORMATION_SUCCESS,
   GET_RTS_GANTT_CHART_DATA_FAIL,
@@ -97,6 +99,16 @@ const RTSOrderBank = (state = initialState, action) => {
         ...state,
         orderBankData: action.payload
       }
+    case ADD_ORDERBANK_SUCCESS:
+      return {
+        ...state,
+        addorderBankData: action.payload
+      }
+    case ADD_ORDERBANK_FAIL:
+      return {
+        ...state,
+        addorderBankData: action.payload
+      }      
     case GET_ORDERBANK_TABLE_INFORMATION_SUCCESS:
       return {
         ...state,

@@ -12,7 +12,7 @@
 .customize-table-container {
   overflow: hidden;
   max-height: 75vh;
-  max-width: 800px;
+  width: fit-content;
   padding-top: 4px !important;
   padding-bottom: 0px !important;
   .customize-table-title {
@@ -22,7 +22,7 @@
 
     .close-button {
       width: 1rem;
-      color: #999999;
+      color: #757575 !important;
       margin-right: -5px;
       cursor: pointer;
 
@@ -36,6 +36,20 @@
   .customize-table-content {
     max-height: 60vh;
     display: flex;
+
+    .column-arrangement {
+      width: auto;
+      min-width: 300px;
+      max-width: 420px;
+      padding: 0 10px;
+    }
+
+    .available-metrics {
+      width: auto;
+      min-width: 230px;
+      max-width: 350px;
+      padding: 0 20px 0 10px;
+    }
 
     & > div {
       overflow: auto;
@@ -59,7 +73,7 @@
 
     div[data-rbd-droppable-id="droppable"] {
       background-color: white;
-      width: 90%;
+      width: 98%;
       padding-left: 8px;
 
       .drag-content {
@@ -78,8 +92,10 @@
         }
 
         .drag-content-label {
-          margin-left: 0.5rem;
-          padding: 0.25rem;
+          font-size: 12px;
+          margin: 0 0.5rem;
+          padding: 0.25rem 1.25rem 0.25rem 0.25rem;
+          flex-shrink: 0;
         }
 
         .drag-content-start-icon,
@@ -88,11 +104,12 @@
           width: 1.25rem;
           color: lightgrey;
           padding: 0.25rem;
+          flex-shrink: 0;
         }
 
         .drag-content-x-icon {
+          width: 1.25rem;
           cursor: pointer;
-
           &:hover {
             background-color: lightgrey;
             color: black;
@@ -126,17 +143,30 @@
     padding: 0px !important;
     display: flex;
     width: 100%;
+    .btn-sec {
+      box-sizing: border-box;
+      border: 1px solid #cbefed;
+      border-radius: 4px;
+      background-color: white;
+      color: #00a19c !important;
+      :hover {
+        background-color: white;
+      }
+    }
     .default-button {
       display: flex;
       justify-content: flex-start;
-      padding-left: 0px !important;
+      padding-left:0 !important;
+      margin-left: -4px !important;
     }
     .cancel-save-buttons {
       display: flex;
       justify-content: flex-end;
+      padding-right: 5px;
     }
   }
 }
+
 .btn-pre-icon {
   display: flex;
   align-items: center;
@@ -149,10 +179,18 @@
   }
 }
 #customize_popup.modal-dialog {
-  max-width: 810px !important;
+  width: fit-content;
+  min-width: 610px !important;
+  max-width: 840px !important;
 }
 
 .btn-size {
   height: 40px;
   width: 120px;
+}
+
+.metrics-colum {
+  font-size: 12px;
+  padding: 1px 0;
+  width: 100%;
 }

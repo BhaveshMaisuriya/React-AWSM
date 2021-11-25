@@ -44,7 +44,7 @@
 
 .disabled {
   background-color: #eee !important;
-  color: rgba(16, 16, 16, 0.3) !important;
+  color: #757575 !important;
 }
 .dropdownChecked {
   background-color: #e0f4f3;

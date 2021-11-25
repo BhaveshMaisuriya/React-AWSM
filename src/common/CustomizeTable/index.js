@@ -30,7 +30,7 @@ const ItemSelect = ({ item, onChange }) => {
     })
   }
   return (
-    <div className="d-flex align-items-center">
+    <div className="metrics-colum d-flex align-items-center">
       <AWSMCheckBox
         disabled={item.disabled}
         onChange={onCheckChange}
@@ -399,7 +399,7 @@ const CustomizeTableModal = ({
         </ModalHeader>
         <ModalBody className="customize-table-container">
           <div className="customize-table-content">
-            <div className="col-5">
+            <div className="available-metrics">
               <h5>Available Metrics</h5>
               {itemToSelect.map(item =>
                 item.key !== "frozen" ? (
@@ -413,7 +413,7 @@ const CustomizeTableModal = ({
                 )
               )}
             </div>
-            <div className="col-7 ">
+            <div className="column-arrangement">
               <h5>Column Arrangement</h5>
               <DragContainer
                 onUpdateOne={onItemSelectChange}
@@ -447,7 +447,7 @@ const CustomizeTableModal = ({
             <Col className="cancel-save-buttons ">
               <button
                 onClick={onExit}
-                className="btn btn-outline-primary px-4 mr-2 btn-size"
+                className="btn-sec px-4 mr-2 btn-size"
               >
                 Cancel
               </button>

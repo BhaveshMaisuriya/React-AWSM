@@ -1,6 +1,6 @@
 import React, { Component } from "react"
 import SearchBar from "../../../components/Common/SearchBar"
-import TablePagination from "../../../components/Common/DataTable/tablePagination"
+import TablePagination from "../../../components/Common/Pagination"
 import PropTypes from "prop-types"
 import { withStyles } from "@material-ui/styles"
 import IconButton from "@material-ui/core/IconButton"
@@ -207,7 +207,7 @@ class Pages extends Component {
    * Will run the audit log modal
    */
   runAuditLogModal = () => {
-    const { modal } = this.state
+    const { modal, salesDate } = this.state
     const { subModule } = this.props
     const modalContent = modal ? (
       <AuditLog
@@ -215,6 +215,7 @@ class Pages extends Component {
         subModule={subModule}
         isOpen={this.state.modal}
         toggle={this.toggle}
+        salesDate={salesDate}
       />
     ) : null
     return modalContent
@@ -337,7 +338,7 @@ class Pages extends Component {
       sort_field: "",
       search_term: "",
       search_fields: transformArrayToString(searchFields),
-      search_date: format(salesDate, "yyyy-MM-dd"),
+      search_date: salesDate ? format(salesDate, "yyyy-MM-dd") : "",
       terminal: TERMINAL_CODE_MAPPING[terminal],
     }
     this.setState({
@@ -389,13 +390,13 @@ class Pages extends Component {
         <VarianceControl
           open={this.state.varianceControl}
           closeDialog={() => this.setState({ varianceControl: false })}
-          selectedDate={format(this.state.salesDate, "yyyy-MM-dd")}
+          selectedDate={this.state.salesDate ? format(this.state.salesDate, "yyyy-MM-dd") : ""}
         />
         <TankStatusModal
           open={this.state.tankStatusModal}
           handleClose={() => this.setState({ tankStatusModal: false })}
           modalTitle={`Tank Status`}
-          selectedDate={format(this.state.salesDate, "yyyy-MM-dd")}
+          selectedDate={this.state.salesDate ? format(this.state.salesDate, "yyyy-MM-dd") : ""}
         />
         <div className="page-content">
           <div className="container-fluid">
@@ -411,7 +412,6 @@ class Pages extends Component {
                       <button
                         className="btn btn-outline-primary excel-btn-container mr-4"
                         id="CsvUploadDownload"
-                        // disabled={this.state.loader}
                       >
                         <div className="excel-download-btn">
                           <span className="download-icon-csv">
@@ -483,6 +483,7 @@ class Pages extends Component {
                           }`}
                         >
                           <div className="enteriesText">
+                          <p className="pr-2 mb-0">
                             {`${currentPage * rowsPerPage + 1} to ${
                               tableData.total_rows -
                                 (currentPage * rowsPerPage + rowsPerPage) <
@@ -494,6 +495,7 @@ class Pages extends Component {
                                 ? `, ${this.props.overrideCount} record exceeds variance threshold`
                                 : ""
                             }`}
+                            </p>
                             {locationPath === "/sales-inventory" && (
                               <div className="separate-snl" />
                             )}
@@ -507,6 +509,7 @@ class Pages extends Component {
                                   onChange={this.onSalesDateChange}
                                   endDate={new Date()}
                                   startDate={subDays(new Date(), 30)}
+                                  defaultValue={new Date()}
                                 />
                               </div>
                               <label className="mb-0 pr-2 w-min">
@@ -546,26 +549,19 @@ class Pages extends Component {
                             "sales-first flex-custom"
                           }`}
                         >
-                          <IconButton
-                            aria-label="delete"
-                            onClick={this.handleOpenCustomizeTable}
-                          >
-                            <img src={customiseTableIcon} />
-                          </IconButton>
-                          {locationPath === "/sales-inventory" && (
+                         {locationPath === "/sales-inventory" && (
                             <>
-                              <div className="separate" />
                               <button
                                 onClick={() =>
                                   this.setState({ varianceControl: true })
                                 }
-                                className="btn btn-outline-primary ml-2 modal-button"
+                                className="btn btn-outline-primary modal-button"
                               >
-                                Variance Control
+                                Threshold Control
                                 <ReactSVG src={VarianceIcon} />
                               </button>
                               <button
-                                className="btn btn-outline-primary ml-2 modal-button"
+                                className="btn btn-outline-primary ml-2 mr-2 modal-button"
                                 onClick={() =>
                                   this.setState({ tankStatusModal: true })
                                 }
@@ -573,8 +569,15 @@ class Pages extends Component {
                                 <ReactSVG src={TankIcon} />
                                 Tank Status
                               </button>
+                              <div className="separate" />
                             </>
                           )}
+                          <IconButton
+                            aria-label="delete"
+                            onClick={this.handleOpenCustomizeTable}
+                          >
+                            <img src={customiseTableIcon} />
+                          </IconButton>
                         </div>
                       </div>
                       <FixedColumnTable

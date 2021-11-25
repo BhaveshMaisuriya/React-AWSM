@@ -81,8 +81,7 @@ const SalesTab = ({ data, onChange, inventoryData }) => {
                     onChange={e => onChangeHandler(e.target.value, "sales_final_figure")}/>
               </div>
               <div className="col-md-6 form-group">
-                  <label>SALES VARIANCE (L)
-                      <Tooltip title="Sales Final Figure - Expected Sales">
+                  <label>SALES VARIANCE (L)  <Tooltip title="Sales Final Figure - Expected Sales">
                           <img src={informationIcon}  alt="sales variance"/>
                       </Tooltip>
                       <span className="extra-lbl">D-1</span>
@@ -96,8 +95,7 @@ const SalesTab = ({ data, onChange, inventoryData }) => {
 
           <div className="row">
               <div className="col-md-6 form-group">
-                  <label>SALES VARIANCE (%)
-                      <Tooltip title="((Sales Final Figure - ExpectedSales)/Expected Sales) * 100%">
+                  <label>SALES VARIANCE (%)  <Tooltip title="((Sales Final Figure - ExpectedSales)/Expected Sales) * 100%">
                           <img src={informationIcon}  alt="sales variance"/>
                       </Tooltip>
                       <span className="extra-lbl">D-1</span>

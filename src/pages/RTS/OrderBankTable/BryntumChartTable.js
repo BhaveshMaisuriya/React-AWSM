@@ -32,7 +32,7 @@ import OrderBankShipmentModal from "./OrderBankShipmentModal"
 import OrderBankSapAlertModal from "./OrderBankSapAlertModal"
 import OrderBankRoadTankerModal from "./OrderBankRoadTankerModal"
 import PlannedLoadTimesModal from "./PlannedLoadTimesModal"
-// import AlertOverruleModal from "./AlertOverruleModal"
+import AlertOverruleModal from "./AlertOverruleModal"
 
 const EventSchedulerStatus = {
   ARE_YET_CREATED_PAYMENT: "not yet to be created",
@@ -47,6 +47,7 @@ const EventContextList = {
   PLAN_LOAD_TIMES: "planned_load_time",
   DELETE_SHIPMENT: "delete_shipment",
   UPDATE_SHIPMENT: "update_shipment",
+  UNDO_LAST_UPDATE: "undo_last_update",
 }
 
 export const bryntumSchedulerTableNameForCookie =
@@ -203,6 +204,9 @@ function BryntumChartTable(props) {
         props.onRemoveEvent(dropdownSelectedItem?.itemSelectedId)
         break
       }
+      case EventContextList.UNDO_LAST_UPDATE: {
+        break
+      }
       default:
         break
     }
@@ -243,14 +247,16 @@ function BryntumChartTable(props) {
         ShipmentDblclickModal(eventRecord)
       },
       beforeEventDropFinalize: async ({ context }) => {
+        const { instance: scheduler } = schedulerProRef.current
         const { eventRecord } = context
         context.async = true
         context.finalize(true)
         updateModalHandler(EventContextList.UPDATE_SHIPMENT, eventRecord)
-        // setAlertOverruleShow('hard')
         await updateOBEvent(eventRecord._data)
       },
-      beforeEventDrag({ eventRecord }) {},
+      afterEventDrop({ eventRecord }) {
+        const { instance: scheduler } = schedulerProRef.current
+        setAlertOverruleShow('soft')},
     },
     eventRenderer: ({ eventRecord, renderData }) => {
       // customize content for event in here
@@ -733,7 +739,11 @@ function BryntumChartTable(props) {
         toggle={toggleRoadTanker}
         selectedVehicleID={selectedVehicleID}
       />
-      {/* <AlertOverruleModal alertType={alertOverruleShow} onCancel={() => setAlertOverruleShow(false)} onSend={() => {}}/> */}
+      <AlertOverruleModal
+        alertType={alertOverruleShow}
+        onCancel={() => setAlertOverruleShow(false)}
+        onSend={() => {}}
+      />
     </div>
   )
 }

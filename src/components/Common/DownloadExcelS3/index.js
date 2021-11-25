@@ -50,7 +50,7 @@ const DownloadExcel = ({ excelDownload, onGetDQMExcelDownload, subModule, downlo
       onClick={() => downloadExcel()}
     >
       <div className="excel-download-btn">
-        <span className="download-icon">
+        <span className="download-icon pr-1">
           <DownloadIcon />
         </span>
         {loader === true ? (

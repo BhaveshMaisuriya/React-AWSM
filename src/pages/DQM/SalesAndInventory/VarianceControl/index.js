@@ -17,8 +17,8 @@ import { formatUpdateVarianceControlUploadData } from "./format-update-data.help
 
 const headers = [
   { label: "STATION TANK STATUS", value: "station_tank_status" },
-  { label: "VARIANCE VALUE (L)", value: "variance_value" },
-  { label: "VARIANCE PERCENTAGE (%)", value: "variance_percentage" }
+  { label: "THRESHOLD VALUE (L)", value: "variance_value" },
+  { label: "THRESHOLD (%)", value: "variance_percentage" }
 ]
 
 const VarianceInput = ({ value, disabled, onChange }) => {
@@ -223,7 +223,7 @@ const VarianceControl = ({
         <ModalHeader
           close={<CloseButton handleClose={() => setIsConfirm(true)} />}
         >
-          <span className="modal-title">Variance Control</span> 
+          <span className="modal-title">Threshold Control</span> 
           <span className="last-updated-sub-title">
              {updatedInformation}
             </span>
@@ -232,8 +232,8 @@ const VarianceControl = ({
           {isConfirm && showExitConfirmation()}
           <div className="w-100">
             <div>
-              <div className="px-2">
-                <label className="variance-table-label">Sales Variance</label>
+              <div className="px-2 custom-padding">
+                <label className="variance-table-label">SALES THRESHOLD</label>
                 {data ? (
                   <VarianceTable
                     items={data.sales}
@@ -246,7 +246,7 @@ const VarianceControl = ({
               </div>
               <div className="px-2">
                 <label className="variance-table-label">
-                  Inventory Variance
+                  INVENTORY THRESHOLD
                 </label>
                 {data? (
                   <VarianceTable
@@ -261,7 +261,7 @@ const VarianceControl = ({
                 ) : <div>On {selectedDate && format(new Date(selectedDate),"do LLL yyyy")}, there is no data for Inventory</div>}
               </div>
             </div>
-            <div className="d-flex align-items-center justify-content-end mt-4 mb-4 px-4">
+            <div className="d-flex align-items-center justify-content-end mt-4 mb-4 px-2">
               {!isConfirm && !scheduler && !isHistoricalDate && (
                 <>
                   <button
@@ -271,7 +271,7 @@ const VarianceControl = ({
                     Cancel
                   </button>
                   <button
-                    className="btn btn-primary ml-4 px-4"
+                    className="btn btn-primary ml-2 px-4"
                     onClick={onUpdate}
                   >
                     Update

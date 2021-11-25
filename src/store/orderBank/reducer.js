@@ -46,7 +46,8 @@ import {ToastSuccess,ToastError} from "../../helpers/swal";
 
 const initialState = {
   orderBankData: null,
-  orderBankTableData: null,
+  orderBankTableData: [],
+  orderBankTableFilters: {},
   shipmentOrderBankTableData: null,
   error: null,
   currentOrderDetail: null,
@@ -66,11 +67,27 @@ const initialState = {
 const RTSOrderBank = (state = initialState, action) => {
   switch (action.type) {
     case GET_RTS_ORDER_BANK_TABLE_DATA_SUCCESS:
+      const { data, scrolling } = action.payload;
+      const { list, total_rows, filter } = data;
+      if (state.orderBankTableData.length !== 0 && scrolling) {
+        return {
+          ...state,
+          orderBankTableData: [...state.orderBankTableData, ...list],
+          orderBankTableFilters: filter,
+          totalRow: total_rows,
+        }
+      }
       return {
         ...state,
-        orderBankTableData: action.payload,
-        error: null
+        orderBankTableData: list,
+        orderBankTableFilters: filter,
+        totalRow: total_rows,
       }
+      // return {
+      //   ...state,
+      //   orderBankTableData: action.payload,
+      //   error: null
+      // }
     case GET_RTS_ORDER_BANK_TABLE_DATA_FAIL:
       return {
         ...state,

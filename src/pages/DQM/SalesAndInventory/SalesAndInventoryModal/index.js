@@ -246,13 +246,13 @@ class SalesAndInventoryTableInformation extends Component {
           {!isConfirm && (
             <ModalFooter>
               <button
-                className="btn btn-outline-primary px-4"
+                className="btn-sec px-4"
                 onClick={() => this.setState({ isConfirm: true })}
               >
                 Cancel
               </button>
               <button
-                className="btn btn-primary ml-4 px-4"
+                className="btn btn-primary ml-2 px-4"
                 onClick={e => handleUpdate(e)}
               >
                 Update

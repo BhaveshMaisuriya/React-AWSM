@@ -55,15 +55,15 @@ const FilterDropdown = ({ dataFilter, dataKey, handleClickApply, handleClickRese
     setVisibilityCount(arr.length)
     if (["inventory_variance", "sales_variance", "sales_variance_percentage", "inventory_variance_percentage"].includes(dataKey)) {
       setCurrent([{
-        "text": "Outside Variance",
-        "checked": (data.find(e => e.text === "Outside Variance"))?.checked ?? false,
+        "text": "Outside Threshold",
+        "checked": (data.find(e => e.text === "Outside Threshold"))?.checked ?? false,
         "visibility": true,
-        disabled: arr.findIndex(e => e.text === "Outside Variance") < 0
+        disabled: arr.findIndex(e => e.text === "Outside Threshold") < 0
       }, {
-        "text": "Within Variance",
-        "checked": (data.find(e => e.text === "Within Variance"))?.checked ?? false,
+        "text": "Within Threshold",
+        "checked": (data.find(e => e.text === "Within Threshold"))?.checked ?? false,
         "visibility": true,
-        disabled: arr.findIndex(e => e.text === "Within Variance") < 0
+        disabled: arr.findIndex(e => e.text === "Within Threshold") < 0
       }])
     } else {
       setCurrent(arr)
@@ -269,7 +269,7 @@ const FilterDropdown = ({ dataFilter, dataKey, handleClickApply, handleClickRese
                 <SimpleBar
                   autoHide={false}
                   style={{
-                    maxHeight: "160px",
+                    maxHeight: "211px",
                     width: "100%",
                     overflow: "auto"
                   }}
@@ -312,8 +312,8 @@ const FilterDropdown = ({ dataFilter, dataKey, handleClickApply, handleClickRese
                                   style={{
                                     height: "20px",
                                     width: "5px",
-                                    marginLeft: "16px",
-                                    marginTop: "8px"
+                                    marginLeft: "20px",
+                                    marginTop: "10px",
                                   }}
                                 />
                               }
@@ -339,7 +339,7 @@ const FilterDropdown = ({ dataFilter, dataKey, handleClickApply, handleClickRese
                 <p style={{ marginTop: "-10px" }}/>
               </Fragment>
             )}
-            <div style={{ height: "25px" }}>
+            <div style={{ height: "25px", marginTop: "20px" }}>
               {!isRemark && current.length > 0 && (
                 <Fragment>
                   <Checkbox
@@ -351,8 +351,8 @@ const FilterDropdown = ({ dataFilter, dataKey, handleClickApply, handleClickRese
                     style={{
                       height: "20px",
                       width: "5px",
-                      marginLeft: "5px",
-                      marginTop: "-1px"
+                      marginLeft: "8px",
+                      marginTop: "-1px",
                     }}
                   />
                   <label

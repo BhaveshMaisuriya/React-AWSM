@@ -66,7 +66,6 @@ class Header extends Component {
   render() {
     return (
       <React.Fragment>
-        {window.location.pathname !== "/orderbank" && (
           <header id="page-topbar" style={{ boxShadow: "none !important" }}>
             <div className="navbar-header">
               <div className="navbar-brand-box" style={{ padding: 0 }}>
@@ -84,14 +83,6 @@ class Header extends Component {
               />
             </div>
           </header>
-        )}
-        {window.location.pathname === "/orderbank" && (
-          <div className="navbar-brand-box position-fixed" style={{ padding: 0 }}>
-            <div className="sideBar_profile">
-              <ProfileMenu sidebar={true} />
-            </div>
-          </div>
-        )}
       </React.Fragment>
     )
   }

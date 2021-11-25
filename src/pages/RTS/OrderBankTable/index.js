@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from "react-redux"
 import PropTypes from 'prop-types';
-import Filter from "../../../components/Common/DataTable/filter"
+import Filter from "../../../components/Common/FilterDropdown"
 import {tableMapping} from "./tableMapping"
 import {CustomInput, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Input,} from "reactstrap"
 import MoreVertIcon from "@material-ui/icons/MoreVert"

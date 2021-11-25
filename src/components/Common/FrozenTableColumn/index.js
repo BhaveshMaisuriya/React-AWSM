@@ -1,6 +1,6 @@
 import React, {Component} from "react"
 import PropTypes from "prop-types"
-import Filter from "../DataTable/filter"
+import Filter from "../FilterDropdown"
 import {Link} from "react-router-dom"
 import "./style.scss"
 import {isNull, isUndefined} from "lodash"

@@ -9,6 +9,8 @@ import { Link } from "react-router-dom"
 //i18n
 import { withTranslation } from "react-i18next"
 
+import ProfileMenu from "../CommonForBoth/TopbarDropdown/ProfileMenu"
+
 class SidebarContent extends Component {
   constructor(props) {
     super(props)
@@ -82,6 +84,11 @@ class SidebarContent extends Component {
     return (
       <React.Fragment>
         <div id="sidebar-menu">
+        {window.location.pathname === "/orderbank" && (
+          <div className="sidebar-orderbank">
+              <ProfileMenu sidebar={true} />
+            </div>
+          )}
           <ul className="metismenu list-unstyled" id="side-menu">
             <li className="menu-title">{this.props.t("Menu")}</li>
             <li>

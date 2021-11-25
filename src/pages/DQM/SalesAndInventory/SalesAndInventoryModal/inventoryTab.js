@@ -147,7 +147,7 @@ const InventoryTab = ({ data, onChange, salesDate }) => {
           <input
             disabled={isDisableInventoryField()}
             className="form-control awsm-input"
-            selected={data?.dipping_adjustment_remarks}
+            value={data?.dipping_adjustment_remarks}
             onChange={e => onChangeHandler(e.target.value, "dipping_adjustment_remarks")}
           />
         </div>

@@ -1,0 +1,107 @@
+@font-face {
+  font-family: "Museo Sans";
+  src: url("../../../assets/fonts/MuseoSans/MuseoSans-500.ttf")
+    format("truetype");
+}
+
+@font-face {
+  font-family: "Inter";
+  src: url("../../../assets/fonts/Inter/Inter-SemiBold.ttf") format("truetype");
+}
+
+*:focus {
+  outline: none;
+}
+
+.filter-selection {
+  height: 42px;
+}
+
+.checkmark .MuiFormControlLabel-label {
+  margin-top: 10px !important;
+  margin-left: 8px !important;
+  font-size: 12px !important;
+  font-family: "Museo Sans" !important;
+  font-weight: 500;
+  max-width: 230px;
+  line-height: 1;
+}
+
+.select-all .MuiFormControlLabel-label {
+  color: #008f8a;
+  font-size: 10px !important;
+}
+
+.filter-button {
+  border: none;
+  color: grey;
+  font-size: 16px;
+  padding: 0 !important;
+  margin: auto;
+}
+
+.text {
+  min-width: 50px;
+}
+
+.filter-container {
+  width: 280px !important;
+  max-width: 280px !important;
+  border-radius: 4px;
+  box-shadow: 0 0 4px 2px rgba(0, 0, 0, 0.16);
+  padding: 8px !important;
+  .search-icon {
+    top: 5px;
+    right: 0;
+  }
+  .item-checked {
+    background-color: #e0f4f3;
+    width: 97%;
+  }
+  .btn-toggle-icon :hover {
+    background-color: white;
+  }
+}
+
+.filter-popover-button {
+  border-radius: 12px !important;
+  padding: 2px 12px !important;
+  font-size: 10px !important;
+  font-family: "Museo Sans" !important;
+  width: 60px !important;
+  height: 24px;
+  float: right !important;
+}
+
+.filter-popover-button-apply {
+  border: 1px solid #00a19c !important;
+  background-color: #00a19c !important;
+  margin-right: 12px !important;
+}
+
+.filter-popover-button-reset {
+  border: 2px solid #e0f4f3 !important;
+  background-color: white !important;
+  color: #008f8a !important;
+  margin-right: 5px !important;
+}
+
+.Loadmore_Filters {
+  text-align: center !important;
+  width: 100% !important;
+  color: #008f8a !important;
+  background-color: unset !important;
+  cursor: pointer;
+}
+
+.popover {
+  max-width: none !important;
+}
+
+.arrow::after {
+  display: none !important;
+}
+
+.arrow::before {
+  display: none !important;
+}

@@ -114,7 +114,7 @@ class SalesInventory extends Component {
             tableData={saleAndInventory}
             downloadtableData={downloadtableData}
             filter={filter}
-            headerTitle="Sales & Inventory"
+            headerTitle="Sales & Inventory Accuracy Check"
             cardTitle="Sales & Inventory List"
             modalComponent={SalesAndInventoryModal}
             onGetDownloadCustomer={this.GetonDownload}

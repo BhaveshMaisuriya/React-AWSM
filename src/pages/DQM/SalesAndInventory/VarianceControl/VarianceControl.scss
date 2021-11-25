@@ -34,14 +34,13 @@
     min-width: 100%;
 
     .variance-table-label {
-      color: #555555;
+      color: black;
       font-family: "Museo Sans", serif;
-      font-size: 1rem;
+      font-size: 13px;
       letter-spacing: 0;
       line-height: 17px;
       font-weight: 600;
-      margin-top: 1.2rem;
-      margin-bottom: 0.6rem;
+      margin-bottom: 1.75rem;
     }
 
     .variance-input {
@@ -67,7 +66,10 @@
 
           &:focus {
             background-color: #EBF9F9;
-            border: 1px solid #00A19C;
+            height: 3.1rem;
+            border-radius: 0 !important;
+            box-shadow:  0 0 0 1px #00A19C;
+            margin-bottom: -1px !important;
             caret-color: #00A19C;
           }
         }
@@ -101,15 +103,18 @@
     }
 
     .variance-table {
-      border: 2px solid #D9D9D9;
+      table-layout: fixed;
+      border: 1px solid #D9D9D9;
       border-radius: 4px 4px 0 0;
       box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.07);
 
       thead {
+        border: 1px solid #D9D9D9;
         background-color: #F8F9FA;
       }
 
       th {
+        border: 1px solid #D9D9D9;
         padding: 1rem;
         font-family: "Museo Sans", serif;
         font-size: 0.8rem;
@@ -117,9 +122,13 @@
         color: black;
       }
 
+      td{
+        border: 1px solid #D9D9D9;
+      }
+      
       > tbody {
         > tr {
-          border-top: 2px solid #D9D9D9;
+          border-top: 1px solid #D9D9D9;
           box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.07);
         }
       }
@@ -142,5 +151,9 @@
 }
 
 .variance-control-modal {
-  max-width: 800px !important;
+  max-width: 780px !important;
+}
+
+.custom-padding{
+  padding-bottom: 1.75rem;
 }

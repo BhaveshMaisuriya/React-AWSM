@@ -9,27 +9,6 @@ import Account from "./auth/register/reducer"
 import ForgetPassword from "./auth/forgetpwd/reducer"
 import Profile from "./auth/profile/reducer"
 
-//Calendar
-import calendar from "./calendar/reducer"
-
-//chat
-import chat from "./chat/reducer"
-
-//crypto
-import crypto from "./crypto/reducer"
-
-//invoices
-import invoices from "./invoices/reducer"
-
-//projects
-import projects from "./projects/reducer"
-
-//tasks
-import tasks from "./tasks/reducer"
-
-//contacts
-import contacts from "./contacts/reducer"
-
 //Retail Customer
 import retailCustomer from "./retailCustomer/reducer"
 
@@ -64,13 +43,6 @@ const rootReducer = combineReducers({
   Account,
   ForgetPassword,
   Profile,
-  calendar,
-  chat,
-  crypto,
-  invoices,
-  projects,
-  tasks,
-  contacts,
   retailCustomer,
   commercialCustomer,
   products,

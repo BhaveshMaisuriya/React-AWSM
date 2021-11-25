@@ -2,20 +2,21 @@ import React, { Component } from "react"
 import PropTypes from "prop-types"
 import { withStyles } from "@material-ui/styles"
 import InputBase from "@material-ui/core/InputBase"
-import {isNull, isUndefined} from "lodash"
+import { isNull, isUndefined } from "lodash"
 
 const styles = {
   root: {
     padding: "2px 4px",
     display: "flex",
     alignItems: "center",
-    height: "40px",
-    width: "100%",
-    borderRadius: "4px",
+    height: "50px",
+    width: "348px",
     backgroundColor: "#FFFFFF",
   },
   input: {
-    marginLeft: 8,
+    fontFamily: "Museo Sans",
+    fontSize: "12px",
+    margin: 15,
     flex: 1,
     border: `none !important`,
     caretColor: "#00A19C",
@@ -51,11 +52,13 @@ class InputWithSuffix extends Component {
 
   render() {
     const { onActive } = this.state
-    const { classes, inputType, value, isEdit, disable } = this.props
+    const { classes, inputType, value, isEdit, disable, isBorder } = this.props
 
     return (
       <div
-        className={`${classes.root} tank_status ${disable ? "disabled" : ""}`}
+        className={`${classes.root} tank_status ${disable ? "disabled" : ""} ${
+          isBorder ? "input-border-tank" : ""
+        }`}
         style={{
           border:
             onActive || inputType == "baseInput"
@@ -65,7 +68,9 @@ class InputWithSuffix extends Component {
         }}
       >
         {!onActive ? (
-          <span className={`readonly-field`}>{!isNull(value) && !isUndefined(value)? value: "-"}</span>
+          <span className={`readonly-field`}>
+            {!isNull(value) && !isUndefined(value) ? value : "-"}
+          </span>
         ) : (
           <InputBase
             onBlur={this.handleHiddenBorder}

@@ -11,15 +11,12 @@
 
     &.disabled {
       background-color: #eeeeee;
-      color: rgba(16, 16, 16, 0.3);
+      color: #757575 !important;
     }
   }
 
   .date-picker-icon {
-    // width: 0.85rem;
-    // position: absolute;
-    // right: 0.35rem;
-    // top: 0.5rem;
+
     color: rgb(204, 205, 207);
   }
 

@@ -66,17 +66,13 @@ class Header extends Component {
   render() {
     return (
       <React.Fragment>
-        {window.location.pathname !== "/orderbank" && (
           <header id="page-topbar" style={{ boxShadow: "none !important" }}>
             <div className="navbar-header">
-              {/* <div className="d-flex" style={{ flexGrow: 1 }}> */}
               <div className="navbar-brand-box" style={{ padding: 0 }}>
                 <div className="sideBar_profile">
                   <ProfileMenu sidebar={true} />
                 </div>
               </div>
-              {/* </div> */}
-
               <div className="navbar-text page-header">
                 Data Quality Management
               </div>
@@ -87,14 +83,6 @@ class Header extends Component {
               />
             </div>
           </header>
-        )}
-        {window.location.pathname === "/orderbank" && (
-          <div className="navbar-brand-box p-fixed" style={{ padding: 0 }}>
-            <div className="sideBar_profile">
-              <ProfileMenu sidebar={true} />
-            </div>
-          </div>
-        )}
       </React.Fragment>
     )
   }

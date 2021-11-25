@@ -72,7 +72,7 @@ const currentSaleAndInventory = {
     dipping_date_time: "12 mar, 12:30PM",
     dipping_to_mid_night_sales_volume: 12312,
     dipping_to_midnight_delivery: 123,
-    dipping_to_midnight_deversion: "12 Mar 2021",
+    dipping_to_midnight_diversion: "12 Mar 2021",
     dipping_to_midnight_deversion_remarks: "12 Mar 2021",
     dipping_adjustment: "12 Mar 2021",
     dipping_adjustment_remarks: "12 Mar 2021",

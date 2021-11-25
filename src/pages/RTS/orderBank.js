@@ -23,13 +23,13 @@ import AuditLog from "components/Common/AuditLog";
 import "./style.scss"
 import MoreVertIcon from "@material-ui/icons/MoreVert"
 import { IconButton, Menu, MenuItem } from "@material-ui/core"
-import eyeIcon from "../../assets/images/auditlog-eye.svg"
+import { CustomEyeIcon } from "pages/DQM/Common/icon";
 import awsmLogo from "../../assets/images/AWSM-logo-order-bank.png"
 import NewOrderModal from "./addOrderBankModal"
 import DateRangePicker from "../../components/Common/DateRangePicker"
 import AWSMDropdown from "../../components/Common/Dropdown"
 import OrderBankTable from "./OrderBankTable"
-import REGION_TERMINAL from "../../common/data/regionAndTerminal"
+import REGION_TERMINAL, { TERMINAL_CODE_MAPPING } from "../../common/data/regionAndTerminal"
 
 //custom icons import
 import customiseTableIcon from "../../assets/images/AWSM-Customise-Table.svg"
@@ -84,7 +84,7 @@ import { DragDropContext} from "react-beautiful-dnd"
 import { isNull } from "lodash"
 import { removeKeywords } from "../DQM/Common/helper"
 import ClearScheduling from "./clearScheduling";
-
+import { transformObjectToStringSentence, filterObject } from "./../DQM/Common/helper"
 const UntickIcon = () => <img src={selectAllIcon3} alt="icon" />
 const CheckedIcon = () => <img src={selectAllIcon2} alt="icon" />
 
@@ -130,6 +130,7 @@ const GanttChartFilterButtons = [
 function OrderBank({
   getRTSOrderBankTableData,
   orderBankTableData,
+  orderBankTableFilters,
   sendOrderBankDN,
   refreshOderBankDN,
   onGetOrderBankAuditLog,
@@ -231,7 +232,7 @@ function OrderBank({
   const [status, setStatusDropdown] = useState("Unscheduled")
   const [shiftDate, setShiftDate] = useState({
     type: "single",
-    days: [format(Date.now(), "yyyy-MM-dd")],
+    date_from: format(Date.now(), "yyyy-MM-dd"),
   })
   const [orderBankSetting, setOrderBankSetting] = useState(orderBankSettings)
   const [showAuditModal, setShowAuditModal] = useState(false)
@@ -254,7 +255,15 @@ function OrderBank({
     })
     return columns
   })
-  const [currentPage, setCurrentPage] = useState(1)
+  const [currentPage, setCurrentPage] = useState(0)
+  const [filterQuery, setfilterQuery] = useState('')
+  const filterOrderBank = useMemo(() => {
+    return {
+      terminal: TERMINAL_CODE_MAPPING[terminal],
+      dn_status: status,
+      shift_date: shiftDate,
+    }
+  }, [terminal, shiftDate, status])
 
   useEffect(()=>{
     const results = {DNs : 3,shipment : 2,backlog : 0,SR : 0,HP : 0};
@@ -280,7 +289,7 @@ function OrderBank({
   }, [])
 
   useEffect(() => {
-    sendMessage(JSON.stringify({
+    /*sendMessage(JSON.stringify({
       "action": "getOrderBank",
       "data": {
         "region": region,
@@ -290,9 +299,21 @@ function OrderBank({
         "page": currentPage,
         "limit": 10,
       }
-    }))
-  }, [region, terminal, shiftDate, status, currentPage])
-
+    }))*/
+    getRTSOrderBankTableData(
+      {
+        "limit": 10,
+        "page": currentPage,
+        "search_term": "",
+        "search_fields": "id,priority,ship_to,name,cloud,trip_no,dn_date,product,volume,retain,runout,product_category,dn_status,split_id,order_type,accessibility,order_remarks,notes,retail_storage_relation,commercial_storage_relation",
+        "q": transformObjectToStringSentence(filterQuery),
+        "sort_dir": "asc",
+        "sort_field": "vehicle",
+        "filter": filterOrderBank,
+      }
+    )
+  }, [filterOrderBank, currentPage, filterQuery])
+  
   const toggle = () => setOpen(!dropdownOpen)
   
   const terminalList = useMemo(() => {
@@ -399,11 +420,11 @@ function OrderBank({
   }
 
   const onSendOrderBankDN = () => {
-    sendOrderBankDN(socketData.filter(e => e.isChecked))
+    sendOrderBankDN(orderBankTableData.filter(e => e.isChecked))
   }
 
   const onRefreshOrderBankDN = () => {
-    refreshOderBankDN(socketData.filter(e => e.isChecked))
+    refreshOderBankDN(orderBankTableData.filter(e => e.isChecked))
   }
 
   const changeGanttChartOption = async (e, val) => {
@@ -556,6 +577,14 @@ function OrderBank({
     setCurrentPage(currentPage + 1)
   }
 
+  const changeFiltersHandler = (qValue, type) => {
+    if(type === "insert") 
+      setfilterQuery(prevFilters => { return {...prevFilters, ...qValue}})
+    else if(type === "remove")
+      setfilterQuery(prevFilters => { return {...filterObject(prevFilters, qValue)}})
+    setCurrentPage(0)
+  }
+
   return (
     <React.Fragment>
       <DragDropContext onDragEnd={onDragEnd}>
@@ -599,9 +628,11 @@ function OrderBank({
                     <a className="border-before" onClick={onFullScreen}>
                       <i className="bx bx-fullscreen ml-3"/> Fullscreen
                     </a>
-                    <a className="border-before" onClick={istoggle}>
-                      <img src={eyeIcon} alt="info" className="ml-3" /> View
-                      Audit Log
+                    <a className="border-before " onClick={istoggle}>
+                      <span className="ml-3">
+                        <CustomEyeIcon/> 
+                        View Audit Log
+                      </span>
                     </a>
                     <span className="bl-1-grey-half plr-15">
                       <Button
@@ -630,7 +661,15 @@ function OrderBank({
                       types={["single"]}
                       startDate={null}
                       defaultValue={shiftDate}
-                      onChange={value => setShiftDate(value)}
+                      onChange={value => {
+                        setShiftDate({
+                          ...shiftDate,
+                          type: value?.type,
+                          date_from: value?.date_from,
+                          date_to: value?.date_to,
+                        });
+                        setCurrentPage(0)
+                      }}
                     />
                   </div>
                   <p className="order-bank-region-label">
@@ -641,7 +680,8 @@ function OrderBank({
                       value={region}
                       onChange={value => {
                         setRegion(value)
-                        setTerminal(null)
+                        setTerminal(REGION_TERMINAL.find(item => item.region === value).terminal[0])
+                        setCurrentPage(0)
                       }}
                       items={REGION_TERMINAL.map(e => e.region)}
                     />
@@ -649,7 +689,10 @@ function OrderBank({
                   <div className="order-bank-region ml-2">
                     <AWSMDropdown
                       value={terminal}
-                      onChange={value => setTerminal(value)}
+                      onChange={value => {
+                        setTerminal(value)
+                        setCurrentPage(0)
+                      }}
                       items={terminalList}
                     />
                   </div>
@@ -834,7 +877,15 @@ function OrderBank({
                       types={["single", "range"]}
                       startDate={null}
                       defaultValue={shiftDate}
-                      onChange={value => setShiftDate(value)}
+                      onChange={value => {
+                        setShiftDate({
+                          ...shiftDate,
+                          type: value?.type,
+                          date_from: value?.date_from,
+                          date_to: value?.date_to,
+                        })
+                        setCurrentPage(0)
+                      }}
                     />
                   </div>
                   <p className="order-bank-region-label">
@@ -845,7 +896,8 @@ function OrderBank({
                       value={region}
                       onChange={value => {
                         setRegion(value)
-                        setTerminal(null)
+                        setTerminal(REGION_TERMINAL.find(item => item.region === value).terminal[0])
+                        setCurrentPage(0)
                       }}
                       items={REGION_TERMINAL.map(e => e.region)}
                     />
@@ -853,7 +905,10 @@ function OrderBank({
                   <div className="order-bank-region ml-2">
                     <AWSMDropdown
                       value={terminal}
-                      onChange={value => setTerminal(value)}
+                      onChange={value => {
+                        setTerminal(value)
+                        setCurrentPage(0)
+                      }}
                       items={terminalList}
                     />
                   </div>
@@ -861,7 +916,10 @@ function OrderBank({
                   <div className="order-bank-region">
                     <AWSMDropdown
                       value={status}
-                      onChange={value => setStatusDropdown(value)}
+                      onChange={value => {
+                        setStatusDropdown(value)
+                        setCurrentPage(0)
+                      }}
                       items={orderBankStatus.map(e => e.label)}
                     />
                   </div>
@@ -918,11 +976,14 @@ function OrderBank({
               </Row>
               <OrderBankTable
                 tableColumns={searchFields}
-                dataSource={socketData || []}
+                dataSource={orderBankTableData || []}
+                headerFilters={orderBankTableFilters}
+                filterApplyHandler={changeFiltersHandler}
                 enabledCross={enabledCross}
                 deleteEnable={deleteEnable}
                 currentPage={currentPage}
                 onChangeCurrentPage={onChangeCurrentPage}
+                onChangeFilters={onChangeCurrentPage}
               />
             </div>
             <NewOrderModal open={showNewOrder} onCancel={onCloseNewOrder} />
@@ -1053,6 +1114,7 @@ const mapDispatchToProps = dispatch => ({
 
 const mapStateToProps = ({ orderBank }) => ({
   orderBankTableData: orderBank.orderBankTableData,
+  orderBankTableFilters: orderBank.orderBankTableFilters,
   auditsCom: orderBank.auditsCom,
   socketData: orderBank.socketData
 })

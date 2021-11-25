@@ -168,21 +168,7 @@
   }
 }
 
-@media (max-width: 992px) {
-  .vertical-menu {
-    display: none;
-  }
 
-  .main-content {
-    margin-left: 0 !important;
-  }
-
-  body.sidebar-enable {
-    .vertical-menu {
-      display: block;
-    }
-  }
-}
 
 // Enlarge menu
 .p-fixed {
@@ -656,4 +642,14 @@ body[data-sidebar="colored"] {
       }
     }
   }
+}
+
+.is-orderbank{
+  top:0 !important;
+}
+
+.sidebar-orderbank{
+  padding-left: 0.4em;
+  margin-top: -10px;
+  margin-bottom: 10px;
 }

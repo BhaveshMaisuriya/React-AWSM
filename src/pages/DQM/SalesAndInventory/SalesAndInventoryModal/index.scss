@@ -1,47 +1,70 @@
-  .modal-title{
-    display: flex;
-    .sub-title {
-      height: 16px;
-      width: fit-content;
-      color: #757575;
-      font-family: "Museo Sans";
-      font-size: 12px;
-      font-style: italic;
-      letter-spacing: 0;
-      line-height: 16px;
-      margin: 0px 0px 5px 5px;
-      padding: 0px 0px 5px 5px;
-    }
+.modal-title {
+  width: 100% !important;
+  display: flex;
+  .sub-title {
+    height: 16px;
+    width: fit-content;
+    color: #757575;
+    font-family: "Museo Sans";
+    font-size: 12px;
+    font-style: italic;
+    letter-spacing: 0;
+    line-height: 16px;
+    margin: 0px 0px 5px 5px;
+    padding: 0px 0px 5px 5px;
   }
+}
 
-  label {
-    display: flex;
-    justify-content: space-between;
-    span{
-      margin-left: auto;
-    }
+label {
+  display: flex;
+  justify-content: space-between;
+  span {
+    margin-left: auto;
   }
+}
 
-  .simple-bar-sale {
-    width: 100%;
-    overflow: visible;
-    padding-right: 0.5rem;
-    padding-top: 20px;
-  }
+.simple-bar-sale {
+  width: 100%;
+  overflow: visible;
+  padding-right: 0.5rem;
+  padding-top: 20px;
+}
 
-  .extra-lbl {
-    position: absolute;
-    right: 0px;
-    margin-right: 10px;
-  }
+.extra-lbl {
+  position: absolute;
+  right: 0px;
+  margin-right: 10px;
+}
 
-  .info{
-    width: 376px;
-    height: 62px;
-  }
-.marginTop30{
+.info {
+  width: 376px;
+  height: 62px;
+}
+.marginTop30 {
   margin-top: 30px;
 }
-.marginBottom22px{
+.marginBottom22px {
   margin-bottom: 22px;
+}
+
+.delivery-table-snl {
+  thead {
+    table-layout: fixed;
+    background: #f8f9fa;
+    text-transform: uppercase;
+    color: #000000;
+    font-weight: 700;
+    border: 1px solid #d9d9d9;
+    th {
+      border: 1px solid #d9d9d9 !important;
+    }
+  }
+  tbody {
+    tr {
+      border: 1px solid #d9d9d9;
+    }
+    td {
+      border: 1px solid #d9d9d9;
+    }
+  }
 }

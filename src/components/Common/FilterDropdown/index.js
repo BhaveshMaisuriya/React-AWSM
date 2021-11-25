@@ -9,11 +9,17 @@ import Checkbox from "@material-ui/core/Checkbox"
 import SimpleBar from "simplebar-react"
 import { isEmpty, isNull, isUndefined } from "lodash"
 import { removeKeywords } from "../../../pages/DQM/Common/helper"
-import "./datatable.scss"
+import "./index.scss"
 import ReplayIcon from "@material-ui/icons/Replay"
-import {format} from "date-fns";
+import { format } from "date-fns"
 
-const FilterDropdown = ({ dataFilter, dataKey, handleClickApply, handleClickReset, rowsPerLoad = 30 }) => {
+const FilterDropdown = ({
+  dataFilter,
+  dataKey,
+  handleClickApply,
+  handleClickReset,
+  rowsPerLoad = 30,
+}) => {
   const [popoverOpen, setPopoverOpen] = useState(false)
   const [checkAll, setCheckAll] = useState(true)
   const [data, setData] = useState([])
@@ -49,22 +55,34 @@ const FilterDropdown = ({ dataFilter, dataKey, handleClickApply, handleClickRese
    * useEffect for loading more dropdown filters
    */
   useEffect(() => {
-    const temp = data.filter(item => (item.visibility === true))
-    const arr = temp.filter((item, index) =>  (index < rowsPerLoad))
+    const temp = data.filter(item => item.visibility === true)
+    const arr = temp.filter((item, index) => index < rowsPerLoad)
     temp.length <= rowsPerLoad ? setHasMore(false) : setHasMore(true)
     setVisibilityCount(arr.length)
-    if (["inventory_variance", "sales_variance", "sales_variance_percentage", "inventory_variance_percentage"].includes(dataKey)) {
-      setCurrent([{
-        "text": "Outside Threshold",
-        "checked": (data.find(e => e.text === "Outside Threshold"))?.checked ?? false,
-        "visibility": true,
-        disabled: arr.findIndex(e => e.text === "Outside Threshold") < 0
-      }, {
-        "text": "Within Threshold",
-        "checked": (data.find(e => e.text === "Within Threshold"))?.checked ?? false,
-        "visibility": true,
-        disabled: arr.findIndex(e => e.text === "Within Threshold") < 0
-      }])
+    if (
+      [
+        "inventory_variance",
+        "sales_variance",
+        "sales_variance_percentage",
+        "inventory_variance_percentage",
+      ].includes(dataKey)
+    ) {
+      setCurrent([
+        {
+          text: "Outside Threshold",
+          checked:
+            data.find(e => e.text === "Outside Threshold")?.checked ?? false,
+          visibility: true,
+          disabled: arr.findIndex(e => e.text === "Outside Threshold") < 0,
+        },
+        {
+          text: "Within Threshold",
+          checked:
+            data.find(e => e.text === "Within Threshold")?.checked ?? false,
+          visibility: true,
+          disabled: arr.findIndex(e => e.text === "Within Threshold") < 0,
+        },
+      ])
     } else {
       setCurrent(arr)
     }
@@ -112,7 +130,7 @@ const FilterDropdown = ({ dataFilter, dataKey, handleClickApply, handleClickRese
           appliedFiltersList.length > 0
             ? appliedFiltersList.includes(item)
             : true,
-        visibility: true
+        visibility: true,
       })
     })
     return newArr.sort((a, b) => b.checked - a.checked)
@@ -218,9 +236,13 @@ const FilterDropdown = ({ dataFilter, dataKey, handleClickApply, handleClickRese
     }
   }
 
-  const checkNullValue = useCallback((text) =>
-    (isNull(text) || isEmpty(text?.toString()) || text?.toString().includes("null"))
-    ,[])
+  const checkNullValue = useCallback(
+    text =>
+      isNull(text) ||
+      isEmpty(text?.toString()) ||
+      text?.toString().includes("null"),
+    []
+  )
 
   return (
     <Fragment>
@@ -246,7 +268,7 @@ const FilterDropdown = ({ dataFilter, dataKey, handleClickApply, handleClickRese
               onChange={onSearchTextChange}
               style={{
                 fontFamily: "Museo Sans",
-                fontSize: "12px"
+                fontSize: "12px",
               }}
             />
             <img
@@ -254,7 +276,7 @@ const FilterDropdown = ({ dataFilter, dataKey, handleClickApply, handleClickRese
               src={searchIcon}
               alt="search"
               style={{
-                paddingRight: "8px"
+                paddingRight: "8px",
               }}
             />
           </div>
@@ -271,58 +293,66 @@ const FilterDropdown = ({ dataFilter, dataKey, handleClickApply, handleClickRese
                   style={{
                     maxHeight: "211px",
                     width: "100%",
-                    overflow: "auto"
+                    overflow: "auto",
                   }}
                 >
                   {current.length > 0 && !isNull(current) && !isRemark
                     ? current.map((row, index) => {
+                        const renderLabel = () => {
+                          if (dataKey === "dipping_timestamp") {
+                            return checkNullValue(row.text)
+                              ? "-"
+                              : format(
+                                  new Date(row.text),
+                                  "dd-MM-yyyy , HH:mm:ss"
+                                )
+                          }
+                          if (dataKey === "override_status") {
+                            return checkNullValue(row.text)
+                              ? "Accurate"
+                              : row.text
+                          }
 
-                      const renderLabel = () => {
-                        if(dataKey === 'dipping_timestamp') {
-                          return checkNullValue(row.text) ? "-" : format(new Date(row.text), "dd-MM-yyyy , HH:mm:ss")
-                        }
-                        if (dataKey === "override_status") {
-                         return checkNullValue(row.text) ? "Accurate" : row.text
+                          if (dataKey !== "override_status") {
+                            return checkNullValue(row.text)
+                              ? "-"
+                              : removeKeywords(row.text)
+                          }
                         }
 
-                        if (dataKey !== "override_status") {
-                         return checkNullValue(row.text) ? "-" : removeKeywords(row.text)
-                        }
-                      }
-
-                      return (
-                        row.visibility && (
-                          <div
-                            key={`${row.text}${index}`}
-                            className={`d-flex align-items-center filter-selection ${
-                              row.checked ? "item-checked" : ""
-                            }`}
-                          >
-                            <FormControlLabel
+                        return (
+                          row.visibility && (
+                            <div
                               key={`${row.text}${index}`}
-                              value={isNull(row.text) ? "-null" : row.text}
-                              onChange={onInputChange}
-                              checked={row.checked}
-                              disabled={row.disabled}
-                              className="checkmark"
-                              control={
-                                <Checkbox
-                                  icon={<UntickIcon />}
-                                  checkedIcon={<CheckedIcon />}
-                                  style={{
-                                    height: "20px",
-                                    width: "5px",
-                                    marginLeft: "20px",
-                                    marginTop: "10px",
-                                  }}
-                                />
-                              }
-                              label={renderLabel()}
-                            />
-                          </div>
+                              className={`d-flex align-items-center filter-selection ${
+                                row.checked ? "item-checked" : ""
+                              }`}
+                            >
+                              <FormControlLabel
+                                key={`${row.text}${index}`}
+                                value={isNull(row.text) ? "-null" : row.text}
+                                onChange={onInputChange}
+                                checked={row.checked}
+                                disabled={row.disabled}
+                                className="checkmark"
+                                control={
+                                  <Checkbox
+                                    icon={<UntickIcon />}
+                                    checkedIcon={<CheckedIcon />}
+                                    style={{
+                                      height: "20px",
+                                      width: "5px",
+                                      marginLeft: "20px",
+                                      marginTop: "10px",
+                                    }}
+                                  />
+                                }
+                                label={renderLabel()}
+                              />
+                            </div>
+                          )
                         )
-                      )
-                    })
+                      })
                     : ResultsMessage()}
                   {hasMore && (
                     <IconButton
@@ -336,7 +366,7 @@ const FilterDropdown = ({ dataFilter, dataKey, handleClickApply, handleClickRese
                     </IconButton>
                   )}
                 </SimpleBar>
-                <p style={{ marginTop: "-10px" }}/>
+                <p style={{ marginTop: "-10px" }} />
               </Fragment>
             )}
             <div style={{ height: "25px", marginTop: "20px" }}>
@@ -359,7 +389,7 @@ const FilterDropdown = ({ dataFilter, dataKey, handleClickApply, handleClickRese
                     style={{
                       color: "#008F8A",
                       fontFamily: "Museo Sans",
-                      margin: "3px auto auto 8px"
+                      margin: "3px auto auto 8px",
                     }}
                   >
                     Select All
@@ -391,10 +421,8 @@ const FilterDropdown = ({ dataFilter, dataKey, handleClickApply, handleClickRese
 }
 
 FilterDropdown.defaultProps = {
-  handleClickApply: () => {
-  },
-  handleClickReset: () => {
-  }
+  handleClickApply: () => {},
+  handleClickReset: () => {},
 }
 
 export default FilterDropdown

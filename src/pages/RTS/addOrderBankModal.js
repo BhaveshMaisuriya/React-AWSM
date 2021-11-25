@@ -31,7 +31,6 @@ for (let i = 0; i < 24; i++) {
 }
 timeData.push(`23:59`)
 
-const ORDER_ETA = ["00", "01"]
 const ORDER_PRIORITY = ["High Priority", "Low Priority"]
 
 const NewOrderBankModal = props => {

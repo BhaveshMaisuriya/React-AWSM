@@ -1,6 +1,6 @@
 import React, {Component} from "react"
 import PropTypes from "prop-types"
-import Filter from "../DataTable/filter"
+import Filter from "../FilterDropdown"
 import {Link} from "react-router-dom"
 import "./style.scss"
 import {isNull, isUndefined} from "lodash"
@@ -133,14 +133,14 @@ class FixedCoulmnTable extends Component {
           className="cursor-pointer"
           onClick={() => overrideActionColumn(data)}
         >
-          {data?.override_status === "True" ? (
+          {data?.override_status === "Override" ? (
             <ReactSVG className="d-inline-block mr-2" src={OverrideIcon}/>
           ) : (
             <span className="accurate d-inline-block mr-2"/>
           )}
           <span
             className={`d-inline-block override-text ${
-              data?.override_status === "True" ? "override-text-green" : ""
+              data?.override_status === "Override" ? "override-text-green" : ""
             }`}
           >
             Override

@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import PropTypes from 'prop-types'
+import PropTypes from "prop-types"
 import { connect } from "react-redux"
 import { withRouter } from "react-router-dom"
 import {
@@ -53,8 +53,7 @@ class Layout extends Component {
     window.scrollTo(0, 0)
     let currentage = this.capitalizeFirstLetter(this.props.location.pathname)
 
-    document.title =
-      currentage + " | AWSM"
+    document.title = currentage + " | AWSM"
     if (this.props.leftSideBarTheme) {
       this.props.changeSidebarTheme(this.props.leftSideBarTheme)
     }
@@ -99,10 +98,12 @@ class Layout extends Component {
         </div>
 
         <div id="layout-wrapper">
-          <Header
-            toggleMenuCallback={this.toggleMenuCallback}
-            toggleRightSidebar={this.toggleRightSidebar}
-          />
+          {window.location.pathname !== "/orderbank" && (
+            <Header
+              toggleMenuCallback={this.toggleMenuCallback}
+              toggleRightSidebar={this.toggleRightSidebar}
+            />
+          )}
           <Sidebar
             theme={this.props.leftSideBarTheme}
             type={this.props.leftSideBarType}
@@ -130,7 +131,7 @@ Layout.propTypes = {
   location: PropTypes.object,
   showRightSidebar: PropTypes.any,
   toggleRightSidebar: PropTypes.any,
-  topbarTheme: PropTypes.any
+  topbarTheme: PropTypes.any,
 }
 
 const mapStateToProps = state => {

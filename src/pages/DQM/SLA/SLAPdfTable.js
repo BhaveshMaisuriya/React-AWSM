@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef, Fragment } from "react"
 import cloneDeep from "lodash/cloneDeep"
-import TablePagination from "../../../components/Common/DataTable/tablePagination"
+import TablePagination from "../../../components/Common/Pagination"
 import EditOutlinedIcon from "@material-ui/icons/EditOutlined"
 import SystemUpdateAltOutlinedIcon from "@material-ui/icons/SystemUpdateAltOutlined"
 import DeleteOutlinedIcon from "@material-ui/icons/DeleteOutlined"

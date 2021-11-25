@@ -3,7 +3,8 @@ import { connect } from "react-redux"
 import { compose } from "redux"
 import PropTypes from "prop-types"
 import { withStyles } from "@material-ui/styles"
-import TablePagination from "../DataTable/tablePagination"
+import { format } from "date-fns"
+import TablePagination from "../Pagination"
 import lineIcon from "../../../assets/images/auditlog-line.svg"
 import { getRetailAuditLog } from "store/actions"
 import { Modal, ModalHeader } from "reactstrap"
@@ -41,22 +42,28 @@ class AuditLog extends Component {
   }
 
   componentDidMount() {
-    const { onGetAuditLog, subModule } = this.props
+    const { onGetAuditLog, subModule, salesDate } = this.props
     const payload = {
       limit: 6,
       page: 0,
       module: subModule,
+    }
+    if (subModule === "sales-and-inventory") {
+      payload.trans_date = salesDate ? format(salesDate, "dd-MM-yyyy") : ""
     }
     onGetAuditLog(payload)
   }
 
   getAuditLogData = () => {
     const { currentPage } = this.state
-    const { onGetAuditLog, subModule } = this.props
+    const { onGetAuditLog, subModule, salesDate } = this.props
     const payload = {
       limit: 6,
       page: currentPage,
       module: subModule,
+    }
+    if (subModule === "sales-and-inventory") {
+      payload.trans_date = salesDate ? format(salesDate, "dd-MM-yyyy") : ""
     }
     onGetAuditLog(payload)
   }
@@ -220,5 +227,6 @@ AuditLog.propType = {
   subModule: PropTypes.string.isRequired,
   isOpen: PropTypes.bool.isRequired,
   toggle: PropTypes.func.isRequired,
+  salesDate: PropTypes.object,
 }
 export default compose(connect(mapStateToProps, mapDispatchToProps), withStyles(styles))(AuditLog)

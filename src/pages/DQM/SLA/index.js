@@ -7,7 +7,7 @@ import {
 } from "../../../store/actions"
 import Loader from "../../../components/Common/Loader"
 import { Link } from "react-router-dom"
-import eyeIcon from "../../../assets/images/auditlog-eye.svg"
+import { CustomEyeIcon } from "../Common/icon"
 import AuditLog from "../../../components/Common/AuditLog"
 import selectAllIcon2 from "../../../assets/images/AWSM-Checked-box.svg"
 import selectAllIcon3 from "../../../assets/images/AWSM-Checkbox.svg"
@@ -481,7 +481,7 @@ class SLA extends Component {
                     this.modalHandler()
                   }}
                 >
-                  <img src={eyeIcon} alt="info" /> View Audit Log
+                   <CustomEyeIcon/>  View Audit Log
                 </Link>
               </div>
             </div>
@@ -619,10 +619,10 @@ class SLA extends Component {
                                                 }
                                               checkedIcon={<CheckedIcon />}
                                               style={{
-                                                height: "20px",
+                                                height: "24px",
                                                 width: "5px",
-                                                marginLeft: "16px",
-                                                marginTop: "8px",
+                                                marginLeft: "20px",
+                                                marginTop: "10px",
                                               }}
                                             />
                                           }
@@ -717,10 +717,10 @@ class SLA extends Component {
                                                 }
                                                 checkedIcon={<CheckedIcon />}
                                                 style={{
-                                                  height: "20px",
+                                                  height: "24px",
                                                   width: "5px",
-                                                  marginLeft: "16px",
-                                                  marginTop: "8px",
+                                                  marginLeft: "20px",
+                                                  marginTop: "10px",
                                                 }}
                                               />
                                             }
@@ -813,10 +813,10 @@ class SLA extends Component {
                                                 }
                                               checkedIcon={<CheckedIcon />}
                                               style={{
-                                                height: "20px",
+                                                height: "24px",
                                                 width: "5px",
-                                                marginLeft: "16px",
-                                                marginTop: "8px",
+                                                marginLeft: "20px",
+                                                marginTop: "10px",
                                               }}
                                             />
                                           }

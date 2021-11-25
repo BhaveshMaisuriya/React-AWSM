@@ -8,6 +8,10 @@ const REGION_TERMINAL = [
     terminal: ["Kerteh", "Kuantan"],
   },
   {
+    region: "Northern",
+    terminal: ["Langkawi", "Prai", "Lumut"],
+  },
+  {
     region: "Nothern",
     terminal: ["Langkawi", "Prai", "Lumut"],
   },
@@ -25,7 +29,7 @@ const REGION_TERMINAL = [
   },
   {
     region: "Sarawak",
-    terminal: ["Bintulu Jv", "Miri", "Senari IOT", "Tg Manis CODT"],
+    terminal: ["Bintulu JV", "Miri", "Senari IOT", "Tg Manis CODT"],
   },
   {
     region: "Special Product",

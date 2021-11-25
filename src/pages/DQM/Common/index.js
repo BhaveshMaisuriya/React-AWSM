@@ -1,6 +1,6 @@
 import React, { Component } from "react"
 import SearchBar from "../../../components/Common/SearchBar"
-import TablePagination from "../../../components/Common/DataTable/tablePagination"
+import TablePagination from "../../../components/Common/Pagination"
 import PropTypes from "prop-types"
 import { withStyles } from "@material-ui/styles"
 import IconButton from "@material-ui/core/IconButton"
@@ -412,7 +412,6 @@ class Pages extends Component {
                       <button
                         className="btn btn-outline-primary excel-btn-container mr-4"
                         id="CsvUploadDownload"
-                        // disabled={this.state.loader}
                       >
                         <div className="excel-download-btn">
                           <span className="download-icon-csv">
@@ -484,6 +483,7 @@ class Pages extends Component {
                           }`}
                         >
                           <div className="enteriesText">
+                          <p className="pr-2 mb-0">
                             {`${currentPage * rowsPerPage + 1} to ${
                               tableData.total_rows -
                                 (currentPage * rowsPerPage + rowsPerPage) <
@@ -495,6 +495,7 @@ class Pages extends Component {
                                 ? `, ${this.props.overrideCount} record exceeds variance threshold`
                                 : ""
                             }`}
+                            </p>
                             {locationPath === "/sales-inventory" && (
                               <div className="separate-snl" />
                             )}
@@ -508,6 +509,7 @@ class Pages extends Component {
                                   onChange={this.onSalesDateChange}
                                   endDate={new Date()}
                                   startDate={subDays(new Date(), 30)}
+                                  defaultValue={new Date()}
                                 />
                               </div>
                               <label className="mb-0 pr-2 w-min">

@@ -94,17 +94,13 @@ class SidebarContent extends Component {
               </Link>
               <ul className="sub-menu" aria-expanded="false">
                 <li>
-                  {/* <Link to="/dashboard">Dashboard</Link> */}
                   <Link to="/sales-inventory">Sales & Inventory</Link>
                   <Link to="/retail-customer">Retail Customer</Link>
                   <Link to="/commercial-customer">Commercial Customer</Link>
                   <Link to="/terminal">Terminal</Link>
                   <Link to="/road-tanker">Road Tanker</Link>
-                  {/* <Link to="/employee-data">Employee Data</Link> */}
                   <Link to="/product">Product</Link>
-                  {/* <Link to="/cloud-cluster">Cloud Clusters</Link> */}
                   <Link to="/sla">SLA</Link>
-                  {/* <Link to="/order-forecast">Order Forecast Method</Link> */}
                 </li>
               </ul>
             </li>
@@ -116,195 +112,10 @@ class SidebarContent extends Component {
               </Link>
               <ul className="sub-menu" aria-expanded="false">
                 <li>
-                  <Link to="/rts">Dashboard</Link>
                   <Link to="/orderbank">Order Bank</Link>
-                  <Link to="/highcharts">HighCharts</Link>
-                  <Link to="/bryntum">Bryntum</Link>
                 </li>
               </ul>
             </li>
-            {/* <li>
-              <Link to="#" className=" waves-effect">
-                <i className="bx bxs-book-content" />
-                <span>OPO</span>
-              </Link>
-            </li>
-
-            <li>
-              <Link to="#" className=" waves-effect">
-                <i className="bx bxs-truck" />
-                <span>RAM</span>
-              </Link>
-            </li>
-
-            <li>
-              <Link to="#" className=" waves-effect">
-                <i className="bx bxs-microchip" />
-                <span>DES</span>
-              </Link>
-            </li>
-
-            <li>
-              <Link to="#" className=" waves-effect">
-                <i className="bx bxs-report" />
-                <span>SDA</span>
-              </Link>
-            </li>
-
-            <li>
-              <Link to="#" className=" waves-effect">
-                <i className="bx bxs-user-detail" />
-                <span>EMS</span>
-              </Link>
-            </li> */}
-
-            {/* <li className="menu-title">{this.props.t("Apps")}</li> */}
-
-            {/* <li>
-              <Link to="/calendar" className=" waves-effect">
-                <i className="bx bx-calendar" />
-                <span>Calendar</span>
-              </Link>
-            </li> */}
-            {/* <li>
-              <Link to="/highcharts" className=" waves-effect">
-                <i className="bx bx-chat" />
-                <span>HighCharts</span>
-              </Link>
-            </li>
-            <li>
-              <Link to="/bryntum" className=" waves-effect">
-                <i className="bx bx-chat" />
-                <span>Bryntum</span>
-              </Link>
-            </li> */}
-            {/*
-            <li>
-              <Link to="/#" className="has-arrow waves-effect">
-                <i className="bx bx-briefcase-alt" />
-                <span>{this.props.t("Products")}</span>
-              </Link>
-              <ul className="sub-menu" aria-expanded="false">
-                <li>
-                  <Link to="/projects-grid">
-                    {this.props.t("Projects Grid")}
-                  </Link>
-                </li>
-                <li>
-                  <Link to="#">
-                    {this.props.t("Projects List")}
-                  </Link>
-                </li>
-                <li>
-                  <Link to="#">
-                    {this.props.t("Project Overview")}
-                  </Link>
-                </li>
-                <li>
-                  <Link to="#">
-                    {this.props.t("Create New")}
-                  </Link>
-                </li>
-              </ul>
-            </li>
-
-            <li>
-              <Link to="/#" className="has-arrow waves-effect">
-                <i className="bx bx-task" />
-                <span>{this.props.t("Tasks")}</span>
-              </Link>
-              <ul className="sub-menu" aria-expanded="false">
-                <li>
-                  <Link to="#">{this.props.t("Task List")}</Link>
-                </li>
-                <li>
-                  <Link to="#">{this.props.t("Kanban Board")}</Link>
-                </li>
-                <li>
-                  <Link to="#">{this.props.t("Create Task")}</Link>
-                </li>
-              </ul>
-            </li>
-
-            <li>
-                <Link to="/#" className="has-arrow waves-effect">
-                  <i className="bx bxs-user-detail" />
-                  <span>{this.props.t("Contacts")}</span>
-                </Link>
-                <ul className="sub-menu" aria-expanded="false">
-                  <li>
-                    <Link to="/contacts-grid">{this.props.t("User Grid")}</Link>
-                  </li>
-                  <li>
-                    <Link to="/contacts-list">{this.props.t("User List")}</Link>
-                  </li>
-                  <li>
-                    <Link to="/contacts-profile">
-                      {this.props.t("Profile")}
-                    </Link>
-                  </li>
-                </ul>
-              </li>
-        
-            <li>
-                <Link to="/#" className="has-arrow waves-effect">
-                  <i className="bx bxs-bar-chart-alt-2" />
-                  <span>{this.props.t("Charts")}</span>
-                </Link>
-
-                <ul className="sub-menu" aria-expanded="false">
-                  <li>
-                    <Link to="/apex-charts">{this.props.t("Apex charts")}</Link>
-                  </li>
-                  <li>
-                    <Link to="/chartist-charts">
-                      {this.props.t("Chartist Chart")}
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/chartjs-charts">
-                      {this.props.t("Chartjs Chart")}
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/e-charts">{this.props.t("E Chart")}</Link>
-                  </li>
-                  <li>
-                    <Link to="/tui-charts">
-                      {this.props.t("Toast UI Chart")}
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/sparkline-charts">
-                      {this.props.t("Sparkline Chart")}
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/charts-knob">{this.props.t("Knob Chart")}</Link>
-                  </li>
-                </ul>
-              </li>
-
-            <li>
-                <Link to="/#" className="has-arrow waves-effect">
-                  <i className="bx bx-map" />
-                  <span>{this.props.t("Maps")}</span>
-                </Link>
-                <ul className="sub-menu" aria-expanded="false">
-                  <li>
-                    <Link to="/maps-google">{this.props.t("Google Maps")}</Link>
-                  </li>
-                  <li>
-                    <Link to="/maps-vector">{this.props.t("Vector Maps")}</Link>
-                  </li>
-                  <li>
-                    <Link to="/maps-leaflet">
-                      {this.props.t("Leaflet Maps")}
-                    </Link>
-                  </li>
-                </ul>
-              </li>
-*/}
           </ul>
         </div>
       </React.Fragment>

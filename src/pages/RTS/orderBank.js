@@ -23,7 +23,7 @@ import AuditLog from "components/Common/AuditLog";
 import "./style.scss"
 import MoreVertIcon from "@material-ui/icons/MoreVert"
 import { IconButton, Menu, MenuItem } from "@material-ui/core"
-import eyeIcon from "../../assets/images/auditlog-eye.svg"
+import { CustomEyeIcon } from "pages/DQM/Common/icon";
 import awsmLogo from "../../assets/images/AWSM-logo-order-bank.png"
 import NewOrderModal from "./addOrderBankModal"
 import DateRangePicker from "../../components/Common/DateRangePicker"
@@ -84,7 +84,7 @@ import { DragDropContext} from "react-beautiful-dnd"
 import { isNull } from "lodash"
 import { removeKeywords } from "../DQM/Common/helper"
 import ClearScheduling from "./clearScheduling";
-
+import { transformObjectToStringSentence, filterObject } from "./../DQM/Common/helper"
 const UntickIcon = () => <img src={selectAllIcon3} alt="icon" />
 const CheckedIcon = () => <img src={selectAllIcon2} alt="icon" />
 
@@ -256,6 +256,7 @@ function OrderBank({
     return columns
   })
   const [currentPage, setCurrentPage] = useState(0)
+  const [filterQuery, setfilterQuery] = useState('')
   const filterOrderBank = useMemo(() => {
     return {
       terminal: TERMINAL_CODE_MAPPING[terminal],
@@ -305,13 +306,13 @@ function OrderBank({
         "page": currentPage,
         "search_term": "",
         "search_fields": "id,priority,ship_to,name,cloud,trip_no,dn_date,product,volume,retain,runout,product_category,dn_status,split_id,order_type,accessibility,order_remarks,notes,retail_storage_relation,commercial_storage_relation",
-        "q": "",
+        "q": transformObjectToStringSentence(filterQuery),
         "sort_dir": "asc",
         "sort_field": "vehicle",
         "filter": filterOrderBank,
       }
     )
-  }, [filterOrderBank, currentPage])
+  }, [filterOrderBank, currentPage, filterQuery])
   
   const toggle = () => setOpen(!dropdownOpen)
   const terminalList = useMemo(() => {
@@ -575,6 +576,14 @@ function OrderBank({
     setCurrentPage(currentPage + 1)
   }
 
+  const changeFiltersHandler = (qValue, type) => {
+    if(type === "insert") 
+      setfilterQuery(prevFilters => { return {...prevFilters, ...qValue}})
+    else if(type === "remove")
+      setfilterQuery(prevFilters => { return {...filterObject(prevFilters, qValue)}})
+    setCurrentPage(0)
+  }
+
   return (
     <React.Fragment>
       <DragDropContext onDragEnd={onDragEnd}>
@@ -618,9 +627,11 @@ function OrderBank({
                     <a className="border-before" onClick={onFullScreen}>
                       <i className="bx bx-fullscreen ml-3"/> Fullscreen
                     </a>
-                    <a className="border-before" onClick={istoggle}>
-                      <img src={eyeIcon} alt="info" className="ml-3" /> View
-                      Audit Log
+                    <a className="border-before " onClick={istoggle}>
+                      <span className="ml-3">
+                        <CustomEyeIcon/> 
+                        View Audit Log
+                      </span>
                     </a>
                     <span className="bl-1-grey-half plr-15">
                       <Button
@@ -966,10 +977,12 @@ function OrderBank({
                 tableColumns={searchFields}
                 dataSource={orderBankTableData || []}
                 headerFilters={orderBankTableFilters}
+                filterApplyHandler={changeFiltersHandler}
                 enabledCross={enabledCross}
                 deleteEnable={deleteEnable}
                 currentPage={currentPage}
                 onChangeCurrentPage={onChangeCurrentPage}
+                onChangeFilters={onChangeCurrentPage}
               />
             </div>
             <NewOrderModal open={showNewOrder} onCancel={onCloseNewOrder} />

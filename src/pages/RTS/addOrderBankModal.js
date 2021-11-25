@@ -1,5 +1,5 @@
 import { Input } from "@material-ui/core"
-import React, { Fragment, useEffect, useState } from "react"
+import React, { Fragment, useEffect, useMemo, useState } from "react"
 import { connect } from "react-redux"
 import {
   Button,
@@ -18,13 +18,13 @@ import ExitConfirmation from "../../components/Common/ExitConfirmation"
 import AWSMInput from "../../components/Common/Input"
 import FileCopyIcon from "@material-ui/icons/FileCopy"
 import AWSMDropdown from "../../components/Common/Dropdown"
-import { orderDetails } from "./newOrderData"
+// import { orderDetails } from "./newOrderData"
 import AWSMAlert from "../../components/Common/AWSMAlert"
 import { getOrderBank } from "../../store/actions"
-import { removeKeywords } from '../../pages/DQM/Common/helper';
+import { removeKeywords } from "../../pages/DQM/Common/helper"
+import REGION_TERMINAL from "common/data/regionAndTerminal"
 
-const ORDER_REGION = ["Center", "Northern"]
-const ORDER_TERMINAL = ["KVDT", "KVDT 1"]
+// const ORDER_TERMINAL = ["KVDT", "KVDT 1"]
 const ORDER_LOAD_TIME = ["00", "01"]
 const ORDER_ETA = ["00", "01"]
 const ORDER_PRIORITY = ["High Priority", "Low Priority"]
@@ -35,10 +35,18 @@ const NewOrderBankModal = props => {
   const [isConfirm, setIsConfirm] = useState(false)
   const [currentState, setCurrentState] = useState("")
   const [orderData, setOrderData] = useState({})
-  const [shiptoNo, setShiptoNo] = useState('')
+  const [shiptoNo, setShiptoNo] = useState("")
   const [progress, setProgress] = useState(0)
   const [showAlert, setShowAlert] = useState(false)
-  const [shiftDate, setShiftDate] = useState(new Date(new Date().getTime() + 24 * 60 * 60 * 1000))
+  const [terminalList, setTerminalList] = useState([])
+  const [productList, setProductList] = useState([])
+  const [inputValue1, setInputValue1] = useState("")
+  const [inputValue2, setInputValue2] = useState("") 
+  const [inputValue3, setInputValue3] = useState("")    
+  const [allProductDetailList, setAllProductDetailList] = useState([])
+  const [shiftDate, setShiftDate] = useState(
+    new Date(new Date().getTime() + 24 * 60 * 60 * 1000)
+  )
 
   const onConfirmCancel = () => {
     setIsConfirm(false)
@@ -52,7 +60,7 @@ const NewOrderBankModal = props => {
   const onConfirmExit = () => {
     setIsConfirm(false)
     setCurrentState("")
-    setShiptoNo('')
+    setShiptoNo("")
     if (onCancel) {
       onCancel()
     }
@@ -67,11 +75,40 @@ const NewOrderBankModal = props => {
     newOrderData.address.address[key] = value
     setOrderData(newOrderData)
   }
-  
+
   const onFieldChange = (key, value) => {
-    const newOrderData = { ...orderData }
-    newOrderData[key] = value
-    setOrderData(newOrderData)
+    if (key === "product_name") {
+      const pro_code = allProductDetailList.find(res => res.name === value)
+      const newOrderData = { ...orderData }
+      newOrderData[key] = value
+      newOrderData["product_code"] = pro_code.code
+      setOrderData(newOrderData)
+    } else if(key === 'myremark1') {
+      setInputValue1(value);
+      if(value.length < 40) {
+        const newOrderData = { ...orderData }
+        newOrderData[key] = value
+        setOrderData(newOrderData)
+      }
+    }  else if(key === 'myremark2') {
+      setInputValue2(value);
+      if(value.length < 40) {
+        const newOrderData = { ...orderData }
+        newOrderData[key] = value
+        setOrderData(newOrderData)
+      }
+    }  else if(key === 'myremark3') {
+      setInputValue3(value);
+      if(value.length < 40) {
+        const newOrderData = { ...orderData }
+        newOrderData[key] = value
+        setOrderData(newOrderData)
+      }
+    } else {
+      const newOrderData = { ...orderData }
+      newOrderData[key] = value
+      setOrderData(newOrderData)
+    }
   }
 
   const onSearchOrder = async () => {
@@ -82,13 +119,32 @@ const NewOrderBankModal = props => {
 
   useEffect(async () => {
     if (props.orderBankData !== null) {
-      if (typeof props.orderBankData === 'object' && props.orderBankData.ship_to_party === shiptoNo) {
+      if (
+        typeof props.orderBankData === "object" &&
+        props.orderBankData.ship_to_party === shiptoNo
+      ) {
         setTimeout(async function () {
           await setShowAlert(true)
           await setOrderData(props.orderBankData)
+          let temp = []
+          let temp1 = []
+          Object.keys(props.orderBankData?.storage).map((key, index) => {
+            if (key.startsWith("storage_")) {
+              temp1.push({
+                name: props.orderBankData?.storage[key].name,
+                code: props.orderBankData?.storage[key].code,
+              })
+              temp.push(props.orderBankData?.storage[key].name)
+            }
+          })
+          await setAllProductDetailList(temp1)
+          await setProductList(temp)
           await setCurrentState("search")
         }, 1000)
-      } else if(props?.orderBankData?.data && props.orderBankData.status === 404) {
+      } else if (
+        props?.orderBankData?.data &&
+        props.orderBankData.status === 404
+      ) {
         setTimeout(function () {
           setCurrentState("error")
         }, 500)
@@ -101,10 +157,39 @@ const NewOrderBankModal = props => {
   }, [props.orderBankData])
 
   const onCancelClick = () => {
-    shiptoNo !== '' ? setIsConfirm(true) : onCancel();
-    setShiptoNo('')
+    shiptoNo !== "" ? setIsConfirm(true) : onCancel()
+    setShiptoNo("")
     setCurrentState("")
   }
+
+  useEffect(() => {
+    const currentRegion = REGION_TERMINAL.find(e => e.region === orderData?.address?.address.region_group)//"Nothern"
+    setTerminalList(currentRegion ? currentRegion.terminal : [])
+  }, [orderData?.address])
+
+  const remainChars1 = useMemo(() => {
+    return 40 - inputValue1.length
+  }, [inputValue1])
+
+  const remainChars2 = useMemo(() => {
+    return 40 - inputValue2.length
+  }, [inputValue2])
+
+  const remainChars3 = useMemo(() => {
+    return 40 - inputValue3.length
+  }, [inputValue3])
+
+  const isValid1 = useMemo(() => {
+    return inputValue1 && remainChars1 >= 0
+  }, [remainChars1])
+
+  const isValid2 = useMemo(() => {
+    return inputValue2 && remainChars2 >= 0
+  }, [remainChars2])
+
+  const isValid3 = useMemo(() => {
+    return inputValue3 && remainChars3 >= 0
+  }, [remainChars3])
 
   return (
     <Modal isOpen={open} className="new-order-modal">
@@ -145,7 +230,15 @@ const NewOrderBankModal = props => {
                   color="primary"
                   className="mt-27 ml-3 p-1320"
                   onClick={() => onSearchOrder()}
-                  disabled={ shiftDate === '' ? shiptoNo === '' ? true : false : shiptoNo === '' ? true : false }
+                  disabled={
+                    shiftDate === ""
+                      ? shiptoNo === ""
+                        ? true
+                        : false
+                      : shiptoNo === ""
+                      ? true
+                      : false
+                  }
                 >
                   Search
                 </Button>
@@ -161,7 +254,7 @@ const NewOrderBankModal = props => {
                     <div className="d-flex">
                       <div className="w-50 mr-2">
                         <AWSMDropdown
-                          items={ORDER_REGION}
+                          // items={ORDER_REGION}
                           // onChange={value => onAddressFieldChange("region_group", value)}
                           value={orderData.address.address.region_group}
                           disabled={true}
@@ -169,9 +262,9 @@ const NewOrderBankModal = props => {
                       </div>
                       <div className="w-50 mr-2">
                         <AWSMDropdown
-                          items={ORDER_TERMINAL}
+                          items={terminalList}
                           onChange={value => onFieldChange("terminal", value)}
-                          value={orderData.terminal ? orderData.terminal : ''}
+                          value={orderData.terminal ? orderData.terminal : ""}
                           disabled={false}
                         />
                       </div>
@@ -201,7 +294,7 @@ const NewOrderBankModal = props => {
                     <div className="d-flex">
                       <div className="w-100">
                         <AWSMDropdown
-                          items={ORDER_TERMINAL}
+                          items={productList}
                           onChange={value =>
                             onFieldChange("product_name", value)
                           }
@@ -268,9 +361,7 @@ const NewOrderBankModal = props => {
                     <div className="d-flex">
                       <div className="w-85">
                         <AWSMInput
-                          onChange={value =>
-                            onFieldChange("remarks", value)
-                          }
+                          onChange={value => onFieldChange("remarks", value)}
                           value={orderData.remarks}
                           placeholder="Type Something here..."
                         />
@@ -343,42 +434,156 @@ const NewOrderBankModal = props => {
                 </div>
                 <Row className="order_details_box mt-4">
                   <Col lg={4} sm={6} xs={12}>
-                    <p><strong>Name: </strong>{orderData.address.ship_to_company}</p>
-                    <p><strong>Cloud: </strong>{orderData.address.cloud}</p>
-                    <p><strong>Product Category:</strong> </p>
-                    <p><strong>Order Type:</strong> </p>
-                    <p><strong>Accessibility:</strong> </p>
-                    <p><strong>Site ID: </strong>{orderData.address.site_id}</p>
-                    <p><strong>Site Name: </strong>{orderData.address.site_name}</p>
-                    <p><strong>Cust Type:</strong> Retail</p>
-                    <p><strong>Order ID: </strong></p>
-                    <p><strong>Order Date:</strong> </p>
-                    <p><strong>Opening Stock Days: </strong></p>
+                    <p>
+                      <strong>Name: </strong>
+                      {orderData.address.ship_to_company}
+                    </p>
+                    <p>
+                      <strong>Cloud: </strong>
+                      {orderData.address.cloud}
+                    </p>
+                    <p>
+                      <strong>Product Category:</strong>{" "}
+                    </p>
+                    <p>
+                      <strong>Order Type:</strong>{" "}
+                    </p>
+                    <p>
+                      <strong>Accessibility:</strong>{" "}
+                    </p>
+                    <p>
+                      <strong>Site ID: </strong>
+                      {orderData.address.site_id}
+                    </p>
+                    <p>
+                      <strong>Site Name: </strong>
+                      {orderData.address.site_name}
+                    </p>
+                    <p>
+                      <strong>Cust Type:</strong> Retail
+                    </p>
+                    <p>
+                      <strong>Order ID: </strong>
+                    </p>
+                    <p>
+                      <strong>Order Date:</strong>{" "}
+                    </p>
+                    <p>
+                      <strong>Opening Stock Days: </strong>
+                    </p>
                   </Col>
                   <Col lg={4} sm={6} xs={12}>
-                    <p><strong>Closing Stock Days:</strong> </p>
-                    <p><strong>Current Stock Days:</strong> </p>
-                    <p><strong>Ullage (L):</strong> </p>
-                    <p><strong>Out Of Stock:</strong> </p>
-                    <p><strong>Max Stock Days:</strong> </p>
-                    <p><strong>Monthly Fixed Quota:</strong> </p>
-                    <p><strong>RT Req:</strong> Lorem Ipsum</p>
-                    <p><strong>City:</strong> {orderData.address.address.city}</p>
-                    <p><strong>Postcode: </strong>{orderData.address.address.postcode}</p>
-                    <p><strong>State: </strong>{orderData.address.address.state}</p>
-                    <p><strong>Cluster: </strong>{orderData.address.cluster}</p>
+                    <p>
+                      <strong>Closing Stock Days:</strong>{" "}
+                    </p>
+                    <p>
+                      <strong>Current Stock Days:</strong>{" "}
+                    </p>
+                    <p>
+                      <strong>Ullage (L):</strong>{" "}
+                    </p>
+                    <p>
+                      <strong>Out Of Stock:</strong>{" "}
+                    </p>
+                    <p>
+                      <strong>Max Stock Days:</strong>{" "}
+                    </p>
+                    <p>
+                      <strong>Monthly Fixed Quota:</strong>{" "}
+                    </p>
+                    <p>
+                      <strong>RT Req:</strong> Lorem Ipsum
+                    </p>
+                    <p>
+                      <strong>City:</strong> {orderData.address.address.city}
+                    </p>
+                    <p>
+                      <strong>Postcode: </strong>
+                      {orderData.address.address.postcode}
+                    </p>
+                    <p>
+                      <strong>State: </strong>
+                      {orderData.address.address.state}
+                    </p>
+                    <p>
+                      <strong>Cluster: </strong>
+                      {orderData.address.cluster}
+                    </p>
                   </Col>
                   <Col lg={4} sm={6} xs={12}>
-                    <p><strong>Alt Cluster: </strong>{orderData.address.alternative_cluster}</p>
-                    <p><strong>Delivery Open Time: </strong>{orderData.delivery.delivery_open_time_1.time_from}  to  {orderData.delivery.delivery_open_time_1.time_to}</p>
-                    <p><strong>Open Time 1: </strong>{removeKeywords(orderData.delivery.actual_open_time_1.days.join())}</p>
-                    <p><strong>Open Time 2:</strong> {removeKeywords(orderData.delivery.actual_open_time_1.days.join())}</p>
-                    <p><strong>Open Time 3:</strong> {removeKeywords(orderData.delivery.actual_open_time_1.days.join())}</p>
-                    <p><strong>No Del Interval 1:</strong> {orderData.delivery.no_delivery_interval_1.type !== '' ? orderData.delivery.no_delivery_interval_1.type === 'daily' ? 'Every day' : `From ${orderData.delivery.no_delivery_interval_1.date_from} to ${orderData.delivery.no_delivery_interval_1.date_to}` : '-'}</p>
-                    <p><strong>No Del Interval 2: </strong>{orderData.delivery.no_delivery_interval_2.type !== '' ? orderData.delivery.no_delivery_interval_2.type === 'daily' ? 'Every day' : `From ${orderData.delivery.no_delivery_interval_2.date_from} to ${orderData.delivery.no_delivery_interval_2.date_to}` : '-'}</p>
-                    <p><strong>No Del Interval 3:</strong> {orderData.delivery.no_delivery_interval_3.type !== '' ? orderData.delivery.no_delivery_interval_3.type === 'daily' ? 'Every day' : `From ${orderData.delivery.no_delivery_interval_3.date_from} to ${orderData.delivery.no_delivery_interval_3.date_to}` : '-'}</p>
-                    <p><strong>No Del Interval 4:</strong> {orderData.delivery.no_delivery_interval_4.type !== '' ? orderData.delivery.no_delivery_interval_4.type === 'daily' ? 'Every day' : `From ${orderData.delivery.no_delivery_interval_4.date_from} to ${orderData.delivery.no_delivery_interval_4.date_to}` : '-'}</p>
-                    <p><strong>No Del Interval 5:</strong> {orderData.delivery.no_delivery_interval_5.type !== '' ? orderData.delivery.no_delivery_interval_5.type === 'daily' ? 'Every day' : `From ${orderData.delivery.no_delivery_interval_5.date_from} to ${orderData.delivery.no_delivery_interval_5.date_to}` : '-'}</p>
+                    <p>
+                      <strong>Alt Cluster: </strong>
+                      {orderData.address.alternative_cluster}
+                    </p>
+                    <p>
+                      <strong>Delivery Open Time: </strong>
+                      {
+                        orderData.delivery.delivery_open_time_1.time_from
+                      } to {orderData.delivery.delivery_open_time_1.time_to}
+                    </p>
+                    <p>
+                      <strong>Open Time 1: </strong>
+                      {removeKeywords(
+                        orderData.delivery.actual_open_time_1.days.join()
+                      )}
+                    </p>
+                    <p>
+                      <strong>Open Time 2:</strong>{" "}
+                      {removeKeywords(
+                        orderData.delivery.actual_open_time_1.days.join()
+                      )}
+                    </p>
+                    <p>
+                      <strong>Open Time 3:</strong>{" "}
+                      {removeKeywords(
+                        orderData.delivery.actual_open_time_1.days.join()
+                      )}
+                    </p>
+                    <p>
+                      <strong>No Del Interval 1:</strong>{" "}
+                      {orderData.delivery.no_delivery_interval_1.type !== ""
+                        ? orderData.delivery.no_delivery_interval_1.type ===
+                          "daily"
+                          ? "Every day"
+                          : `From ${orderData.delivery.no_delivery_interval_1.date_from} to ${orderData.delivery.no_delivery_interval_1.date_to}`
+                        : "-"}
+                    </p>
+                    <p>
+                      <strong>No Del Interval 2: </strong>
+                      {orderData.delivery.no_delivery_interval_2.type !== ""
+                        ? orderData.delivery.no_delivery_interval_2.type ===
+                          "daily"
+                          ? "Every day"
+                          : `From ${orderData.delivery.no_delivery_interval_2.date_from} to ${orderData.delivery.no_delivery_interval_2.date_to}`
+                        : "-"}
+                    </p>
+                    <p>
+                      <strong>No Del Interval 3:</strong>{" "}
+                      {orderData.delivery.no_delivery_interval_3.type !== ""
+                        ? orderData.delivery.no_delivery_interval_3.type ===
+                          "daily"
+                          ? "Every day"
+                          : `From ${orderData.delivery.no_delivery_interval_3.date_from} to ${orderData.delivery.no_delivery_interval_3.date_to}`
+                        : "-"}
+                    </p>
+                    <p>
+                      <strong>No Del Interval 4:</strong>{" "}
+                      {orderData.delivery.no_delivery_interval_4.type !== ""
+                        ? orderData.delivery.no_delivery_interval_4.type ===
+                          "daily"
+                          ? "Every day"
+                          : `From ${orderData.delivery.no_delivery_interval_4.date_from} to ${orderData.delivery.no_delivery_interval_4.date_to}`
+                        : "-"}
+                    </p>
+                    <p>
+                      <strong>No Del Interval 5:</strong>{" "}
+                      {orderData.delivery.no_delivery_interval_5.type !== ""
+                        ? orderData.delivery.no_delivery_interval_5.type ===
+                          "daily"
+                          ? "Every day"
+                          : `From ${orderData.delivery.no_delivery_interval_5.date_from} to ${orderData.delivery.no_delivery_interval_5.date_to}`
+                        : "-"}
+                    </p>
                   </Col>
                 </Row>
                 <div className="d-flex justify-content-between mt-4">
@@ -399,32 +604,63 @@ const NewOrderBankModal = props => {
                 <div className="d-flex justify-content-between mt-4 mb-4">
                   <div className="w-100 mr-4">
                     <label className="text-upper">my Remarks 1</label>
-                    <div className="w-100">
-                      <AWSMInput
+                    <div className="w-100 relative">
+                    <input
+                      onChange={e => onFieldChange("myremark1", e.target.value)}
+                      value={orderData.myremark1}
+                      className={`awsm-input w-100 ${(inputValue1 && !isValid1) ? "out-range " : ""}`}
+                    />
+                      {/* <AWSMInput
                         onChange={value => onFieldChange("myremark1", value)}
                         value={orderData.myremark1}
+                        className={`awsm-input w-100 ${(orderData.myremark1 && !isValid) ? "out-range " : ""}`}
                         placeholder="Type something here..."
-                      />
+                      /> */}
+                       <span
+                          className={`position-absolute awsm-input-right-content ${
+                            (inputValue1 && !isValid1) ? "out-range " : ""
+                          }`}
+                        >{`${remainChars1 >= 0 ? "+" : ""}${remainChars1}`}</span>
                     </div>
                   </div>
                   <div className="w-100 mr-4">
                     <label className="text-upper">my Remarks 2</label>
-                    <div className="w-100">
-                      <AWSMInput
+                    <div className="w-100 relative">
+                      {/* <AWSMInput
                         onChange={value => onFieldChange("myremark2", value)}
                         value={orderData.myremark2}
                         placeholder="Type something here..."
-                      />
+                      /> */}
+                      <input
+                        onChange={e => onFieldChange("myremark2", e.target.value)}
+                        value={orderData.myremark2}
+                        className={`awsm-input w-100 ${(inputValue2 && !isValid2) ? "out-range " : ""}`}
+                    />
+                    <span
+                          className={`position-absolute awsm-input-right-content ${
+                            (inputValue2 && !isValid2) ? "out-range " : ""
+                          }`}
+                        >{`${remainChars2 >= 0 ? "+" : ""}${remainChars2}`}</span>
                     </div>
                   </div>
                   <div className="w-100 mr-4">
                     <label className="text-upper">my Remarks 3</label>
-                    <div className="w-100">
-                      <AWSMInput
+                    <div className="w-100 relative">
+                      {/* <AWSMInput
                         onChange={value => onFieldChange("myremark3", value)}
                         value={orderData.myremark3}
                         placeholder="Type something here..."
-                      />
+                      /> */}
+                                            <input
+                        onChange={e => onFieldChange("myremark3", e.target.value)}
+                        value={orderData.myremark3}
+                        className={`awsm-input w-100 ${(inputValue3 && !isValid3) ? "out-range " : ""}`}
+                    />
+                    <span
+                          className={`position-absolute awsm-input-right-content ${
+                            (inputValue3 && !isValid3) ? "out-range " : ""
+                          }`}
+                        >{`${remainChars3 >= 0 ? "+" : ""}${remainChars3}`}</span>
                     </div>
                   </div>
                 </div>
@@ -432,12 +668,13 @@ const NewOrderBankModal = props => {
             )}
             {currentState !== "search" && (
               <div
-                className={`text-center h-340 w-100 table ${currentState === ""
+                className={`text-center h-340 w-100 table ${
+                  currentState === ""
                     ? "bg-grey"
                     : currentState === "error"
-                      ? "bg-err"
-                      : "bg-loading"
-                  }`}
+                    ? "bg-err"
+                    : "bg-loading"
+                }`}
               >
                 <div className="relative table_cell h-100 verticle-middle">
                   <FileCopyIcon />

@@ -307,47 +307,17 @@ class index extends Component {
     })
   }
 
-  ChangeFilterCondition = (newFilterCondition) => {
-    const {dataSource} = this.props
-    const newData = dataSource.filter(item =>
-      newFilterCondition.every(condition => {
-        if (condition.key === "dn_status" || condition.key === "priority") {
-          return isArray(item[condition.key]) && item[condition.key].some(e => condition.data.includes(e))
-        } else if (condition.key === "remarks") {
-          // TODO update remarks logic when filter component updated
-          return true
-        } else {
-          return condition.data.includes(item[condition.key])
-        }
-      })
-    )
-    this.setState({dataSource: newData, filterCondition: newFilterCondition})
-  }
-
   ResetDataFilterHandler = (key) => {
-    const {filterCondition} = this.state
-    const index = filterCondition.findIndex(e => e.key === key)
-    let newFilterCondition = [...filterCondition]
-    if (index >= 0) {
-      newFilterCondition.splice(index, 1)
-    }
-    this.ChangeFilterCondition(newFilterCondition)
+    const {filterApplyHandler} = this.props
+    filterApplyHandler(key, "remove")
   }
 
 
   ApplyFilterHandler = (data, key) => {
-    const {dataSource} = this.props
-    if (!dataSource) {
-      return
-    }
-    const newFilterCondition = [...this.state.filterCondition]
-    const index = newFilterCondition.findIndex(e => e.key === key)
-    if (index >= 0) {
-      newFilterCondition[index] = {key, data}
-    } else {
-      newFilterCondition.push({key, data})
-    }
-    this.ChangeFilterCondition(newFilterCondition)
+    const {filterApplyHandler} = this.props
+    const tempObj = {}
+    tempObj[key] = data
+    filterApplyHandler(tempObj, "insert")
   }
 
   OnChangeCheckBoxHandler = (status, i) => {
@@ -508,6 +478,7 @@ class index extends Component {
 
 index.propTypes = {
   tableColumns: PropTypes.array.isRequired,
+  filterApplyHandler: PropTypes.func.isRequired,
 }
 const mapDispatchToProp = dispatch => ({
   updateOrderBankTableData: payload => dispatch(updateOrderBankTableData(payload)),

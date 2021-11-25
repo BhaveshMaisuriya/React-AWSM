@@ -16,7 +16,8 @@ const DatePicker = ({
   onChange,
   startDate = null,
   endDate = null,
-  placeholder = "Select date"
+  placeholder = "Select date",
+  defaultValue = null,
 }) => {
   const [date, setDate] = useState(value ? new Date(value) : null)
   const [anchorEl, setAnchorEl] = React.useState(null)
@@ -50,10 +51,10 @@ const DatePicker = ({
   }
   
   const onClear = () => {
-    setDate(null)
+    setDate(defaultValue ?? null)
     setAnchorEl(null);
     if (onChange) {
-      onChange(null)
+      onChange(defaultValue ?? null)
     }
   }
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef, Fragment } from "react"
 import cloneDeep from "lodash/cloneDeep"
-import TablePagination from "../../../components/Common/DataTable/tablePagination"
+import TablePagination from "../../../components/Common/Pagination"
 
 function SLATable(props) {
   const rowsPerPage = 10

@@ -195,8 +195,7 @@ const InventoryTab = ({ data, onChange, salesDate }) => {
             disabled="true"/>
         </div>
         <div className="col-md-6 form-group">
-          <label>YESTERDAY SALES FINAL FIGURE (L)
-            <Tooltip title="Sales of Final Figure D-1">
+          <label>YESTERDAY SALES FINAL FIGURE (L) <Tooltip title="Sales of Final Figure D-1">
               <img src={informationIcon} alt="yesterday sales final figure"/>
             </Tooltip>
             <span className="extra-lbl">D-1</span>
@@ -258,8 +257,7 @@ const InventoryTab = ({ data, onChange, salesDate }) => {
 
       <div className="row">
         <div className="col-md-6 form-group">
-          <label>CALCULATED INVENTORY @12AM (L)
-            <Tooltip title="Calculated Inventory = Yesterday Opening Inventory (L) - Yesterday Sales Final Figure (L) + Yesterday Delivery(L)+ Yesterday Diversion(L) + Yesterday Delivery Adjustment(L)">
+          <label>CALCULATED INVENTORY @12AM (L) <Tooltip title="Calculated Inventory = Yesterday Opening Inventory (L) - Yesterday Sales Final Figure (L) + Yesterday Delivery(L)+ Yesterday Diversion(L) + Yesterday Delivery Adjustment(L)">
               <img src={informationIcon} alt="calculated inventory"/>
             </Tooltip>
             <span className="extra-lbl">D+0</span>

@@ -86,7 +86,7 @@ class Header extends Component {
           </header>
         )}
         {window.location.pathname === "/orderbank" && (
-          <div className="navbar-brand-box position-absolute" style={{ padding: 0 }}>
+          <div className="navbar-brand-box position-fixed" style={{ padding: 0 }}>
             <div className="sideBar_profile">
               <ProfileMenu sidebar={true} />
             </div>

@@ -184,14 +184,16 @@ code !== undefined && axios
   )
   .then(response => response.data)
 
-export const addOrderBank = payload => ''
-axios.post(`/rts/order-bank/create`)
+export const addOrderBank = (params) => 
+axios.post(`/rts/order-bank/create`, { ...params })
   .then(response => response.data)  
 
 // get single order bank
 export const getOrderBankDetail = (params) => viewOrderDetails
 
-export const deleteOrderBankDetail = (params) => params
+export const deleteOrderBankDetail = (params) => 
+axios.delete(`/rts/order-bank/${params}`)
+.then(response => response.data)  
 
 // get dqm main table excel file from s3
 export const getDQMExcel = (params) => 
@@ -351,8 +353,12 @@ export const getSalesAuditLog = payload =>
   export const getRunAutoScheduling = payload =>
   get(url.GET_COMMERCIAL_AUDITLOG, { payload: payload })    
 
-  export const getdeleteMultipleOrder = payload =>
-  get(url.GET_COMMERCIAL_AUDITLOG, { payload: payload })  
+  // export const getdeleteMultipleOrder = payload =>
+  // get(url.GET_COMMERCIAL_AUDITLOG, { payload: payload })  
+
+  export const getdeleteMultipleOrder = (params) => 
+  axios.post(`/rts/order-bank`, params.params)
+  .then(response => response.data)  
 
   export const getCrossTerminal = payload =>
   get(url.GET_COMMERCIAL_AUDITLOG, { payload: payload })    

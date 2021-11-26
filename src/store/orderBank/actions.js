@@ -205,14 +205,14 @@ export const updateOrderBankTableData = (payload) => ({
   payload,
 })
 
-export const deleteOrderBankDetail = data => ({
+export const deleteOrderBankDetail = (params) => ({
   type: DELETE_ORDERBANK_DETAIL,
-  data,
+  params,
 })
 
-export const deleteOrderBankDetailSuccess = event => ({
+export const deleteOrderBankDetailSuccess = response => ({
   type: DELETE_ORDERBANK_DETAIL_SUCCESS,
-  payload: event,
+  payload: response,
 })
 
 export const deleteOrderBankDetailFail = error => ({

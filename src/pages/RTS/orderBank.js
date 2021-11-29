@@ -356,7 +356,7 @@ function OrderBank({
   }
 
   const onSaveDeleteMultiple = async() => {
-    const payload = multipleDeleteIds;
+    const payload = {"order_banks": multipleDeleteIds};
     await onGetDeleteMultipleOrder(payload);
     setDeleteMultiple(false)
   }

@@ -40,6 +40,8 @@ import {
   GET_OB_RT_DETAILS_FAIL,
   UPDATE_OB_RT_DETAILS_SUCCESS,
   UPDATE_OB_RT_DETAILS_FAIL,
+  GET_DELETE_MULTIPLE_ORDER_SUCCESS,
+  GET_DELETE_MULTIPLE_ORDER_FAIL
 } from "./actionTypes"
 import {notify} from "../../helpers/notify"
 import {ToastSuccess,ToastError} from "../../helpers/swal";
@@ -62,6 +64,7 @@ const initialState = {
   orderBankRTDetails: null,
   socketData: [],
   totalRow: 0,
+  multipleorder: null,
 }
 
 const RTSOrderBank = (state = initialState, action) => {
@@ -137,6 +140,18 @@ const RTSOrderBank = (state = initialState, action) => {
         ...state,
         error: action.payload
       }
+    case GET_DELETE_MULTIPLE_ORDER_SUCCESS:
+      notify.success("Records Successfully Deleted")
+      return {
+        ...state,
+        multipleorder: action.payload
+      }
+
+    case GET_DELETE_MULTIPLE_ORDER_FAIL:
+      return {
+        ...state,
+        error: action.payload
+      }      
     case UPDATE_ORDERBANK_TABLE_INFORMATION_SUCCESS: {
       notify.success("Record Successfully Updated")
       return {

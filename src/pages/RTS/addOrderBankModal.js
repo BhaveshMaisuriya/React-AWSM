@@ -66,8 +66,7 @@ const NewOrderBankModal = props => {
       planned_load_time: orderData.load_time !== undefined ? orderData.load_time : '',
       remarks: orderData.remarks !== undefined ? orderData.remarks : '',
       priority: orderData.priority_order !== undefined ? orderData.priority_order : '',
-      retail_storage: parseInt(0),
-      commercial_storage: parseInt(0),
+      retail_storage: parseInt(orderData.product_id),
     };
     const { onAddOrderBank } = props
     await onAddOrderBank(temp)
@@ -99,6 +98,7 @@ const NewOrderBankModal = props => {
       const newOrderData = { ...orderData }
       newOrderData[key] = value
       newOrderData["product_code"] = pro_code.code
+      newOrderData["product_id"] = pro_code.id
       setOrderData(newOrderData)
     } else if(key === 'myremark1') {
       setInputValue1(value);
@@ -150,6 +150,7 @@ const NewOrderBankModal = props => {
               temp1.push({
                 name: props.orderBankData?.storage[key].name,
                 code: props.orderBankData?.storage[key].code,
+                id: props.orderBankData?.storage[key].id,
               })
               temp.push(props.orderBankData?.storage[key].name)
             }

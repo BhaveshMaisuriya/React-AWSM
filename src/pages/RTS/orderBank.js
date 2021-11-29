@@ -245,6 +245,7 @@ function OrderBank({
   const [deleteCheck, setDeleteCheck] = useState(deleteCheckOption)
   const [checkedValue, setCheckedValue] = useState('Manual Scheduling')
   const [isCustomizeGanttModalOpen,setIsCustomizeGanttModalOpen] = useState(false)
+  const [multipleDeleteIds,setMultipleDeleteIds] = useState(false)  
   const [bryntumCurrentColumns,setBryntumCurrentColumns] = useState(()=>{
     if (!getCookieByKey(bryntumSchedulerTableNameForCookie)) return ganttChartTableDefaultColumns
     const cookieParseData = JSON.parse(getCookieByKey(bryntumSchedulerTableNameForCookie))
@@ -315,6 +316,7 @@ function OrderBank({
   }, [filterOrderBank, currentPage, filterQuery])
   
   const toggle = () => setOpen(!dropdownOpen)
+  
   const terminalList = useMemo(() => {
     const currentRegion = REGION_TERMINAL.find(e => e.region === region)
     return currentRegion ? currentRegion.terminal : []
@@ -354,10 +356,10 @@ function OrderBank({
   }
 
   const onSaveDeleteMultiple = async() => {
-    const payload = {}
+    const payload = {"order_banks": multipleDeleteIds};
     await onGetDeleteMultipleOrder(payload);
     setDeleteMultiple(false)
-  }    
+  }
 
   const onCloseCrossTerminal = () => {
     setCrossTerminal(false)
@@ -394,7 +396,10 @@ function OrderBank({
   }
 
   const deleteEnable = val => {
-    if (val > 0) {
+    if (val.length > 0) {
+      let ids = [];
+      val.map((item, index) => { ids.push(item.id); });
+      setMultipleDeleteIds(ids);
       let temp = [...orderBankSetting]
       temp.map(function (item, index) {
         if (item.value === 'DeleteMultiple') {

@@ -33,6 +33,7 @@
     "availity-reactstrap-validation": "^2.7.0",
     "axios": "^0.21.0",
     "bootstrap": "^4.5.3",
+    "caniuse-lite": "^1.0.30001283",
     "chart.js": "^2.9.4",
     "chartist": "^0.11.4",
     "ckeditor4-react": "^1.4.2",

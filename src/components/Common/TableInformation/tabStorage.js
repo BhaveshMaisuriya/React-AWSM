@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState } from "react"
 import DropdownInput from "../DropdownInput"
 import AWSMDropdown from "../Dropdown"
 import AWSMInput from "../Input"
@@ -10,7 +10,6 @@ import AWSMAlert from "../AWSMAlert"
 
 const ACTIVE_PRODUCTS = ["ACTIVE", "INACTIVE"]
 const SALES_CATEGORY = ["LV1", "LV2", "Normal", "TC", "LD"]
-const ORDERING_CATEGORY = ["SMP"]
 
 const timeData = []
 for (let i = 0; i < 24; i++) {
@@ -20,7 +19,7 @@ for (let i = 0; i < 24; i++) {
 timeData.push(`23:59`)
 
 const TabStorage = ({ scheduler, data, onChange }) => {
-  const [storageData, setStorageData] = useState(data.storage || {})
+  const [storageData, setStorageData] = useState(data?.storage || {})
   const [deleteItemKey, setDeleteItemKey] = useState(null)
   const [alert, setAlert] = useState(false)
   const pathName = window.location.pathname

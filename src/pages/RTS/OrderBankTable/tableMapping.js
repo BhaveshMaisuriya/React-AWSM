@@ -1,20 +1,20 @@
 const tableColumns = [
   "priority",
   "notes",
-  "ship_to_party",
-  "name",
-  "cloud",
+  "retail_storage_relation.retail",
+  "retail_storage_relation.retail_customer_relation.site_name",
+  "retail_storage_relation.retail_customer_relation.cloud",
   "trip",
   "dn_date",
-  "product",
+  "retail_storage_relation.product",
   "volume",
   "retain",
   "runout",
-  "product_category",
+  "retail_storage_relation.sales_category",
   "dn_status",
   "split_id",
   "order_type",
-  "accessibility",
+  "retail_storage_relation.retail_customer_relation.road_tanker_accessibility",
   "order_remarks"
 ]
 
@@ -40,15 +40,15 @@ const tableMapping = {
     columnSize: "cell-text",
     key: "frozen",
   },
-  ship_to_party: {
+  "retail_storage_relation.retail": {
     label: "Ship To",
     columnSize: "cell-text",
   },
-  name: {
+  "retail_storage_relation.retail_customer_relation.site_name": {
     label: "Name",
     columnSize: "cell-text",
   },
-  cloud: {
+  "retail_storage_relation.retail_customer_relation.cloud": {
     label: "Cloud",
     columnSize: "cell-text",
   },
@@ -60,7 +60,7 @@ const tableMapping = {
     label: "DN Date",
     columnSize: "cell-text",
   },
-  product: {
+  "retail_storage_relation.product": {
     label: "Product",
     columnSize: "cell-text",
   },
@@ -76,7 +76,7 @@ const tableMapping = {
     label: "Runout",
     columnSize: "cell-text",
   },
-  product_category: {
+  "retail_storage_relation.sales_category": {
     label: "Product Category",
     columnSize: "cell-text",
   },
@@ -93,7 +93,7 @@ const tableMapping = {
     label: "Order Type",
     columnSize: "cell-text",
   },
-  accessibility: {
+  "retail_storage_relation.retail_customer_relation.road_tanker_accessibility": {
     label: "Accessibility",
     columnSize: "cell-text",
   },

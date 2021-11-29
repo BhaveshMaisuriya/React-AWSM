@@ -7,7 +7,7 @@ import AWSMInputNumber from "../InputNumber"
 
 const TabAddress = ({ scheduler, data, onChange }) => {
   const addressData = useMemo(() => {
-    return data.address || {}
+    return data?.address || {}
   }, [data])
 
   const onFieldChange = (key, value) => {
@@ -25,12 +25,12 @@ const TabAddress = ({ scheduler, data, onChange }) => {
       <Row className="row">
         <Col className="col-md-6 form-group">
           <label>SOLD TO (PARTY)</label>
-          <AWSMInput defaultValue={addressData.sold_to_party || ""} disabled />
+          <AWSMInput defaultValue={addressData?.sold_to_party || ""} disabled />
         </Col>
         <Col className="col-md-6 form-group">
           <label>SOLD TO (COMPANY NAME)</label>
           <AWSMInput
-            defaultValue={addressData.sold_to_company || ""}
+            defaultValue={addressData?.sold_to_company || ""}
             disabled
           />
         </Col>
@@ -38,11 +38,11 @@ const TabAddress = ({ scheduler, data, onChange }) => {
           <>
             <Col className="col-md-6 form-group">
               <label>SITE ID</label>
-              <AWSMInput defaultValue={addressData.site_id || ""} disabled />
+              <AWSMInput defaultValue={addressData?.site_id || ""} disabled />
             </Col>
             <Col className="col-md-6 form-group">
               <label>SITE NAME</label>
-              <AWSMInput defaultValue={addressData.site_name || ""} disabled />
+              <AWSMInput defaultValue={addressData?.site_name || ""} disabled />
             </Col>
           </>
         )}
@@ -50,7 +50,9 @@ const TabAddress = ({ scheduler, data, onChange }) => {
           <label>ADDRESS 1</label>
           <AWSMInput
             value={
-              addressData.address ? addressData.address.address_1 || "" : ""
+              addressData?.address?.address_1
+                ? addressData.address.address_1
+                : ""
             }
             disabled
           />
@@ -59,7 +61,9 @@ const TabAddress = ({ scheduler, data, onChange }) => {
           <label>ADDRESS 2</label>
           <AWSMInput
             value={
-              addressData.address ? addressData.address.address_2 || "" : ""
+              addressData?.address?.address_2
+                ? addressData.address.address_2
+                : ""
             }
             disabled
           />
@@ -69,7 +73,9 @@ const TabAddress = ({ scheduler, data, onChange }) => {
             <label>ADDRESS 3</label>
             <AWSMInput
               value={
-                addressData.address ? addressData.address.address_3 || "" : ""
+                addressData?.address?.address_3
+                  ? addressData.address.address_3
+                  : ""
               }
               disabled
             />
@@ -78,14 +84,14 @@ const TabAddress = ({ scheduler, data, onChange }) => {
         <Col className="col-md-6 form-group">
           <label>CITY</label>
           <AWSMInput
-            value={addressData.address ? addressData.address.city || "" : ""}
+            value={addressData?.address?.city ? addressData.address.city : ""}
             disabled
           />
         </Col>
         <Col className="col-md-6 form-group">
           <label>STATE</label>
           <AWSMInput
-            value={addressData.address ? addressData.address.state || "" : ""}
+            value={addressData?.address?.state ? addressData.address.state : ""}
             disabled
           />
         </Col>
@@ -93,7 +99,7 @@ const TabAddress = ({ scheduler, data, onChange }) => {
           <label>POST CODE</label>
           <AWSMInput
             value={
-              addressData.address ? addressData.address.postcode || "" : ""
+              addressData?.address?.postcode ? addressData.address.postcode : ""
             }
             disabled
           />
@@ -101,7 +107,9 @@ const TabAddress = ({ scheduler, data, onChange }) => {
         <Col className="col-md-6 form-group">
           <label>COUNTRY</label>
           <AWSMInput
-            value={addressData.address ? addressData.address.country || "" : ""}
+            value={
+              addressData?.address?.country ? addressData.address.country : ""
+            }
             disabled
           />
         </Col>
@@ -109,7 +117,9 @@ const TabAddress = ({ scheduler, data, onChange }) => {
           <label>REGION</label>
           <AWSMInput
             value={
-              addressData.address ? addressData.address.region_group || "" : ""
+              addressData?.address?.region_group
+                ? addressData.address.region_group
+                : ""
             }
             disabled
           />
@@ -121,7 +131,7 @@ const TabAddress = ({ scheduler, data, onChange }) => {
           <label>LATITUDE</label>
           <AWSMInput
             value={
-              addressData.address ? addressData.address.latitude || "" : ""
+              addressData?.address?.latitude ? addressData.address.latitude : ""
             }
             disabled
           />
@@ -130,7 +140,9 @@ const TabAddress = ({ scheduler, data, onChange }) => {
           <label>LONGITUDE</label>
           <AWSMInput
             value={
-              addressData.address ? addressData.address.longitude || "" : ""
+              addressData?.address?.longitude
+                ? addressData.address.longitude
+                : ""
             }
             disabled
           />
@@ -138,7 +150,7 @@ const TabAddress = ({ scheduler, data, onChange }) => {
         <Col className="col-md-6 form-group">
           <label>ALTERNATIVE CLUSTER</label>
           <AWSMInput
-            value={addressData.alternative_cluster || ""}
+            value={addressData?.alternative_cluster || ""}
             onChange={value => onFieldChange("alternative_cluster", value)}
             disabled={scheduler}
             placeholder="Type something here..."
@@ -147,7 +159,7 @@ const TabAddress = ({ scheduler, data, onChange }) => {
         <Col className="col-md-6 form-group">
           <label>CLUSTER</label>
           <AWSMInput
-            value={addressData.cluster || ""}
+            value={addressData?.cluster || ""}
             onChange={value => onFieldChange("cluster", value)}
             disabled={scheduler}
             placeholder="Type something here..."
@@ -156,7 +168,7 @@ const TabAddress = ({ scheduler, data, onChange }) => {
         <Col className="col-md-6 form-group">
           <label>SPEED (KM/Hr)</label>
           <AWSMInputNumber
-            value={addressData.speed || ""}
+            value={addressData?.speed || ""}
             disabled={scheduler}
             onChange={value => onFieldChange("speed", value)}
             placeholder="Type something here..."
@@ -165,7 +177,7 @@ const TabAddress = ({ scheduler, data, onChange }) => {
         <Col className="col-md-6 form-group">
           <label>CLOUD</label>
           <AWSMInput
-            value={addressData.cloud || ""}
+            value={addressData?.cloud || ""}
             onChange={value => onFieldChange("cloud", value)}
             disabled={scheduler}
             placeholder="Type something here..."
@@ -175,7 +187,7 @@ const TabAddress = ({ scheduler, data, onChange }) => {
           <Col className="col-md-6 form-group">
             <label>BORDER</label>
             <AWSMDropdown
-              value={addressData.border ? "Y" : "N"}
+              value={addressData?.border ? "Y" : "N"}
               onChange={value => onFieldChange("border", value === "Y")}
               disabled={scheduler}
               items={["Y", "N"]}

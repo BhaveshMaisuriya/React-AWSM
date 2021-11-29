@@ -4,10 +4,6 @@ import {
   GET_ROAD_TANKER_SUCCESS,
   GET_ROADTANKER_AUDITLOG_SUCCESS,
   GET_ROADTANKER_AUDITLOG_FAIL,
-  GET_TABLE_INFORMATION_FAIL,
-  GET_TABLE_INFORMATION_SUCCESS,
-  UPDATE_TABLE_INFORMATION_SUCCESS,
-  UPDATE_TABLE_INFORMATION_FAIL,
   GET_ROADTANKER_FILTER_SUCCESS,
   GET_ROADTANKER_FILTER_FAIL,
   GET_DOWNLOAD_ROAD_TANKER_SUCCESS,
@@ -41,9 +37,12 @@ const RoadTanker = (state = initialState, action) => {
         isLoading: true,
       }
     case GET_ROAD_TANKER_SUCCESS:
-      const list = action.payload?.list;
-      if(list && list.length > 0){
-        action.payload = {...action.payload,list: formatDateResponseList(list)}
+      const list = action.payload?.list
+      if (list && list.length > 0) {
+        action.payload = {
+          ...action.payload,
+          list: formatDateResponseList(list),
+        }
       }
       return {
         ...state,
@@ -79,34 +78,6 @@ const RoadTanker = (state = initialState, action) => {
       }
 
     case GET_ROADTANKER_AUDITLOG_FAIL:
-      return {
-        ...state,
-        error: action.payload,
-      }
-
-    case GET_TABLE_INFORMATION_SUCCESS:
-      return {
-        ...state,
-        address: action.payload,
-      }
-
-    case GET_TABLE_INFORMATION_FAIL:
-      return {
-        ...state,
-        error: action.payload,
-      }
-
-    case UPDATE_TABLE_INFORMATION_SUCCESS:
-      return {
-        ...state,
-        address: state.events.map(event =>
-          event.id.toString() === action.payload.id.toString()
-            ? { event, ...action.payload }
-            : event
-        ),
-      }
-
-    case UPDATE_TABLE_INFORMATION_FAIL:
       return {
         ...state,
         error: action.payload,

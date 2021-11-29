@@ -1,11 +1,10 @@
 import { takeLatest, put, call, takeEvery, select } from "redux-saga/effects"
-import Factory, { mergeFilterValues } from "./factory"
+import Factory from "./factory"
 import {
   GET_TERMINAL,
   GET_TERMINAL_AUDITLOG,
   GET_TERMINAL_TABLE_INFORMATION,
   UPDATE_TERMINAL_TABLE_INFORMATION,
-  // GET_TERMINAL_FILTER,
   GET_DOWNLOAD_TERMINAL,
 } from "./actionTypes"
 
@@ -14,12 +13,11 @@ import {
   getTerminalFail,
   getTerminalAuditLogSuccess,
   getTerminalAuditLogFail,
-  getTableInformationSuccess,
-  getTableInformationFail,
-  updateTableInformationSuccess,
-  updateTableInformationFail,
+  getTerminalTableInformationSuccess,
+  getTerminalTableInformationFail,
+  updateTerminalTableInformationSuccess,
+  updateTerminalTableInformationFail,
   getTerminalFilterSuccess,
-  // getTerminalFilterFail,
   getDownloadTerminalSuccess,
   getDownloadTerminalFail
 } from "./actions"
@@ -27,12 +25,9 @@ import {
 import {
   getTerminal,
   getAuditLog,
-  getTableInformation,
-  updateTableInformation,
   getTerminalTableInformation,
   getDownloadTerminal,
   updateTerminalDetail,
-  // getTerminalFilter,
 } from "../../helpers/fakebackend_helper"
 
 function* onGetTerminal({ params = {} }) {
@@ -70,9 +65,9 @@ function* onGetTerminalAuditLog(params) {
 function* fetchTableInformation({ code }) {
   try {
     const response = yield call(getTerminalTableInformation, code)
-    yield put(getTableInformationSuccess(response))
+    yield put(getTerminalTableInformationSuccess(response))
   } catch (error) {
-    yield put(getTableInformationFail(error))
+    yield put(getTerminalTableInformationFail(error))
   }
 }
 
@@ -80,24 +75,11 @@ function* onUpdateTableInformation({ payload: event }) {
   try {
     const preValue = yield select(store => store.terminal.currentTerminal)
     const response = yield call(updateTerminalDetail, { updateValue: event.body, preValue })
-    yield put(updateTableInformationSuccess(response))
+    yield put(updateTerminalTableInformationSuccess(response))
   } catch (error) {
-    yield put(updateTableInformationFail(error))
+    yield put(updateTerminalTableInformationFail(error))
   }
 }
-
-// function* onGetTerminalFilter({ params = {} }) {
-//   try {
-//     const response = yield call(getTerminalFilter, params)
-//     yield put(
-//       getTerminalFilterSuccess(
-//         mergeFilterValues(response, params.search_fields)
-//       )
-//     )
-//   } catch (error) {
-//     yield put(getTerminalFilterFail(error))
-//   }
-// }
 
 //last function
 function* terminalSaga() {
@@ -106,7 +88,6 @@ function* terminalSaga() {
   yield takeLatest(GET_TERMINAL_TABLE_INFORMATION, fetchTableInformation)
   yield takeEvery(UPDATE_TERMINAL_TABLE_INFORMATION, onUpdateTableInformation)
   yield takeEvery(GET_DOWNLOAD_TERMINAL, onGetDownloadTerminal)
-  // yield takeLatest(GET_TERMINAL_FILTER, onGetTerminalFilter)
 }
 
 export default terminalSaga

@@ -60,11 +60,11 @@ const tableMapping = {
     columnSize: "cell-text",
   },
   yesterday_sales_adjustment: {
-    label: "YESTERDAY'S SALES ADJUSTMENT",
+    label: "YESTERDAY'S SALES ADJUSTMENT (L)",
     columnSize: "cell-text",
   },
   yesterday_sales_adjustment_remarks: {
-    label: "YESTERDAY SALES ADJUSTMENT REMARKS",
+    label: "YESTERDAY'S SALES ADJUSTMENT (L) REMARKS",
     columnSize: "cell-text",
   },
   sales_final_figure: {
@@ -109,7 +109,7 @@ const tableMapping = {
     columnSize: "cell-text",
   },
   dipping_to_midnight_diversion_remarks: {
-    label: "DIPPING TO MIDNIGHT DIVERSION REMARKS (L)",
+    label: "DIPPING TO MIDNIGHT DIVERSION (L) REMARKS ",
     columnSize: "cell-text",
   },
   dipping_adjustment: {
@@ -125,7 +125,7 @@ const tableMapping = {
     columnSize: "cell-text",
   },
   delivery_adjustment_remarks: {
-    label: "DELIVERY ADJUSTMENT REMARKS",
+    label: "DELIVERY ADJUSTMENT (L) REMARKS",
     columnSize: "cell-text",
   },
   opening_inventory: {
@@ -141,23 +141,23 @@ const tableMapping = {
     columnSize: "cell-text",
   },
   yesterday_delivery: {
-    label: "YESTERDAY DELIVERY (L)",
+    label: "YESTERDAY'S DELIVERY (L)",
     columnSize: "cell-text",
   },
   yesterday_diversion: {
-    label: "YESTERDAY DIVERSION (L)",
+    label: "YESTERDAY'S DIVERSION (L)",
     columnSize: "cell-text",
   },
   yesterday_diversion_remarks: {
-    label: "YESTERDAY DIVERSION REMARKS",
+    label: "YESTERDAY'S DIVERSION (L) REMARKS",
     columnSize: "cell-text",
   },
   yesterday_delivery_adjustment: {
-    label: "YESTERDAY DELIVERY ADJUSTMENT (L)",
+    label: "YESTERDAY'S DELIVERY ADJUSTMENT (L)",
     columnSize: "cell-text",
   },
   yesterday_delivery_adjustment_remarks: {
-    label: "YESTERDAY DELIVERY ADJUSTMENT REMARKS",
+    label: "YESTERDAY'S DELIVERY ADJUSTMENT (L) REMARKS",
     columnSize: "cell-text",
   },
   calculated_inventory: {
@@ -189,11 +189,11 @@ const tableMapping = {
     columnSize: "cell-text",
   },
   inventory_correction_volume: {
-    label: "INVENTORY CORRECTION VOLUME",
+    label: "INVENTORY CORRECTION (L)",
     columnSize: "cell-text",
   },
   inventory_correction_remarks: {
-    label: "INVENTORY CORRECTION REMARKS",
+    label: "INVENTORY CORRECTION (L) REMARKS",
     columnSize: "cell-text",
   },
 }

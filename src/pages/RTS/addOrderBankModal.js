@@ -17,7 +17,6 @@ import ExitConfirmation from "../../components/Common/ExitConfirmation"
 import AWSMInput from "../../components/Common/Input"
 import FileCopyIcon from "@material-ui/icons/FileCopy"
 import AWSMDropdown from "../../components/Common/Dropdown"
-// import { orderDetails } from "./newOrderData"
 import AWSMAlert from "../../components/Common/AWSMAlert"
 import { getOrderBank, addOrderBank } from "../../store/actions"
 import { removeKeywords } from "../../pages/DQM/Common/helper"
@@ -29,10 +28,8 @@ for (let i = 0; i < 24; i++) {
   timeData.push(`${i.toString().padStart(2, "0")}:00`)
   timeData.push(`${i.toString().padStart(2, "0")}:30`)
 }
-timeData.push(`23:59`);
-
+timeData.push(`23:59`)
 const ORDER_PRIORITY = ["High Priority", "Low Priority"]
-
 const NewOrderBankModal = props => {
   const { open, onCancel } = props
 

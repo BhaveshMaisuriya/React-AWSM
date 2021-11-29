@@ -306,7 +306,7 @@ function OrderBank({
         "limit": 10,
         "page": currentPage,
         "search_term": "",
-        "search_fields": "id,priority,ship_to,name,cloud,trip_no,dn_date,product,volume,retain,runout,product_category,dn_status,split_id,order_type,accessibility,order_remarks,notes,retail_storage_relation,commercial_storage_relation",
+        "search_fields": "id,priority,retail_storage_relation.retail,retail_storage_relation.retail_customer_relation.site_name,retail_storage_relation.retail_customer_relation.cloud,trip_no,dn_date,retail_storage_relation.product,volume,retain,runout,retail_storage_relation.sales_category,dn_status,split_id,order_type,retail_storage_relation.retail_customer_relation.road_tanker_accessibility,order_remarks,notes,retail_storage_relation,commercial_storage_relation",
         "q": transformObjectToStringSentence(filterQuery),
         "sort_dir": "asc",
         "sort_field": "vehicle",

@@ -1,22 +1,19 @@
 import React, { Component, Fragment } from "react"
 import { connect } from "react-redux"
 import Page from "../Common"
-import {
-  getSaleAndInventory,
-  getTableInformation,
-  updateTableInformation,
-  getDownloadSales,
-} from "../../../store/actions"
+import { getSaleAndInventory } from "store/actions"
 import { tableColumns, tableMapping } from "./tableMapping"
 import { transformArrayToString, getCookieByKey } from "../Common/helper"
 import SalesAndInventoryModal from "./SalesAndInventoryModal"
-import Loader from "../../../components/Common/Loader"
+import Loader from "components/Common/Loader"
 import {
   getSalesAndInventoryVarianceControl,
   overrideStatusInActionColumn,
-} from "../../../store/actions"
-import { format, subDays } from "date-fns"
-import REGION_TERMINAL, {TERMINAL_CODE_MAPPING} from "../../../common/data/regionAndTerminal";
+} from "store/actions"
+import { format } from "date-fns"
+import REGION_TERMINAL, {
+  TERMINAL_CODE_MAPPING,
+} from "common/data/regionAndTerminal"
 
 const tableName = "salesinventory-table"
 
@@ -28,30 +25,35 @@ class SalesInventory extends Component {
         ? JSON.parse(getCookieByKey(tableName))
         : tableColumns,
       salesDate: new Date(),
-      subModule: "sales-and-inventory"
+      subModule: "sales-and-inventory",
     }
   }
 
-  formatDate = (date) => {
+  formatDate = date => {
     var result = date.toLocaleDateString("en-GB", {
       year: "numeric",
       month: "2-digit",
       day: "2-digit",
-    });
-    return result.split('/')[2] + "-" + result.split('/')[1] + "-" + result.split('/')[0];
+    })
+    return (
+      result.split("/")[2] +
+      "-" +
+      result.split("/")[1] +
+      "-" +
+      result.split("/")[0]
+    )
   }
 
   componentDidMount() {
     this.onGetMainTableAndAuditLog()
   }
 
-  onGetMainTableAndAuditLog = () =>
-  {
-    const defaultTerminal = REGION_TERMINAL.find((option)=> option.region === "Central")?.terminal?.find((term)=> term === "KVDT")
-    const {
-      onGetSaleAndInventory,
-      getSalesAndInventoryVarianceControl,
-    } = this.props
+  onGetMainTableAndAuditLog = () => {
+    const defaultTerminal = REGION_TERMINAL.find(
+      option => option.region === "Central"
+    )?.terminal?.find(term => term === "KVDT")
+    const { onGetSaleAndInventory, getSalesAndInventoryVarianceControl } =
+      this.props
     const { searchFields } = this.state
     const params = {
       limit: 10,
@@ -61,7 +63,7 @@ class SalesInventory extends Component {
       search_term: "",
       search_fields: transformArrayToString(searchFields),
       search_date: format(this.state.salesDate, "yyyy-MM-dd"),
-      terminal: TERMINAL_CODE_MAPPING[defaultTerminal]
+      terminal: TERMINAL_CODE_MAPPING[defaultTerminal],
     }
     onGetSaleAndInventory(params)
     /*Call Variance Control only when the modal is opened, not on the page load*/
@@ -78,19 +80,16 @@ class SalesInventory extends Component {
     await onGetDownloadSales(downloadParams)
   }
 
-  onUpdateSalesDate = (newDate)=>{
+  onUpdateSalesDate = newDate => {
     this.setState({
-      salesDate: newDate
+      salesDate: newDate,
     })
   }
 
   render() {
     const {
       onGetSaleAndInventory,
-      onGetTableInformation,
-      onUpdateTableInformation,
       saleAndInventory,
-      downloadtableData,
       filter,
       tableError,
       varianceControlData,
@@ -106,18 +105,14 @@ class SalesInventory extends Component {
           <Page
             tableName={tableName}
             onGetMainTable={onGetSaleAndInventory}
-            onGetTableInformation={onGetTableInformation}
-            onUpdateTableInformation={onUpdateTableInformation}
             tableColumns={searchFields}
             defaultColumns={tableColumns}
             tableMapping={tableMapping}
             tableData={saleAndInventory}
-            downloadtableData={downloadtableData}
             filter={filter}
             headerTitle="Sales & Inventory Accuracy Check"
             cardTitle="Sales & Inventory List"
             modalComponent={SalesAndInventoryModal}
-            onGetDownloadCustomer={this.GetonDownload}
             frozenColNum={2}
             varianceControlData={varianceControlData}
             overrideActionColumn={overrideStatusInActionColumn}
@@ -146,17 +141,13 @@ const mapStateToProps = ({ saleAndInventory }) => ({
   saleAndInventory: saleAndInventory.mainTableData,
   tableError: saleAndInventory.tableError,
   saleAndInventoryIsLoading: saleAndInventory.isLoading,
-  downloadtableData: saleAndInventory.downloadtableData,
   filter: saleAndInventory.filter,
   varianceControlData: saleAndInventory.varianceControlData,
-  isUpdateSuccess: saleAndInventory.isUpdateSuccess
+  isUpdateSuccess: saleAndInventory.isUpdateSuccess,
 })
 
 const mapDispatchToProps = dispatch => ({
   onGetSaleAndInventory: params => dispatch(getSaleAndInventory(params)),
-  onGetTableInformation: () => dispatch(getTableInformation()),
-  onUpdateTableInformation: event => dispatch(updateTableInformation(event)),
-  onGetDownloadSales: params => dispatch(getDownloadSales(params)),
   getSalesAndInventoryVarianceControl: () =>
     dispatch(getSalesAndInventoryVarianceControl()),
   overrideStatusInActionColumn: params =>

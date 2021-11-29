@@ -196,7 +196,7 @@ class index extends Component {
       return v != "notes" ? (
         <th>
               <span onClick={() => this.onSorting(v)}>
-                {tableMapping[v].label.toUpperCase()}
+                {tableMapping[v]?.label.toUpperCase()}
               </span>
           <Filter
             dataFilter={filterData}
@@ -263,7 +263,7 @@ class index extends Component {
   RenderTRComponent = (data) => {
     const {expandSearch} = this.state
     return this.props.tableColumns.map((v) => {
-      let typeOfColumn = tableMapping[v].type
+      let typeOfColumn = tableMapping[v]?.type
       let result;
       switch (typeOfColumn) {
         case "priority_type":

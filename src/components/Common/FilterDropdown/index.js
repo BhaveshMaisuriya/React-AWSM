@@ -247,7 +247,7 @@ const FilterDropdown = ({
   return (
     <Fragment>
       <Button
-        id={dataKey}
+        id={dataKey.replaceAll(".", "_")}
         color="link"
         className="filter-button"
         onMouseDown={e => e.preventDefault()}
@@ -257,7 +257,7 @@ const FilterDropdown = ({
       <Popover
         placement="bottom"
         isOpen={popoverOpen}
-        target={dataKey}
+        target={dataKey.replaceAll(".", "_")}
         toggle={toggle}
         trigger="legacy"
       >

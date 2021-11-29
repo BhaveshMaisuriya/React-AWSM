@@ -2,11 +2,9 @@ import React, { Fragment, PureComponent } from "react"
 import { connect } from "react-redux"
 import { Button, Modal, ModalFooter, ModalBody, ModalHeader } from "reactstrap"
 import { format } from "date-fns"
-import { isScheduler } from "../../../helpers/auth_helper"
-import {
-  getTableInformation,
-  updateTableInformation,
-} from "../../../store/terminal/actions"
+import { isScheduler } from "helpers/auth_helper"
+import { getTerminalTableInformation, updateTerminalTableInformation
+} from "store/actions"
 import AddressTab from "./AddressTab"
 import ContactTab from "./ContactTab"
 import StatusTab from "./StatusTab"
@@ -15,7 +13,7 @@ import "./TerminalDetailModal.scss"
 import classnames from "classnames"
 import SimpleBar from "simplebar-react"
 import { isEqual } from "lodash"
-import CloseButton from "../../../components/Common/CloseButton"
+import CloseButton from "components/Common/CloseButton"
 import {
   Col,
   Nav,
@@ -25,7 +23,7 @@ import {
   TabContent,
   TabPane,
 } from "reactstrap"
-import ExitConfirmation from "../../../components/Common/ExitConfirmation"
+import ExitConfirmation from "components/Common/ExitConfirmation"
 import AWSMAlert from "components/Common/AWSMAlert"
 import { isValidDate } from "../Common/helper"
 
@@ -488,8 +486,8 @@ const mapStateToProps = ({ terminal }) => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  fetchTableInformation: params => dispatch(getTableInformation(params)),
-  onUpdateTableInformation: params => dispatch(updateTableInformation(params)),
+  fetchTableInformation: params => dispatch(getTerminalTableInformation(params)),
+  onUpdateTableInformation: params => dispatch(updateTerminalTableInformation(params)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(TerminalDetailModal)

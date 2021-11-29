@@ -142,7 +142,7 @@
     "lint": "eslint .",
     "format": "prettier --write \"**/*.{js,jsx,json,md,html,css,less,scss}\"",
     "test": "CI=true react-scripts test | true",
-    "test:local": "react-scripts test --watchAll",
+    "test:local": "react-scripts test --coverage --watchAll",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

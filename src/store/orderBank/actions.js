@@ -8,6 +8,9 @@ import {
   GET_ORDERBANK,
   GET_ORDERBANK_SUCCESS,
   GET_ORDERBANK_FAIL,
+  ADD_ORDERBANK,
+  ADD_ORDERBANK_SUCCESS,
+  ADD_ORDERBANK_FAIL,  
   UPDATE_ORDERBANK_TABLE_INFORMATION,
   UPDATE_ORDERBANK_TABLE_INFORMATION_SUCCESS,
   UPDATE_ORDERBANK_TABLE_INFORMATION_FAIL,
@@ -104,8 +107,6 @@ export const getShipmentOfOderBankGanttChartFail = (error) => ({
   payload: error,
 })
 
-
-
 export const getOrderBank = params => ({
   type: GET_ORDERBANK,
   params,
@@ -118,6 +119,21 @@ export const getOrderBankSuccess = response => ({
 
 export const getOrderBankFail = error => ({
   type: GET_ORDERBANK_FAIL,
+  payload: error,
+})
+
+export const addOrderBank = params => ({
+  type: ADD_ORDERBANK,
+  params,
+})
+
+export const addOrderBankSuccess = response => ({
+  type: ADD_ORDERBANK_SUCCESS,
+  payload: response,
+})
+
+export const addOrderBankFail = error => ({
+  type: ADD_ORDERBANK_FAIL,
   payload: error,
 })
 

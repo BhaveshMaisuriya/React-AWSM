@@ -5,10 +5,10 @@ import PropTypes from "prop-types"
 import { withStyles } from "@material-ui/styles"
 import { format } from "date-fns"
 import TablePagination from "../Pagination"
-import lineIcon from "../../../assets/images/auditlog-line.svg"
+import lineIcon from "assets/images/auditlog-line.svg"
 import { getRetailAuditLog } from "store/actions"
 import { Modal, ModalHeader } from "reactstrap"
-import CloseButton from "../../../components/Common/CloseButton"
+import CloseButton from "components/Common/CloseButton"
 import "./style.scss"
 
 const styles = {
@@ -99,35 +99,22 @@ class AuditLog extends Component {
   modalData = (audit, idx) => {
     //cut to get name from string
     let text = audit.description
-    let firstWord = text.trim().split(" ")
     let theName = audit.user
-    //cut action from string
-    let action = firstWord.shift()
-
-    const Month = [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December",
-    ]
 
     //cut date from string
     let date = new Date(audit.created)
-    let finalDate = date.getDate() + "-" + (date.getMonth() + 1) + "-" + date.getFullYear()
+    let finalDate =
+      date.getDate() + "-" + (date.getMonth() + 1) + "-" + date.getFullYear()
 
     //cut time from string
-    var ampm = date.getHours() >= 12 ? "PM" : "AM"
-    var hour = date.getHours().toString().length == 1 ? "0" + date.getHours() : date.getHours()
+    var hour =
+      date.getHours().toString().length == 1
+        ? "0" + date.getHours()
+        : date.getHours()
     var mins =
-      date.getMinutes().toString().length == 1 ? "0" + date.getMinutes() : date.getMinutes()
+      date.getMinutes().toString().length == 1
+        ? "0" + date.getMinutes()
+        : date.getMinutes()
     let finalTime = hour + ":" + mins
 
     const { classes } = this.props
@@ -229,4 +216,7 @@ AuditLog.propType = {
   toggle: PropTypes.func.isRequired,
   salesDate: PropTypes.object,
 }
-export default compose(connect(mapStateToProps, mapDispatchToProps), withStyles(styles))(AuditLog)
+export default compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  withStyles(styles)
+)(AuditLog)

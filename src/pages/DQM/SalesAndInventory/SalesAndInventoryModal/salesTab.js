@@ -63,7 +63,7 @@ const SalesTab = ({ data, onChange, inventoryData }) => {
                   <label>YESTERDAY'S SALES ADJUSTMENT REMARKS<span className="extra-lbl">D-1</span></label>
                   <input
                     className="form-control awsm-input"
-                    value={data?.yesterday_sales_adjustment_remarks}
+                    value={data?.yesterday_sales_adjustment_remarks || ''}
                     onChange={e => onChangeHandler(e.target.value, "yesterday_sales_adjustment_remarks")}/>
               </div>
           </div>

@@ -1,16 +1,11 @@
 import React, { Component, Fragment } from "react"
 import { connect } from "react-redux"
-import Page from "./../Common"
-import {
-  getCommercialCustomer,
-  getDownloadCommercialCustomer,
-  getTableInformation,
-  updateTableInformation,
-} from "../../../store/actions"
+import Page from "../Common"
+import { getCommercialCustomer } from "store/actions"
 import { tableColumns, tableMapping } from "./tableMapping"
-import { transformArrayToString, getCookieByKey } from "./../Common/helper"
+import { transformArrayToString, getCookieByKey } from "../Common/helper"
 import CommercialCustomerModal from "./CommercialCustomerModal"
-import Loader from "../../../components/Common/Loader"
+import Loader from "components/Common/Loader"
 const CommercialCustomerTableName = "commercial-table"
 
 class CommercialCustomer extends Component {
@@ -37,27 +32,14 @@ class CommercialCustomer extends Component {
     await onGetCommercialCustomer(params)
   }
 
-  GetonDownload = async currentPage => {
-    const downloadParams = {
-      limit: null,
-      page: currentPage,
-      search_fields: "*",
-    }
-    const { onGetDownloadCommercialCustomer } = this.props
-    await onGetDownloadCommercialCustomer(downloadParams)
-  }
-
   render() {
     const {
       onGetCommercialCustomer,
-      onGetTableInformation,
-      onUpdateTableInformation,
       commercialCustomer,
-      downloadCommercialCustomer,
       tableError,
       filterCom,
       commercialCustomerIsLoading,
-    } = this.props    
+    } = this.props
     const { searchFields, subModule } = this.state
     return (
       <Fragment>
@@ -65,19 +47,15 @@ class CommercialCustomer extends Component {
         {commercialCustomer.list && (
           <Page
             onGetMainTable={onGetCommercialCustomer}
-            onGetTableInformation={onGetTableInformation}
-            onUpdateTableInformation={onUpdateTableInformation}
             tableColumns={searchFields}
             defaultColumns={tableColumns}
             tableMapping={tableMapping}
             tableData={commercialCustomer}
-            downloadtableData={downloadCommercialCustomer}
             filter={filterCom}
             headerTitle="Commercial Customer"
             cardTitle="Commercial Customer List"
             tableName={CommercialCustomerTableName}
             modalComponent={CommercialCustomerModal}
-            onGetDownloadCustomer={this.GetonDownload}
             subModule={subModule}
           />
         )}
@@ -101,15 +79,10 @@ const mapStateToProps = ({ commercialCustomer }) => ({
   tableError: commercialCustomer.tableError,
   commercialCustomerIsLoading: commercialCustomer.isLoading,
   filterCom: commercialCustomer.filterCom,
-  downloadCommercialCustomer: commercialCustomer.downloadCommercialCustomer,
 })
 
 const mapDispatchToProps = dispatch => ({
   onGetCommercialCustomer: params => dispatch(getCommercialCustomer(params)),
-  onGetTableInformation: () => dispatch(getTableInformation()),
-  onUpdateTableInformation: event => dispatch(updateTableInformation(event)),
-  onGetDownloadCommercialCustomer: params =>
-    dispatch(getDownloadCommercialCustomer(params)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(CommercialCustomer)

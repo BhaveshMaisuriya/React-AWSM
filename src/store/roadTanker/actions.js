@@ -23,7 +23,7 @@ import {
   UPDATE_ROAD_TANKER_DETAIL,
   UPDATE_ROAD_TANKER_DETAIL_SUCCESS,
   UPDATE_ROAD_TANKER_DETAIL_FAIL,
-  RESET_CURRENT_ROAD_TANKER_DATA
+  RESET_CURRENT_ROAD_TANKER_DATA,
 } from "./actionTypes"
 
 export const getRoadTanker = params => ({
@@ -56,7 +56,7 @@ export const getDownloadRoadTankerFail = error => ({
   payload: error,
 })
 
-export const getRoadTankerAuditLog = (params) => ({
+export const getRoadTankerAuditLog = params => ({
   type: GET_ROADTANKER_AUDITLOG,
   params,
 })
@@ -68,35 +68,6 @@ export const getRoadTankerAuditLogSuccess = response => ({
 
 export const getRoadTankerAuditLogFail = error => ({
   type: GET_ROADTANKER_AUDITLOG_FAIL,
-  payload: error,
-})
-
-export const getTableInformation = () => ({
-  type: GET_TABLE_INFORMATION,
-})
-
-export const getTableInformationSuccess = response => ({
-  type: GET_TABLE_INFORMATION_SUCCESS,
-  payload: response,
-})
-
-export const getTableInformationFail = error => ({
-  type: GET_TABLE_INFORMATION_FAIL,
-  payload: error,
-})
-
-export const updateTableInformation = event => ({
-  type: UPDATE_TABLE_INFORMATION,
-  payload: event,
-})
-
-export const updateTableInformationSuccess = event => ({
-  type: UPDATE_TABLE_INFORMATION_SUCCESS,
-  payload: event,
-})
-
-export const updateTableInformationFail = error => ({
-  type: UPDATE_TABLE_INFORMATION_FAIL,
   payload: error,
 })
 
@@ -117,32 +88,32 @@ export const getRoadTankerFilterFail = error => ({
 
 export const getRoadTankerDetail = params => ({
   type: GET_ROAD_TANKER_DETAIL,
-  params
+  params,
 })
 
 export const getRoadTankeDetailSuccess = response => ({
   type: GET_ROAD_TANKER_DETAIL_SUCCESS,
-  payload: response
+  payload: response,
 })
 
 export const getRoadTankerDetailFail = error => ({
   type: GET_ROAD_TANKER_DETAIL_FAIL,
-  payload: error
+  payload: error,
 })
 
 export const updateRoadTankerDetail = params => ({
   type: UPDATE_ROAD_TANKER_DETAIL,
-  params
+  params,
 })
 
 export const updateRoadTankerDetailSuccess = response => ({
   type: UPDATE_ROAD_TANKER_DETAIL_SUCCESS,
-  payload: response
+  payload: response,
 })
 
 export const updateRoadTankerDetailFail = error => ({
   type: UPDATE_ROAD_TANKER_DETAIL_FAIL,
-  payload: error
+  payload: error,
 })
 
 export const resetCurrentRoadTankerData = () => ({

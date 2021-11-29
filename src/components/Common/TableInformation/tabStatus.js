@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react"
+import React, { useState } from "react"
 import { Col, Row } from "reactstrap"
 import "./tabStatus.scss"
 import AWSMDropdown from "../Dropdown"
@@ -16,11 +16,11 @@ for (let i = 0; i < 24; i++) {
 timeData.push(`23:59`)
 
 const TabStatus = ({ scheduler, data, onChange }) => {
-  if (!data.status) {
+  if (!data?.status) {
     return null
   }
   const pathName = window.location.pathname
-  const [statusData, setStatusData] = useState(data.status)
+  const [statusData, setStatusData] = useState(data?.status)
 
   const onFieldChange = (key, subKey, value) => {
     const newStatusData = { ...statusData }
@@ -37,7 +37,7 @@ const TabStatus = ({ scheduler, data, onChange }) => {
             time_to: null,
           }
         } else {
-          newStatusData[key] = { ...newStatusData[key]}
+          newStatusData[key] = { ...newStatusData[key] }
         }
         newStatusData[key].type = "range"
       }
@@ -64,15 +64,6 @@ const TabStatus = ({ scheduler, data, onChange }) => {
     newDataSourceItems.push(value)
     onFieldChange("sales_inventory_data_source_items", null, newDataSourceItems)
   }
-
-  // const errorMessage = useMemo(() => {
-  //   if (statusData.status_awsm === "Temporarily Closed") {
-  //     if (!statusData.close_period || !(statusData.close_period.date_from && statusData.close_period.date_to && statusData.close_period.time_from && statusData.close_period.time_to)) {
-  //       return "Close period is required!"
-  //     }
-  //   }
-  //   return null
-  // }, [statusData])
 
   return (
     <div className="dqm-status-container">
@@ -202,30 +193,6 @@ const TabStatus = ({ scheduler, data, onChange }) => {
         </Col>
       </Row>
       <hr style={{ margin: "2em 0" }} />
-      {/* {errorMessage && <p className="error">{errorMessage}</p>} */}
-
-      {pathName === "/commercial-customer" && (
-        <div className="row">
-          {/*<div className="col-12 col-sm-6">*/}
-          {/*  <div className="input-header">SALES CATEGORY</div>*/}
-          {/*  <AWSMDropdown*/}
-          {/*    value={statusData.sale_category || ""}*/}
-          {/*    items={SALES_CATEGORY}*/}
-          {/*    onChange={value => onFieldChange("sale_category", null, value)}*/}
-          {/*    disabled={scheduler}*/}
-          {/*  />*/}
-          {/*</div>*/}
-          {/*<div className="col-12 col-sm-6">*/}
-          {/*  <div className="input-header">SALES AND INVENTORY DATA SOURCE</div>*/}
-          {/*  <AWSMDropdown*/}
-          {/*    value={statusData.sales_inventory_data_source || ""}*/}
-          {/*    onChange={value => onFieldChange("sales_inventory_data_source", null, value)}*/}
-          {/*    items={SALES_AND_INVENTORY}*/}
-          {/*    disabled={scheduler}*/}
-          {/*  />*/}
-          {/*</div>*/}
-        </div>
-      )}
     </div>
   )
 }

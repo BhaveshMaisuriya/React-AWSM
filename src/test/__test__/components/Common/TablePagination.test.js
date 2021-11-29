@@ -1,8 +1,8 @@
 import React from "react"
 import { render, screen } from "@testing-library/react"
-import Pagination from "../../../../components/Common/Pagination"
+import Pagination from "components/Common/Pagination"
 import userEvent from "@testing-library/user-event"
-import '@testing-library/jest-dom'
+// import '@testing-library/jest-dom'
 
 describe("testing pagination component", () => {
   test("renders pagination component with crashing", () => {

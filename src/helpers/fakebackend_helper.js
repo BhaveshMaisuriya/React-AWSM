@@ -184,6 +184,10 @@ code !== undefined && axios
   )
   .then(response => response.data)
 
+export const addOrderBank = payload => 
+axios.post(`/rts/order-bank/create`)
+  .then(response => response.data)  
+
 // get single order bank
 export const getOrderBankDetail = (params) => viewOrderDetails
 

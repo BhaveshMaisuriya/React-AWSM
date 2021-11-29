@@ -17,7 +17,7 @@ import {
   GET_DOWNLOAD_TERMINAL,
   GET_DOWNLOAD_TERMINAL_SUCCESS,
   GET_DOWNLOAD_TERMINAL_FAIL,
-  RESET_CURRENT_TERMINAL_DETAIL
+  RESET_CURRENT_TERMINAL_DETAIL,
 } from "./actionTypes"
 
 export const getTerminal = params => ({
@@ -50,7 +50,7 @@ export const getDownloadTerminalFail = error => ({
   payload: error,
 })
 
-export const getTerminalAuditLog = (params) => ({
+export const getTerminalAuditLog = params => ({
   type: GET_TERMINAL_AUDITLOG,
   params,
 })
@@ -65,32 +65,32 @@ export const getTerminalAuditLogFail = error => ({
   payload: error,
 })
 
-export const getTableInformation = (code) => ({
+export const getTerminalTableInformation = code => ({
   type: GET_TERMINAL_TABLE_INFORMATION,
   code,
 })
 
-export const getTableInformationSuccess = response => ({
+export const getTerminalTableInformationSuccess = response => ({
   type: GET_TERMINAL_TABLE_INFORMATION_SUCCESS,
   payload: response,
 })
 
-export const getTableInformationFail = error => ({
+export const getTerminalTableInformationFail = error => ({
   type: GET_TERMINAL_TABLE_INFORMATION_FAIL,
   payload: error,
 })
 
-export const updateTableInformation = event => ({
+export const updateTerminalTableInformation = event => ({
   type: UPDATE_TERMINAL_TABLE_INFORMATION,
   payload: event,
 })
 
-export const updateTableInformationSuccess = event => ({
+export const updateTerminalTableInformationSuccess = event => ({
   type: UPDATE_TERMINAL_TABLE_INFORMATION_SUCCESS,
   payload: event,
 })
 
-export const updateTableInformationFail = error => ({
+export const updateTerminalTableInformationFail = error => ({
   type: UPDATE_TERMINAL_TABLE_INFORMATION_FAIL,
   payload: error,
 })

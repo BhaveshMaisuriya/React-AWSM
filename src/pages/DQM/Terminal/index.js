@@ -1,17 +1,11 @@
 import React, { Component, Fragment } from "react"
 import { connect } from "react-redux"
 import Page from "../Common"
-import {
-  getTerminal,
-  getTableInformation,
-  getDownloadTerminal,
-  updateTableInformation,
-  resetCurrentTerminalDetail,
-} from "../../../store/actions"
+import { getTerminal, resetCurrentTerminalDetail } from "store/actions"
 import { tableColumns, tableMapping } from "./tableMapping"
 import { transformArrayToString, getCookieByKey } from "../Common/helper"
 import TerminalDetailModal from "./TerminalDetailModal"
-import Loader from "../../../components/Common/Loader"
+import Loader from "components/Common/Loader"
 
 const TerminalTableName = "terminal-table"
 
@@ -22,7 +16,7 @@ class Terminal extends Component {
       searchFields: getCookieByKey(TerminalTableName)
         ? JSON.parse(getCookieByKey(TerminalTableName))
         : tableColumns,
-      subModule: "terminal"
+      subModule: "terminal",
     }
   }
 
@@ -39,24 +33,11 @@ class Terminal extends Component {
     onGetTerminal(params)
   }
 
-  GetonDownload = async currentPage => {
-    const downloadParams = {
-      limit: null,
-      page: currentPage,
-      search_fields: "*",
-    }
-    const { onGetDownloadTerminal } = this.props
-    await onGetDownloadTerminal(downloadParams)
-  }
-
   render() {
     const {
       onGetTerminal,
-      onGetTableInformation,
-      onUpdateTableInformation,
       terminalTable,
       tableError,
-      downloadTerminal,
       filterTerminal,
       terminalTableIsLoading,
       resetCurrentTerminalDetail,
@@ -71,16 +52,12 @@ class Terminal extends Component {
             cardTitle="Terminal List"
             tableName={TerminalTableName}
             onGetMainTable={onGetTerminal}
-            onGetTableInformation={onGetTableInformation}
-            onUpdateTableInformation={onUpdateTableInformation}
             tableColumns={searchFields}
             defaultColumns={tableColumns}
             tableMapping={tableMapping}
             tableData={terminalTable}
-            downloadtableData={downloadTerminal}
             filter={filterTerminal}
             modalComponent={TerminalDetailModal}
-            onGetDownloadCustomer={this.GetonDownload}
             resetCurrentTerminalDetail={resetCurrentTerminalDetail}
             subModule={subModule}
           />
@@ -105,14 +82,10 @@ const mapStateToProps = ({ terminal }) => ({
   tableError: terminal.tableError,
   terminalTableIsLoading: terminal.isLoading,
   filterTerminal: terminal.filterTerminal,
-  downloadTerminal: terminal.downloadTerminal,
 })
 
 const mapDispatchToProps = dispatch => ({
   onGetTerminal: params => dispatch(getTerminal(params)),
-  onGetTableInformation: () => dispatch(getTableInformation()),
-  onUpdateTableInformation: event => dispatch(updateTableInformation(event)),
-  onGetDownloadTerminal: params => dispatch(getDownloadTerminal(params)),
   resetCurrentTerminalDetail: () => dispatch(resetCurrentTerminalDetail()),
 })
 

@@ -1,46 +1,44 @@
 import React, { Component } from "react"
-import SearchBar from "../../../components/Common/SearchBar"
-import TablePagination from "../../../components/Common/Pagination"
+import SearchBar from "components/Common/SearchBar"
+import TablePagination from "components/Common/Pagination"
 import PropTypes from "prop-types"
 import { withStyles } from "@material-ui/styles"
 import IconButton from "@material-ui/core/IconButton"
-import { Divider } from "@material-ui/core"
 import { connect } from "react-redux"
 import {
   Row,
   Col,
   Card,
   CardBody,
-  CardTitle,
   Popover,
   PopoverBody,
 } from "reactstrap"
 import { ReactSVG } from "react-svg"
 import { Link } from "react-router-dom"
-import customiseTableIcon from "../../../assets/images/AWSM-Customise-Table.svg"
-import AuditLog from "../../../components/Common/AuditLog"
-import Loader from "../../../components/Common/Loader"
-import FixedColumnTable from "../../../components/Common/FrozenTableColumn"
-import CustomizeTableModal from "../../../common/CustomizeTable"
+import customiseTableIcon from "assets/images/AWSM-Customise-Table.svg"
+import AuditLog from "components/Common/AuditLog"
+import Loader from "components/Common/Loader"
+import FixedColumnTable from "components/Common/FrozenTableColumn"
+import CustomizeTableModal from "common/CustomizeTable"
 import {
   transformArrayToString,
   transformObjectToStringSentence,
   filterObject,
 } from "./helper"
 import "./style.scss"
-import DownloadExcelButton from "./../../../components/Common/DownloadExcelS3"
-import AWSMAlert from "../../../components/Common/AWSMAlert"
+import DownloadExcelButton from "components/Common/DownloadExcelS3"
+import AWSMAlert from "components/Common/AWSMAlert"
 import VarianceControl from "../SalesAndInventory/VarianceControl"
 import TankStatusModal from "../SalesAndInventory/TankStatusModal/TankStatusModal"
-import VarianceIcon from "../../../assets/images/AWSM-Variance-Control.svg"
-import TankIcon from "../../../assets/images/AWSM-Tank-Status.svg"
-import AWSMDropdown from "../../../components/Common/Dropdown"
-import DatePicker from "../../../components/Common/DatePicker"
-import REGION_TERMINAL from "../../../common/data/regionAndTerminal"
+import VarianceIcon from "assets/images/AWSM-Variance-Control.svg"
+import TankIcon from "assets/images/AWSM-Tank-Status.svg"
+import AWSMDropdown from "components/Common/Dropdown"
+import DatePicker from "components/Common/DatePicker"
+import REGION_TERMINAL from "common/data/regionAndTerminal"
 import { format, subDays } from "date-fns"
 import { CustomCSVIcon, CustomEyeIcon } from "./icon"
 import CsvFileUpload from "./CsvFileUpload"
-import { TERMINAL_CODE_MAPPING } from "../../../common/data/regionAndTerminal"
+import { TERMINAL_CODE_MAPPING } from "common/data/regionAndTerminal"
 import { isEqual } from "lodash"
 import { isScheduler } from "helpers/auth_helper"
 
@@ -366,7 +364,6 @@ class Pages extends Component {
       classes,
       filter,
       tableMapping,
-      cardTitle,
       headerTitle,
       frozenColNum,
       varianceControlData,
@@ -643,8 +640,6 @@ class Pages extends Component {
 
 Pages.propType = {
   onGetMainTable: PropTypes.func.isRequired,
-  onGetTableInformation: PropTypes.func.isRequired,
-  onUpdateTableInformation: PropTypes.func.isRequired,
   tableColumns: PropTypes.array.isRequired,
   tableMapping: PropTypes.object.isRequired,
   tableData: PropTypes.object.isRequired,
@@ -653,7 +648,6 @@ Pages.propType = {
   cardTitle: PropTypes.string.isRequired,
   tableName: PropTypes.string.isRequired,
   modalComponent: PropTypes.element,
-  onGetDownloadCustomer: PropTypes.func.isRequired,
   frozenColNum: PropTypes.number,
   varianceControlData: PropTypes.object,
   overrideActionColumn: PropTypes.func,

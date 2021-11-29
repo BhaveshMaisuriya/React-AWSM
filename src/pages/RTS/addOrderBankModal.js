@@ -1,4 +1,3 @@
-import { Input } from "@material-ui/core"
 import React, { Fragment, useEffect, useMemo, useState } from "react"
 import { connect } from "react-redux"
 import {
@@ -18,17 +17,19 @@ import ExitConfirmation from "../../components/Common/ExitConfirmation"
 import AWSMInput from "../../components/Common/Input"
 import FileCopyIcon from "@material-ui/icons/FileCopy"
 import AWSMDropdown from "../../components/Common/Dropdown"
-// import { orderDetails } from "./newOrderData"
 import AWSMAlert from "../../components/Common/AWSMAlert"
-import { getOrderBank } from "../../store/actions"
+import { getOrderBank, addOrderBank } from "../../store/actions"
 import { removeKeywords } from "../../pages/DQM/Common/helper"
 import REGION_TERMINAL from "common/data/regionAndTerminal"
+import TimePicker from "../../components/Common/TableInformation/components/TimePicker"
 
-// const ORDER_TERMINAL = ["KVDT", "KVDT 1"]
-const ORDER_LOAD_TIME = ["00", "01"]
-const ORDER_ETA = ["00", "01"]
+const timeData = []
+for (let i = 0; i < 24; i++) {
+  timeData.push(`${i.toString().padStart(2, "0")}:00`)
+  timeData.push(`${i.toString().padStart(2, "0")}:30`)
+}
+timeData.push(`23:59`)
 const ORDER_PRIORITY = ["High Priority", "Low Priority"]
-
 const NewOrderBankModal = props => {
   const { open, onCancel } = props
 
@@ -53,7 +54,23 @@ const NewOrderBankModal = props => {
     setCurrentState("")
   }
 
-  const handleUpdate = () => {
+  const handleUpdate = async() => {
+    const temp = {
+      shift_date: shiftDate,
+      my_remark_1: orderData.myremark1 !== undefined ? orderData.myremark1 : '',
+      my_remark_2: orderData.myremark2 !== undefined ? orderData.myremark2 : '',
+      my_remark_3: orderData.myremark3 !== undefined ? orderData.myremark3 : '',
+      terminal: orderData.terminal !== undefined ? orderData.terminal : '',
+      volume: orderData.volume !== undefined ? parseInt(orderData.volume) : 0,
+      eta: orderData.eta !== undefined ? orderData.eta : '',
+      planned_load_time: orderData.load_time !== undefined ? orderData.load_time : '',
+      remarks: orderData.remarks !== undefined ? orderData.remarks : '',
+      priority: orderData.priority_order !== undefined ? orderData.priority_order : '',
+      retail_storage: parseInt(0),
+      commercial_storage: parseInt(0),
+    };
+    const { onAddOrderBank } = props
+    await onAddOrderBank(temp)
     onCancel()
   }
 
@@ -330,13 +347,19 @@ const NewOrderBankModal = props => {
                     <label className="text-upper">Planned Load Time</label>
                     <div className="d-flex">
                       <div className="w-100">
-                        <AWSMDropdown
+                      <TimePicker
+                        value={orderData.load_time}
+                        items={timeData}
+                        onChange={value => onFieldChange("load_time", value)}
+                        hasNone
+                      />
+                        {/* <AWSMDropdown
                           items={ORDER_LOAD_TIME}
                           onChange={value => onFieldChange("load_time", value)}
                           value={orderData.load_time}
                           disabled={false}
                           placeholder="select load time"
-                        />
+                        /> */}
                       </div>
                     </div>
                   </div>
@@ -344,13 +367,19 @@ const NewOrderBankModal = props => {
                     <label className="text-upper">eta</label>
                     <div className="d-flex">
                       <div className="w-70">
-                        <AWSMDropdown
+                        <TimePicker
+                          value={orderData.eta}
+                          items={timeData}
+                          onChange={value => onFieldChange("eta", value)}
+                          hasNone
+                        />
+                        {/* <AWSMDropdown
                           items={ORDER_ETA}
                           onChange={value => onFieldChange("eta", value)}
                           value={orderData.eta}
                           disabled={false}
                           placeholder="select"
-                        />
+                        /> */}
                       </div>
                     </div>
                   </div>
@@ -727,6 +756,7 @@ const mapStateToProps = ({ orderBank }) => ({
 
 const mapDispatchToProps = dispatch => ({
   onGetOrderBank: params => dispatch(getOrderBank(params)),
+  onAddOrderBank: params => dispatch(addOrderBank(params)),  
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(NewOrderBankModal)

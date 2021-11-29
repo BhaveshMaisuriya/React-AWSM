@@ -1,16 +1,11 @@
 import React, { Component, Fragment } from "react"
 import { connect } from "react-redux"
-import Page from "./../Common"
-import {
-  getRoadTanker,
-  getDownloadRoadTanker,
-  getTableInformation,
-  updateTableInformation,
-} from "../../../store/actions"
+import Page from "../Common"
+import { getRoadTanker } from "store/actions"
 import { tableColumns, tableMapping } from "./tableMapping"
 import InformationModal from "./InformationModal"
-import { transformArrayToString, getCookieByKey } from "./../Common/helper"
-import Loader from "../../../components/Common/Loader"
+import { transformArrayToString, getCookieByKey } from "../Common/helper"
+import Loader from "components/Common/Loader"
 
 const RoadTankerTableName = "road-tanker-table"
 class RoadTanker extends Component {
@@ -26,9 +21,7 @@ class RoadTanker extends Component {
   }
 
   componentDidMount() {
-    const {
-      onGetRoadTanker,
-    } = this.props
+    const { onGetRoadTanker } = this.props
     const { searchFields } = this.state
     const params = {
       limit: 10,
@@ -40,23 +33,10 @@ class RoadTanker extends Component {
     onGetRoadTanker(params)
   }
 
-  GetonDownload = async currentPage => {
-    const downloadParams = {
-      limit: null,
-      page: 0,
-      search_fields: "*",
-    }
-    const { onGetDownloadRoadTanker } = this.props
-    await onGetDownloadRoadTanker(downloadParams)
-  }
-
   render() {
     const {
       onGetRoadTanker,
-      onGetTableInformation,
-      onUpdateTableInformation,
       filterRoadTanker,
-      downloadRoadTanker,
       roadTanker,
       tableError,
       roadTankerIsLoading,
@@ -69,19 +49,15 @@ class RoadTanker extends Component {
         {roadTanker.list && (
           <Page
             onGetMainTable={onGetRoadTanker}
-            onGetTableInformation={onGetTableInformation}
-            onUpdateTableInformation={onUpdateTableInformation}
             tableColumns={searchFields}
             defaultColumns={tableColumns}
             tableMapping={tableMapping}
             tableData={roadTanker}
             tableName={RoadTankerTableName}
-            downloadtableData={downloadRoadTanker}
             filter={filterRoadTanker}
             headerTitle="Road Tanker"
             cardTitle="Road Tanker List"
             modalComponent={InformationModal}
-            onGetDownloadCustomer={this.GetonDownload}
             subModule={subModule}
           />
         )}
@@ -105,14 +81,10 @@ const mapStateToProps = ({ roadTanker }) => ({
   tableError: roadTanker.tableError,
   roadTankerIsLoading: roadTanker.isLoading,
   filterRoadTanker: roadTanker.filterRoadTanker,
-  downloadRoadTanker: roadTanker.downloadRoadTanker,
 })
 
 const mapDispatchToProps = dispatch => ({
   onGetRoadTanker: params => dispatch(getRoadTanker(params)),
-  onGetTableInformation: () => dispatch(getTableInformation()),
-  onUpdateTableInformation: event => dispatch(updateTableInformation(event)),
-  onGetDownloadRoadTanker: params => dispatch(getDownloadRoadTanker(params)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(RoadTanker)

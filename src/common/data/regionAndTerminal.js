@@ -11,14 +11,10 @@ const REGION_TERMINAL = [
     region: "Northern",
     terminal: ["Langkawi", "Prai", "Lumut"],
   },
-  {
-    region: "Nothern",
-    terminal: ["Langkawi", "Prai", "Lumut"],
-  },
-  {
-    region: "Northern",
-    terminal: ["Langkawi", "Prai", "Lumut"],
-  },
+  // {
+  //   region: "Nothern",
+  //   terminal: ["Langkawi", "Prai", "Lumut"],
+  // },
   {
     region: "Southern",
     terminal: ["Melaka", "Pasir Gudang"],

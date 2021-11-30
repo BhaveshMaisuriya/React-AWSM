@@ -357,7 +357,7 @@ export const getSalesAuditLog = payload =>
   // get(url.GET_COMMERCIAL_AUDITLOG, { payload: payload })  
 
   export const getdeleteMultipleOrder = (params) => 
-  axios.post(`/rts/order-bank`, params.params)
+  axios.delete(`/rts/order-bank`, params.params)
   .then(response => response.data)  
 
   export const getCrossTerminal = payload =>

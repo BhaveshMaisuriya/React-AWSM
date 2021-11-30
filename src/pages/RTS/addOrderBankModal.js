@@ -681,11 +681,11 @@ const NewOrderBankModal = props => {
                         value={orderData.myremark3}
                         placeholder="Type something here..."
                       /> */}
-                                            <input
+                      <input
                         onChange={e => onFieldChange("myremark3", e.target.value)}
                         value={orderData.myremark3}
                         className={`awsm-input w-100 ${(inputValue3 && !isValid3) ? "out-range " : ""}`}
-                    />
+                      />
                     <span
                           className={`position-absolute awsm-input-right-content ${
                             (inputValue3 && !isValid3) ? "out-range " : ""

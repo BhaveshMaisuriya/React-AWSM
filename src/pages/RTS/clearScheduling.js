@@ -66,13 +66,14 @@ function ClearScheduling (props) {
         contentClassName="modalContainer"
       >
         <ModalHeader toggle={props.toggle}>
-          <h3>Clear Scheduling Confirmation</h3>
+          <h3>Cancel Shipment Confirmation</h3>
         </ModalHeader>
-          <p>This action cannot be undone. Are you sure you want to clear {props.checkedValue} on {currentDate()}? All order will be drop back to Unscheduled list in Order Bank.</p>
+        <p>Are you sure you want to proceed with this shipment cancellation?<br />All order under this shipment will be drop back to Unscheduled list in Order Bank</p>
+          {/* <p>This action cannot be undone. Are you sure you want to clear {props.checkedValue} on {currentDate()}? All order will be drop back to Unscheduled list in Order Bank.</p> */}
           <ModalFooter>
           <div className="d-flex">
         <button className="btn btn-dan" onClick={props.toggle}>Cancel</button>
-        <button className="btn btn-danger ml-2" onClick={onClear}>Clear</button>
+        <button className="btn btn-danger ml-2" onClick={onClear}>Proceed</button>
       </div>
       </ModalFooter>
       </Modal>

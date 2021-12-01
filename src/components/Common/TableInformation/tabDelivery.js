@@ -14,10 +14,10 @@ import { isValidDate } from "../../../pages/DQM/Common/helper"
 
 const timeData = []
 for (let i = 0; i < 24; i++) {
-  timeData.push(`${i.toString().padStart(2, "0")}:00`)
-  timeData.push(`${i.toString().padStart(2, "0")}:30`)
+  timeData.push(`${i.toString().padStart(2, "0")}:00:00`)
+  timeData.push(`${i.toString().padStart(2, "0")}:30:00`)
 }
-timeData.push(`23:59`)
+timeData.push(`23:59:00`)
 
 const ACTUAL_OPEN_TIME = [
   { name: "Monday", checked: false },
@@ -319,16 +319,16 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
         </Col>
         <Col className="col-md-6">
           <label>DELIVERY OPEN TIME (TO)</label>
-          <TimePicker
-            items={timeData}
+          <AWSMInput //TimePicker
+            // items={timeData}
             disabled
             value={deliveryData?.delivery_open_time_1.time_to}
-            onChange={value =>
-              onFieldChange("delivery_open_time_1", {
-                ...deliveryData?.delivery_open_time_1,
-                time_to: value,
-              })
-            }
+            // onChange={value =>
+            //   onFieldChange("delivery_open_time_1", {
+            //     ...deliveryData?.delivery_open_time_1,
+            //     time_to: value,
+            //   })
+            // }
             hasNone
           />
         </Col>

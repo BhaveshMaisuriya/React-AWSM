@@ -1,5 +1,4 @@
-import { Input } from "@material-ui/core"
-import React, { Fragment, useEffect, useState } from "react"
+import React, { Fragment, useEffect, useMemo, useState } from "react"
 import { connect } from "react-redux"
 import { format } from "date-fns"
 import {
@@ -36,6 +35,9 @@ const EditOrderBankModal = props => {
   const [orderData, setOrderData] = useState({})
   const [showAlert, setShowAlert] = useState(false)
   const [activeTab, setActiveTab] = useState("1")
+  const [inputValue1, setInputValue1] = useState("")
+  const [inputValue2, setInputValue2] = useState("") 
+  const [inputValue3, setInputValue3] = useState("")  
 
   useEffect(async () => {
     const { onGetOrderBankDetails } = props
@@ -68,10 +70,59 @@ const EditOrderBankModal = props => {
   }
 
   const onFieldChange = (key, value) => {
-    const newOrderData = { ...orderData }
-    newOrderData[key] = value
-    setOrderData(newOrderData)
+    if(key === 'myremark1') {
+      setInputValue1(value);
+      if(value.length < 40) {
+        const newOrderData = { ...orderData }
+        newOrderData[key] = value
+        setOrderData(newOrderData)
+      }
+    }  else if(key === 'myremark2') {
+      setInputValue2(value);
+      if(value.length < 40) {
+        const newOrderData = { ...orderData }
+        newOrderData[key] = value
+        setOrderData(newOrderData)
+      }
+    }  else if(key === 'myremark3') {
+      setInputValue3(value);
+      if(value.length < 40) {
+        const newOrderData = { ...orderData }
+        newOrderData[key] = value
+        setOrderData(newOrderData)
+      }
+    } else {
+      const newOrderData = { ...orderData }
+      newOrderData[key] = value
+      setOrderData(newOrderData)
+    }
   }
+
+  const remainChars1 = useMemo(() => {
+    return 40 - inputValue1.length
+  }, [inputValue1])
+
+  const remainChars2 = useMemo(() => {
+    return 40 - inputValue2.length
+  }, [inputValue2])
+
+  const remainChars3 = useMemo(() => {
+    return 40 - inputValue3.length
+  }, [inputValue3])
+
+  const isValid1 = useMemo(() => {
+    return inputValue1 && remainChars1 >= 0
+  }, [remainChars1])
+
+  const isValid2 = useMemo(() => {
+    return inputValue2 && remainChars2 >= 0
+  }, [remainChars2])
+
+  const isValid3 = useMemo(() => {
+    return inputValue3 && remainChars3 >= 0
+  }, [remainChars3])
+
+
   return (
     <Modal isOpen={open} className="new-order-modal">
       <ModalHeader toggle={toggle}>
@@ -344,32 +395,62 @@ const EditOrderBankModal = props => {
                     <div className="d-flex justify-content-between mt-4 mb-4">
                       <div className="w-100 mr-4">
                         <label className="text-upper">my Remarks 1</label>
-                        <div className="w-100">
-                          <AWSMInput
+                        <div className="w-100 relative">
+                        <input
+                          onChange={e => onFieldChange("myremark1", e.target.value)}
+                          value={orderData.myremark1}
+                          className={`awsm-input w-100 ${(inputValue1 && !isValid1) ? "out-range " : ""}`}
+                        />
+                        <span
+                          className={`position-absolute awsm-input-right-content ${
+                            (inputValue1 && !isValid1) ? "out-range " : ""
+                          }`}
+                        >{`${remainChars1 >= 0 ? "+" : ""}${remainChars1}`}</span>
+                          {/* <AWSMInput
                             onChange={value => onFieldChange("myremark1", value)}
                             value={orderData.myremark1}
                             placeholder="Type something here..."
-                          />
+                          /> */}
                         </div>
                       </div>
                       <div className="w-100 mr-4">
                         <label className="text-upper">my Remarks 2</label>
-                        <div className="w-100">
-                          <AWSMInput
+                        <div className="w-100 relative">
+                        <input
+                        onChange={e => onFieldChange("myremark2", e.target.value)}
+                        value={orderData.myremark2}
+                        className={`awsm-input w-100 ${(inputValue2 && !isValid2) ? "out-range " : ""}`}
+                    />
+                    <span
+                          className={`position-absolute awsm-input-right-content ${
+                            (inputValue2 && !isValid2) ? "out-range " : ""
+                          }`}
+                        >{`${remainChars2 >= 0 ? "+" : ""}${remainChars2}`}</span>
+                          {/* <AWSMInput
                             onChange={value => onFieldChange("myremark2", value)}
                             value={orderData.myremark2}
                             placeholder="Type something here..."
-                          />
+                          /> */}
                         </div>
                       </div>
                       <div className="w-100 mr-4">
                         <label className="text-upper">my Remarks 3</label>
-                        <div className="w-100">
-                          <AWSMInput
+                        <div className="w-100 relative">
+                        <input
+                        onChange={e => onFieldChange("myremark3", e.target.value)}
+                        value={orderData.myremark3}
+                        className={`awsm-input w-100 ${(inputValue3 && !isValid3) ? "out-range " : ""}`}
+                      />
+                       <span
+                          className={`position-absolute awsm-input-right-content ${
+                            (inputValue3 && !isValid3) ? "out-range " : ""
+                          }`}
+                        >{`${remainChars3 >= 0 ? "+" : ""}${remainChars3}`}</span>
+                          {/* <AWSMInput
                             onChange={value => onFieldChange("myremark3", value)}
                             value={orderData.myremark3}
                             placeholder="Type something here..."
-                          />
+                          /> */}
                         </div>
                       </div>
                     </div>

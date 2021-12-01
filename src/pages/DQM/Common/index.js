@@ -5,26 +5,15 @@ import PropTypes from "prop-types"
 import { withStyles } from "@material-ui/styles"
 import IconButton from "@material-ui/core/IconButton"
 import { connect } from "react-redux"
-import {
-  Row,
-  Col,
-  Card,
-  CardBody,
-  Popover,
-  PopoverBody,
-} from "reactstrap"
+import { Row, Col, Card, CardBody, Popover, PopoverBody } from "reactstrap"
 import { ReactSVG } from "react-svg"
 import { Link } from "react-router-dom"
 import customiseTableIcon from "assets/images/AWSM-Customise-Table.svg"
 import AuditLog from "components/Common/AuditLog"
 import Loader from "components/Common/Loader"
 import FixedColumnTable from "components/Common/FrozenTableColumn"
-import CustomizeTableModal from "common/CustomizeTable"
-import {
-  transformArrayToString,
-  transformObjectToStringSentence,
-  filterObject,
-} from "./helper"
+import CustomizeTableModal from "components/Common/CustomizeTable"
+import { transformArrayToString, transformObjectToStringSentence, filterObject } from "./helper"
 import "./style.scss"
 import DownloadExcelButton from "components/Common/DownloadExcelS3"
 import AWSMAlert from "components/Common/AWSMAlert"
@@ -60,11 +49,10 @@ const styles = {
   },
 }
 class Pages extends Component {
-  defaultRegion = REGION_TERMINAL.find(option => option.region === "Central")
-    ?.region
-  defaultTerminal = REGION_TERMINAL.find(
-    option => option.region === "Central"
-  )?.terminal?.find(term => term === "KVDT")
+  defaultRegion = REGION_TERMINAL.find(option => option.region === "Central")?.region
+  defaultTerminal = REGION_TERMINAL.find(option => option.region === "Central")?.terminal?.find(
+    term => term === "KVDT"
+  )
   constructor(props) {
     super(props)
     this.state = {
@@ -97,7 +85,6 @@ class Pages extends Component {
     this.toggleCsvModal = this.toggleCsvModal.bind(this)
     this.toggleTI = this.toggleTI.bind(this)
   }
-
 
   getCustomerData = async () => {
     const { onGetMainTable /*salesDate*/ } = this.props
@@ -296,8 +283,7 @@ class Pages extends Component {
       {
         ...this.state,
         region: value,
-        terminal: REGION_TERMINAL.find(option => option.region === value)
-          ?.terminal?.[0],
+        terminal: REGION_TERMINAL.find(option => option.region === value)?.terminal?.[0],
       },
       this.onDateAndTerminalChange
     )
@@ -371,7 +357,7 @@ class Pages extends Component {
       subModule,
     } = this.props
     if (!tableData || tableData.length === 0) return ""
-    const scheduler = isScheduler();
+    const scheduler = isScheduler()
     return (
       <React.Fragment>
         {this.state.downloadCsv === true && <Loader />}
@@ -404,50 +390,47 @@ class Pages extends Component {
               >
                 <div className="vertical-hr-right">
                   {(locationPath === "/retail-customer" ||
-                    locationPath === "/commercial-customer") && !scheduler && (
-                    <>
-                      <button
-                        className="btn btn-outline-primary excel-btn-container mr-4"
-                        id="CsvUploadDownload"
-                      >
-                        <div className="excel-download-btn">
-                          <span className="download-icon-csv">
-                            <CustomCSVIcon />
-                          </span>
-                          <span className="download-button-message-csv">
-                            CSV File
-                          </span>
-                          <div className="arrow-down" />
-                        </div>
-                      </button>
-                      <Popover
-                        target="CsvUploadDownload"
-                        placement="bottom"
-                        id="csvMainRight"
-                        isOpen={this.state.showDownloadOption}
-                        trigger="legacy"
-                        style={{
-                          width: "150px",
-                          textAlign: "left",
-                          boxShadow: "#ccc 2px 1px 10px",
-                        }}
-                        toggle={() =>
-                          this.setState({
-                            showDownloadOption: !this.state.showDownloadOption,
-                          })
-                        }
-                      >
-                        <PopoverBody className="mainCsv">
-                          <div className="csvDropdown">
-                            <p onClick={() => this.uploadCSV()}>Upload CSV</p>
-                            <p onClick={() => this.downloadCSV()}>
-                              Download CSV
-                            </p>
+                    locationPath === "/commercial-customer") &&
+                    !scheduler && (
+                      <>
+                        <button
+                          className="btn btn-outline-primary excel-btn-container mr-4"
+                          id="CsvUploadDownload"
+                        >
+                          <div className="excel-download-btn">
+                            <span className="download-icon-csv">
+                              <CustomCSVIcon />
+                            </span>
+                            <span className="download-button-message-csv">CSV File</span>
+                            <div className="arrow-down" />
                           </div>
-                        </PopoverBody>
-                      </Popover>
-                    </>
-                  )}
+                        </button>
+                        <Popover
+                          target="CsvUploadDownload"
+                          placement="bottom"
+                          id="csvMainRight"
+                          isOpen={this.state.showDownloadOption}
+                          trigger="legacy"
+                          style={{
+                            width: "150px",
+                            textAlign: "left",
+                            boxShadow: "#ccc 2px 1px 10px",
+                          }}
+                          toggle={() =>
+                            this.setState({
+                              showDownloadOption: !this.state.showDownloadOption,
+                            })
+                          }
+                        >
+                          <PopoverBody className="mainCsv">
+                            <div className="csvDropdown">
+                              <p onClick={() => this.uploadCSV()}>Upload CSV</p>
+                              <p onClick={() => this.downloadCSV()}>Download CSV</p>
+                            </div>
+                          </PopoverBody>
+                        </Popover>
+                      </>
+                    )}
                   <DownloadExcelButton subModule={subModule} salesDate={this.props.salesDate} />
                   <div className="separate" />
                 </div>
@@ -480,18 +463,16 @@ class Pages extends Component {
                           }`}
                         >
                           <div className="enteriesText">
-                          <p className="pr-2 mb-0">
-                            {`${currentPage * rowsPerPage + 1} to ${
-                              tableData.total_rows -
-                                (currentPage * rowsPerPage + rowsPerPage) <
-                              0
-                                ? tableData.total_rows
-                                : currentPage * rowsPerPage + rowsPerPage
-                            } of ${tableData.total_rows} entries${
-                              locationPath === "/sales-inventory"
-                                ? `, ${this.props.overrideCount} record exceeds variance threshold`
-                                : ""
-                            }`}
+                            <p className="pr-2 mb-0">
+                              {`${currentPage * rowsPerPage + 1} to ${
+                                tableData.total_rows - (currentPage * rowsPerPage + rowsPerPage) < 0
+                                  ? tableData.total_rows
+                                  : currentPage * rowsPerPage + rowsPerPage
+                              } of ${tableData.total_rows} entries${
+                                locationPath === "/sales-inventory"
+                                  ? `, ${this.props.overrideCount} record exceeds variance threshold`
+                                  : ""
+                              }`}
                             </p>
                             {locationPath === "/sales-inventory" && (
                               <div className="separate-snl" />
@@ -509,16 +490,13 @@ class Pages extends Component {
                                   defaultValue={new Date()}
                                 />
                               </div>
-                              <label className="mb-0 pr-2 w-min">
-                                REGION & TERMINAL
-                              </label>
+                              <label className="mb-0 pr-2 w-min">REGION & TERMINAL</label>
                               <div className="d-flex w-100">
                                 <div className="col-3 p-0">
                                   <AWSMDropdown
                                     placeholder=""
                                     items={REGION_TERMINAL.filter(
-                                      option =>
-                                        option.region !== "Special Product"
+                                      option => option.region !== "Special Product"
                                     ).map(e => e.region)}
                                     value={this.state.region}
                                     onChange={this.onRegionChange}
@@ -528,9 +506,8 @@ class Pages extends Component {
                                   <AWSMDropdown
                                     placeholder=""
                                     items={
-                                      REGION_TERMINAL.find(
-                                        e => e.region === this.state.region
-                                      )?.terminal
+                                      REGION_TERMINAL.find(e => e.region === this.state.region)
+                                        ?.terminal
                                     }
                                     value={this.state.terminal}
                                     onChange={this.onTerminalChange}
@@ -542,16 +519,13 @@ class Pages extends Component {
                         </div>
                         <div
                           className={`d-flex align-items-center ${
-                            locationPath === "/sales-inventory" &&
-                            "sales-first flex-custom"
+                            locationPath === "/sales-inventory" && "sales-first flex-custom"
                           }`}
                         >
-                         {locationPath === "/sales-inventory" && (
+                          {locationPath === "/sales-inventory" && (
                             <>
                               <button
-                                onClick={() =>
-                                  this.setState({ varianceControl: true })
-                                }
+                                onClick={() => this.setState({ varianceControl: true })}
                                 className="btn btn-outline-primary modal-button"
                               >
                                 Threshold Control
@@ -559,9 +533,7 @@ class Pages extends Component {
                               </button>
                               <button
                                 className="btn btn-outline-primary ml-2 mr-2 modal-button"
-                                onClick={() =>
-                                  this.setState({ tankStatusModal: true })
-                                }
+                                onClick={() => this.setState({ tankStatusModal: true })}
                               >
                                 <ReactSVG src={TankIcon} />
                                 Tank Status
@@ -569,10 +541,7 @@ class Pages extends Component {
                               <div className="separate" />
                             </>
                           )}
-                          <IconButton
-                            aria-label="delete"
-                            onClick={this.handleOpenCustomizeTable}
-                          >
+                          <IconButton aria-label="delete" onClick={this.handleOpenCustomizeTable}>
                             <img src={customiseTableIcon} />
                           </IconButton>
                         </div>
@@ -593,23 +562,20 @@ class Pages extends Component {
                         rowsPerPage={rowsPerPage}
                         currentPage={currentPage}
                         onChangePage={this.handleChangePage}
-                        totalPages={Math.ceil(
-                          tableData.total_rows / rowsPerPage
-                        )}
+                        totalPages={Math.ceil(tableData.total_rows / rowsPerPage)}
                       />
                     </CardBody>
                   }
                 </Card>
               </Col>
-              {this.state.loader === false &&
-                this.state.error_message !== "" && (
-                  <AWSMAlert
-                    status="error"
-                    message={this.state.error_message}
-                    openAlert={this.state.alert}
-                    closeAlert={() => this.setState({ alert: false })}
-                  />
-                )}
+              {this.state.loader === false && this.state.error_message !== "" && (
+                <AWSMAlert
+                  status="error"
+                  message={this.state.error_message}
+                  openAlert={this.state.alert}
+                  closeAlert={() => this.setState({ alert: false })}
+                />
+              )}
               <AWSMAlert
                 status={this.state.csvStatus}
                 message={this.state.csvMessage}
@@ -617,8 +583,7 @@ class Pages extends Component {
                 closeAlert={() => this.setState({ csvAlert: false })}
               />
             </Row>
-            {(this.state.openCsvModal === true ||
-              this.state.downloadCsv === true) && (
+            {(this.state.openCsvModal === true || this.state.downloadCsv === true) && (
               <CsvFileUpload
                 currentPage={locationPath}
                 isOpen={this.state.openCsvModal}

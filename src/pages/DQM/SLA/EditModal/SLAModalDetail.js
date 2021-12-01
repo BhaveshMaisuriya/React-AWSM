@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"
 import PropTypes from "prop-types"
 import ExitConfirmation from "components/Common/ExitConfirmation"
-import { XIcon } from "common/CustomizeTable/icons"
+import { XIcon } from "components/Common/CustomizeTable/icons"
 import { Button, Modal, ModalBody, Table } from "reactstrap"
 import CustomCKEditor from "./CustomCKEditor"
 import "./ModalDetail.scss"
@@ -10,9 +10,16 @@ import SLARecordEditor from "./CustomCKEditor5"
 import { isEqual } from "lodash"
 
 export const SLAModalDetail = ({ ...props }) => {
-  const { openModalDetail, handleCloseModal, onUpdateSLAItem, data, type, onCreateSLARecord  } = props
+  const {
+    openModalDetail,
+    handleCloseModal,
+    onUpdateSLAItem,
+    data,
+    type,
+    onCreateSLARecord,
+  } = props
   const [modalConfirm, setModalConfirm] = useState(false)
-  const [dataSubmitted,setDataSubmitted] = useState(data)
+  const [dataSubmitted, setDataSubmitted] = useState(data)
 
   useEffect(() => {
     if (openModalDetail) {
@@ -29,13 +36,13 @@ export const SLAModalDetail = ({ ...props }) => {
     handleCloseModal()
   }
 
-  const ValidateDataHandler = () =>{
-    if(!dataSubmitted && type !== "add") return false
-    else if(!dataSubmitted) return true
-    else{
+  const ValidateDataHandler = () => {
+    if (!dataSubmitted && type !== "add") return false
+    else if (!dataSubmitted) return true
+    else {
       let keys = Object.keys(dataSubmitted)
-      for(let i = 0;i< keys.length;i++){
-        if(dataSubmitted[keys[i]] && dataSubmitted[keys[i]] !== '&nbsp;'){
+      for (let i = 0; i < keys.length; i++) {
+        if (dataSubmitted[keys[i]] && dataSubmitted[keys[i]] !== "&nbsp;") {
           return false
         }
       }
@@ -44,21 +51,22 @@ export const SLAModalDetail = ({ ...props }) => {
   }
 
   const handleOnUpdateClick = () => {
-    if(type == 'add'){
-      onCreateSLARecord(dataSubmitted || {
-        itemIdentifier:'',
-        description:'',
-        kpi:'',
-        mitigation_plan:'',
-        action_by:'',
-        module:'',
-        remarks:'',
-      })
-    }
-    else{
+    if (type == "add") {
+      onCreateSLARecord(
+        dataSubmitted || {
+          itemIdentifier: "",
+          description: "",
+          kpi: "",
+          mitigation_plan: "",
+          action_by: "",
+          module: "",
+          remarks: "",
+        }
+      )
+    } else {
       onUpdateSLAItem({
-        itemId : data.id,
-        recordValue:dataSubmitted || data
+        itemId: data.id,
+        recordValue: dataSubmitted || data,
       })
     }
     handleCloseModal()
@@ -101,19 +109,22 @@ export const SLAModalDetail = ({ ...props }) => {
               <div>
                 <table className="sla-detail-table">
                   <thead>
-                      <th className="header hd_1">item no.</th>
-                      <th className="header hd_2">description</th>
-                      <th className="header hd_3">kpi</th>
-                      <th className="header hd_4">mitigation plan</th>
-                      <th className="header hd_5">action by</th>
-                      <th className="header hd_6">module</th>
-                      <th className="header hd_7">remarks</th>
+                    <th className="header hd_1">item no.</th>
+                    <th className="header hd_2">description</th>
+                    <th className="header hd_3">kpi</th>
+                    <th className="header hd_4">mitigation plan</th>
+                    <th className="header hd_5">action by</th>
+                    <th className="header hd_6">module</th>
+                    <th className="header hd_7">remarks</th>
                   </thead>
                   <tbody>
                     <tr className="ck-content">
                       <td className="" colSpan={7}>
                         {/* <CustomCKEditor data={data} /> */}
-                        <SLARecordEditor onChange={(v)=>setDataSubmitted(v)} data={data}/>
+                        <SLARecordEditor
+                          onChange={v => setDataSubmitted(v)}
+                          data={data}
+                        />
                       </td>
                     </tr>
                   </tbody>
@@ -127,12 +138,12 @@ export const SLAModalDetail = ({ ...props }) => {
                 >
                   Cancel
                 </button>
-                  <button
+                <button
                   disabled={ValidateDataHandler()}
                   className="btn btn-primary px-4"
                   onClick={handleOnUpdateClick}
                 >
-                  { type == "add" ? 'Add' : 'Update' }
+                  {type == "add" ? "Add" : "Update"}
                 </button>
               </div>
             </div>

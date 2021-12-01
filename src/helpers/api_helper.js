@@ -22,7 +22,7 @@ axiosApi.interceptors.response.use(
 export { axiosApi }
 
 const realAxiosApi = axios.create({
-  baseURL: "https://cp54ul6po2.execute-api.ap-southeast-1.amazonaws.com/dev",
+  baseURL: process.env.REACT_APP_API_END_POINT,
   headers: {
     'content-type': 'application/json',
   },

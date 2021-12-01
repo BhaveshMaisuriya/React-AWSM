@@ -11,7 +11,7 @@ import {
   Button,
   Modal,
 } from "reactstrap"
-import CustomizeTableModal from "../../common/CustomizeTable"
+import CustomizeTableModal from "components/Common/CustomizeTable"
 import TankStatusModal from "../DQM/SalesAndInventory/TankStatusModal/TankStatusModal"
 const popTypes = [
   {
@@ -398,21 +398,21 @@ const data = {
         field: "weight",
         sort: "asc",
         width: 100,
-        type: "string"
+        type: "string",
       },
       {
         label: "Restrict Code",
         field: "restrict",
         sort: "asc",
         width: 100,
-        type: "string"
+        type: "string",
       },
       {
         label: "Vehicle Owner",
         field: "vehicle",
         sort: "asc",
         width: 100,
-        type: "string"
+        type: "string",
       },
     ],
     rows: [
@@ -573,10 +573,10 @@ for (var i = 0; i < Object.keys(data).length; i++) {
   }
 }
 
-import Breadcrumbs from "../../components/Common/Breadcrumb"
+import Breadcrumbs from "components/Common/Breadcrumb"
 import "./datatables.scss"
 import VarianceControl from "../DQM/SalesAndInventory/VarianceControl"
-import AWSMDropdown from "../../components/Common/Dropdown"
+import AWSMDropdown from "components/Common/Dropdown"
 class DatatableTables extends Component {
   constructor(props) {
     super(props)
@@ -667,7 +667,7 @@ class DatatableTables extends Component {
 
     const onOpenCustomiseModal = () => {
       this.setState({
-        customiseModalOpen: !this.state.customiseModalOpen
+        customiseModalOpen: !this.state.customiseModalOpen,
       })
     }
     return (
@@ -714,8 +714,8 @@ class DatatableTables extends Component {
                                   this.setState({
                                     filters: [
                                       {
-                                        key:
-                                          data[locationPath].columns[0].field,
+                                        key: data[locationPath].columns[0]
+                                          .field,
                                         filter: popTypes[0].field,
                                         value: "",
                                       },
@@ -799,9 +799,8 @@ class DatatableTables extends Component {
                                           onClick={() => {
                                             var filters = this.state.filters
                                             filters.push({
-                                              key:
-                                                data[locationPath].columns[0]
-                                                  .field,
+                                              key: data[locationPath].columns[0]
+                                                .field,
                                               filter: popTypes[0].field,
                                               value: "",
                                             })
@@ -829,7 +828,17 @@ class DatatableTables extends Component {
                           <label>REGION & TERMINAL</label>
                           <div className="d-flex">
                             <div className="col-5 p-0">
-                              <AWSMDropdown items={["Northern", "Southern", "Central", "Eastern", "Sabah", "Sarawak"]} value="Northern" />
+                              <AWSMDropdown
+                                items={[
+                                  "Northern",
+                                  "Southern",
+                                  "Central",
+                                  "Eastern",
+                                  "Sabah",
+                                  "Sarawak",
+                                ]}
+                                value="Northern"
+                              />
                             </div>
                             <div className="col-7 p-0 ml-2">
                               <AWSMDropdown items={["KVDT"]} value="KVDT" />
@@ -839,17 +848,46 @@ class DatatableTables extends Component {
                       </div>
                     </div>
                     <div className="d-flex justify-content-end mt-4">
-                      <button className="btn btn-outline-primary" onClick={onOpenCustomiseModal}>Customise</button>
-                      <div className="grey-text" style={{ width: "1px", backgroundColor: "gray", margin: "0 12px" }} />
-                      {locationPath === "/sales-inventory" && <div>
-                        <button onClick={() => this.setState({ varianceControl: true })} className="btn btn-outline-primary">
-                          Sales and Inventory
-                        </button>
-                        <button className="btn btn-outline-primary ml-2" onClick={() => this.setState({ tankStatusModal: true })}>Tank Status</button>
-                        <VarianceControl open={this.state.varianceControl} closeDialog={() => this.setState({ varianceControl: false })} />
-                      </div>
-
-                      }
+                      <button
+                        className="btn btn-outline-primary"
+                        onClick={onOpenCustomiseModal}
+                      >
+                        Customise
+                      </button>
+                      <div
+                        className="grey-text"
+                        style={{
+                          width: "1px",
+                          backgroundColor: "gray",
+                          margin: "0 12px",
+                        }}
+                      />
+                      {locationPath === "/sales-inventory" && (
+                        <div>
+                          <button
+                            onClick={() =>
+                              this.setState({ varianceControl: true })
+                            }
+                            className="btn btn-outline-primary"
+                          >
+                            Sales and Inventory
+                          </button>
+                          <button
+                            className="btn btn-outline-primary ml-2"
+                            onClick={() =>
+                              this.setState({ tankStatusModal: true })
+                            }
+                          >
+                            Tank Status
+                          </button>
+                          <VarianceControl
+                            open={this.state.varianceControl}
+                            closeDialog={() =>
+                              this.setState({ varianceControl: false })
+                            }
+                          />
+                        </div>
+                      )}
                     </div>
                     <MDBDataTable
                       responsive
@@ -865,7 +903,7 @@ class DatatableTables extends Component {
         </div>
         <Modal
           isOpen={this.state.modalOpen}
-        // toggle={this.tog_standard}
+          // toggle={this.tog_standard}
         >
           <div className="modal-header">
             <h5 className="modal-title mt-0" id="myModalLabel">
@@ -933,7 +971,11 @@ class DatatableTables extends Component {
             </button>
           </div>
         </Modal>
-        <TankStatusModal open={this.state.tankStatusModal} handleClose={() => this.setState({ tankStatusModal: false })} modalTitle={`Tank Status`} />
+        <TankStatusModal
+          open={this.state.tankStatusModal}
+          handleClose={() => this.setState({ tankStatusModal: false })}
+          modalTitle={`Tank Status`}
+        />
       </React.Fragment>
     )
   }

@@ -142,8 +142,11 @@ const RTSOrderBank = (state = initialState, action) => {
       }
     case GET_DELETE_MULTIPLE_ORDER_SUCCESS:
       notify.success("Records Successfully Deleted")
+      const { order_banks } = action.payload
+      const newOrderBankTableData = state.orderBankTableData.filter((item) => !order_banks.includes(item.id))
       return {
         ...state,
+        orderBankTableData: newOrderBankTableData,
         multipleorder: action.payload
       }
 

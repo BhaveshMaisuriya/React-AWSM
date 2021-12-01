@@ -1,6 +1,5 @@
 import React, { Component } from "react"
 import { connect } from "react-redux"
-import { compose } from "redux"
 import PropTypes from "prop-types"
 import { withStyles } from "@material-ui/styles"
 import { format } from "date-fns"
@@ -103,18 +102,12 @@ class AuditLog extends Component {
 
     //cut date from string
     let date = new Date(audit.created)
-    let finalDate =
-      date.getDate() + "-" + (date.getMonth() + 1) + "-" + date.getFullYear()
+    let finalDate = date.getDate() + "-" + (date.getMonth() + 1) + "-" + date.getFullYear()
 
     //cut time from string
-    var hour =
-      date.getHours().toString().length == 1
-        ? "0" + date.getHours()
-        : date.getHours()
+    var hour = date.getHours().toString().length == 1 ? "0" + date.getHours() : date.getHours()
     var mins =
-      date.getMinutes().toString().length == 1
-        ? "0" + date.getMinutes()
-        : date.getMinutes()
+      date.getMinutes().toString().length == 1 ? "0" + date.getMinutes() : date.getMinutes()
     let finalTime = hour + ":" + mins
 
     const { classes } = this.props
@@ -216,7 +209,4 @@ AuditLog.propType = {
   toggle: PropTypes.func.isRequired,
   salesDate: PropTypes.object,
 }
-export default compose(
-  connect(mapStateToProps, mapDispatchToProps),
-  withStyles(styles)
-)(AuditLog)
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(AuditLog))

@@ -53,22 +53,13 @@ class CustomPagination extends Component {
   }
 
   renderDivider = () => {
-    return (
-      <Divider
-        orientation="vertical"
-        flexItem
-        light
-        className="Pagination-Divider"
-      />
-    )
+    return <Divider orientation="vertical" flexItem light className="Pagination-Divider" />
   }
 
   renderPageDots = () => {
     return (
       <PaginationItem disabled>
-        <PaginationLink className="Pagination-Button Pagination-Text">
-          {"..."}
-        </PaginationLink>
+        <PaginationLink className="Pagination-Button Pagination-Text">{"..."}</PaginationLink>
       </PaginationItem>
     )
   }
@@ -76,13 +67,9 @@ class CustomPagination extends Component {
   getPagenumbers = pageNumbers => {
     const { totalPages, currentPage, numShownPages } = this.props
     let newPageNumbers = 0
-    if (currentPage < numShownPages - 1)
-      newPageNumbers = pageNumbers.splice(0, numShownPages)
+    if (currentPage < numShownPages - 1) newPageNumbers = pageNumbers.splice(0, numShownPages)
     else if (totalPages - currentPage <= numShownPages - 1)
-      newPageNumbers = pageNumbers.splice(
-        totalPages - numShownPages,
-        numShownPages
-      )
+      newPageNumbers = pageNumbers.splice(totalPages - numShownPages, numShownPages)
     else
       newPageNumbers = pageNumbers.splice(
         currentPage - Math.ceil(numShownPages / 3),
@@ -101,45 +88,46 @@ class CustomPagination extends Component {
     // const newpageNumbers = pageNumbers.splice(currentPage, 20)
     const newpageNumbers = this.getPagenumbers(pageNumbers)
     return (
-      <Pagination>
-        <div className="Pagination-Container">
-          <PaginationItem disabled={currentPage === 0}>
-            <PaginationLink
-              onClick={this.handleBackButtonClick}
-              aria-label="Previous Page"
-              className="Pagination-Button Pagination-First-Button"
-            >
-              <img
-                src={currentPage === 0 ? ArrowLeftG : ArrowLeft}
-                className="img-arrow"
-              />
-            </PaginationLink>
-          </PaginationItem>
-          {this.renderDivider()}
-          {currentPage >= numShownPages - 1 ? this.renderPage(firstPage) : ""}
-          {currentPage >= numShownPages - 1 ? this.renderPageDots() : ""}
-          {newpageNumbers.map(number => this.renderPage(number))}
-          {totalPages - currentPage > numShownPages - 1 || (currentPage < 8 && totalPages > 8)
-            ? this.renderPageDots()
-            : ""}
-          {totalPages - currentPage > numShownPages - 1 || (currentPage < 8 && totalPages > 8)
-            ? this.renderPage(totalPages)
-            : ""}
-          {this.renderDivider()}
-          <PaginationItem disabled={currentPage >= totalPages - 1}>
-            <PaginationLink
-              onClick={this.handleNextButtonClick}
-              aria-label="Next Page"
-              className="Pagination-Button"
-            >
-              <img
-                src={currentPage >= totalPages - 1 ? ArrowRightG : ArrowRight}
-                className="img-arrow"
-              />
-            </PaginationLink>
-          </PaginationItem>
-        </div>
-      </Pagination>
+      <>
+        {totalPages >= 2 && (
+          <Pagination>
+            <div className="Pagination-Container">
+              <PaginationItem disabled={currentPage === 0}>
+                <PaginationLink
+                  onClick={this.handleBackButtonClick}
+                  aria-label="Previous Page"
+                  className="Pagination-Button Pagination-First-Button"
+                >
+                  <img src={currentPage === 0 ? ArrowLeftG : ArrowLeft} className="img-arrow" />
+                </PaginationLink>
+              </PaginationItem>
+              {this.renderDivider()}
+              {currentPage >= numShownPages - 1 ? this.renderPage(firstPage) : ""}
+              {currentPage >= numShownPages - 1 ? this.renderPageDots() : ""}
+              {newpageNumbers.map(number => this.renderPage(number))}
+              {totalPages - currentPage > numShownPages - 1 || (currentPage < 8 && totalPages > 8)
+                ? this.renderPageDots()
+                : ""}
+              {totalPages - currentPage > numShownPages - 1 || (currentPage < 8 && totalPages > 8)
+                ? this.renderPage(totalPages)
+                : ""}
+              {this.renderDivider()}
+              <PaginationItem disabled={currentPage >= totalPages - 1}>
+                <PaginationLink
+                  onClick={this.handleNextButtonClick}
+                  aria-label="Next Page"
+                  className="Pagination-Button"
+                >
+                  <img
+                    src={currentPage >= totalPages - 1 ? ArrowRightG : ArrowRight}
+                    className="img-arrow"
+                  />
+                </PaginationLink>
+              </PaginationItem>
+            </div>
+          </Pagination>
+        )}
+      </>
     )
   }
 }
@@ -147,7 +135,6 @@ class CustomPagination extends Component {
 CustomPagination.propTypes = {
   onChangePage: PropTypes.func.isRequired,
   currentPage: PropTypes.number.isRequired,
-  rowsPerPage: PropTypes.number.isRequired,
   totalPages: PropTypes.number.isRequired,
   increment: PropTypes.number,
   numShownPages: PropTypes.number,

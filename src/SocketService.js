@@ -1,5 +1,5 @@
 import store from "./store/index";
-const URL_CONNECTION = "wss://gaimtnhvwf.execute-api.ap-southeast-1.amazonaws.com/dev";
+const URL_CONNECTION = process.env.REACT_APP_SOCKET_END_POINT
 let webSocket = null;
 import { getWebsocketMessageSuccess } from "./store/orderBank/actions"
 async function initWebsocket() {

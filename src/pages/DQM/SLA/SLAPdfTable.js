@@ -8,14 +8,7 @@ import VisibilityOutlinedIcon from "@material-ui/icons/VisibilityOutlined"
 import { connect } from "react-redux"
 import Tooltip from "@material-ui/core/Tooltip"
 import { getSLAPdfDownload, getDeletePdf, getRenamePdf } from "store/actions"
-import {
-  Col,
-  Modal,
-  ModalBody,
-  ModalHeader,
-  ModalFooter,
-  Row,
-} from "reactstrap"
+import { Col, Modal, ModalBody, ModalHeader, ModalFooter, Row } from "reactstrap"
 import AWSMInput from "components/Common/Input"
 import AWSMAlert from "components/Common/AWSMAlert"
 import { ReactSVG } from "react-svg"
@@ -122,8 +115,7 @@ function SLAPdfTable(props) {
         months[getFullDate.getMonth()] +
         " " +
         getFullDate.getFullYear()
-      uploadedTime =
-        getFullDate.getHours() + ":" + getFullDate.getMinutes() + " " + ampm
+      uploadedTime = getFullDate.getHours() + ":" + getFullDate.getMinutes() + " " + ampm
 
       allData.push({
         filename: item.filename,
@@ -236,9 +228,7 @@ function SLAPdfTable(props) {
       )
       await setCollection(data)
       await setFilterTableDatas(
-        tableDatas.filter(
-          item => item.filename.toLowerCase().indexOf(query) > -1
-        )
+        tableDatas.filter(item => item.filename.toLowerCase().indexOf(query) > -1)
       )
     }
   }
@@ -265,9 +255,7 @@ function SLAPdfTable(props) {
   }
 
   const headRow = () => {
-    return Object.values(tableHeader).map((title, index) => (
-      <td key={index}>{title}</td>
-    ))
+    return Object.values(tableHeader).map((title, index) => <td key={index}>{title}</td>)
   }
 
   const toggleRename = () => {
@@ -280,9 +268,7 @@ function SLAPdfTable(props) {
 
   return (
     <>
-      {tableDatas.length === 0 && (
-        <p className="not_found">No Uploaded Documents Found!</p>
-      )}
+      {tableDatas.length === 0 && <p className="not_found">No Uploaded Documents Found!</p>}
       {tableDatas.length > 0 && (
         <Fragment>
           <div className="search-sla">
@@ -298,9 +284,7 @@ function SLAPdfTable(props) {
           <div className="top-page-number">
             <div className="enteriesText">
               {`${currentPage * rowsPerPage + 1} to ${
-                filterTableDatas.length -
-                  (currentPage * rowsPerPage + rowsPerPage) <
-                0
+                filterTableDatas.length - (currentPage * rowsPerPage + rowsPerPage) < 0
                   ? filterTableDatas.length
                   : currentPage * rowsPerPage + rowsPerPage
               } of ${filterTableDatas.length} enteries`}
@@ -334,10 +318,7 @@ function SLAPdfTable(props) {
         <ModalBody>
           <Row>
             <Col lg={10}>
-              <AWSMInput
-                value={renameFileName}
-                onChange={value => setRenameFileName(value)}
-              />
+              <AWSMInput value={renameFileName} onChange={value => setRenameFileName(value)} />
             </Col>
             <Col lg={2}>
               <div className="d-flex align-items-center h-100">.pdf</div>
@@ -347,10 +328,7 @@ function SLAPdfTable(props) {
         <Row>
           <Col>
             <div className="d-flex justify-content-end pr-3 mt-2 mb-4">
-              <button
-                className="btn btn-outline-primary mr-3"
-                onClick={toggleRename}
-              >
+              <button className="btn btn-outline-primary mr-3" onClick={toggleRename}>
                 Cancel
               </button>
               <button className="btn btn-primary" onClick={RenamePdf}>
@@ -382,10 +360,7 @@ function SLAPdfTable(props) {
         <Row>
           <Col>
             <div className="d-flex justify-content-end pr-3 mt-2 mb-4">
-              <button
-                className="btn btn-outline-danger mr-3"
-                onClick={toggleDelete}
-              >
+              <button className="btn btn-outline-danger mr-3" onClick={toggleDelete}>
                 Cancel
               </button>
               <button className="btn btn-danger" onClick={DeletePdf}>

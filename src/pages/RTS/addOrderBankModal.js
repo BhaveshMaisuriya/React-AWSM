@@ -336,9 +336,9 @@ const NewOrderBankModal = props => {
                           placeholder="Lorem ipsum"
                         />
                       </div>
-                      <div className="w-30 ml-3">
+                      {/* <div className="w-30 ml-3">
                         <Button color="primary">Generate</Button>
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                 </div>
@@ -466,14 +466,14 @@ const NewOrderBankModal = props => {
                   <Col lg={4} sm={6} xs={12}>
                     <p>
                       <strong>Name: </strong>
-                      {orderData.address.ship_to_company}
+                      {orderData.ship_to_company}
                     </p>
                     <p>
                       <strong>Cloud: </strong>
                       {orderData.address.cloud}
                     </p>
                     <p>
-                      <strong>Product Category:</strong>{" "}
+                      <strong>Product Category:</strong>{orderData?.storage?.storage_1?.ordering_category}
                     </p>
                     <p>
                       <strong>Order Type:</strong>{" "}
@@ -519,10 +519,10 @@ const NewOrderBankModal = props => {
                       <strong>Max Stock Days:</strong>{" "}
                     </p>
                     <p>
-                      <strong>Monthly Fixed Quota:</strong>{" "}
+                      <strong>Monthly Fixed Quota:</strong>{orderData?.storage.storage_1?.monthly_fixed_quota}
                     </p>
                     <p>
-                      <strong>RT Req:</strong> Lorem Ipsum
+                      <strong>RT Req:</strong>{""}
                     </p>
                     <p>
                       <strong>City:</strong> {orderData.address.address.city}

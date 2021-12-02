@@ -27,6 +27,9 @@ import {
   DELETE_ORDERBANK_DETAIL,
   DELETE_ORDERBANK_DETAIL_SUCCESS,
   DELETE_ORDERBANK_DETAIL_FAIL,
+  VIEW_ORDERBANK_DETAIL,
+  VIEW_ORDERBANK_DETAIL_SUCCESS,
+  VIEW_ORDERBANK_DETAIL_FAIL,  
   SEND_DN_STATUS_REQUEST,
   SEND_DN_STATUS_REQUEST_SUCCESS,
   SEND_DN_STATUS_REQUEST_FAIL,
@@ -210,6 +213,21 @@ export const sendOrderBankDNFail = (error) => ({
 export const updateOrderBankTableData = (payload) => ({
   type: UPDATE_ORDER_BANK_TABLE_DATA,
   payload,
+})
+
+export const viewOrderBankDetail = (params) => ({
+  type: VIEW_ORDERBANK_DETAIL,
+  params,
+})
+
+export const viewOrderBankDetailSuccess = response => ({
+  type: VIEW_ORDERBANK_DETAIL_SUCCESS,
+  payload: response,
+})
+
+export const viewOrderBankDetailFail = error => ({
+  type: VIEW_ORDERBANK_DETAIL_FAIL,
+  payload: error
 })
 
 export const deleteOrderBankDetail = (params) => ({

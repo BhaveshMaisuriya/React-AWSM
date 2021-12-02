@@ -3,6 +3,8 @@ import {
   CANCEL_PAYMENT_IN_GANTT_CHART_SUCCESS,
   DELETE_ORDERBANK_DETAIL_FAIL,
   DELETE_ORDERBANK_DETAIL_SUCCESS,
+  VIEW_ORDERBANK_DETAIL_FAIL,
+  VIEW_ORDERBANK_DETAIL_SUCCESS,  
   DESELECT_VEHICLE_RTS_SHIPMENT,
   DRAG_RTS_ORDER_BANK_TO_GANTT_CHART_SUCCESS,
   GET_ORDER_BANK_AUDITLOG_FAIL,
@@ -65,6 +67,7 @@ const initialState = {
   socketData: [],
   totalRow: 0,
   multipleorder: null,
+  viewData: null,
 }
 
 const RTSOrderBank = (state = initialState, action) => {
@@ -185,6 +188,18 @@ const RTSOrderBank = (state = initialState, action) => {
         ...state,
         error: action.payload
       }
+    case VIEW_ORDERBANK_DETAIL_SUCCESS: {
+      return {
+        ...state,
+        viewData: action.payload
+      }
+    }
+    case VIEW_ORDERBANK_DETAIL_FAIL:
+      return {
+        ...state,
+        error: action.payload
+      }
+      
     case SEND_DN_STATUS_REQUEST_SUCCESS:
       notify.success("An order has been successfully sent for DN Creation")
       return {

@@ -1,14 +1,10 @@
 import React, { useState } from "react"
-import { EllipsisIcon } from "../../../common/CustomizeTable/icons"
+import { EllipsisIcon } from "../CustomizeTable/icons"
 import "./index.scss"
 import { Dropdown, DropdownMenu, DropdownToggle } from "reactstrap"
 import { ReactSVG } from "react-svg"
 
-const AWSMButtonOption = ({
-  options = [],
-  optionClick,
-  disabled,
-}) => {
+const AWSMButtonOption = ({ options = [], optionClick, disabled }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const toggle = () => setDropdownOpen(prevState => !prevState)
 

@@ -28,9 +28,7 @@ function SLATable(props) {
       const query = val.toLowerCase()
       setCurrentPage(0)
       const data = cloneDeep(
-        tableDatas
-          .filter(item => item.name.toLowerCase().indexOf(query) > -1)
-          .slice(0, rowsPerPage)
+        tableDatas.filter(item => item.name.toLowerCase().indexOf(query) > -1).slice(0, rowsPerPage)
       )
       await setCollection(data)
     }
@@ -58,16 +56,12 @@ function SLATable(props) {
   }
 
   const headRow = () => {
-    return Object.values(tableHeader).map((title, index) => (
-      <td key={index}>{title}</td>
-    ))
+    return Object.values(tableHeader).map((title, index) => <td key={index}>{title}</td>)
   }
 
   return (
     <>
-      {tableDatas.length === 0 && (
-        <p className="not_found">No Uploaded Documents Found!</p>
-      )}
+      {tableDatas.length === 0 && <p className="not_found">No Uploaded Documents Found!</p>}
       {tableDatas.length > 0 && (
         <Fragment>
           <div className="search">
@@ -81,8 +75,7 @@ function SLATable(props) {
           <div className="top-page-number">
             <div className="enteriesText">
               {`${currentPage * rowsPerPage + 1} to ${
-                tableDatas.length - (currentPage * rowsPerPage + rowsPerPage) <
-                0
+                tableDatas.length - (currentPage * rowsPerPage + rowsPerPage) < 0
                   ? tableDatas.length
                   : currentPage * rowsPerPage + rowsPerPage
               } of ${tableDatas.length} enteries`}

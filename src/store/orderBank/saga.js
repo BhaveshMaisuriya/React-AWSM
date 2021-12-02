@@ -37,7 +37,7 @@ import {
   getOrderBankSuccess,
   getOrderBankFail,
   addOrderBankSuccess,
-  addOrderBankFail,  
+  addOrderBankFail,
   getOrderBankDetailFail,
   getOrderBankDetailSuccess,
   deleteOrderBankDetailFail,
@@ -69,6 +69,8 @@ import {
   updateOBEventSuccess,
   getOBRTDetailsSuccess,
   updateOBRTDetailsSuccess,
+  getdeleteMultipleOrderSuccess,
+  getdeleteMultipleOrderFail,
 } from "./actions"
 import {
   getOrderBank,
@@ -234,8 +236,15 @@ function* onGetRunAutoScheduling(params) {
 
 function* onGetDeleteMultipleOrder(params) {
   try {
+    let newResponse = {};
     const response = yield call(getdeleteMultipleOrder, params)
-    yield put(getdeleteMultipleOrderSuccess(response))
+    if (response) {
+      newResponse = {
+        ...response,
+        order_banks: params?.params?.order_banks,
+      }
+    }
+    yield put(getdeleteMultipleOrderSuccess(newResponse))
   } catch (error) {
     yield put(getdeleteMultipleOrderFail(error))
   }

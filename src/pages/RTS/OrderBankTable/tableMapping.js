@@ -2,7 +2,7 @@ const tableColumns = [
   "priority",
   "notes",
   "retail_storage_relation.retail",
-  "retail_storage_relation.retail_customer_relation.site_name",
+  "retail_storage_relation.retail_customer_relation.ship_to_company",
   "retail_storage_relation.retail_customer_relation.cloud",
   "trip",
   "dn_date",
@@ -15,7 +15,7 @@ const tableColumns = [
   "split_id",
   "order_type",
   "retail_storage_relation.retail_customer_relation.road_tanker_accessibility",
-  "order_remarks"
+  "order_remarks",
 ]
 
 const shipmentTableColumns = [
@@ -44,7 +44,7 @@ const tableMapping = {
     label: "Ship To",
     columnSize: "cell-text",
   },
-  "retail_storage_relation.retail_customer_relation.site_name": {
+  "retail_storage_relation.retail_customer_relation.ship_to_company": {
     label: "Name",
     columnSize: "cell-text",
   },
@@ -52,7 +52,7 @@ const tableMapping = {
     label: "Cloud",
     columnSize: "cell-text",
   },
-  trip: {
+  trip_no: {
     label: "Trip No.",
     columnSize: "cell-text",
   },
@@ -109,15 +109,15 @@ const tableMapping = {
     label: "SR",
     columnSize: "cell-text",
   },
-  site_id: {
+  "retail_storage_relation.retail_customer_relation.site_id": {
     label: "Site ID",
     columnSize: "cell-text",
   },
-  site_name: {
+  "retail_storage_relation.retail_customer_relation.site_name": {
     label: "Site Name",
     columnSize: "cell-text",
   },
-  product_code: {
+  "retail_storage_relation.product": {
     label: "Product Code",
     columnSize: "cell-text",
   },
@@ -125,7 +125,7 @@ const tableMapping = {
     label: "DN No",
     columnSize: "cell-text",
   },
-  dn_time_creation: {
+  dn_created_at: {
     label: "DN Time Creation ",
     columnSize: "cell-text",
   },
@@ -145,11 +145,11 @@ const tableMapping = {
     label: "Requested Delivery date",
     columnSize: "cell-text",
   },
-  multiload_id: {
+  multi_load_id: {
     label: "Multiload ID ",
     columnSize: "cell-text",
   },
-  multiprod_id: {
+  multi_prod_id: {
     label: "Multiprod ID ",
     columnSize: "cell-text",
   },
@@ -201,11 +201,11 @@ const tableMapping = {
     label: "Max Stock days",
     columnSize: "cell-text",
   },
-  monthly_fixed_quota: {
+  "retail_storage_relation.monthly_fixed_quota": {
     label: "Monthly Fixed Quota",
     columnSize: "cell-text",
   },
-  rt_req: {
+  "retail_storage_relation.retail_customer_relation.road_tanker_requirement": {
     label: "RT Req",
     columnSize: "cell-text",
   },
@@ -245,15 +245,15 @@ const tableMapping = {
     label: "Country",
     columnSize: "cell-text",
   },
-  cluster: {
+  "retail_storage_relation.retail_customer_relation.cluster": {
     label: "Cluster ",
     columnSize: "cell-text",
   },
-  alt_cluster: {
+  "retail_storage_relation.retail_customer_relation.alternative_cluster": {
     label: "Alt cluster",
     columnSize: "cell-text",
   },
-  border_station: {
+  "retail_storage_relation.retail_customer_relation.border_station": {
     label: "Border Station",
     columnSize: "cell-text",
   },
@@ -405,38 +405,10 @@ const tableMapping = {
     label: "Remarks",
     columnSize: "cell-text",
   },
-  // scheduling_status: {
-  //     label: "Scheduling Status",
-  //     columnSize: "cell-text",
-  //     },
   sales_order_no: {
     label: "Sales Order No",
     columnSize: "cell-text",
   },
-  // total_travelling_time: {
-  //     label: "Total Travelling Time",
-  //     columnSize: "cell-text",
-  //     },
-  // terminal_loading_time: {
-  //     label: "Terminal loading time",
-  //     columnSize: "cell-text",
-  //     },
-  // offloading_time: {
-  //     label: "Offloading time",
-  //     columnSize: "cell-text",
-  //     },
-  // average_speed: {
-  //     label: "Average speed",
-  //     columnSize: "cell-text",
-  //     },
-  // region: {
-  //     label: "Region",
-  //     columnSize: "cell-text",
-  //     },
-  // terminal: {
-  //     label: "Terminal",
-  //     columnSize: "cell-text",
-  //     },
   my_remark_1: {
     label: "My Remark 1",
     columnSize: "cell-text",
@@ -462,17 +434,17 @@ const ganttChartTableDefaultColumns = {
     label: "RATE(%)",
     columnSize: "cell-text",
   },
-  // shift: {
-  //   label: "SHIFT",
+  shift: {
+    label: "SHIFT",
+    columnSize: "cell-text",
+    type: "list",
+  },
+  // status: {
+  //   label: "STATUS",
   //   columnSize: "cell-text",
   //   type: "list"
-  // },
-  status: {
-    label: "STATUS",
-    columnSize: "cell-text",
-    type: "list"
 
-  },
+  // },
   cap: {
     label: "CAP(L)",
     columnSize: "cell-text",
@@ -483,12 +455,11 @@ const ganttChartTableDefaultColumns = {
   },
 }
 
-
 const ganttChartTableMapping = {
   vehicle: {
     label: "VEHICLE",
     columnSize: "cell-text",
-    key: "frozen"
+    key: "frozen",
   },
   rate: {
     label: "RATE (%)",
@@ -558,5 +529,5 @@ export {
   ganttChartTableColumns,
   ganttChartTableDefaultColumns,
   ganttChartTableMapping,
-  shipmentTableColumns
+  shipmentTableColumns,
 }

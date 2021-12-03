@@ -83,7 +83,11 @@ import { DragDropContext } from "react-beautiful-dnd"
 import { isNull } from "lodash"
 import { removeKeywords } from "../DQM/Common/helper"
 import ClearScheduling from "./clearScheduling"
-import { transformObjectToStringSentence, filterObject } from "./../DQM/Common/helper"
+import {
+  transformArrayToString,
+  transformObjectToStringSentence,
+  filterObject,
+} from "./../DQM/Common/helper"
 const UntickIcon = () => <img src={selectAllIcon3} alt="icon" />
 const CheckedIcon = () => <img src={selectAllIcon2} alt="icon" />
 
@@ -204,14 +208,12 @@ function OrderBank({
         "dn_status": status,
         "page": currentPage,
         "limit": 10,
-      }
+      } 
     }))*/
     getRTSOrderBankTableData({
       limit: 10,
       page: currentPage,
-      search_term: "",
-      search_fields:
-        "id,priority,retail_storage_relation.retail,retail_storage_relation.retail_customer_relation.site_name,retail_storage_relation.retail_customer_relation.cloud,trip_no,dn_date,retail_storage_relation.product,volume,retain,runout,retail_storage_relation.sales_category,dn_status,split_id,order_type,retail_storage_relation.retail_customer_relation.road_tanker_accessibility,order_remarks,notes,retail_storage_relation,commercial_storage_relation",
+      search_fields: transformArrayToString(searchFields),
       q: transformObjectToStringSentence(filterQuery),
       sort_dir: "asc",
       sort_field: "vehicle",
@@ -506,7 +508,7 @@ function OrderBank({
         <div className="order-bank-page-content">
           <div className="container-fluid">
             <Card className="order_bank_main d-block">
-              <CardBody>
+              <CardBody className="pb-3">
                 <Row className="border_btm">
                   <Col lg={3} md={3} sm={12}>
                     <div className="h-100">
@@ -530,7 +532,7 @@ function OrderBank({
                       </Nav>
                     </div>
                   </Col>
-                  <Col lg={9} md={9} sm={12} className="top_right_section">
+                  <Col lg={9} md={9} sm={12} className="top_right_section mt-1">
                     <div className="d-flex align-item-right ">
                       <a className="border-before">
                         <img src={awsmLogo} height="25px" width="80px" className="ml-3" />
@@ -558,7 +560,7 @@ function OrderBank({
                   </Col>
                 </Row>
                 <Row className="remove_border pb-0 mt-3">
-                  <Col lg={6} className="order-bank-bar pr-0">
+                  <Col lg={5} md={12} className="order-bank-bar pr-0">
                     <div className="order-bank-shift-date">
                       <div>DATE</div>
                       <DateRangePicker
@@ -601,8 +603,7 @@ function OrderBank({
                       />
                     </div>
                   </Col>
-
-                  <Col className="order-bank-bar right pl-0">
+                  <Col  className="order-bank-bar right pl-0">
                     <IconButton
                       aria-label="delete"
                       onClick={toggleCustomizeModal}
@@ -612,7 +613,7 @@ function OrderBank({
                     </IconButton>
                     <button
                       id="ClearScheduling"
-                      className="btn btn-outline-primary excel-btn-container pdf-btn"
+                      className="btn btn-outline-primary excel-btn-container scheduling-btn"
                     >
                       <div className="excel-download-btn">
                         <span className="download-button-message">
@@ -629,7 +630,7 @@ function OrderBank({
                       style={{ width: "auto" }}
                       toggle={toggleDownload}
                     >
-                      <PopoverBody className="sla-rbd-download">
+                      <PopoverBody className="clear-scheduling">
                         <>
                           {deleteCheck.length > 0 &&
                             deleteCheck.map((row, index) => {
@@ -704,7 +705,7 @@ function OrderBank({
                   <TabContent activeTab={activeTab} className="pt-2">
                     <TabPane tabId="1">
                       <div className="gantt_chart_main">
-                        <div className="gantt_chart_first pb-4">
+                        <div className="gantt_chart_first pb-3">
                           <BryntumChartTable
                             currentTab={activeTab}
                             ganttChartAllRadio={ganttChartAllRadio}
@@ -739,41 +740,19 @@ function OrderBank({
                     </TabPane>
                     <TabPane tabId="2">
                       <div className="shipment_main">
-                        <div className="gantt_chart_first pb-4">
+                        <div className="gantt_chart_first pb-3">
                           <BryntumChartShipment
                             currentTab={activeTab}
                             ganttChartAllRadio={ganttChartAllRadio}
                             bryntumCurrentColumns={bryntumCurrentColumns}
                           />
-                          {activeTab === "1" && (
-                            <div className="square_border">
-                              {GanttChartBottom.map((item, index) => {
-                                return (
-                                  <div className="d-flex align-items-center mr-2" key={index}>
-                                    <div className={`square ${item.color} mr-1 ml-2`} />
-                                    {item.title}
-                                  </div>
-                                )
-                              })}
-                              <div id="gethighlight" className="hover_display">
-                                {GanttChartBottomHover.map((item, index) => {
-                                  return (
-                                    <div className="d-flex align-items-center mr-2" key={index}>
-                                      <div className={`square ${item.color} mr-1 ml-2`} />
-                                      {item.title}
-                                    </div>
-                                  )
-                                })}
-                              </div>
-                            </div>
-                          )}
                         </div>
                       </div>
                     </TabPane>
                   </TabContent>
                 </div>
               </CardBody>
-              <div className="gantt_chart_second pt-2 px-4">
+              <div className="gantt_chart_second px-4">
                 <Row className="remove_border">
                   <Col lg={9} className="order-bank-bar">
                     <h4 className="m-0 order-bank-label">Order Bank</h4>

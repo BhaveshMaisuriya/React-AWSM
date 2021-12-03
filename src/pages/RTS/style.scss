@@ -1,5 +1,5 @@
 .order_bank_main {
-    margin-top: 15px;
+    margin-top: 10px;
     height: 100%;
     padding-bottom: 10px !important;
     .border_btm {
@@ -128,10 +128,12 @@
     >h4 {
         font-weight: 700;
     }
+
     .order-bank-label {
         margin: 0;
         padding-right: 10px;
         border-right: 1px solid #D9D9D9;
+        font-family: Museo Sans, serif;
     }
 
     .order-bank-shift-date {
@@ -142,7 +144,7 @@
         >div:first-child {
             margin-right: 10px;
             color: #333333;
-            font-size: 15px ;
+            font-size: 13px ;
         }
         >div:not(:first-child) {
             flex-grow: 1;
@@ -151,8 +153,8 @@
     }
 
     .order-bank-region-label {
-        font-size: 15px;
         margin: 0 10px;
+        font-size: 13px;
     }
 
     .order-bank-region {
@@ -397,6 +399,7 @@
     border-radius: 10px;
     margin-top: 1rem;
     height: 10%;
+    width: fit-content;
 }
 .pointer {
     cursor: pointer;
@@ -692,3 +695,15 @@
       color: red;
     }
   }
+
+.clear-scheduling  {
+    width: 190px !important;
+    overflow-y: auto;
+    box-shadow: 0 3px 10px rgb(204, 199, 199);
+}
+
+.scheduling-btn {
+    float: right;
+    max-height:39px !important;
+}
+

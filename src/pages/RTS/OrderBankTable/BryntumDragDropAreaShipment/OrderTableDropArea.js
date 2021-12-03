@@ -382,7 +382,7 @@ const OrderTableDropArea = ({
       "dash-green-border align-items-center justify-content-center"}`}>
       {
         dropData && dropData.length > 0 && resourceId ? renderTable() : resourceId ? (
-          <span className="text-uppercase">Drag & drop the oder here <br/> from order bank</span>) : (
+          <span className="text-uppercase">Drag & drop the order here <br/> from order bank</span>) : (
           <span className="text-uppercase">Please select a vehicle <br/> to assign shipment</span>)
       }
     </div>

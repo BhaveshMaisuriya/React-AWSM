@@ -4,11 +4,10 @@
 # https://aka.ms/yaml
 
 trigger:
-- master
-- staging
-- develop
-- sprint/*
-
+  - master
+  - staging
+  - develop
+  - sprint/*
 
 pool:
   vmImage: ubuntu-latest
@@ -16,30 +15,33 @@ pool:
 steps:
   - script: rm .env && cp .env.staging .env && cat .env && cat .env.staging
     displayName: "Add Staging Environment"
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/stage'))
+  - script: rm .env && cp .env.prod .env && cat .env && cat .env.prod
+    displayName: "Add Prod Environment"
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
   - script: cp .npmrc.trial ~/.npmrc
     displayName: "Add Bryntum Repo"
   - script: npm install @bryntum/schedulerpro@npm:@bryntum/schedulerpro-trial
     displayName: "Install Bryntum Trial Version"
-  - script: npm install
+  - script: npm install --force --no-save
     displayName: "Install NPM Packages"
   - script: cat ~/.npmrc && ls node_modules && ls node_modules/@bryntum && ls node_modules/@bryntum/schedulerpro
   #- script: ls node_module
-   # displayName: "Debug"
+  # displayName: "Debug"
   - script: npm run lint
     displayName: "Lint Source Code"
   - script: npm test
     displayName: "Run Unit Tests"
-  - task: SonarCloudPrepare@1
-    inputs:
-      SonarCloud: "awsm-sonarcloud"
-      organization: "digitaldelivery"
-      scannerMode: "CLI"
-      configMode: "manual"
-      cliProjectKey: "PDB-AWSM-Frontend"
-      cliProjectName: "PDB-AWSM-Frontend"
-      cliSources: "."
-  - task: SonarCloudAnalyze@1
+  # - task: SonarCloudPrepare@1
+  #   inputs:
+  #     SonarCloud: "awsm-sonarcloud"
+  #     organization: "digitaldelivery"
+  #     scannerMode: "CLI"
+  #     configMode: "manual"
+  #     cliProjectKey: "PDB-AWSM-Frontend"
+  #     cliProjectName: "PDB-AWSM-Frontend"
+  #     cliSources: "."
+  # - task: SonarCloudAnalyze@1
   - script: npm run build
     displayName: "Compile Application"
   - task: CopyFiles@2

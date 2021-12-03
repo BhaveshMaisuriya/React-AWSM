@@ -340,7 +340,7 @@ function BryntumChartTable(props) {
         style={{ maxWidth: "100%" }}
       >
         <Row className="w-100" style={{ height: "100%" }}>
-          <Col lg={12}>
+          <Col lg={12} className="pr-0">
             <Droppable key="shipment-chart" droppableId="shipment-chart">
               {(provided, snapshot) => {
                 return (

@@ -22,7 +22,7 @@ import FileCopyIcon from "@material-ui/icons/FileCopy"
 import AWSMDropdown from "../../components/Common/Dropdown"
 import { orderDetails } from "./newOrderData"
 import AWSMAlert from "../../components/Common/AWSMAlert"
-import { getOrderBankDetail } from "../../store/actions"
+import { getEditOrderBankDetail } from "../../store/actions"
 
 const ORDER_REGION = ["Center", "Center"]
 const ORDER_TERMINAL = ["KVDT", "KVDT 1"]
@@ -32,17 +32,12 @@ const EditOrderBankModal = props => {
 
   const [isConfirm, setIsConfirm] = useState(false)
   const [editOrderData, setEditOrderData] = useState(null)
-  const [orderData, setOrderData] = useState({})
   const [showAlert, setShowAlert] = useState(false)
   const [activeTab, setActiveTab] = useState("1")
   const [inputValue1, setInputValue1] = useState("")
   const [inputValue2, setInputValue2] = useState("") 
   const [inputValue3, setInputValue3] = useState("")  
 
-  useEffect(async () => {
-    const { onGetOrderBankDetails } = props
-    await onGetOrderBankDetails('11111')
-  }, []);
 
   useEffect(async () => {
     viewData !== null && setEditOrderData(viewData);
@@ -58,7 +53,9 @@ const EditOrderBankModal = props => {
     setIsConfirm(false)
   }
 
-  const handleUpdate = () => {
+  const handleUpdate = async() => {
+    const { onGetEditOrderBankDetails } = props
+    await onGetEditOrderBankDetails({id: editOrderData.id, data: editOrderData})
     onCancel()
   }
 
@@ -77,28 +74,28 @@ const EditOrderBankModal = props => {
     if(key === 'myremark1') {
       setInputValue1(value);
       if(value.length < 40) {
-        const newOrderData = { ...orderData }
+        const newOrderData = { ...editOrderData }
         newOrderData[key] = value
-        setOrderData(newOrderData)
+        setEditOrderData(newOrderData)
       }
     }  else if(key === 'myremark2') {
       setInputValue2(value);
       if(value.length < 40) {
-        const newOrderData = { ...orderData }
+        const newOrderData = { ...editOrderData }
         newOrderData[key] = value
-        setOrderData(newOrderData)
+        setEditOrderData(newOrderData)
       }
     }  else if(key === 'myremark3') {
       setInputValue3(value);
       if(value.length < 40) {
-        const newOrderData = { ...orderData }
+        const newOrderData = { ...editOrderData }
         newOrderData[key] = value
-        setOrderData(newOrderData)
+        setEditOrderData(newOrderData)
       }
     } else {
-      const newOrderData = { ...orderData }
+      const newOrderData = { ...editOrderData }
       newOrderData[key] = value
-      setOrderData(newOrderData)
+      setEditOrderData(newOrderData)
     }
   }
 
@@ -165,7 +162,7 @@ const EditOrderBankModal = props => {
                     <AWSMDropdown
                       items={ORDER_TERMINAL}
                       onChange={value => onFieldChange("terminal", value)}
-                      value={orderData.terminal}
+                      value={editOrderData.terminal}
                       disabled={false}
                     />
                   </div>
@@ -323,9 +320,9 @@ const EditOrderBankModal = props => {
                         <label className="text-upper">Multiproduct ID</label>
                         <span className='remove_text text-red' onClick={() => onFieldChange("ConfirmMultiproduct", true)} >Remove</span>
                         <div className="d-flex">
-                          <div className={`w-100 relative ${orderData.ConfirmMultiproduct === true && 'border-red'}`}>
+                          <div className={`w-100 relative ${editOrderData.ConfirmMultiproduct === true && 'border-red'}`}>
                             <AWSMInput value="" disabled={true} />
-                            {orderData.ConfirmMultiproduct === true &&
+                            {editOrderData.ConfirmMultiproduct === true &&
                               <div className='confirm-main'>
                                 <span class='confirm-text text-red' onClick={() => onFieldChange("ConfirmMultiproduct", false)}>Confirm</span>
                                 <span class='confirm-no-text text-red' onClick={() => onFieldChange("ConfirmMultiproduct", false)}>No</span>
@@ -356,9 +353,9 @@ const EditOrderBankModal = props => {
                         <label className="text-upper">Multiload ID</label>
                         <span className='remove_text text-red' onClick={() => onFieldChange("ConfirmMultiload", true)}>Remove</span>
                         <div className="d-flex">
-                          <div className={`w-100 relative ${orderData.ConfirmMultiload === true && 'border-red'}`}>
+                          <div className={`w-100 relative ${editOrderData.ConfirmMultiload === true && 'border-red'}`}>
                             <AWSMInput value="" disabled={true} />
-                            {orderData.ConfirmMultiload === true &&
+                            {editOrderData.ConfirmMultiload === true &&
                               <div className='confirm-main'>
                                 <span class='confirm-text text-red' onClick={() => onFieldChange("ConfirmMultiload", false)}>Confirm</span>
                                 <span class='confirm-no-text text-red' onClick={() => onFieldChange("ConfirmMultiload", false)}>No</span>
@@ -402,7 +399,7 @@ const EditOrderBankModal = props => {
                         <div className="w-100 relative">
                         <input
                           onChange={e => onFieldChange("myremark1", e.target.value)}
-                          value={orderData.my_remark_1}
+                          value={editOrderData.my_remark_1}
                           className={`awsm-input w-100 ${(inputValue1 && !isValid1) ? "out-range " : ""}`}
                         />
                         <span
@@ -412,7 +409,7 @@ const EditOrderBankModal = props => {
                         >{`${remainChars1 >= 0 ? "+" : ""}${remainChars1}`}</span>
                           {/* <AWSMInput
                             onChange={value => onFieldChange("myremark1", value)}
-                            value={orderData.myremark1}
+                            value={editOrderData.myremark1}
                             placeholder="Type something here..."
                           /> */}
                         </div>
@@ -422,7 +419,7 @@ const EditOrderBankModal = props => {
                         <div className="w-100 relative">
                         <input
                         onChange={e => onFieldChange("myremark2", e.target.value)}
-                        value={orderData.my_remark_2}
+                        value={editOrderData.my_remark_2}
                         className={`awsm-input w-100 ${(inputValue2 && !isValid2) ? "out-range " : ""}`}
                     />
                     <span
@@ -432,7 +429,7 @@ const EditOrderBankModal = props => {
                         >{`${remainChars2 >= 0 ? "+" : ""}${remainChars2}`}</span>
                           {/* <AWSMInput
                             onChange={value => onFieldChange("myremark2", value)}
-                            value={orderData.myremark2}
+                            value={editOrderData.myremark2}
                             placeholder="Type something here..."
                           /> */}
                         </div>
@@ -442,7 +439,7 @@ const EditOrderBankModal = props => {
                         <div className="w-100 relative">
                         <input
                         onChange={e => onFieldChange("myremark3", e.target.value)}
-                        value={orderData.my_remark_3}
+                        value={editOrderData.my_remark_3}
                         className={`awsm-input w-100 ${(inputValue3 && !isValid3) ? "out-range " : ""}`}
                       />
                        <span
@@ -452,7 +449,7 @@ const EditOrderBankModal = props => {
                         >{`${remainChars3 >= 0 ? "+" : ""}${remainChars3}`}</span>
                           {/* <AWSMInput
                             onChange={value => onFieldChange("myremark3", value)}
-                            value={orderData.myremark3}
+                            value={editOrderData.myremark3}
                             placeholder="Type something here..."
                           /> */}
                         </div>
@@ -1091,7 +1088,7 @@ const EditOrderBankModal = props => {
             Cancel
           </Button>
           <Button color="primary" className="p-1320" onClick={handleUpdate}>
-            Add
+            Update
           </Button>
         </ModalFooter>
       )}
@@ -1112,7 +1109,7 @@ const mapStateToProps = ({ orderBank }) => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  onGetOrderBankDetails: params => dispatch(getOrderBankDetail(params)),
+  onGetEditOrderBankDetails: params => dispatch(getEditOrderBankDetail(params)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditOrderBankModal)

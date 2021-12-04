@@ -25,10 +25,10 @@ import EditIcon from "assets/images/AWSM-Edit-Icon.svg"
 import TrashIcon from "assets/images/AWSM-Trash-Icon.svg"
 import NoDataIcon from "assets/images/AWSM-No-Data-Available.svg"
 import DeleteOrderBankConfirmation from "../deleteOrderBankModal"
-import EditOrderBankModal from "../editOrderBankModal"
+import EditOrderBankModal from "../EditOrderBankModal"
 import ConfirmDNStatusModal from "./confirmDNStatusModal"
-import { deleteOrderBankDetail, sendDNStatusRequest, updateOrderBankTableData } from "store/actions"
-import { Draggable, Droppable } from "react-beautiful-dnd"
+import {deleteOrderBankDetail, sendDNStatusRequest, updateOrderBankTableData, viewOrderBankDetail} from "../../../store/actions"
+import {Draggable, Droppable} from "react-beautiful-dnd"
 import InfiniteScroll from "react-infinite-scroll-component"
 
 export class TableGroupEvent extends React.Component {
@@ -46,7 +46,8 @@ export class TableGroupEvent extends React.Component {
   }
 
   OnClickEditHandler = () => {
-    this.setState({ isOpenEditModal: true })
+    this.setState({isOpenEditModal: true})
+    this.props.viewRecords(this.props.allData)
   }
 
   OnClickRemoveHandler = () => {
@@ -64,8 +65,8 @@ export class TableGroupEvent extends React.Component {
   }
 
   render() {
-    const { openDropDown } = this.state
-    const { index, isChecked, editable = true } = this.props
+    const {openDropDown} = this.state
+    const {index, isChecked, viewData, editable = true} = this.props
     return (
       <>
         <DragIndicatorIcon style={{ color: "#D9D9D9", transform: "translateX(5px)" }} />
@@ -117,7 +118,8 @@ export class TableGroupEvent extends React.Component {
         {this.state.isOpenEditModal && (
           <EditOrderBankModal
             open={true}
-            onCancel={() => this.setState({ isOpenEditModal: false })}
+            onCancel={() => this.setState({isOpenEditModal: false})}
+            viewData={this.props.viewData}
           />
         )}
       </>
@@ -306,22 +308,20 @@ class index extends Component {
     await onGetDeleteOrderBankDetail(allData.id)
   }
 
+  OnViewRecords = async (allData) => {
+    const {onGetViewOrderBankDetail} = this.props
+    await onGetViewOrderBankDetail(allData.id)
+  }
+
   DataOfTableFixed = () => {
     const { dataSource } = this.state
     return dataSource.map((v, i) => {
-      return (
-        <tr key={i} className={v.isChecked ? "selected-row" : "bg-white"}>
-          <th>
-            <TableGroupEvent
-              index={i}
-              allData={v}
-              isChecked={v.isChecked}
-              Onchange={this.OnChangeCheckBoxHandler}
-              deleteRecords={this.OnDeleteRecords}
-            />
-          </th>
-        </tr>
-      )
+      return <tr key={i} className={v.isChecked ? "selected-row" : "bg-white"}>
+        <th>
+          <TableGroupEvent index={i} allData={v} isChecked={v.isChecked} Onchange={this.OnChangeCheckBoxHandler}
+           deleteRecords={this.OnDeleteRecords} viewRecords={this.OnViewRecords} viewData={this.props.viewData}/>
+        </th>
+      </tr>
     })
   }
 
@@ -519,8 +519,10 @@ const mapDispatchToProp = dispatch => ({
   updateOrderBankTableData: payload => dispatch(updateOrderBankTableData(payload)),
   onGetDeleteOrderBankDetail: params => dispatch(deleteOrderBankDetail(params)),
   onSendDNStatusRequest: params => dispatch(sendDNStatusRequest(params)),
+  onGetViewOrderBankDetail: params => dispatch(viewOrderBankDetail(params)),
 })
 const mapStateToProps = ({ orderBank }) => ({
   totalRow: orderBank.totalRow,
+  viewData: orderBank.viewData,
 })
 export default connect(mapStateToProps, mapDispatchToProp)(index)

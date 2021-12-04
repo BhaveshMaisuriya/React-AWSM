@@ -7,6 +7,7 @@ import {
   DRAG_RTS_ORDER_BANK_TO_GANTT_CHART_SUCCESS,
   UPDATE_ORDERBANK_TABLE_INFORMATION,
   DELETE_ORDERBANK_DETAIL,
+  VIEW_ORDERBANK_DETAIL,
   GET_RTS_ORDER_BANK_TABLE_DATA,
   SEND_ORDER_BANK_DN,
   REFRESH_ORDER_BANK_DN,
@@ -41,6 +42,8 @@ import {
   getOrderBankDetailSuccess,
   deleteOrderBankDetailFail,
   deleteOrderBankDetailSuccess,
+  viewOrderBankDetailFail,
+  viewOrderBankDetailSuccess,
   updateOrderbankTableInformationSuccess,
   updateOrderbankTableInformationFail,
   sendOrderBankDNFail,
@@ -79,6 +82,7 @@ import {
   sendRTSOrderBank,
   refreshRTSOrderBank,
   deleteOrderBankDetail,
+  viewOrderBankDetail,
   getOrderBankAuditLog,
   getClearScheduling,
   getSendBulkShipment,
@@ -121,6 +125,15 @@ function* onDeleteOrderbankTableInformation({ params }) {
     yield put(deleteOrderBankDetailSuccess(response))
   } catch (error) {
     yield put(deleteOrderBankDetailFail(error))
+  }
+}
+
+function* onViewOrderbankTableInformation({ params }) {
+  try {
+    const response = yield call(viewOrderBankDetail, params)
+    yield put(viewOrderBankDetailSuccess(response))
+  } catch (error) {
+    yield put(viewOrderBankDetailFail(error))
   }
 }
 
@@ -348,6 +361,10 @@ function* orderBankSaga() {
     DELETE_ORDERBANK_DETAIL,
     onDeleteOrderbankTableInformation
   )
+  yield takeLatest(
+    VIEW_ORDERBANK_DETAIL,
+    onViewOrderbankTableInformation
+  )  
   // yield takeLatest(
   //   UPDATE_ORDERBANK_TABLE_INFORMATION,
   //   onPutOrderbankTableInformation

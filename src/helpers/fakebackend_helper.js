@@ -195,6 +195,10 @@ export const deleteOrderBankDetail = (params) =>
 axios.delete(`/rts/order-bank/${params}`)
 .then(response => response.data)  
 
+export const viewOrderBankDetail = (params) => 
+axios.get(`/rts/order-bank/${params}`)
+.then(response => response.data)  
+
 // get dqm main table excel file from s3
 export const getDQMExcel = (params) => 
   axios.post(

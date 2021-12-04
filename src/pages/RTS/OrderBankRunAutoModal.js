@@ -7,7 +7,7 @@ function OrderBankRunAutoModal(props) {
   const [displayRun, setDisplayRun] = useState(false)
 
   function toggle() {
-    props.istoggle('success', 'Auto schedule is running successfully');
+    props.istoggle('success', 'Orders have been succesfully Auto-scheduled');
   }
 
   function CloseModal() {

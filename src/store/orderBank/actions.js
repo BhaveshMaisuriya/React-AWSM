@@ -147,6 +147,21 @@ export const addOrderBankFail = error => ({
   payload: error,
 })
 
+export const getEditOrderBankDetail = params => ({
+  type: EDIT_ORDERBANK,
+  params,
+})
+
+export const getEditOrderBankDetailSuccess = response => ({
+  type: EDIT_ORDERBANK_SUCCESS,
+  payload: response,
+})
+
+export const getEditOrderBankDetailFail = error => ({
+  type: EDIT_ORDERBANK_FAIL,
+  payload: error,
+})
+
 export const getOrderBankDetail = (params) => {
   return {
     type: GET_ORDERBANK_TABLE_INFORMATION,

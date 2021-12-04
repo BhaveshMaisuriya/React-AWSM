@@ -13,6 +13,8 @@ import {
   GET_ORDERBANK_SUCCESS,
   ADD_ORDERBANK_FAIL,
   ADD_ORDERBANK_SUCCESS,
+  EDIT_ORDERBANK_FAIL,
+  EDIT_ORDERBANK_SUCCESS,  
   GET_ORDERBANK_TABLE_INFORMATION_FAIL,
   GET_ORDERBANK_TABLE_INFORMATION_SUCCESS,
   GET_RTS_GANTT_CHART_DATA_FAIL,
@@ -68,6 +70,7 @@ const initialState = {
   totalRow: 0,
   multipleorder: null,
   viewData: null,
+  editorderBankData: null,
 }
 
 const RTSOrderBank = (state = initialState, action) => {
@@ -131,7 +134,17 @@ const RTSOrderBank = (state = initialState, action) => {
       return {
         ...state,
         addorderBankData: action.payload
-      }      
+      }    
+    case EDIT_ORDERBANK_SUCCESS:
+      return {
+        ...state,
+        editorderBankData: action.payload
+      }
+    case EDIT_ORDERBANK_FAIL:
+      return {
+        ...state,
+        editorderBankData: action.payload
+      }            
     case GET_ORDERBANK_TABLE_INFORMATION_SUCCESS:
       return {
         ...state,

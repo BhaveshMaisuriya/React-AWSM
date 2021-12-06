@@ -47,6 +47,7 @@ export class TableGroupEvent extends React.Component {
 
   OnClickEditHandler = () => {
     this.setState({isOpenEditModal: true})
+    console.log('id::1', this.props.allData)
     this.props.viewRecords(this.props.allData)
   }
 
@@ -309,8 +310,9 @@ class index extends Component {
   }
 
   OnViewRecords = async (allData) => {
+    console.log('id::', allData.id)
     const {onGetViewOrderBankDetail} = this.props
-    await onGetViewOrderBankDetail(allData.id)
+    await onGetViewOrderBankDetail(allData.id);
   }
 
   DataOfTableFixed = () => {

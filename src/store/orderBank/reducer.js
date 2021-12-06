@@ -191,7 +191,7 @@ const RTSOrderBank = (state = initialState, action) => {
         orderBankTableData: action.payload
       }
     case DELETE_ORDERBANK_DETAIL_SUCCESS: {
-      notify.success("Record Successfully Deleted")
+      notify.success("Order has been successfully deleted")
       return {
         ...state,
         currentOrderDetail: null,

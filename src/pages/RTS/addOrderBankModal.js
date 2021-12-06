@@ -209,6 +209,15 @@ const NewOrderBankModal = props => {
     return inputValue3 && remainChars3 >= 0
   }, [remainChars3])
 
+  const hrMints = (val) => {
+    if(val !== ''){
+    let temp = val.split(':');
+      return temp[0] + ':' + temp[1];
+    } else {
+      return '00:00';
+    }
+  }
+
   return (
     <Modal isOpen={open} className="new-order-modal">
       <ModalHeader toggle={toggle}>
@@ -555,27 +564,28 @@ const NewOrderBankModal = props => {
                       <strong>Open Time 1: </strong>
                       {removeKeywords(
                         orderData.delivery.actual_open_time_1.days.join()
-                      )}
+                      )} - {hrMints(orderData.delivery.actual_open_time_1.time_from)} to {hrMints(orderData.delivery.actual_open_time_1.time_to)}
                     </p>
                     <p>
                       <strong>Open Time 2:</strong>{" "}
                       {removeKeywords(
-                        orderData.delivery.actual_open_time_1.days.join()
-                      )}
+                        orderData.delivery.actual_open_time_2.days.join()
+                      )} - {hrMints(orderData.delivery.actual_open_time_2.time_from)} to {hrMints(orderData.delivery.actual_open_time_2.time_to)}
                     </p>
                     <p>
                       <strong>Open Time 3:</strong>{" "}
-                      {removeKeywords(
-                        orderData.delivery.actual_open_time_1.days.join()
-                      )}
+                      {orderData.delivery.actual_open_time_3 ?
+                      removeKeywords(
+                        orderData.delivery.actual_open_time_3.days.join()
+                      ) + '-' + hrMints(orderData.delivery.actual_open_time_3.time_from) + 'to' + hrMints(orderData.delivery.actual_open_time_3.time_to) : '-'}
                     </p>
                     <p>
                       <strong>No Del Interval 1:</strong>{" "}
                       {orderData.delivery.no_delivery_interval_1.type !== ""
                         ? orderData.delivery.no_delivery_interval_1.type ===
                           "daily"
-                          ? "Every day"
-                          : `From ${orderData.delivery.no_delivery_interval_1.date_from} to ${orderData.delivery.no_delivery_interval_1.date_to}`
+                          ? "Every day" + ' - ' + hrMints(orderData.delivery.no_delivery_interval_1.time_from) + ' to ' + hrMints(orderData.delivery.no_delivery_interval_1.time_to)
+                          : `From ${orderData.delivery.no_delivery_interval_1.date_from} ${hrMints(orderData.delivery.no_delivery_interval_1.time_from)} to ${orderData.delivery.no_delivery_interval_1.date_to} ${hrMints(orderData.delivery.no_delivery_interval_1.time_from)}`
                         : "-"}
                     </p>
                     <p>
@@ -583,8 +593,8 @@ const NewOrderBankModal = props => {
                       {orderData.delivery.no_delivery_interval_2.type !== ""
                         ? orderData.delivery.no_delivery_interval_2.type ===
                           "daily"
-                          ? "Every day"
-                          : `From ${orderData.delivery.no_delivery_interval_2.date_from} to ${orderData.delivery.no_delivery_interval_2.date_to}`
+                          ? "Every day" + ' - ' + hrMints(orderData.delivery.no_delivery_interval_2.time_from) + ' to ' + hrMints(orderData.delivery.no_delivery_interval_2.time_to)
+                          : `From ${orderData.delivery.no_delivery_interval_2.date_from} ${hrMints(orderData.delivery.no_delivery_interval_2.time_from)} to ${orderData.delivery.no_delivery_interval_2.date_to} ${hrMints(orderData.delivery.no_delivery_interval_2.time_from)}`
                         : "-"}
                     </p>
                     <p>
@@ -592,8 +602,8 @@ const NewOrderBankModal = props => {
                       {orderData.delivery.no_delivery_interval_3.type !== ""
                         ? orderData.delivery.no_delivery_interval_3.type ===
                           "daily"
-                          ? "Every day"
-                          : `From ${orderData.delivery.no_delivery_interval_3.date_from} to ${orderData.delivery.no_delivery_interval_3.date_to}`
+                          ? "Every day" + ' - ' + hrMints(orderData.delivery.no_delivery_interval_3.time_from) + ' to ' + hrMints(orderData.delivery.no_delivery_interval_3.time_to)
+                          : `From ${orderData.delivery.no_delivery_interval_3.date_from} ${hrMints(orderData.delivery.no_delivery_interval_3.time_from)} to ${orderData.delivery.no_delivery_interval_3.date_to} ${hrMints(orderData.delivery.no_delivery_interval_3.time_from)}`
                         : "-"}
                     </p>
                     <p>
@@ -601,8 +611,8 @@ const NewOrderBankModal = props => {
                       {orderData.delivery.no_delivery_interval_4.type !== ""
                         ? orderData.delivery.no_delivery_interval_4.type ===
                           "daily"
-                          ? "Every day"
-                          : `From ${orderData.delivery.no_delivery_interval_4.date_from} to ${orderData.delivery.no_delivery_interval_4.date_to}`
+                          ? "Every day" + ' - ' + hrMints(orderData.delivery.no_delivery_interval_4.time_from) + ' to ' + hrMints(orderData.delivery.no_delivery_interval_4.time_to)
+                          : `From ${orderData.delivery.no_delivery_interval_4.date_from} ${hrMints(orderData.delivery.no_delivery_interval_4.time_from)} to ${orderData.delivery.no_delivery_interval_4.date_to} ${hrMints(orderData.delivery.no_delivery_interval_4.time_from)}`
                         : "-"}
                     </p>
                     <p>
@@ -610,8 +620,8 @@ const NewOrderBankModal = props => {
                       {orderData.delivery.no_delivery_interval_5.type !== ""
                         ? orderData.delivery.no_delivery_interval_5.type ===
                           "daily"
-                          ? "Every day"
-                          : `From ${orderData.delivery.no_delivery_interval_5.date_from} to ${orderData.delivery.no_delivery_interval_5.date_to}`
+                          ? "Every day" + ' - ' + hrMints(orderData.delivery.no_delivery_interval_5.time_from) + ' to ' + hrMints(orderData.delivery.no_delivery_interval_5.time_to)
+                          : `From ${orderData.delivery.no_delivery_interval_5.date_from} ${hrMints(orderData.delivery.no_delivery_interval_5.time_from)} to ${orderData.delivery.no_delivery_interval_5.date_to} ${hrMints(orderData.delivery.no_delivery_interval_5.time_from)}`
                         : "-"}
                     </p>
                   </Col>

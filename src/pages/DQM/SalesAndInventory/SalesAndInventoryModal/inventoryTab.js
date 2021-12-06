@@ -88,10 +88,10 @@ const InventoryTab = ({ data, onChange, salesDate }) => {
             disabled="true"/>
         </div>
         <div className="col-md-6 form-group">
-          <label>DIPPING DATE & TIME<span className="extra-lbl">D-1</span></label>
+          <label>DIPPING TIMESTAMP<span className="extra-lbl">D-1</span></label>
           <DatePicker
             className="form-control awsm-input"
-            value={data?.dipping_date_time}
+            value={data?.dipping_timestamp?data?.dipping_timestamp:data?.dipping_datetime}
             format={'DD-MM-yyyy , HH:mm:ss'}
             disabled="true"/>
         </div>

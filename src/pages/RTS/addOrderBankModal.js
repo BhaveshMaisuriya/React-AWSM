@@ -103,6 +103,7 @@ const NewOrderBankModal = props => {
       newOrderData[key] = value
       newOrderData["product_code"] = pro_code.code
       newOrderData["product_id"] = pro_code.id
+      newOrderData['storeData'] = pro_code;
       setOrderData(newOrderData)
     } else if(key === 'myremark1') {
       setInputValue1(value);
@@ -151,11 +152,13 @@ const NewOrderBankModal = props => {
           let temp1 = []
           Object.keys(props.orderBankData?.storage).map((key, index) => {
             if (key.startsWith("storage_")) {
-              temp1.push({
-                name: props.orderBankData?.storage[key].name,
-                code: props.orderBankData?.storage[key].code,
-                id: props.orderBankData?.storage[key].id,
-              })
+              temp1.push(props.orderBankData?.storage[key]
+              //   {
+              //   name: .name,
+              //   code: props.orderBankData?.storage[key].code,
+              //   id: props.orderBankData?.storage[key].id,
+              // }
+              )
               temp.push(props.orderBankData?.storage[key].name)
             }
           })
@@ -486,13 +489,13 @@ const NewOrderBankModal = props => {
                       {orderData?.address?.cloud}
                     </p>
                     <p>
-                      <strong>Product Category:</strong>{orderData?.storage?.storage_1?.ordering_category}
+                      <strong>Product Category:</strong>{orderData?.storeData?.sales_category}
                     </p>
                     <p>
-                      <strong>Order Type:</strong>{" "}
+                      <strong>Order Type:</strong>{orderData?.storeData?.ordering_category}
                     </p>
                     <p>
-                      <strong>Accessibility:</strong>{" "}
+                      <strong>Accessibility:</strong>{orderData?.delivery?.road_tanker_accessibility}
                     </p>
                     <p>
                       <strong>Site ID: </strong>

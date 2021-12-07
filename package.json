@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@azure/msal-browser": "^2.14.2",
-    "@bryntum/schedulerpro": "npm:@bryntum/schedulerpro-trial@^4.2.3",
+    "@bryntum/schedulerpro": "npm:@bryntum/schedulerpro-trial@^4.3.3",
     "@bryntum/schedulerpro-react": "^4.2.1",
     "@ckeditor/ckeditor5-build-classic": "^28.0.0",
     "@ckeditor/ckeditor5-react": "^3.0.2",

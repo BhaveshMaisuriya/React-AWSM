@@ -33,9 +33,7 @@ const InventoryTab = ({ data, onChange, salesDate }) => {
     // Calculate inventory variance
     newData[INVENTORY_VARIANCE] = Number(newData?.inventory_final_figure) - Number(data?.calculated_inventory);
     // Handle percent inventory field
-    if (newData?.inventory_final_figure > 0 && newData?.calculated_inventory > 0) {
-      newData[INVENTORY_VARIANCE_PERCENT] = ((Number(newData?.inventory_variance) * 100) / (Number(data?.calculated_inventory))).toFixed(2)
-    }
+    newData[INVENTORY_VARIANCE_PERCENT] = ((Number(newData?.inventory_variance) * 100) / (Number(data?.calculated_inventory))).toFixed(2)
     onChange("inventory", newData)
   }
   const isDisableInventoryField = () => {
@@ -88,10 +86,10 @@ const InventoryTab = ({ data, onChange, salesDate }) => {
             disabled="true"/>
         </div>
         <div className="col-md-6 form-group">
-          <label>DIPPING DATE & TIME<span className="extra-lbl">D-1</span></label>
+          <label>DIPPING TIMESTAMP<span className="extra-lbl">D-1</span></label>
           <DatePicker
             className="form-control awsm-input"
-            value={data?.dipping_date_time}
+            value={data?.dipping_timestamp?data?.dipping_timestamp:data?.dipping_datetime}
             format={'DD-MM-yyyy , HH:mm:ss'}
             disabled="true"/>
         </div>

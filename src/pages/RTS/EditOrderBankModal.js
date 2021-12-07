@@ -115,13 +115,13 @@ const EditOrderBankModal = props => {
     };
     const { onGetEditOrderBankDetails } = props
     await onGetEditOrderBankDetails({id: editOrderData.id, data: temp})
-    
+    if(props.editorderBankData) {
+      onCancel('edit', props.editorderBankData?.status ? 'error' : 'success')
+    }
   }
 
   useEffect(() => {
-    if(props.editorderBankData) {
-      onCancel('edit', 'success')
-    }
+  
   }, [props.editorderBankData])
 
   const onConfirmExit = () => {

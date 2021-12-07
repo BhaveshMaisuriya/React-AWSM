@@ -39,8 +39,7 @@ export class TableGroupEvent extends React.Component {
       openDropDown: false,
       isOpenDeleteModal: false,
       isOpenEditModal: false,
-      showEditAlert: false,
-      showEditMsg: ''
+
     }
   }
 
@@ -50,12 +49,12 @@ export class TableGroupEvent extends React.Component {
 
   getEditCancel = (type, val = '') => {
     this.setState({isOpenEditModal: false})
-    type === 'edit' && this.setState({showEditAlert: true});
-    val !== '' ? this.setState({showEditMsg: val}) : this.setState({showEditAlert: ''});
+    this.props.editAlert(type, val);
   }
 
   OnClickEditHandler = () => {
-    this.setState({isOpenEditModal: true})
+    
+    this.setState({isOpenEditModal: !this.state.isOpenEditModal})
     this.props.viewRecords(this.props.allData)
   }
 
@@ -119,14 +118,15 @@ export class TableGroupEvent extends React.Component {
         />
         {this.state.isOpenDeleteModal && (
           <DeleteOrderBankConfirmation
-            isOpen={true}
+            isOpen={this.state.isOpenDeleteModal}
             onDelete={this.deleteOrder.bind(this)}
             onCancel={() => this.setState({ isOpenDeleteModal: false })}
           />
         )}
+        
         {this.state.isOpenEditModal && (
           <EditOrderBankModal
-            open={true}
+            open={this.state.isOpenEditModal}
             onCancel={this.getEditCancel}
             viewData={this.props.viewData}
           />
@@ -156,6 +156,8 @@ class index extends Component {
         asc: false,
       },
       currentPage: 1,
+      showEditAlert: false,
+      showEditMsg: ''
     }
   }
 
@@ -269,7 +271,6 @@ class index extends Component {
 
   RenderTRComponent = data => {
     const { expandSearch } = this.state
-    console.log('data::', data, this.props.tableColumns)
     return this.props.tableColumns.map(v => {
       let typeOfColumn = tableMapping[v]?.type
       let result
@@ -325,13 +326,18 @@ class index extends Component {
     await onGetViewOrderBankDetail(allData.id);
   }
 
+  editAlert = (type, val) => {
+    type === 'edit' && this.setState({showEditAlert: true});
+    val !== '' ? this.setState({showEditMsg: val}) : this.setState({showEditAlert: ''});
+  }
+
   DataOfTableFixed = () => {
     const { dataSource } = this.state
     return dataSource.map((v, i) => {
       return <tr key={i} className={v.isChecked ? "selected-row" : "bg-white"}>
         <th>
           <TableGroupEvent index={i} allData={v} isChecked={v.isChecked} Onchange={this.OnChangeCheckBoxHandler}
-           deleteRecords={this.OnDeleteRecords} viewRecords={this.OnViewRecords} viewData={this.props.viewData}/>
+           deleteRecords={this.OnDeleteRecords} viewRecords={this.OnViewRecords} editAlert={this.editAlert} viewData={this.props.viewData}/>
         </th>
       </tr>
     })

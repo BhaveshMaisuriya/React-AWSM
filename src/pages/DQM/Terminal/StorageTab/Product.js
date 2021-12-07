@@ -124,19 +124,19 @@ const Product = ({
         </div>
         <div className="col-3 form-group mb-0 h-40">
           <label
-            className={`${renderExceedError("flow_rate", 10000)}`}
+            className={`${renderExceedError("terminal_product_density", 10000)}`}
           >
-            FLOW RATE (L/MIN)
+            PRODUCT DENSITY
           </label>
           <AWSMInputNumber
-            defaultValue={value.flow_rate}
-            disabled={scheduler}
+            defaultValue={value.terminal_product_density}
+            disabled
             placeholder={!scheduler && placeholderNumberOnly}
-            onChange={value => onFieldChange("flow_rate", value)}
-            renderExceedError={renderExceedError("flow_rate", 10000)}
+            onChange={value => onFieldChange("terminal_product_density", value)}
+            renderExceedError={renderExceedError("terminal_product_density", 10000)}
             // max={10000}
           />
-          {renderExceedError("flow_rate", 10000)}
+          {renderExceedError("terminal_product_density", 10000)}
         </div>
       </div>
       <h6 className="font-weight-bold mb-0 marginTop20">VOLUME CAPPING</h6>

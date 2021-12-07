@@ -137,7 +137,7 @@ const tableMapping = {
     label: "Customer Type",
     columnSize: "cell-text",
   },
-  order_id: {
+  id: {
     label: "Order ID",
     columnSize: "cell-text",
   },
@@ -209,39 +209,39 @@ const tableMapping = {
     label: "RT Req",
     columnSize: "cell-text",
   },
-  duration: {
+  "retail_storage_relation.duration": {
     label: "Duration (Hrs)",
     columnSize: "cell-text",
   },
-  distance: {
+  "retail_storage_relation.distance": {
     label: "Distance (KM)",
     columnSize: "cell-text",
   },
-  delivery_address: {
+  "retail_storage_relation.retail_customer_relation.address_relation.address_1": {
     label: "Delivery Address",
     columnSize: "cell-text",
   },
-  city: {
+  "retail_storage_relation.retail_customer_relation.address_relation.city": {
     label: "City",
     columnSize: "cell-text",
   },
-  postcode: {
+  "retail_storage_relation.retail_customer_relation.address_relation.postcode": {
     label: "Postcode",
     columnSize: "cell-text",
   },
-  state: {
+  "retail_storage_relation.retail_customer_relation.address_relation.state": {
     label: "State",
     columnSize: "cell-text",
   },
-  latitude: {
+  "retail_storage_relation.retail_customer_relation.address_relation.latitude": {
     label: "Latitude",
     columnSize: "cell-text",
   },
-  longitude: {
+  "retail_storage_relation.retail_customer_relation.address_relation.longitude": {
     label: "Longitude",
     columnSize: "cell-text",
   },
-  country: {
+  "retail_storage_relation.retail_customer_relation.address_relation.country": {
     label: "Country",
     columnSize: "cell-text",
   },
@@ -257,147 +257,147 @@ const tableMapping = {
     label: "Border Station",
     columnSize: "cell-text",
   },
-  contact_name_1: {
+  "retail_storage_relation.retail_customer_relation.contact1_relation.name": {
     label: "Contact Name 1",
     columnSize: "cell-text",
   },
-  contact_number_1: {
+  "retail_storage_relation.retail_customer_relation.contact1_relation.number": {
     label: "Contact Number 1",
     columnSize: "cell-text",
   },
-  contact_name_2: {
+  "retail_storage_relation.retail_customer_relation.contact2_relation.name": {
     label: "Contact Name 2",
     columnSize: "cell-text",
   },
-  contact_number_2: {
+  "retail_storage_relation.retail_customer_relation.contact2_relation.number": {
     label: "Contact Number 2",
     columnSize: "cell-text",
   },
-  contact_name_3: {
+  "retail_storage_relation.retail_customer_relation.contact3_relation.name": {
     label: "Contact Name 3",
     columnSize: "cell-text",
   },
-  contact_number_3: {
+  "retail_storage_relation.retail_customer_relation.contact3_relation.number": {
     label: "Contact Number 3",
     columnSize: "cell-text",
   },
-  tm_name: {
+  "retail_storage_relation.retail_customer_relation.territory_manager_relation.name": {
     label: "TM Name",
     columnSize: "cell-text",
   },
-  tm_number: {
+  "retail_storage_relation.retail_customer_relation.territory_manager_relation.number": {
     label: "TM Number",
     columnSize: "cell-text",
   },
-  rs_name: {
+  "retail_storage_relation.retail_customer_relation.retail_sales_manager_relation.name": {
     label: "RS Name",
     columnSize: "cell-text",
   },
-  rs_number: {
+  "retail_storage_relation.retail_customer_relation.retail_sales_manager_relation.number": {
     label: "RS Number",
     columnSize: "cell-text",
   },
-  delivery_open_time_From: {
+  "retail_storage_relation.retail_customer_relation.delivery_open_time.time_from": {
     label: "Delivery Open Time From",
     columnSize: "cell-text",
   },
-  delivery_open_time_To: {
+  "retail_storage_relation.retail_customer_relation.delivery_open_time.time_to": {
     label: "Delivery Open Time To",
     columnSize: "cell-text",
   },
-  open_time_1_day: {
+  "retail_storage_relation.retail_customer_relation.actual_open_time_1.days": {
     label: "Open Time 1 Day",
     columnSize: "cell-text",
   },
-  open_time_1_from: {
+  "retail_storage_relation.retail_customer_relation.actual_open_time_1.time_from": {
     label: "Open Time 1 From",
     columnSize: "cell-text",
   },
-  open_time_1_to: {
+  "retail_storage_relation.retail_customer_relation.actual_open_time_1.time_to": {
     label: "Open Time 1 To",
     columnSize: "cell-text",
   },
-  open_time_2_day: {
+  "retail_storage_relation.retail_customer_relation.actual_open_time_2.days": {
     label: "Open Time 2 Day",
     columnSize: "cell-text",
   },
-  open_time_2_from: {
+  "retail_storage_relation.retail_customer_relation.actual_open_time_2.time_from": {
     label: "Open Time 2 From",
     columnSize: "cell-text",
   },
-  open_time_2_to: {
+  "retail_storage_relation.retail_customer_relation.actual_open_time_2.time_to": {
     label: "Open Time 2 To",
     columnSize: "cell-text",
   },
-  open_time_3_day: {
+  "retail_storage_relation.retail_customer_relation.actual_open_time_3.days": {
     label: "Open Time 3 Day",
     columnSize: "cell-text",
   },
-  open_time_3_from: {
+  "retail_storage_relation.retail_customer_relation.actual_open_time_3.time_from": {
     label: "Open Time 3 From",
     columnSize: "cell-text",
   },
-  open_time_3_to: {
+  "retail_storage_relation.retail_customer_relation.actual_open_time_3.time_to": {
     label: "Open Time 3 To",
     columnSize: "cell-text",
   },
-  no_del_interval_1: {
+  "retail_storage_relation.retail_customer_relation.no_delivery_interval_1.days": {
     label: "No Del Interval 1",
     columnSize: "cell-text",
   },
-  no_del_interval_1_from: {
+  "retail_storage_relation.retail_customer_relation.no_delivery_interval_1.time_from": {
     label: "No Del Interval 1 From",
     columnSize: "cell-text",
   },
-  no_del_interval_1_to: {
+  "retail_storage_relation.retail_customer_relation.no_delivery_interval_1.time_to": {
     label: "No Del Interval 1 To",
     columnSize: "cell-text",
   },
-  no_del_interval_2: {
+  "retail_storage_relation.retail_customer_relation.no_delivery_interval_2.days": {
     label: "No Del Interval 2",
     columnSize: "cell-text",
   },
-  no_del_interval_2_from: {
+  "retail_storage_relation.retail_customer_relation.no_delivery_interval_2.time_from": {
     label: "No Del Interval 2 From",
     columnSize: "cell-text",
   },
-  no_del_interval_2_to: {
+  "retail_storage_relation.retail_customer_relation.no_delivery_interval_2.time_to": {
     label: "No Del Interval 2 To",
     columnSize: "cell-text",
   },
-  no_del_interval_3: {
+  "retail_storage_relation.retail_customer_relation.no_delivery_interval_3.days": {
     label: "No Del Interval 3",
     columnSize: "cell-text",
   },
-  no_del_interval_3_from: {
+  "retail_storage_relation.retail_customer_relation.no_delivery_interval_3.time_from": {
     label: "No Del Interval 3 From",
     columnSize: "cell-text",
   },
-  no_del_interval_3_to: {
+  "retail_storage_relation.retail_customer_relation.no_delivery_interval_3.time_to": {
     label: "No Del Interval 3 To",
     columnSize: "cell-text",
   },
-  no_del_interval_4: {
+  "retail_storage_relation.retail_customer_relation.no_delivery_interval_4.days": {
     label: "No Del Interval 4",
     columnSize: "cell-text",
   },
-  no_del_interval_4_from: {
+  "retail_storage_relation.retail_customer_relation.no_delivery_interval_4.time_from": {
     label: "No Del Interval 4 From",
     columnSize: "cell-text",
   },
-  no_del_interval_4_to: {
+  "retail_storage_relation.retail_customer_relation.no_delivery_interval_4.time_to": {
     label: "No Del Interval 4 To",
     columnSize: "cell-text",
   },
-  no_del_interval_5: {
+  "retail_storage_relation.retail_customer_relation.no_delivery_interval_5.days": {
     label: "No Del Interval 5",
     columnSize: "cell-text",
   },
-  no_del_interval_5_from: {
+  "retail_storage_relation.retail_customer_relation.no_delivery_interval_5.time_from": {
     label: "No Del Interval 5 From",
     columnSize: "cell-text",
   },
-  no_del_interval_5_to: {
+  "retail_storage_relation.retail_customer_relation.no_delivery_interval_5.time_to": {
     label: "No Del Interval 5 To",
     columnSize: "cell-text",
   },

@@ -213,7 +213,8 @@ function OrderBank({
     getRTSOrderBankTableData({
       limit: 10,
       page: currentPage,
-      search_fields: transformArrayToString(searchFields),
+      // search_fields: transformArrayToString(searchFields),
+      search_fields: "*",
       q: transformObjectToStringSentence(filterQuery),
       sort_dir: "asc",
       sort_field: "vehicle",
@@ -603,7 +604,7 @@ function OrderBank({
                       />
                     </div>
                   </Col>
-                  <Col  className="order-bank-bar right pl-0">
+                  <Col className="order-bank-bar right pl-0">
                     <IconButton
                       aria-label="delete"
                       onClick={toggleCustomizeModal}

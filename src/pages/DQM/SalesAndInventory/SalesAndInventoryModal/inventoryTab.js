@@ -33,9 +33,7 @@ const InventoryTab = ({ data, onChange, salesDate }) => {
     // Calculate inventory variance
     newData[INVENTORY_VARIANCE] = Number(newData?.inventory_final_figure) - Number(data?.calculated_inventory);
     // Handle percent inventory field
-    if (newData?.inventory_final_figure > 0 && newData?.calculated_inventory > 0) {
-      newData[INVENTORY_VARIANCE_PERCENT] = ((Number(newData?.inventory_variance) * 100) / (Number(data?.calculated_inventory))).toFixed(2)
-    }
+    newData[INVENTORY_VARIANCE_PERCENT] = ((Number(newData?.inventory_variance) * 100) / (Number(data?.calculated_inventory))).toFixed(2)
     onChange("inventory", newData)
   }
   const isDisableInventoryField = () => {

@@ -122,6 +122,8 @@ function OrderBank({
   const [activeTab, setActiveTab] = useState("1")
   const [dropdownOpen, setOpen] = useState(false)
   const [crossTerminal, setCrossTerminal] = useState(false)
+  const [showAddNotification, setShowAddNotification] = useState(false)
+  const [notiMessage, setNotiMessage] = useState('')
   const [uploadDmr, setUploadDmr] = useState(false)
   const [deleteMultiple, setDeleteMultiple] = useState(false)
   const [showNewOrder, setShowNewOrder] = useState(false)
@@ -278,8 +280,10 @@ function OrderBank({
     setCrossTerminal(false)
   }
 
-  const onCloseNewOrder = () => {
+  const onCloseNewOrder = (type, val = '') => {
     setShowNewOrder(false)
+    type === 'add' && setShowAddNotification(true);
+    val === 'success' ? setNotiMessage('success') : setNotiMessage('error');
   }
 
   const enabledCross = val => {
@@ -960,6 +964,14 @@ function OrderBank({
                   message="DMR File Uploaded!"
                   openAlert={showAlertDMR}
                   closeAlert={() => setShowAlertDMR(false)}
+                />
+              )}
+              {showAddNotification && (
+                <AWSMAlert
+                  status={notiMessage}
+                  message={notiMessage === 'success' ? "Order added Successfully" : "Order has not been added"}
+                  openAlert={showAddNotification}
+                  closeAlert={() => setShowAddNotification(false)}
                 />
               )}
             </Card>

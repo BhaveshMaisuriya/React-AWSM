@@ -189,7 +189,7 @@ axios.post(`/rts/order-bank/create`, { ...params })
   .then(response => response.data) 
   
 export const editOrderBankDetail = (params) => 
-axios.put(`/rts/order-bank/${params.id}`, {'data': params.data})
+axios.put(`/rts/order-bank/${params.id}`, {...params.data})
   .then(response => response.data)   
 
 // get single order bank

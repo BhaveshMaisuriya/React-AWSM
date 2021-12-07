@@ -126,7 +126,6 @@ const RTSOrderBank = (state = initialState, action) => {
         orderBankData: action.payload
       }
     case ADD_ORDERBANK_SUCCESS:
-      notify.success("Order Successfully added")
       return {
         ...state,
         addorderBankData: action.payload

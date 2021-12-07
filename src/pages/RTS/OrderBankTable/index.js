@@ -25,11 +25,12 @@ import EditIcon from "assets/images/AWSM-Edit-Icon.svg"
 import TrashIcon from "assets/images/AWSM-Trash-Icon.svg"
 import NoDataIcon from "assets/images/AWSM-No-Data-Available.svg"
 import DeleteOrderBankConfirmation from "../deleteOrderBankModal"
-import EditOrderBankModal from "../editOrderBankModal"
+import EditOrderBankModal from "../editOrderBankModal"  
 import ConfirmDNStatusModal from "./confirmDNStatusModal"
 import {deleteOrderBankDetail, sendDNStatusRequest, updateOrderBankTableData, viewOrderBankDetail} from "../../../store/actions"
 import {Draggable, Droppable} from "react-beautiful-dnd"
 import InfiniteScroll from "react-infinite-scroll-component"
+import AWSMAlert from "components/Common/AWSMAlert"
 
 export class TableGroupEvent extends React.Component {
   constructor(props) {
@@ -38,6 +39,8 @@ export class TableGroupEvent extends React.Component {
       openDropDown: false,
       isOpenDeleteModal: false,
       isOpenEditModal: false,
+      showEditAlert: false,
+      showEditMsg: ''
     }
   }
 
@@ -45,9 +48,14 @@ export class TableGroupEvent extends React.Component {
     this.setState({ openDropDown: !this.state.openDropDown })
   }
 
+  getEditCancel = (type, val = '') => {
+    this.setState({isOpenEditModal: false})
+    type === 'edit' && this.setState({showEditAlert: true});
+    val !== '' ? this.setState({showEditMsg: val}) : this.setState({showEditAlert: ''});
+  }
+
   OnClickEditHandler = () => {
     this.setState({isOpenEditModal: true})
-    console.log('id::1', this.props.allData)
     this.props.viewRecords(this.props.allData)
   }
 
@@ -119,7 +127,7 @@ export class TableGroupEvent extends React.Component {
         {this.state.isOpenEditModal && (
           <EditOrderBankModal
             open={true}
-            onCancel={() => this.setState({isOpenEditModal: false})}
+            onCancel={this.getEditCancel}
             viewData={this.props.viewData}
           />
         )}
@@ -261,34 +269,37 @@ class index extends Component {
 
   RenderTRComponent = data => {
     const { expandSearch } = this.state
+    console.log('data::', data, this.props.tableColumns)
     return this.props.tableColumns.map(v => {
       let typeOfColumn = tableMapping[v]?.type
       let result
+      
       switch (typeOfColumn) {
         case "priority_type":
           result = (
             <td>
-              {data[v] &&
-                data[v].map(e => {
-                  return <span className={`circle ${e}`}>{e}</span>
-                })}
+              {/* {data[v] &&
+                data[v].map(e => { 
+                  return*/}
+                   <span className={`circle ${data[v]}`}>{data[v]}</span>
+                {/* })} */}
             </td>
           )
           break
         case "dn_status":
           result = (
             <td>
-              {data[v] &&
-                data[v].map(e => {
-                  return (
+              {/* {data[v] &&
+                data[v].map(e => { 
+                  return (*/}
                     <span
-                      className={`status ${e}`}
-                      onClick={this.DNStatusOnClickHandler.bind(this, data, e)}
+                      className={`status ${data[v]}`}
+                      onClick={this.DNStatusOnClickHandler.bind(this, data, data[v])}
                     >
-                      {e}
+                      {data[v]}
                     </span>
-                  )
-                })}
+                  {/* )
+                })} */}
             </td>
           )
           break
@@ -310,7 +321,6 @@ class index extends Component {
   }
 
   OnViewRecords = async (allData) => {
-    console.log('id::', allData.id)
     const {onGetViewOrderBankDetail} = this.props
     await onGetViewOrderBankDetail(allData.id);
   }
@@ -508,6 +518,14 @@ class index extends Component {
             bodyContent={`Are you sure you want to send this order for DN Creation?`}
           />
         )}
+        {this.state.showEditAlert && (
+          <AWSMAlert
+            status={this.state.showEditMsg}
+            message={this.state.showEditMsg === 'success' ? "Order updated successfully" : "Order has not been update"}
+            openAlert={this.state.showEditAlert}
+            closeAlert={() => this.setState({showEditAlert: false})}
+          />
+      )}
       </div>
     )
   }

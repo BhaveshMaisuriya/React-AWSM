@@ -30,6 +30,12 @@ function CrossTerminalModal(props) {
     setIsConfirm(true)
   }
 
+  const onSaveClick = (region, terminal) => {
+    setRegion(REGION_TERMINAL[0].region);
+    setTerminal(REGION_TERMINAL[0].terminal[0]);
+    onSave(region, terminal);
+  }
+
   return (
     <Modal isOpen={open} className="deleteModal">
       <ModalHeader toggle={toggle}>Cross Terminal</ModalHeader>
@@ -53,7 +59,7 @@ function CrossTerminalModal(props) {
                     setRegion(value)
                     setTerminal(null)
                   }}
-                  disabled
+                  // disabled
                   items={REGION_TERMINAL.map(e => e.region)}
                 />
               </Col>
@@ -72,7 +78,7 @@ function CrossTerminalModal(props) {
               >
                 Cancel
               </button>
-              <button onClick={onSave} className="btn btn-primary">
+              <button onClick={() => onSaveClick()} className="btn btn-primary">
                 Update
               </button>
             </div>

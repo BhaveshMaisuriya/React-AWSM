@@ -99,6 +99,7 @@ import { sendMessage } from "SocketService"
 function OrderBank({
   getRTSOrderBankTableData,
   orderBankTableData,
+  crossTerminalDetails,
   orderBankTableFilters,
   sendOrderBankDN,
   refreshOderBankDN,
@@ -110,6 +111,7 @@ function OrderBank({
   onGetCrossTerminal,
   dragOrderBankToGanttChart,
   socketData,
+  
 }) {
   const ganttChartEvents = useSelector(state => state.orderBank.ganttChart.event)
   const [orderSummary, setOrderSummary] = useState({
@@ -274,9 +276,9 @@ function OrderBank({
     setCrossTerminal(false)
   }
 
-  const onSaveCrossTerminal = async () => {
-    const payload = {}
-    await onGetCrossTerminal(payload)
+  const onSaveCrossTerminal = async (region, terminal) => { 
+    const payload = { order_banks: multipleDeleteIds, region: region, terminal: terminal };
+    await onGetCrossTerminal(payload);
     setCrossTerminal(false)
   }
 
@@ -287,23 +289,24 @@ function OrderBank({
   }
 
   const enabledCross = val => {
-    if (val !== 0) {
-      let temp = [...orderBankSetting]
-      temp.map(function (item) {
-        if (item.value === "CrossTerminal" || item.value === "SendDN") {
-          item.disabled = false
-        }
-      })
-      setOrderBankSetting(temp)
-    } else {
-      let temp = [...orderBankSetting]
-      temp.map(function (item) {
-        if (item.value === "CrossTerminal" || item.value === "SendDN") {
-          item.disabled = true
-        }
-      })
-      setOrderBankSetting(temp)
-    }
+    // if (val !== 0) {
+    //   let temp = [...orderBankSetting]
+    //   temp.map(function (item) {
+    //     if (item.value === "CrossTerminal" || item.value === "SendDN") {
+    //       item.disabled = false
+    //     }
+    //   })
+    //   setOrderBankSetting(temp)
+    // }
+    //  else {
+    //   let temp = [...orderBankSetting]
+    //   temp.map(function (item) {
+    //     if (item.value === "CrossTerminal" || item.value === "SendDN") {
+    //       item.disabled = true
+    //     }
+    //   })
+    //   setOrderBankSetting(temp)
+    // }
   }
 
   const deleteEnable = val => {
@@ -1008,6 +1011,7 @@ const mapStateToProps = ({ orderBank }) => ({
   orderBankTableFilters: orderBank.orderBankTableFilters,
   auditsCom: orderBank.auditsCom,
   socketData: orderBank.socketData,
+  crossTerminalDetails: orderBank.crossTerminalDetails,
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(OrderBank)

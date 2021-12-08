@@ -365,8 +365,9 @@ export const getSalesAuditLog = payload =>
   axios.delete(`/rts/order-bank`, { data: params.params } )
   .then(response => response.data)  
 
-  export const getCrossTerminal = payload =>
-  get(url.GET_COMMERCIAL_AUDITLOG, { payload: payload })    
+  export const getCrossTerminal = params =>
+  axios.post(`/rts/cross-terminal`, { ...params.params } )
+  .then(response => response.data)     
 
 // get DQM Road Tanker Audit Log
 export const getRoadTankerAuditLog = payload =>

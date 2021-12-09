@@ -577,20 +577,20 @@ const NewOrderBankModal = props => {
                       <strong>Open Time 1: </strong>
                       {orderData?.delivery?.actual_open_time_1 ? removeKeywords(
                         orderData?.delivery?.actual_open_time_1?.days.join()
-                      ) + '-' + hrMints(orderData?.delivery.actual_open_time_1?.time_from) + 'to' + hrMints(orderData?.delivery?.actual_open_time_1?.time_to) : '-'}
+                      ) + '-' + hrMints(orderData?.delivery.actual_open_time_1?.time_from) + ' to ' + hrMints(orderData?.delivery?.actual_open_time_1?.time_to) : '-'}
                     </p>
                     <p>
                       <strong>Open Time 2:</strong>{" "}
                       {orderData?.delivery?.actual_open_time_2 ? removeKeywords(
                         orderData?.delivery.actual_open_time_2?.days.join()
-                      ) + '-' + hrMints(orderData?.delivery?.actual_open_time_2?.time_from) + 'to' + hrMints(orderData?.delivery?.actual_open_time_2?.time_to) : '-'}
+                      ) + '-' + hrMints(orderData?.delivery?.actual_open_time_2?.time_from) + ' to ' + hrMints(orderData?.delivery?.actual_open_time_2?.time_to) : '-'}
                     </p>
                     <p>
                       <strong>Open Time 3:</strong>{" "}
                       {orderData?.delivery?.actual_open_time_3 ?
                       removeKeywords(
                         orderData?.delivery?.actual_open_time_3?.days.join()
-                      ) + '-' + hrMints(orderData?.delivery?.actual_open_time_3?.time_from) + 'to' + hrMints(orderData?.delivery?.actual_open_time_3?.time_to) : '-'}
+                      ) + '-' + hrMints(orderData?.delivery?.actual_open_time_3?.time_from) + ' to ' + hrMints(orderData?.delivery?.actual_open_time_3?.time_to) : '-'}
                     </p>
                     <p>
                       <strong>No Del Interval 1:</strong>{" "}

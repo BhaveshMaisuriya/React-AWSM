@@ -24,7 +24,7 @@ const SalesTab = ({ data, onChange, inventoryData }) => {
         newData[SALES_FINAL_FIGURE] = Number(data?.actual_sales) + Number(newData?.yesterday_sales_adjustment)
         newData[SALES_VARIANCE] = Number(data?.actual_sales) + Number(newData?.yesterday_sales_adjustment) - Number(data?.expected_sales)
         // calculation % for sales variance
-        if (Number(newData?.sales_variance) > 0 && Number(data?.expected_sales) > 0) {
+        if (Number(data?.expected_sales) != 0) {
             newData[SALES_VARIANCE_PERCENT] = ((Number(newData?.sales_variance) * 100) / (Number(data?.expected_sales))).toFixed(2);
         }
         onChange(["inventory", "sales"], [newInventoryData, newData])

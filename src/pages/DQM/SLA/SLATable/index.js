@@ -80,7 +80,7 @@ const SLATable = ({ items, onDeleteSLADetail, scheduler, onUpdate }) => {
     setDeleteItem(item.id)
   }
 
-  const columns = Object.keys(tableMapping).map(key => tableMapping[key])
+  const columns = Object.keys(tableMapping)?.map(key => tableMapping[key])
   if (!isScheduler()) {
     columns.push({
       label: "Action",
@@ -92,17 +92,15 @@ const SLATable = ({ items, onDeleteSLADetail, scheduler, onUpdate }) => {
   }
 
   const totalColSizes = columns.reduce(
-    (previousValue, currentValue) =>
-      previousValue + currentValue.columnSize || 1,
+    (previousValue, currentValue) => previousValue + currentValue.columnSize || 1,
     0
   )
-
 
   const getColSize = col => {
     return `${(((col.columnSize || 1) / totalColSizes) * 100).toFixed(2)}%`
   }
 
-  const OnDeleteSLAHandler = () =>{
+  const OnDeleteSLAHandler = () => {
     setDeleteItem(null)
     onDeleteSLADetail(deleteItem)
   }
@@ -111,28 +109,22 @@ const SLATable = ({ items, onDeleteSLADetail, scheduler, onUpdate }) => {
     <div className="sla-table">
       <table>
         <thead>
-          {columns.map(col => (
+          {columns?.map(col => (
             <th style={{ width: getColSize(col) }}>{col.label}</th>
           ))}
         </thead>
         <tbody>
-          {items.map((item, index) => {
+          {items?.map((item, index) => {
             return item.id !== deleteItem ? (
               <tr>
-                {columns.map(({ TDComponent, apiKey, TDComponentProps }) =>
+                {columns?.map(({ TDComponent, apiKey, TDComponentProps }) =>
                   TDComponent ? (
-                    <TDComponent
-                      index={index}
-                      item={item}
-                      {...TDComponentProps}
-                    />
+                    <TDComponent index={index} item={item} {...TDComponentProps} />
                   ) : (
                     <td
                       className="ck ck-content"
                       dangerouslySetInnerHTML={{
-                        __html: createDOMPurify.sanitize(
-                          apiKey ? item[apiKey] || "" : ""
-                        ),
+                        __html: createDOMPurify.sanitize(apiKey ? item[apiKey] || "" : ""),
                       }}
                     />
                   )
@@ -142,16 +134,13 @@ const SLATable = ({ items, onDeleteSLADetail, scheduler, onUpdate }) => {
               <tr>
                 <td colSpan={columns.length}>
                   <div className="d-flex align-items-center justify-content-center sla-table-confirm-delete-item">
-                    <div>
-                      Are you sure you want to delete this data from this table?
-                    </div>
-                    <button
-                      className="btn btn-dan ml-3 mr-2"
-                      onClick={() => setDeleteItem(null)}
-                    >
+                    <div>Are you sure you want to delete this data from this table?</div>
+                    <button className="btn btn-dan ml-3 mr-2" onClick={() => setDeleteItem(null)}>
                       Cancel
                     </button>
-                    <button className="btn btn-danger" onClick={()=>OnDeleteSLAHandler()}>Delete</button>
+                    <button className="btn btn-danger" onClick={() => OnDeleteSLAHandler()}>
+                      Delete
+                    </button>
                   </div>
                 </td>
               </tr>
@@ -160,7 +149,7 @@ const SLATable = ({ items, onDeleteSLADetail, scheduler, onUpdate }) => {
         </tbody>
       </table>
       <SLAModalDetail
-        type={'update'}
+        type={"update"}
         openModalDetail={modalDetail.isShow}
         data={modalDetail.data}
         handleCloseModal={handleCloseModalDetail}

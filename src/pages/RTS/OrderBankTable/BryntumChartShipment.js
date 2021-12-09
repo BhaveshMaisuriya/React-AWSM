@@ -59,7 +59,16 @@ function BryntumChartTable(props) {
 
   useEffect(() => {
     const { getRTSOderBankGanttChart } = props
-    getRTSOderBankGanttChart()
+    const payload = {
+      limit: 11,
+      page: 0,
+      search_fields: "*",
+      q: "",
+      sort_dir: "desc",
+      sort_field: "vehicle",
+      filter: {}
+    }
+    getRTSOderBankGanttChart(payload)
   }, [])
   useEffect(() => {
     setFilterList(
@@ -325,7 +334,7 @@ function BryntumChartTable(props) {
   }
 
   useEffect(() => {
-    const newTableData = props.ganttChartData.table.filter(e => {
+    const newTableData = props.ganttChartTableData.filter(e => {
       return filterCondition.every(condition => {
         return condition.data.includes(e[condition.key])
       })
@@ -355,7 +364,7 @@ function BryntumChartTable(props) {
                         <BryntumGrid
                           {...schedulerproConfig}
                           autoSync
-                          resources={props.ganttChartData.table}
+                          resources={props.ganttChartTableData}
                           syncDataOnLoad
                           ref={schedulerProRef}
                         />
@@ -373,7 +382,7 @@ function BryntumChartTable(props) {
             <ChartColumnFilter
               key={e.key}
               filterKey={e.key}
-              filterData={props.ganttChartData.table}
+              filterData={props.ganttChartTableData}
               type={e.type}
               onApply={onApplyFilter}
               onReset={onResetFilter}
@@ -423,6 +432,7 @@ const mapStateToProps = ({ orderBank }) => {
   return {
     isSendRequestProcess: orderBank.isSendRequestProcess,
     ganttChartData: orderBank.ganttChart,
+    ganttChartTableData: orderBank.ganttChartTableData,
   }
 }
 

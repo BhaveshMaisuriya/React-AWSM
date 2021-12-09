@@ -305,7 +305,14 @@ function* sendRequestOrderPaymentInGanttChart({ params={} }){
 function* onGetRTSOrderBankGanttChart({ params = {} }) {
   try {
     const response = yield call(getRTSOderBankGanttChart, params)
-    yield put(getRTSOderBankGanttChartSuccess(response))
+    let newResponse = {}
+    // when user increase page params -> scrolling action
+    if (params?.page !== 0) {
+      newResponse = { ...response, scrolling: true}
+    } else {
+      newResponse = { ...response, scrolling: false}
+    }
+    yield put(getRTSOderBankGanttChartSuccess(newResponse))
   } catch (error) {
     yield put(getRTSOderBankGanttChartFail(error))
   }

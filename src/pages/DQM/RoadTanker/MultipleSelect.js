@@ -5,14 +5,13 @@ import ListItemIcon from "@material-ui/core/ListItemIcon"
 import ListItemText from "@material-ui/core/ListItemText"
 import "./InformationModal.scss"
 import AWSMCheckBox from "../../../common/CheckBox"
-import {withStyles} from "@material-ui/styles";
+import { withStyles } from "@material-ui/styles"
 
-const styles = ()=>({
+const styles = () => ({
   "p-0": {
-    padding: "0!important"
-  }
+    padding: "0!important",
+  },
 })
-
 
 class MultipleSelect extends Component {
   constructor(props) {
@@ -36,7 +35,7 @@ class MultipleSelect extends Component {
       onDeleteBtnClick,
       onNoClick,
       disabled,
-      classes
+      classes,
     } = this.props
     const { RtRestrictionSelected } = this.state
 
@@ -101,17 +100,21 @@ class MultipleSelect extends Component {
         value={RtRestrictionSelected}
         onChange={handleChange}
         renderValue={selected =>
-          selected.length > 0 && selected
-            ? selected.join(", ")
-            : !disabled && "Select"
+          selected?.length > 0 && selected ? selected.join(", ") : !disabled && "Select"
         }
         disabled={disabled}
         displayEmpty={true}
       >
         {names?.map(name => (
-          <MenuItem key={name} value={name} className={classes["p-0"]} disableRipple={true} disableGutters={true}>
-            <ListItemIcon >
-              <AWSMCheckBox checked={RtRestrictionSelected.indexOf(name) !== -1}/>
+          <MenuItem
+            key={name}
+            value={name}
+            className={classes["p-0"]}
+            disableRipple={true}
+            disableGutters={true}
+          >
+            <ListItemIcon>
+              <AWSMCheckBox checked={RtRestrictionSelected.indexOf(name) !== -1} />
             </ListItemIcon>
             <ListItemText id={name} primary={name} />
           </MenuItem>

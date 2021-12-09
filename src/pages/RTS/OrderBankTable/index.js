@@ -282,25 +282,26 @@ class index extends Component {
               {/* {data[v] &&
                 data[v].map(e => { 
                   return*/}
-                   <span className={`circle ${data[v]}`}>{data[v]}</span>
+                   {/* <span className={`circle ${data[v]}`}>{data[v]}</span> */}
                 {/* })} */}
+              {_.isArray(data[v]) &&
+                data[v].map(e => {
+                  return <span className={`circle ${e}`}>{e}</span>
+                })}
             </td>
           )
           break
         case "dn_status":
           result = (
             <td>
-              {/* {data[v] &&
-                data[v].map(e => { 
-                  return (*/}
-                    <span
-                      className={`status ${data[v]}`}
-                      onClick={this.DNStatusOnClickHandler.bind(this, data, data[v])}
-                    >
-                      {data[v]}
-                    </span>
-                  {/* )
-                })} */}
+              {
+                <span
+                  className={`status ${data[v]}`}
+                  onClick={this.DNStatusOnClickHandler.bind(this, data, data[v])}
+                >
+                  {data[v]}
+                </span>
+              }
             </td>
           )
           break

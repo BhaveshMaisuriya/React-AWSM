@@ -4,7 +4,7 @@ import {
   DELETE_ORDERBANK_DETAIL_FAIL,
   DELETE_ORDERBANK_DETAIL_SUCCESS,
   VIEW_ORDERBANK_DETAIL_FAIL,
-  VIEW_ORDERBANK_DETAIL_SUCCESS,  
+  VIEW_ORDERBANK_DETAIL_SUCCESS,
   DESELECT_VEHICLE_RTS_SHIPMENT,
   DRAG_RTS_ORDER_BANK_TO_GANTT_CHART_SUCCESS,
   GET_ORDER_BANK_AUDITLOG_FAIL,
@@ -14,7 +14,7 @@ import {
   ADD_ORDERBANK_FAIL,
   ADD_ORDERBANK_SUCCESS,
   EDIT_ORDERBANK_FAIL,
-  EDIT_ORDERBANK_SUCCESS,  
+  EDIT_ORDERBANK_SUCCESS,
   GET_ORDERBANK_TABLE_INFORMATION_FAIL,
   GET_ORDERBANK_TABLE_INFORMATION_SUCCESS,
   GET_RTS_GANTT_CHART_DATA_FAIL,
@@ -47,7 +47,9 @@ import {
   GET_CROSS_TERMINAL_SUCCESS,
   GET_CROSS_TERMINAL_FAIL,  
   GET_DELETE_MULTIPLE_ORDER_SUCCESS,
-  GET_DELETE_MULTIPLE_ORDER_FAIL
+  GET_DELETE_MULTIPLE_ORDER_FAIL,
+  SEND_ORDER_BANK_DN_FAIL,
+  SEND_ORDER_BANK_DN_SUCCESS,
 } from "./actionTypes"
 import {notify} from "../../helpers/notify"
 import {ToastSuccess,ToastError} from "../../helpers/swal";
@@ -74,6 +76,8 @@ const initialState = {
   multipleorder: null,
   viewData: null,
   editorderBankData: null,
+  ganttChartTableData: [],
+  totalRow_ganttChart: 0,
 }
 
 const RTSOrderBank = (state = initialState, action) => {
@@ -95,11 +99,11 @@ const RTSOrderBank = (state = initialState, action) => {
         orderBankTableFilters: filter,
         totalRow: total_rows,
       }
-      // return {
-      //   ...state,
-      //   orderBankTableData: action.payload,
-      //   error: null
-      // }
+    // return {
+    //   ...state,
+    //   orderBankTableData: action.payload,
+    //   error: null
+    // }
     case GET_RTS_ORDER_BANK_TABLE_DATA_FAIL:
       return {
         ...state,
@@ -157,7 +161,7 @@ const RTSOrderBank = (state = initialState, action) => {
       return {
         ...state,
         editorderBankData: action.payload
-      }            
+      }
     case GET_ORDERBANK_TABLE_INFORMATION_SUCCESS:
       return {
         ...state,
@@ -183,7 +187,7 @@ const RTSOrderBank = (state = initialState, action) => {
       return {
         ...state,
         error: action.payload
-      }      
+      }
     case UPDATE_ORDERBANK_TABLE_INFORMATION_SUCCESS: {
       notify.success("Record Successfully Updated")
       return {
@@ -228,7 +232,7 @@ const RTSOrderBank = (state = initialState, action) => {
         ...state,
         error: action.payload
       }
-      
+
     case SEND_DN_STATUS_REQUEST_SUCCESS:
       notify.success("An order has been successfully sent for DN Creation")
       return {
@@ -284,9 +288,20 @@ const RTSOrderBank = (state = initialState, action) => {
         error: action.payload
       }
     case GET_RTS_GANTT_CHART_DATA_SUCCESS: {
+      const { data, scrolling } = action.payload;
+      const { list, total_rows } = data;
+      if (state.ganttChartTableData.length !== 0 && scrolling) {
+        return {
+          ...state,
+          ganttChartTableData: [ ...state.ganttChartTableData, ...list],
+          totalRow_ganttChart: total_rows,
+        }
+      }
       return {
         ...state,
-        ganttChart: action.payload
+        ganttChartTableData: list,
+        totalRow_ganttChart: total_rows,
+        //ganttChart: action.payload
       }
     }
     case GET_RTS_GANTT_CHART_DATA_FAIL: {
@@ -396,7 +411,7 @@ const RTSOrderBank = (state = initialState, action) => {
       const { id } = action.params
       const event = state.ganttChart.event.filter(item => item.id !== id)
       if(event){
-          state.ganttChart.event = [...event]
+        state.ganttChart.event = [...event]
       }
       ToastSuccess.fire()
 
@@ -466,7 +481,18 @@ const RTSOrderBank = (state = initialState, action) => {
         ...state,
       }
     }
- 
+    case SEND_ORDER_BANK_DN_FAIL: {
+      notify.error("Send DN failed!")
+      return {
+        ...state,
+      }
+    }
+    case SEND_ORDER_BANK_DN_SUCCESS: {
+      notify.success("Send DN success!")
+      return {
+        ...state,
+      }
+    }
     default:
       return state
   }

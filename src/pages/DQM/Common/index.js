@@ -374,12 +374,14 @@ class Pages extends Component {
           open={this.state.varianceControl}
           closeDialog={() => this.setState({ varianceControl: false })}
           selectedDate={this.state.salesDate ? format(this.state.salesDate, "yyyy-MM-dd") : ""}
+          refreshMainTable={this.getCustomerData}
         />
         <TankStatusModal
           open={this.state.tankStatusModal}
           handleClose={() => this.setState({ tankStatusModal: false })}
           modalTitle={`Tank Status`}
           selectedDate={this.state.salesDate ? format(this.state.salesDate, "yyyy-MM-dd") : ""}
+          refreshMainTable={this.getCustomerData}
         />
         <div className="page-content">
           <div className="container-fluid">

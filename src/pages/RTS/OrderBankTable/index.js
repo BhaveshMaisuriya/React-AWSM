@@ -27,10 +27,11 @@ import NoDataIcon from "assets/images/AWSM-No-Data-Available.svg"
 import DeleteOrderBankConfirmation from "../deleteOrderBankModal"
 import EditOrderBankModal from "../editOrderBankModal"  
 import ConfirmDNStatusModal from "./confirmDNStatusModal"
-import {deleteOrderBankDetail, sendDNStatusRequest, updateOrderBankTableData, viewOrderBankDetail} from "../../../store/actions"
+import {deleteOrderBankDetail, sendDNStatusRequest, updateOrderBankTableData, viewOrderBankDetail, getRTSOrderBankTableData} from "../../../store/actions"
 import {Draggable, Droppable} from "react-beautiful-dnd"
 import InfiniteScroll from "react-infinite-scroll-component"
 import AWSMAlert from "components/Common/AWSMAlert"
+import { transformObjectToStringSentence } from "pages/DQM/Common/helper"
 
 export class TableGroupEvent extends React.Component {
   constructor(props) {
@@ -318,8 +319,18 @@ class index extends Component {
   }
 
   OnDeleteRecords = async allData => {
-    const { onGetDeleteOrderBankDetail } = this.props
+    const { onGetDeleteOrderBankDetail, getRTSOrderBankTableData, payloadFilter } = this.props
     await onGetDeleteOrderBankDetail(allData.id)
+    await getRTSOrderBankTableData({
+      limit: 10,
+      page: payloadFilter.currentPage,
+      // search_fields: transformArrayToString(searchFields),
+      search_fields: "*",
+      q: transformObjectToStringSentence(payloadFilter.filterQuery),
+      sort_dir: "asc",
+      sort_field: "vehicle",
+      filter: payloadFilter.filterOrderBank,
+    }); 
   }
 
   OnViewRecords = async (allData) => {
@@ -545,6 +556,7 @@ index.propTypes = {
 const mapDispatchToProp = dispatch => ({
   updateOrderBankTableData: payload => dispatch(updateOrderBankTableData(payload)),
   onGetDeleteOrderBankDetail: params => dispatch(deleteOrderBankDetail(params)),
+  getRTSOrderBankTableData: params => dispatch(getRTSOrderBankTableData(params)),
   onSendDNStatusRequest: params => dispatch(sendDNStatusRequest(params)),
   onGetViewOrderBankDetail: params => dispatch(viewOrderBankDetail(params)),
 })

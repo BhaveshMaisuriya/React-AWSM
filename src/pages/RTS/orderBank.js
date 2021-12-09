@@ -130,6 +130,7 @@ function OrderBank({
   const [deleteMultiple, setDeleteMultiple] = useState(false)
   const [showNewOrder, setShowNewOrder] = useState(false)
   const [showCustomize, setShowCustomize] = useState(false)
+  const [payloadFilter, setPayloadFilter] = useState({})
   const [searchFields, setSearchFields] = useState(
     getCookieByKey("Order Bank") ? JSON.parse(getCookieByKey("Order Bank")) : tableColumns
   )
@@ -223,7 +224,8 @@ function OrderBank({
       sort_dir: "asc",
       sort_field: "vehicle",
       filter: filterOrderBank,
-    })
+    }); payloadFilter
+    setPayloadFilter({filterOrderBank: filterOrderBank, currentPage:currentPage, filterQuery:filterQuery});
   }, [filterOrderBank, currentPage, filterQuery])
 
   const toggle = () => setOpen(!dropdownOpen)
@@ -270,6 +272,16 @@ function OrderBank({
     const payload = { order_banks: multipleDeleteIds }
     await onGetDeleteMultipleOrder(payload)
     setDeleteMultiple(false)
+    getRTSOrderBankTableData({
+      limit: 10,
+      page: payloadFilter.currentPage,
+      // search_fields: transformArrayToString(searchFields),
+      search_fields: "*",
+      q: transformObjectToStringSentence(payloadFilter.filterQuery),
+      sort_dir: "asc",
+      sort_field: "vehicle",
+      filter: payloadFilter.filterOrderBank,
+    }); 
   }
 
   const onCloseCrossTerminal = () => {
@@ -286,27 +298,37 @@ function OrderBank({
     setShowNewOrder(false)
     type === 'add' && setShowAddNotification(true);
     val === 'success' ? setNotiMessage('success') : setNotiMessage('error');
+    getRTSOrderBankTableData({
+      limit: 10,
+      page: payloadFilter.currentPage,
+      // search_fields: transformArrayToString(searchFields),
+      search_fields: "*",
+      q: transformObjectToStringSentence(payloadFilter.filterQuery),
+      sort_dir: "asc",
+      sort_field: "vehicle",
+      filter: payloadFilter.filterOrderBank,
+    }); 
   }
 
   const enabledCross = val => {
-    // if (val !== 0) {
-    //   let temp = [...orderBankSetting]
-    //   temp.map(function (item) {
-    //     if (item.value === "CrossTerminal" || item.value === "SendDN") {
-    //       item.disabled = false
-    //     }
-    //   })
-    //   setOrderBankSetting(temp)
-    // }
-    //  else {
-    //   let temp = [...orderBankSetting]
-    //   temp.map(function (item) {
-    //     if (item.value === "CrossTerminal" || item.value === "SendDN") {
-    //       item.disabled = true
-    //     }
-    //   })
-    //   setOrderBankSetting(temp)
-    // }
+    if (val !== 0) {
+      let temp = [...orderBankSetting]
+      temp.map(function (item) {
+        if (item.value === "CrossTerminal" || item.value === "SendDN") {
+          item.disabled = false
+        }
+      })
+      setOrderBankSetting(temp)
+    }
+     else {
+      let temp = [...orderBankSetting]
+      temp.map(function (item) {
+        if (item.value === "CrossTerminal" || item.value === "SendDN") {
+          item.disabled = true
+        }
+      })
+      setOrderBankSetting(temp)
+    }
   }
 
   const deleteEnable = val => {
@@ -877,6 +899,7 @@ function OrderBank({
                   currentPage={currentPage}
                   onChangeCurrentPage={onChangeCurrentPage}
                   onChangeFilters={onChangeCurrentPage}
+                  payloadFilter={payloadFilter}
                 />
               </div>
               <NewOrderModal open={showNewOrder} onCancel={onCloseNewOrder} />

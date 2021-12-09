@@ -277,7 +277,7 @@ function OrderBank({
   }
 
   const onSaveCrossTerminal = async (region, terminal) => { 
-    const payload = { order_banks: multipleDeleteIds, region: region, terminal: terminal };
+    const payload = { order_id: multipleDeleteIds, terminal: terminal };
     await onGetCrossTerminal(payload);
     setCrossTerminal(false)
   }
@@ -892,6 +892,7 @@ function OrderBank({
               />
               <CrossTerminalModal
                 open={crossTerminal}
+                region={region}
                 onCancel={onCloseCrossTerminal}
                 onSave={onSaveCrossTerminal}
               />

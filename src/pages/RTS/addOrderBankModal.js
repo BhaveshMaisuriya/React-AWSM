@@ -70,19 +70,25 @@ const NewOrderBankModal = props => {
     };
     const { onAddOrderBank } = props
     await onAddOrderBank(temp);
-    onCancel()
-    setShiftDate(new Date(new Date().getTime() + 24 * 60 * 60 * 1000));
-    setOrderData({});
-    setShiptoNo('');
     
+   
   }
+
+  useEffect(() => {
+    if(props.addorderBankData) {
+      typeof props.addorderBankData === 'object' ? onCancel('add', 'success') : onCancel('add', 'error');
+      setShiftDate(new Date(new Date().getTime() + 24 * 60 * 60 * 1000));
+      setOrderData({});
+      setShiptoNo('');
+    }
+  }, [props.addorderBankData])
 
   const onConfirmExit = () => {
     setIsConfirm(false)
     setCurrentState("")
     setShiptoNo("")
     if (onCancel) {
-      onCancel()
+      onCancel('cancle')
     }
   }
 
@@ -103,6 +109,7 @@ const NewOrderBankModal = props => {
       newOrderData[key] = value
       newOrderData["product_code"] = pro_code.code
       newOrderData["product_id"] = pro_code.id
+      newOrderData['storeData'] = pro_code;
       setOrderData(newOrderData)
     } else if(key === 'myremark1') {
       setInputValue1(value);
@@ -151,11 +158,13 @@ const NewOrderBankModal = props => {
           let temp1 = []
           Object.keys(props.orderBankData?.storage).map((key, index) => {
             if (key.startsWith("storage_")) {
-              temp1.push({
-                name: props.orderBankData?.storage[key].name,
-                code: props.orderBankData?.storage[key].code,
-                id: props.orderBankData?.storage[key].id,
-              })
+              temp1.push(props.orderBankData?.storage[key]
+              //   {
+              //   name: .name,
+              //   code: props.orderBankData?.storage[key].code,
+              //   id: props.orderBankData?.storage[key].id,
+              // }
+              )
               temp.push(props.orderBankData?.storage[key].name)
             }
           })
@@ -179,7 +188,7 @@ const NewOrderBankModal = props => {
   }, [props.orderBankData])
 
   const onCancelClick = () => {
-    shiptoNo !== "" ? setIsConfirm(true) : onCancel()
+    shiptoNo !== "" ? setIsConfirm(true) : onCancel('cancle')
     setShiptoNo("")
     setCurrentState("")
   }
@@ -486,13 +495,13 @@ const NewOrderBankModal = props => {
                       {orderData?.address?.cloud}
                     </p>
                     <p>
-                      <strong>Product Category:</strong>{orderData?.storage?.storage_1?.ordering_category}
+                      <strong>Product Category:</strong> {orderData?.storeData?.sales_category}
                     </p>
                     <p>
-                      <strong>Order Type:</strong>{" "}
+                      <strong>Order Type:</strong> {orderData?.storeData?.ordering_category}
                     </p>
                     <p>
-                      <strong>Accessibility:</strong>{" "}
+                      <strong>Accessibility:</strong> {orderData?.delivery?.road_tanker_accessibility}
                     </p>
                     <p>
                       <strong>Site ID: </strong>
@@ -509,10 +518,10 @@ const NewOrderBankModal = props => {
                       <strong>Order ID: </strong>
                     </p>
                     <p>
-                      <strong>Order Date:</strong>{" "}
+                      <strong>Order Date:</strong> {shiftDate.toLocaleDateString()}
                     </p>
                     <p>
-                      <strong>Opening Stock Days: </strong>
+                      <strong>Opening Stock Days: </strong> {" "}
                     </p>
                   </Col>
                   <Col lg={4} sm={6} xs={12}>
@@ -520,22 +529,22 @@ const NewOrderBankModal = props => {
                       <strong>Closing Stock Days:</strong>{" "}
                     </p>
                     <p>
-                      <strong>Current Stock Days:</strong>{" "}
+                      <strong>Current Stock Days:</strong> {" "}
                     </p>
                     <p>
-                      <strong>Ullage (L):</strong>{" "}
+                      <strong>Ullage (L):</strong> {" "}
                     </p>
                     <p>
-                      <strong>Out Of Stock:</strong>{" "}
+                      <strong>Out Of Stock:</strong> {" "}
                     </p>
                     <p>
                       <strong>Max Stock Days:</strong>{" "}
                     </p>
                     <p>
-                      <strong>Monthly Fixed Quota:</strong>{orderData?.storage?.storage_1?.monthly_fixed_quota}
+                      <strong>Monthly Fixed Quota:</strong> {orderData?.storeData?.monthly_fixed_quota}
                     </p>
                     <p>
-                      <strong>RT Req:</strong>{""}
+                      <strong>RT Req:</strong> {orderData?.delivery?.road_tanker_requirement}
                     </p>
                     <p>
                       <strong>City:</strong> {orderData?.address?.address?.city}
@@ -767,6 +776,7 @@ const NewOrderBankModal = props => {
 
 const mapStateToProps = ({ orderBank }) => ({
   orderBankData: orderBank.orderBankData,
+  addorderBankData: orderBank.addorderBankData,
 })
 
 const mapDispatchToProps = dispatch => ({

@@ -189,7 +189,7 @@ axios.post(`/rts/order-bank/create`, { ...params })
   .then(response => response.data) 
   
 export const editOrderBankDetail = (params) => 
-axios.put(`/rts/order-bank/${params.id}`, {'data': params.data})
+axios.put(`/rts/order-bank/${params.id}`, {...params.data})
   .then(response => response.data)   
 
 // get single order bank
@@ -365,8 +365,9 @@ export const getSalesAuditLog = payload =>
   axios.delete(`/rts/order-bank`, { data: params.params } )
   .then(response => response.data)  
 
-  export const getCrossTerminal = payload =>
-  get(url.GET_COMMERCIAL_AUDITLOG, { payload: payload })    
+  export const getCrossTerminal = params =>
+  axios.post(`/rts/cross-terminal`, { ...params.params } )
+  .then(response => response.data)     
 
 // get DQM Road Tanker Audit Log
 export const getRoadTankerAuditLog = payload =>

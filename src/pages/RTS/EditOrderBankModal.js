@@ -113,16 +113,21 @@ const EditOrderBankModal = props => {
       "commercial_storage_relation":editOrderData.commercial_storage_relation,
       "road_tanker_relation":editOrderData.road_tanker_relation
     };
-    console.log('temp::', temp)
     const { onGetEditOrderBankDetails } = props
     await onGetEditOrderBankDetails({id: editOrderData.id, data: temp})
-    onCancel()
+    if(props.editorderBankData) {
+      onCancel('edit', props.editorderBankData?.status ? 'error' : 'success')
+    }
   }
+
+  useEffect(() => {
+  
+  }, [props.editorderBankData])
 
   const onConfirmExit = () => {
     setIsConfirm(false)
     if (onCancel) {
-      onCancel()
+      onCancel('cancel')
     }
   }
 
@@ -187,7 +192,7 @@ const EditOrderBankModal = props => {
   return (
     <Modal isOpen={open} className="new-order-modal">
       <ModalHeader toggle={toggle}>
-        <span className="modal-title">View/Edit Details: Order ID {editOrderData.id}</span>
+        <span className="modal-title">View/Edit Details: Order ID {editOrderData?.id}</span>
         <span className="last-updated-sub-title">
         {`Last Updated By: ${editOrderData?.updated_by?.split("@")[0] || "Unknown"} on ${editOrderData?.created_at && format(new Date(editOrderData?.created_at), "do LLL yyyy") || ""}`}
         </span>
@@ -204,7 +209,7 @@ const EditOrderBankModal = props => {
                 <label>SHIFT DATE</label>
                 <AWSMInput
                   type="text"
-                  value={editOrderData.shift_date}
+                  value={editOrderData?.shift_date}
                   disabled={true}
                 />
               </div>
@@ -214,7 +219,7 @@ const EditOrderBankModal = props => {
                   <div className="col-3">
                     <AWSMDropdown
                       items={ORDER_REGION}
-                      value={editOrderData.region}
+                      value={editOrderData?.region}
                       disabled={true}
                     />
                   </div>
@@ -222,7 +227,7 @@ const EditOrderBankModal = props => {
                     <AWSMDropdown
                       items={ORDER_TERMINAL}
                       onChange={value => onFieldChange("terminal", value)}
-                      value={editOrderData.terminal}
+                      value={editOrderData?.terminal}
                       disabled={false}
                     />
                   </div>
@@ -312,7 +317,7 @@ const EditOrderBankModal = props => {
                         <label className="text-upper">Volume (L)</label>
                         <div className="d-flex">
                           <div className="w-100">
-                            <AWSMInput value={editOrderData.volume} disabled={false} onChange={value => onFieldChange("volume", value)} />
+                            <AWSMInput value={editOrderData?.volume} disabled={false} onChange={value => onFieldChange("volume", value)} />
                           </div>
                         </div>
                       </div>
@@ -320,7 +325,7 @@ const EditOrderBankModal = props => {
                         <label className="text-upper">customer Type</label>
                         <div className="d-flex">
                           <div className="w-100">
-                            <AWSMInput value={editOrderData.customer_type} disabled={true} />
+                            <AWSMInput value={editOrderData?.customer_type} disabled={true} />
                           </div>
                         </div>
                       </div>
@@ -338,7 +343,7 @@ const EditOrderBankModal = props => {
                         <label className="text-upper">Product</label>
                         <div className="d-flex">
                           <div className="w-100">
-                            <AWSMInput value={''} disabled={false} onChange={value => onFieldChange("product", value)} />
+                            <AWSMInput value={editOrderData?.product} disabled={false} onChange={value => onFieldChange("product", value)} />
                           </div>
                         </div>
                       </div>
@@ -354,7 +359,7 @@ const EditOrderBankModal = props => {
                         <label className="text-upper">Order Type</label>
                         <div className="d-flex">
                           <div className="w-100">
-                            <AWSMInput value={editOrderData.order_type} disabled={true} />
+                            <AWSMInput value={editOrderData?.order_type} disabled={true} />
                           </div>
                         </div>
                       </div>
@@ -364,7 +369,7 @@ const EditOrderBankModal = props => {
                         <label className="text-upper">Planned Load Time</label>
                         <div className="d-flex">
                           <div className="w-100">
-                            <AWSMInput value={editOrderData.planned_load_time} disabled={false} onChange={value => onFieldChange("loadTime", value)} />
+                            <AWSMInput value={editOrderData?.planned_load_time} disabled={false} onChange={value => onFieldChange("loadTime", value)} />
                           </div>
                         </div>
                       </div>
@@ -372,7 +377,7 @@ const EditOrderBankModal = props => {
                         <label className="text-upper">ETA</label>
                         <div className="d-flex">
                           <div className="w-100">
-                            <AWSMInput value={editOrderData.eta} disabled={true} />
+                            <AWSMInput value={editOrderData?.eta} disabled={true} />
                           </div>
                         </div>
                       </div>
@@ -380,9 +385,9 @@ const EditOrderBankModal = props => {
                         <label className="text-upper">Multiproduct ID</label>
                         <span className='remove_text text-red' onClick={() => onFieldChange("ConfirmMultiproduct", true)} >Remove</span>
                         <div className="d-flex">
-                          <div className={`w-100 relative ${editOrderData.ConfirmMultiproduct === true && 'border-red'}`}>
+                          <div className={`w-100 relative ${editOrderData?.ConfirmMultiproduct === true && 'border-red'}`}>
                             <AWSMInput value="" disabled={true} />
-                            {editOrderData.ConfirmMultiproduct === true &&
+                            {editOrderData?.ConfirmMultiproduct === true &&
                               <div className='confirm-main'>
                                 <span class='confirm-text text-red' onClick={() => onFieldChange("ConfirmMultiproduct", false)}>Confirm</span>
                                 <span class='confirm-no-text text-red' onClick={() => onFieldChange("ConfirmMultiproduct", false)}>No</span>
@@ -397,7 +402,7 @@ const EditOrderBankModal = props => {
                         <label className="text-upper">Retain</label>
                         <div className="d-flex">
                           <div className="w-100">
-                            <AWSMInput value={editOrderData.retain} disabled={true} />
+                            <AWSMInput value={editOrderData?.retain} disabled={true} />
                           </div>
                         </div>
                       </div>
@@ -405,7 +410,7 @@ const EditOrderBankModal = props => {
                         <label className="text-upper">Runout</label>
                         <div className="d-flex">
                           <div className="w-100">
-                            <AWSMInput value={editOrderData.runout} disabled={true} />
+                            <AWSMInput value={editOrderData?.runout} disabled={true} />
                           </div>
                         </div>
                       </div>
@@ -413,9 +418,9 @@ const EditOrderBankModal = props => {
                         <label className="text-upper">Multiload ID</label>
                         <span className='remove_text text-red' onClick={() => onFieldChange("ConfirmMultiload", true)}>Remove</span>
                         <div className="d-flex">
-                          <div className={`w-100 relative ${editOrderData.ConfirmMultiload === true && 'border-red'}`}>
+                          <div className={`w-100 relative ${editOrderData?.ConfirmMultiload === true && 'border-red'}`}>
                             <AWSMInput value="" disabled={true} />
-                            {editOrderData.ConfirmMultiload === true &&
+                            {editOrderData?.ConfirmMultiload === true &&
                               <div className='confirm-main'>
                                 <span class='confirm-text text-red' onClick={() => onFieldChange("ConfirmMultiload", false)}>Confirm</span>
                                 <span class='confirm-no-text text-red' onClick={() => onFieldChange("ConfirmMultiload", false)}>No</span>
@@ -430,7 +435,7 @@ const EditOrderBankModal = props => {
                         <label className="text-upper">Priority<span className='text-red'>*</span></label>
                         <div className="d-flex">
                           <div className="w-100">
-                            <AWSMInput value={editOrderData.priority} disabled={false} onChange={value => onFieldChange("priority", value)} />
+                            <AWSMInput value={editOrderData?.priority} disabled={false} onChange={value => onFieldChange("priority", value)} />
                           </div>
                         </div>
                       </div>
@@ -438,7 +443,7 @@ const EditOrderBankModal = props => {
                         <label className="text-upper">Special Request Remarks</label>
                         <div className="d-flex">
                           <div className="w-100">
-                            <AWSMInput value={editOrderData.remarks} disabled={true} />
+                            <AWSMInput value={editOrderData?.remarks} disabled={true} />
                           </div>
                         </div>
                       </div>
@@ -448,7 +453,7 @@ const EditOrderBankModal = props => {
                         <label className="text-upper">Order Remarks</label>
                         <div className="d-flex">
                           <div className="w-100">
-                            <AWSMInput value={editOrderData.order_remarks} disabled={false} onChange={value => onFieldChange("order-remark", value)} />
+                            <AWSMInput value={editOrderData?.order_remarks} disabled={false} onChange={value => onFieldChange("order-remark", value)} />
                           </div>
                         </div>
                       </div>
@@ -459,7 +464,7 @@ const EditOrderBankModal = props => {
                         <div className="w-100 relative">
                         <input
                           onChange={e => onFieldChange("myremark1", e.target.value)}
-                          value={editOrderData.my_remark_1}
+                          value={editOrderData?.my_remark_1}
                           className={`awsm-input w-100 ${(inputValue1 && !isValid1) ? "out-range " : ""}`}
                         />
                         <span
@@ -479,7 +484,7 @@ const EditOrderBankModal = props => {
                         <div className="w-100 relative">
                         <input
                         onChange={e => onFieldChange("myremark2", e.target.value)}
-                        value={editOrderData.my_remark_2}
+                        value={editOrderData?.my_remark_2}
                         className={`awsm-input w-100 ${(inputValue2 && !isValid2) ? "out-range " : ""}`}
                     />
                     <span
@@ -499,7 +504,7 @@ const EditOrderBankModal = props => {
                         <div className="w-100 relative">
                         <input
                         onChange={e => onFieldChange("myremark3", e.target.value)}
-                        value={editOrderData.my_remark_3}
+                        value={editOrderData?.my_remark_3}
                         className={`awsm-input w-100 ${(inputValue3 && !isValid3) ? "out-range " : ""}`}
                       />
                        <span
@@ -540,7 +545,7 @@ const EditOrderBankModal = props => {
                         <label className="text-upper">Duration</label>
                         <div className="d-flex">
                           <div className="w-100">
-                            <AWSMInput value={editOrderData.duration} disabled={true} />
+                            <AWSMInput value={editOrderData?.duration} disabled={true} />
                           </div>
                         </div>
                       </div>
@@ -550,7 +555,7 @@ const EditOrderBankModal = props => {
                         <label className="text-upper">Distance</label>
                         <div className="d-flex">
                           <div className="w-100">
-                            <AWSMInput value={editOrderData.distance} disabled={true} />
+                            <AWSMInput value={editOrderData?.distance} disabled={true} />
                           </div>
                         </div>
                       </div>
@@ -733,7 +738,7 @@ const EditOrderBankModal = props => {
                         <label className="text-upper">Remarks</label>
                         <div className="d-flex">
                           <div className="w-100">
-                            <AWSMInput value={editOrderData.remarks} disabled={true} />
+                            <AWSMInput value={editOrderData?.remarks} disabled={true} />
                           </div>
                         </div>
                       </div>
@@ -744,7 +749,7 @@ const EditOrderBankModal = props => {
                         <label className="text-upper">DN No.</label>
                         <div className="d-flex">
                           <div className="w-100">
-                            <AWSMInput value={editOrderData.dn_no} disabled={true} />
+                            <AWSMInput value={editOrderData?.dn_no} disabled={true} />
                           </div>
                         </div>
                       </div>
@@ -752,7 +757,7 @@ const EditOrderBankModal = props => {
                         <label className="text-upper">DN Status</label>
                         <div className="d-flex">
                           <div className="w-100">
-                            <AWSMInput value={editOrderData.dn_status} disabled={true} />
+                            <AWSMInput value={editOrderData?.dn_status} disabled={true} />
                           </div>
                         </div>
                       </div>
@@ -760,7 +765,7 @@ const EditOrderBankModal = props => {
                         <label className="text-upper">DN Date</label>
                         <div className="d-flex">
                           <div className="w-100">
-                            <AWSMInput value={editOrderData.dn_date} disabled={true} />
+                            <AWSMInput value={editOrderData?.dn_date} disabled={true} />
                           </div>
                         </div>
                       </div>
@@ -770,7 +775,7 @@ const EditOrderBankModal = props => {
                         <label className="text-upper">DN Time Creation.</label>
                         <div className="d-flex">
                           <div className="w-100">
-                            <AWSMInput value={editOrderData.dn_created_at} disabled={true} />
+                            <AWSMInput value={editOrderData?.dn_created_at} disabled={true} />
                           </div>
                         </div>
                       </div>
@@ -778,7 +783,7 @@ const EditOrderBankModal = props => {
                         <label className="text-upper">DN Created By</label>
                         <div className="d-flex">
                           <div className="w-100">
-                            <AWSMInput value={editOrderData.dn_created_by} disabled={true} />
+                            <AWSMInput value={editOrderData?.dn_created_by} disabled={true} />
                           </div>
                         </div>
                       </div>
@@ -786,7 +791,7 @@ const EditOrderBankModal = props => {
                         <label className="text-upper">Sales Order No</label>
                         <div className="d-flex">
                           <div className="w-100">
-                            <AWSMInput value={editOrderData.sales_order_no} disabled={true} />
+                            <AWSMInput value={editOrderData?.sales_order_no} disabled={true} />
                           </div>
                         </div>
                       </div>
@@ -800,7 +805,7 @@ const EditOrderBankModal = props => {
                         <label className="text-upper">Opening Stock Days</label>
                         <div className="d-flex">
                           <div className="w-100">
-                            <AWSMInput value={editOrderData.opening_stock_days} disabled={true} />
+                            <AWSMInput value={editOrderData?.opening_stock_days} disabled={true} />
                           </div>
                         </div>
                       </div>
@@ -808,7 +813,7 @@ const EditOrderBankModal = props => {
                         <label className="text-upper">Closing Stock Days</label>
                         <div className="d-flex">
                           <div className="w-100">
-                            <AWSMInput value={editOrderData.closing_stock_days} disabled={true} />
+                            <AWSMInput value={editOrderData?.closing_stock_days} disabled={true} />
                           </div>
                         </div>
                       </div>
@@ -816,7 +821,7 @@ const EditOrderBankModal = props => {
                         <label className="text-upper">Current Stock Days</label>
                         <div className="d-flex">
                           <div className="w-100">
-                            <AWSMInput value={editOrderData.current_stock_days} disabled={true} />
+                            <AWSMInput value={editOrderData?.current_stock_days} disabled={true} />
                           </div>
                         </div>
                       </div>
@@ -826,7 +831,7 @@ const EditOrderBankModal = props => {
                         <label className="text-upper">Ullage (L)</label>
                         <div className="d-flex">
                           <div className="w-100">
-                            <AWSMInput value={editOrderData.ullage} disabled={true} />
+                            <AWSMInput value={editOrderData?.ullage} disabled={true} />
                           </div>
                         </div>
                       </div>
@@ -834,7 +839,7 @@ const EditOrderBankModal = props => {
                         <label className="text-upper">Out of Stock</label>
                         <div className="d-flex">
                           <div className="w-100">
-                            <AWSMInput value={editOrderData.out_of_stock} disabled={true} />
+                            <AWSMInput value={editOrderData?.out_of_stock} disabled={true} />
                           </div>
                         </div>
                       </div>
@@ -842,7 +847,7 @@ const EditOrderBankModal = props => {
                         <label className="text-upper">Max Stock Days</label>
                         <div className="d-flex">
                           <div className="w-100">
-                            <AWSMInput value={editOrderData.max_stock_days} disabled={true} />
+                            <AWSMInput value={editOrderData?.max_stock_days} disabled={true} />
                           </div>
                         </div>
                       </div>
@@ -1087,7 +1092,7 @@ const EditOrderBankModal = props => {
                         <label className="text-upper">Route ID</label>
                         <div className="d-flex">
                           <div className="w-100">
-                            <AWSMInput value={editOrderData.route_id} disabled={true} />
+                            <AWSMInput value={editOrderData?.route_id} disabled={true} />
                           </div>
                         </div>
                       </div>
@@ -1095,7 +1100,7 @@ const EditOrderBankModal = props => {
                         <label className="text-upper">Split ID</label>
                         <div className="d-flex">
                           <div className="w-100">
-                            <AWSMInput value={editOrderData.split_id} disabled={true} />
+                            <AWSMInput value={editOrderData?.split_id} disabled={true} />
                           </div>
                         </div>
                       </div>
@@ -1103,7 +1108,7 @@ const EditOrderBankModal = props => {
                         <label className="text-upper">Vehicle</label>
                         <div className="d-flex">
                           <div className="w-100">
-                            <AWSMInput value={editOrderData.vehicle} disabled={true} />
+                            <AWSMInput value={editOrderData?.vehicle} disabled={true} />
                           </div>
                         </div>
                       </div>
@@ -1115,7 +1120,7 @@ const EditOrderBankModal = props => {
                         <label className="text-upper">Shipment</label>
                         <div className="d-flex">
                           <div className="w-100">
-                            <AWSMInput value={editOrderData.shipment} disabled={true} />
+                            <AWSMInput value={editOrderData?.shipment} disabled={true} />
                           </div>
                         </div>
                       </div>
@@ -1123,7 +1128,7 @@ const EditOrderBankModal = props => {
                         <label className="text-upper">Trip No.</label>
                         <div className="d-flex">
                           <div className="w-100">
-                            <AWSMInput value={editOrderData.trip_no} disabled={true} />
+                            <AWSMInput value={editOrderData?.trip_no} disabled={true} />
                           </div>
                         </div>
                       </div>
@@ -1166,6 +1171,7 @@ const EditOrderBankModal = props => {
 
 const mapStateToProps = ({ orderBank }) => ({
   currentOrderDetail: orderBank.currentOrderDetail,
+  editorderBankData: orderBank.editorderBankData,
 })
 
 const mapDispatchToProps = dispatch => ({

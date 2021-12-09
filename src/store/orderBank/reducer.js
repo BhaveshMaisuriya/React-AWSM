@@ -44,6 +44,8 @@ import {
   GET_OB_RT_DETAILS_FAIL,
   UPDATE_OB_RT_DETAILS_SUCCESS,
   UPDATE_OB_RT_DETAILS_FAIL,
+  GET_CROSS_TERMINAL_SUCCESS,
+  GET_CROSS_TERMINAL_FAIL,  
   GET_DELETE_MULTIPLE_ORDER_SUCCESS,
   GET_DELETE_MULTIPLE_ORDER_FAIL,
   SEND_ORDER_BANK_DN_FAIL,
@@ -68,6 +70,7 @@ const initialState = {
     event: []
   },
   orderBankRTDetails: null,
+  crossTerminalDetails: null,
   socketData: [],
   totalRow: 0,
   multipleorder: null,
@@ -130,7 +133,6 @@ const RTSOrderBank = (state = initialState, action) => {
         orderBankData: action.payload
       }
     case ADD_ORDERBANK_SUCCESS:
-      notify.success("Order Successfully added")
       return {
         ...state,
         addorderBankData: action.payload
@@ -139,7 +141,17 @@ const RTSOrderBank = (state = initialState, action) => {
       return {
         ...state,
         addorderBankData: action.payload
-      }
+      }   
+      case GET_CROSS_TERMINAL_SUCCESS: 
+        return {
+          ...state,
+          crossTerminalDetails: action.params,
+        }      
+      case GET_CROSS_TERMINAL_FAIL: 
+        return {
+          ...state,
+          crossTerminalDetails: action.params,
+      }    
     case EDIT_ORDERBANK_SUCCESS:
       return {
         ...state,

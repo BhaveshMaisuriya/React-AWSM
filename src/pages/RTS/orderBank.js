@@ -99,6 +99,7 @@ import { sendMessage } from "SocketService"
 function OrderBank({
   getRTSOrderBankTableData,
   orderBankTableData,
+  crossTerminalDetails,
   orderBankTableFilters,
   sendOrderBankDN,
   refreshOderBankDN,
@@ -110,6 +111,7 @@ function OrderBank({
   onGetCrossTerminal,
   dragOrderBankToGanttChart,
   socketData,
+  
 }) {
   const ganttChartEvents = useSelector(state => state.orderBank.ganttChart.event)
   const [orderSummary, setOrderSummary] = useState({
@@ -122,6 +124,8 @@ function OrderBank({
   const [activeTab, setActiveTab] = useState("1")
   const [dropdownOpen, setOpen] = useState(false)
   const [crossTerminal, setCrossTerminal] = useState(false)
+  const [showAddNotification, setShowAddNotification] = useState(false)
+  const [notiMessage, setNotiMessage] = useState('')
   const [uploadDmr, setUploadDmr] = useState(false)
   const [deleteMultiple, setDeleteMultiple] = useState(false)
   const [showNewOrder, setShowNewOrder] = useState(false)
@@ -272,34 +276,37 @@ function OrderBank({
     setCrossTerminal(false)
   }
 
-  const onSaveCrossTerminal = async () => {
-    const payload = {}
-    await onGetCrossTerminal(payload)
+  const onSaveCrossTerminal = async (region, terminal) => { 
+    const payload = { order_banks: multipleDeleteIds, region: region, terminal: terminal };
+    await onGetCrossTerminal(payload);
     setCrossTerminal(false)
   }
 
-  const onCloseNewOrder = () => {
+  const onCloseNewOrder = (type, val = '') => {
     setShowNewOrder(false)
+    type === 'add' && setShowAddNotification(true);
+    val === 'success' ? setNotiMessage('success') : setNotiMessage('error');
   }
 
   const enabledCross = val => {
-    if (val !== 0) {
-      let temp = [...orderBankSetting]
-      temp.map(function (item) {
-        if (item.value === "CrossTerminal" || item.value === "SendDN") {
-          item.disabled = false
-        }
-      })
-      setOrderBankSetting(temp)
-    } else {
-      let temp = [...orderBankSetting]
-      temp.map(function (item) {
-        if (item.value === "CrossTerminal" || item.value === "SendDN") {
-          item.disabled = true
-        }
-      })
-      setOrderBankSetting(temp)
-    }
+    // if (val !== 0) {
+    //   let temp = [...orderBankSetting]
+    //   temp.map(function (item) {
+    //     if (item.value === "CrossTerminal" || item.value === "SendDN") {
+    //       item.disabled = false
+    //     }
+    //   })
+    //   setOrderBankSetting(temp)
+    // }
+    //  else {
+    //   let temp = [...orderBankSetting]
+    //   temp.map(function (item) {
+    //     if (item.value === "CrossTerminal" || item.value === "SendDN") {
+    //       item.disabled = true
+    //     }
+    //   })
+    //   setOrderBankSetting(temp)
+    // }
   }
 
   const deleteEnable = val => {
@@ -973,6 +980,14 @@ function OrderBank({
                   closeAlert={() => setShowAlertDMR(false)}
                 />
               )}
+              {showAddNotification && (
+                <AWSMAlert
+                  status={notiMessage}
+                  message={notiMessage === 'success' ? "Order added Successfully" : "Order has not been added"}
+                  openAlert={showAddNotification}
+                  closeAlert={() => setShowAddNotification(false)}
+                />
+              )}
             </Card>
           </div>
         </div>
@@ -1007,6 +1022,7 @@ const mapStateToProps = ({ orderBank }) => ({
   orderBankTableFilters: orderBank.orderBankTableFilters,
   auditsCom: orderBank.auditsCom,
   socketData: orderBank.socketData,
+  crossTerminalDetails: orderBank.crossTerminalDetails,
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(OrderBank)

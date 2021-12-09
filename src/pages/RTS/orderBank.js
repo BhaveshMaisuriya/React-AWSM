@@ -333,7 +333,7 @@ function OrderBank({
   }
 
   const onSendOrderBankDN = () => {
-    sendOrderBankDN(orderBankTableData.filter(e => e.isChecked))
+    sendOrderBankDN(orderBankTableData.filter(e => e.isChecked).map(e => e.id))
   }
 
   const onRefreshOrderBankDN = () => {
@@ -502,6 +502,17 @@ function OrderBank({
       })
     setCurrentPage(0)
   }
+  
+  useEffect(() => {
+    const isItemSelected = !!orderBankTableData.find(e => e.isChecked);
+    const newSettings = [...orderBankSetting];
+    const sendDN = newSettings.find(e => e.value === "SendDN");
+    if (sendDN) {
+      sendDN.disabled = !isItemSelected;
+    }
+    setOrderBankSetting(newSettings);
+  }, [orderBankTableData])
+  
 
   return (
     <React.Fragment>

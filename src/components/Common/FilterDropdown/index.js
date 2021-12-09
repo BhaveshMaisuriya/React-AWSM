@@ -70,15 +70,13 @@ const FilterDropdown = ({
       setCurrent([
         {
           text: "Outside Threshold",
-          checked:
-            data.find(e => e.text === "Outside Threshold")?.checked ?? false,
+          checked: data.find(e => e.text === "Outside Threshold")?.checked ?? false,
           visibility: true,
           disabled: arr.findIndex(e => e.text === "Outside Threshold") < 0,
         },
         {
           text: "Within Threshold",
-          checked:
-            data.find(e => e.text === "Within Threshold")?.checked ?? false,
+          checked: data.find(e => e.text === "Within Threshold")?.checked ?? false,
           visibility: true,
           disabled: arr.findIndex(e => e.text === "Within Threshold") < 0,
         },
@@ -97,14 +95,9 @@ const FilterDropdown = ({
     newData.forEach(item => {
       item.visibility =
         item.text !== null &&
-        item.text
-          .toString()
-          .toLowerCase()
-          .includes(tempSearch.toString().toLowerCase())
+        item.text.toString().toLowerCase().includes(tempSearch.toString().toLowerCase())
       item.checked =
-        appliedFiltersList.length > 0
-          ? appliedFiltersList.includes(item.text)
-          : item.visibility
+        appliedFiltersList.length > 0 ? appliedFiltersList.includes(item.text) : item.visibility
     })
     setData(newData)
   }, [searchWords])
@@ -126,10 +119,7 @@ const FilterDropdown = ({
     dataFilter[dataKey]?.forEach(item => {
       newArr.push({
         text: item,
-        checked:
-          appliedFiltersList.length > 0
-            ? appliedFiltersList.includes(item)
-            : true,
+        checked: appliedFiltersList.length > 0 ? appliedFiltersList.includes(item) : true,
         visibility: true,
       })
     })
@@ -147,9 +137,7 @@ const FilterDropdown = ({
       const itemText = isNull(item.text) ? "-null" : item.text
       if (value.toString() === itemText.toString()) {
         item.checked = !item.checked
-        item.checked
-          ? setCheckedCount(checkedCount + 1)
-          : setCheckedCount(checkedCount - 1)
+        item.checked ? setCheckedCount(checkedCount + 1) : setCheckedCount(checkedCount - 1)
       }
     })
     setData(newData)
@@ -167,9 +155,7 @@ const FilterDropdown = ({
    * Handle apply button onclick
    */
   function clickApply() {
-    const checkedFilter = data
-      .filter(item => item.checked === true)
-      .map(item => item.text)
+    const checkedFilter = data.filter(item => item.checked === true).map(item => item.text)
     setSearch("")
     setAppliedFilters(checkedFilter)
     setPopoverOpen(!popoverOpen)
@@ -204,8 +190,7 @@ const FilterDropdown = ({
     if (popoverOpen) {
       setSearch("")
       dataFilter ? setData(getFilterData()) : ""
-      if (appliedFiltersList.length > 0)
-        setCheckedCount(appliedFiltersList.length)
+      if (appliedFiltersList.length > 0) setCheckedCount(appliedFiltersList.length)
       else setCheckAll(true)
     }
   }
@@ -237,17 +222,21 @@ const FilterDropdown = ({
   }
 
   const checkNullValue = useCallback(
-    text =>
-      isNull(text) ||
-      isEmpty(text?.toString()) ||
-      text?.toString().includes("null"),
+    text => isNull(text) || isEmpty(text?.toString()) || text?.toString().includes("null"),
     []
   )
+
+  const escapeRegExp = string => {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") // $& means the whole matched string
+  }
+  const replaceAll = (str, match, replacement) => {
+    return str.replace(new RegExp(escapeRegExp(match), "g"), () => replacement)
+  }
 
   return (
     <Fragment>
       <Button
-        id={dataKey.replaceAll(".", "_")}
+        id={replaceAll(dataKey, ".", "_")}
         color="link"
         className="filter-button"
         onMouseDown={e => e.preventDefault()}
@@ -257,7 +246,7 @@ const FilterDropdown = ({
       <Popover
         placement="bottom"
         isOpen={popoverOpen}
-        target={dataKey.replaceAll(".", "_")}
+        target={replaceAll(dataKey, ".", "_")}
         toggle={toggle}
         trigger="legacy"
       >
@@ -302,21 +291,14 @@ const FilterDropdown = ({
                           if (dataKey === "dipping_timestamp") {
                             return checkNullValue(row.text)
                               ? "-"
-                              : format(
-                                  new Date(row.text),
-                                  "dd-MM-yyyy , HH:mm:ss"
-                                )
+                              : format(new Date(row.text), "dd-MM-yyyy , HH:mm:ss")
                           }
                           if (dataKey === "override_status") {
-                            return checkNullValue(row.text)
-                              ? "Accurate"
-                              : row.text
+                            return checkNullValue(row.text) ? "Accurate" : row.text
                           }
 
                           if (dataKey !== "override_status") {
-                            return checkNullValue(row.text)
-                              ? "-"
-                              : removeKeywords(row.text)
+                            return checkNullValue(row.text) ? "-" : removeKeywords(row.text)
                           }
                         }
 

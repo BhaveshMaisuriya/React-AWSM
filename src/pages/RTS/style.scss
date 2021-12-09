@@ -14,6 +14,12 @@
 .remove_border {
     padding-bottom: 10px;
     border-bottom: unset !important;
+    .awsm-select-toggle{
+        height: 2.3rem !important;
+    }
+    .calendar-label{
+        height: 2.3rem !important;
+    }
 }
 .order-bank-page-content {
     padding: 0;
@@ -704,6 +710,10 @@
 
 .scheduling-btn {
     float: right;
-    max-height:39px !important;
+    max-height:2.3rem !important;
+}
+
+.b-grid-header-container{
+    max-height: 50px !important;
 }
 

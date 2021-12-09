@@ -23,10 +23,11 @@ import {
   UPDATE_SALES_AND_INVENTORY_DETAIL_SUCCESS,
   UPDATE_SALES_AND_INVENTORY_DETAIL_FAIL,
   OVERRIDE_STATUS_IN_ACTION_COLUMN_SUCCESS,
-  OVERRIDE_STATUS_IN_ACTION_COLUMN_FAIL
+  OVERRIDE_STATUS_IN_ACTION_COLUMN_FAIL,
 } from "./actionTypes"
-import { ToastSuccess, ToastError } from "../../helpers/swal"
-import formatDateResponseList from "../../helpers/format-response-data/format-date-response.helper"
+import { ToastSuccess, ToastError } from "helpers/swal"
+import { findMatchedColumns } from "./factory"
+import formatDateResponseList from "helpers/format-response-data/format-date-response.helper"
 
 const initialState = {
   varianceControlData: null,
@@ -43,7 +44,8 @@ const initialState = {
   currentSalesAndInventory: {},
   isUpdateSuccess: false,
   isLoading: false,
-  overrideSuccess: null
+  overrideSuccess: null,
+  vcUpdateSuccess: null,
 }
 
 const SaleAndInventory = (state = initialState, action) => {
@@ -54,11 +56,12 @@ const SaleAndInventory = (state = initialState, action) => {
         isLoading: true,
       }
     case GET_SALES_AND_INVENTORY_VARIANCE_CONTROL_SUCCESS:
-      // ToastSuccess.fire()
       return {
         ...state,
         varianceControlData: action.payload,
         varianceControlError: null,
+        vcUpdateSuccess: null,
+        tsUpdateSuccess: null,
       }
     case GET_SALES_AND_INVENTORY_VARIANCE_CONTROL_FAILED:
       return {
@@ -73,7 +76,7 @@ const SaleAndInventory = (state = initialState, action) => {
     case GET_SALES_AND_INVENTORY_TANK_STATUS_SUCCESS:
       return {
         ...state,
-        tankStatusData:action.payload,
+        tankStatusData: action.payload,
       }
     case GET_SALES_AND_INVENTORY_TANK_STATUS_FAILED:
       return {
@@ -81,9 +84,9 @@ const SaleAndInventory = (state = initialState, action) => {
         tankStatusModalError: action.payload,
       }
     case GET_SALES_AND_INVENTORY_SUCCESS:
-      const list = action.payload?.list;
-      if(list && list.length > 0){
-        action.payload = {...action.payload,list: formatDateResponseList(list)}
+      const list = action.payload?.list
+      if (list && list.length > 0) {
+        action.payload = { ...action.payload, list: formatDateResponseList(list) }
       }
       return {
         ...state,
@@ -142,14 +145,16 @@ const SaleAndInventory = (state = initialState, action) => {
       ToastSuccess.fire()
       return {
         ...state,
-        varianceControlData: action.payload,
+        vcUpdateSuccess: true,
+        // varianceControlData: action.payload,
         varianceControlError: null,
       }
     case UPDATE_SALES_AND_INVENTORY_VARIANCE_CONTROL_FAILED:
       ToastError.fire()
       return {
         ...state,
-        varianceControlData: null,
+        vcUpdateSuccess: false,
+        // varianceControlData: null,
         varianceControlError: action.payload,
       }
     case UPDATE_SALES_AND_INVENTORY_TANK_STATUS:
@@ -160,14 +165,16 @@ const SaleAndInventory = (state = initialState, action) => {
       ToastSuccess.fire()
       return {
         ...state,
-        tankStatusData: action.payload,
+        tsUpdateSuccess: true,
+        // tankStatusData: action.payload,
         tankStatusError: null,
       }
     case UPDATE_SALES_AND_INVENTORY_TANK_STATUS_FAILED:
       ToastError.fire()
       return {
         ...state,
-        tankStatusData: null,
+        tsUpdateSuccess: false,
+        // tankStatusData: null,
         tankStatusError: action.payload,
       }
 
@@ -175,40 +182,51 @@ const SaleAndInventory = (state = initialState, action) => {
       /*payload is all information from record. So we must filter which columns are in view and
        update the view for optimistic. The real data must be get all again but the request time
        is too long so we must show the changes first in the view */
-       const currentTableColumns = Object.keys(state.mainTableData.list[0]);
-       let newList = [...state.mainTableData.list]
-       if(action.payload?.data){
-         const {trans_id} = action.payload?.data
-         const columnsInDetail = findMatchedColumns(action.payload?.data?.details,currentTableColumns)
-         const columnsInSales = findMatchedColumns(action.payload?.data?.sales,currentTableColumns)
-         const columnsInInventory = findMatchedColumns(action.payload?.data?.inventory,currentTableColumns)
-         // For the information from delivery Tab, need example data in List to filter
-         const updatedRecordRow = {...columnsInDetail,...columnsInSales,...columnsInInventory, trans_id}
-         const updatedIndex = newList.findIndex((row)=> row.trans_id === trans_id);
-         if(updatedIndex !== -1){
-           newList[updatedIndex] = updatedRecordRow
-         }
-       }
-       ToastSuccess.fire()
-       return {
-         ...state,
-         mainTableData: {...state.mainTableData,list:newList},
-         isUpdateSuccess: {success:true}, // for each update return a new success object
-       }
- 
-     case UPDATE_SALES_AND_INVENTORY_DETAIL_FAIL:
-       ToastError.fire()
-       return {
-         ...state,
-         error: action.payload,
-       }
+      const currentTableColumns = Object.keys(state.mainTableData.list[0])
+      let newList = [...state.mainTableData.list]
+      if (action.payload?.data) {
+        const { trans_id } = action.payload?.data
+        const columnsInDetail = findMatchedColumns(
+          action.payload?.data?.details,
+          currentTableColumns
+        )
+        const columnsInSales = findMatchedColumns(action.payload?.data?.sales, currentTableColumns)
+        const columnsInInventory = findMatchedColumns(
+          action.payload?.data?.inventory,
+          currentTableColumns
+        )
+        // For the information from delivery Tab, need example data in List to filter
+        const updatedRecordRow = {
+          ...columnsInDetail,
+          ...columnsInSales,
+          ...columnsInInventory,
+          trans_id,
+        }
+        const updatedIndex = newList.findIndex(row => row.trans_id === trans_id)
+        if (updatedIndex !== -1) {
+          newList[updatedIndex] = updatedRecordRow
+        }
+      }
+      ToastSuccess.fire()
+      return {
+        ...state,
+        mainTableData: { ...state.mainTableData, list: newList },
+        isUpdateSuccess: { success: true }, // for each update return a new success object
+      }
+
+    case UPDATE_SALES_AND_INVENTORY_DETAIL_FAIL:
+      ToastError.fire()
+      return {
+        ...state,
+        error: action.payload,
+      }
 
     case OVERRIDE_STATUS_IN_ACTION_COLUMN_SUCCESS: {
       ToastSuccess.fire()
       return {
         ...state,
         isUpdateSuccess: {
-          success: true
+          success: true,
         },
       }
     }
@@ -218,24 +236,14 @@ const SaleAndInventory = (state = initialState, action) => {
       return {
         ...state,
         isUpdateSuccess: {
-          success: false
+          success: false,
         },
         error: action.payload,
       }
     }
-     default:
-       return state
-   }
- }
- 
- export default SaleAndInventory
- 
- function findMatchedColumns(object,columns){
-   return Object.keys(object).reduce((result,key)=>{
-     if(columns.indexOf(key) !==-1){
-       result[key] = object[key]
-     }
-     return result
-   },{})
- }
- 
+    default:
+      return state
+  }
+}
+
+export default SaleAndInventory

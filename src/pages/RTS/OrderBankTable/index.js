@@ -268,7 +268,7 @@ class index extends Component {
         case "priority_type":
           result = (
             <td>
-              {data[v] &&
+              {_.isArray(data[v]) &&
                 data[v].map(e => {
                   return <span className={`circle ${e}`}>{e}</span>
                 })}
@@ -278,17 +278,14 @@ class index extends Component {
         case "dn_status":
           result = (
             <td>
-              {data[v] &&
-                data[v].map(e => {
-                  return (
-                    <span
-                      className={`status ${e}`}
-                      onClick={this.DNStatusOnClickHandler.bind(this, data, e)}
-                    >
-                      {e}
-                    </span>
-                  )
-                })}
+              {
+                <span
+                  className={`status ${data[v]}`}
+                  onClick={this.DNStatusOnClickHandler.bind(this, data, data[v])}
+                >
+                  {data[v]}
+                </span>
+              }
             </td>
           )
           break

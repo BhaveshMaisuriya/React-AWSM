@@ -24,12 +24,10 @@ const BasicConcepts = ({
   deliveryData,
   setDeliveryData,
   subKey,
-  applySelectedDate
+  applySelectedDate,
 }) => {
   // get calendar month
-  const [startDayOfMonth, setStartDayOfMonth] = useState(
-    new Date(format(new Date(), "MMM yyyy"))
-  )
+  const [startDayOfMonth, setStartDayOfMonth] = useState(new Date(format(new Date(), "MMM yyyy")))
   const endDayOfMonth = lastDayOfMonth(startDayOfMonth)
 
   const calendarMonth = eachDayOfInterval({
@@ -46,10 +44,10 @@ const BasicConcepts = ({
     setSelectedDay(day)
   }
 
-  function clearSelectedDate (){
+  function clearSelectedDate() {
     setDaynames([])
     setDateRange({ from: undefined, to: undefined })
-    setSelectedDay(undefined);
+    setSelectedDay(undefined)
   }
 
   const handleDayName = event => {
@@ -60,10 +58,7 @@ const BasicConcepts = ({
   }
 
   return (
-    <div
-      className="m-3 d-flex flex-column awsm-ultra-calendar"
-      style={{ position: "relative" }}
-    >
+    <div className="m-3 d-flex flex-column awsm-ultra-calendar" style={{ position: "relative" }}>
       <div
         className="d-flex "
         style={{
@@ -77,7 +72,7 @@ const BasicConcepts = ({
           height: 40,
         }}
       ></div>
-      {check.checkedA ? (
+      {check?.checkedA ? (
         <div>
           <RangePicker
             dateRange={dateRange}
@@ -95,7 +90,7 @@ const BasicConcepts = ({
             subKey={subKey}
           />
         </div>
-      ) : daynames.length > 0 ? (
+      ) : daynames?.length > 0 ? (
         <MultiPicker
           daynames={daynames}
           setDaynames={setDaynames}
@@ -130,34 +125,20 @@ const BasicConcepts = ({
       )}
       <div className="footerButton">
         <FormControlLabel
-          control={
-            <Checkbox
-              checked={check.checkedA}
-              onChange={handleDayName}
-              name="checkedA"
-            />
-          }
+          control={<Checkbox checked={check?.checkedA} onChange={handleDayName} name="checkedA" />}
           label="Start and End day"
         />
 
         <div className="text-right">
-          <button
-            type="button"
-            className={`buttonCancel`}
-            onClick={clearSelectedDate}
-          >
+          <button type="button" className={`buttonCancel`} onClick={clearSelectedDate}>
             Clear
           </button>
-          <button
-            type="button"
-            className={`buttonUpdate`}
-            onClick={applySelectedDate}
-          >
+          <button type="button" className={`buttonUpdate`} onClick={applySelectedDate}>
             Apply
           </button>
         </div>
       </div>
-  </div>
+    </div>
   )
 }
 export default BasicConcepts

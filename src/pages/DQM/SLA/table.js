@@ -61,8 +61,8 @@ function SLATable(props) {
 
   return (
     <>
-      {tableDatas.length === 0 && <p className="not_found">No Uploaded Documents Found!</p>}
-      {tableDatas.length > 0 && (
+      {tableDatas?.length === 0 && <p className="not_found">No Uploaded Documents Found!</p>}
+      {tableDatas?.length > 0 && (
         <Fragment>
           <div className="search">
             <input
@@ -75,10 +75,10 @@ function SLATable(props) {
           <div className="top-page-number">
             <div className="enteriesText">
               {`${currentPage * rowsPerPage + 1} to ${
-                tableDatas.length - (currentPage * rowsPerPage + rowsPerPage) < 0
-                  ? tableDatas.length
+                tableDatas?.length - (currentPage * rowsPerPage + rowsPerPage) < 0
+                  ? tableDatas?.length
                   : currentPage * rowsPerPage + rowsPerPage
-              } of ${tableDatas.length} enteries`}
+              } of ${tableDatas?.length} enteries`}
             </div>
           </div>
           <table>
@@ -88,7 +88,7 @@ function SLATable(props) {
             <tbody className="trhover">{tableData()}</tbody>
           </table>
           <TablePagination
-            count={tableDatas.length}
+            count={tableDatas?.length}
             rowsPerPage={rowsPerPage}
             currentPage={currentPage}
             onChangePage={updatePage}

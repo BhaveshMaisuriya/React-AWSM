@@ -33,6 +33,7 @@ import OrderBankSapAlertModal from "./OrderBankSapAlertModal"
 import OrderBankRoadTankerModal from "./OrderBankRoadTankerModal"
 import PlannedLoadTimesModal from "./PlannedLoadTimesModal"
 import AlertOverruleModal from "./AlertOverruleModal"
+import InfiniteScroll from "react-infinite-scroll-component"
 
 const EventSchedulerStatus = {
   ARE_YET_CREATED_PAYMENT: "not yet to be created",
@@ -71,11 +72,21 @@ function BryntumChartTable(props) {
   const schedulerProRef = useRef()
   const firstRender = useRef(true)
   const [filterList, setFilterList] = useState([])
+  const [currentPage, setCurrentPage] = useState(0)
 
   useEffect(() => {
     const { getRTSOderBankGanttChart } = props
-    getRTSOderBankGanttChart()
-  }, [])
+    const payload = {
+      limit: 10,
+      page: currentPage,
+      search_fields: "*",
+      q: "",
+      sort_dir: "desc",
+      sort_field: "vehicle",
+      filter: {}
+    }
+    getRTSOderBankGanttChart(payload)
+  }, [currentPage])
 
   useEffect(() => {
     setFilterList(
@@ -87,9 +98,9 @@ function BryntumChartTable(props) {
   }, [bryntumCurrentColumns])
 
   useEffect(() => {
-    setTableData(props.ganttChartData.table)
-    setEventsData(props.ganttChartData.event)
-  }, [props.ganttChartData])
+    setTableData(props.ganttChartTableData)
+    //setEventsData(props.ganttChartData.event)
+  }, [props.ganttChartTableData])
 
   const toggle = () => setModal(!modal)
 
@@ -639,7 +650,7 @@ function BryntumChartTable(props) {
   }
 
   useEffect(() => {
-    const newTableData = props.ganttChartData.table.filter(e => {
+    const newTableData = props.ganttChartTableData.filter(e => {
       return filterCondition.every(condition => {
         return condition.data.includes(e[condition.key])
       })
@@ -647,44 +658,56 @@ function BryntumChartTable(props) {
     updateResourceRecords(newTableData)
   }, [filterCondition])
 
+  const handleScrollGanttChartTable = () => {
+    setCurrentPage(currentPage + 1);
+  }
+
   return (
-    <div className="rts-table-container scroll" id="scrollableDiv">
+    <div className="rts-table-container scroll" id="scrollableDivGanttChart">
       <div
         className="container-orderbank gant-chart-table"
         style={{ maxWidth: "100%" }}
       >
-        <Row className="mr-0 overflow-hidden">
-          <Col lg={12} className="pr-1">
-            <Droppable key="gantt-chart" droppableId="gantt-chart">
-              {(provided, snapshot) => {
-                return (
-                  <div
-                    className="rts-gantt-chart"
-                    {...provided.droppableProps}
-                    ref={provided.innerRef}
-                  >
-                    {snapshot.isDraggingOver && <div className="on-dragging" />}
-                    <BryntumSchedulerPro
-                      {...schedulerproConfig}
-                      events={eventsData}
-                      autoSync
-                      resources={props.ganttChartData.table}
-                      syncDataOnLoad
-                      ref={schedulerProRef}
-                      // other props, event handlers, etc
-                    />
-                  </div>
-                )
-              }}
-            </Droppable>
-          </Col>
+        <Row className="mr-0">
+          <InfiniteScroll
+            next={handleScrollGanttChartTable}
+            hasMore={props.ganttChartTableData.length < props.totalRow_ganttChart}
+            loader={<h5>Loading...</h5>}
+            dataLength={props.ganttChartTableData.length}
+            height={400}
+          >
+            <Col lg={12} className="pr-1">
+                <Droppable key="gantt-chart" droppableId="gantt-chart">
+                  {(provided, snapshot) => {
+                    return (
+                      <div
+                        className="rts-gantt-chart"
+                        {...provided.droppableProps}
+                        ref={provided.innerRef}
+                      >
+                        {snapshot.isDraggingOver && <div className="on-dragging" />}
+                        <BryntumSchedulerPro
+                          {...schedulerproConfig}
+                          events={eventsData}
+                          autoSync
+                          resources={props.ganttChartTableData}
+                          syncDataOnLoad
+                          ref={schedulerProRef}
+                          // other props, event handlers, etc
+                        />
+                      </div>
+                    )
+                  }}
+                </Droppable>
+            </Col>
+          </InfiniteScroll>
         </Row>
         {filterList.map(e => {
           return (
             <ChartColumnFilter
               key={e.key}
               filterKey={e.key}
-              filterData={props.ganttChartData.table}
+              filterData={props.ganttChartTableData}
               type={e.type}
               onApply={onApplyFilter}
               onReset={onResetFilter}
@@ -752,6 +775,8 @@ const mapStateToProps = ({ orderBank }) => {
   return {
     isSendRequestProcess: orderBank.isSendRequestProcess,
     ganttChartData: orderBank.ganttChart,
+    ganttChartTableData: orderBank.ganttChartTableData,
+    totalRow_ganttChart: orderBank.totalRow_ganttChart,
   }
 }
 

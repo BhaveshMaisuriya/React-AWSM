@@ -10,10 +10,7 @@ import {
   GET_SALES_AND_INVENTORY_TANK_STATUS,
   OVERRIDE_STATUS_IN_ACTION_COLUMN,
 } from "./actionTypes"
-import Factory, {
-  formatResponseDataVarianceControl,
-  DownloadData,
-} from "./factory"
+import Factory, { formatResponseDataVarianceControl, DownloadData } from "./factory"
 import {
   getSalesAndInventoryTankStatusSuccess,
   getSalesAndInventoryTankStatusFailed,
@@ -49,13 +46,13 @@ import {
   getSaleAndInventoryDetail,
   updateSaleAndInventoryDetail,
   getSaleAndInventoryByRecordId,
-  updateSaleAndInventoryOverride
+  updateSaleAndInventoryOverride,
 } from "../../helpers/fakebackend_helper"
 
 function* onGetSalesAndInventory({ params = {} }) {
   try {
-    if(params.q && params.q === "()"){
-      yield put(getSaleAndInventorySuccess('Data is not available'))
+    if (params.q && params.q === "()") {
+      yield put(getSaleAndInventorySuccess("Data is not available"))
     } else {
       const response = yield call(getSaleAndInventory, params)
       yield put(getSaleAndInventorySuccess(Factory(response)))
@@ -78,14 +75,17 @@ function* onGetSalesAndInventoryDetail({ recordId }) {
 function* onGetSalesAndInventoryVarianceControl({ date }) {
   try {
     const response = yield call(getSaleAndInventoryVarianceControl, date ? date : "")
-    const {updated_at,updated_by,...dataToFormat} = response.data
-    const convertResponse = formatResponseDataVarianceControl(dataToFormat,"",["id","created_at"]);
-    if (convertResponse){
+    const { updated_at, updated_by, ...dataToFormat } = response.data
+    const convertResponse = formatResponseDataVarianceControl(dataToFormat, "", [
+      "id",
+      "created_at",
+    ])
+    if (convertResponse) {
       convertResponse.date = response.data?.vc_created_at
       convertResponse.updated_at = updated_at
       convertResponse.updated_by = updated_by
       yield put(getSalesAndInventoryVarianceControlSuccess(convertResponse))
-    }else{
+    } else {
       yield put(getSalesAndInventoryVarianceControlSuccess(response.data))
     }
   } catch (error) {
@@ -102,7 +102,7 @@ function* onUpdateSalesAndInventoryVarianceControl({ data }) {
   }
 }
 
-function* onGetSalesAndInventoryTankStatus({date}) {
+function* onGetSalesAndInventoryTankStatus({ date }) {
   try {
     // const response = yield call(getSaleAndInventoryTankStatus, date)
     const response = yield call(getSaleAndInventoryTankStatus, date ? date : "")
@@ -141,10 +141,10 @@ function* onGetDownloadSales({ params = {} }) {
 function* onUpdateSalesAndInventoryDetail({ recordId, payload }) {
   try {
     const response = yield call(updateSaleAndInventoryDetail, recordId, payload)
-    if(response && response.status === 200){
+    if (response && response.status === 200) {
       // optimistic data
       const updateData = {
-        data:{...payload?.updateValue, trans_id:recordId}
+        data: { ...payload?.updateValue, trans_id: recordId },
       }
       yield put(updateSalesAndInventoryDetailSuccess(updateData))
     }
@@ -155,7 +155,11 @@ function* onUpdateSalesAndInventoryDetail({ recordId, payload }) {
 
 function* onUpdateSalesAndInventoryOverride({ payload }) {
   try {
-    yield call(updateSaleAndInventoryOverride, payload.trans_id, !(payload.override_status === "Override"))
+    yield call(
+      updateSaleAndInventoryOverride,
+      payload.trans_id,
+      !(payload.override_status === "Override")
+    )
     yield put(overrideStatusInActionColumnSuccess())
   } catch (err) {
     yield put(overrideStatusInActionColumnFail(err))
@@ -163,38 +167,19 @@ function* onUpdateSalesAndInventoryOverride({ payload }) {
 }
 
 function* saleAndInventorySaga() {
-  yield takeLatest(
-    GET_SALES_AND_INVENTORY_VARIANCE_CONTROL,
-    onGetSalesAndInventoryVarianceControl
-  )
+  yield takeLatest(GET_SALES_AND_INVENTORY_VARIANCE_CONTROL, onGetSalesAndInventoryVarianceControl)
   yield takeLatest(
     UPDATE_SALES_AND_INVENTORY_VARIANCE_CONTROL,
     onUpdateSalesAndInventoryVarianceControl
   )
-  yield takeLatest(
-    GET_SALES_AND_INVENTORY_TANK_STATUS,
-    onGetSalesAndInventoryTankStatus
-  )
-  yield takeLatest(
-    UPDATE_SALES_AND_INVENTORY_TANK_STATUS,
-    onUpdateSalesAndInventoryTankStatus
-  )
+  yield takeLatest(GET_SALES_AND_INVENTORY_TANK_STATUS, onGetSalesAndInventoryTankStatus)
+  yield takeLatest(UPDATE_SALES_AND_INVENTORY_TANK_STATUS, onUpdateSalesAndInventoryTankStatus)
   yield takeLatest(GET_SALES_AUDITLOG, onGetSalesAuditLog)
   yield takeLatest(GET_DOWNLOAD_SALES, onGetDownloadSales)
   yield takeLatest(GET_SALES_AND_INVENTORY, onGetSalesAndInventory)
   yield takeLatest(GET_DETAIL_SALES, onGetSalesAndInventoryDetail)
-  yield takeLatest(
-    UPDATE_SALES_AND_INVENTORY_DETAIL,
-    onUpdateSalesAndInventoryDetail
-  )
-  yield takeLatest(
-    UPDATE_SALES_AND_INVENTORY_VARIANCE_CONTROL,
-    onUpdateSalesAndInventoryVarianceControl
-  )
-  yield takeLatest(
-    OVERRIDE_STATUS_IN_ACTION_COLUMN,
-    onUpdateSalesAndInventoryOverride
-  )
+  yield takeLatest(UPDATE_SALES_AND_INVENTORY_DETAIL, onUpdateSalesAndInventoryDetail)
+  yield takeLatest(OVERRIDE_STATUS_IN_ACTION_COLUMN, onUpdateSalesAndInventoryOverride)
 }
 
 export default saleAndInventorySaga

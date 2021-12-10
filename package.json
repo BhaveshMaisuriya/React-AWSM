@@ -121,6 +121,7 @@
     "react-svg": "^13.0.1",
     "react-switch": "^5.0.1",
     "react-time-picker": "^4.0.1",
+    "react-tiny-virtual-list": "^2.2.0",
     "react-to-pdf": "^0.0.14",
     "react-toastr": "^3.0.0",
     "react-twitter-auth": "0.0.13",

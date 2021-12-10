@@ -729,6 +729,7 @@ function OrderBank({
                             currentTab={activeTab}
                             ganttChartAllRadio={ganttChartAllRadio}
                             bryntumCurrentColumns={bryntumCurrentColumns}
+                            dateConfig={shiftDate}
                           />
                           <div className="square_border">
                             {GanttChartBottom.map(item => {

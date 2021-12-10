@@ -36,7 +36,7 @@ const SalesTab = ({ data, onChange, inventoryData }) => {
                   <label>ACTUAL SALES(L)<span className="extra-lbl">D-1</span></label>
                   <input
                     className="form-control awsm-input"
-                    value={data?.actual_sales}
+                    value={!isNaN(data?.actual_sales) ? Number(data?.actual_sales).toFixed(1) : ''}
                     disabled="true"
                     onChange={e => onChangeHandler(e.target.value, "actual_sales")}/>
               </div>
@@ -44,7 +44,7 @@ const SalesTab = ({ data, onChange, inventoryData }) => {
                   <label>EXPECTED SALES(L)<span className="extra-lbl">D-1</span></label>
                   <input
                     className="form-control awsm-input"
-                    value={data?.expected_sales}
+                    value={!isNaN(data?.expected_sales) ? Number(data?.expected_sales).toFixed(1) : ''}
                     disabled="true"
                     onChange={e => onChangeHandler(e.target.value, "expected_sales")}
                   />
@@ -76,7 +76,7 @@ const SalesTab = ({ data, onChange, inventoryData }) => {
                       <span className="extra-lbl">D-1</span></label>
                   <input
                     className="form-control awsm-input"
-                    value={data?.sales_final_figure}
+                    value={!isNaN(data?.sales_final_figure) ? Number(data?.sales_final_figure).toFixed(1) : ''}
                     disabled="true"
                     onChange={e => onChangeHandler(e.target.value, "sales_final_figure")}/>
               </div>
@@ -88,7 +88,8 @@ const SalesTab = ({ data, onChange, inventoryData }) => {
                   </label>
                   <input
                     className="form-control awsm-input"
-                    disabled="true" value={data?.sales_variance}
+                    disabled="true"
+                    value={!isNaN(data?.sales_variance) ? Number(data?.sales_variance).toFixed(1) : ''}
                     onChange={e => onChangeHandler(e.target.value, "sales_variance")}/>
               </div>
           </div>

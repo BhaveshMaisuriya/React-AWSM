@@ -92,7 +92,7 @@ function BryntumChartTable(props) {
     setFilterList(
       Object.keys(bryntumCurrentColumns).map(e => ({
         key: e,
-        type: ganttChartTableMapping[e].type,
+        type: ganttChartTableMapping[e]?.type,
       }))
     )
   }, [bryntumCurrentColumns])
@@ -248,7 +248,7 @@ function BryntumChartTable(props) {
     autoLoad: true,
     autoSync: true,
     autoCommit: true,
-    rowHeight: 35,
+    rowHeight: 30,
     barMargin: 0,
     resourceMargin: 0,
     autoAdjustTimeAxis: false,
@@ -337,7 +337,7 @@ function BryntumChartTable(props) {
         showCurrentTimeLine: false,
       },
     },
-    startDate: "2021-07-23",
+    startDate: props?.dateConfig?.date_from,
     resourceNonWorkingTimeFeature: true,
     nonWorkingTimeFeature: true,
     resourceTimeRangesFeature: true,
@@ -409,7 +409,7 @@ function BryntumChartTable(props) {
       headers: [
         {
           unit: "day",
-          dateFormat: "dddd. do MMM YYYY",
+          dateFormat: "dddd. Do MMM YYYY",
         },
         {
           unit: "hour",
@@ -478,7 +478,7 @@ function BryntumChartTable(props) {
                 >
                   {value}
                 </div>
-                {record.pto && <div className="suffix">{record.pto}</div>}
+                {record.pump_type  && <div className="suffix">{record.pump_type}</div>}
               </div>
             )
           }
@@ -650,12 +650,23 @@ function BryntumChartTable(props) {
   }
 
   useEffect(() => {
-    const newTableData = props.ganttChartTableData.filter(e => {
-      return filterCondition.every(condition => {
-        return condition.data.includes(e[condition.key])
-      })
-    })
-    updateResourceRecords(newTableData)
+    let q = "";
+    if (filterCondition.length > 0) {
+      q = filterCondition.filter(v => v.data.length > 0).map(e => {
+        return `(${e.data.map(k => `${e.key}=='${k}'`).join("||")})`
+      }).join("&&")
+    }
+    setCurrentPage(0);
+    const payload = {
+      limit: 10,
+      page: 0,
+      search_fields: "*",
+      q,
+      sort_dir: "desc",
+      sort_field: "vehicle",
+      filter: {}
+    }
+    props.getRTSOderBankGanttChart(payload)
   }, [filterCondition])
 
   const handleScrollGanttChartTable = () => {
@@ -674,7 +685,7 @@ function BryntumChartTable(props) {
             hasMore={props.ganttChartTableData.length < props.totalRow_ganttChart}
             loader={<h5>Loading...</h5>}
             dataLength={props.ganttChartTableData.length}
-            height={400}
+            height={360}
           >
             <Col lg={12} className="pr-1">
                 <Droppable key="gantt-chart" droppableId="gantt-chart">
@@ -702,12 +713,12 @@ function BryntumChartTable(props) {
             </Col>
           </InfiniteScroll>
         </Row>
-        {filterList.map(e => {
+        {props.ganttChartTableFilter && filterList.map(e => {
           return (
-            <ChartColumnFilter
+            props.ganttChartTableFilter[e.key] && <ChartColumnFilter
               key={e.key}
               filterKey={e.key}
-              filterData={props.ganttChartTableData}
+              filterData={props.ganttChartTableFilter[e.key]}
               type={e.type}
               onApply={onApplyFilter}
               onReset={onResetFilter}
@@ -777,6 +788,7 @@ const mapStateToProps = ({ orderBank }) => {
     ganttChartData: orderBank.ganttChart,
     ganttChartTableData: orderBank.ganttChartTableData,
     totalRow_ganttChart: orderBank.totalRow_ganttChart,
+    ganttChartTableFilter: orderBank.ganttChartTableFilter,
   }
 }
 

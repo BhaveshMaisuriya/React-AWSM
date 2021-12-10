@@ -60,10 +60,6 @@ const tableMapping = {
     label: "DN Date",
     columnSize: "cell-text",
   },
-  "retail_storage_relation.product": {
-    label: "Product",
-    columnSize: "cell-text",
-  },
   volume: {
     label: "Volume (L)",
     columnSize: "cell-text",
@@ -423,7 +419,7 @@ const tableMapping = {
   },
 }
 
-const ganttChartTableColumns = ["vehicle", "shift", "rate", "cap", "rtcode"]
+const ganttChartTableColumns = ["vehicle", "shift_type", "rate", "cap", "rtcode"]
 
 const ganttChartTableDefaultColumns = {
   vehicle: {
@@ -434,7 +430,7 @@ const ganttChartTableDefaultColumns = {
     label: "RATE(%)",
     columnSize: "cell-text",
   },
-  shift: {
+  shift_type: {
     label: "SHIFT",
     columnSize: "cell-text",
     type: "list",
@@ -465,7 +461,7 @@ const ganttChartTableMapping = {
     label: "RATE (%)",
     columnSize: "cell-text",
   },
-  shift: {
+  shift_type: {
     label: "SHIFT",
     columnSize: "cell-text",
     type: "list",
@@ -494,7 +490,7 @@ const ganttChartTableMapping = {
     label: "PRODUCT",
     columnSize: "cell-text",
   },
-  pump: {
+  pump_type: {
     label: "PUMP",
     columnSize: "cell-text",
   },

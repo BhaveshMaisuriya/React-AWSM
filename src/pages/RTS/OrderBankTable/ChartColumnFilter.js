@@ -3,9 +3,10 @@ import Checkbox from "@material-ui/core/Checkbox"
 import selectAllIcon3 from "../../../assets/images/AWSM-Checkbox.svg"
 import selectAllIcon2 from "../../../assets/images/AWSM-Checked-box.svg"
 import selectAllIcon from "../../../assets/images/AWSM-Select-all-Checkbox.svg"
-import { useMemo, useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { ReactSVG } from "react-svg"
 import "../style.scss"
+import VirtualList from "react-tiny-virtual-list"
 
 const CustomIcon = () => {
   // untick checkbox icon
@@ -25,45 +26,37 @@ const ChartColumnFilter = ({
   filterKey,
   onApply,
   onReset,
-  type,
 }) => {
-  const originalDataList = useMemo(() => {
-    switch (type) {
-      case "list": {
-        return [
-          ...new Set([].concat(...filterData.map(e => e[`${filterKey}_list`]))),
-        ]
-      }
-      default: {
-        return filterData.map(e => e[filterKey])
-      }
-    }
-  }, [filterData])
 
-  useEffect(() => {
-    setData(
-      [...new Set(originalDataList)].map(e => ({
-        text: e,
-        checked: true,
-        visible: true,
-      }))
-    )
-  }, [originalDataList])
-
-  const [data, setData] = useState(
-    [...new Set(originalDataList)].map(e => ({
+  const [selectedRows, setSelectedRows] = useState({
+    isFirst: true,
+    list: [],
+  })
+  
+  function getData() {
+    return filterData.map(e => ({
       text: e,
-      checked: true,
+      checked: selectedRows.isFirst || !!selectedRows.list.find(v => v === e),
       visible: true,
     }))
-  )
+  }
 
-  const onItemChange = index => {
+  const [data, setData] = useState(getData());
+
+  const visibleData = useMemo(() => {
+    return data.filter(e => e.visible)
+  }, [data])
+  
+  useEffect(() => {
+    setData(getData());
+  }, [filterData])
+
+  const onItemChange = text => {
     const newData = [...data]
-    if (newData[index]) {
-      newData[index].checked = !newData[index].checked
-    }
+    const selectedRow = newData.find(e => e.text === text);
+    selectedRow.checked = !selectedRow.checked
     setData(newData)
+    setSelectedRows({ isFirst: false, list: newData.filter(e => e.checked).map(e => e.text) })
   }
 
   const isCheckAll = useMemo(() => {
@@ -72,6 +65,7 @@ const ChartColumnFilter = ({
 
   const checkAllChange = () => {
     setData([...data].map(e => ({ ...e, checked: !isCheckAll })))
+    setSelectedRows({ isFirst: false, list: data.filter(() => !isCheckAll).map(e => e.text) })
   }
 
   const onInputSearchChange = event => {
@@ -104,6 +98,10 @@ const ChartColumnFilter = ({
     }
     setData([...data].map(e => ({ ...e, checked: true })))
   }
+  
+  const isApplyDisable = useMemo(() => {
+    return !data.some(e => e.checked)
+  }, [data])
 
   return (
     <div
@@ -115,30 +113,40 @@ const ChartColumnFilter = ({
         <ReactSVG src={SearchIcon} />
       </div>
       <div className="chart-column-filter-body">
-        {data.map(
-          (e, index) =>
-            e.visible && (
-              <div
-                className={`chart-column-select-item ${
-                  e.checked ? "checked" : " "
-                }`}
-              >
-                <Checkbox
-                  checked={e.checked}
-                  onChange={() => onItemChange(index)}
-                  icon={<CustomIcon />}
-                  checkedIcon={<CustomIcon2 />}
-                  style={{
-                    height: "20px",
-                    width: "5px",
-                    marginLeft: "5px",
-                    marginTop: "-1px",
-                  }}
-                />
-                <label>{e.text}</label>
-              </div>
-            )
-        )}
+        <VirtualList
+          width='100%'
+          height={visibleData.length >= 5 ? 200 : visibleData.length*40}
+          itemCount={visibleData.length}
+          itemSize={40}
+          renderItem={({index, style}) =>
+            {
+              const e = visibleData[index] ?? {}
+              return (
+                <div
+                  className={`chart-column-select-item ${
+                    e.checked ? "checked" : " "
+                  }`}
+                  style={style}
+                  key={index}
+                >
+                  <Checkbox
+                    checked={e.checked}
+                    onChange={() => onItemChange(e.text)}
+                    icon={<CustomIcon />}
+                    checkedIcon={<CustomIcon2 />}
+                    style={{
+                      height: "20px",
+                      width: "5px",
+                      marginLeft: "5px",
+                      marginTop: "-1px",
+                    }}
+                  />
+                  <label>{e.text.toString()}</label>
+                </div>
+              )
+            }
+          }
+        />
       </div>
       <div className="chart-column-footer">
         <div>
@@ -160,7 +168,7 @@ const ChartColumnFilter = ({
           <button className="btn btn-outline-primary" onClick={reset}>
             Reset
           </button>
-          <button className="btn btn-primary" onClick={apply}>
+          <button disabled={isApplyDisable} className="btn btn-primary" onClick={apply}>
             Apply
           </button>
         </div>

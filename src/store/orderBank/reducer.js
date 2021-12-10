@@ -77,6 +77,7 @@ const initialState = {
   viewData: null,
   editorderBankData: null,
   ganttChartTableData: [],
+  ganttChartTableFilter: {},
   totalRow_ganttChart: 0,
 }
 
@@ -289,18 +290,20 @@ const RTSOrderBank = (state = initialState, action) => {
       }
     case GET_RTS_GANTT_CHART_DATA_SUCCESS: {
       const { data, scrolling } = action.payload;
-      const { list, total_rows } = data;
+      const { list, total_rows, filter } = data;
       if (state.ganttChartTableData.length !== 0 && scrolling) {
         return {
           ...state,
           ganttChartTableData: [ ...state.ganttChartTableData, ...list],
           totalRow_ganttChart: total_rows,
+          
         }
       }
       return {
         ...state,
         ganttChartTableData: list,
         totalRow_ganttChart: total_rows,
+        ganttChartTableFilter: filter,
         //ganttChart: action.payload
       }
     }

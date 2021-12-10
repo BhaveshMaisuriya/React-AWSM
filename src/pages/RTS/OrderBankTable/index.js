@@ -434,7 +434,7 @@ class index extends Component {
           hasMore={this.props.dataSource?.length < totalRow}
           loader={<h5>Loading...</h5>}
           dataLength={dataSource.length}
-          height={450}
+          height={430}
         >
           <div className="container-orderbank" style={{ maxWidth: "100%" }}>
             {dataSource.length ? (

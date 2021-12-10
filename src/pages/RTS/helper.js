@@ -100,7 +100,7 @@ export const orderBankSettings = [
 
   // {disabled: false, 'value': 'RefreshDN', 'label': 'Refresh Blocked DN', 'icon' : customiseTableIcon },
   {
-    disabled: false,
+    disabled: true,
     value: "CrossTerminal",
     label: "Cross Terminal",
     icon: customiseCrossTerminalIcon,

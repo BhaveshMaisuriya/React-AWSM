@@ -319,7 +319,7 @@ const TabDelivery = ({ scheduler, onChange, data }) => {
         </Col>
         <Col className="col-md-6">
           <label>DELIVERY OPEN TIME (TO)</label>
-          <AWSMInput //TimePicker
+          <TimePicker
             // items={timeData}
             disabled
             value={deliveryData?.delivery_open_time_1.time_to}

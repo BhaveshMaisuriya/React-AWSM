@@ -1,3 +1,4 @@
+import { connect } from "echarts";
 import React from "react"
 import { Modal, ModalBody, ModalHeader } from "reactstrap";
 
@@ -18,4 +19,4 @@ const DeleteOrderBankConfirmation = ({ isOpen, onDelete, onCancel }) => {
     )
   }
 
-export default DeleteOrderBankConfirmation;
+  export default DeleteOrderBankConfirmation;

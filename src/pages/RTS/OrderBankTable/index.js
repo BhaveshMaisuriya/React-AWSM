@@ -120,6 +120,7 @@ export class TableGroupEvent extends React.Component {
         {this.state.isOpenDeleteModal && (
           <DeleteOrderBankConfirmation
             isOpen={this.state.isOpenDeleteModal}
+            allData={this.props.allData}
             onDelete={this.deleteOrder.bind(this)}
             onCancel={() => this.setState({ isOpenDeleteModal: false })}
           />
@@ -158,7 +159,10 @@ class index extends Component {
       },
       currentPage: 1,
       showEditAlert: false,
-      showEditMsg: ''
+      showEditMsg: '',
+      callDelete: false,
+      showDeleteMsg: '',
+      showDelete: false,
     }
   }
 
@@ -319,22 +323,37 @@ class index extends Component {
   }
 
   OnDeleteRecords = async allData => {
-    const { onGetDeleteOrderBankDetail, getRTSOrderBankTableData, payloadFilter } = this.props
-    await onGetDeleteOrderBankDetail(allData.id)
-    await getRTSOrderBankTableData({
-      limit: 10,
-      page: payloadFilter.currentPage,
-      // search_fields: transformArrayToString(searchFields),
-      search_fields: "*",
-      q: transformObjectToStringSentence(payloadFilter.filterQuery),
-      sort_dir: "asc",
-      sort_field: "vehicle",
-      filter: payloadFilter.filterOrderBank,
-    }); 
+    const { onGetDeleteOrderBankDetail } = this.props
+    await onGetDeleteOrderBankDetail(allData.id);
+    // setTimeout(function(){  this.setState( prevState => ({ callDelete: true })); }, 1000);
+    await this.setState({callDelete: true});
+  }
+
+  CallTable = async() => {
+    const { getRTSOrderBankTableData, payloadFilter } = this.props
+    if(await this.props.deleteSuccess !== undefined && this.state.callDelete === true){
+      if(this.props.deleteSuccess === true) {
+        setTimeout(async function(){
+          await getRTSOrderBankTableData({
+            limit: 10,
+            page: payloadFilter.currentPage,
+            // search_fields: transformArrayToString(searchFields),
+            search_fields: "*",
+            q: transformObjectToStringSentence(payloadFilter.filterQuery),
+            sort_dir: "asc",
+            sort_field: "vehicle",
+            filter: payloadFilter.filterOrderBank,
+          });           
+        }, 2000);  
+        await this.setState({callDelete: false});
+        await this.setState({ showDeleteMsg: this.props.deleteSuccess === true ? 'success' : 'error' });
+        await this.setState({ showDelete : true});
+      }
+    }    
   }
 
   OnViewRecords = async (allData) => {
-    const {onGetViewOrderBankDetail} = this.props
+    const { onGetViewOrderBankDetail } = this.props
     await onGetViewOrderBankDetail(allData.id);
   }
 
@@ -435,6 +454,7 @@ class index extends Component {
   }
 
   render() {
+    this.props.deleteSuccess !== undefined && this.CallTable(); //setTimeout(function(){  }, 1000); 
     const { selectedAllItem, expandSearch, DNStatus } = this.state
     const { dataSource } = this.state
     const { totalRow } = this.props
@@ -544,6 +564,14 @@ class index extends Component {
             closeAlert={() => this.setState({showEditAlert: false})}
           />
       )}
+        {this.state.showDelete && (
+          <AWSMAlert
+            status={this.state.showDeleteMsg}
+            message={this.state.showDeleteMsg === 'success' ? "Order deleted successfully" : "Order has not been deleted"}
+            openAlert={this.state.showDelete}
+            closeAlert={() => this.setState({showDelete: false})}
+          />
+      )}      
       </div>
     )
   }
@@ -563,5 +591,6 @@ const mapDispatchToProp = dispatch => ({
 const mapStateToProps = ({ orderBank }) => ({
   totalRow: orderBank.totalRow,
   viewData: orderBank.viewData,
+  deleteSuccess: orderBank.deleteSuccess,
 })
 export default connect(mapStateToProps, mapDispatchToProp)(index)

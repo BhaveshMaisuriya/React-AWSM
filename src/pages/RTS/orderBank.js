@@ -111,7 +111,7 @@ function OrderBank({
   onGetCrossTerminal,
   dragOrderBankToGanttChart,
   socketData,
-  
+  multipleorder,
 }) {
   const ganttChartEvents = useSelector(state => state.orderBank.ganttChart.event)
   const [orderSummary, setOrderSummary] = useState({
@@ -160,6 +160,8 @@ function OrderBank({
   const [checkedValue, setCheckedValue] = useState("Manual Scheduling")
   const [isCustomizeGanttModalOpen, setIsCustomizeGanttModalOpen] = useState(false)
   const [multipleDeleteIds, setMultipleDeleteIds] = useState(false)
+  const [deleteMultipleStatus, setDeleteMultipleStatus] = useState('');
+  const [showDeleteMultiple, setShowDeleteMultiple] = useState(false)
   const [bryntumCurrentColumns, setBryntumCurrentColumns] = useState(() => {
     if (!getCookieByKey(bryntumSchedulerTableNameForCookie)) return ganttChartTableDefaultColumns
     const cookieParseData = JSON.parse(getCookieByKey(bryntumSchedulerTableNameForCookie))
@@ -272,17 +274,31 @@ function OrderBank({
     const payload = { order_banks: multipleDeleteIds }
     await onGetDeleteMultipleOrder(payload)
     setDeleteMultiple(false)
-    getRTSOrderBankTableData({
-      limit: 10,
-      page: payloadFilter.currentPage,
-      // search_fields: transformArrayToString(searchFields),
-      search_fields: "*",
-      q: transformObjectToStringSentence(payloadFilter.filterQuery),
-      sort_dir: "asc",
-      sort_field: "vehicle",
-      filter: payloadFilter.filterOrderBank,
-    }); 
+    let temp = [...orderBankSetting]
+      temp.map(function (item) {
+        if (item.value === "DeleteMultiple") {
+          item.disabled = true
+        }
+      })
+      setOrderBankSetting(temp)
   }
+
+  useEffect(() => {
+    if(multipleorder) {
+      getRTSOrderBankTableData({
+        limit: 10,
+        page: payloadFilter.currentPage,
+        // search_fields: transformArrayToString(searchFields),
+        search_fields: "*",
+        q: transformObjectToStringSentence(payloadFilter.filterQuery),
+        sort_dir: "asc",
+        sort_field: "vehicle",
+        filter: payloadFilter.filterOrderBank,
+      }); 
+      setDeleteMultipleStatus((multipleorder.order_banks !== undefined) ? 'success' : 'error');
+      setShowDeleteMultiple(true)
+    }
+  }, [multipleorder])
 
   const onCloseCrossTerminal = () => {
     setCrossTerminal(false)
@@ -1013,6 +1029,14 @@ function OrderBank({
                   closeAlert={() => setShowAddNotification(false)}
                 />
               )}
+              {showDeleteMultiple && (
+                <AWSMAlert
+                  status={deleteMultipleStatus}
+                  message={deleteMultipleStatus === 'success' ? "Orders deleted Successfully" : "Orders has not been deleted"}
+                  openAlert={showDeleteMultiple}
+                  closeAlert={() => setShowDeleteMultiple(false)}
+                />
+              )}              
             </Card>
           </div>
         </div>
@@ -1048,6 +1072,7 @@ const mapStateToProps = ({ orderBank }) => ({
   auditsCom: orderBank.auditsCom,
   socketData: orderBank.socketData,
   crossTerminalDetails: orderBank.crossTerminalDetails,
+  multipleorder: orderBank.multipleorder,
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(OrderBank)

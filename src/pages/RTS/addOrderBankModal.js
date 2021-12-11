@@ -57,6 +57,7 @@ const NewOrderBankModal = props => {
   const handleUpdate = async() => {
     const temp = {
       shift_date: shiftDate,
+      requested_delivery_date: shiftDate,
       my_remark_1: orderData.myremark1 !== undefined ? orderData.myremark1 : '',
       my_remark_2: orderData.myremark2 !== undefined ? orderData.myremark2 : '',
       my_remark_3: orderData.myremark3 !== undefined ? orderData.myremark3 : '',
@@ -70,13 +71,11 @@ const NewOrderBankModal = props => {
     };
     const { onAddOrderBank } = props
     await onAddOrderBank(temp);
-    
-   
   }
-
+ 
   useEffect(() => {
     if(props.addorderBankData) {
-      typeof props.addorderBankData === 'object' ? onCancel('add', 'success') : onCancel('add', 'error');
+      (typeof props.addorderBankData === 'object' && props.addorderBankData.status === undefined) ? onCancel('add', 'success') : onCancel('add', 'error');
       setShiftDate(new Date(new Date().getTime() + 24 * 60 * 60 * 1000));
       setOrderData({});
       setShiptoNo('');

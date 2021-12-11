@@ -175,7 +175,7 @@ const RTSOrderBank = (state = initialState, action) => {
         error: action.payload
       }
     case GET_DELETE_MULTIPLE_ORDER_SUCCESS:
-      notify.success("Records Successfully Deleted")
+      // notify.success("Records Successfully Deleted")
       const { order_banks } = action.payload
       const newOrderBankTableData = state.orderBankTableData.filter((item) => !order_banks.includes(item.id))
       return {
@@ -187,10 +187,10 @@ const RTSOrderBank = (state = initialState, action) => {
     case GET_DELETE_MULTIPLE_ORDER_FAIL:
       return {
         ...state,
-        error: action.payload
+        multipleorder: action.payload
       }
     case UPDATE_ORDERBANK_TABLE_INFORMATION_SUCCESS: {
-      notify.success("Record Successfully Updated")
+      // notify.success("Record Successfully Updated")
       return {
         ...state,
         currentOrderDetail: null,
@@ -209,18 +209,19 @@ const RTSOrderBank = (state = initialState, action) => {
         orderBankTableData: action.payload
       }
     case DELETE_ORDERBANK_DETAIL_SUCCESS: {
-      notify.success("Order has been successfully deleted")
+      // notify.success("Order has been successfully deleted")
       return {
         ...state,
         currentOrderDetail: null,
-        error: null,
-        updateSuccess: true
+        deleteresponse: action.payload,
+        deleteSuccess: true
       }
     }
     case DELETE_ORDERBANK_DETAIL_FAIL:
       return {
         ...state,
-        error: action.payload
+        deleteresponse: action.payload,
+        deleteSuccess: false
       }
     case VIEW_ORDERBANK_DETAIL_SUCCESS: {
       return {

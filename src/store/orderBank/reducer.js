@@ -45,14 +45,13 @@ import {
   UPDATE_OB_RT_DETAILS_SUCCESS,
   UPDATE_OB_RT_DETAILS_FAIL,
   GET_CROSS_TERMINAL_SUCCESS,
-  GET_CROSS_TERMINAL_FAIL,  
+  GET_CROSS_TERMINAL_FAIL,
   GET_DELETE_MULTIPLE_ORDER_SUCCESS,
   GET_DELETE_MULTIPLE_ORDER_FAIL,
   SEND_ORDER_BANK_DN_FAIL,
   SEND_ORDER_BANK_DN_SUCCESS,
 } from "./actionTypes"
-import {notify} from "../../helpers/notify"
-import {ToastSuccess,ToastError} from "../../helpers/swal";
+import { ToastSuccess, ToastError } from "../../helpers/swal"
 
 const initialState = {
   orderBankData: null,
@@ -67,7 +66,7 @@ const initialState = {
   auditsCom: null,
   ganttChart: {
     table: [],
-    event: []
+    event: [],
   },
   orderBankRTDetails: null,
   crossTerminalDetails: null,
@@ -84,8 +83,8 @@ const initialState = {
 const RTSOrderBank = (state = initialState, action) => {
   switch (action.type) {
     case GET_RTS_ORDER_BANK_TABLE_DATA_SUCCESS:
-      const { data, scrolling } = action.payload;
-      const { list, total_rows, filter } = data;
+      const { data, scrolling } = action.payload
+      const { list, total_rows, filter } = data
       if (state.orderBankTableData.length !== 0 && scrolling) {
         return {
           ...state,
@@ -109,194 +108,195 @@ const RTSOrderBank = (state = initialState, action) => {
       return {
         ...state,
         orderBankTableData: null,
-        error: action.payload
+        error: action.payload,
       }
     case GET_SHIPMENT_ORDER_BANK_TABLE_DATA_SUCCESS:
       return {
         ...state,
         shipmentOrderBankTableData: action.payload,
-        error: null
+        error: null,
       }
     case GET_SHIPMENT_ORDER_BANK_TABLE_DATA_FAIL:
       return {
         ...state,
         shipmentOrderBankTableData: null,
-        error: action.payload
+        error: action.payload,
       }
     case GET_ORDERBANK_SUCCESS:
       return {
         ...state,
-        orderBankData: action.payload
+        orderBankData: action.payload,
       }
     case GET_ORDERBANK_FAIL:
       return {
         ...state,
-        orderBankData: action.payload
+        orderBankData: action.payload,
       }
     case ADD_ORDERBANK_SUCCESS:
       return {
         ...state,
-        addorderBankData: action.payload
+        addorderBankData: action.payload,
       }
     case ADD_ORDERBANK_FAIL:
       return {
         ...state,
-        addorderBankData: action.payload
-      }   
-      case GET_CROSS_TERMINAL_SUCCESS: 
-        return {
-          ...state,
-          crossTerminalDetails: action.params,
-        }      
-      case GET_CROSS_TERMINAL_FAIL: 
-        return {
-          ...state,
-          crossTerminalDetails: action.params,
-      }    
+        addorderBankData: action.payload,
+      }
+    case GET_CROSS_TERMINAL_SUCCESS:
+      return {
+        ...state,
+        crossTerminalDetails: action.params,
+      }
+    case GET_CROSS_TERMINAL_FAIL:
+      return {
+        ...state,
+        crossTerminalDetails: action.params,
+      }
     case EDIT_ORDERBANK_SUCCESS:
       return {
         ...state,
-        editorderBankData: action.payload
+        editorderBankData: action.payload,
       }
     case EDIT_ORDERBANK_FAIL:
       return {
         ...state,
-        editorderBankData: action.payload
+        editorderBankData: action.payload,
       }
     case GET_ORDERBANK_TABLE_INFORMATION_SUCCESS:
       return {
         ...state,
-        currentOrderDetail: action.payload
+        currentOrderDetail: action.payload,
       }
 
     case GET_ORDERBANK_TABLE_INFORMATION_FAIL:
       return {
         ...state,
-        error: action.payload
+        error: action.payload,
       }
     case GET_DELETE_MULTIPLE_ORDER_SUCCESS:
-      notify.success("Records Successfully Deleted")
+      ToastSuccess.fire({ title: "Records Successfully Deleted" })
       const { order_banks } = action.payload
-      const newOrderBankTableData = state.orderBankTableData.filter((item) => !order_banks.includes(item.id))
+      const newOrderBankTableData = state.orderBankTableData.filter(
+        item => !order_banks.includes(item.id)
+      )
       return {
         ...state,
         orderBankTableData: newOrderBankTableData,
-        multipleorder: action.payload
+        multipleorder: action.payload,
       }
 
     case GET_DELETE_MULTIPLE_ORDER_FAIL:
       return {
         ...state,
-        error: action.payload
+        error: action.payload,
       }
     case UPDATE_ORDERBANK_TABLE_INFORMATION_SUCCESS: {
-      notify.success("Record Successfully Updated")
+      ToastSuccess.fire({ title: "Record Successfully Updated" })
       return {
         ...state,
         currentOrderDetail: null,
         error: null,
-        updateSuccess: true
+        updateSuccess: true,
       }
     }
     case UPDATE_ORDERBANK_TABLE_INFORMATION_FAIL:
       return {
         ...state,
-        error: action.payload
+        error: action.payload,
       }
     case UPDATE_ORDER_BANK_TABLE_DATA:
       return {
         ...state,
-        orderBankTableData: action.payload
+        orderBankTableData: action.payload,
       }
     case DELETE_ORDERBANK_DETAIL_SUCCESS: {
-      notify.success("Order has been successfully deleted")
+      ToastSuccess.fire({ title: "Order has been successfully deleted" })
       return {
         ...state,
         currentOrderDetail: null,
         error: null,
-        updateSuccess: true
+        updateSuccess: true,
       }
     }
     case DELETE_ORDERBANK_DETAIL_FAIL:
       return {
         ...state,
-        error: action.payload
+        error: action.payload,
       }
     case VIEW_ORDERBANK_DETAIL_SUCCESS: {
       return {
         ...state,
-        viewData: action.payload
+        viewData: action.payload,
       }
     }
     case VIEW_ORDERBANK_DETAIL_FAIL:
       return {
         ...state,
-        error: action.payload
+        error: action.payload,
       }
 
     case SEND_DN_STATUS_REQUEST_SUCCESS:
-      notify.success("An order has been successfully sent for DN Creation")
+      ToastSuccess.fire({ title: "An order has been successfully sent for DN Creation" })
       return {
-        ...state
+        ...state,
       }
     case GET_ORDER_BANK_AUDITLOG_SUCCESS:
       return {
         ...state,
-        auditsCom: action.payload
+        auditsCom: action.payload,
       }
 
     case GET_ORDER_BANK_AUDITLOG_FAIL:
       return {
         ...state,
-        error: action.payload
+        error: action.payload,
       }
 
     case PROCESS_PAYMENT_IN_GANTT_CHART_SUCCESS:
-      notify.success("A shipment has been successfully created in SAP")
+      ToastSuccess.fire({ title: "A shipment has been successfully created in SAP" })
       return {
         ...state,
-        isSendRequestProcess: state.isSendRequestProcess + 1
+        isSendRequestProcess: state.isSendRequestProcess + 1,
       }
 
     case PROCESS_PAYMENT_IN_GANTT_CHART_FAIL:
-      notify.error("A shipment has been fail created in SAP")
+      ToastError.fire({ title: "A shipment has been fail created in SAP" })
       return {
         ...state,
         error: action.payload,
-        isSendRequestProcess: state.isSendRequestProcess + 1
+        isSendRequestProcess: state.isSendRequestProcess + 1,
       }
     case CANCEL_PAYMENT_IN_GANTT_CHART_SUCCESS:
-      notify.success("A shipment has been successfully cancelled from schedule")
+      ToastSuccess.fire({ title: "A shipment has been successfully cancelled from schedule" })
       return {
         ...state,
-        isSendRequestProcess: state.isSendRequestProcess + 1
+        isSendRequestProcess: state.isSendRequestProcess + 1,
       }
     case CANCEL_PAYMENT_IN_GANTT_CHART_FAIL:
-      notify.error("A shipment has been fail cancelled in SAP")
+      ToastError.fire({ title: "A shipment has been fail cancelled in SAP" })
       return {
         ...state,
-        error: action.payload
+        error: action.payload,
       }
     case SEND_ORDER_IN_GANTT_CHART_SUCCESS:
-      notify.success("A shipment has been successfully sent for Creation")
-      return {
-        ...state
-      }
-    case SEND_ORDER_IN_GANTT_CHART_FAIL:
-      notify.error("A shipment has been fail to sent for Creation")
+      ToastSuccess.fire({ title: "A shipment has been successfully sent for Creation" })
       return {
         ...state,
-        error: action.payload
+      }
+    case SEND_ORDER_IN_GANTT_CHART_FAIL:
+      ToastError.fire({ title: "A shipment has been fail to sent for Creation" })
+      return {
+        ...state,
+        error: action.payload,
       }
     case GET_RTS_GANTT_CHART_DATA_SUCCESS: {
-      const { data, scrolling } = action.payload;
-      const { list, total_rows, filter } = data;
+      const { data, scrolling } = action.payload
+      const { list, total_rows, filter } = data
       if (state.ganttChartTableData.length !== 0 && scrolling) {
         return {
           ...state,
-          ganttChartTableData: [ ...state.ganttChartTableData, ...list],
+          ganttChartTableData: [...state.ganttChartTableData, ...list],
           totalRow_ganttChart: total_rows,
-          
         }
       }
       return {
@@ -312,57 +312,67 @@ const RTSOrderBank = (state = initialState, action) => {
         ...state,
         ganttChart: {
           table: [],
-          event: []
+          event: [],
         },
-        error: action.payload
+        error: action.payload,
       }
     }
 
     case SELECT_VEHICLE_RTS_SHIPMENT: {
-      const {vehicle, resourceId} = action
+      const { vehicle, resourceId } = action
       return {
         ...state,
         selectedVehicleShipment: {
           vehicle,
-          resourceId
-        }
+          resourceId,
+        },
       }
     }
-
 
     case DESELECT_VEHICLE_RTS_SHIPMENT: {
       return {
         ...state,
-        selectedVehicleShipment: null
+        selectedVehicleShipment: null,
       }
     }
 
     case DRAG_RTS_ORDER_BANK_TO_GANTT_CHART_SUCCESS: {
       if (!state.selectedVehicleShipment || !state.selectedVehicleShipment?.resourceId) return state
-      const newOrderBankTableData = state.orderBankTableData && [...state.orderBankTableData].filter((record) => !record.isChecked)
-      const {resourceId} = state.selectedVehicleShipment
-      const resourceEventIndex = state.ganttChart.event &&
+      const newOrderBankTableData =
+        state.orderBankTableData &&
+        [...state.orderBankTableData].filter(record => !record.isChecked)
+      const { resourceId } = state.selectedVehicleShipment
+      const resourceEventIndex =
+        state.ganttChart.event &&
         state.ganttChart.event.length > 0 &&
-        state.ganttChart.event.findIndex(({resourceId: id}) => id === resourceId)
+        state.ganttChart.event.findIndex(({ resourceId: id }) => id === resourceId)
       if (resourceEventIndex < 0) return state
       if (!state.ganttChart.event[resourceEventIndex].shipments) {
         state.ganttChart.event[resourceEventIndex].shipments = []
-        state.ganttChart.event[resourceEventIndex].shipments.push({id: Math.random(), orders: action.dropData})
+        state.ganttChart.event[resourceEventIndex].shipments.push({
+          id: Math.random(),
+          orders: action.dropData,
+        })
       } else {
-        state.ganttChart.event[resourceEventIndex].shipments.push({id: Math.random(), orders: action.dropData})
+        state.ganttChart.event[resourceEventIndex].shipments.push({
+          id: Math.random(),
+          orders: action.dropData,
+        })
       }
       return {
         ...state,
-        orderBankTableData: newOrderBankTableData ? newOrderBankTableData : state.orderBankTableData,
+        orderBankTableData: newOrderBankTableData
+          ? newOrderBankTableData
+          : state.orderBankTableData,
         ganttChart: {
           ...state.ganttChart,
-          event: [...state.ganttChart.event]
-        }
+          event: [...state.ganttChart.event],
+        },
       }
     }
     case REMOVE_ORDER_FROM_SHIPMENT_SUCCESS: {
       // debugger
-      const {orderId, shipmentId, resourceId, eventId} = action.params
+      const { orderId, shipmentId, resourceId, eventId } = action.params
 
       const event = state.ganttChart.event.find(item => item.id === eventId)
       if (event) {
@@ -383,21 +393,23 @@ const RTSOrderBank = (state = initialState, action) => {
         orderBankTableData: [...state.orderBankTableData],
         ganttChart: {
           ...state.ganttChart,
-          event: [...state.ganttChart.event]
-        }
+          event: [...state.ganttChart.event],
+        },
       }
     }
     case REMOVE_SHIPMENT_FROM_EVENT_SUCCESS: {
-      const {eventId, shipmentId} = action.params
+      const { eventId, shipmentId } = action.params
       const event = state.ganttChart.event.find(item => item.id === eventId)
       if (event) {
         let removedShipment = event.shipments.find(item => item.id === shipmentId)
         event.shipments = event.shipments.filter(item => item.id !== shipmentId)
 
-        state.orderBankTableData = state.orderBankTableData.concat(removedShipment.orders.map(item => {
-          item.isChecked = false
-          return item
-        }))
+        state.orderBankTableData = state.orderBankTableData.concat(
+          removedShipment.orders.map(item => {
+            item.isChecked = false
+            return item
+          })
+        )
       }
       ToastSuccess.fire()
 
@@ -406,14 +418,14 @@ const RTSOrderBank = (state = initialState, action) => {
         orderBankTableData: [...state.orderBankTableData],
         ganttChart: {
           ...state.ganttChart,
-          event: [...state.ganttChart.event]
-        }
+          event: [...state.ganttChart.event],
+        },
       }
     }
     case REMOVE_EVENT_SUCCESS: {
       const { id } = action.params
       const event = state.ganttChart.event.filter(item => item.id !== id)
-      if(event){
+      if (event) {
         state.ganttChart.event = [...event]
       }
       ToastSuccess.fire()
@@ -430,9 +442,9 @@ const RTSOrderBank = (state = initialState, action) => {
     }
 
     case UPDATE_OB_EVENT_SUCCESS: {
-      const {id} = action.params
+      const { id } = action.params
       const event = state.ganttChart.event.filter(item => item.id !== id)
-      if(event){
+      if (event) {
         state.ganttChart.event = [...event, action.params]
       }
       return {
@@ -440,7 +452,7 @@ const RTSOrderBank = (state = initialState, action) => {
         ganttChart: {
           ...state.ganttChart,
           event: [...state.ganttChart.event],
-        }
+        },
       }
     }
     case UPDATE_OB_EVENT_FAIL: {
@@ -476,7 +488,7 @@ const RTSOrderBank = (state = initialState, action) => {
     case UPDATE_OB_RT_DETAILS_SUCCESS: {
       return {
         ...state,
-        orderBankRTDetails: action.params ,
+        orderBankRTDetails: action.params,
       }
     }
     case UPDATE_OB_RT_DETAILS_FAIL: {
@@ -485,13 +497,13 @@ const RTSOrderBank = (state = initialState, action) => {
       }
     }
     case SEND_ORDER_BANK_DN_FAIL: {
-      notify.error("Send DN failed!")
+      ToastError.fire({ title: "Send DN failed!" })
       return {
         ...state,
       }
     }
     case SEND_ORDER_BANK_DN_SUCCESS: {
-      notify.success("Send DN success!")
+      ToastSuccess.fire({ title: "Send DN success!" })
       return {
         ...state,
       }

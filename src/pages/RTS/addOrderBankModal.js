@@ -57,6 +57,7 @@ const NewOrderBankModal = props => {
   const handleUpdate = async() => {
     const temp = {
       shift_date: shiftDate,
+      requested_delivery_date: shiftDate,
       my_remark_1: orderData.myremark1 !== undefined ? orderData.myremark1 : '',
       my_remark_2: orderData.myremark2 !== undefined ? orderData.myremark2 : '',
       my_remark_3: orderData.myremark3 !== undefined ? orderData.myremark3 : '',

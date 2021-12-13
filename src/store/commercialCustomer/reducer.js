@@ -29,8 +29,6 @@ const initialState = {
   isLoading: false,
 }
 
-// import { notify } from "../../helpers/notify"
-
 const CommercialCustomer = (state = initialState, action) => {
   switch (action.type) {
     case GET_COMMERCIAL_CUSTOMER:
@@ -39,9 +37,9 @@ const CommercialCustomer = (state = initialState, action) => {
         isLoading: true,
       }
     case GET_COMMERCIAL_CUSTOMER_SUCCESS:
-      const list = action.payload?.list;
-      if(list && list.length > 0){
-        action.payload = {...action.payload,list: formatDateResponseList(list)}
+      const list = action.payload?.list
+      if (list && list.length > 0) {
+        action.payload = { ...action.payload, list: formatDateResponseList(list) }
       }
       return {
         ...state,

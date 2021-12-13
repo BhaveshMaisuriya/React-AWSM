@@ -549,7 +549,7 @@ function OrderBank({
         <div className="order-bank-page-content">
           <div className="container-fluid">
             <Card className="order_bank_main d-block">
-              <CardBody className="pb-3 pr-4">
+              <CardBody className="pb-3 px-4">
                 <Row className="border_btm">
                   <Col lg={3} md={3} sm={12}>
                     <div className="h-100">

@@ -136,6 +136,8 @@ function OrderBank({
   )
   const [region, setRegion] = useState(REGION_TERMINAL[0].region)
   const [terminal, setTerminal] = useState(REGION_TERMINAL[0].terminal[0])
+  const [regionBank, setRegionBank] = useState(REGION_TERMINAL[0].region)
+  const [terminalBank, setTerminalBank] = useState(REGION_TERMINAL[0].terminal[0])  
   const [refreshDNModal, setRefreshDNModal] = useState(false)
   const [displayAutoModal, setDisplayAutoModal] = useState(false)
   const [showClearAlert, setShowClearAlert] = useState(false)
@@ -236,6 +238,11 @@ function OrderBank({
     const currentRegion = REGION_TERMINAL.find(e => e.region === region)
     return currentRegion ? currentRegion.terminal : []
   }, [region])
+
+  const terminalListBank = useMemo(() => {
+    const currentRegion = REGION_TERMINAL.find(e => e.region === region)
+    return currentRegion ? currentRegion.terminalBank : []
+  }, [region])  
 
   const onSettingClick = val => {
     if (val === "newOrder") {
@@ -834,10 +841,10 @@ function OrderBank({
                     <p className="order-bank-region-label">REGION & TERMINAL</p>
                     <div className="order-bank-region">
                       <AWSMDropdown
-                        value={region}
+                        value={regionBank}
                         onChange={value => {
-                          setRegion(value)
-                          setTerminal(
+                          setRegionBank(value)
+                          setTerminalBank(
                             REGION_TERMINAL.find(item => item.region === value).terminal[0]
                           )
                           setCurrentPage(0)
@@ -847,12 +854,12 @@ function OrderBank({
                     </div>
                     <div className="order-bank-region ml-2">
                       <AWSMDropdown
-                        value={terminal}
+                        value={terminalBank}
                         onChange={value => {
-                          setTerminal(value)
+                          setTerminalBank(value)
                           setCurrentPage(0)
                         }}
-                        items={terminalList}
+                        items={terminalListBank}
                       />
                     </div>
                     <p className="order-bank-region-label">STATUS</p>
@@ -995,6 +1002,7 @@ function OrderBank({
                   open={displayBulkModal}
                   istoggle={istoggleBulk}
                   CloseModal={CloseBulkModal}
+                  terminal={terminal}
                 />
               )}
               {showSnackAlert && (

@@ -28,7 +28,7 @@ LinearProgressWithLabel.propTypes = {
 };
 
 export default function LinearWithValueLabel(props) {
-  const [progress, setProgress] = React.useState(10);
+  const [progress, setProgress] = React.useState(0);
 
   function closeModal() {
     props.toggle();

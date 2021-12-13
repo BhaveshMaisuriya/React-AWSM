@@ -572,7 +572,7 @@ function OrderBank({
         <div className="order-bank-page-content">
           <div className="container-fluid">
             <Card className="order_bank_main d-block">
-              <CardBody className="pb-3">
+              <CardBody className="pb-3 px-4">
                 <Row className="border_btm">
                   <Col lg={3} md={3} sm={12}>
                     <div className="h-100">
@@ -731,7 +731,7 @@ function OrderBank({
                           <div id="myMm" style={{ height: "1mm" }} />
                           <div className="pdf-wid">
                             <button
-                              className="btn btn-primary excel-btn-container pdf-btn"
+                              className="btn btn-primary btn-sm excel-btn-container pdf-btn"
                               onClick={ConfirmClearModal}
                             >
                               {" "}
@@ -774,7 +774,6 @@ function OrderBank({
                             currentTab={activeTab}
                             ganttChartAllRadio={ganttChartAllRadio}
                             bryntumCurrentColumns={bryntumCurrentColumns}
-                            dateConfig={shiftDate}
                           />
                           <div className="square_border">
                             {GanttChartBottom.map(item => {

@@ -599,7 +599,7 @@ function BryntumChartTable(props) {
                 {
                   name: "offset",
                   options: {
-                    offset: [0, 20],
+                    offset: [40, 20],
                   },
                 },
               ],
@@ -715,10 +715,10 @@ function BryntumChartTable(props) {
         </Row>
         {props.ganttChartTableFilter && filterList.map(e => {
           return (
-            props.ganttChartTableFilter[e.key] && <ChartColumnFilter
+            <ChartColumnFilter
               key={e.key}
               filterKey={e.key}
-              filterData={props.ganttChartTableFilter[e.key]}
+              filterData={props.ganttChartTableFilter[e.key] ?? []}
               type={e.type}
               onApply={onApplyFilter}
               onReset={onResetFilter}

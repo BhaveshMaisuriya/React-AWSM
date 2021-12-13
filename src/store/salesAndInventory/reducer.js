@@ -210,7 +210,6 @@ const SaleAndInventory = (state = initialState, action) => {
       ToastSuccess.fire()
       return {
         ...state,
-        mainTableData: { ...state.mainTableData, list: newList },
         isUpdateSuccess: { success: true }, // for each update return a new success object
       }
 

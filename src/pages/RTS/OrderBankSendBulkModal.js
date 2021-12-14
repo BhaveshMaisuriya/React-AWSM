@@ -2,6 +2,7 @@ import React, { Fragment, useState } from "react"
 import { Modal, ModalFooter, ModalHeader, ModalBody, Button } from "reactstrap"
 import { connect } from "react-redux"
 import LinearWithValueLabel from "components/Common/Loader/LinearWithValueLabel"
+import { getDate } from "date-fns"
 
 function OrderBankSendBulkModal(props) {
   const [displayBulk, setDisplayBulk] = useState(false)
@@ -18,6 +19,20 @@ function OrderBankSendBulkModal(props) {
     setDisplayBulk(!displayBulk)
   }
 
+  const months = [ "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",];
+ var dt = new Date();
+
   return (
     <Fragment>
       <Modal
@@ -33,7 +48,7 @@ function OrderBankSendBulkModal(props) {
           {!displayBulk ? (
             <Fragment>
               <p>
-                Are you sure you want to send KVDT Scheduling on 11th Feb 2021 for Bulk Shipment?
+                Are you sure you want to send {props.terminal} Scheduling on { dt.getDate() + ' ' + months[dt.getMonth()]  + ' ' + dt.getFullYear() } for Bulk Shipment?
               </p>
               <div className="mt-3 mb-2 text-right">
                 <Button
@@ -66,10 +81,10 @@ function OrderBankSendBulkModal(props) {
 }
 
 const mapStateToProps = ({ orderBank }) => ({
-    auditsCom: orderBank.auditsCom,
-  })
+  auditsCom: orderBank.auditsCom,
+})
   
-  const mapDispatchToProps = dispatch => ({
-  })
+const mapDispatchToProps = dispatch => ({
+})
   
-  export default connect(mapStateToProps, mapDispatchToProps)(OrderBankSendBulkModal)
+export default connect(mapStateToProps, mapDispatchToProps)(OrderBankSendBulkModal)

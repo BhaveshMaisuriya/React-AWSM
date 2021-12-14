@@ -1240,10 +1240,10 @@
   resolved "https://npm.bryntum.com/@bryntum%2fschedulerpro-trial-lib/-/schedulerpro-trial-lib-1.0.0.tgz"
   integrity sha512-h3b2yuobXyDvPh5t8PZafdZWdRHWzYeaA5leFFSd1Ak4iyI0Kfc8KbB7eGAcCZlnzH3HqodWKhMuS7mcfpcwGg==
 
-"@bryntum/schedulerpro@npm:@bryntum/schedulerpro-trial@^4.2.3":
-  version "4.2.3"
-  resolved "https://npm.bryntum.com/@bryntum%2fschedulerpro-trial/-/schedulerpro-trial-4.2.3.tgz"
-  integrity sha512-SYtkbv1jqADI21ZFWLt1yMchu0aBqPBK6gI+9aNW3CMVOGEAAiNZ/XnFKFOJ2hj2B9shgGe0J1XtaZ0oyR9cZg==
+"@bryntum/schedulerpro@npm:@bryntum/schedulerpro-trial@^4.3.3":
+  version "4.3.3"
+  resolved "https://npm.bryntum.com/@bryntum%2fschedulerpro-trial/-/schedulerpro-trial-4.3.3.tgz#d129411f07b7246180ba997ca39609107df20179"
+  integrity sha512-/cq3lxV/wII1Pp42pWMCJGP6zJKO/A30I7F5YqBPFcAigVRJ/NDuZkSuo0FkcKZuQwLJPipRhI4uX6lrMAtGhw==
   dependencies:
     "@bryntum/schedulerpro-trial-lib" "1.0.0"
 
@@ -12705,6 +12705,13 @@ react-time-picker@^4.0.1:
     react-clock "^3.0.0"
     react-fit "^1.0.3"
     update-input-width "^1.1.1"
+
+react-tiny-virtual-list@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/react-tiny-virtual-list/-/react-tiny-virtual-list-2.2.0.tgz#eafb6fcf764e4ed41150ff9752cdaad8b35edf4a"
+  integrity sha512-MDiy2xyqfvkWrRiQNdHFdm36lfxmcLLKuYnUqcf9xIubML85cmYCgzBJrDsLNZ3uJQ5LEHH9BnxGKKSm8+C0Bw==
+  dependencies:
+    prop-types "^15.5.7"
 
 react-to-pdf@^0.0.14:
   version "0.0.14"

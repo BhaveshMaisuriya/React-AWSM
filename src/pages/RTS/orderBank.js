@@ -111,7 +111,7 @@ function OrderBank({
   onGetCrossTerminal,
   dragOrderBankToGanttChart,
   socketData,
-  
+  multipleorder,
 }) {
   const ganttChartEvents = useSelector(state => state.orderBank.ganttChart.event)
   const [orderSummary, setOrderSummary] = useState({
@@ -136,6 +136,8 @@ function OrderBank({
   )
   const [region, setRegion] = useState(REGION_TERMINAL[0].region)
   const [terminal, setTerminal] = useState(REGION_TERMINAL[0].terminal[0])
+  const [regionBank, setRegionBank] = useState(REGION_TERMINAL[0].region)
+  const [terminalBank, setTerminalBank] = useState(REGION_TERMINAL[0].terminal[0])  
   const [refreshDNModal, setRefreshDNModal] = useState(false)
   const [displayAutoModal, setDisplayAutoModal] = useState(false)
   const [showClearAlert, setShowClearAlert] = useState(false)
@@ -160,6 +162,8 @@ function OrderBank({
   const [checkedValue, setCheckedValue] = useState("Manual Scheduling")
   const [isCustomizeGanttModalOpen, setIsCustomizeGanttModalOpen] = useState(false)
   const [multipleDeleteIds, setMultipleDeleteIds] = useState(false)
+  const [deleteMultipleStatus, setDeleteMultipleStatus] = useState('');
+  const [showDeleteMultiple, setShowDeleteMultiple] = useState(false)
   const [bryntumCurrentColumns, setBryntumCurrentColumns] = useState(() => {
     if (!getCookieByKey(bryntumSchedulerTableNameForCookie)) return ganttChartTableDefaultColumns
     const cookieParseData = JSON.parse(getCookieByKey(bryntumSchedulerTableNameForCookie))
@@ -235,6 +239,11 @@ function OrderBank({
     return currentRegion ? currentRegion.terminal : []
   }, [region])
 
+  const terminalListBank = useMemo(() => {
+    const currentRegion = REGION_TERMINAL.find(e => e.region === region)
+    return currentRegion ? currentRegion.terminalBank : []
+  }, [region])  
+
   const onSettingClick = val => {
     if (val === "newOrder") {
       setShowNewOrder(true)
@@ -272,17 +281,31 @@ function OrderBank({
     const payload = { order_banks: multipleDeleteIds }
     await onGetDeleteMultipleOrder(payload)
     setDeleteMultiple(false)
-    getRTSOrderBankTableData({
-      limit: 10,
-      page: payloadFilter.currentPage,
-      // search_fields: transformArrayToString(searchFields),
-      search_fields: "*",
-      q: transformObjectToStringSentence(payloadFilter.filterQuery),
-      sort_dir: "asc",
-      sort_field: "vehicle",
-      filter: payloadFilter.filterOrderBank,
-    }); 
+    let temp = [...orderBankSetting]
+      temp.map(function (item) {
+        if (item.value === "DeleteMultiple") {
+          item.disabled = true
+        }
+      })
+      setOrderBankSetting(temp)
   }
+
+  useEffect(() => {
+    if(multipleorder) {
+      getRTSOrderBankTableData({
+        limit: 10,
+        page: payloadFilter.currentPage,
+        // search_fields: transformArrayToString(searchFields),
+        search_fields: "*",
+        q: transformObjectToStringSentence(payloadFilter.filterQuery),
+        sort_dir: "asc",
+        sort_field: "vehicle",
+        filter: payloadFilter.filterOrderBank,
+      }); 
+      setDeleteMultipleStatus((multipleorder.order_banks !== undefined) ? 'success' : 'error');
+      setShowDeleteMultiple(true)
+    }
+  }, [multipleorder])
 
   const onCloseCrossTerminal = () => {
     setCrossTerminal(false)
@@ -817,10 +840,10 @@ function OrderBank({
                     <p className="order-bank-region-label">REGION & TERMINAL</p>
                     <div className="order-bank-region">
                       <AWSMDropdown
-                        value={region}
+                        value={regionBank}
                         onChange={value => {
-                          setRegion(value)
-                          setTerminal(
+                          setRegionBank(value)
+                          setTerminalBank(
                             REGION_TERMINAL.find(item => item.region === value).terminal[0]
                           )
                           setCurrentPage(0)
@@ -830,12 +853,12 @@ function OrderBank({
                     </div>
                     <div className="order-bank-region ml-2">
                       <AWSMDropdown
-                        value={terminal}
+                        value={terminalBank}
                         onChange={value => {
-                          setTerminal(value)
+                          setTerminalBank(value)
                           setCurrentPage(0)
                         }}
-                        items={terminalList}
+                        items={terminalListBank}
                       />
                     </div>
                     <p className="order-bank-region-label">STATUS</p>
@@ -978,6 +1001,7 @@ function OrderBank({
                   open={displayBulkModal}
                   istoggle={istoggleBulk}
                   CloseModal={CloseBulkModal}
+                  terminal={terminal}
                 />
               )}
               {showSnackAlert && (
@@ -1012,6 +1036,14 @@ function OrderBank({
                   closeAlert={() => setShowAddNotification(false)}
                 />
               )}
+              {showDeleteMultiple && (
+                <AWSMAlert
+                  status={deleteMultipleStatus}
+                  message={deleteMultipleStatus === 'success' ? "Orders deleted Successfully" : "Orders has not been deleted"}
+                  openAlert={showDeleteMultiple}
+                  closeAlert={() => setShowDeleteMultiple(false)}
+                />
+              )}              
             </Card>
           </div>
         </div>
@@ -1047,6 +1079,7 @@ const mapStateToProps = ({ orderBank }) => ({
   auditsCom: orderBank.auditsCom,
   socketData: orderBank.socketData,
   crossTerminalDetails: orderBank.crossTerminalDetails,
+  multipleorder: orderBank.multipleorder,
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(OrderBank)

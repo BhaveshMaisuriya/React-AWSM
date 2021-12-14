@@ -20,7 +20,7 @@ import AWSMDropdown from "../../components/Common/Dropdown"
 import AWSMAlert from "../../components/Common/AWSMAlert"
 import { getOrderBank, addOrderBank } from "../../store/actions"
 import { removeKeywords } from "../../pages/DQM/Common/helper"
-import REGION_TERMINAL from "common/data/regionAndTerminal"
+import REGION_TERMINAL, { TERMINAL_CODE_MAPPING } from "common/data/regionAndTerminal"
 import TimePicker from "../../components/Common/TableInformation/components/TimePicker"
 
 const timeData = []
@@ -56,12 +56,12 @@ const NewOrderBankModal = props => {
 
   const handleUpdate = async() => {
     const temp = {
-      shift_date: shiftDate,
-      requested_delivery_date: shiftDate,
+      shift_date: shiftDate.toISOString().split('T')[0],
+      requested_delivery_date: shiftDate.toISOString().split('T')[0],
       my_remark_1: orderData.myremark1 !== undefined ? orderData.myremark1 : '',
       my_remark_2: orderData.myremark2 !== undefined ? orderData.myremark2 : '',
       my_remark_3: orderData.myremark3 !== undefined ? orderData.myremark3 : '',
-      terminal: orderData.terminal !== undefined ? orderData.terminal : '',
+      terminal: orderData.terminal !== undefined ? TERMINAL_CODE_MAPPING[orderData.terminal] : '',
       volume: orderData.volume !== undefined ? parseInt(orderData.volume) : 0,
       eta: orderData.eta !== undefined ? orderData.eta : '',
       planned_load_time: orderData.load_time !== undefined ? orderData.load_time : '',
@@ -69,6 +69,7 @@ const NewOrderBankModal = props => {
       priority: orderData.priority_order !== undefined ? orderData.priority_order : '',
       retail_storage: parseInt(orderData.product_id),
     };
+
     const { onAddOrderBank } = props
     await onAddOrderBank(temp);
   }

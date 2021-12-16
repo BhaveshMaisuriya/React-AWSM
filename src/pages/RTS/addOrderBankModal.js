@@ -26,10 +26,12 @@ import TimePicker from "../../components/Common/TableInformation/components/Time
 const timeData = []
 for (let i = 0; i < 24; i++) {
   timeData.push(`${i.toString().padStart(2, "0")}:00`)
+  timeData.push(`${i.toString().padStart(2, "0")}:15`)
   timeData.push(`${i.toString().padStart(2, "0")}:30`)
+  timeData.push(`${i.toString().padStart(2, "0")}:45`)
 }
 timeData.push(`23:59`)
-const ORDER_PRIORITY = ["High Priority", "Low Priority"]
+const ORDER_PRIORITY = ["None", "High Priority"]
 const NewOrderBankModal = props => {
   const { open, onCancel } = props
 
@@ -39,8 +41,11 @@ const NewOrderBankModal = props => {
   const [shiptoNo, setShiptoNo] = useState("")
   // const [progress, setProgress] = useState(0)
   const [showAlert, setShowAlert] = useState(false)
+  const [disableBtn, setdisableBtn] = useState(false)
   const [terminalList, setTerminalList] = useState([])
+  const [regionList, setRegionList] = useState([])
   const [productList, setProductList] = useState([])
+  const [inputValue, setInputValue] = useState("")
   const [inputValue1, setInputValue1] = useState("")
   const [inputValue2, setInputValue2] = useState("") 
   const [inputValue3, setInputValue3] = useState("")    
@@ -49,37 +54,51 @@ const NewOrderBankModal = props => {
     new Date(new Date().getTime() + 24 * 60 * 60 * 1000)
   )
 
+  useEffect(() => {
+    let temp = [];
+    REGION_TERMINAL.map((item, index) => {
+      temp.push(item.region);
+    })
+    setRegionList(temp) 
+  }, [REGION_TERMINAL])
+
   const onConfirmCancel = () => {
     setIsConfirm(false)
     setCurrentState("")
   }
 
   const handleUpdate = async() => {
-    const temp = {
-      shift_date: shiftDate.toISOString().split('T')[0],
-      requested_delivery_date: shiftDate.toISOString().split('T')[0],
-      my_remark_1: orderData.myremark1 !== undefined ? orderData.myremark1 : '',
-      my_remark_2: orderData.myremark2 !== undefined ? orderData.myremark2 : '',
-      my_remark_3: orderData.myremark3 !== undefined ? orderData.myremark3 : '',
-      terminal: orderData.terminal !== undefined ? TERMINAL_CODE_MAPPING[orderData.terminal] : '',
-      volume: orderData.volume !== undefined ? parseInt(orderData.volume) : 0,
-      eta: orderData.eta !== undefined ? orderData.eta : '',
-      planned_load_time: orderData.load_time !== undefined ? orderData.load_time : '',
-      remarks: orderData.remarks !== undefined ? orderData.remarks : '',
-      priority: orderData.priority_order !== undefined ? orderData.priority_order : '',
-      retail_storage: parseInt(orderData.product_id),
-    };
+    if((orderData?.myremark1?.length < 40 || orderData?.myremark2?.length < 40 || orderData?.myremark3?.length < 40)){
+      const temp = {
+        shift_date: shiftDate.toISOString().split('T')[0],
+        requested_delivery_date: shiftDate.toISOString().split('T')[0],
+        my_remark_1: orderData.myremark1 !== undefined ? orderData.myremark1 : '',
+        my_remark_2: orderData.myremark2 !== undefined ? orderData.myremark2 : '',
+        my_remark_3: orderData.myremark3 !== undefined ? orderData.myremark3 : '',
+        terminal: orderData.terminal !== undefined ? TERMINAL_CODE_MAPPING[orderData.terminal] : '',
+        volume: orderData.volume !== undefined ? parseInt(orderData.volume) : 0,
+        eta: orderData.eta !== undefined ? orderData.eta : '',
+        planned_load_time: orderData.load_time !== undefined ? orderData.load_time : '',
+        remarks: orderData.remarks !== undefined ? orderData.remarks : '',
+        priority: orderData.priority_order !== undefined ? orderData.priority_order : '',
+        retail_storage: parseInt(orderData.product_id),
+      };
 
-    const { onAddOrderBank } = props
-    await onAddOrderBank(temp);
+      const { onAddOrderBank } = props
+      await onAddOrderBank(temp);
+      setOrderData({});
+      setShiptoNo('');
+      setShiftDate(new Date(new Date().getTime() + 24 * 60 * 60 * 1000));
+    } else {
+      setdisableBtn(true);
+    }
   }
  
   useEffect(() => {
     if(props.addorderBankData) {
       (typeof props.addorderBankData === 'object' && props.addorderBankData.status === undefined) ? onCancel('add', 'success') : onCancel('add', 'error');
-      setShiftDate(new Date(new Date().getTime() + 24 * 60 * 60 * 1000));
-      setOrderData({});
-      setShiptoNo('');
+      
+
     }
   }, [props.addorderBankData])
 
@@ -111,12 +130,33 @@ const NewOrderBankModal = props => {
       newOrderData["product_id"] = pro_code.id
       newOrderData['storeData'] = pro_code;
       setOrderData(newOrderData)
+    } else if(key === 'region'){
+      const currentRegion = REGION_TERMINAL.find(e => e.region === value);
+      setTerminalList(currentRegion ? currentRegion.terminal : []);
+  
+      const newOrderData = { ...orderData }
+      newOrderData[key] = currentRegion ? currentRegion.region : ''
+      newOrderData['terminal'] = '';
+      setOrderData(newOrderData)
+    } else if(key === 'remarks') {
+      setInputValue(value);
+      if(value.length < 40) {
+        const newOrderData = { ...orderData }
+        newOrderData[key] = value
+        setOrderData(newOrderData)
+        setdisableBtn(false);
+      } else {
+        setdisableBtn(true);
+      }
     } else if(key === 'myremark1') {
       setInputValue1(value);
       if(value.length < 40) {
         const newOrderData = { ...orderData }
         newOrderData[key] = value
         setOrderData(newOrderData)
+        setdisableBtn(false);
+      } else {
+        setdisableBtn(true);
       }
     }  else if(key === 'myremark2') {
       setInputValue2(value);
@@ -124,6 +164,9 @@ const NewOrderBankModal = props => {
         const newOrderData = { ...orderData }
         newOrderData[key] = value
         setOrderData(newOrderData)
+        setdisableBtn(false);
+      } else {
+        setdisableBtn(true);
       }
     }  else if(key === 'myremark3') {
       setInputValue3(value);
@@ -131,6 +174,9 @@ const NewOrderBankModal = props => {
         const newOrderData = { ...orderData }
         newOrderData[key] = value
         setOrderData(newOrderData)
+        setdisableBtn(false);
+      } else {
+        setdisableBtn(true);
       }
     } else {
       const newOrderData = { ...orderData }
@@ -196,7 +242,15 @@ const NewOrderBankModal = props => {
   useEffect(() => {
     const currentRegion = REGION_TERMINAL.find(e => e.region === orderData?.address?.address.region_group)//"Nothern"
     setTerminalList(currentRegion ? currentRegion.terminal : [])
+
+    const newOrderData = { ...orderData }
+    newOrderData['region'] = currentRegion ? currentRegion.region : ''
+    setOrderData(newOrderData)
   }, [orderData?.address])
+  
+  const remainChars = useMemo(() => {
+    return 40 - inputValue.length
+  }, [inputValue])
 
   const remainChars1 = useMemo(() => {
     return 40 - inputValue1.length
@@ -209,6 +263,10 @@ const NewOrderBankModal = props => {
   const remainChars3 = useMemo(() => {
     return 40 - inputValue3.length
   }, [inputValue3])
+
+  const isValid = useMemo(() => {
+    return inputValue && remainChars >= 0
+  }, [remainChars])  
 
   const isValid1 = useMemo(() => {
     return inputValue1 && remainChars1 >= 0
@@ -249,8 +307,10 @@ const NewOrderBankModal = props => {
                 <DatePicker
                   className="form-control awsm-input"
                   value={shiftDate}
+                  startDate={new Date()}
                   onChange={date => setShiftDate(date)}
                   orderBankShiftDate={true}
+                  defaultValue={new Date()}
                 />
               </div>
               <div className="col-4 p-0 ml-4">
@@ -294,10 +354,11 @@ const NewOrderBankModal = props => {
                     <div className="d-flex">
                       <div className="w-50 mr-2">
                         <AWSMDropdown
-                          // items={ORDER_REGION}
-                          // onChange={value => onAddressFieldChange("region_group", value)}
-                          value={orderData?.address?.address?.region_group}
-                          disabled={true}
+                          items={regionList}
+                          onChange={value => onFieldChange("region", value)}
+                          value={orderData.region ? orderData.region : ""}
+                          // value={orderData?.address?.address?.region_group}
+                          disabled={false}
                         />
                       </div>
                       <div className="w-50 mr-2">
@@ -411,12 +472,22 @@ const NewOrderBankModal = props => {
                   <div className="w-100 mr-4">
                     <label className="text-upper">Order Remarks</label>
                     <div className="d-flex">
-                      <div className="w-85">
-                        <AWSMInput
+                      <div className="w-85 relative">
+                      <input
+                      onChange={e => onFieldChange("remarks", e.target.value)}
+                      value={orderData?.remarks}
+                      className={`awsm-input w-100 ${(inputValue && !isValid) ? "out-range " : ""}`}
+                    />
+                        {/* <AWSMInput
                           onChange={value => onFieldChange("remarks", value)}
                           value={orderData.remarks}
                           placeholder="Type Something here..."
-                        />
+                        /> */}
+                          <span
+                          className={`position-absolute awsm-input-right-content ${
+                            (inputValue && !isValid) ? "out-range " : ""
+                          }`}
+                        >{`${remainChars >= 0 ? "+" : ""}${remainChars}`}</span>
                       </div>
                     </div>
                   </div>
@@ -431,9 +502,10 @@ const NewOrderBankModal = props => {
                           onChange={value =>
                             onFieldChange("priority_order", value)
                           }
+                          // defaultSelected='None'
                           value={orderData.priority_order}
                           disabled={false}
-                          placeholder="select priority"
+                          // placeholder="select priority"
                         />
                       </div>
                     </div>
@@ -518,9 +590,9 @@ const NewOrderBankModal = props => {
                       <strong>Order ID: </strong>
                     </p>
                     <p>
-                      <strong>Order Date:</strong> {shiftDate.toLocaleDateString()}
+                      <strong>Requested Delievry Date:</strong> {shiftDate.toLocaleDateString()}
                     </p>
-                    <p>
+                    <p>1
                       <strong>Opening Stock Days: </strong> {" "}
                     </p>
                   </Col>
@@ -576,7 +648,7 @@ const NewOrderBankModal = props => {
                     <p>
                       <strong>Open Time 1: </strong>
                       {orderData?.delivery?.actual_open_time_1 ? removeKeywords(
-                        orderData?.delivery?.actual_open_time_1?.days.join()
+                        orderData?.delivery?.actual_open_time_1?.days !== '' ? orderData?.delivery?.actual_open_time_1?.days.join() : ''
                       ) + '-' + hrMints(orderData?.delivery.actual_open_time_1?.time_from) + ' to ' + hrMints(orderData?.delivery?.actual_open_time_1?.time_to) : '-'}
                     </p>
                     <p>
@@ -757,7 +829,7 @@ const NewOrderBankModal = props => {
           >
             Cancel
           </Button>
-          <Button color="primary" className="p-1320" onClick={handleUpdate}>
+          <Button color="primary" disabled={disableBtn} className="p-1320" onClick={handleUpdate}>
             Add
           </Button>
         </ModalFooter>

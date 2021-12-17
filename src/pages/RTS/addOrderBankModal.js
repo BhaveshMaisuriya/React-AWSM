@@ -234,8 +234,8 @@ const NewOrderBankModal = props => {
   }, [props.orderBankData])
 
   const onCancelClick = () => {
-    shiptoNo !== "" ? setIsConfirm(true) : onCancel('cancle')
-    setShiptoNo("")
+    (shiptoNo !== "" || shiftDate !==  new Date(new Date().getTime() + 24 * 60 * 60 * 1000)) ? setIsConfirm(true) : onCancel('cancle')
+    // setShiptoNo("")
     setCurrentState("")
   }
 

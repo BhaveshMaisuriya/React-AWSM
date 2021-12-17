@@ -611,7 +611,7 @@ function OrderBank({
                         </span>
                       </a>
                       <span className="bl-1-grey-half plr-15">
-                        <Button color={"primary"} onClick={() => onClickRunAutoScheduling()}>
+                        <Button color={"primary"} disabled={terminal === terminalBank ? false : true} onClick={() => onClickRunAutoScheduling()}>
                           Run Auto Schedule
                         </Button>
                       </span>

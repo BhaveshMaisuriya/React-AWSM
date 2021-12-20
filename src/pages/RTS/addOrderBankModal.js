@@ -71,17 +71,15 @@ const NewOrderBankModal = props => {
     }
 
     const { onAddOrderBank } = props
-    await onAddOrderBank(temp)
+    await onAddOrderBank(temp);
   }
-
+ 
   useEffect(() => {
-    if (props.addorderBankData) {
-      typeof props.addorderBankData === "object" && props.addorderBankData.status === undefined
-        ? onCancel("add", "success")
-        : onCancel("add", "error")
-      setShiftDate(new Date(new Date().getTime() + 24 * 60 * 60 * 1000))
-      setOrderData({})
-      setShiptoNo("")
+    if(props.addorderBankData) {
+      (typeof props.addorderBankData === 'object' && props.addorderBankData.status === undefined) ? onCancel('add', 'success') : onCancel('add', 'error');
+      setShiftDate(new Date(new Date().getTime() + 24 * 60 * 60 * 1000));
+      setOrderData({});
+      setShiptoNo('');
     }
   }, [props.addorderBankData])
 

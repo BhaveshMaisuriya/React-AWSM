@@ -165,15 +165,9 @@ class index extends Component {
       },
       currentPage: 1,
       showEditAlert: false,
-<<<<<<< HEAD
       showEditMsg: "",
       callDelete: false,
       showDeleteMsg: "",
-=======
-      showEditMsg: '',
-      callDelete: false,
-      showDeleteMsg: '',
->>>>>>> a3b4c233d1d02fdbeed279f4868ef22330e5fb2f
       showDelete: false,
     }
     this.onDragEnd = this.onDragEnd.bind(this)
@@ -341,7 +335,6 @@ class index extends Component {
 
   OnDeleteRecords = async allData => {
     const { onGetDeleteOrderBankDetail } = this.props
-<<<<<<< HEAD
     await onGetDeleteOrderBankDetail(allData.id)
     // setTimeout(function(){  this.setState( prevState => ({ callDelete: true })); }, 1000);
     await this.setState({ callDelete: true })
@@ -352,18 +345,6 @@ class index extends Component {
     if ((await this.props.deleteSuccess) !== undefined && this.state.callDelete === true) {
       if (this.props.deleteSuccess === true) {
         setTimeout(async function () {
-=======
-    await onGetDeleteOrderBankDetail(allData.id);
-    // setTimeout(function(){  this.setState( prevState => ({ callDelete: true })); }, 1000);
-    await this.setState({callDelete: true});
-  }
-
-  CallTable = async() => {
-    const { getRTSOrderBankTableData, payloadFilter } = this.props
-    if(await this.props.deleteSuccess !== undefined && this.state.callDelete === true){
-      if(this.props.deleteSuccess === true) {
-        setTimeout(async function(){
->>>>>>> a3b4c233d1d02fdbeed279f4868ef22330e5fb2f
           await getRTSOrderBankTableData({
             limit: 10,
             page: payloadFilter.currentPage,
@@ -373,7 +354,6 @@ class index extends Component {
             sort_dir: "asc",
             sort_field: "vehicle",
             filter: payloadFilter.filterOrderBank,
-<<<<<<< HEAD
           })
         }, 2000)
         await this.setState({ callDelete: false })
@@ -388,20 +368,6 @@ class index extends Component {
   OnViewRecords = async allData => {
     const { onGetViewOrderBankDetail } = this.props
     await onGetViewOrderBankDetail(allData.id)
-=======
-          });           
-        }, 2000);  
-        await this.setState({callDelete: false});
-        await this.setState({ showDeleteMsg: this.props.deleteSuccess === true ? 'success' : 'error' });
-        await this.setState({ showDelete : true});
-      }
-    }    
-  }
-
-  OnViewRecords = async (allData) => {
-    const { onGetViewOrderBankDetail } = this.props
-    await onGetViewOrderBankDetail(allData.id);
->>>>>>> a3b4c233d1d02fdbeed279f4868ef22330e5fb2f
   }
 
   editAlert = (type, val) => {
@@ -516,11 +482,7 @@ class index extends Component {
   }
 
   render() {
-<<<<<<< HEAD
     this.props.deleteSuccess !== undefined && this.CallTable() //setTimeout(function(){  }, 1000);
-=======
-    this.props.deleteSuccess !== undefined && this.CallTable(); //setTimeout(function(){  }, 1000); 
->>>>>>> a3b4c233d1d02fdbeed279f4868ef22330e5fb2f
     const { selectedAllItem, expandSearch, DNStatus } = this.state
     const { dataSource } = this.state
     const { totalRow } = this.props
@@ -647,19 +609,7 @@ class index extends Component {
             openAlert={this.state.showDelete}
             closeAlert={() => this.setState({ showDelete: false })}
           />
-<<<<<<< HEAD
         )}
-=======
-      )}
-        {this.state.showDelete && (
-          <AWSMAlert
-            status={this.state.showDeleteMsg}
-            message={this.state.showDeleteMsg === 'success' ? "Order deleted successfully" : "Order has not been deleted"}
-            openAlert={this.state.showDelete}
-            closeAlert={() => this.setState({showDelete: false})}
-          />
-      )}      
->>>>>>> a3b4c233d1d02fdbeed279f4868ef22330e5fb2f
       </div>
     )
   }

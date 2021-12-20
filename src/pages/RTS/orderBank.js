@@ -115,15 +115,10 @@ function OrderBank({
   onGetDeleteMultipleOrder,
   onGetCrossTerminal,
   dragOrderBankToGanttChart,
-<<<<<<< HEAD
   // socketData,
   multipleorder,
   getRTSOderBankGanttChart,
   clearGanttData,
-=======
-  socketData,
-  multipleorder,
->>>>>>> a3b4c233d1d02fdbeed279f4868ef22330e5fb2f
 }) {
   const ganttChartEvents = useSelector(state => state.orderBank.ganttChart.event)
   const [orderSummary, setOrderSummary] = useState({
@@ -149,11 +144,7 @@ function OrderBank({
   const [region, setRegion] = useState(REGION_TERMINAL[0].region)
   const [terminal, setTerminal] = useState(REGION_TERMINAL[0].terminal[0])
   const [regionBank, setRegionBank] = useState(REGION_TERMINAL[0].region)
-<<<<<<< HEAD
   const [terminalBank, setTerminalBank] = useState(REGION_TERMINAL[0].terminal[0])
-=======
-  const [terminalBank, setTerminalBank] = useState(REGION_TERMINAL[0].terminal[0])  
->>>>>>> a3b4c233d1d02fdbeed279f4868ef22330e5fb2f
   const [refreshDNModal, setRefreshDNModal] = useState(false)
   const [displayAutoModal, setDisplayAutoModal] = useState(false)
   const [showClearAlert, setShowClearAlert] = useState(false)
@@ -178,11 +169,7 @@ function OrderBank({
   const [checkedValue, setCheckedValue] = useState("Manual Scheduling")
   const [isCustomizeGanttModalOpen, setIsCustomizeGanttModalOpen] = useState(false)
   const [multipleDeleteIds, setMultipleDeleteIds] = useState(false)
-<<<<<<< HEAD
   const [deleteMultipleStatus, setDeleteMultipleStatus] = useState("")
-=======
-  const [deleteMultipleStatus, setDeleteMultipleStatus] = useState('');
->>>>>>> a3b4c233d1d02fdbeed279f4868ef22330e5fb2f
   const [showDeleteMultiple, setShowDeleteMultiple] = useState(false)
   const [bryntumCurrentColumns, setBryntumCurrentColumns] = useState(() => {
     if (!getCookieByKey(bryntumSchedulerTableNameForCookie)) return ganttChartTableDefaultColumns
@@ -283,11 +270,7 @@ function OrderBank({
   const terminalListBank = useMemo(() => {
     const currentRegion = REGION_TERMINAL.find(e => e.region === region)
     return currentRegion ? currentRegion.terminalBank : []
-<<<<<<< HEAD
   }, [region])
-=======
-  }, [region])  
->>>>>>> a3b4c233d1d02fdbeed279f4868ef22330e5fb2f
 
   const onSettingClick = val => {
     if (val === "newOrder") {
@@ -327,7 +310,6 @@ function OrderBank({
     await onGetDeleteMultipleOrder(payload)
     setDeleteMultiple(false)
     let temp = [...orderBankSetting]
-<<<<<<< HEAD
     temp.map(function (item) {
       if (item.value === "DeleteMultiple") {
         item.disabled = true
@@ -338,38 +320,17 @@ function OrderBank({
 
   useEffect(() => {
     if (multipleorder) {
-=======
-      temp.map(function (item) {
-        if (item.value === "DeleteMultiple") {
-          item.disabled = true
-        }
-      })
-      setOrderBankSetting(temp)
-  }
-
-  useEffect(() => {
-    if(multipleorder) {
->>>>>>> a3b4c233d1d02fdbeed279f4868ef22330e5fb2f
       getRTSOrderBankTableData({
         limit: 10,
         page: payloadFilter.currentPage,
         // search_fields: transformArrayToString(searchFields),
         search_fields: "*",
-<<<<<<< HEAD
         q: transformObjectToStringSentenceRTS(payloadFilter.filterQuery),
         sort_dir: "asc",
         sort_field: "vehicle",
         filter: payloadFilter.filterOrderBank,
       })
       setDeleteMultipleStatus(multipleorder.order_banks !== undefined ? "success" : "error")
-=======
-        q: transformObjectToStringSentence(payloadFilter.filterQuery),
-        sort_dir: "asc",
-        sort_field: "vehicle",
-        filter: payloadFilter.filterOrderBank,
-      }); 
-      setDeleteMultipleStatus((multipleorder.order_banks !== undefined) ? 'success' : 'error');
->>>>>>> a3b4c233d1d02fdbeed279f4868ef22330e5fb2f
       setShowDeleteMultiple(true)
     }
   }, [multipleorder])
@@ -1128,7 +1089,6 @@ function OrderBank({
               {showDeleteMultiple && (
                 <AWSMAlert
                   status={deleteMultipleStatus}
-<<<<<<< HEAD
                   message={
                     deleteMultipleStatus === "success"
                       ? "Orders deleted Successfully"
@@ -1138,13 +1098,6 @@ function OrderBank({
                   closeAlert={() => setShowDeleteMultiple(false)}
                 />
               )}
-=======
-                  message={deleteMultipleStatus === 'success' ? "Orders deleted Successfully" : "Orders has not been deleted"}
-                  openAlert={showDeleteMultiple}
-                  closeAlert={() => setShowDeleteMultiple(false)}
-                />
-              )}              
->>>>>>> a3b4c233d1d02fdbeed279f4868ef22330e5fb2f
             </Card>
           </div>
         </div>

@@ -194,11 +194,7 @@ const RTSOrderBank = (state = initialState, action) => {
     case GET_DELETE_MULTIPLE_ORDER_FAIL:
       return {
         ...state,
-<<<<<<< HEAD
         multipleorder: action.payload,
-=======
-        multipleorder: action.payload
->>>>>>> a3b4c233d1d02fdbeed279f4868ef22330e5fb2f
       }
     case UPDATE_ORDERBANK_TABLE_INFORMATION_SUCCESS: {
       // notify.success("Record Successfully Updated")
@@ -227,22 +223,14 @@ const RTSOrderBank = (state = initialState, action) => {
         ...state,
         currentOrderDetail: null,
         deleteresponse: action.payload,
-<<<<<<< HEAD
         deleteSuccess: true,
-=======
-        deleteSuccess: true
->>>>>>> a3b4c233d1d02fdbeed279f4868ef22330e5fb2f
       }
     }
     case DELETE_ORDERBANK_DETAIL_FAIL:
       return {
         ...state,
         deleteresponse: action.payload,
-<<<<<<< HEAD
         deleteSuccess: false,
-=======
-        deleteSuccess: false
->>>>>>> a3b4c233d1d02fdbeed279f4868ef22330e5fb2f
       }
     case VIEW_ORDERBANK_DETAIL_SUCCESS: {
       return {

@@ -27,9 +27,7 @@ import DateRangePicker from "components/Common/DateRangePicker"
 import AWSMDropdown from "components/Common/Dropdown"
 import OrderBankTable from "./OrderBankTable"
 import REGION_TERMINAL, { TERMINAL_CODE_MAPPING } from "common/data/regionAndTerminal"
-//custom icons import
 import customiseTableIcon from "assets/images/AWSM-Customise-Table.svg"
-
 import CustomizeTableModal from "components/Common/CustomizeTable"
 
 import { FormControlLabel } from "@material-ui/core"

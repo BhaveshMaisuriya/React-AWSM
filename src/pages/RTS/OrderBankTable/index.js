@@ -427,8 +427,8 @@ class index extends Component {
       }
     })
     let deleteEnable = checkedData //checkedData.filter((v) => (v.scheduling_status === "Unscheduled"))
-    let checkCross = checkedData.filter(
-      v => v.product_category === "ASR" || v.product_category === "SMP"
+    let checkCross = checkedData.filter(//product_category
+      v => v.order_type === "ZASR" || v.order_type === "SMP"
     )
     this.props.enabledCross(checkCross.length)
     this.props.deleteEnable(deleteEnable)

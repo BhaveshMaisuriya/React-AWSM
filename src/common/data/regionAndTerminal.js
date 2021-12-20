@@ -77,3 +77,4 @@ export const TERMINAL_CODE_MAPPING_ID = {
 }
 
 export default REGION_TERMINAL
+

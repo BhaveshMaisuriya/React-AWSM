@@ -18,6 +18,7 @@ const OrderBankRoadTankerModal = ({
   terminal = "",
   region = "",
   shiftDate = "",
+  refreshTable,
 }) => {
   const [currentOrderBankRTDetails, setOrderBankRTDetails] = useState()
   const [isConfirm, setIsConfirm] = useState(false)
@@ -46,6 +47,7 @@ const OrderBankRoadTankerModal = ({
 
   const handleUpdate = () => {
     updateOBRTDetails(currentOrderBankRTDetails)
+    refreshTable()
     toggle()
   }
 

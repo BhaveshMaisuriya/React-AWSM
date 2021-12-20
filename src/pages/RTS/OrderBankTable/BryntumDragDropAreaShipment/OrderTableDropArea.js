@@ -8,7 +8,7 @@ import selectAllIcon from "../../../../assets/images/AWSM-Select-all-Checkbox.sv
 import RedAlertIcon from "./../../../../assets/images/AWSM-Red-Alert.svg"
 import './OrderTableDropArea.scss'
 import ConfirmDNStatusModal from "../confirmDNStatusModal";
-import {removeOrderFromShipment, removeShipmentFromEvent} from "../../../../store/orderBank/actions";
+import {removeOrderFromShipment, removeShipmentFromEvent, getShipmentDetail} from "../../../../store/orderBank/actions";
 
 const supportReorderShameShipment = (list, startIdx, endIdx) => {
   const result = Array.from(list)
@@ -23,7 +23,9 @@ const OrderTableDropArea = ({
                               ganttChartEvents,
                               resourceId,
                               removeOrderFromShipment,
-                              removeShipmentFromEvent
+                              removeShipmentFromEvent,
+                              getShipmentDetail,
+                              shipmentDropData,
                             }) => {
   const [dropData, setDropData] = useState([])
 
@@ -36,32 +38,36 @@ const OrderTableDropArea = ({
 
   useEffect(() => {
     // merge all orders from all events that belong to resource Id ( vehicle)
-    if (resourceId && Array.isArray(ganttChartEvents) && ganttChartEvents.length > 0) {
-      let dropDataResult = []
-      const matchedEvents = ganttChartEvents.filter(({resourceId: id}) => resourceId === id)
-      if (matchedEvents && matchedEvents.length > 0) {
-        for (let event of matchedEvents) {
-          const {shipments} = event
-          if (shipments && Array.isArray(shipments) && shipments.length > 0) {
-            for (let shipment of shipments) {
-              const shipmentObj = {...shipment}
-              shipmentObj.event = event.id
-              const {orders} = shipment
-              if (orders && Array.isArray(orders) && orders.length > 0) {
-                shipmentObj.orders = orders.map(item => {
-                  item.isChecked = false
-                  item.isOnRemove = false
-                  return item
-                })
-                dropDataResult.push(shipmentObj)
-              }
-            }
-          }
-        }
-      }
-      setDropData(dropDataResult)
+    // if (resourceId && Array.isArray(ganttChartEvents) && ganttChartEvents.length > 0) {
+    //   let dropDataResult = []
+    //   const matchedEvents = ganttChartEvents.filter(({resourceId: id}) => resourceId === id)
+    //   if (matchedEvents && matchedEvents.length > 0) {
+    //     for (let event of matchedEvents) {
+    //       const {shipments} = event
+    //       if (shipments && Array.isArray(shipments) && shipments.length > 0) {
+    //         for (let shipment of shipments) {
+    //           const shipmentObj = {...shipment}
+    //           shipmentObj.event = event.id
+    //           const {orders} = shipment
+    //           if (orders && Array.isArray(orders) && orders.length > 0) {
+    //             shipmentObj.orders = orders.map(item => {
+    //               item.isChecked = false
+    //               item.isOnRemove = false
+    //               return item
+    //             })
+    //             dropDataResult.push(shipmentObj)
+    //           }
+    //         }
+    //       }
+    //     }
+    //   }
+    //   setDropData(dropDataResult)
+    // }
+    if (resourceId) {
+      getShipmentDetail(resourceId)
+      setDropData(shipmentDropData)
     }
-  }, [resourceId, ganttChartEvents])
+  }, [resourceId])
 
   // Handle checkbox click
   const setSelectedShipmentDependOnOrders = (selectedShip) => {
@@ -182,7 +188,7 @@ const OrderTableDropArea = ({
               return (
                 <td key={key}>
                   {dataRow[key]
-                    .map((value, index) => <span key={index} className={`circle ${value}`}>{value}</span>)
+                    ?.map((value, index) => <span key={index} className={`circle ${value}`}>{value}</span>)
                   }
                 </td>
               )
@@ -391,12 +397,14 @@ const OrderTableDropArea = ({
 
 const mapDispatchToProps = dispatch => ({
   removeOrderFromShipment: payload => dispatch(removeOrderFromShipment(payload)),
-  removeShipmentFromEvent: payload => dispatch(removeShipmentFromEvent(payload))
+  removeShipmentFromEvent: payload => dispatch(removeShipmentFromEvent(payload)),
+  getShipmentDetail: payload => dispatch(getShipmentDetail(payload)),
 })
 
 const mapStateToProps = ({orderBank}) => ({
   ganttChartEvents: orderBank?.ganttChart?.event,
-  resourceId: orderBank?.selectedVehicleShipment?.resourceId
+  resourceId: orderBank?.selectedVehicleShipment?.resourceId,
+  shipmentDropData: orderBank?.shipmentDropData,
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(OrderTableDropArea)

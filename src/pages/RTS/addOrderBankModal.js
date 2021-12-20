@@ -4,7 +4,6 @@ import { Button, Modal, ModalFooter, ModalBody, ModalHeader, Row, Col } from "re
 import DatePicker from "../../components/Common/DatePicker"
 import ExitConfirmation from "../../components/Common/ExitConfirmation"
 import AWSMInput from "../../components/Common/Input"
-import FileCopyIcon from "@material-ui/icons/FileCopy"
 import AWSMDropdown from "../../components/Common/Dropdown"
 import AWSMAlert from "../../components/Common/AWSMAlert"
 import { getOrderBank, addOrderBank } from "../../store/actions"
@@ -40,7 +39,8 @@ const NewOrderBankModal = props => {
   const [inputValue2, setInputValue2] = useState("")
   const [inputValue3, setInputValue3] = useState("")
   const [allProductDetailList, setAllProductDetailList] = useState([])
-  const [shiftDate, setShiftDate] = useState(new Date(new Date().getTime() + 24 * 60 * 60 * 1000))
+  const [defaultDate] = useState(new Date(new Date().getTime() + 24 * 60 * 60 * 1000))
+  const [shiftDate, setShiftDate] = useState(defaultDate)
 
   useEffect(() => {
     if (currentState === "loading") {
@@ -107,8 +107,9 @@ const NewOrderBankModal = props => {
     setIsConfirm(false)
     setCurrentState("")
     setShiptoNo("")
+    setShiftDate(defaultDate)
     if (onCancel) {
-      onCancel('cancle')
+      onCancel('cancel')
     }
   }
 
@@ -235,7 +236,7 @@ const NewOrderBankModal = props => {
   }, [props.orderBankData])
 
   const onCancelClick = () => {
-    (shiptoNo !== "" || shiftDate !==  new Date(new Date().getTime() + 24 * 60 * 60 * 1000)) ? setIsConfirm(true) : onCancel('cancle')
+    shiptoNo !== "" || defaultDate !== shiftDate ? setIsConfirm(true) : onCancel('cancel');
     // setShiptoNo("")
     setCurrentState("")
   }
@@ -340,15 +341,15 @@ const NewOrderBankModal = props => {
                 <DatePicker
                   className="form-control awsm-input"
                   value={shiftDate}
-                  startDate={new Date()}
+                  startDate={defaultDate}
+                  defaultValue={defaultDate}
                   onChange={date => setShiftDate(date)}
                   orderBankShiftDate={true}
-                  defaultValue={new Date()}
                 />
               </div>
               <div className="col-4 p-0 ml-4">
                 <label>
-                  SHIP TO <span className="text-red">*</span>
+                  SHIP TO
                 </label>
                 <AWSMInput
                   type="number"
@@ -452,9 +453,9 @@ const NewOrderBankModal = props => {
                           placeholder="Lorem ipsum"
                         />
                       </div>
-                      {/* <div className="w-30 ml-3">
-                        <Button color="primary">Generate</Button>
-                      </div> */}
+                      <div className="w-40 ml-3">
+                        <Button className="h-100" color="primary" block >Generate</Button>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -509,6 +510,7 @@ const NewOrderBankModal = props => {
                       <input
                       onChange={e => onFieldChange("remarks", e.target.value)}
                       value={orderData?.remarks}
+                      maxLength={40}
                       className={`awsm-input w-100 ${(inputValue && !isValid) ? "out-range " : ""}`}
                     />
                         {/* <AWSMInput
@@ -625,7 +627,7 @@ const NewOrderBankModal = props => {
                     <p>
                       <strong>Requested Delievry Date:</strong> {shiftDate.toLocaleDateString()}
                     </p>
-                    <p>1
+                    <p>
                       <strong>Opening Stock Days: </strong> {" "}
                     </p>
                   </Col>
@@ -786,6 +788,7 @@ const NewOrderBankModal = props => {
                     <input
                       onChange={e => onFieldChange("myremark1", e.target.value)}
                       value={orderData?.myremark1}
+                      maxLength={40}
                       className={`awsm-input w-100 ${(inputValue1 && !isValid1) ? "out-range " : ""}`}
                     />
                       {/* <AWSMInput
@@ -812,6 +815,7 @@ const NewOrderBankModal = props => {
                       <input
                         onChange={e => onFieldChange("myremark2", e.target.value)}
                         value={orderData?.myremark2}
+                        maxLength={40}
                         className={`awsm-input w-100 ${(inputValue2 && !isValid2) ? "out-range " : ""}`}
                     />
                     <span
@@ -832,6 +836,7 @@ const NewOrderBankModal = props => {
                       <input
                         onChange={e => onFieldChange("myremark3", e.target.value)}
                         value={orderData?.myremark3}
+                        maxLength={40}
                         className={`awsm-input w-100 ${(inputValue3 && !isValid3) ? "out-range " : ""}`}
                       />
                     <span
@@ -855,7 +860,6 @@ const NewOrderBankModal = props => {
                 }`}
               >
                 <div className="relative table_cell h-100 verticle-middle">
-                  {/* <FileCopyIcon /> */}
                   <img src={NoDataIcon} alt="No Data" />
                   <p className="text-18">
                     {currentState === "" ? (

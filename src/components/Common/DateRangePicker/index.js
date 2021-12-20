@@ -28,14 +28,15 @@ const DateRangePicker = ({
   defaultMonth = new Date(),
   disabled = false,
   onChange = () => {},
-  onBlur = ()=>{},
+  onBlur = () => {},
   types = ["single", "range", "every", "daily"],
   startDate = new Date(),
   endDate = null,
   placeholder = "Select date",
   disablePreviousDayBeforeSelect = false,
   error = false,
-  validateTime = false
+  validateTime = false,
+  defaultDate,
 }) => {
   const [value, setValue] = useState(defaultValue || dateObjectTemplate)
   const [month, setMonth] = useState(defaultMonth)
@@ -75,9 +76,7 @@ const DateRangePicker = ({
           outRange: outRange,
         }
       }
-      const dateTo = value.date_to
-        ? new Date(value.date_to)
-        : new Date(value.date_from)
+      const dateTo = value.date_to ? new Date(value.date_to) : new Date(value.date_from)
       const dateFrom = new Date(value.date_from)
       const range = {
         from: dateFrom,
@@ -108,11 +107,9 @@ const DateRangePicker = ({
       }
       return value.days && value.days.length > 0 ? `Every ${value.days.join(", ")}` : ""
     } else if (value.type === "range") {
-      if(value.date_from > value.date_to){
+      if (value.date_from > value.date_to) {
         return `From ${
-          value.date_to
-            ? format(new Date(value.date_to), DISPLAY_DATE_FORMAT)
-            : "Select date"
+          value.date_to ? format(new Date(value.date_to), DISPLAY_DATE_FORMAT) : "Select date"
         } to ${
           !value.date_from
             ? "select another date"
@@ -120,20 +117,15 @@ const DateRangePicker = ({
         }`
       } else {
         return `From ${
-          value.date_from
-            ? format(new Date(value.date_from), DISPLAY_DATE_FORMAT)
-            : "Select date"
+          value.date_from ? format(new Date(value.date_from), DISPLAY_DATE_FORMAT) : "Select date"
         } to ${
           !value.date_to
             ? "select another date"
             : format(new Date(value.date_to), DISPLAY_DATE_FORMAT)
         }`
       }
-     
     } else if (value.type === "single") {
-      return value.date_from
-        ? format(new Date(value.date_from), DISPLAY_DATE_FORMAT)
-        : ""
+      return value.date_from ? format(new Date(value.date_from), DISPLAY_DATE_FORMAT) : ""
     } else if (value.type === "daily") {
       return "Every day"
     }
@@ -153,9 +145,10 @@ const DateRangePicker = ({
     setValue({
       ...value,
       type: newSelectedDays.length > 0 ? "every" : null,
-      days: newSelectedDays.length > 0 ? newSelectedDays
-        .sort()
-        .map(day => format(addDays(startOfWeek(Date.now()), day), "cccc")) : [],
+      days:
+        newSelectedDays.length > 0
+          ? newSelectedDays.sort().map(day => format(addDays(startOfWeek(Date.now()), day), "cccc"))
+          : [],
       date_from: null,
       date_to: null,
     })
@@ -207,9 +200,7 @@ const DateRangePicker = ({
       <div
         onClick={() => onWeekSelectDay(weekday)}
         className={`DayPicker-Weekday ${
-          selectedWeekDays.includes(weekday) && value.type === "every"
-            ? "select"
-            : ""
+          selectedWeekDays.includes(weekday) && value.type === "every" ? "select" : ""
         }`}
         role="columnheader"
       >
@@ -267,16 +258,16 @@ const DateRangePicker = ({
   const onClear = () => {
     const newValue = {
       ...defaultValue,
-      type: "",
+      type: defaultDate ? "single" : "",
       days: [],
-      date_from: null,
+      date_from: defaultDate || null,
       date_to: null,
     }
     setValue(newValue)
     if (onChange) {
       onChange(newValue)
     }
-    if(onBlur){
+    if (onBlur) {
       onBlur()
     }
     setAnchorEl(null)
@@ -287,19 +278,19 @@ const DateRangePicker = ({
       onChange(value)
     }
 
-    if(onBlur && !value.type){
+    if (onBlur && !value.type) {
       onBlur()
     }
     setAnchorEl(null)
   }
-  
+
   const dateError = useMemo(() => {
-    if (validateTime && value && (value.time_from || value.time_to) &&!isValidDate(value)) {
+    if (validateTime && value && (value.time_from || value.time_to) && !isValidDate(value)) {
       return "Please select date"
     }
     return false
   }, [value])
-  
+
   const onRangeChange = () => {
     setValue({
       ...value,
@@ -309,7 +300,7 @@ const DateRangePicker = ({
       date_to: null,
     })
   }
-  
+
   const isApplyDisabled = useMemo(() => {
     return !isValidDate(value)
   }, [value])
@@ -327,13 +318,11 @@ const DateRangePicker = ({
           (error || dateError) && !disabled && "border-danger"
         } ${disabled ? "disabled" : ""}`}
       >
-        <div className="date-picker-label">{!disabled && !labelValue ? placeholder : labelValue}</div>
-        {!disabled && (
-          <ReactSVG className="date-picker-icon" src={AWSM_Calendar} />
-        )}
-        {dateError && !disabled && <div className="calendar-error">
-          {dateError}
-        </div>}
+        <div className="date-picker-label">
+          {!disabled && !labelValue ? placeholder : labelValue}
+        </div>
+        {!disabled && <ReactSVG className="date-picker-icon" src={AWSM_Calendar} />}
+        {dateError && !disabled && <div className="calendar-error">{dateError}</div>}
       </button>
       <Popover
         id={id}
@@ -358,25 +347,19 @@ const DateRangePicker = ({
             captionElement={captionElement}
             onDayClick={onDayClick}
             navbarElement={navbarElement}
-            disabledDays={disablePreviousDayBeforeSelect && [{before: startDate}]}
+            disabledDays={disablePreviousDayBeforeSelect && [{ before: startDate }]}
           />
           <div className="d-flex justify-content-between align-items-center mb-2">
             {types.includes("range") ? (
               <div className="d-flex align-items-center">
-                <CheckBox
-                  checked={isRange}
-                  onChange={() => onRangeChange() }
-                />
+                <CheckBox checked={isRange} onChange={() => onRangeChange()} />
                 <label>Start and End date</label>
               </div>
             ) : (
               <div />
             )}
             <div className="d-flex pr-3">
-              <button
-                className="btn btn-outline-primary mr-2 btn-date-range"
-                onClick={onClear}
-              >
+              <button className="btn btn-outline-primary mr-2 btn-date-range" onClick={onClear}>
                 Clear
               </button>
               <button

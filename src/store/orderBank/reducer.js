@@ -52,8 +52,10 @@ import {
   SEND_ORDER_BANK_DN_SUCCESS,
   DRAG_RTS_ORDER_BANK_TO_GANTT_CHART_FAIL,
   CLEAR_GANTT_DATA,
+  GET_SHIPMENT_DETAIL_FAIL,
+  GET_SHIPMENT_DETAIL_SUCCESS,
 } from "./actionTypes"
-import { eventGanttChartFactory } from "./factory"
+import { eventGanttChartFactory, shipmentFactory } from "./factory"
 import { ToastSuccess, ToastError } from "../../helpers/swal"
 
 const initialState = {
@@ -83,6 +85,7 @@ const initialState = {
   totalRow_ganttChart: 0,
   ganttChartEventData: [],
   dropOderSuccess: false,
+  shipmentDropData: [],
 }
 
 const RTSOrderBank = (state = initialState, action) => {
@@ -510,6 +513,13 @@ const RTSOrderBank = (state = initialState, action) => {
         ...state,
       }
     }
+    case GET_SHIPMENT_DETAIL_SUCCESS: {
+      return {
+        ...state,
+        shipmentDropData: shipmentFactory(action.payload)
+      }
+    }
+
     default:
       return state
   }

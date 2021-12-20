@@ -57,4 +57,23 @@ export const TERMINAL_CODE_MAPPING = {
   "Tg Manis CODT":  "M857",
 }
 
+export const TERMINAL_CODE_MAPPING_ID = {
+  "M808": "KVDT",
+  "M838": "Kerteh",
+  "M839": "Kuantan",
+  "M819": "Langkawi",
+  "M818": "Prai",
+  "M817": "Lumut",
+  "M828": "Melaka",
+  "M829": "Pasir Gudang",
+  "M846": "Labuan",
+  "M847": "Sandakan",
+  "M848": "Sepangar Bay",
+  "M849": "Tawau JV",
+  "M858": "Bintulu JV",
+  "M859": "Miri",
+  "M855": "Senari IOT",
+  "M857": "Tg Manis CODT",
+}
+
 export default REGION_TERMINAL

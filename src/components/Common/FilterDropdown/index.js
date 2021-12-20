@@ -296,7 +296,9 @@ const FilterDropdown = ({
                           if (dataKey === "override_status") {
                             return checkNullValue(row.text) ? "Accurate" : row.text
                           }
-
+                          if (["retain", "runout", "dn_date"].includes(dataKey)) {
+                            return format(new Date(row.text), "dd-MM-yyyy")
+                          }
                           if (dataKey !== "override_status") {
                             return checkNullValue(row.text) ? "-" : removeKeywords(row.text)
                           }

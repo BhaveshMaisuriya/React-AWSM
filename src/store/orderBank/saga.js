@@ -1,12 +1,10 @@
-import { takeLatest, put, call, takeEvery, select } from "redux-saga/effects"
+import { takeLatest, put, call, select } from "redux-saga/effects"
 import {
   GET_ORDERBANK,
   ADD_ORDERBANK,
   EDIT_ORDERBANK,
   GET_ORDERBANK_TABLE_INFORMATION,
   GET_SHIPMENT_ORDER_BANK_TABLE_DATA,
-  DRAG_RTS_ORDER_BANK_TO_GANTT_CHART_SUCCESS,
-  UPDATE_ORDERBANK_TABLE_INFORMATION,
   DELETE_ORDERBANK_DETAIL,
   VIEW_ORDERBANK_DETAIL,
   GET_RTS_ORDER_BANK_TABLE_DATA,
@@ -23,11 +21,13 @@ import {
   CANCEL_PAYMENT_IN_GANTT_CHART,
   SEND_ORDER_IN_GANTT_CHART,
   GET_RTS_GANTT_CHART_DATA,
-  DRAG_RTS_ORDER_BANK_TO_GANTT_CHART, REMOVE_ORDER_FROM_SHIPMENT, REMOVE_SHIPMENT_FROM_EVENT,
+  DRAG_RTS_ORDER_BANK_TO_GANTT_CHART,
+  REMOVE_ORDER_FROM_SHIPMENT,
+  REMOVE_SHIPMENT_FROM_EVENT,
   REMOVE_EVENT,
   UPDATE_OB_EVENT,
   GET_OB_RT_DETAILS,
-  UPDATE_OB_RT_DETAILS
+  UPDATE_OB_RT_DETAILS,
 } from "./actionTypes"
 
 import {
@@ -40,15 +40,13 @@ import {
   addOrderBankSuccess,
   addOrderBankFail,
   getEditOrderBankDetailSuccess,
-  getEditOrderBankDetailFail,  
+  getEditOrderBankDetailFail,
   getOrderBankDetailFail,
   getOrderBankDetailSuccess,
   deleteOrderBankDetailFail,
   deleteOrderBankDetailSuccess,
   viewOrderBankDetailFail,
   viewOrderBankDetailSuccess,
-  updateOrderbankTableInformationSuccess,
-  updateOrderbankTableInformationFail,
   sendOrderBankDNFail,
   sendOrderBankDNSuccess,
   refreshOderBankDNFail,
@@ -71,11 +69,14 @@ import {
   removeEventSuccess,
   updateOBEventSuccess,
   getOBRTDetailsSuccess,
+  getOBRTDetailsFail,
   updateOBRTDetailsSuccess,
+  updateOBRTDetailsFail,
   getdeleteMultipleOrderSuccess,
   getdeleteMultipleOrderFail,
   getCrossTerminalSuccess,
-  getCrossTerminalFail,  
+  getCrossTerminalFail,
+  dragOrderBankToGanttChartFail,
 } from "./actions"
 import {
   getOrderBank,
@@ -84,7 +85,6 @@ import {
   getOrderBankDetail,
   getRTSOderBank,
   getShipmentOderBank,
-  putOrderbankDetail,
   sendRTSOrderBank,
   refreshRTSOrderBank,
   deleteOrderBankDetail,
@@ -96,6 +96,9 @@ import {
   getdeleteMultipleOrder,
   getCrossTerminal,
   getRTSOderBankGanttChart,
+  sendOderToVehicle,
+  getRTSOrderbankRTdetails,
+  updateRTSOrderbankRTdetails,
 } from "../../helpers/fakebackend_helper"
 
 function* onGetOrderbank({ params = {} }) {
@@ -158,9 +161,9 @@ function* onGetRTSOrderBank({ params = {} }) {
     let newResponse = {}
     // when user increase page params -> scrolling action
     if (params?.page !== 0) {
-      newResponse = { ...response, scrolling: true}
+      newResponse = { ...response, scrolling: true }
     } else {
-      newResponse = { ...response, scrolling: false}
+      newResponse = { ...response, scrolling: false }
     }
     yield put(getRTSOrderBankTableDataSuccess(newResponse))
   } catch (error) {
@@ -186,7 +189,7 @@ function* onGetShipmentOrderBankData({ params = {} }) {
 //   }
 // }
 
-function* onRefreshOrderBankDN({ params = {}}) {
+function* onRefreshOrderBankDN({ params = {} }) {
   try {
     const response = yield call(refreshRTSOrderBank, params)
     yield put(refreshOderBankDNSuccess(response))
@@ -195,7 +198,7 @@ function* onRefreshOrderBankDN({ params = {}}) {
   }
 }
 
-function* onSendOrderBankDN({ params = {}}) {
+function* onSendOrderBankDN({ params = {} }) {
   try {
     const response = yield call(sendRTSOrderBank, params)
     yield put(sendOrderBankDNSuccess(response))
@@ -251,7 +254,7 @@ function* onGetRunAutoScheduling(params) {
 
 function* onGetDeleteMultipleOrder(params) {
   try {
-    let newResponse = {};
+    let newResponse = {}
     const response = yield call(getdeleteMultipleOrder, params)
     if (response) {
       newResponse = {
@@ -274,7 +277,7 @@ function* onGetCrossTerminal(params) {
   }
 }
 
-function* sendRequestPaymentInGanttChart({ params={} }){
+function* sendRequestPaymentInGanttChart({ params = {} }) {
   try {
     // send request
     yield put(processPaymentInGanttChartSuccess(params))
@@ -283,7 +286,7 @@ function* sendRequestPaymentInGanttChart({ params={} }){
   }
 }
 
-function* sendRequestCancelPaymentInGanttChart({ params={} }){
+function* sendRequestCancelPaymentInGanttChart({ params = {} }) {
   try {
     // send request
     yield put(cancelPaymentInGanttChartSuccess(params))
@@ -292,7 +295,7 @@ function* sendRequestCancelPaymentInGanttChart({ params={} }){
   }
 }
 
-function* sendRequestOrderPaymentInGanttChart({ params={} }){
+function* sendRequestOrderPaymentInGanttChart({ params = {} }) {
   try {
     // send request
 
@@ -308,9 +311,9 @@ function* onGetRTSOrderBankGanttChart({ params = {} }) {
     let newResponse = {}
     // when user increase page params -> scrolling action
     if (params?.page !== 0) {
-      newResponse = { ...response, scrolling: true}
+      newResponse = { ...response, scrolling: true, page: params.page }
     } else {
-      newResponse = { ...response, scrolling: false}
+      newResponse = { ...response, scrolling: false, page: params.page }
     }
     yield put(getRTSOderBankGanttChartSuccess(newResponse))
   } catch (error) {
@@ -319,91 +322,89 @@ function* onGetRTSOrderBankGanttChart({ params = {} }) {
 }
 
 function* onDragOrderBankToGanttChart() {
-  let dragOrder = yield select(store => store.orderBank?.orderBankTableData?.filter(e => e.isChecked))
-  //TODO implement integrate API
-  // here just for mock data
-  try{
-    if (dragOrder && dragOrder.length > 0){
+  const dragOrder = yield select(store =>
+    store.orderBank?.orderBankTableData?.filter(e => e.isChecked)
+  )
+  const selectedVehicle = yield select(store => store?.orderBank?.selectedVehicleShipment)
+  try {
+    if (dragOrder && dragOrder.length > 0) {
+      yield call(sendOderToVehicle, {
+        vehicle: selectedVehicle.vehicle,
+        order_banks: dragOrder.map(e => e.id),
+      })
       yield put(dragOrderBankToGanttChartSuccess(dragOrder))
     }
-  }catch (error){
-
+  } catch (error) {
+    yield put(dragOrderBankToGanttChartFail(dragOrder))
   }
 }
 
-function* onRemoveOrderFromShipment(payload){
+function* onRemoveOrderFromShipment(payload) {
   // call api to remove here
   // put data to success case
   yield put(removeOrderFromShipmentSuccess(payload.params))
 }
 
-function* onRemoveShipmentFromEvent(payload){
+function* onRemoveShipmentFromEvent(payload) {
   // call api to remove shipment here
 
   // call success case
   yield put(removeShipmentFromEventSuccess(payload.params))
 }
 
-function* onRemoveEvent(payload){
+function* onRemoveEvent(payload) {
   // call api to remove shipment here
-  
+
   // call success case
   yield put(removeEventSuccess(payload.params))
 }
 
-function* onUpdateEvent(payload){
+function* onUpdateEvent(payload) {
   // call api to remove shipment here
-  
+
   // call success case
   yield put(updateOBEventSuccess(payload.params))
 }
 
-function* onGetOBRTDetails(payload){
-  // call api to remove shipment here
-  // call success case
-  yield put(getOBRTDetailsSuccess(payload.params))
+function* onGetOBRTDetails(payload) {
+  try {
+    const response = yield call(getRTSOrderbankRTdetails, payload.params)
+    yield put(getOBRTDetailsSuccess(response.data))
+  } catch (error) {
+    yield put(getOBRTDetailsFail(error.response))
+  }
 }
 
-function* onUpdateOBRTDetails(payload){
-  // call api to remove shipment here
-  // call success case
-  yield put(updateOBRTDetailsSuccess(payload.params))
+function* onUpdateOBRTDetails(payload) {
+  try {
+    const response = yield call(updateRTSOrderbankRTdetails, payload.params)
+    yield put(updateOBRTDetailsSuccess(response))
+  } catch (error) {
+    yield put(updateOBRTDetailsFail(error.response))
+  }
 }
 
 function* orderBankSaga() {
   yield takeLatest(GET_ORDERBANK, onGetOrderbank)
-  yield takeLatest(ADD_ORDERBANK, onAddOrderbank)  
-  yield takeLatest(EDIT_ORDERBANK, onEditOrderBankDetail)    
+  yield takeLatest(ADD_ORDERBANK, onAddOrderbank)
+  yield takeLatest(EDIT_ORDERBANK, onEditOrderBankDetail)
   yield takeLatest(GET_RTS_ORDER_BANK_TABLE_DATA, onGetRTSOrderBank)
   yield takeLatest(GET_SHIPMENT_ORDER_BANK_TABLE_DATA, onGetShipmentOrderBankData)
-  yield takeLatest(
-    GET_ORDERBANK_TABLE_INFORMATION,
-    onGetOrderbankTableInformation
-  )
-  yield takeLatest(
-    DELETE_ORDERBANK_DETAIL,
-    onDeleteOrderbankTableInformation
-  )
-  yield takeLatest(
-    VIEW_ORDERBANK_DETAIL,
-    onViewOrderbankTableInformation
-  )  
-  // yield takeLatest(
-  //   UPDATE_ORDERBANK_TABLE_INFORMATION,
-  //   onPutOrderbankTableInformation
-  // )
+  yield takeLatest(GET_ORDERBANK_TABLE_INFORMATION, onGetOrderbankTableInformation)
+  yield takeLatest(DELETE_ORDERBANK_DETAIL, onDeleteOrderbankTableInformation)
+  yield takeLatest(VIEW_ORDERBANK_DETAIL, onViewOrderbankTableInformation)
   yield takeLatest(REFRESH_ORDER_BANK_DN, onRefreshOrderBankDN)
   yield takeLatest(SEND_ORDER_BANK_DN, onSendOrderBankDN)
   yield takeLatest(SEND_DN_STATUS_REQUEST, onSendDNStatusRequest)
   yield takeLatest(GET_ORDER_BANK_AUDITLOG, onGetOrderBankAuditLog)
-  yield takeLatest(GET_CLEAR_SCHEDULING, onGetClearScheduling) 
+  yield takeLatest(GET_CLEAR_SCHEDULING, onGetClearScheduling)
   yield takeLatest(GET_SEND_BULK_SHIPMENT, onGetSendBulkShipment)
-  yield takeLatest(GET_RUN_AUTO_SCHEDULING, onGetRunAutoScheduling)  
+  yield takeLatest(GET_RUN_AUTO_SCHEDULING, onGetRunAutoScheduling)
   yield takeLatest(GET_DELETE_MULTIPLE_ORDER, onGetDeleteMultipleOrder)
   yield takeLatest(GET_CROSS_TERMINAL, onGetCrossTerminal)
-  yield takeLatest(PROCESS_PAYMENT_IN_GANTT_CHART , sendRequestPaymentInGanttChart)
-  yield takeLatest(CANCEL_PAYMENT_IN_GANTT_CHART , sendRequestCancelPaymentInGanttChart)
-  yield takeLatest(SEND_ORDER_IN_GANTT_CHART , sendRequestOrderPaymentInGanttChart)
+  yield takeLatest(PROCESS_PAYMENT_IN_GANTT_CHART, sendRequestPaymentInGanttChart)
+  yield takeLatest(CANCEL_PAYMENT_IN_GANTT_CHART, sendRequestCancelPaymentInGanttChart)
+  yield takeLatest(SEND_ORDER_IN_GANTT_CHART, sendRequestOrderPaymentInGanttChart)
   yield takeLatest(GET_RTS_GANTT_CHART_DATA, onGetRTSOrderBankGanttChart)
   yield takeLatest(DRAG_RTS_ORDER_BANK_TO_GANTT_CHART, onDragOrderBankToGanttChart)
   yield takeLatest(REMOVE_ORDER_FROM_SHIPMENT, onRemoveOrderFromShipment)

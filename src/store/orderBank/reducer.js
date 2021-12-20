@@ -50,7 +50,10 @@ import {
   GET_DELETE_MULTIPLE_ORDER_FAIL,
   SEND_ORDER_BANK_DN_FAIL,
   SEND_ORDER_BANK_DN_SUCCESS,
+  DRAG_RTS_ORDER_BANK_TO_GANTT_CHART_FAIL,
+  CLEAR_GANTT_DATA,
 } from "./actionTypes"
+import { eventGanttChartFactory } from "./factory"
 import { ToastSuccess, ToastError } from "../../helpers/swal"
 
 const initialState = {
@@ -78,6 +81,8 @@ const initialState = {
   ganttChartTableData: [],
   ganttChartTableFilter: {},
   totalRow_ganttChart: 0,
+  ganttChartEventData: [],
+  dropOderSuccess: false,
 }
 
 const RTSOrderBank = (state = initialState, action) => {
@@ -189,7 +194,11 @@ const RTSOrderBank = (state = initialState, action) => {
     case GET_DELETE_MULTIPLE_ORDER_FAIL:
       return {
         ...state,
+<<<<<<< HEAD
+        multipleorder: action.payload,
+=======
         multipleorder: action.payload
+>>>>>>> a3b4c233d1d02fdbeed279f4868ef22330e5fb2f
       }
     case UPDATE_ORDERBANK_TABLE_INFORMATION_SUCCESS: {
       // notify.success("Record Successfully Updated")
@@ -218,14 +227,22 @@ const RTSOrderBank = (state = initialState, action) => {
         ...state,
         currentOrderDetail: null,
         deleteresponse: action.payload,
+<<<<<<< HEAD
+        deleteSuccess: true,
+=======
         deleteSuccess: true
+>>>>>>> a3b4c233d1d02fdbeed279f4868ef22330e5fb2f
       }
     }
     case DELETE_ORDERBANK_DETAIL_FAIL:
       return {
         ...state,
         deleteresponse: action.payload,
+<<<<<<< HEAD
+        deleteSuccess: false,
+=======
         deleteSuccess: false
+>>>>>>> a3b4c233d1d02fdbeed279f4868ef22330e5fb2f
       }
     case VIEW_ORDERBANK_DETAIL_SUCCESS: {
       return {
@@ -294,21 +311,34 @@ const RTSOrderBank = (state = initialState, action) => {
         error: action.payload,
       }
     case GET_RTS_GANTT_CHART_DATA_SUCCESS: {
-      const { data, scrolling } = action.payload
+      const { data, scrolling, page } = action.payload
       const { list, total_rows, filter } = data
-      if (state.ganttChartTableData.length !== 0 && scrolling) {
+      // add id to mapping with event
+      const newList = list?.map(vehicle => ({ ...vehicle, id: vehicle?.vehicle }))
+      if (state.ganttChartTableData.length !== 0 && scrolling && page > 0) {
         return {
           ...state,
-          ganttChartTableData: [...state.ganttChartTableData, ...list],
+          ganttChartTableData: [...state.ganttChartTableData, ...newList],
+          ganttChartEventData: eventGanttChartFactory(list),
           totalRow_ganttChart: total_rows,
         }
       }
       return {
         ...state,
-        ganttChartTableData: list,
+        ganttChartTableData: newList,
+        ganttChartEventData: eventGanttChartFactory(list),
         totalRow_ganttChart: total_rows,
         ganttChartTableFilter: filter,
+        dropOderSuccess: false,
         //ganttChart: action.payload
+      }
+    }
+    case CLEAR_GANTT_DATA: {
+      return {
+        ...state,
+        ganttChartTableData: [],
+        ganttChartEventData: [],
+        dropOderSuccess: false,
       }
     }
     case GET_RTS_GANTT_CHART_DATA_FAIL: {
@@ -341,37 +371,15 @@ const RTSOrderBank = (state = initialState, action) => {
     }
 
     case DRAG_RTS_ORDER_BANK_TO_GANTT_CHART_SUCCESS: {
-      if (!state.selectedVehicleShipment || !state.selectedVehicleShipment?.resourceId) return state
-      const newOrderBankTableData =
-        state.orderBankTableData &&
-        [...state.orderBankTableData].filter(record => !record.isChecked)
-      const { resourceId } = state.selectedVehicleShipment
-      const resourceEventIndex =
-        state.ganttChart.event &&
-        state.ganttChart.event.length > 0 &&
-        state.ganttChart.event.findIndex(({ resourceId: id }) => id === resourceId)
-      if (resourceEventIndex < 0) return state
-      if (!state.ganttChart.event[resourceEventIndex].shipments) {
-        state.ganttChart.event[resourceEventIndex].shipments = []
-        state.ganttChart.event[resourceEventIndex].shipments.push({
-          id: Math.random(),
-          orders: action.dropData,
-        })
-      } else {
-        state.ganttChart.event[resourceEventIndex].shipments.push({
-          id: Math.random(),
-          orders: action.dropData,
-        })
-      }
       return {
         ...state,
-        orderBankTableData: newOrderBankTableData
-          ? newOrderBankTableData
-          : state.orderBankTableData,
-        ganttChart: {
-          ...state.ganttChart,
-          event: [...state.ganttChart.event],
-        },
+        dropOderSuccess: true,
+      }
+    }
+    case DRAG_RTS_ORDER_BANK_TO_GANTT_CHART_FAIL: {
+      return {
+        ...state,
+        dropOderSuccess: false,
       }
     }
     case REMOVE_ORDER_FROM_SHIPMENT_SUCCESS: {
@@ -490,12 +498,14 @@ const RTSOrderBank = (state = initialState, action) => {
       }
     }
     case UPDATE_OB_RT_DETAILS_SUCCESS: {
+      ToastSuccess.fire()
       return {
         ...state,
-        orderBankRTDetails: action.params,
+        // orderBankRTDetails: action.params,
       }
     }
     case UPDATE_OB_RT_DETAILS_FAIL: {
+      ToastError.fire()
       return {
         ...state,
       }

@@ -25,13 +25,21 @@ import EditIcon from "assets/images/AWSM-Edit-Icon.svg"
 import TrashIcon from "assets/images/AWSM-Trash-Icon.svg"
 import NoDataIcon from "assets/images/AWSM-No-Data-Available.svg"
 import DeleteOrderBankConfirmation from "../deleteOrderBankModal"
-import EditOrderBankModal from "../editOrderBankModal"  
+import EditOrderBankModal from "../editOrderBankModal"
 import ConfirmDNStatusModal from "./confirmDNStatusModal"
-import {deleteOrderBankDetail, sendDNStatusRequest, updateOrderBankTableData, viewOrderBankDetail, getRTSOrderBankTableData} from "../../../store/actions"
-import {Draggable, Droppable} from "react-beautiful-dnd"
+import {
+  deleteOrderBankDetail,
+  sendDNStatusRequest,
+  updateOrderBankTableData,
+  viewOrderBankDetail,
+  getRTSOrderBankTableData,
+  dragOrderBankToGanttChart,
+} from "store/actions"
+import { Draggable, Droppable, DragDropContext } from "react-beautiful-dnd"
 import InfiniteScroll from "react-infinite-scroll-component"
 import AWSMAlert from "components/Common/AWSMAlert"
 import { transformObjectToStringSentence } from "pages/DQM/Common/helper"
+import { format } from "date-fns"
 
 export class TableGroupEvent extends React.Component {
   constructor(props) {
@@ -40,7 +48,6 @@ export class TableGroupEvent extends React.Component {
       openDropDown: false,
       isOpenDeleteModal: false,
       isOpenEditModal: false,
-
     }
   }
 
@@ -48,14 +55,13 @@ export class TableGroupEvent extends React.Component {
     this.setState({ openDropDown: !this.state.openDropDown })
   }
 
-  getEditCancel = (type, val = '') => {
-    this.setState({isOpenEditModal: false})
-    this.props.editAlert(type, val);
+  getEditCancel = (type, val = "") => {
+    this.setState({ isOpenEditModal: false })
+    this.props.editAlert(type, val)
   }
 
   OnClickEditHandler = () => {
-    
-    this.setState({isOpenEditModal: !this.state.isOpenEditModal})
+    this.setState({ isOpenEditModal: !this.state.isOpenEditModal })
     this.props.viewRecords(this.props.allData)
   }
 
@@ -74,8 +80,8 @@ export class TableGroupEvent extends React.Component {
   }
 
   render() {
-    const {openDropDown} = this.state
-    const {index, isChecked, viewData, editable = true} = this.props
+    const { openDropDown } = this.state
+    const { index, isChecked, editable = true } = this.props
     return (
       <>
         <DragIndicatorIcon style={{ color: "#D9D9D9", transform: "translateX(5px)" }} />
@@ -125,7 +131,7 @@ export class TableGroupEvent extends React.Component {
             onCancel={() => this.setState({ isOpenDeleteModal: false })}
           />
         )}
-        
+
         {this.state.isOpenEditModal && (
           <EditOrderBankModal
             open={this.state.isOpenEditModal}
@@ -159,14 +165,21 @@ class index extends Component {
       },
       currentPage: 1,
       showEditAlert: false,
+<<<<<<< HEAD
+      showEditMsg: "",
+      callDelete: false,
+      showDeleteMsg: "",
+=======
       showEditMsg: '',
       callDelete: false,
       showDeleteMsg: '',
+>>>>>>> a3b4c233d1d02fdbeed279f4868ef22330e5fb2f
       showDelete: false,
     }
+    this.onDragEnd = this.onDragEnd.bind(this)
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     // if(!isEqual(nextProps.dataSource,this.props.dataSource)){
     if (nextProps.dataSource !== this.props.dataSource) {
       this.setState({ dataSource: nextProps.dataSource, filterData: nextProps.headerFilters })
@@ -279,16 +292,11 @@ class index extends Component {
     return this.props.tableColumns.map(v => {
       let typeOfColumn = tableMapping[v]?.type
       let result
-      
+
       switch (typeOfColumn) {
         case "priority_type":
           result = (
             <td>
-              {/* {data[v] &&
-                data[v].map(e => { 
-                  return*/}
-                   {/* <span className={`circle ${data[v]}`}>{data[v]}</span> */}
-                {/* })} */}
               {_.isArray(data[v]) &&
                 data[v].map(e => {
                   return <span className={`circle ${e}`}>{e}</span>
@@ -310,6 +318,15 @@ class index extends Component {
             </td>
           )
           break
+        case "date":
+          result = (
+            <td>
+              <div className="custom-td-overflow">
+                {data[v] ? format(new Date(data[v].toString()), "dd-MM-yyyy") : ""}
+              </div>
+            </td>
+          )
+          break
         default:
           result = (
             <td>
@@ -324,6 +341,18 @@ class index extends Component {
 
   OnDeleteRecords = async allData => {
     const { onGetDeleteOrderBankDetail } = this.props
+<<<<<<< HEAD
+    await onGetDeleteOrderBankDetail(allData.id)
+    // setTimeout(function(){  this.setState( prevState => ({ callDelete: true })); }, 1000);
+    await this.setState({ callDelete: true })
+  }
+
+  CallTable = async () => {
+    const { getRTSOrderBankTableData, payloadFilter } = this.props
+    if ((await this.props.deleteSuccess) !== undefined && this.state.callDelete === true) {
+      if (this.props.deleteSuccess === true) {
+        setTimeout(async function () {
+=======
     await onGetDeleteOrderBankDetail(allData.id);
     // setTimeout(function(){  this.setState( prevState => ({ callDelete: true })); }, 1000);
     await this.setState({callDelete: true});
@@ -334,6 +363,7 @@ class index extends Component {
     if(await this.props.deleteSuccess !== undefined && this.state.callDelete === true){
       if(this.props.deleteSuccess === true) {
         setTimeout(async function(){
+>>>>>>> a3b4c233d1d02fdbeed279f4868ef22330e5fb2f
           await getRTSOrderBankTableData({
             limit: 10,
             page: payloadFilter.currentPage,
@@ -343,6 +373,22 @@ class index extends Component {
             sort_dir: "asc",
             sort_field: "vehicle",
             filter: payloadFilter.filterOrderBank,
+<<<<<<< HEAD
+          })
+        }, 2000)
+        await this.setState({ callDelete: false })
+        await this.setState({
+          showDeleteMsg: this.props.deleteSuccess === true ? "success" : "error",
+        })
+        await this.setState({ showDelete: true })
+      }
+    }
+  }
+
+  OnViewRecords = async allData => {
+    const { onGetViewOrderBankDetail } = this.props
+    await onGetViewOrderBankDetail(allData.id)
+=======
           });           
         }, 2000);  
         await this.setState({callDelete: false});
@@ -355,22 +401,33 @@ class index extends Component {
   OnViewRecords = async (allData) => {
     const { onGetViewOrderBankDetail } = this.props
     await onGetViewOrderBankDetail(allData.id);
+>>>>>>> a3b4c233d1d02fdbeed279f4868ef22330e5fb2f
   }
 
   editAlert = (type, val) => {
-    type === 'edit' && this.setState({showEditAlert: true});
-    val !== '' ? this.setState({showEditMsg: val}) : this.setState({showEditAlert: ''});
+    type === "edit" && this.setState({ showEditAlert: true })
+    val !== "" ? this.setState({ showEditMsg: val }) : this.setState({ showEditAlert: "" })
   }
 
   DataOfTableFixed = () => {
     const { dataSource } = this.state
     return dataSource.map((v, i) => {
-      return <tr key={i} className={v.isChecked ? "selected-row" : "bg-white"}>
-        <th>
-          <TableGroupEvent index={i} allData={v} isChecked={v.isChecked} Onchange={this.OnChangeCheckBoxHandler}
-           deleteRecords={this.OnDeleteRecords} viewRecords={this.OnViewRecords} editAlert={this.editAlert} viewData={this.props.viewData}/>
-        </th>
-      </tr>
+      return (
+        <tr key={i} className={v.isChecked ? "selected-row" : "bg-white"}>
+          <th>
+            <TableGroupEvent
+              index={i}
+              allData={v}
+              isChecked={v.isChecked}
+              Onchange={this.OnChangeCheckBoxHandler}
+              deleteRecords={this.OnDeleteRecords}
+              viewRecords={this.OnViewRecords}
+              editAlert={this.editAlert}
+              viewData={this.props.viewData}
+            />
+          </th>
+        </tr>
+      )
     })
   }
 
@@ -453,8 +510,17 @@ class index extends Component {
     onChangeCurrentPage()
   }
 
+  onDragEnd() {
+    const { dragOrderBankToGanttChart } = this.props
+    dragOrderBankToGanttChart()
+  }
+
   render() {
+<<<<<<< HEAD
+    this.props.deleteSuccess !== undefined && this.CallTable() //setTimeout(function(){  }, 1000);
+=======
     this.props.deleteSuccess !== undefined && this.CallTable(); //setTimeout(function(){  }, 1000); 
+>>>>>>> a3b4c233d1d02fdbeed279f4868ef22330e5fb2f
     const { selectedAllItem, expandSearch, DNStatus } = this.state
     const { dataSource } = this.state
     const { totalRow } = this.props
@@ -486,64 +552,66 @@ class index extends Component {
               </table>
             ) : null}
             <div className="scroll">
-              {/* <DragDropContext onDragEnd={(r) => console.log(r)}> */}
-              <Droppable droppableId="order-bank-table" isDropDisabled={true}>
-                {provided => (
-                  <table
-                    {...provided.droppableProps}
-                    ref={provided.innerRef}
-                    className={`scrollable ${!dataSource.length ? "bd-left" : ""}`}
-                  >
-                    <thead>
-                      <tr>{this.headerTableConfiguration()}</tr>
-                    </thead>
-                    <tbody>
-                      {dataSource && dataSource.length ? (
-                        dataSource.map((v, index) => {
-                          return (
-                            <Draggable
-                              isDragDisabled={!v.isChecked}
-                              key={v.id}
-                              draggableId={index.toString()}
-                              index={index}
-                            >
-                              {(provided, snapshot) => (
-                                <>
-                                  <tr
-                                    className={`${
-                                      v.isChecked && !snapshot.isDragging ? "selected-row" : ""
-                                    } ${snapshot.isDragging ? "tr-dragging" : ""}`}
-                                    ref={provided.innerRef}
-                                    {...provided.draggableProps}
-                                    {...provided.dragHandleProps}
-                                    style={this.getStyle(provided.draggableProps.style, snapshot)}
-                                  >
-                                    {this.bodyTableConfiguration(v, snapshot.isDragging)}
-                                  </tr>
-                                  {snapshot.isDragging && (
-                                    <tr className={`${v.isChecked ? "selected-row" : "bg-white"}`}>
-                                      {this.bodyTableConfiguration(v)}
+              <DragDropContext onDragEnd={this.onDragEnd}>
+                <Droppable droppableId="order-bank-table" isDropDisabled={true}>
+                  {provided => (
+                    <table
+                      {...provided.droppableProps}
+                      ref={provided.innerRef}
+                      className={`scrollable ${!dataSource.length ? "bd-left" : ""}`}
+                    >
+                      <thead>
+                        <tr>{this.headerTableConfiguration()}</tr>
+                      </thead>
+                      <tbody>
+                        {dataSource && dataSource.length ? (
+                          dataSource.map((v, index) => {
+                            return (
+                              <Draggable
+                                isDragDisabled={!v.isChecked}
+                                key={v.id}
+                                draggableId={index.toString()}
+                                index={index}
+                              >
+                                {(provided, snapshot) => (
+                                  <>
+                                    <tr
+                                      className={`${
+                                        v.isChecked && !snapshot.isDragging ? "selected-row" : ""
+                                      } ${snapshot.isDragging ? "tr-dragging" : ""}`}
+                                      ref={provided.innerRef}
+                                      {...provided.draggableProps}
+                                      {...provided.dragHandleProps}
+                                      style={this.getStyle(provided.draggableProps.style, snapshot)}
+                                    >
+                                      {this.bodyTableConfiguration(v, snapshot.isDragging)}
                                     </tr>
-                                  )}
-                                </>
-                              )}
-                            </Draggable>
-                          )
-                        })
-                      ) : (
-                        <tr>
-                          <td colSpan={18} className={"rts-table-nodata"}>
-                            <div>
-                              <img src={NoDataIcon} alt="No Data" />
-                            </div>
-                          </td>
-                        </tr>
-                      )}
-                    </tbody>
-                  </table>
-                )}
-              </Droppable>
-              {/* </DragDropContext> */}
+                                    {snapshot.isDragging && (
+                                      <tr
+                                        className={`${v.isChecked ? "selected-row" : "bg-white"}`}
+                                      >
+                                        {this.bodyTableConfiguration(v)}
+                                      </tr>
+                                    )}
+                                  </>
+                                )}
+                              </Draggable>
+                            )
+                          })
+                        ) : (
+                          <tr>
+                            <td colSpan={18} className={"rts-table-nodata"}>
+                              <div>
+                                <img src={NoDataIcon} alt="No Data" />
+                              </div>
+                            </td>
+                          </tr>
+                        )}
+                      </tbody>
+                    </table>
+                  )}
+                </Droppable>
+              </DragDropContext>
             </div>
           </div>
         </InfiniteScroll>
@@ -559,10 +627,29 @@ class index extends Component {
         {this.state.showEditAlert && (
           <AWSMAlert
             status={this.state.showEditMsg}
-            message={this.state.showEditMsg === 'success' ? "Order updated successfully" : "Order has not been update"}
+            message={
+              this.state.showEditMsg === "success"
+                ? "Order updated successfully"
+                : "Order has not been update"
+            }
             openAlert={this.state.showEditAlert}
-            closeAlert={() => this.setState({showEditAlert: false})}
+            closeAlert={() => this.setState({ showEditAlert: false })}
           />
+        )}
+        {this.state.showDelete && (
+          <AWSMAlert
+            status={this.state.showDeleteMsg}
+            message={
+              this.state.showDeleteMsg === "success"
+                ? "Order deleted successfully"
+                : "Order has not been deleted"
+            }
+            openAlert={this.state.showDelete}
+            closeAlert={() => this.setState({ showDelete: false })}
+          />
+<<<<<<< HEAD
+        )}
+=======
       )}
         {this.state.showDelete && (
           <AWSMAlert
@@ -572,6 +659,7 @@ class index extends Component {
             closeAlert={() => this.setState({showDelete: false})}
           />
       )}      
+>>>>>>> a3b4c233d1d02fdbeed279f4868ef22330e5fb2f
       </div>
     )
   }
@@ -587,6 +675,7 @@ const mapDispatchToProp = dispatch => ({
   getRTSOrderBankTableData: params => dispatch(getRTSOrderBankTableData(params)),
   onSendDNStatusRequest: params => dispatch(sendDNStatusRequest(params)),
   onGetViewOrderBankDetail: params => dispatch(viewOrderBankDetail(params)),
+  dragOrderBankToGanttChart: () => dispatch(dragOrderBankToGanttChart()),
 })
 const mapStateToProps = ({ orderBank }) => ({
   totalRow: orderBank.totalRow,

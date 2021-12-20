@@ -59,6 +59,7 @@ const tableMapping = {
   dn_date: {
     label: "DN Date",
     columnSize: "cell-text",
+    type: "date",
   },
   volume: {
     label: "Volume (L)",
@@ -67,10 +68,12 @@ const tableMapping = {
   retain: {
     label: "Retain",
     columnSize: "cell-text",
+    type: "date",
   },
   runout: {
     label: "Runout",
     columnSize: "cell-text",
+    type: "date",
   },
   "retail_storage_relation.sales_category": {
     label: "Product Category",

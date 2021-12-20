@@ -22,8 +22,29 @@ export function transformObjectToStringSentence(qObject) {
         newString = newString.concat("(")
         for (let [index, object] of qObject[key].entries()) {
           newString = newString.concat(key, "==", checkType(object))
-          if (index !== qObject[key].length - 1)
-            newString = newString.concat("||")
+          if (index !== qObject[key].length - 1) newString = newString.concat("||")
+        }
+        if (index !== keys.length - 1) newString = newString.concat(")&&")
+      } else {
+        newString = ""
+        newString = newString.concat("(")
+      }
+    }
+    newString = newString.concat(")")
+  }
+  return newString
+}
+
+export function transformObjectToStringSentenceRTS(qObject) {
+  let newString = ""
+  if (Object.keys(qObject).length !== 0 && qObject) {
+    const keys = Object.keys(qObject)
+    for (let [index, key] of keys.entries()) {
+      if (qObject[key].length !== 0) {
+        newString = newString.concat("(")
+        for (let [index, object] of qObject[key].entries()) {
+          newString = newString.concat(key, "==", `'${object}'`)
+          if (index !== qObject[key].length - 1) newString = newString.concat("||")
         }
         if (index !== keys.length - 1) newString = newString.concat(")&&")
       } else {
@@ -75,14 +96,14 @@ export function getCookieByKey(key) {
   }
 }
 
-export const isValidDate = (date) => {
-  return date && (
+export const isValidDate = date => {
+  return (
+    date &&
     date.type &&
     ((date.type === "every" && date.days && date.days.length > 0) ||
       (date.type === "range" && (date.date_to || date.date_from)) ||
       date.type === "daily" ||
-      date.type === "single" && date.date_from
-    )
+      (date.type === "single" && date.date_from))
   )
 }
 
@@ -94,12 +115,7 @@ export const isValidDateTime = date => {
   if (!date.time_from && !date.time_to && !isValidDate(date)) {
     return true
   }
-  return (
-    date.type &&
-    date.time_from &&
-    date.time_to &&
-    isValidDate(date)
-  )
+  return date.type && date.time_from && date.time_to && isValidDate(date)
 }
 
 export const runValidation = data => {
@@ -118,13 +134,13 @@ export const runValidation = data => {
     const validateContact = Object.keys(data.contact).map(key => {
       const contactKey = key.split("_").pop()
       if (key.startsWith("contact_") && data.contact[key] && contactKey > 1 && contactKey < 4) {
-        if (
-          data.contact[key].number &&
-          !/^\+?[0-9- ]+$/.test(data.contact[key].number)
-        ) {
+        if (data.contact[key].number && !/^\+?[0-9- ]+$/.test(data.contact[key].number)) {
           return false
         }
-        if (data.contact[key].email && !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(data.contact[key].email)) {
+        if (
+          data.contact[key].email &&
+          !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(data.contact[key].email)
+        ) {
           return false
         }
       }
@@ -144,7 +160,10 @@ export const runValidation = data => {
   if (data.delivery) {
     return Object.keys(data.delivery).every(key => {
       const intervalNumber = key.split("_").pop()
-      if ((key.startsWith("actual_open_time") && intervalNumber < 3) || (key.startsWith("no_delivery_interval") && intervalNumber > 2 && intervalNumber <= 5)) {
+      if (
+        (key.startsWith("actual_open_time") && intervalNumber < 3) ||
+        (key.startsWith("no_delivery_interval") && intervalNumber > 2 && intervalNumber <= 5)
+      ) {
         return isValidDateTime(data.delivery[key])
       }
       return true
@@ -157,29 +176,20 @@ export const removeKeywords = string => {
   const newString = string.toString() ? string.toString() : string
   return newString
     ? newString
-      .toString()
-      .replace(
-        "Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday",
-        "Every day"
-      )
-      .replace(
-        "every Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday",
-        "Every day"
-      )
-      .replace(
-        "every Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday",
-        "Every day"
-      )
-      .replace("every ", "")
-      .replace("daily ", "Every day")
-      .replace("daily", "Every day")
-      .replace("range ", "")
-      .replace("single ", "")
-      .replace("0:00", "0")
-      .replace("null", "-")
-      .replace("None", "-")
-      .replace("true", "Y")
-      .replace("false", "N")
+        .toString()
+        .replace("Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday", "Every day")
+        .replace("every Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday", "Every day")
+        .replace("every Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday", "Every day")
+        .replace("every ", "")
+        .replace("daily ", "Every day")
+        .replace("daily", "Every day")
+        .replace("range ", "")
+        .replace("single ", "")
+        .replace("0:00", "0")
+        .replace("null", "-")
+        .replace("None", "-")
+        .replace("true", "Y")
+        .replace("false", "N")
     : newString
 }
 

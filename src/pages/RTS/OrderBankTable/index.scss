@@ -26,6 +26,11 @@
                                 cursor: pointer;
                             }
                         }
+                        span{
+                            &:hover{
+                                cursor: pointer;
+                            }
+                        }
                     }
                 }
                 tbody{

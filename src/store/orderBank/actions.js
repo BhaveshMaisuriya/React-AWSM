@@ -89,6 +89,9 @@ import {
   GET_RUN_AUTO_SCHEDULING_SUCCESS,
   GET_RUN_AUTO_SCHEDULING_FAIL,
   CLEAR_GANTT_DATA,
+  GET_SHIPMENT_DETAIL_SUCCESS,
+  GET_SHIPMENT_DETAIL_FAIL,
+  GET_SHIPMENT_DETAIL
 } from "./actionTypes"
 
 export const getRTSOrderBankTableData = params => ({
@@ -531,4 +534,19 @@ export const updateOBRTDetailsFail = error => ({
 
 export const clearGanttData = () => ({
   type: CLEAR_GANTT_DATA,
+})
+
+export const getShipmentDetail = params => ({
+  type: GET_SHIPMENT_DETAIL,
+  params,
+})
+
+export const getShipmentDetailSuccess = response => ({
+  type: GET_SHIPMENT_DETAIL_SUCCESS,
+  payload: response,
+})
+
+export const getShipmentDetailFail = error => ({
+  type: GET_SHIPMENT_DETAIL_FAIL,
+  payload: error,
 })

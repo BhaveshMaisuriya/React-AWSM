@@ -94,7 +94,28 @@ function BryntumChartTable(props) {
     getRTSOderBankGanttChart(payload)
   }
 
+  const refreshGanttChartTable = () => {
+    props.clearGanttData()
+    setCurrentPage(0)
+    const { getRTSOderBankGanttChart } = props
+    const payload = {
+      limit: 10,
+      page: 0,
+      search_fields: "*",
+      q: "",
+      sort_dir: "desc",
+      sort_field: "vehicle",
+      filter: {
+        shift_date: props?.dateConfig,
+      },
+    }
+    setTimeout(() => {
+      getRTSOderBankGanttChart(payload)
+    }, 1000)
+  }
+
   useEffect(getGanttCharData, [currentPage])
+
   useEffect(() => {
     if (dropOderSuccess) {
       getGanttCharData(0)
@@ -112,7 +133,6 @@ function BryntumChartTable(props) {
 
   useEffect(() => {
     setTableData(props.ganttChartTableData)
-    //setEventsData(props.ganttChartData.event)
   }, [props.ganttChartTableData])
 
   const toggle = () => setModal(!modal)
@@ -270,7 +290,7 @@ function BryntumChartTable(props) {
         ShipmentDblclickModal(eventRecord)
       },
       beforeEventDropFinalize: async ({ context }) => {
-        const { instance: scheduler } = schedulerProRef.current
+        // const { instance: scheduler } = schedulerProRef.current
         const { eventRecord } = context
         context.async = true
         context.finalize(true)
@@ -278,8 +298,8 @@ function BryntumChartTable(props) {
         await updateOBEvent(eventRecord._data)
       },
       afterEventDrop({ eventRecord }) {
-        const { instance: scheduler } = schedulerProRef.current
-        setAlertOverruleShow("soft")
+        // const { instance: scheduler } = schedulerProRef.current
+        // setAlertOverruleShow("soft")
       },
     },
     eventRenderer: ({ eventRecord, renderData }) => {
@@ -762,6 +782,7 @@ function BryntumChartTable(props) {
         region={props.region}
         terminal={props.terminal}
         shiftDate={props.dateConfig.date_from}
+        refreshTable={refreshGanttChartTable}
       />
       <AlertOverruleModal
         alertType={alertOverruleShow}

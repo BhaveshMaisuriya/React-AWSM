@@ -458,6 +458,10 @@ export const updateRTSOrderbankRTdetails = params => {
   return axios.put(`${url.GET_RTS_GANTT_CHART}/${params.vehicle}`, { ...params })
 }
 
+export const getShipmentDetail = params => {
+  return axios.get(`rts/shipment/${params}`)
+}
+
 export {
   getLoggedInUser,
   isUserAuthenticated,

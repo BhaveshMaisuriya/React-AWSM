@@ -86,6 +86,26 @@ function BryntumChartTable(props) {
     )
   }, [bryntumCurrentColumns])
 
+  const refreshGanttChartTable = () => {
+    props.clearGanttData()
+    setCurrentPage(0)
+    const { getRTSOderBankGanttChart } = props
+    const payload = {
+      limit: 11,
+      page: 0,
+      search_fields: "*",
+      q: "",
+      sort_dir: "desc",
+      sort_field: "vehicle",
+      filter: {
+        shift_date: dateConfig,
+      },
+    }
+    setTimeout(() => {
+      getRTSOderBankGanttChart(payload)
+    }, 1000)
+  }
+
   const toggle = () => setModal(!modal)
 
   const removeShipmentHandler = () => {
@@ -433,6 +453,7 @@ function BryntumChartTable(props) {
         region={props.region}
         terminal={props.terminal}
         shiftDate={props.dateConfig.date_from}
+        refreshTable={refreshGanttChartTable}
       />
     </div>
   )

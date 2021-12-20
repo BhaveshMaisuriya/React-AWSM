@@ -28,6 +28,7 @@ import {
   UPDATE_OB_EVENT,
   GET_OB_RT_DETAILS,
   UPDATE_OB_RT_DETAILS,
+  GET_SHIPMENT_DETAIL
 } from "./actionTypes"
 
 import {
@@ -77,6 +78,8 @@ import {
   getCrossTerminalSuccess,
   getCrossTerminalFail,
   dragOrderBankToGanttChartFail,
+  getShipmentDetailSuccess,
+  getShipmentDetailFail,
 } from "./actions"
 import {
   getOrderBank,
@@ -99,6 +102,7 @@ import {
   sendOderToVehicle,
   getRTSOrderbankRTdetails,
   updateRTSOrderbankRTdetails,
+  getShipmentDetail,
 } from "../../helpers/fakebackend_helper"
 
 function* onGetOrderbank({ params = {} }) {
@@ -384,6 +388,15 @@ function* onUpdateOBRTDetails(payload) {
   }
 }
 
+function* onGetShipmentDetails(payload) {
+  try {
+    const response = yield call(getShipmentDetail, payload.params)
+    yield put(getShipmentDetailSuccess(response.data))
+  } catch (error) {
+    yield put(getShipmentDetailFail(error))
+  }
+}
+
 function* orderBankSaga() {
   yield takeLatest(GET_ORDERBANK, onGetOrderbank)
   yield takeLatest(ADD_ORDERBANK, onAddOrderbank)
@@ -413,6 +426,7 @@ function* orderBankSaga() {
   yield takeLatest(UPDATE_OB_EVENT, onUpdateEvent)
   yield takeLatest(GET_OB_RT_DETAILS, onGetOBRTDetails)
   yield takeLatest(UPDATE_OB_RT_DETAILS, onUpdateOBRTDetails)
+  yield takeLatest(GET_SHIPMENT_DETAIL, onGetShipmentDetails)
 }
 
 export default orderBankSaga

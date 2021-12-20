@@ -21,6 +21,7 @@ import AuditLog from "components/Common/AuditLog"
 import "./style.scss"
 import MoreVertIcon from "@material-ui/icons/MoreVert"
 import { IconButton, MenuItem } from "@material-ui/core"
+// import { CustomEyeIcon } from "pages/DQM/Common/icon"
 import awsmLogo from "assets/images/AWSM-logo-order-bank.png"
 import NewOrderModal from "./addOrderBankModal"
 import DateRangePicker from "components/Common/DateRangePicker"
@@ -93,18 +94,23 @@ import {
 import { isNull } from "lodash"
 import { removeKeywords } from "../DQM/Common/helper"
 import ClearScheduling from "./clearScheduling"
-import { transformObjectToStringSentenceRTS, filterObject } from "./../DQM/Common/helper"
+import {
+  transformArrayToString,
+  transformObjectToStringSentence,
+  filterObject,
+} from "./../DQM/Common/helper"
 const UntickIcon = () => <img src={selectAllIcon3} alt="icon" />
 const CheckedIcon = () => <img src={selectAllIcon2} alt="icon" />
 
 import { ReactSVG } from "react-svg"
 import UploadDMRModal from "./uploadDMRModal"
 import DeleteMultipleModal from "./deleteMultiple"
-// import { sendMessage } from "SocketService"
+import { sendMessage } from "SocketService"
 
 function OrderBank({
   getRTSOrderBankTableData,
   orderBankTableData,
+  crossTerminalDetails,
   orderBankTableFilters,
   sendOrderBankDN,
   refreshOderBankDN,
@@ -115,7 +121,7 @@ function OrderBank({
   onGetDeleteMultipleOrder,
   onGetCrossTerminal,
   dragOrderBankToGanttChart,
-  // socketData,
+  socketData,
   multipleorder,
   getRTSOderBankGanttChart,
   clearGanttData,
@@ -132,7 +138,7 @@ function OrderBank({
   const [dropdownOpen, setOpen] = useState(false)
   const [crossTerminal, setCrossTerminal] = useState(false)
   const [showAddNotification, setShowAddNotification] = useState(false)
-  const [notiMessage, setNotiMessage] = useState("")
+  const [notiMessage, setNotiMessage] = useState('')
   const [uploadDmr, setUploadDmr] = useState(false)
   const [deleteMultiple, setDeleteMultiple] = useState(false)
   const [showNewOrder, setShowNewOrder] = useState(false)
@@ -144,7 +150,7 @@ function OrderBank({
   const [region, setRegion] = useState(REGION_TERMINAL[0].region)
   const [terminal, setTerminal] = useState(REGION_TERMINAL[0].terminal[0])
   const [regionBank, setRegionBank] = useState(REGION_TERMINAL[0].region)
-  const [terminalBank, setTerminalBank] = useState(REGION_TERMINAL[0].terminal[0])
+  const [terminalBank, setTerminalBank] = useState(REGION_TERMINAL[0].terminal[0])  
   const [refreshDNModal, setRefreshDNModal] = useState(false)
   const [displayAutoModal, setDisplayAutoModal] = useState(false)
   const [showClearAlert, setShowClearAlert] = useState(false)
@@ -169,7 +175,7 @@ function OrderBank({
   const [checkedValue, setCheckedValue] = useState("Manual Scheduling")
   const [isCustomizeGanttModalOpen, setIsCustomizeGanttModalOpen] = useState(false)
   const [multipleDeleteIds, setMultipleDeleteIds] = useState(false)
-  const [deleteMultipleStatus, setDeleteMultipleStatus] = useState("")
+  const [deleteMultipleStatus, setDeleteMultipleStatus] = useState('');
   const [showDeleteMultiple, setShowDeleteMultiple] = useState(false)
   const [bryntumCurrentColumns, setBryntumCurrentColumns] = useState(() => {
     if (!getCookieByKey(bryntumSchedulerTableNameForCookie)) return ganttChartTableDefaultColumns
@@ -207,7 +213,6 @@ function OrderBank({
       })
     }, 100)
   }, [shiftDate])
-
   useEffect(() => {
     const results = { DNs: 3, shipment: 2, backlog: 0, SR: 0, HP: 0 }
     if (ganttChartEvents) {
@@ -248,16 +253,12 @@ function OrderBank({
       page: currentPage,
       // search_fields: transformArrayToString(searchFields),
       search_fields: "*",
-      q: transformObjectToStringSentenceRTS(filterQuery),
+      q: transformObjectToStringSentence(filterQuery),
       sort_dir: "asc",
       sort_field: "vehicle",
       filter: filterOrderBank,
-    })
-    setPayloadFilter({
-      filterOrderBank: filterOrderBank,
-      currentPage: currentPage,
-      filterQuery: filterQuery,
-    })
+    }); payloadFilter
+    setPayloadFilter({filterOrderBank: filterOrderBank, currentPage:currentPage, filterQuery:filterQuery});
   }, [filterOrderBank, currentPage, filterQuery])
 
   const toggle = () => setOpen(!dropdownOpen)
@@ -270,7 +271,7 @@ function OrderBank({
   const terminalListBank = useMemo(() => {
     const currentRegion = REGION_TERMINAL.find(e => e.region === region)
     return currentRegion ? currentRegion.terminalBank : []
-  }, [region])
+  }, [region])  
 
   const onSettingClick = val => {
     if (val === "newOrder") {
@@ -310,27 +311,27 @@ function OrderBank({
     await onGetDeleteMultipleOrder(payload)
     setDeleteMultiple(false)
     let temp = [...orderBankSetting]
-    temp.map(function (item) {
-      if (item.value === "DeleteMultiple") {
-        item.disabled = true
-      }
-    })
-    setOrderBankSetting(temp)
+      temp.map(function (item) {
+        if (item.value === "DeleteMultiple") {
+          item.disabled = true
+        }
+      })
+      setOrderBankSetting(temp)
   }
 
   useEffect(() => {
-    if (multipleorder) {
+    if(multipleorder) {
       getRTSOrderBankTableData({
         limit: 10,
         page: payloadFilter.currentPage,
         // search_fields: transformArrayToString(searchFields),
         search_fields: "*",
-        q: transformObjectToStringSentenceRTS(payloadFilter.filterQuery),
+        q: transformObjectToStringSentence(payloadFilter.filterQuery),
         sort_dir: "asc",
         sort_field: "vehicle",
         filter: payloadFilter.filterOrderBank,
-      })
-      setDeleteMultipleStatus(multipleorder.order_banks !== undefined ? "success" : "error")
+      }); 
+      setDeleteMultipleStatus((multipleorder.order_banks !== undefined) ? 'success' : 'error');
       setShowDeleteMultiple(true)
     }
   }, [multipleorder])
@@ -339,26 +340,26 @@ function OrderBank({
     setCrossTerminal(false)
   }
 
-  const onSaveCrossTerminal = async (region, terminal) => {
-    const payload = { order_id: multipleDeleteIds, terminal: terminal }
-    await onGetCrossTerminal(payload)
+  const onSaveCrossTerminal = async (region, terminal) => { 
+    const payload = { order_id: multipleDeleteIds, terminal: terminal };
+    await onGetCrossTerminal(payload);
     setCrossTerminal(false)
   }
 
-  const onCloseNewOrder = (type, val = "") => {
+  const onCloseNewOrder = (type, val = '') => {
     setShowNewOrder(false)
-    type === "add" && setShowAddNotification(true)
-    val === "success" ? setNotiMessage("success") : setNotiMessage("error")
+    type === 'add' && setShowAddNotification(true);
+    val === 'success' ? setNotiMessage('success') : setNotiMessage('error');
     getRTSOrderBankTableData({
       limit: 10,
       page: payloadFilter.currentPage,
       // search_fields: transformArrayToString(searchFields),
       search_fields: "*",
-      q: transformObjectToStringSentenceRTS(payloadFilter.filterQuery),
+      q: transformObjectToStringSentence(payloadFilter.filterQuery),
       sort_dir: "asc",
       sort_field: "vehicle",
       filter: payloadFilter.filterOrderBank,
-    })
+    }); 
   }
 
   const enabledCross = val => {
@@ -370,7 +371,8 @@ function OrderBank({
         }
       })
       setOrderBankSetting(temp)
-    } else {
+    }
+     else {
       let temp = [...orderBankSetting]
       temp.map(function (item) {
         if (item.value === "CrossTerminal" || item.value === "SendDN") {
@@ -581,7 +583,7 @@ function OrderBank({
       })
     setCurrentPage(0)
   }
-
+  
   useEffect(() => {
     const isItemSelected = !!orderBankTableData?.find(e => e.isChecked)
     const newSettings = [...orderBankSetting]
@@ -589,21 +591,21 @@ function OrderBank({
     if (sendDN) {
       sendDN.disabled = !isItemSelected
     }
-    setOrderBankSetting(newSettings)
+    setOrderBankSetting(newSettings);
   }, [orderBankTableData])
-
-  //Object literal checking icon type
-  const getIcon = type => {
-    var icons = {
-      customiseAddIcon: <AddOrderIcon />,
-      customiseTableBankIcon: <CustomizeTableIcon />,
-      customiseUploadIcon: <UploadIcon />,
-      customiseCrossTerminalIcon: <CrossTerminalIcon />,
-      customiseMultipleDNIcon: <MultipleDNIcon />,
-      customiseMultipleDeleteOrderIcon: <DeleteOrderIcon />,
+  
+    //Object literal checking icon type
+    const getIcon = type => {
+      var icons = {
+        customiseAddIcon: <AddOrderIcon />,
+        customiseTableBankIcon: <CustomizeTableIcon />,
+        customiseUploadIcon: <UploadIcon />,
+        customiseCrossTerminalIcon: <CrossTerminalIcon />,
+        customiseMultipleDNIcon: <MultipleDNIcon />,
+        customiseMultipleDeleteOrderIcon: <DeleteOrderIcon />,
+      }
+      return icons[type]
     }
-    return icons[type]
-  }
 
   return (
     <React.Fragment>
@@ -650,7 +652,7 @@ function OrderBank({
                         </span>
                       </a>
                       <span className="bl-1-grey-half plr-15">
-                        <Button color={"primary"} onClick={() => onClickRunAutoScheduling()}>
+                        <Button color={"primary"} disabled={terminal === terminalBank ? false : true} onClick={() => onClickRunAutoScheduling()}>
                           Run Auto Schedule
                         </Button>
                       </span>
@@ -940,11 +942,11 @@ function OrderBank({
                         {orderBankSetting.map((option, index) => {
                           return (
                             <MenuItem
-                              className="awsm-option-button-content-item-rts"
+                            className="awsm-option-button-content-item-rts"
                               disabled={option.disabled}
                               onClick={() => onSettingClick(option.value)}
                             >
-                              {getIcon(option.icon)}
+                               {getIcon(option.icon)}
                               <div className="pl-2" disabled key={index}>
                                 {option.label}
                               </div>
@@ -1097,7 +1099,7 @@ function OrderBank({
                   openAlert={showDeleteMultiple}
                   closeAlert={() => setShowDeleteMultiple(false)}
                 />
-              )}
+              )}              
             </Card>
           </div>
         </div>

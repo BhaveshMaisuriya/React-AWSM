@@ -4,6 +4,7 @@ import { Button, Modal, ModalFooter, ModalBody, ModalHeader, Row, Col } from "re
 import DatePicker from "../../components/Common/DatePicker"
 import ExitConfirmation from "../../components/Common/ExitConfirmation"
 import AWSMInput from "../../components/Common/Input"
+import FileCopyIcon from "@material-ui/icons/FileCopy"
 import AWSMDropdown from "../../components/Common/Dropdown"
 import AWSMAlert from "../../components/Common/AWSMAlert"
 import { getOrderBank, addOrderBank } from "../../store/actions"
@@ -15,10 +16,12 @@ import NoDataIcon from "assets/images/AWSM-No-Data-Available-Inverted.svg"
 const timeData = []
 for (let i = 0; i < 24; i++) {
   timeData.push(`${i.toString().padStart(2, "0")}:00`)
+  timeData.push(`${i.toString().padStart(2, "0")}:15`)
   timeData.push(`${i.toString().padStart(2, "0")}:30`)
+  timeData.push(`${i.toString().padStart(2, "0")}:45`)
 }
 timeData.push(`23:59`)
-const ORDER_PRIORITY = ["High Priority", "Low Priority"]
+const ORDER_PRIORITY = ["None", "High Priority"]
 const NewOrderBankModal = props => {
   const { open, onCancel } = props
 
@@ -28,8 +31,11 @@ const NewOrderBankModal = props => {
   const [shiptoNo, setShiptoNo] = useState("")
   const [progress, setProgress] = useState(0)
   const [showAlert, setShowAlert] = useState(false)
+  const [disableBtn, setdisableBtn] = useState(false)
   const [terminalList, setTerminalList] = useState([])
+  const [regionList, setRegionList] = useState([])
   const [productList, setProductList] = useState([])
+  const [inputValue, setInputValue] = useState("")
   const [inputValue1, setInputValue1] = useState("")
   const [inputValue2, setInputValue2] = useState("")
   const [inputValue3, setInputValue3] = useState("")
@@ -49,39 +55,51 @@ const NewOrderBankModal = props => {
     }
   }, [currentState])
 
+  useEffect(() => {
+    let temp = [];
+    REGION_TERMINAL.map((item, index) => {
+      temp.push(item.region);
+    })
+    setRegionList(temp) 
+  }, [REGION_TERMINAL])
+
   const onConfirmCancel = () => {
     setIsConfirm(false)
     setCurrentState("")
   }
 
-  const handleUpdate = async () => {
-    const temp = {
-      shift_date: shiftDate.toISOString().split("T")[0],
-      requested_delivery_date: shiftDate.toISOString().split("T")[0],
-      my_remark_1: orderData.myremark1 !== undefined ? orderData.myremark1 : "",
-      my_remark_2: orderData.myremark2 !== undefined ? orderData.myremark2 : "",
-      my_remark_3: orderData.myremark3 !== undefined ? orderData.myremark3 : "",
-      terminal: orderData.terminal !== undefined ? TERMINAL_CODE_MAPPING[orderData.terminal] : "",
-      volume: orderData.volume !== undefined ? parseInt(orderData.volume) : 0,
-      eta: orderData.eta !== undefined ? orderData.eta : "",
-      planned_load_time: orderData.load_time !== undefined ? orderData.load_time : "",
-      remarks: orderData.remarks !== undefined ? orderData.remarks : "",
-      priority: orderData.priority_order !== undefined ? orderData.priority_order : "",
-      retail_storage: parseInt(orderData.product_id),
+  const handleUpdate = async() => {
+    if((orderData?.myremark1?.length < 40 || orderData?.myremark2?.length < 40 || orderData?.myremark3?.length < 40)){
+      const temp = {
+        shift_date: shiftDate.toISOString().split('T')[0],
+        requested_delivery_date: shiftDate.toISOString().split('T')[0],
+        my_remark_1: orderData.myremark1 !== undefined ? orderData.myremark1 : '',
+        my_remark_2: orderData.myremark2 !== undefined ? orderData.myremark2 : '',
+        my_remark_3: orderData.myremark3 !== undefined ? orderData.myremark3 : '',
+        terminal: orderData.terminal !== undefined ? TERMINAL_CODE_MAPPING[orderData.terminal] : '',
+        volume: orderData.volume !== undefined ? parseInt(orderData.volume) : 0,
+        eta: orderData.eta !== undefined ? orderData.eta : '',
+        planned_load_time: orderData.load_time !== undefined ? orderData.load_time : '',
+        remarks: orderData.remarks !== undefined ? orderData.remarks : '',
+        priority: orderData.priority_order !== undefined ? orderData.priority_order : '',
+        retail_storage: parseInt(orderData.product_id),
+      };
+
+      const { onAddOrderBank } = props
+      await onAddOrderBank(temp);
+      setOrderData({});
+      setShiptoNo('');
+      setShiftDate(new Date(new Date().getTime() + 24 * 60 * 60 * 1000));
+    } else {
+      setdisableBtn(true);
     }
-
-    const { onAddOrderBank } = props
-    await onAddOrderBank(temp)
   }
-
+ 
   useEffect(() => {
-    if (props.addorderBankData) {
-      typeof props.addorderBankData === "object" && props.addorderBankData.status === undefined
-        ? onCancel("add", "success")
-        : onCancel("add", "error")
-      setShiftDate(new Date(new Date().getTime() + 24 * 60 * 60 * 1000))
-      setOrderData({})
-      setShiptoNo("")
+    if(props.addorderBankData) {
+      (typeof props.addorderBankData === 'object' && props.addorderBankData.status === undefined) ? onCancel('add', 'success') : onCancel('add', 'error');
+      
+
     }
   }, [props.addorderBankData])
 
@@ -90,7 +108,7 @@ const NewOrderBankModal = props => {
     setCurrentState("")
     setShiptoNo("")
     if (onCancel) {
-      onCancel("cancle")
+      onCancel('cancle')
     }
   }
 
@@ -111,28 +129,55 @@ const NewOrderBankModal = props => {
       newOrderData[key] = value
       newOrderData["product_code"] = pro_code.code
       newOrderData["product_id"] = pro_code.id
-      newOrderData["storeData"] = pro_code
+      newOrderData['storeData'] = pro_code;
       setOrderData(newOrderData)
-    } else if (key === "myremark1") {
-      setInputValue1(value)
-      if (value.length < 40) {
+    } else if(key === 'region'){
+      const currentRegion = REGION_TERMINAL.find(e => e.region === value);
+      setTerminalList(currentRegion ? currentRegion.terminal : []);
+  
+      const newOrderData = { ...orderData }
+      newOrderData[key] = currentRegion ? currentRegion.region : ''
+      newOrderData['terminal'] = '';
+      setOrderData(newOrderData)
+    } else if(key === 'remarks') {
+      setInputValue(value);
+      if(value.length < 40) {
         const newOrderData = { ...orderData }
         newOrderData[key] = value
         setOrderData(newOrderData)
+        setdisableBtn(false);
+      } else {
+        setdisableBtn(true);
       }
-    } else if (key === "myremark2") {
-      setInputValue2(value)
-      if (value.length < 40) {
+    } else if(key === 'myremark1') {
+      setInputValue1(value);
+      if(value.length < 40) {
         const newOrderData = { ...orderData }
         newOrderData[key] = value
         setOrderData(newOrderData)
+        setdisableBtn(false);
+      } else {
+        setdisableBtn(true);
       }
-    } else if (key === "myremark3") {
-      setInputValue3(value)
-      if (value.length < 40) {
+    }  else if(key === 'myremark2') {
+      setInputValue2(value);
+      if(value.length < 40) {
         const newOrderData = { ...orderData }
         newOrderData[key] = value
         setOrderData(newOrderData)
+        setdisableBtn(false);
+      } else {
+        setdisableBtn(true);
+      }
+    }  else if(key === 'myremark3') {
+      setInputValue3(value);
+      if(value.length < 40) {
+        const newOrderData = { ...orderData }
+        newOrderData[key] = value
+        setOrderData(newOrderData)
+        setdisableBtn(false);
+      } else {
+        setdisableBtn(true);
       }
     } else {
       const newOrderData = { ...orderData }
@@ -160,13 +205,12 @@ const NewOrderBankModal = props => {
           let temp1 = []
           Object.keys(props.orderBankData?.storage).map((key, index) => {
             if (key.startsWith("storage_")) {
-              temp1.push(
-                props.orderBankData?.storage[key]
-                //   {
-                //   name: .name,
-                //   code: props.orderBankData?.storage[key].code,
-                //   id: props.orderBankData?.storage[key].id,
-                // }
+              temp1.push(props.orderBankData?.storage[key]
+              //   {
+              //   name: .name,
+              //   code: props.orderBankData?.storage[key].code,
+              //   id: props.orderBankData?.storage[key].id,
+              // }
               )
               temp.push(props.orderBankData?.storage[key].name)
             }
@@ -175,7 +219,10 @@ const NewOrderBankModal = props => {
           await setProductList(temp)
           await setCurrentState("search")
         }, 1000)
-      } else if (props?.orderBankData?.data && props.orderBankData.status === 404) {
+      } else if (
+        props?.orderBankData?.data &&
+        props.orderBankData.status === 404
+      ) {
         setTimeout(function () {
           setCurrentState("error")
         }, 500)
@@ -188,17 +235,23 @@ const NewOrderBankModal = props => {
   }, [props.orderBankData])
 
   const onCancelClick = () => {
-    shiptoNo !== "" ? setIsConfirm(true) : onCancel("cancle")
-    setShiptoNo("")
+    (shiptoNo !== "" || shiftDate !==  new Date(new Date().getTime() + 24 * 60 * 60 * 1000)) ? setIsConfirm(true) : onCancel('cancle')
+    // setShiptoNo("")
     setCurrentState("")
   }
 
   useEffect(() => {
-    const currentRegion = REGION_TERMINAL.find(
-      e => e.region === orderData?.address?.address.region_group
-    ) //"Nothern"
+    const currentRegion = REGION_TERMINAL.find(e => e.region === orderData?.address?.address.region_group)//"Nothern"
     setTerminalList(currentRegion ? currentRegion.terminal : [])
+
+    const newOrderData = { ...orderData }
+    newOrderData['region'] = currentRegion ? currentRegion.region : ''
+    setOrderData(newOrderData)
   }, [orderData?.address])
+  
+  const remainChars = useMemo(() => {
+    return 40 - inputValue.length
+  }, [inputValue])
 
   const remainChars1 = useMemo(() => {
     return 40 - inputValue1.length
@@ -212,6 +265,10 @@ const NewOrderBankModal = props => {
     return 40 - inputValue3.length
   }, [inputValue3])
 
+  const isValid = useMemo(() => {
+    return inputValue && remainChars >= 0
+  }, [remainChars])  
+
   const isValid1 = useMemo(() => {
     return inputValue1 && remainChars1 >= 0
   }, [remainChars1])
@@ -224,12 +281,12 @@ const NewOrderBankModal = props => {
     return inputValue3 && remainChars3 >= 0
   }, [remainChars3])
 
-  const hrMints = val => {
-    if (val !== "" && val !== undefined && val !== null) {
-      let temp = val.split(":")
-      return temp[0] + ":" + temp[1]
+  const hrMints = (val) => {
+    if(val !== '' && val !== undefined &&  val !== null){
+    let temp = val.split(':');
+      return temp[0] + ':' + temp[1];
     } else {
-      return "00:00"
+      return '00:00';
     }
   }
 
@@ -272,7 +329,9 @@ const NewOrderBankModal = props => {
       </ModalHeader>
 
       <ModalBody className="position-relative h-70v scroll pl-30">
-        {isConfirm && <ExitConfirmation onExit={onConfirmExit} onCancel={onConfirmCancel} />}
+        {isConfirm && (
+          <ExitConfirmation onExit={onConfirmExit} onCancel={onConfirmCancel} />
+        )}
         {!isConfirm && (
           <>
             <div className="d-flex justify-content-between align-item-baseline">
@@ -281,12 +340,16 @@ const NewOrderBankModal = props => {
                 <DatePicker
                   className="form-control awsm-input"
                   value={shiftDate}
+                  startDate={new Date()}
                   onChange={date => setShiftDate(date)}
                   orderBankShiftDate={true}
+                  defaultValue={new Date()}
                 />
               </div>
               <div className="col-4 p-0 ml-4">
-                <label>SHIP TO</label>
+                <label>
+                  SHIP TO <span className="text-red">*</span>
+                </label>
                 <AWSMInput
                   type="number"
                   defaultValue=""
@@ -324,10 +387,11 @@ const NewOrderBankModal = props => {
                     <div className="d-flex">
                       <div className="w-50 mr-2">
                         <AWSMDropdown
-                          // items={ORDER_REGION}
-                          // onChange={value => onAddressFieldChange("region_group", value)}
-                          value={orderData?.address?.address?.region_group}
-                          disabled={true}
+                          items={regionList}
+                          onChange={value => onFieldChange("region", value)}
+                          value={orderData.region ? orderData.region : ""}
+                          // value={orderData?.address?.address?.region_group}
+                          disabled={false}
                         />
                       </div>
                       <div className="w-50 mr-2">
@@ -365,7 +429,9 @@ const NewOrderBankModal = props => {
                       <div className="w-100">
                         <AWSMDropdown
                           items={productList}
-                          onChange={value => onFieldChange("product_name", value)}
+                          onChange={value =>
+                            onFieldChange("product_name", value)
+                          }
                           value={orderData.product_name}
                           disabled={false}
                           placeholder="select"
@@ -378,17 +444,17 @@ const NewOrderBankModal = props => {
                     <div className="d-flex">
                       <div className="w-70">
                         <AWSMInput
-                          onChange={value => onFieldChange("product_code", value)}
+                          onChange={value =>
+                            onFieldChange("product_code", value)
+                          }
                           value={orderData.product_code}
                           disabled={true}
                           placeholder="Lorem ipsum"
                         />
                       </div>
-                      <div className="w-40 ml-3">
-                        <Button className="h-100" block color="primary">
-                          Generate
-                        </Button>
-                      </div>
+                      {/* <div className="w-30 ml-3">
+                        <Button color="primary">Generate</Button>
+                      </div> */}
                     </div>
                   </div>
                 </div>
@@ -398,12 +464,12 @@ const NewOrderBankModal = props => {
                     <label className="text-upper">Planned Load Time</label>
                     <div className="d-flex">
                       <div className="w-100">
-                        <TimePicker
-                          value={orderData.load_time}
-                          items={timeData}
-                          onChange={value => onFieldChange("load_time", value)}
-                          hasNone
-                        />
+                      <TimePicker
+                        value={orderData.load_time}
+                        items={timeData}
+                        onChange={value => onFieldChange("load_time", value)}
+                        hasNone
+                      />
                         {/* <AWSMDropdown
                           items={ORDER_LOAD_TIME}
                           onChange={value => onFieldChange("load_time", value)}
@@ -439,12 +505,22 @@ const NewOrderBankModal = props => {
                   <div className="w-100 mr-4">
                     <label className="text-upper">Order Remarks</label>
                     <div className="d-flex">
-                      <div className="w-85">
-                        <AWSMInput
+                      <div className="w-85 relative">
+                      <input
+                      onChange={e => onFieldChange("remarks", e.target.value)}
+                      value={orderData?.remarks}
+                      className={`awsm-input w-100 ${(inputValue && !isValid) ? "out-range " : ""}`}
+                    />
+                        {/* <AWSMInput
                           onChange={value => onFieldChange("remarks", value)}
                           value={orderData.remarks}
                           placeholder="Type Something here..."
-                        />
+                        /> */}
+                          <span
+                          className={`position-absolute awsm-input-right-content ${
+                            (inputValue && !isValid) ? "out-range " : ""
+                          }`}
+                        >{`${remainChars >= 0 ? "+" : ""}${remainChars}`}</span>
                       </div>
                     </div>
                   </div>
@@ -456,20 +532,27 @@ const NewOrderBankModal = props => {
                       <div className="w-100">
                         <AWSMDropdown
                           items={ORDER_PRIORITY}
-                          onChange={value => onFieldChange("priority_order", value)}
+                          onChange={value =>
+                            onFieldChange("priority_order", value)
+                          }
+                          // defaultSelected='None'
                           value={orderData.priority_order}
                           disabled={false}
-                          placeholder="select priority"
+                          // placeholder="select priority"
                         />
                       </div>
                     </div>
                   </div>
                   <div className="w-50 mr-4">
-                    <label className="text-upper">Special Request Remarks</label>
+                    <label className="text-upper">
+                      Special Request Remarks
+                    </label>
                     <div className="d-flex">
                       <div className="w-100">
                         <AWSMInput
-                          onChange={value => onFieldChange("request_remark_order", value)}
+                          onChange={value =>
+                            onFieldChange("request_remark_order", value)
+                          }
                           value={orderData.request_remark_order}
                           disabled={true}
                           placeholder="Lorem ipsum"
@@ -523,8 +606,7 @@ const NewOrderBankModal = props => {
                       <strong>Order Type:</strong> {orderData?.storeData?.ordering_category}
                     </p>
                     <p>
-                      <strong>Accessibility:</strong>{" "}
-                      {orderData?.delivery?.road_tanker_accessibility}
+                      <strong>Accessibility:</strong> {orderData?.delivery?.road_tanker_accessibility}
                     </p>
                     <p>
                       <strong>Site ID: </strong>
@@ -541,10 +623,10 @@ const NewOrderBankModal = props => {
                       <strong>Order ID: </strong>
                     </p>
                     <p>
-                      <strong>Order Date:</strong> {shiftDate.toLocaleDateString()}
+                      <strong>Requested Delievry Date:</strong> {shiftDate.toLocaleDateString()}
                     </p>
-                    <p>
-                      <strong>Opening Stock Days: </strong>{" "}
+                    <p>1
+                      <strong>Opening Stock Days: </strong> {" "}
                     </p>
                   </Col>
                   <Col lg={4} sm={6} xs={12}>
@@ -552,20 +634,19 @@ const NewOrderBankModal = props => {
                       <strong>Closing Stock Days:</strong>{" "}
                     </p>
                     <p>
-                      <strong>Current Stock Days:</strong>{" "}
+                      <strong>Current Stock Days:</strong> {" "}
                     </p>
                     <p>
-                      <strong>Ullage (L):</strong>{" "}
+                      <strong>Ullage (L):</strong> {" "}
                     </p>
                     <p>
-                      <strong>Out Of Stock:</strong>{" "}
+                      <strong>Out Of Stock:</strong> {" "}
                     </p>
                     <p>
                       <strong>Max Stock Days:</strong>{" "}
                     </p>
                     <p>
-                      <strong>Monthly Fixed Quota:</strong>{" "}
-                      {orderData?.storeData?.monthly_fixed_quota}
+                      <strong>Monthly Fixed Quota:</strong>{" "}{orderData?.storeData?.monthly_fixed_quota}
                     </p>
                     <p>
                       <strong>RT Req:</strong> {orderData?.delivery?.road_tanker_requirement}
@@ -607,36 +688,22 @@ const NewOrderBankModal = props => {
                           hrMints(orderData?.delivery.actual_open_time_1?.time_from) +
                           " to " +
                           hrMints(orderData?.delivery?.actual_open_time_1?.time_to)
-                        : "-"}
-                    </p>
+                        : "-"}                    </p>
                     <p>
                       <strong>Open Time 2:</strong>{" "}
-                      {orderData?.delivery?.actual_open_time_2
-                        ? removeKeywords(
-                            orderData?.delivery?.actual_open_time_2?.days !== ""
-                              ? orderData?.delivery?.actual_open_time_2?.days.join() + " - "
-                              : ""
-                          ) +
-                          hrMints(orderData?.delivery?.actual_open_time_2?.time_from) +
-                          " to " +
-                          hrMints(orderData?.delivery?.actual_open_time_2?.time_to)
-                        : "-"}
+                      {orderData?.delivery?.actual_open_time_2 ? removeKeywords(
+                        orderData?.delivery.actual_open_time_2?.days.join()
+                      ) + '-' + hrMints(orderData?.delivery?.actual_open_time_2?.time_from) + ' to ' + hrMints(orderData?.delivery?.actual_open_time_2?.time_to) : '-'}
                     </p>
                     <p>
                       <strong>Open Time 3:</strong>{" "}
-                      {orderData?.delivery?.actual_open_time_3
-                        ? removeKeywords(
-                            orderData?.delivery?.actual_open_time_3?.days !== ""
-                              ? orderData?.delivery?.actual_open_time_3?.days.join() + " - "
-                              : ""
-                          ) +
-                          hrMints(orderData?.delivery?.actual_open_time_3?.time_from) +
-                          " to " +
-                          hrMints(orderData?.delivery?.actual_open_time_3?.time_to)
-                        : "-"}
+                      {orderData?.delivery?.actual_open_time_3 ?
+                      removeKeywords(
+                        orderData?.delivery?.actual_open_time_3?.days.join()
+                      ) + '-' + hrMints(orderData?.delivery?.actual_open_time_3?.time_from) + ' to ' + hrMints(orderData?.delivery?.actual_open_time_3?.time_to) : '-'}
                     </p>
                     <p>
-                      <strong>No Del Interval 1:</strong>
+                      <strong>No Del Interval 1:</strong>{" "}
                       {deliveryIntervalText(
                         orderData?.delivery?.no_delivery_interval_1,
                         orderData?.delivery?.no_delivery_interval_1?.type,
@@ -660,7 +727,7 @@ const NewOrderBankModal = props => {
                       )}
                     </p>
                     <p>
-                      <strong>No Del Interval 3:</strong>
+                      <strong>No Del Interval 3:</strong>{" "}
                       {deliveryIntervalText(
                         orderData?.delivery?.no_delivery_interval_3,
                         orderData?.delivery?.no_delivery_interval_3?.type,
@@ -672,7 +739,7 @@ const NewOrderBankModal = props => {
                       )}
                     </p>
                     <p>
-                      <strong>No Del Interval 4:</strong>
+                      <strong>No Del Interval 4:</strong>{" "}
                       {deliveryIntervalText(
                         orderData?.delivery?.no_delivery_interval_4,
                         orderData?.delivery?.no_delivery_interval_4?.type,
@@ -684,7 +751,7 @@ const NewOrderBankModal = props => {
                       )}
                     </p>
                     <p>
-                      <strong>No Del Interval 5:</strong>
+                      <strong>No Del Interval 5:</strong>{" "}
                       {deliveryIntervalText(
                         orderData?.delivery?.no_delivery_interval_5,
                         orderData?.delivery?.no_delivery_interval_5?.type,
@@ -716,24 +783,22 @@ const NewOrderBankModal = props => {
                   <div className="w-100 mr-4">
                     <label className="text-upper">my Remarks 1</label>
                     <div className="w-100 relative">
-                      <input
-                        onChange={e => onFieldChange("myremark1", e.target.value)}
-                        value={orderData?.myremark1}
-                        className={`awsm-input w-100 ${
-                          inputValue1 && !isValid1 ? "out-range " : ""
-                        }`}
-                      />
+                    <input
+                      onChange={e => onFieldChange("myremark1", e.target.value)}
+                      value={orderData?.myremark1}
+                      className={`awsm-input w-100 ${(inputValue1 && !isValid1) ? "out-range " : ""}`}
+                    />
                       {/* <AWSMInput
                         onChange={value => onFieldChange("myremark1", value)}
                         value={orderData.myremark1}
                         className={`awsm-input w-100 ${(orderData.myremark1 && !isValid) ? "out-range " : ""}`}
                         placeholder="Type something here..."
                       /> */}
-                      <span
-                        className={`position-absolute awsm-input-right-content ${
-                          inputValue1 && !isValid1 ? "out-range " : ""
-                        }`}
-                      >{`${remainChars1 >= 0 ? "+" : ""}${remainChars1}`}</span>
+                       <span
+                          className={`position-absolute awsm-input-right-content ${
+                            (inputValue1 && !isValid1) ? "out-range " : ""
+                          }`}
+                        >{`${remainChars1 >= 0 ? "+" : ""}${remainChars1}`}</span>
                     </div>
                   </div>
                   <div className="w-100 mr-4">
@@ -747,15 +812,13 @@ const NewOrderBankModal = props => {
                       <input
                         onChange={e => onFieldChange("myremark2", e.target.value)}
                         value={orderData?.myremark2}
-                        className={`awsm-input w-100 ${
-                          inputValue2 && !isValid2 ? "out-range " : ""
-                        }`}
-                      />
-                      <span
-                        className={`position-absolute awsm-input-right-content ${
-                          inputValue2 && !isValid2 ? "out-range " : ""
-                        }`}
-                      >{`${remainChars2 >= 0 ? "+" : ""}${remainChars2}`}</span>
+                        className={`awsm-input w-100 ${(inputValue2 && !isValid2) ? "out-range " : ""}`}
+                    />
+                    <span
+                          className={`position-absolute awsm-input-right-content ${
+                            (inputValue2 && !isValid2) ? "out-range " : ""
+                          }`}
+                        >{`${remainChars2 >= 0 ? "+" : ""}${remainChars2}`}</span>
                     </div>
                   </div>
                   <div className="w-100 mr-4">
@@ -769,15 +832,13 @@ const NewOrderBankModal = props => {
                       <input
                         onChange={e => onFieldChange("myremark3", e.target.value)}
                         value={orderData?.myremark3}
-                        className={`awsm-input w-100 ${
-                          inputValue3 && !isValid3 ? "out-range " : ""
-                        }`}
+                        className={`awsm-input w-100 ${(inputValue3 && !isValid3) ? "out-range " : ""}`}
                       />
-                      <span
-                        className={`position-absolute awsm-input-right-content ${
-                          inputValue3 && !isValid3 ? "out-range " : ""
-                        }`}
-                      >{`${remainChars3 >= 0 ? "+" : ""}${remainChars3}`}</span>
+                    <span
+                          className={`position-absolute awsm-input-right-content ${
+                            (inputValue3 && !isValid3) ? "out-range " : ""
+                          }`}
+                        >{`${remainChars3 >= 0 ? "+" : ""}${remainChars3}`}</span>
                     </div>
                   </div>
                 </div>
@@ -794,6 +855,7 @@ const NewOrderBankModal = props => {
                 }`}
               >
                 <div className="relative table_cell h-100 verticle-middle">
+                  {/* <FileCopyIcon /> */}
                   <img src={NoDataIcon} alt="No Data" />
                   <p className="text-18">
                     {currentState === "" ? (
@@ -821,7 +883,7 @@ const NewOrderBankModal = props => {
           >
             Cancel
           </Button>
-          <Button color="primary" className="p-1320" onClick={handleUpdate}>
+          <Button color="primary" disabled={disableBtn} className="p-1320" onClick={handleUpdate}>
             Add
           </Button>
         </ModalFooter>

@@ -346,10 +346,10 @@ export const ganttChartTableData = [
 export const ganttChartTableEvents = [
   {
     id: 1,
-    resourceId: 1,
+    resourceId: "WPF 8372BC",
     name: "RT13098 Drag true",
-    startDate: "2021-07-23 00:00",
-    endDate: "2021-07-23 6:00",
+    startDate: "2021-12-15 00:00",
+    endDate: "2021-12-15 06:00",
     eventColor: "#9E9E9E",
     eventType: "SAP Alert",
     highlight: true,

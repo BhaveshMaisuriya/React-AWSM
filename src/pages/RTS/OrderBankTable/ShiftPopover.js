@@ -9,9 +9,9 @@ const ShiftPopover = ({ record, onChange, type }) => {
   const toggle = () => setPopoverOpen(!popoverOpen)
   const buttonRef = useRef()
   const list =
-    record.shift === "ON"
+    record.shift_type === "ON"
       ? ["On", "On1", "On2", "Off"]
-      : record.shift === "OH"
+      : record.shift_type === "OH"
       ? ["ON", "Off"]
       : []
   return (
@@ -22,7 +22,7 @@ const ShiftPopover = ({ record, onChange, type }) => {
         type={"button"}
         onBlur={() => setPopoverOpen(false)}
       >
-        <div>{record?.[type]}</div>
+        <div>{record?.shift_type}</div>
         <ReactSVG src={ArrowDropDownIcon} />
       </button>
       <Popover

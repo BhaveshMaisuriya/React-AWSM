@@ -1,11 +1,5 @@
 import RedAlertIcon from "assets/images/AWSM-Red-Alert.svg"
 import YellowAlertIcon from "assets/images/AWSM-Soft-Overrule.svg"
-import customiseTableBankIcon from "assets/images/AWSM-Customise-Table-Bank.svg"
-import customiseAddIcon from "assets/images/AWSM-Add-Order.svg"
-import customiseCrossTerminalIcon from "assets/images/AWSM-Cross-Terminal.svg"
-import customiseMultipleDNIcon from "assets/images/AWSM-Multiple-DN.svg"
-import customiseUploadIcon from "assets/images/AWSM-Upload-RTS.svg"
-import customiseMultipleDeleteOrderIcon from "assets/images/AWSM-Trash-Icon-RTS.svg"
 
 export const GanttChartBottom = [
   {
@@ -83,19 +77,19 @@ export const orderBankSettings = [
     disabled: false,
     value: "newOrder",
     label: "Add New Order",
-    icon: customiseAddIcon,
+    icon: "customiseAddIcon",
   },
   {
     disabled: false,
     value: "customizeCol",
     label: "Customize Column",
-    icon: customiseTableBankIcon,
+    icon: "customiseTableBankIcon",
   },
   {
     disabled: false,
     value: "uploadDmr",
     label: "Upload DMR",
-    icon: customiseUploadIcon,
+    icon: "customiseUploadIcon",
   },
 
   // {disabled: false, 'value': 'RefreshDN', 'label': 'Refresh Blocked DN', 'icon' : customiseTableIcon },
@@ -103,19 +97,19 @@ export const orderBankSettings = [
     disabled: true,
     value: "CrossTerminal",
     label: "Cross Terminal",
-    icon: customiseCrossTerminalIcon,
+    icon: "customiseCrossTerminalIcon",
   },
   {
     disabled: true,
     value: "SendDN",
     label: "Send Multiple for DN",
-    icon: customiseMultipleDNIcon,
+    icon: "customiseMultipleDNIcon",
   },
   {
     disabled: true,
     value: "DeleteMultiple",
     label: "Delete Multiple Order",
-    icon: customiseMultipleDeleteOrderIcon,
+    icon: "customiseMultipleDeleteOrderIcon",
   },
 ]
 export const orderBankStatus = [

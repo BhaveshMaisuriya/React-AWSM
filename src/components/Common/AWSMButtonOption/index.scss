@@ -28,6 +28,16 @@
   }
 }
 .awsm-option-button-content {
+  .awsm-option-button-content-item-rts{
+    color: #6e6e6e;
+    &:hover {
+      color: white;
+      background-color: #00A49D;
+      svg {
+        color: white !important;
+      }
+    }
+  }
   .awsm-option-button-content-item {
     cursor: pointer;
     color: #8D8D8D;

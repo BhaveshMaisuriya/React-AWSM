@@ -653,7 +653,7 @@ const tableMapping = {
     columnSize: "cell-text",
   },
   no_delivery_interval_1_value: {
-    label: "NO DELIVERY INTERVAL 1 DAY",
+    label: "NO DELIVERY INTERVAL DAY 1",
     apiKey: "no_delivery_interval_1.value",
     columnSize: "cell-text-big",
   },

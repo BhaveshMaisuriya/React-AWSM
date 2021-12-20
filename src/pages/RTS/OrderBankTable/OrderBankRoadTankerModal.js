@@ -1,19 +1,11 @@
 import React, { useState, useEffect } from "react"
-import {
-  Button,
-  Modal,
-  ModalBody,
-  ModalHeader,
-  ModalFooter,
-  Row,
-  Col,
-} from "reactstrap"
-import CloseButton from "../../../components/Common/CloseButton"
-import ExitConfirmation from "../../../components/Common/ExitConfirmation"
-import AWSMDropdown from "../../../components/Common/Dropdown"
+import { Button, Modal, ModalBody, ModalHeader, ModalFooter, Row, Col } from "reactstrap"
+import CloseButton from "components/Common/CloseButton"
+import ExitConfirmation from "components/Common/ExitConfirmation"
+import AWSMDropdown from "components/Common/Dropdown"
 import { isEqual } from "lodash"
-import { isScheduler } from "../../../helpers/auth_helper"
-import { getOBRTDetails, updateOBRTDetails } from "../../../store/actions"
+import { isScheduler } from "helpers/auth_helper"
+import { getOBRTDetails, updateOBRTDetails } from "store/actions"
 import { connect } from "react-redux"
 
 const OrderBankRoadTankerModal = ({
@@ -23,8 +15,11 @@ const OrderBankRoadTankerModal = ({
   orderBankRTDetails,
   getOBRTDetails,
   updateOBRTDetails,
+  terminal = "",
+  region = "",
+  shiftDate = "",
 }) => {
-  const [currentOrderBankRTDetails, setOrderBankRTDetails] = useState(null)
+  const [currentOrderBankRTDetails, setOrderBankRTDetails] = useState()
   const [isConfirm, setIsConfirm] = useState(false)
   const onFieldValueChange = (fieldName, value) => {
     const newData = { ...currentOrderBankRTDetails }
@@ -33,12 +28,12 @@ const OrderBankRoadTankerModal = ({
   }
 
   useEffect(() => {
-    if (isOpen) getOBRTDetails({ vehicleId: selectedVehicleID })
+    if (isOpen) getOBRTDetails(selectedVehicleID)
     else setOrderBankRTDetails(null)
   }, [isOpen])
 
   useEffect(() => {
-    setOrderBankRTDetails(null)
+    setOrderBankRTDetails(orderBankRTDetails)
   }, [orderBankRTDetails])
 
   const handleClose = () => {
@@ -84,7 +79,7 @@ const OrderBankRoadTankerModal = ({
             <input
               className="form-control awsm-input"
               type="text"
-              defaultValue={currentOrderBankRTDetails?.shift_date}
+              defaultValue={shiftDate}
               disabled
             />
           </Col>
@@ -95,7 +90,7 @@ const OrderBankRoadTankerModal = ({
                 <input
                   className="form-control awsm-input"
                   type="text"
-                  defaultValue={currentOrderBankRTDetails?.region}
+                  defaultValue={region}
                   disabled
                 />
               </Col>
@@ -103,7 +98,7 @@ const OrderBankRoadTankerModal = ({
                 <input
                   className="form-control awsm-input"
                   type="text"
-                  defaultValue={currentOrderBankRTDetails?.terminal}
+                  defaultValue={terminal}
                   disabled
                 />
               </Col>
@@ -124,9 +119,9 @@ const OrderBankRoadTankerModal = ({
           <Col className="col-md-4 form-group">
             <label>SHIFT</label>
             <AWSMDropdown
-              value={null}
-              items={currentOrderBankRTDetails?.shift_dropdown}
-              onChange={e => onFieldValueChange("shift", e.target.value)}
+              value={currentOrderBankRTDetails?.shift_type}
+              items={["Double", "OH"]}
+              onChange={e => onFieldValueChange("shift_type", e)}
               disabled={!isScheduler}
               className="form-control awsm-input"
               placeholder={"Select"}
@@ -137,7 +132,7 @@ const OrderBankRoadTankerModal = ({
             <input
               className="form-control awsm-input"
               type="text"
-              defaultValue={currentOrderBankRTDetails?.status}
+              defaultValue={currentOrderBankRTDetails?.status_sap}
               disabled
             />
           </Col>
@@ -157,7 +152,7 @@ const OrderBankRoadTankerModal = ({
             <input
               className="form-control awsm-input"
               type="text"
-              defaultValue={currentOrderBankRTDetails?.rt_code}
+              defaultValue={currentOrderBankRTDetails?.restriction_code}
               disabled
             />
           </Col>
@@ -166,7 +161,7 @@ const OrderBankRoadTankerModal = ({
             <input
               className="form-control awsm-input"
               type="text"
-              defaultValue={currentOrderBankRTDetails?.product}
+              defaultValue={currentOrderBankRTDetails?.product_type_sap}
               disabled
             />
           </Col>
@@ -177,7 +172,7 @@ const OrderBankRoadTankerModal = ({
             <input
               className="form-control awsm-input"
               type="text"
-              defaultValue={currentOrderBankRTDetails?.name}
+              defaultValue={currentOrderBankRTDetails?.owner}
               disabled
             />
           </Col>
@@ -186,16 +181,16 @@ const OrderBankRoadTankerModal = ({
             <input
               className="form-control awsm-input"
               type="text"
-              defaultValue={currentOrderBankRTDetails?.cust_type}
+              defaultValue={currentOrderBankRTDetails?.customer_type}
               disabled
             />
           </Col>
           <Col className="col-md-4 form-group">
-            <label>PLUMP</label>
+            <label>PUMP</label>
             <input
               className="form-control awsm-input"
               type="text"
-              defaultValue={currentOrderBankRTDetails?.plump}
+              defaultValue={currentOrderBankRTDetails?.pump_type}
               disabled
             />
           </Col>
@@ -206,7 +201,7 @@ const OrderBankRoadTankerModal = ({
             <input
               className="form-control awsm-input"
               type="text"
-              defaultValue={currentOrderBankRTDetails?.hours}
+              defaultValue={currentOrderBankRTDetails?.daily_available_hours}
               disabled
             />
           </Col>
@@ -215,7 +210,7 @@ const OrderBankRoadTankerModal = ({
             <input
               className="form-control awsm-input"
               type="text"
-              defaultValue={currentOrderBankRTDetails?.no_of_compartment}
+              defaultValue={currentOrderBankRTDetails?.compartment_no}
               disabled
             />
           </Col>
@@ -235,7 +230,7 @@ const OrderBankRoadTankerModal = ({
             <input
               className="form-control awsm-input"
               type="text"
-              defaultValue={currentOrderBankRTDetails?.charterer_type}
+              defaultValue={currentOrderBankRTDetails?.chattering_type}
               disabled
             />
           </Col>
@@ -279,7 +274,4 @@ const mapDispatchToProps = dispatch => ({
   updateOBRTDetails: params => dispatch(updateOBRTDetails(params)),
 })
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(OrderBankRoadTankerModal)
+export default connect(mapStateToProps, mapDispatchToProps)(OrderBankRoadTankerModal)

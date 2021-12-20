@@ -10,10 +10,10 @@ import {
   GET_ORDERBANK_FAIL,
   ADD_ORDERBANK,
   ADD_ORDERBANK_SUCCESS,
-  ADD_ORDERBANK_FAIL,  
+  ADD_ORDERBANK_FAIL,
   EDIT_ORDERBANK,
   EDIT_ORDERBANK_SUCCESS,
-  EDIT_ORDERBANK_FAIL,    
+  EDIT_ORDERBANK_FAIL,
   UPDATE_ORDERBANK_TABLE_INFORMATION,
   UPDATE_ORDERBANK_TABLE_INFORMATION_SUCCESS,
   UPDATE_ORDERBANK_TABLE_INFORMATION_FAIL,
@@ -32,7 +32,7 @@ import {
   DELETE_ORDERBANK_DETAIL_FAIL,
   VIEW_ORDERBANK_DETAIL,
   VIEW_ORDERBANK_DETAIL_SUCCESS,
-  VIEW_ORDERBANK_DETAIL_FAIL,  
+  VIEW_ORDERBANK_DETAIL_FAIL,
   SEND_DN_STATUS_REQUEST,
   SEND_DN_STATUS_REQUEST_SUCCESS,
   SEND_DN_STATUS_REQUEST_FAIL,
@@ -41,13 +41,13 @@ import {
   GET_ORDER_BANK_AUDITLOG_FAIL,
   GET_CLEAR_SCHEDULING,
   GET_CLEAR_SCHEDULING_SUCCESS,
-  GET_CLEAR_SCHEDULING_FAIL,  
+  GET_CLEAR_SCHEDULING_FAIL,
   GET_DELETE_MULTIPLE_ORDER,
   GET_DELETE_MULTIPLE_ORDER_SUCCESS,
   GET_DELETE_MULTIPLE_ORDER_FAIL,
   GET_CROSS_TERMINAL,
   GET_CROSS_TERMINAL_SUCCESS,
-  GET_CROSS_TERMINAL_FAIL,  
+  GET_CROSS_TERMINAL_FAIL,
   PROCESS_PAYMENT_IN_GANTT_CHART,
   PROCESS_PAYMENT_IN_GANTT_CHART_SUCCESS,
   PROCESS_PAYMENT_IN_GANTT_CHART_FAIL,
@@ -67,7 +67,8 @@ import {
   DESELECT_VEHICLE_RTS_SHIPMENT,
   REMOVE_ORDER_FROM_SHIPMENT,
   REMOVE_ORDER_FROM_SHIPMENT_SUCCESS,
-  REMOVE_SHIPMENT_FROM_EVENT, REMOVE_SHIPMENT_FROM_EVENT_SUCCESS,
+  REMOVE_SHIPMENT_FROM_EVENT,
+  REMOVE_SHIPMENT_FROM_EVENT_SUCCESS,
   REMOVE_EVENT,
   REMOVE_EVENT_SUCCESS,
   UPDATE_OB_EVENT,
@@ -83,39 +84,39 @@ import {
   UPDATE_OB_RT_DETAILS_FAIL,
   GET_SEND_BULK_SHIPMENT,
   GET_SEND_BULK_SHIPMENT_SUCCESS,
-  GET_SEND_BULK_SHIPMENT_FAIL,  
+  GET_SEND_BULK_SHIPMENT_FAIL,
   GET_RUN_AUTO_SCHEDULING,
   GET_RUN_AUTO_SCHEDULING_SUCCESS,
-  GET_RUN_AUTO_SCHEDULING_FAIL,  
-  
+  GET_RUN_AUTO_SCHEDULING_FAIL,
+  CLEAR_GANTT_DATA,
 } from "./actionTypes"
 
-export const getRTSOrderBankTableData = (params) => ({
+export const getRTSOrderBankTableData = params => ({
   type: GET_RTS_ORDER_BANK_TABLE_DATA,
   params,
 })
 
-export const getRTSOrderBankTableDataSuccess = (response) => ({
+export const getRTSOrderBankTableDataSuccess = response => ({
   type: GET_RTS_ORDER_BANK_TABLE_DATA_SUCCESS,
   payload: response,
 })
 
-export const getRTSOrderBankTableDataFail = (error) => ({
+export const getRTSOrderBankTableDataFail = error => ({
   type: GET_RTS_ORDER_BANK_TABLE_DATA_FAIL,
   payload: error,
 })
 
-export const getShipmentOfOderBankGanttChart = (params) => ({
+export const getShipmentOfOderBankGanttChart = params => ({
   type: GET_SHIPMENT_ORDER_BANK_TABLE_DATA,
   params,
 })
 
-export const getShipmentOfOderBankGanttChartSuccess = (response) => ({
+export const getShipmentOfOderBankGanttChartSuccess = response => ({
   type: GET_SHIPMENT_ORDER_BANK_TABLE_DATA_SUCCESS,
   payload: response,
 })
 
-export const getShipmentOfOderBankGanttChartFail = (error) => ({
+export const getShipmentOfOderBankGanttChartFail = error => ({
   type: GET_SHIPMENT_ORDER_BANK_TABLE_DATA_FAIL,
   payload: error,
 })
@@ -165,10 +166,10 @@ export const getEditOrderBankDetailFail = error => ({
   payload: error,
 })
 
-export const getOrderBankDetail = (params) => {
+export const getOrderBankDetail = params => {
   return {
     type: GET_ORDERBANK_TABLE_INFORMATION,
-    params
+    params,
   }
 }
 
@@ -194,46 +195,45 @@ export const updateOrderbankTableInformationSuccess = event => ({
 
 export const updateOrderbankTableInformationFail = error => ({
   type: UPDATE_ORDERBANK_TABLE_INFORMATION_FAIL,
-  payload: error
+  payload: error,
 })
 
-export const refreshOderBankDN = (params) => ({
+export const refreshOderBankDN = params => ({
   type: REFRESH_ORDER_BANK_DN,
   params,
 })
 
-export const refreshOderBankDNSuccess = (response) => ({
+export const refreshOderBankDNSuccess = response => ({
   type: REFRESH_ORDER_BANK_SUCCESS,
   payload: response,
 })
 
-
-export const refreshOderBankDNFail = (error) => ({
+export const refreshOderBankDNFail = error => ({
   type: REFRESH_ORDER_BANK_DN_FAIL,
   payload: error,
 })
 
-export const sendOrderBankDN = (params) => ({
+export const sendOrderBankDN = params => ({
   type: SEND_ORDER_BANK_DN,
   params,
 })
 
-export const sendOrderBankDNSuccess = (response) => ({
+export const sendOrderBankDNSuccess = response => ({
   type: SEND_ORDER_BANK_DN_SUCCESS,
   payload: response,
 })
 
-export const sendOrderBankDNFail = (error) => ({
+export const sendOrderBankDNFail = error => ({
   type: SEND_ORDER_BANK_DN_FAIL,
   payload: error,
 })
 
-export const updateOrderBankTableData = (payload) => ({
+export const updateOrderBankTableData = payload => ({
   type: UPDATE_ORDER_BANK_TABLE_DATA,
   payload,
 })
 
-export const viewOrderBankDetail = (params) => ({
+export const viewOrderBankDetail = params => ({
   type: VIEW_ORDERBANK_DETAIL,
   params,
 })
@@ -245,10 +245,10 @@ export const viewOrderBankDetailSuccess = response => ({
 
 export const viewOrderBankDetailFail = error => ({
   type: VIEW_ORDERBANK_DETAIL_FAIL,
-  payload: error
+  payload: error,
 })
 
-export const deleteOrderBankDetail = (params) => ({
+export const deleteOrderBankDetail = params => ({
   type: DELETE_ORDERBANK_DETAIL,
   params,
 })
@@ -260,7 +260,7 @@ export const deleteOrderBankDetailSuccess = response => ({
 
 export const deleteOrderBankDetailFail = error => ({
   type: DELETE_ORDERBANK_DETAIL_FAIL,
-  payload: error
+  payload: error,
 })
 
 export const sendDNStatusRequest = params => ({
@@ -275,7 +275,7 @@ export const sendDNStatusRequestSuccess = event => ({
 
 export const sendDNStatusRequestFail = error => ({
   type: SEND_DN_STATUS_REQUEST_FAIL,
-  payload: error
+  payload: error,
 })
 
 export const getOrderBankAuditLog = () => ({
@@ -381,8 +381,7 @@ export const processPaymentInGanttChartFail = error => ({
   payload: error,
 })
 
-
-export const cancelPaymentInGanttChart = (param) => ({
+export const cancelPaymentInGanttChart = param => ({
   type: CANCEL_PAYMENT_IN_GANTT_CHART,
   payload: param,
 })
@@ -396,7 +395,6 @@ export const cancelPaymentInGanttChartFail = error => ({
   type: CANCEL_PAYMENT_IN_GANTT_CHART_FAIL,
   payload: error,
 })
-
 
 export const sendOrderInGanttChart = () => ({
   type: SEND_ORDER_IN_GANTT_CHART,
@@ -431,103 +429,106 @@ export const dragOrderBankToGanttChart = () => ({
   type: DRAG_RTS_ORDER_BANK_TO_GANTT_CHART,
 })
 
-export const dragOrderBankToGanttChartSuccess = (dropData) => ({
+export const dragOrderBankToGanttChartSuccess = dropData => ({
   type: DRAG_RTS_ORDER_BANK_TO_GANTT_CHART_SUCCESS,
-  dropData
+  dropData,
 })
 
-export const dragOrderBankToGanttChartFail = (error) => ({
+export const dragOrderBankToGanttChartFail = error => ({
   type: DRAG_RTS_ORDER_BANK_TO_GANTT_CHART_FAIL,
   error,
 })
 
-export const selectVehicleShipment = ({vehicle, resourceId})=> ({
+export const selectVehicleShipment = ({ vehicle, resourceId }) => ({
   type: SELECT_VEHICLE_RTS_SHIPMENT,
   vehicle,
-  resourceId
+  resourceId,
 })
 
-export const deselectVehicleShipment = ()=>({
-  type:DESELECT_VEHICLE_RTS_SHIPMENT
+export const deselectVehicleShipment = () => ({
+  type: DESELECT_VEHICLE_RTS_SHIPMENT,
 })
 
-export const removeOrderFromShipment = (params) => ({
+export const removeOrderFromShipment = params => ({
   type: REMOVE_ORDER_FROM_SHIPMENT,
-  params
+  params,
 })
 
-export const removeOrderFromShipmentSuccess = (params) => ({
+export const removeOrderFromShipmentSuccess = params => ({
   type: REMOVE_ORDER_FROM_SHIPMENT_SUCCESS,
-  params
+  params,
 })
 
-
-export const removeShipmentFromEvent = (params) => ({
+export const removeShipmentFromEvent = params => ({
   type: REMOVE_SHIPMENT_FROM_EVENT,
-  params
+  params,
 })
 
-export const removeShipmentFromEventSuccess = (params) => ({
+export const removeShipmentFromEventSuccess = params => ({
   type: REMOVE_SHIPMENT_FROM_EVENT_SUCCESS,
-  params
+  params,
 })
 
-export const removeEvent = (params) => ({
+export const removeEvent = params => ({
   type: REMOVE_EVENT,
-  params
+  params,
 })
 
-export const removeEventSuccess = (params) => ({
+export const removeEventSuccess = params => ({
   type: REMOVE_EVENT_SUCCESS,
-  params
+  params,
 })
 
-export const updateOBEvent = (params) => ({
+export const updateOBEvent = params => ({
   type: UPDATE_OB_EVENT,
-  params
+  params,
 })
 
-export const updateOBEventSuccess = (params) => ({
+export const updateOBEventSuccess = params => ({
   type: UPDATE_OB_EVENT_SUCCESS,
-  params
+  params,
 })
 
-export const updateOBEventFail = (params) => ({
+export const updateOBEventFail = params => ({
   type: UPDATE_OB_EVENT_FAIL,
-  params
+  params,
 })
 
-export const getWebsocketMessageSuccess = (data) => ({
+export const getWebsocketMessageSuccess = data => ({
   type: GET_WEB_SOCKET_MESSAGE_SUCCESS,
   payload: data,
 })
 
-export const getOBRTDetails = (params) => ({
+export const getOBRTDetails = params => ({
   type: GET_OB_RT_DETAILS,
-  params
+  params,
 })
 
-export const getOBRTDetailsSuccess = (params) => ({
+export const getOBRTDetailsSuccess = data => ({
   type: GET_OB_RT_DETAILS_SUCCESS,
-  params
+  payload: data,
 })
 
-export const getOBRTDetailsFail = (params) => ({
+export const getOBRTDetailsFail = error => ({
   type: GET_OB_RT_DETAILS_FAIL,
-  params
+  payload: error,
 })
 
-export const updateOBRTDetails = (params) => ({
+export const updateOBRTDetails = params => ({
   type: UPDATE_OB_RT_DETAILS,
-  params
+  params,
 })
 
-export const updateOBRTDetailsSuccess = (params) => ({
+export const updateOBRTDetailsSuccess = data => ({
   type: UPDATE_OB_RT_DETAILS_SUCCESS,
-  params
+  payload: data,
 })
 
-export const updateOBRTDetailsFail = (params) => ({
+export const updateOBRTDetailsFail = error => ({
   type: UPDATE_OB_RT_DETAILS_FAIL,
-  params
+  payload: error,
+})
+
+export const clearGanttData = () => ({
+  type: CLEAR_GANTT_DATA,
 })

@@ -21,12 +21,13 @@ import {
   processPaymentInGanttChart,
   selectVehicleShipment,
   sendOrderInGanttChart,
-} from "../../../store/actions"
+} from "store/actions"
 import { cloneDeep } from "lodash"
 import { Droppable } from "react-beautiful-dnd"
 import OrderBankShipmentModal from "./OrderBankShipmentModal"
 import PlannedLoadTimesModal from "./PlannedLoadTimesModal"
 import BryntumDragDropAreaShipment from "./BryntumDragDropAreaShipment/BryntumDragDropAreaShipment"
+import OrderBankRoadTankerModal from "./OrderBankRoadTankerModal"
 import ChartColumnFilter from "./ChartColumnFilter"
 import ShiftPopover from "./ShiftPopover"
 import InfiniteScroll from "react-infinite-scroll-component"
@@ -42,7 +43,7 @@ const EventContextList = {
 export const bryntumSchedulerTableNameForCookie = "rts-gantt-chart-bryntum-scheduler"
 
 function BryntumChartTable(props) {
-  const { bryntumCurrentColumns, onSelectVehicle, onDeselectVehicle } = props
+  const { bryntumCurrentColumns, onSelectVehicle, onDeselectVehicle, dateConfig } = props
   const tableData = useRef([])
   const setTableData = newData => {
     tableData.current = newData
@@ -53,6 +54,8 @@ function BryntumChartTable(props) {
   const [filterCondition, setFilterCondition] = useState([])
   const [eventsData, setEventsData] = useState([])
   const [shipmentDblclick, setShipmentDblclick] = useState(false)
+  const [roadTankerModalShow, setRoadTankerModal] = useState(false)
+  const [selectedVehicleID, setSelectedVehicleID] = useState(null)
   const schedulerProRef = useRef()
   const firstRender = useRef(true)
   const [filterList, setFilterList] = useState([])
@@ -67,7 +70,9 @@ function BryntumChartTable(props) {
       q: "",
       sort_dir: "desc",
       sort_field: "vehicle",
-      filter: {},
+      filter: {
+        shift_date: dateConfig,
+      },
     }
     getRTSOderBankGanttChart(payload)
   }, [currentPage])
@@ -170,6 +175,15 @@ function BryntumChartTable(props) {
     setShipmentDblclick(!shipmentDblclick)
   }
 
+  function showRoadTanker(event) {
+    setSelectedVehicleID(event.target.innerText)
+    toggleRoadTanker()
+  }
+
+  function toggleRoadTanker() {
+    setRoadTankerModal(!roadTankerModalShow)
+  }
+
   function onShiftDateChange(recordId, value) {
     const currentTableData = tableData.current
     const recordIndex = currentTableData.findIndex(e => e.id === recordId)
@@ -207,8 +221,10 @@ function BryntumChartTable(props) {
           case "vehicle": {
             return (
               <div className="chart-vehicle-cell">
-                <div className="value">{value}</div>
-                {record.pto && <div className="suffix">{record.pto}</div>}
+                <div className="value" onClick={showRoadTanker} style={{ cursor: "pointer" }}>
+                  {value}
+                </div>
+                {record.pump_type && <div className="suffix">{record.pump_type}</div>}
               </div>
             )
           }
@@ -410,6 +426,14 @@ function BryntumChartTable(props) {
       {shipmentDblclick && (
         <OrderBankShipmentModal open={shipmentDblclick} istoggle={toggleShipment} />
       )}
+      <OrderBankRoadTankerModal
+        isOpen={roadTankerModalShow}
+        toggle={toggleRoadTanker}
+        selectedVehicleID={selectedVehicleID}
+        region={props.region}
+        terminal={props.terminal}
+        shiftDate={props.dateConfig.date_from}
+      />
     </div>
   )
 }

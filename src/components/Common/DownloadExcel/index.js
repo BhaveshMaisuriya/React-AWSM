@@ -38,7 +38,7 @@ class DownloadExcel extends Component {
                     item.no_delivery_interval_4_value = removeKeywords(item.no_delivery_interval_4_value);
                 } 
                 if(item.actual_open_time_1_value) {
-                    item.actual_open_time_1_value = removeKeywords(item.actual_open_time_1_value);
+                    item.actual_open_time_1_value = (item.actual_open_time_1_value).join(',');
                 } 
                 if(item.actual_open_time_2_value) {
                     item.actual_open_time_2_value = removeKeywords(item.actual_open_time_2_value);

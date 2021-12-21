@@ -81,7 +81,7 @@ function BryntumChartTable(props) {
       limit: 10,
       page: page ?? currentPage,
       search_fields: "*",
-      q: "",
+      q: `(status_awsm=='Active')`,
       sort_dir: "desc",
       sort_field: "vehicle",
       filter: {
@@ -102,7 +102,7 @@ function BryntumChartTable(props) {
       limit: 10,
       page: 0,
       search_fields: "*",
-      q: "",
+      q: `(status_awsm=='Active')`,
       sort_dir: "desc",
       sort_field: "vehicle",
       filter: {
@@ -681,7 +681,7 @@ function BryntumChartTable(props) {
       limit: 10,
       page: 0,
       search_fields: "*",
-      q,
+      q: `(status_awsm=='Active')`,
       sort_dir: "desc",
       sort_field: "vehicle",
       filter: {

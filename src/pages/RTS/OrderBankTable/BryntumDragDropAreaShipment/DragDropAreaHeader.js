@@ -1,4 +1,5 @@
 import React, {memo} from "react";
+import { format } from "date-fns"
 
 const DragDropAreaHeader = memo(({vehicle, currentDate}) => {
   return (
@@ -12,7 +13,7 @@ const DragDropAreaHeader = memo(({vehicle, currentDate}) => {
         </span>
       </p>
       <p className="mb-0 b-text-align-center">
-        {currentDate ? currentDate : "Thursday, 11th FEB 2021"}
+        {currentDate ? format(new Date(currentDate), "EEEE, do MMM yyyy") : "Thursday, 11th FEB 2021"}
       </p>
       <p/>
     </div>

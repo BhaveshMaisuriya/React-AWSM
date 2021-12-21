@@ -11,6 +11,7 @@ import { removeKeywords } from "../../pages/DQM/Common/helper"
 import REGION_TERMINAL, { TERMINAL_CODE_MAPPING } from "common/data/regionAndTerminal"
 import TimePicker from "../../components/Common/TableInformation/components/TimePicker"
 import NoDataIcon from "assets/images/AWSM-No-Data-Available-Inverted.svg"
+import { format } from "date-fns";
 
 const timeData = []
 for (let i = 0; i < 24; i++) {
@@ -303,13 +304,17 @@ const NewOrderBankModal = props => {
     deliveryDateTo,
     deliveryDays
   ) => {
+
+    let formattedDateFrom = deliveryDateFrom !== null ? (format(new Date(deliveryDateFrom), "dd-MM-yyyy")) : ""
+    let formattedDateTo = deliveryDateTo !== null ? (format(new Date(deliveryDateTo), "dd-MM-yyyy")) : ""
+  
     if (deliveryNumber !== undefined && deliveryType === "daily") {
       return " Every day" + " - " + hrMints(deliveryTimeFrom) + " to " + hrMints(deliveryTimeTo)
     }
     if (deliveryNumber !== undefined && deliveryType === "single") {
-      return ` From ${deliveryDateFrom !== null ? deliveryDateFrom : ""} - ${hrMints(
+      return ` From ${formattedDateFrom !== null ? formattedDateFrom : ""} - ${hrMints(
         deliveryTimeFrom == null ? deliveryTimeFrom : ""
-      )} to ${deliveryDateTo !== null ? deliveryDateTo : ""} ${hrMints(
+      )} to ${ formattedDateTo !== null ?  formattedDateTo : ""} ${hrMints(
         deliveryTimeTo == null ? deliveryTimeTo : ""
       )}`
     }
@@ -514,7 +519,7 @@ const NewOrderBankModal = props => {
                         <input
                         onChange={e => onFieldChange("remarks", e.target.value)}
                         value={orderData?.remarks}
-                        maxLength={40}
+                        maxLength={41}
                         className={`awsm-input w-100 ${(inputValue && !isValid) ? "out-range " : ""}`}
                       />
                           {/* <AWSMInput
@@ -792,7 +797,7 @@ const NewOrderBankModal = props => {
                       <input
                         onChange={e => onFieldChange("myremark1", e.target.value)}
                         value={orderData?.myremark1}
-                        maxLength={40}
+                        maxLength={41}
                         className={`awsm-input w-100 ${(inputValue1 && !isValid1) ? "out-range " : ""}`}
                       />
                         {/* <AWSMInput
@@ -819,7 +824,7 @@ const NewOrderBankModal = props => {
                         <input
                           onChange={e => onFieldChange("myremark2", e.target.value)}
                           value={orderData?.myremark2}
-                          maxLength={40}
+                          maxLength={41}
                           className={`awsm-input w-100 ${(inputValue2 && !isValid2) ? "out-range " : ""}`}
                       />
                       <span
@@ -840,7 +845,7 @@ const NewOrderBankModal = props => {
                         <input
                           onChange={e => onFieldChange("myremark3", e.target.value)}
                           value={orderData?.myremark3}
-                          maxLength={40}
+                          maxLength={41}
                           className={`awsm-input w-100 ${(inputValue3 && !isValid3) ? "out-range " : ""}`}
                         />
                       <span

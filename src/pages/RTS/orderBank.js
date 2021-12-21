@@ -143,10 +143,10 @@ function OrderBank({
   const [searchFields, setSearchFields] = useState(
     getCookieByKey("Order Bank") ? JSON.parse(getCookieByKey("Order Bank")) : tableColumns
   )
-  const [region, setRegion] = useState(REGION_TERMINAL[0].region)
-  const [terminal, setTerminal] = useState(REGION_TERMINAL[0].terminal[0])
-  const [regionBank, setRegionBank] = useState(REGION_TERMINAL[0].region)
-  const [terminalBank, setTerminalBank] = useState(REGION_TERMINAL[0].terminal[0])
+  const [region, setRegionGantt] = useState(REGION_TERMINAL[0].region)
+  const [terminal, setTerminalGantt] = useState(REGION_TERMINAL[0].terminal[0])
+  const [regionTable, setRegionTable] = useState(REGION_TERMINAL[0].region)
+  const [terminalTable, setTerminalTable] = useState(REGION_TERMINAL[0].terminal[0])
   const [refreshDNModal, setRefreshDNModal] = useState(false)
   const [displayAutoModal, setDisplayAutoModal] = useState(false)
   const [showClearAlert, setShowClearAlert] = useState(false)
@@ -154,7 +154,11 @@ function OrderBank({
   const [ganttChartAllRadio, setGanttChartAllRadio] = useState("")
   const [sendDNModal, setSendDNModal] = useState(false)
   const [status, setStatusDropdown] = useState("Unscheduled")
-  const [shiftDate, setShiftDate] = useState({
+  const [shiftDateGantt, setShiftDateGantt] = useState({
+    type: "single",
+    date_from: defaultDate,
+  })
+  const [shiftDateTable, setShiftDateTable] = useState({
     type: "single",
     date_from: defaultDate,
   })
@@ -186,11 +190,11 @@ function OrderBank({
   const [filterQuery, setfilterQuery] = useState("")
   const filterOrderBank = useMemo(() => {
     return {
-      terminal: TERMINAL_CODE_MAPPING[terminal],
+      terminal: TERMINAL_CODE_MAPPING[terminalTable],
       dn_status: status,
-      shift_date: shiftDate,
+      shift_date: shiftDateTable,
     }
-  }, [terminal, shiftDate, status])
+  }, [terminalTable, shiftDateTable, status])
 
   useEffect(() => {
     clearGanttData()
@@ -199,15 +203,16 @@ function OrderBank({
         limit: 10,
         page: 0,
         search_fields: "*",
-        q: "",
+        q: `(status_awsm=='Active')`,
         sort_dir: "desc",
         sort_field: "vehicle",
         filter: {
-          shift_date: shiftDate,
+          shift_date: shiftDateGantt,
+          // terminal: TERMINAL_CODE_MAPPING[terminal],
         },
       })
     }, 100)
-  }, [shiftDate])
+  }, [shiftDateGantt, terminal])
 
   useEffect(() => {
     const results = { DNs: 3, shipment: 2, backlog: 0, SR: 0, HP: 0 }
@@ -262,15 +267,15 @@ function OrderBank({
 
   const toggle = () => setOpen(!dropdownOpen)
 
-  const terminalList = useMemo(() => {
+  const terminalListGantt = useMemo(() => {
     const currentRegion = REGION_TERMINAL.find(e => e.region === region)
     return currentRegion ? currentRegion.terminal : []
   }, [region])
 
-  const terminalListBank = useMemo(() => {
-    const currentRegion = REGION_TERMINAL.find(e => e.region === region)
-    return currentRegion ? currentRegion.terminalBank : []
-  }, [region])
+  const terminalListTable = useMemo(() => {
+    const currentRegion = REGION_TERMINAL.find(e => e.region === regionTable)
+    return currentRegion ? currentRegion.terminal : []
+  }, [regionTable])
 
   const onSettingClick = val => {
     if (val === "newOrder") {
@@ -637,7 +642,7 @@ function OrderBank({
                       <span className="bl-1-grey-half plr-15">
                         <Button
                           color={"primary"}
-                          disabled={terminal === terminalBank ? false : true}
+                          disabled={terminal === terminalTable ? false : true}
                           onClick={() => onClickRunAutoScheduling()}
                         >
                           Run Auto Schedule
@@ -658,11 +663,11 @@ function OrderBank({
                       <DateRangePicker
                         types={["single"]}
                         startDate={null}
-                        defaultValue={shiftDate}
+                        defaultValue={shiftDateGantt}
                         defaultDate={defaultDate}
                         onChange={value => {
-                          setShiftDate({
-                            ...shiftDate,
+                          setShiftDateGantt({
+                            ...shiftDateGantt,
                             type: value?.type,
                             date_from: value?.date_from,
                             date_to: value?.date_to,
@@ -676,8 +681,8 @@ function OrderBank({
                       <AWSMDropdown
                         value={region}
                         onChange={value => {
-                          setRegion(value)
-                          setTerminal(
+                          setRegionGantt(value)
+                          setTerminalGantt(
                             REGION_TERMINAL.find(item => item.region === value).terminal[0]
                           )
                           setCurrentPage(0)
@@ -689,10 +694,10 @@ function OrderBank({
                       <AWSMDropdown
                         value={terminal}
                         onChange={value => {
-                          setTerminal(value)
+                          setTerminalGantt(value)
                           setCurrentPage(0)
                         }}
-                        items={terminalList}
+                        items={terminalListGantt}
                       />
                     </div>
                   </Col>
@@ -803,7 +808,7 @@ function OrderBank({
                             currentTab={activeTab}
                             ganttChartAllRadio={ganttChartAllRadio}
                             bryntumCurrentColumns={bryntumCurrentColumns}
-                            dateConfig={shiftDate}
+                            dateConfig={shiftDateGantt}
                             region={region}
                             terminal={terminal}
                             clearGanttData={clearGanttData}
@@ -842,7 +847,7 @@ function OrderBank({
                             currentTab={activeTab}
                             ganttChartAllRadio={ganttChartAllRadio}
                             bryntumCurrentColumns={bryntumCurrentColumns}
-                            dateConfig={shiftDate}
+                            dateConfig={shiftDateGantt}
                             region={region}
                             terminal={terminal}
                             clearGanttData={clearGanttData}
@@ -862,11 +867,11 @@ function OrderBank({
                       <DateRangePicker
                         types={["single", "range"]}
                         startDate={null}
-                        defaultValue={shiftDate}
+                        defaultValue={shiftDateTable}
                         defaultDate={defaultDate}
                         onChange={value => {
-                          setShiftDate({
-                            ...shiftDate,
+                          setShiftDateTable({
+                            ...shiftDateTable,
                             type: value?.type,
                             date_from: value?.date_from,
                             date_to: value?.date_to,
@@ -878,10 +883,10 @@ function OrderBank({
                     <p className="order-bank-region-label">REGION & TERMINAL</p>
                     <div className="order-bank-region">
                       <AWSMDropdown
-                        value={regionBank}
+                        value={regionTable}
                         onChange={value => {
-                          setRegionBank(value)
-                          setTerminalBank(
+                          setRegionTable(value)
+                          setTerminalTable(
                             REGION_TERMINAL.find(item => item.region === value).terminal[0]
                           )
                           setCurrentPage(0)
@@ -891,12 +896,12 @@ function OrderBank({
                     </div>
                     <div className="order-bank-region ml-2">
                       <AWSMDropdown
-                        value={terminalBank}
+                        value={terminalTable}
                         onChange={value => {
-                          setTerminalBank(value)
+                          setTerminalTable(value)
                           setCurrentPage(0)
                         }}
-                        items={terminalListBank}
+                        items={terminalListTable}
                       />
                     </div>
                     <p className="order-bank-region-label">STATUS</p>
@@ -977,13 +982,13 @@ function OrderBank({
               />
               <CrossTerminalModal
                 open={crossTerminal}
-                region={region}
+                region={regionTable}
                 onCancel={onCloseCrossTerminal}
                 onSave={onSaveCrossTerminal}
               />
               <UploadDMRModal
                 open={uploadDmr}
-                region={region}
+                region={regionTable}
                 onCancel={onCloseUploadDMR}
                 onSave={onCloseUploadDMR}
                 alertShow={onGetShowAlert}

@@ -25,9 +25,8 @@ const OrderTableDropArea = ({
                               removeOrderFromShipment,
                               removeShipmentFromEvent,
                               getShipmentDetail,
-                              shipmentDropData,
+                              dropData,
                             }) => {
-  const [dropData, setDropData] = useState([])
 
   const [selectedShipment, setSelectedShipment] = useState(null);
   const [invalidSelectedShipment, setInvalidSelectedShipment] = useState(null)
@@ -65,7 +64,6 @@ const OrderTableDropArea = ({
     // }
     if (resourceId) {
       getShipmentDetail(resourceId)
-      setDropData(shipmentDropData)
     }
   }, [resourceId])
 
@@ -404,7 +402,7 @@ const mapDispatchToProps = dispatch => ({
 const mapStateToProps = ({orderBank}) => ({
   ganttChartEvents: orderBank?.ganttChart?.event,
   resourceId: orderBank?.selectedVehicleShipment?.resourceId,
-  shipmentDropData: orderBank?.shipmentDropData,
+  dropData: orderBank?.shipmentDropData,
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(OrderTableDropArea)

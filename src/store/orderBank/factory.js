@@ -1,4 +1,4 @@
-import { isUndefined } from "lodash"
+import { isUndefined, get } from "lodash"
 import { format, parse } from "date-fns"
 
 export default function orderBankFactory(data, orderid) {
@@ -36,6 +36,7 @@ export function eventGanttChartFactory(roadTankerList) {
           endDate: planned_end_time ? format(parse(planned_end_time, TIME_FORMAT, new Date(shift_date)), DATE_TIME_FORMAT) : format(parse("23:59:59", TIME_FORMAT, new Date(shift_date)), DATE_TIME_FORMAT),
           eventType: orderBank?.dn_status,
           eventColor: EVENT_COLOR[dn_status],
+          draggable: true,
         }
         eventGanttChartList.push(event)
       })
@@ -53,10 +54,10 @@ export function shipmentFactory(shipments) {
         const event = {
           volume: order?.volume,
           delivery_date: order?.requested_delivery_date,
-          // cloud: order?.retail_storage_relation.retail_customer_relation.cloud,
-          // name: order?.retail_storage_relation.retail_customer_relation.ship_to_company,
-          // ship_to: order?.retail_storage_relation.retail,
-          // product: order?.retail_storage_relation.product,
+          cloud: get(order, "retail_storage_relation.retail_customer_relation.cloud", ""),
+          name: get(order, "retail_storage_relation.retail_customer_relation.ship_to_company", ""),
+          ship_to: get(order, "retail_storage_relation.retail", ""),
+          product: get(order, "retail_storage_relation.product", "")
         }
         orders.push(event)
       })

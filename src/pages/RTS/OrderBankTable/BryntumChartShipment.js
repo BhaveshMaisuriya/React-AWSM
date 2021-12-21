@@ -404,7 +404,7 @@ function BryntumChartTable(props) {
                           />
                         </InfiniteScroll>
                       </div>
-                      <BryntumDragDropAreaShipment />
+                      <BryntumDragDropAreaShipment currentDate={dateConfig?.date_from} />
                     </div>
                   </div>
                 )

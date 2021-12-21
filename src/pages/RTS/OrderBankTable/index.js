@@ -427,8 +427,10 @@ class index extends Component {
       }
     })
     let deleteEnable = checkedData //checkedData.filter((v) => (v.scheduling_status === "Unscheduled"))
-    let checkCross = checkedData.filter(
-      v => v.product_category === "ASR" || v.product_category === "SMP"
+    // let checkCross = checkedData.filter(
+    //   v => v.product_category === "ASR" || v.product_category === "SMP"
+    let checkCross = checkedData.filter(//product_category
+      v => v.order_type === "ZASR" || v.order_type === "SMP"
     )
     this.props.enabledCross(checkCross.length)
     this.props.deleteEnable(deleteEnable)
@@ -538,9 +540,8 @@ class index extends Component {
                                 {(provided, snapshot) => (
                                   <>
                                     <tr
-                                      className={`${
-                                        v.isChecked && !snapshot.isDragging ? "selected-row" : ""
-                                      } ${snapshot.isDragging ? "tr-dragging" : ""}`}
+                                      className={`${v.isChecked && !snapshot.isDragging ? "selected-row" : ""
+                                        } ${snapshot.isDragging ? "tr-dragging" : ""}`}
                                       ref={provided.innerRef}
                                       {...provided.draggableProps}
                                       {...provided.dragHandleProps}

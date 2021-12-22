@@ -10,6 +10,7 @@ function CrossTerminalModal(props) {
   const [region, setRegion] = useState(props.region)
   const [terminal, setTerminal] = useState(null)
   const [isConfirm, setIsConfirm] = useState(false)
+  const [regionList, setRegionList] = useState([])
 
   const terminalList = useMemo(() => {
     const currentRegion = REGION_TERMINAL.find(e => e.region === region)
@@ -37,6 +38,21 @@ function CrossTerminalModal(props) {
     setTerminal(null)
   }
 
+  useEffect(() => {
+    let temp = [];
+    REGION_TERMINAL.map((item, index) => {
+      temp.push(item.region);
+    })
+    setRegionList(temp) 
+  }, [REGION_TERMINAL])
+
+  const regionChange = (value) => {
+    setRegion(value);
+    setTerminal('')
+    // const currentRegion = REGION_TERMINAL.find(e => e.region === value);
+    //   setTerminalList(currentRegion ? currentRegion.terminal : []);
+  }
+
   return (
     <Modal isOpen={open} className="deleteModal">
       <ModalHeader toggle={toggle}>Cross Terminal</ModalHeader>
@@ -54,9 +70,9 @@ function CrossTerminalModal(props) {
               <Col lg={6}>
                 <AWSMDropdown
                   value={region}
-                  // onChange={value => regionChange(value)}
-                  disabled
-                  items={REGION_TERMINAL.map(e => e.region)}
+                  onChange={value => regionChange(value)}
+                  // disabled
+                  items={regionList}
                 />
               </Col>
               <Col lg={6}>

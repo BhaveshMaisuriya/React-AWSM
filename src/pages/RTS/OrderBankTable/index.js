@@ -131,12 +131,12 @@ export class TableGroupEvent extends React.Component {
             onCancel={() => this.setState({ isOpenDeleteModal: false })}
           />
         )}
-
         {this.state.isOpenEditModal && (
           <EditOrderBankModal
             open={this.state.isOpenEditModal}
             onCancel={this.getEditCancel}
             viewData={this.props.viewData}
+            region={this.props.orderregion}
           />
         )}
       </>
@@ -390,6 +390,7 @@ class index extends Component {
               viewRecords={this.OnViewRecords}
               editAlert={this.editAlert}
               viewData={this.props.viewData}
+              orderregion={this.props.orderregion}
             />
           </th>
         </tr>
@@ -430,7 +431,7 @@ class index extends Component {
     // let checkCross = checkedData.filter(
     //   v => v.product_category === "ASR" || v.product_category === "SMP"
     let checkCross = checkedData.filter(//product_category
-      v => v.order_type === "ZASR" || v.order_type === "SMP"
+      v => v.order_type === "ASR" || v.order_type === "SMP"
     )
     this.props.enabledCross(checkCross.length)
     this.props.deleteEnable(deleteEnable)

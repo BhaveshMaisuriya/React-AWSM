@@ -967,6 +967,7 @@ function OrderBank({
                   onChangeCurrentPage={onChangeCurrentPage}
                   onChangeFilters={onChangeCurrentPage}
                   payloadFilter={payloadFilter}
+                  orderregion={regionTable}
                 />
               </div>
               <NewOrderModal open={showNewOrder} onCancel={onCloseNewOrder} />

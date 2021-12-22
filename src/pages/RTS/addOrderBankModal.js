@@ -31,6 +31,7 @@ const NewOrderBankModal = props => {
   const [shiptoNo, setShiptoNo] = useState("")
   const [progress, setProgress] = useState(0)
   const [showAlert, setShowAlert] = useState(false)
+  const [isaddClicked, setIsaddClicked] = useState(false)  
   const [terminalList, setTerminalList] = useState([])
   const [regionList, setRegionList] = useState([])
   const [productList, setProductList] = useState([])
@@ -69,7 +70,8 @@ const NewOrderBankModal = props => {
   }
 
   const handleUpdate = async() => {
-    if((orderData?.myremark1?.length < 40 || orderData?.myremark2?.length < 40 || orderData?.myremark3?.length < 40)){
+    setIsaddClicked(true);
+    if((orderData?.myremark1?.length < 40 || orderData?.myremark2?.length < 40 || orderData?.myremark3?.length < 40) && orderData.terminal !== undefined && orderData.priority_order !== undefined && orderData.volume !== undefined && orderData.product_name !== undefined && shiptoNo !== ''){
       const temp = {
         shift_date: shiftDate.toISOString().split('T')[0],
         requested_delivery_date: shiftDate.toISOString().split('T')[0],
@@ -343,10 +345,11 @@ const NewOrderBankModal = props => {
               </div>
               <div className="col-4 p-0 ml-4">
                 <label>
-                  SHIP TO
+                  SHIP TO<span className="text-red">*</span>
                 </label>
                 <AWSMInput
                   type="number"
+                  error={(shiptoNo === '' && isaddClicked === true) ? true : false}
                   defaultValue=""
                   placeholder="Numeric Only"
                   onChange={val => setShiptoNo(val)}
@@ -378,13 +381,14 @@ const NewOrderBankModal = props => {
                 <h4>Ship To: {shiptoNo}</h4>
                 <div className="d-flex justify-content-between mt-4">
                   <div className="w-50 mr-4">
-                    <label className="text-upper">Region & Terminal</label>
+                    <label className="text-upper">Region & Terminal<span className="text-red">*</span></label>
                     <div className="d-flex">
                       <div className="w-50 mr-2">
                         <AWSMDropdown
                           items={regionList}
                           onChange={value => onFieldChange("region", value)}
                           value={orderData.region ? orderData.region : ""}
+                          error={(orderData.region === undefined && isaddClicked === true) ? true : false}
                           // value={orderData?.address?.address?.region_group}
                           disabled={false}
                         />
@@ -393,6 +397,7 @@ const NewOrderBankModal = props => {
                         <AWSMDropdown
                           items={terminalList}
                           onChange={value => onFieldChange("terminal", value)}
+                          error={(orderData.terminal === undefined && isaddClicked === true) ? true : false}
                           value={orderData.terminal ? orderData.terminal : ""}
                           disabled={false}
                         />
@@ -408,6 +413,7 @@ const NewOrderBankModal = props => {
                         <AWSMInput
                           type="number"
                           placeholder="Numeric Only"
+                          error={(orderData.volume === undefined && isaddClicked === true) ? true : false}
                           onChange={value => onFieldChange("volume", value)}
                           value={orderData.volume}
                         />
@@ -427,6 +433,7 @@ const NewOrderBankModal = props => {
                           onChange={value =>
                             onFieldChange("product_name", value)
                           }
+                          error={(orderData.product_name === undefined && isaddClicked === true) ? true : false}
                           value={orderData.product_name}
                           disabled={false}
                           placeholder="select"
@@ -502,7 +509,7 @@ const NewOrderBankModal = props => {
                   </div>
                   <div className="d-flex justify-content-between mt-4">
                     <div className="w-50 mr-4">
-                      <label className="text-upper">Priority</label>
+                      <label className="text-upper">Priority<span className="text-red">*</span></label>
                       <div className="d-flex">
                         <div className="w-100">
                           <AWSMDropdown
@@ -510,6 +517,7 @@ const NewOrderBankModal = props => {
                             onChange={value =>
                               onFieldChange("priority_order", value)
                             }
+                            error={(orderData.priority_order === undefined && isaddClicked === true) ? true : false}
                             // defaultSelected='None'
                             value={orderData.priority_order}
                             disabled={false}

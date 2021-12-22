@@ -13,7 +13,7 @@ import "./input.scss"
  * @constructor
  */
 
-const AWSMInput = ({disabled, onChange, placeholder = "Type something here...", value, type="text", defaultValue , maxLength}) => {
+const AWSMInput = ({disabled, onChange, error = false, placeholder = "Type something here...", value, type="text", defaultValue , maxLength}) => {
 
   const [symbolsArr] = useState(["e", "E", "+", "-", "."]);
 
@@ -42,7 +42,7 @@ const AWSMInput = ({disabled, onChange, placeholder = "Type something here...", 
            placeholder={disabled ? "" : placeholder}
            disabled={disabled}
            onChange={onValueChange}
-           className={`awsm-input w-100 ${disabled ? "disabled" : ""}`} />
+           className={`awsm-input ${error === true ? 'border-danger' : '' } w-100 ${disabled ? "disabled" : ""}`} />
   )
 }
 

@@ -18,13 +18,11 @@ import {
 import DatePicker from "../../components/Common/DatePicker"
 import ExitConfirmation from "../../components/Common/ExitConfirmation"
 import AWSMInput from "../../components/Common/Input"
-import FileCopyIcon from "@material-ui/icons/FileCopy"
 import AWSMDropdown from "../../components/Common/Dropdown"
-import { orderDetails } from "./newOrderData"
 import AWSMAlert from "../../components/Common/AWSMAlert"
 import { getEditOrderBankDetail } from "../../store/actions"
 import TimePicker from "../../components/Common/TableInformation/components/TimePicker"
-import REGION_TERMINAL, { TERMINAL_CODE_MAPPING, TERMINAL_CODE_MAPPING_ID } from "common/data/regionAndTerminal"
+import REGION_TERMINAL, { TERMINAL_CODE_MAPPING_ID } from "common/data/regionAndTerminal"
 
 const ORDER_PRIORITY = ["None", "High Priority"]
 const timeData = []
@@ -41,8 +39,7 @@ const EditOrderBankModal = props => {
 
   const [isConfirm, setIsConfirm] = useState(false)
   const [editOrderData, setEditOrderData] = useState(null)
-  const [showAlert, setShowAlert] = useState(false)
-  const [disableBtn, setdisableBtn] = useState(false)  
+  const [showAlert, setShowAlert] = useState(false)  
   const [activeTab, setActiveTab] = useState("1")
   const [inputValue1, setInputValue1] = useState("")
   const [inputValue2, setInputValue2] = useState("") 
@@ -58,20 +55,6 @@ const EditOrderBankModal = props => {
       setEditOrderData(temp); 
     }
   }, [viewData]);  
-
-  // useEffect(() => {
-  //   let temp = [];
-  //   REGION_TERMINAL.map((item, index) => {
-  //     temp.push(item.region);
-  //   })
-  //   setRegionList(temp) 
-  // }, [REGION_TERMINAL])
-
-  // useEffect(async () => {
-  //   if (props.currentOrderDetail !== null) {
-  //     setEditOrderData(props.currentOrderDetail);
-  //   }
-  // }, [props.currentOrderDetail])
 
   const onConfirmCancel = () => {
     setIsConfirm(false)
@@ -93,64 +76,6 @@ const EditOrderBankModal = props => {
       vehicle: editOrderData?.vehicle,
       commercial_storage: editOrderData?.commercial_storage,
       retail_storage: editOrderData?.retail_storage,
-
-      // "id":editOrderData.id,
-      // "sales_order_no":editOrderData.sales_order_no,
-      // "delivery_item_number":editOrderData.delivery_item_number,
-      // "shift_date":editOrderData.shift_date,
-      // "retail_storage":editOrderData.retail_storage,
-      // "commercial_storage":editOrderData.commercial_storage,
-      // "priority":editOrderData.priority,
-      // "sr":editOrderData.sr,
-      // "name":editOrderData.name,
-      // "volume":editOrderData.volume,
-      // "dn_no":editOrderData.dn_no,
-      // "dn_status":editOrderData.dn_status,
-      // "dn_date":editOrderData.dn_date,
-      // "dn_created_at":editOrderData.dn_created_at,
-      // "dn_created_by":editOrderData.dn_created_by,
-      // "customer_type":editOrderData.customer_type,
-      // "order_type":editOrderData.order_type,
-      // "requested_delivery_date":editOrderData.requested_delivery_date,
-      // "multi_load_id":editOrderData.multi_load_id,
-      // "multi_prod_id":editOrderData.multi_prod_id,
-      // "split_id":editOrderData.split_id,
-      // "route_id":editOrderData.route_id,
-      // "vehicle":editOrderData.vehicle,
-      // "scheduled_status":editOrderData.scheduled_status,
-      // "ds_quantity":editOrderData.ds_quantity,
-      // "ds_quantity_per_compartment":editOrderData.ds_quantity_per_compartment,
-      // "shipment":editOrderData.shipment,
-      // "shipment_date":editOrderData.shipment_date,
-      // "trip_no":editOrderData.trip_no,
-      // "planned_load_time":editOrderData.planned_load_time,
-      // "eta":editOrderData.eta,
-      // "retain":editOrderData.retain,
-      // "runout":editOrderData.runout,
-      // "opening_stock_days":editOrderData.opening_stock_days,
-      // "closing_stock_days":editOrderData.closing_stock_days,
-      // "current_stock_days":editOrderData.current_stock_days,
-      // "ullage":editOrderData.ullage,
-      // "out_of_stock":editOrderData.out_of_stock,
-      // "max_stock_days":editOrderData.max_stock_days,
-      // "duration":editOrderData.duration,
-      // "distance":editOrderData.distance,
-      // "remarks":editOrderData.remarks,
-      // "order_remarks":editOrderData.order_remarks,
-      // "scheduling_status":editOrderData.scheduling_status,
-      // "total_travelling_time":editOrderData.total_travelling_time,
-      // "terminal_loading_time":editOrderData.terminal_loading_time,
-      // "offloading_time":editOrderData.offloading_time,
-      // "average_speed":editOrderData.average_speed,
-      // "my_remark_1":editOrderData.my_remark_1,
-      // "my_remark_2":editOrderData.my_remark_2,
-      // "my_remark_3":editOrderData.my_remark_3,
-      // "created_at":editOrderData.created_at,
-      // "created_by":editOrderData.created_by,
-      // "updated_by":editOrderData.updated_by,
-      // "retail_storage_relation":editOrderData.retail_storage_relation,
-      // "commercial_storage_relation":editOrderData.commercial_storage_relation,
-      // "road_tanker_relation":editOrderData.road_tanker_relation
     };
     const { onGetEditOrderBankDetails } = props
     await onGetEditOrderBankDetails({id: editOrderData.id, data: temp})
@@ -181,9 +106,6 @@ const EditOrderBankModal = props => {
         const newOrderData = { ...editOrderData }
         newOrderData[key] = value
         setEditOrderData(newOrderData)
-        setdisableBtn(false);
-      } else {
-        setdisableBtn(true);
       }
     }  else if(key === 'my_remark_2') {
       setInputValue2(value);
@@ -191,9 +113,6 @@ const EditOrderBankModal = props => {
         const newOrderData = { ...editOrderData }
         newOrderData[key] = value
         setEditOrderData(newOrderData)
-        setdisableBtn(false);
-      } else {
-        setdisableBtn(true);
       }
     }  else if(key === 'my_remark_3') {
       setInputValue3(value);
@@ -201,9 +120,6 @@ const EditOrderBankModal = props => {
         const newOrderData = { ...editOrderData }
         newOrderData[key] = value
         setEditOrderData(newOrderData)
-        setdisableBtn(false);
-      } else {
-        setdisableBtn(true);
       }
     } else {
       const newOrderData = { ...editOrderData }
@@ -255,14 +171,6 @@ const EditOrderBankModal = props => {
             <div className="d-flex justify-content-between align-item-baseline">
               <div className="col-4 p-0">
                 <label>SHIFT DATE</label>
-                {/* <DatePicker
-                  className="form-control awsm-input"
-                  value={editOrderData?.shift_date}
-                  startDate={new Date()}
-                  onChange={date => setShiftDate(date)}
-                  orderBankShiftDate={true}
-                  defaultValue={new Date()}
-                /> */}
                 <AWSMInput
                   type="text"
                   value={editOrderData?.shift_date}
@@ -273,10 +181,11 @@ const EditOrderBankModal = props => {
                 <label className="text-upper">region & terminal</label>
                 <Row>
                   <div className="col-3">
-                    <AWSMDropdown
-                      value={editOrderData?.region}
-                      disabled={true}
-                    />
+                  <AWSMInput
+                  type="text"
+                  value={editOrderData?.region}
+                  disabled={true}
+                />
                   </div>
                   <div className="col-3">
                     <AWSMDropdown
@@ -398,7 +307,6 @@ const EditOrderBankModal = props => {
                         <label className="text-upper">Product</label>
                         <div className="d-flex">
                           <div className="w-100">
-                            {/* <AWSMInput value={editOrderData?.product_name} disabled={false} onChange={value => onFieldChange("product", value)} /> */}
                             <AWSMDropdown
                               items={''}//productList
                               onChange={value =>
@@ -411,7 +319,6 @@ const EditOrderBankModal = props => {
                           </div>
                         </div>
                       </div>
-                      {console.log('editOrderData::', editOrderData)}
                       <div className="w-30 mr-4">
                         <label className="text-upper">Product Code</label>
                         <div className="d-flex">
@@ -440,7 +347,6 @@ const EditOrderBankModal = props => {
                         onChange={value => onFieldChange("planned_load_time", value)}
                         hasNone
                       />
-                            {/* <AWSMInput value={editOrderData?.planned_load_time} disabled={false} onChange={value => onFieldChange("loadTime", value)} /> */}
                           </div>
                         </div>
                       </div>
@@ -454,7 +360,6 @@ const EditOrderBankModal = props => {
                             onChange={value => onFieldChange("eta", value)}
                             hasNone
                           />
-                            {/* <AWSMInput value={editOrderData?.eta} disabled={true} /> */}
                           </div>
                         </div>
                       </div>
@@ -512,7 +417,6 @@ const EditOrderBankModal = props => {
                         <label className="text-upper">Priority<span className='text-red'>*</span></label>
                         <div className="d-flex">
                           <div className="w-100">
-                            {/* <AWSMInput value={editOrderData?.priority} disabled={false} onChange={value => onFieldChange("priority", value)} /> */}
                             <AWSMDropdown
                           items={ORDER_PRIORITY}
                           onChange={value =>
@@ -556,11 +460,6 @@ const EditOrderBankModal = props => {
                             (inputValue1 && !isValid1) ? "out-range " : ""
                           }`}
                         >{`${remainChars1 >= 0 ? "+" : ""}${remainChars1}`}</span>
-                          {/* <AWSMInput
-                            onChange={value => onFieldChange("myremark1", value)}
-                            value={editOrderData.myremark1}
-                            placeholder="Type something here..."
-                          /> */}
                         </div>
                       </div>
                       <div className="w-100 mr-4">
@@ -576,11 +475,6 @@ const EditOrderBankModal = props => {
                             (inputValue2 && !isValid2) ? "out-range " : ""
                           }`}
                         >{`${remainChars2 >= 0 ? "+" : ""}${remainChars2}`}</span>
-                          {/* <AWSMInput
-                            onChange={value => onFieldChange("myremark2", value)}
-                            value={editOrderData.myremark2}
-                            placeholder="Type something here..."
-                          /> */}
                         </div>
                       </div>
                       <div className="w-100 mr-4">
@@ -596,11 +490,6 @@ const EditOrderBankModal = props => {
                             (inputValue3 && !isValid3) ? "out-range " : ""
                           }`}
                         >{`${remainChars3 >= 0 ? "+" : ""}${remainChars3}`}</span>
-                          {/* <AWSMInput
-                            onChange={value => onFieldChange("myremark3", value)}
-                            value={editOrderData.myremark3}
-                            placeholder="Type something here..."
-                          /> */}
                         </div>
                       </div>
                     </div>
@@ -1236,7 +1125,7 @@ const EditOrderBankModal = props => {
           >
             Cancel
           </Button>
-          <Button color="primary" disabled={disableBtn} className="p-1320" onClick={handleUpdate}>
+          <Button color="primary" className="p-1320" onClick={handleUpdate}>
             Update
           </Button>
         </ModalFooter>

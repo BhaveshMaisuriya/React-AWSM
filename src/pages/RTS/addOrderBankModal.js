@@ -31,7 +31,6 @@ const NewOrderBankModal = props => {
   const [shiptoNo, setShiptoNo] = useState("")
   const [progress, setProgress] = useState(0)
   const [showAlert, setShowAlert] = useState(false)
-  const [disableBtn, setdisableBtn] = useState(false)
   const [terminalList, setTerminalList] = useState([])
   const [regionList, setRegionList] = useState([])
   const [productList, setProductList] = useState([])
@@ -91,16 +90,11 @@ const NewOrderBankModal = props => {
       setOrderData({});
       setShiptoNo('');
       setShiftDate(new Date(new Date().getTime() + 24 * 60 * 60 * 1000));
-    } else {
-      setdisableBtn(true);
     }
   }
- 
   useEffect(() => {
-    if(props.addorderBankData) {
+    if(props.addorderBankData) {     
       (typeof props.addorderBankData === 'object' && props.addorderBankData.status === undefined) ? onCancel('add', 'success') : onCancel('add', 'error');
-      
-
     }
   }, [props.addorderBankData])
 
@@ -147,29 +141,20 @@ const NewOrderBankModal = props => {
         const newOrderData = { ...orderData }
         newOrderData[key] = value
         setOrderData(newOrderData)
-        setdisableBtn(false);
-      } else {
-        setdisableBtn(true);
-      }
+      } 
     } else if(key === 'myremark1') {
       setInputValue1(value);
       if(value.length < 40) {
         const newOrderData = { ...orderData }
         newOrderData[key] = value
         setOrderData(newOrderData)
-        setdisableBtn(false);
-      } else {
-        setdisableBtn(true);
-      }
+      } 
     }  else if(key === 'myremark2') {
       setInputValue2(value);
       if(value.length < 40) {
         const newOrderData = { ...orderData }
         newOrderData[key] = value
         setOrderData(newOrderData)
-        setdisableBtn(false);
-      } else {
-        setdisableBtn(true);
       }
     }  else if(key === 'myremark3') {
       setInputValue3(value);
@@ -177,9 +162,6 @@ const NewOrderBankModal = props => {
         const newOrderData = { ...orderData }
         newOrderData[key] = value
         setOrderData(newOrderData)
-        setdisableBtn(false);
-      } else {
-        setdisableBtn(true);
       }
     } else {
       const newOrderData = { ...orderData }
@@ -202,7 +184,11 @@ const NewOrderBankModal = props => {
       ) {
         setTimeout(async function () {
           await setShowAlert(true)
-          await setOrderData(props.orderBankData)
+          let temporderBankData = {...props.orderBankData};
+          temporderBankData.myremark1 = '',
+          temporderBankData.myremark2 = '',
+          temporderBankData.myremark3 = '',
+          await setOrderData(temporderBankData)
           let temp = []
           let temp1 = []
           Object.keys(props.orderBankData?.storage).map((key, index) => {
@@ -305,8 +291,8 @@ const NewOrderBankModal = props => {
     deliveryDays
   ) => {
 
-    let formattedDateFrom = deliveryDateFrom !== null ? (format(new Date(deliveryDateFrom), "dd-MM-yyyy")) : ""
-    let formattedDateTo = deliveryDateTo !== null ? (format(new Date(deliveryDateTo), "dd-MM-yyyy")) : ""
+    let formattedDateFrom = deliveryDateFrom && deliveryDateFrom !== null ? (format(new Date(deliveryDateFrom), "dd-MM-yyyy")) : ""
+    let formattedDateTo = deliveryDateTo && deliveryDateTo !== null ? (format(new Date(deliveryDateTo), "dd-MM-yyyy")) : ""
   
     if (deliveryNumber !== undefined && deliveryType === "daily") {
       return " Every day" + " - " + hrMints(deliveryTimeFrom) + " to " + hrMints(deliveryTimeTo)
@@ -461,9 +447,6 @@ const NewOrderBankModal = props => {
                           placeholder="Lorem ipsum"
                         />
                       </div>
-                      {/* <div className="w-40 ml-3">
-                        <Button className="h-100" color="primary" block >Generate</Button>
-                      </div> */}
                     </div>
                   </div>
                 </div>
@@ -480,13 +463,6 @@ const NewOrderBankModal = props => {
                           onChange={value => onFieldChange("load_time", value)}
                           hasNone
                         />
-                          {/* <AWSMDropdown
-                            items={ORDER_LOAD_TIME}
-                            onChange={value => onFieldChange("load_time", value)}
-                            value={orderData.load_time}
-                            disabled={false}
-                            placeholder="select load time"
-                          /> */}
                         </div>
                       </div>
                     </div>
@@ -500,13 +476,6 @@ const NewOrderBankModal = props => {
                             onChange={value => onFieldChange("eta", value)}
                             hasNone
                           />
-                          {/* <AWSMDropdown
-                            items={ORDER_ETA}
-                            onChange={value => onFieldChange("eta", value)}
-                            value={orderData.eta}
-                            disabled={false}
-                            placeholder="select"
-                          /> */}
                         </div>
                       </div>
                     </div>
@@ -522,11 +491,6 @@ const NewOrderBankModal = props => {
                         maxLength={41}
                         className={`awsm-input w-100 ${(inputValue && !isValid) ? "out-range " : ""}`}
                       />
-                          {/* <AWSMInput
-                            onChange={value => onFieldChange("remarks", value)}
-                            value={orderData.remarks}
-                            placeholder="Type Something here..."
-                          /> */}
                             <span
                             className={`position-absolute awsm-input-right-content ${
                               (inputValue && !isValid) ? "out-range " : ""
@@ -800,12 +764,6 @@ const NewOrderBankModal = props => {
                         maxLength={41}
                         className={`awsm-input w-100 ${(inputValue1 && !isValid1) ? "out-range " : ""}`}
                       />
-                        {/* <AWSMInput
-                          onChange={value => onFieldChange("myremark1", value)}
-                          value={orderData.myremark1}
-                          className={`awsm-input w-100 ${(orderData.myremark1 && !isValid) ? "out-range " : ""}`}
-                          placeholder="Type something here..."
-                        /> */}
                         <span
                             className={`position-absolute awsm-input-right-content ${
                               (inputValue1 && !isValid1) ? "out-range " : ""
@@ -816,11 +774,6 @@ const NewOrderBankModal = props => {
                     <div className="w-100 mr-4">
                       <label className="text-upper">my Remarks 2</label>
                       <div className="w-100 relative">
-                        {/* <AWSMInput
-                          onChange={value => onFieldChange("myremark2", value)}
-                          value={orderData.myremark2}
-                          placeholder="Type something here..."
-                        /> */}
                         <input
                           onChange={e => onFieldChange("myremark2", e.target.value)}
                           value={orderData?.myremark2}
@@ -837,11 +790,6 @@ const NewOrderBankModal = props => {
                     <div className="w-100 mr-4">
                       <label className="text-upper">my Remarks 3</label>
                       <div className="w-100 relative">
-                        {/* <AWSMInput
-                          onChange={value => onFieldChange("myremark3", value)}
-                          value={orderData.myremark3}
-                          placeholder="Type something here..."
-                        /> */}
                         <input
                           onChange={e => onFieldChange("myremark3", e.target.value)}
                           value={orderData?.myremark3}
@@ -898,7 +846,7 @@ const NewOrderBankModal = props => {
           >
             Cancel
           </Button>
-          <Button color="primary" disabled={disableBtn} className="p-1320" onClick={handleUpdate}>
+          <Button color="primary" className="p-1320" onClick={handleUpdate}>
             Add
           </Button>
         </ModalFooter>

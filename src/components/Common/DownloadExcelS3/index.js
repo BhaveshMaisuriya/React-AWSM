@@ -14,7 +14,7 @@ const DownloadExcel = ({ excelDownload, onGetDQMExcelDownload, subModule, downlo
     subModule: subModule === "sales-and-inventory" ? "sales-inventory" : subModule,
   }
 
- 
+  
 
   useEffect(() => {
     if(excelDownload !== null && excelDownload) {

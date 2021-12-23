@@ -278,6 +278,7 @@ function BryntumChartTable(props) {
     resourceMargin: 0,
     autoAdjustTimeAxis: false,
     fillTicks: true,
+    scheduleMenuFeature : false,
     listeners: {
       cellClick: function (grid) {
         const { record } = grid
@@ -323,22 +324,19 @@ function BryntumChartTable(props) {
           ${eventRecord.data.eventType === "Soft Overrule" ? `<img src=${YellowAlertIcon} />` : ""} 
           <div class="eventCustomize ${renderData.width < 360 ? "marquee" : ""}" >
             <div class="white-bg brdr-radius">
-              <p>1</p>
+              <p>${eventRecord?._data?.id ? eventRecord._data.id : 1}</p>
             </div>
             <div class="blue-bg brdr-radius">
-              <p>M808</p>
+              <p>${renderData.resource._data?.order_banks[0]?.terminal ? renderData.resource._data.order_banks[0].terminal : "M808"}</p>
             </div>
             <div class="white-text brdr-radius">
-              <p>${renderData.resource.hours} hrs</p>
+              <p>${format(renderData.start, "HH:mm")} hrs</p>
             </div>
             <div class="green-bg brdr-radius">
-              <p>eta 09:00</p>
+              <p>eta ${renderData.resource._data?.order_banks[0]?.eta?.substring(0,5) ? renderData.resource._data.order_banks[0].eta.substring(0,5) : "00:00"}</p>
             </div>
             <div class="white-text brdr-radius">
-              <p>${renderData.resource.hours} hrs</p>
-            </div>
-            <div class="green-bg brdr-radius">
-              <p>eta 09:00</p>
+              <p>${format(renderData.end, "HH:mm")} hrs</p>
             </div>
           </div>
         </div>

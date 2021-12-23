@@ -25,7 +25,7 @@ const OrderTableDropArea = ({
                               removeOrderFromShipment,
                               removeShipmentFromEvent,
                               getShipmentDetail,
-                              dropData,
+                              dropDataShipment,
                             }) => {
 
   const [selectedShipment, setSelectedShipment] = useState(null);
@@ -34,6 +34,7 @@ const OrderTableDropArea = ({
 
   const [showCancelPopup, setShowCancelPopup] = useState(false)
   const [deleteShipmentList, setDeleteShipment] = useState(null)
+  const [dropData, setDropData] = useState(dropDataShipment)
 
   useEffect(() => {
     // merge all orders from all events that belong to resource Id ( vehicle)
@@ -64,6 +65,7 @@ const OrderTableDropArea = ({
     // }
     if (resourceId) {
       getShipmentDetail(resourceId)
+      setDropData(dropDataShipment)
     }
   }, [resourceId])
 
@@ -402,7 +404,7 @@ const mapDispatchToProps = dispatch => ({
 const mapStateToProps = ({orderBank}) => ({
   ganttChartEvents: orderBank?.ganttChart?.event,
   resourceId: orderBank?.selectedVehicleShipment?.resourceId,
-  dropData: orderBank?.shipmentDropData,
+  dropDataShipment: orderBank?.shipmentDropData,
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(OrderTableDropArea)

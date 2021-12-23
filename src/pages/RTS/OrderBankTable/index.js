@@ -159,22 +159,19 @@ class index extends Component {
         isOpenConfirmModal: false,
       },
       filterCondition: [],
-      currentSort: {
-        key: null,
-        asc: false,
-      },
       currentPage: 1,
       showEditAlert: false,
       showEditMsg: "",
       callDelete: false,
       showDeleteMsg: "",
       showDelete: false,
+      fieldToSort: "retail_storage_relation.retail",
+      fieldSortDirection: "desc",
     }
     this.onDragEnd = this.onDragEnd.bind(this)
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
-    // if(!isEqual(nextProps.dataSource,this.props.dataSource)){
     if (nextProps.dataSource !== this.props.dataSource) {
       this.setState({ dataSource: nextProps.dataSource, filterData: nextProps.headerFilters })
     }
@@ -192,27 +189,22 @@ class index extends Component {
   }
 
   onSorting(col) {
-    let newDataSource = [...this.state.dataSource]
-    let newSort = { ...this.state.currentSort }
-    if (newSort.key === col) {
-      newSort.asc = !newSort.asc
-    } else {
-      newSort = { key: col, asc: true }
+    const { fieldSortDirection, fieldToSort } = this.state
+    const { fieldSortDirectionHandler, fieldToSortHandler } = this.props
+    if (col === fieldToSort && fieldSortDirection === "asc") {
+      fieldSortDirectionHandler("desc")
+      this.setState({ fieldSortDirection: "desc" })
+    } else if (col === fieldToSort && fieldSortDirection === "desc") {
+      fieldSortDirectionHandler("asc")
+      this.setState({ fieldSortDirection: "asc" })
+    } else if (col !== fieldToSort) {
+      fieldToSortHandler(col)
+      this.setState({ fieldToSort: col })
     }
-    newDataSource = newDataSource.sort((a, b) => {
-      if (a[col] < b[col]) {
-        return newSort.asc ? -1 : 1
-      }
-      if (a[col] > b[col]) {
-        return newSort.asc ? 1 : -1
-      }
-      return 0
-    })
-    this.setState({ dataSource: newDataSource, currentSort: newSort })
   }
 
   headerTableConfiguration = () => {
-    const { fixedHeaders, filterData, expandSearch, searchText } = this.state
+    const { filterData, expandSearch, searchText } = this.state
     return this.props.tableColumns.map(v => {
       return v != "notes" ? (
         <th>
@@ -342,17 +334,17 @@ class index extends Component {
 
   CallTable = async () => {
     const { getRTSOrderBankTableData, payloadFilter } = this.props
+    const { fieldSortDirection, fieldToSort } = this.state
     if ((await this.props.deleteSuccess) !== undefined && this.state.callDelete === true) {
       if (this.props.deleteSuccess === true) {
         setTimeout(async function () {
           await getRTSOrderBankTableData({
             limit: 10,
             page: payloadFilter.currentPage,
-            // search_fields: transformArrayToString(searchFields),
             search_fields: "*",
             q: transformObjectToStringSentence(payloadFilter.filterQuery),
-            sort_dir: "asc",
-            sort_field: "vehicle",
+            sort_dir: fieldSortDirection,
+            sort_field: fieldToSort,
             filter: payloadFilter.filterOrderBank,
           })
         }, 2000)

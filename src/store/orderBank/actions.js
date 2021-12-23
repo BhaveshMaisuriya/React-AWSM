@@ -2,6 +2,7 @@ import {
   GET_RTS_ORDER_BANK_TABLE_DATA_FAIL,
   GET_RTS_ORDER_BANK_TABLE_DATA_SUCCESS,
   GET_RTS_ORDER_BANK_TABLE_DATA,
+  CLEAR_RTS_ORDER_BANK_TABLE_DATA,
   GET_SHIPMENT_ORDER_BANK_TABLE_DATA_FAIL,
   GET_SHIPMENT_ORDER_BANK_TABLE_DATA_SUCCESS,
   GET_SHIPMENT_ORDER_BANK_TABLE_DATA,
@@ -91,7 +92,7 @@ import {
   CLEAR_GANTT_DATA,
   GET_SHIPMENT_DETAIL_SUCCESS,
   GET_SHIPMENT_DETAIL_FAIL,
-  GET_SHIPMENT_DETAIL
+  GET_SHIPMENT_DETAIL,
 } from "./actionTypes"
 
 export const getRTSOrderBankTableData = params => ({
@@ -534,6 +535,10 @@ export const updateOBRTDetailsFail = error => ({
 
 export const clearGanttData = () => ({
   type: CLEAR_GANTT_DATA,
+})
+
+export const clearRTSOrderBankTableData = () => ({
+  type: CLEAR_RTS_ORDER_BANK_TABLE_DATA,
 })
 
 export const getShipmentDetail = params => ({

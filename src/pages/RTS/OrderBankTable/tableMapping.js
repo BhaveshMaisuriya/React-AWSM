@@ -4,9 +4,9 @@ const tableColumns = [
   "retail_storage_relation.retail",
   "retail_storage_relation.retail_customer_relation.ship_to_company",
   "retail_storage_relation.retail_customer_relation.cloud",
-  "trip",
-  "dn_date",
-  "retail_storage_relation.product",
+  "trip_no",
+  "requested_delivery_date",
+  "retail_storage_relation.product_relation_name",
   "volume",
   "retain",
   "runout",
@@ -54,6 +54,14 @@ const tableMapping = {
   },
   trip_no: {
     label: "Trip No.",
+    columnSize: "cell-text",
+  },
+  requested_delivery_date: {
+    label: "Delivery Date",
+    columnSize: "cell-text",
+  },
+  "retail_storage_relation.product_relation_name": {
+    label: "Product",
     columnSize: "cell-text",
   },
   dn_date: {
@@ -138,10 +146,6 @@ const tableMapping = {
   },
   id: {
     label: "Order ID",
-    columnSize: "cell-text",
-  },
-  requested_delivery_date: {
-    label: "Requested Delivery date",
     columnSize: "cell-text",
   },
   multi_load_id: {
@@ -487,10 +491,6 @@ const ganttChartTableMapping = {
   },
   hours: {
     label: "HOURS",
-    columnSize: "cell-text",
-  },
-  product: {
-    label: "PRODUCT",
     columnSize: "cell-text",
   },
   pump_type: {

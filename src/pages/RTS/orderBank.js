@@ -67,6 +67,7 @@ import {
   getRunAutoScheduling,
   getRTSOderBankGanttChart,
   clearGanttData,
+  clearRTSOrderBankTableData,
 } from "store/orderBank/actions"
 import OrderBankActionModal from "./OrderBankActionModal"
 import CrossTerminalModal from "./crossTerminalModal"
@@ -176,6 +177,8 @@ function OrderBank({
   const [multipleDeleteIds, setMultipleDeleteIds] = useState(false)
   const [deleteMultipleStatus, setDeleteMultipleStatus] = useState("")
   const [showDeleteMultiple, setShowDeleteMultiple] = useState(false)
+  const [fieldToSort, setFieldToSort] = useState("retail_storage_relation.retail")
+  const [fieldSortDirection, setFieldSortDirection] = useState("desc")
   const [bryntumCurrentColumns, setBryntumCurrentColumns] = useState(() => {
     if (!getCookieByKey(bryntumSchedulerTableNameForCookie)) return ganttChartTableDefaultColumns
     const cookieParseData = JSON.parse(getCookieByKey(bryntumSchedulerTableNameForCookie))
@@ -254,8 +257,8 @@ function OrderBank({
       page: currentPage,
       search_fields: "*",
       q: transformObjectToStringSentence(filterQuery),
-      sort_dir: "asc",
-      sort_field: "vehicle",
+      sort_dir: fieldSortDirection,
+      sort_field: fieldToSort,
       filter: filterOrderBank,
     })
     setPayloadFilter({
@@ -264,6 +267,29 @@ function OrderBank({
       filterQuery: filterQuery,
     })
   }, [filterOrderBank, currentPage, filterQuery])
+
+  useEffect(() => {
+    clearRTSOrderBankTableData()
+    setTimeout(() => {
+      getRTSOrderBankTableData({
+        limit: 10 * (currentPage + 1),
+        page: 0,
+        search_fields: "*",
+        q: transformObjectToStringSentence(filterQuery),
+        sort_dir: fieldSortDirection,
+        sort_field: fieldToSort,
+        filter: filterOrderBank,
+      })
+    }, 100)
+  }, [fieldSortDirection, fieldToSort])
+
+  const fieldSortDirectionHandler = direction => {
+    setFieldSortDirection(direction)
+  }
+
+  const fieldToSortHandler = fieldName => {
+    setFieldToSort(fieldName)
+  }
 
   const toggle = () => setOpen(!dropdownOpen)
 
@@ -539,7 +565,7 @@ function OrderBank({
       }
     })
     var temp2 = temp1.join().split(",")
-    var temp3 = temp2.length > 0 ? temp2[0] + " & " + temp2[1] : temp2
+    var temp3 = temp2.length > 1 === true ? temp2[0] + " & " + temp2[1] : temp2[0]
     setCheckedValue(temp3)
     setDeleteCheck(temp)
   }
@@ -767,6 +793,7 @@ function OrderBank({
                             <button
                               className="btn btn-primary btn-sm excel-btn-container pdf-btn"
                               onClick={ConfirmClearModal}
+                              disabled={checkedValue === "" ? true : false}
                             >
                               {" "}
                               Clear{" "}
@@ -967,6 +994,8 @@ function OrderBank({
                   onChangeCurrentPage={onChangeCurrentPage}
                   onChangeFilters={onChangeCurrentPage}
                   payloadFilter={payloadFilter}
+                  fieldSortDirectionHandler={fieldSortDirectionHandler}
+                  fieldToSortHandler={fieldToSortHandler}
                 />
               </div>
               <NewOrderModal open={showNewOrder} onCancel={onCloseNewOrder} />
@@ -1125,6 +1154,7 @@ const mapDispatchToProps = dispatch => ({
   onGetCrossTerminal: payload => dispatch(getCrossTerminal(payload)),
   getRTSOderBankGanttChart: params => dispatch(getRTSOderBankGanttChart(params)),
   clearGanttData: () => dispatch(clearGanttData()),
+  clearRTSOrderBankTableData: () => dispatch(clearRTSOrderBankTableData()),
 })
 
 const mapStateToProps = ({ orderBank }) => ({

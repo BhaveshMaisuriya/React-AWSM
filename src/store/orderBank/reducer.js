@@ -54,6 +54,7 @@ import {
   CLEAR_GANTT_DATA,
   GET_SHIPMENT_DETAIL_FAIL,
   GET_SHIPMENT_DETAIL_SUCCESS,
+  CLEAR_RTS_ORDER_BANK_TABLE_DATA,
 } from "./actionTypes"
 import { eventGanttChartFactory, shipmentFactory } from "./factory"
 import { ToastSuccess, ToastError } from "../../helpers/swal"
@@ -332,6 +333,13 @@ const RTSOrderBank = (state = initialState, action) => {
         dropOderSuccess: false,
       }
     }
+    case CLEAR_RTS_ORDER_BANK_TABLE_DATA: {
+      return {
+        ...state,
+        orderBankTableData: [],
+        dropOderSuccess: false,
+      }
+    }
     case GET_RTS_GANTT_CHART_DATA_FAIL: {
       return {
         ...state,
@@ -516,7 +524,7 @@ const RTSOrderBank = (state = initialState, action) => {
     case GET_SHIPMENT_DETAIL_SUCCESS: {
       return {
         ...state,
-        shipmentDropData: shipmentFactory(action.payload)
+        shipmentDropData: shipmentFactory(action.payload),
       }
     }
 

@@ -52,12 +52,15 @@ export function shipmentFactory(shipments) {
       let orders = []
       shipment?.order_banks?.forEach(order => {
         const event = {
+          id: order?.id,
           volume: order?.volume,
           delivery_date: order?.requested_delivery_date,
           cloud: get(order, "retail_storage_relation.retail_customer_relation.cloud", ""),
           name: get(order, "retail_storage_relation.retail_customer_relation.ship_to_company", ""),
           ship_to: get(order, "retail_storage_relation.retail", ""),
-          product: get(order, "retail_storage_relation.product", "")
+          product: get(order, "retail_storage_relation.product", ""),
+          isChecked: false,
+          isOnRemove: false,
         }
         orders.push(event)
       })

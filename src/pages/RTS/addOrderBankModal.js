@@ -21,7 +21,7 @@ for (let i = 0; i < 24; i++) {
   timeData.push(`${i.toString().padStart(2, "0")}:45`)
 }
 timeData.push(`23:59`)
-const ORDER_PRIORITY = ["None", "High Priority"]
+const ORDER_PRIORITY = ["None", "Low Priority"]
 const NewOrderBankModal = props => {
   const { open, onCancel } = props
 
@@ -298,7 +298,7 @@ const NewOrderBankModal = props => {
       return " Every day" + " - " + hrMints(deliveryTimeFrom) + " to " + hrMints(deliveryTimeTo)
     }
     if (deliveryNumber !== undefined && deliveryType === "single") {
-      return ` From ${formattedDateFrom !== null ? formattedDateFrom : ""} - ${hrMints(
+      return `${formattedDateFrom !== null ? formattedDateFrom : ""} - ${hrMints(
         deliveryTimeFrom == null ? deliveryTimeFrom : ""
       )} to ${ formattedDateTo !== null ?  formattedDateTo : ""} ${hrMints(
         deliveryTimeTo == null ? deliveryTimeTo : ""
@@ -343,7 +343,7 @@ const NewOrderBankModal = props => {
               </div>
               <div className="col-4 p-0 ml-4">
                 <label>
-                  SHIP TO
+                SHIP TO <span className="text-red">*</span>
                 </label>
                 <AWSMInput
                   type="number"

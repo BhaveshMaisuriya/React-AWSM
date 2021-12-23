@@ -40,11 +40,21 @@ const EditOrderBankModal = props => {
   const [isConfirm, setIsConfirm] = useState(false)
   const [editOrderData, setEditOrderData] = useState(null)
   const [showAlert, setShowAlert] = useState(false)  
+  const [isUpdate, setIsUpdate] = useState(false)
   const [activeTab, setActiveTab] = useState("1")
   const [inputValue1, setInputValue1] = useState("")
   const [inputValue2, setInputValue2] = useState("") 
   const [inputValue3, setInputValue3] = useState("")  
   const [terminalList, setTerminalList] = useState([])
+  const [regionList, setRegionList] = useState([])
+
+  useEffect(() => {
+    let temp = [];
+    REGION_TERMINAL.map((item, index) => {
+      temp.push(item.region);
+    })
+    setRegionList(temp) 
+  }, [REGION_TERMINAL])
 
   useEffect(async () => {
     if(viewData !== null ){ 
@@ -52,9 +62,13 @@ const EditOrderBankModal = props => {
       const currentRegion = REGION_TERMINAL.find(e => e.region === temp.region);
       setTerminalList(currentRegion ? currentRegion.terminal : []);
       temp.terminal_name = TERMINAL_CODE_MAPPING_ID[temp.terminal];
+      temp.region = props?.region;
       setEditOrderData(temp); 
     }
   }, [viewData]);  
+
+  useEffect(async () => {
+  }, [props.region]);    
 
   const onConfirmCancel = () => {
     setIsConfirm(false)
@@ -78,14 +92,16 @@ const EditOrderBankModal = props => {
       retail_storage: editOrderData?.retail_storage,
     };
     const { onGetEditOrderBankDetails } = props
-    await onGetEditOrderBankDetails({id: editOrderData.id, data: temp})
-    if(props.editorderBankData) {
-      onCancel('edit', props.editorderBankData?.status ? 'error' : 'success')
-    }
+    await onGetEditOrderBankDetails({id: editOrderData.id, data: temp}) 
+    setIsUpdate(true);
   }
 
   useEffect(() => {
-  
+    if(props.editorderBankData && isUpdate === true) {
+      (typeof props.editorderBankData === 'object' && props.editorderBankData.status === undefined) ? onCancel('edit', 'success') : onCancel('edit', 'error');
+      setEditOrderData(null);
+      setIsUpdate(false);
+      }
   }, [props.editorderBankData])
 
   const onConfirmExit = () => {
@@ -100,7 +116,15 @@ const EditOrderBankModal = props => {
   }
 
   const onFieldChange = (key, value) => {
-    if(key === 'my_remark_1') {
+    if(key === 'region'){
+      const currentRegion = REGION_TERMINAL.find(e => e.region === value);
+      setTerminalList(currentRegion ? currentRegion.terminal : []);
+  
+      const newOrderData = { ...editOrderData }
+      newOrderData[key] = currentRegion ? currentRegion.region : ''
+      newOrderData['terminal_name'] = '';
+      setEditOrderData(newOrderData)
+    }else if(key === 'my_remark_1') {
       setInputValue1(value);
       if(value.length < 40) {
         const newOrderData = { ...editOrderData }
@@ -181,11 +205,12 @@ const EditOrderBankModal = props => {
                 <label className="text-upper">region & terminal</label>
                 <Row>
                   <div className="col-3">
-                  <AWSMInput
-                  type="text"
-                  value={editOrderData?.region}
-                  disabled={true}
-                />
+                  <AWSMDropdown
+                          items={regionList}
+                          onChange={value => onFieldChange("region", value)}
+                          value={editOrderData.region ? editOrderData.region : ""}
+                          disabled={false}
+                        />
                   </div>
                   <div className="col-3">
                     <AWSMDropdown

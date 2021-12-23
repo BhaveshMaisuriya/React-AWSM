@@ -994,6 +994,7 @@ function OrderBank({
                   onChangeCurrentPage={onChangeCurrentPage}
                   onChangeFilters={onChangeCurrentPage}
                   payloadFilter={payloadFilter}
+                  orderregion={regionTable}
                   fieldSortDirectionHandler={fieldSortDirectionHandler}
                   fieldToSortHandler={fieldToSortHandler}
                 />

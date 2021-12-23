@@ -40,6 +40,7 @@ const EditOrderBankModal = props => {
   const [isConfirm, setIsConfirm] = useState(false)
   const [editOrderData, setEditOrderData] = useState(null)
   const [showAlert, setShowAlert] = useState(false)  
+  const [isUpdate, setIsUpdate] = useState(false)
   const [activeTab, setActiveTab] = useState("1")
   const [inputValue1, setInputValue1] = useState("")
   const [inputValue2, setInputValue2] = useState("") 
@@ -91,16 +92,16 @@ const EditOrderBankModal = props => {
       retail_storage: editOrderData?.retail_storage,
     };
     const { onGetEditOrderBankDetails } = props
-    await onGetEditOrderBankDetails({id: editOrderData.id, data: temp})
-    // 
-    if(props.editorderBankData) {
-    (typeof props.editorderBankData === 'object' && props.editorderBankData.status === undefined) ? onCancel('edit', 'success') : onCancel('edit', 'error');
-    setEditOrderData(null);
-    }
+    await onGetEditOrderBankDetails({id: editOrderData.id, data: temp}) 
+    setIsUpdate(true);
   }
 
   useEffect(() => {
- 
+    if(props.editorderBankData && isUpdate === true) {
+      (typeof props.editorderBankData === 'object' && props.editorderBankData.status === undefined) ? onCancel('edit', 'success') : onCancel('edit', 'error');
+      setEditOrderData(null);
+      setIsUpdate(false);
+      }
   }, [props.editorderBankData])
 
   const onConfirmExit = () => {

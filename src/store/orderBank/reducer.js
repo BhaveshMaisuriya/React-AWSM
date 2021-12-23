@@ -80,6 +80,7 @@ const initialState = {
   totalRow: 0,
   multipleorder: null,
   viewData: null,
+  sendDn: null,
   editorderBankData: null,
   ganttChartTableData: [],
   ganttChartTableFilter: {},
@@ -249,9 +250,10 @@ const RTSOrderBank = (state = initialState, action) => {
       }
 
     case SEND_DN_STATUS_REQUEST_SUCCESS:
-      ToastSuccess.fire({ title: "An order has been successfully sent for DN Creation" })
+      // ToastSuccess.fire({ title: "An order has been successfully sent for DN Creation" })
       return {
         ...state,
+        sendDn: 'success',
       }
     case GET_ORDER_BANK_AUDITLOG_SUCCESS:
       return {

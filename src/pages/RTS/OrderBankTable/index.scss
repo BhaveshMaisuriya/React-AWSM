@@ -46,14 +46,14 @@
                             align-items: center;
                             justify-content: center;
                         }
-                        .Send{
+                        .send{
                             color:#00A19C;
                             border:1px solid #00A19C;
                             &:hover{
                                 cursor: pointer;
                             }
                             }
-                        .Blocked{
+                        .blocked{
                             color:#D50000;
                             background: #F2B2B2;
                             box-sizing: border-box;
@@ -62,11 +62,11 @@
                             color:#763F98;
                             background: #D6C5E0;
                         }
-                        .Clear{
+                        .clean{
                             color:#4CAF50;
                             background: #D5FBD6;
                         }
-                        .Unblocked{
+                        .unblock{
                             color:#763F98;
                             background: #D6C5E0;
                             font-weight: 700;

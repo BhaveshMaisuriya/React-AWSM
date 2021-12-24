@@ -295,10 +295,10 @@ class index extends Component {
             <td>
               {
                 <span
-                  className={`status ${data[v]}`}
+                  className={`status ${data[v] === 'Clean DN' ? 'clean' : data[v] === 'Blocked DN' ? 'blocked' : data[v] === 'Late Unblock' ? 'unblock' : 'send' }`}
                   onClick={this.DNStatusOnClickHandler.bind(this, data, data[v])}
                 >
-                  {data[v]}
+                  {(data[v] === '' || data[v] === null) ? 'Send for DN' : data[v]}
                 </span>
               }
             </td>
@@ -442,7 +442,7 @@ class index extends Component {
   }
 
   DNStatusOnClickHandler(data, key) {
-    if (key === "Send For DN") {
+    if ((key === "" || key === null)) {
       this.setState({ DNStatus: { isOpenConfirmModal: true, data } })
     }
   }
@@ -452,7 +452,10 @@ class index extends Component {
     const { DNStatus } = this.state
     const { onSendDNStatusRequest } = this.props
     onSendDNStatusRequest(DNStatus.data)
-    this.setState({ DNStatus: { isOpenConfirmModal: false } })
+    this.setState({ DNStatus: { isOpenConfirmModal: false } });
+    // if(this.props.sendDn){
+      this.setState({showSendDN: true});
+    // }
   }
 
   getStyle(style, snapshot) {
@@ -592,6 +595,14 @@ class index extends Component {
             closeAlert={() => this.setState({ showEditAlert: false })}
           />
         )}
+        {this.state.showSendDN && (
+          <AWSMAlert
+            status='success'
+            message='An order has been successfully sent for DN Creation'
+            openAlert={this.state.showSendDN}
+            closeAlert={() => this.setState({ showSendDN: false })}
+          />
+        )}
         {this.state.showDelete && (
           <AWSMAlert
             status={this.state.showDeleteMsg}
@@ -625,5 +636,6 @@ const mapStateToProps = ({ orderBank }) => ({
   totalRow: orderBank.totalRow,
   viewData: orderBank.viewData,
   deleteSuccess: orderBank.deleteSuccess,
+  sendDn: orderBank.sendDn,
 })
 export default connect(mapStateToProps, mapDispatchToProp)(index)

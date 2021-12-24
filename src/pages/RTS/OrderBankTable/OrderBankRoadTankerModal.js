@@ -27,6 +27,11 @@ const OrderBankRoadTankerModal = ({
     newData[fieldName] = value
     setOrderBankRTDetails(newData)
   }
+  const rtAvailabilityStatusSelection = {
+    OH: ["OH", "OFF"],
+    Double: ["On", "ON", "On1", "On2", "OFF"],
+    DOUBLE: ["On", "ON", "On1", "On2", "OFF"],
+  }
 
   useEffect(() => {
     if (isOpen) getOBRTDetails(selectedVehicleID)
@@ -120,22 +125,21 @@ const OrderBankRoadTankerModal = ({
           </Col>
           <Col className="col-md-4 form-group">
             <label>SHIFT</label>
-            <AWSMDropdown
-              value={currentOrderBankRTDetails?.shift_type}
-              items={["Double", "OH"]}
-              onChange={e => onFieldValueChange("shift_type", e)}
-              disabled={!isScheduler}
+            <input
               className="form-control awsm-input"
-              placeholder={"Select"}
+              type="text"
+              defaultValue={currentOrderBankRTDetails?.shift_type}
+              disabled
             />
           </Col>
           <Col className="col-md-4 form-group">
             <label>STATUS</label>
-            <input
+            <AWSMDropdown
+              value={currentOrderBankRTDetails?.rt_availability_status}
+              items={rtAvailabilityStatusSelection[currentOrderBankRTDetails?.shift_type]}
+              onChange={e => onFieldValueChange("rt_availability_status", e)}
+              disabled={!isScheduler}
               className="form-control awsm-input"
-              type="text"
-              defaultValue={currentOrderBankRTDetails?.status_sap}
-              disabled
             />
           </Col>
         </Row>
@@ -145,7 +149,7 @@ const OrderBankRoadTankerModal = ({
             <input
               className="form-control awsm-input"
               type="text"
-              defaultValue={currentOrderBankRTDetails?.capacity}
+              defaultValue={currentOrderBankRTDetails?.max_volume}
               disabled
             />
           </Col>

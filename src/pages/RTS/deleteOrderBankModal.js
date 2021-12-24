@@ -4,7 +4,7 @@ import { Modal, ModalBody, ModalHeader } from "reactstrap";
 
 const DeleteOrderBankConfirmation = ({ isOpen, onDelete, onCancel }) => {
     return (
-      <Modal isOpen={isOpen} className='deleteModal'>
+      <Modal id="deleteorderbank-modal" isOpen={isOpen} className='deleteModal'>
         <ModalHeader toggle={onCancel}>
           Delete Confirmation
         </ModalHeader>

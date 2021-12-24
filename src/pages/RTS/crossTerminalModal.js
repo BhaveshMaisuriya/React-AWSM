@@ -54,8 +54,8 @@ function CrossTerminalModal(props) {
   }
 
   return (
-    <Modal isOpen={open} className="deleteModal">
-      <ModalHeader toggle={toggle}>Cross Terminal</ModalHeader>
+    <Modal  id="crossterminal-modal" isOpen={open} className="deleteModal">
+      <ModalHeader  toggle={toggle}>Cross Terminal</ModalHeader>
       <ModalBody className="position-relative h-250 scroll pl-30">
         {isConfirm && <ExitConfirmation onExit={onConfirmExit} onCancel={onConfirmCancel} />}
         {!isConfirm && (

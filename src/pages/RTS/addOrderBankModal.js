@@ -139,28 +139,28 @@ const NewOrderBankModal = props => {
       setOrderData(newOrderData)
     } else if(key === 'remarks') {
       setInputValue(value);
-      if(value.length < 40) {
+      if(value.length <= 40) {
         const newOrderData = { ...orderData }
         newOrderData[key] = value
         setOrderData(newOrderData)
       } 
     } else if(key === 'myremark1') {
       setInputValue1(value);
-      if(value.length < 40) {
+      if(value.length <= 40) {
         const newOrderData = { ...orderData }
         newOrderData[key] = value
         setOrderData(newOrderData)
       } 
     }  else if(key === 'myremark2') {
       setInputValue2(value);
-      if(value.length < 40) {
+      if(value.length <= 40) {
         const newOrderData = { ...orderData }
         newOrderData[key] = value
         setOrderData(newOrderData)
       }
     }  else if(key === 'myremark3') {
       setInputValue3(value);
-      if(value.length < 40) {
+      if(value.length <= 40) {
         const newOrderData = { ...orderData }
         newOrderData[key] = value
         setOrderData(newOrderData)
@@ -295,16 +295,13 @@ const NewOrderBankModal = props => {
 
     let formattedDateFrom = deliveryDateFrom && deliveryDateFrom !== null ? (format(new Date(deliveryDateFrom), "dd-MM-yyyy")) : ""
     let formattedDateTo = deliveryDateTo && deliveryDateTo !== null ? (format(new Date(deliveryDateTo), "dd-MM-yyyy")) : ""
-  
+
     if (deliveryNumber !== undefined && deliveryType === "daily") {
       return " Every day" + " - " + hrMints(deliveryTimeFrom) + " to " + hrMints(deliveryTimeTo)
     }
     if (deliveryNumber !== undefined && deliveryType === "single") {
-      return `${formattedDateFrom !== null ? formattedDateFrom : ""} - ${hrMints(
-        deliveryTimeFrom == null ? deliveryTimeFrom : ""
-      )} to ${ formattedDateTo !== null ?  formattedDateTo : ""} ${hrMints(
-        deliveryTimeTo == null ? deliveryTimeTo : ""
-      )}`
+      return `${formattedDateFrom !== null ? formattedDateFrom : ""} - ${hrMints(deliveryTimeFrom)} 
+      to ${ formattedDateTo !== null ?  formattedDateTo : ""} ${hrMints(deliveryTimeTo)}`
     }
     if (deliveryNumber !== undefined && deliveryType === "every") {
       return deliveryNumber
@@ -314,7 +311,10 @@ const NewOrderBankModal = props => {
             " to " +
             hrMints(deliveryTimeTo)
         : " - "
-    } else {
+    } if(deliveryNumber !== undefined && deliveryType === "range"){
+      return `${formattedDateFrom !== null ? formattedDateFrom : ""} to ${ formattedDateTo !== null ?  formattedDateTo : ""}
+      - ${hrMints(deliveryTimeFrom)} to ${hrMints(deliveryTimeTo)}`
+    }else {
       return " - "
     }
   }
@@ -495,7 +495,7 @@ const NewOrderBankModal = props => {
                         <input
                         onChange={e => onFieldChange("remarks", e.target.value)}
                         value={orderData?.remarks}
-                        maxLength={41}
+                        maxLength={40}
                         className={`awsm-input w-100 ${(inputValue && !isValid) ? "out-range " : ""}`}
                       />
                             <span
@@ -769,7 +769,7 @@ const NewOrderBankModal = props => {
                       <input
                         onChange={e => onFieldChange("myremark1", e.target.value)}
                         value={orderData?.myremark1}
-                        maxLength={41}
+                        maxLength={40}
                         className={`awsm-input w-100 ${(inputValue1 && !isValid1) ? "out-range " : ""}`}
                       />
                         <span
@@ -785,7 +785,7 @@ const NewOrderBankModal = props => {
                         <input
                           onChange={e => onFieldChange("myremark2", e.target.value)}
                           value={orderData?.myremark2}
-                          maxLength={41}
+                          maxLength={40}
                           className={`awsm-input w-100 ${(inputValue2 && !isValid2) ? "out-range " : ""}`}
                       />
                       <span
@@ -801,7 +801,7 @@ const NewOrderBankModal = props => {
                         <input
                           onChange={e => onFieldChange("myremark3", e.target.value)}
                           value={orderData?.myremark3}
-                          maxLength={41}
+                          maxLength={40}
                           className={`awsm-input w-100 ${(inputValue3 && !isValid3) ? "out-range " : ""}`}
                         />
                       <span

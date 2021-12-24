@@ -665,6 +665,24 @@
     background-color: #fece664f;
  }
 
+ #crossterminal-modal .modal-content{
+    h5{
+        padding-left: 20px !important;
+    }
+    .btn{
+        width: 120px !important;
+    }
+}
+
+#deleteorderbank-modal .modal-content{
+    h5{
+        padding-left: 20px !important;
+    }
+    .btn{
+        width: 120px !important;
+    }
+}
+
 .yellowbar {
     margin-top: 2em;
 }

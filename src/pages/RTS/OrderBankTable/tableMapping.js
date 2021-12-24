@@ -426,98 +426,109 @@ const tableMapping = {
   },
 }
 
-const ganttChartTableColumns = ["vehicle", "shift_type", "rate", "cap", "rtcode"]
+const ganttChartTableColumns = [
+  "vehicle",
+  "cap",
+  "rt_availability_status",
+  "utilization_rate",
+  "restriction_code",
+]
 
 const ganttChartTableDefaultColumns = {
   vehicle: {
     label: "VEHICLE ID",
     columnSize: "cell-text",
   },
-  rate: {
-    label: "RATE(%)",
-    columnSize: "cell-text",
-  },
-  shift_type: {
-    label: "SHIFT",
-    columnSize: "cell-text",
-    type: "list",
-  },
-  // status: {
-  //   label: "STATUS",
-  //   columnSize: "cell-text",
-  //   type: "list"
-
-  // },
   cap: {
-    label: "CAP(L)",
+    label: "Cap (L)",
     columnSize: "cell-text",
   },
-  rtcode: {
-    label: "RT CODE",
+  rt_availability_status: {
+    label: "Status",
+    columnSize: "cell-text",
+  },
+  utilization_rate: {
+    label: "Util (%)",
+    columnSize: "cell-text",
+  },
+  restriction_code: {
+    label: "RT Code",
     columnSize: "cell-text",
   },
 }
 
 const ganttChartTableMapping = {
   vehicle: {
-    label: "VEHICLE",
+    label: "Vehicle",
     columnSize: "cell-text",
     key: "frozen",
   },
-  rate: {
-    label: "RATE (%)",
+  cap: {
+    label: "Cap (L)",
     columnSize: "cell-text",
   },
-  shift_type: {
-    label: "SHIFT",
+  owner: {
+    label: "Name",
+    columnSize: "cell-text",
+  },
+  chartering_type: {
+    label: "Type",
+    columnSize: "cell-text",
+  },
+  rt_availability_status: {
+    label: "Status",
     columnSize: "cell-text",
     type: "list",
   },
-  cap: {
-    label: "CAP (L)",
-    columnSize: "cell-text",
-  },
-  rtcode: {
-    label: "RT CODE",
-    columnSize: "cell-text",
-  },
-  name: {
-    label: "NAME",
-    columnSize: "cell-text",
-  },
-  status: {
-    label: "STATUS",
-    columnSize: "cell-text",
-  },
-  hours: {
-    label: "HOURS",
+  shift_type: {
+    label: "Shift",
     columnSize: "cell-text",
   },
   pump_type: {
-    label: "PUMP",
+    label: "Pump",
     columnSize: "cell-text",
   },
-  no_of_com: {
-    label: "NO. OF COM",
-    label_short: "NO. OF...",
+  daily_available_hours: {
+    label: "Hours",
     columnSize: "cell-text",
+  },
+  utilization_rate: {
+    label: "Util (%)",
+    columnSize: "cell-text",
+  },
+  product_type_sap: {
+    label: "Product",
+    columnSize: "cell-text",
+  },
+  max_volume: {
+    label: "Capacity",
+    columnSize: "cell-text",
+  },
+  compartment_no: {
+    label: "No. of Comp",
+    columnSize: "cell-text",
+    label_short: "NO. OF...",
   },
   max_weight: {
-    label: "MAX WEIGHT",
+    label: "Max Weight",
+    columnSize: "cell-text",
     label_short: "MAX W...",
+  },
+  max_weight: {
+    label: "Max Weight",
     columnSize: "cell-text",
   },
-  cust_type: {
-    label: "CUST TYPE",
+  customer_type: {
+    label: "Cust Type",
+    columnSize: "cell-text",
     label_short: "CUST T...",
-    columnSize: "cell-text",
   },
-  type: {
-    label: "TYPE",
+  restriction_code: {
+    label: "RT Code",
     columnSize: "cell-text",
   },
   remarks: {
-    label: "REMARKS",
+    label: "Remarks",
     columnSize: "cell-text",
   },
 }

@@ -39,6 +39,7 @@ const EditOrderBankModal = props => {
 
   const [isConfirm, setIsConfirm] = useState(false)
   const [editOrderData, setEditOrderData] = useState(null)
+  const [originalEditOrderData, setoriginalEditOrderData] = useState(null)  
   const [showAlert, setShowAlert] = useState(false)  
   const [isUpdate, setIsUpdate] = useState(false)
   const [activeTab, setActiveTab] = useState("1")
@@ -64,6 +65,7 @@ const EditOrderBankModal = props => {
       temp.terminal_name = TERMINAL_CODE_MAPPING_ID[temp.terminal];
       temp.region = props?.region;
       setEditOrderData(temp); 
+      setoriginalEditOrderData(temp);
     }
   }, [viewData]);  
 
@@ -112,7 +114,13 @@ const EditOrderBankModal = props => {
   }
 
   const toggle = () => {
-    setIsConfirm(true)
+    if(originalEditOrderData !== editOrderData){
+      setIsConfirm(true);
+    } else {
+      if (onCancel) {
+        onCancel('cancel');
+      }
+    }
   }
 
   const onFieldChange = (key, value) => {
@@ -1146,7 +1154,7 @@ const EditOrderBankModal = props => {
             color="light-primary"
             className="light-primary p-1320"
             outline
-            onClick={() => setIsConfirm(true)}
+            onClick={toggle}
           >
             Cancel
           </Button>

@@ -369,9 +369,10 @@ class index extends Component {
     await onGetViewOrderBankDetail(allData.id)
   }
 
-  editAlert = async(type, val) => {
+  editAlert = async(type, val = '') => {
     type === "edit" && this.setState({ showEditAlert: true })
     val !== "" ? this.setState({ showEditMsg: val }) : this.setState({ showEditAlert: "" })
+    if(type === "edit"){
     this.setState({showLoader: true});
     const { getRTSOrderBankTableData, payloadFilter } = this.props
     const { fieldSortDirection, fieldToSort } = this.state
@@ -386,7 +387,8 @@ class index extends Component {
             sort_field: fieldToSort,
             filter: payloadFilter.filterOrderBank,
           })
-        }, 2000)
+        }, 2000);
+      }
   }
 
   DataOfTableFixed = () => {

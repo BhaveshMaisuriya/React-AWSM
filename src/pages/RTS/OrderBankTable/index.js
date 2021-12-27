@@ -613,7 +613,7 @@ class index extends Component {
             message={
               this.state.showEditMsg === "success"
                 ? "Record successfully updated"
-                : "Order has not been update"
+                : "Order update failed"
             }
             openAlert={this.state.showEditAlert}
             closeAlert={() => this.setState({ showEditAlert: false })}

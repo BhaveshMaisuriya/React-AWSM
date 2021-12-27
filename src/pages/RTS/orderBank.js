@@ -189,6 +189,7 @@ function OrderBank({
     })
     return columns
   })
+  const [reloadData, setReloadData] = useState(false)
   const [currentPage, setCurrentPage] = useState(0)
   const [filterQuery, setfilterQuery] = useState("")
   const filterOrderBank = useMemo(() => {
@@ -349,9 +350,10 @@ function OrderBank({
     setOrderBankSetting(temp)
   }
 
-  useEffect(() => {
+  useEffect(async() => {
     if (multipleorder) {
-      getRTSOrderBankTableData({
+      setReloadData(true);
+      await getRTSOrderBankTableData({
         limit: 10,
         page: payloadFilter.currentPage,
         search_fields: "*",
@@ -362,6 +364,7 @@ function OrderBank({
       })
       setDeleteMultipleStatus(multipleorder.order_banks !== undefined ? "success" : "error")
       setShowDeleteMultiple(true)
+      setReloadData(false);
     }
   }, [multipleorder])
 
@@ -375,11 +378,12 @@ function OrderBank({
     setCrossTerminal(false)
   }
 
-  const onCloseNewOrder = (type, val = "") => {
+  const onCloseNewOrder = async(type, val = "") => {
     setShowNewOrder(false)
     type === "add" && setShowAddNotification(true)
     val === "success" ? setNotiMessage("success") : setNotiMessage("error")
-    getRTSOrderBankTableData({
+    setReloadData(true);
+    await getRTSOrderBankTableData({
       limit: 10,
       page: payloadFilter.currentPage,
       search_fields: "*",
@@ -387,7 +391,8 @@ function OrderBank({
       sort_dir: "asc",
       sort_field: "vehicle",
       filter: payloadFilter.filterOrderBank,
-    })
+    });
+    setReloadData(false);
   }
 
   const enabledCross = val => {
@@ -997,6 +1002,7 @@ function OrderBank({
                   orderregion={regionTable}
                   fieldSortDirectionHandler={fieldSortDirectionHandler}
                   fieldToSortHandler={fieldToSortHandler}
+                  reloadData={reloadData}
                 />
               </div>
               <NewOrderModal open={showNewOrder} onCancel={onCloseNewOrder} />

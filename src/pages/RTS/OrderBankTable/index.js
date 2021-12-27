@@ -167,15 +167,21 @@ class index extends Component {
       showDelete: false,
       fieldToSort: "retail_storage_relation.retail",
       fieldSortDirection: "desc",
+      showLoader: false,
     }
     this.onDragEnd = this.onDragEnd.bind(this)
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
     if (nextProps.dataSource !== this.props.dataSource) {
+      this.setState({showLoader: false});
       this.setState({ dataSource: nextProps.dataSource, filterData: nextProps.headerFilters })
     }
+    if (nextProps.reloadData !== this.props.reloadData) {
+      this.setState({showLoader: this.props.reloadData});
+    }
   }
+
 
   onSearchTextChange(e) {
     this.setState({ searchText: e.target.value })
@@ -326,6 +332,7 @@ class index extends Component {
   }
 
   OnDeleteRecords = async allData => {
+    this.setState({showLoader: true});
     const { onGetDeleteOrderBankDetail } = this.props
     await onGetDeleteOrderBankDetail(allData.id)
     // setTimeout(function(){  this.setState( prevState => ({ callDelete: true })); }, 1000);
@@ -362,9 +369,24 @@ class index extends Component {
     await onGetViewOrderBankDetail(allData.id)
   }
 
-  editAlert = (type, val) => {
+  editAlert = async(type, val) => {
     type === "edit" && this.setState({ showEditAlert: true })
     val !== "" ? this.setState({ showEditMsg: val }) : this.setState({ showEditAlert: "" })
+    this.setState({showLoader: true});
+    const { getRTSOrderBankTableData, payloadFilter } = this.props
+    const { fieldSortDirection, fieldToSort } = this.state
+
+        setTimeout(async function () {
+          await getRTSOrderBankTableData({
+            limit: 10,
+            page: payloadFilter.currentPage,
+            search_fields: "*",
+            q: transformObjectToStringSentence(payloadFilter.filterQuery),
+            sort_dir: fieldSortDirection,
+            sort_field: fieldToSort,
+            filter: payloadFilter.filterOrderBank,
+          })
+        }, 2000)
   }
 
   DataOfTableFixed = () => {
@@ -494,7 +516,7 @@ class index extends Component {
           height={430}
         >
           <div className="container-orderbank" style={{ maxWidth: "100%" }}>
-            {dataSource.length ? (
+            {dataSource.length && this.state.showLoader === false ? (
               <table className="fixed">
                 <thead>
                   <tr style={{ zIndex: 2 }}>
@@ -524,7 +546,7 @@ class index extends Component {
                         <tr>{this.headerTableConfiguration()}</tr>
                       </thead>
                       <tbody>
-                        {dataSource && dataSource.length ? (
+                        {dataSource && dataSource.length && this.state.showLoader === false ? (
                           dataSource.map((v, index) => {
                             return (
                               <Draggable

@@ -665,14 +665,21 @@
     background-color: #fece664f;
  }
 
- #crossterminal-modal .modal-content{
-    h5{
-        padding-left: 20px !important;
+#crossterminal-modal {
+    top: 12%;
+    .modal-content{
+        height: 70%;
+        h5{
+            padding-left: 20px !important;
+        }
+        .btn{
+            width: 120px !important;
+        }
+        .pt-12 {
+            padding-top: 12em;
+        }
     }
-    .btn{
-        width: 120px !important;
-    }
-}
+ }
 
 #deleteorderbank-modal .modal-content{
     h5{
@@ -752,4 +759,3 @@
 .b-grid-header-container{
     max-height: 50px !important;
 }
-

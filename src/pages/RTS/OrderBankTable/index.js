@@ -632,8 +632,8 @@ class index extends Component {
             status={this.state.showDeleteMsg}
             message={
               this.state.showDeleteMsg === "success"
-                ? "Order deleted successfully"
-                : "Order has not been deleted"
+                ? "An Order has been successfully deleted from Order Bank"
+                : "An Order has not been deleted from Order Bank"
             }
             openAlert={this.state.showDelete}
             closeAlert={() => this.setState({ showDelete: false })}

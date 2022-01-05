@@ -46,6 +46,7 @@ const EditOrderBankModal = props => {
   const [inputValue1, setInputValue1] = useState("")
   const [inputValue2, setInputValue2] = useState("") 
   const [inputValue3, setInputValue3] = useState("")  
+  const [inputValue, setInputValue] = useState("")    
   const [terminalList, setTerminalList] = useState([])
   const [regionList, setRegionList] = useState([])
 
@@ -87,7 +88,7 @@ const EditOrderBankModal = props => {
       volume: parseInt(editOrderData?.volume),
       eta: editOrderData?.eta,
       planned_load_time: editOrderData?.planned_load_time,
-      remarks: editOrderData?.remarks,
+      remarks: editOrderData?.order_remarks,
       priority: editOrderData?.priority,
       vehicle: editOrderData?.vehicle,
       commercial_storage: editOrderData?.commercial_storage,
@@ -132,7 +133,14 @@ const EditOrderBankModal = props => {
       newOrderData[key] = currentRegion ? currentRegion.region : ''
       newOrderData['terminal_name'] = '';
       setEditOrderData(newOrderData)
-    }else if(key === 'my_remark_1') {
+    } else if(key === 'order_remarks') {
+      setInputValue(value);
+      if(value.length < 40) {
+        const newOrderData = { ...editOrderData }
+        newOrderData[key] = value
+        setEditOrderData(newOrderData)
+      }
+    } else if(key === 'my_remark_1') {
       setInputValue1(value);
       if(value.length < 40) {
         const newOrderData = { ...editOrderData }
@@ -171,6 +179,14 @@ const EditOrderBankModal = props => {
   const remainChars3 = useMemo(() => {
     return 40 - inputValue3.length
   }, [inputValue3])
+
+  const remainChars = useMemo(() => {
+    return 40 - inputValue.length
+  }, [inputValue])
+
+  const isValid = useMemo(() => {
+    return inputValue && remainChars >= 0
+  }, [remainChars])
 
   const isValid1 = useMemo(() => {
     return inputValue1 && remainChars1 >= 0
@@ -473,8 +489,19 @@ const EditOrderBankModal = props => {
                       <div className="w-70 mr-4">
                         <label className="text-upper">Order Remarks</label>
                         <div className="d-flex">
-                          <div className="w-100">
-                            <AWSMInput value={editOrderData?.order_remarks} disabled={false} onChange={value => onFieldChange("order-remark", value)} />
+                          <div className="w-100 relative">
+                            {/* <AWSMInput value={editOrderData?.order_remarks} disabled={false} onChange={value => onFieldChange("order_remarks", value)} /> */}
+                            <input
+                              onChange={e => onFieldChange("order_remarks", e.target.value)}
+                              value={editOrderData?.order_remarks}
+                              className={`awsm-input w-100 ${(inputValue && !isValid) ? "out-range " : ""}`}
+                            />
+                        <span
+                          className={`position-absolute awsm-input-right-content ${
+                            (inputValue && !isValid) ? "out-range " : ""
+                          }`}
+                        >{`${remainChars >= 0 ? "+" : ""}${remainChars}`}</span>
+
                           </div>
                         </div>
                       </div>

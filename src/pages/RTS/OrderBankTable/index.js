@@ -25,7 +25,7 @@ import EditIcon from "assets/images/AWSM-Edit-Icon.svg"
 import TrashIcon from "assets/images/AWSM-Trash-Icon.svg"
 import NoDataIcon from "assets/images/AWSM-No-Data-Available.svg"
 import DeleteOrderBankConfirmation from "../deleteOrderBankModal"
-import EditOrderBankModal from "../editOrderBankModal"
+import EditOrderBankModal from "../editOrderBankModal"  
 import ConfirmDNStatusModal from "./confirmDNStatusModal"
 import {
   deleteOrderBankDetail,
@@ -302,7 +302,7 @@ class index extends Component {
             <td>
               {
                 <span
-                  className={`status ${data[v] === 'Clean DN' ? 'clean' : data[v] === 'Blocked DN' ? 'blocked' : data[v] === 'Late Unblock' ? 'unblock' : 'send' }`}
+                  className={`status ${data['dn_no'] === 'Clean DN' ? 'clean' : data['dn_no'] === 'Blocked DN' ? 'blocked' : data['dn_no'] === 'Late Unblock' ? 'unblock' : 'send' }`}
                   onClick={this.DNStatusOnClickHandler.bind(this, data, data[v])}
                 >
                   {(data[v] === '' || data[v] === null) ? 'Send for DN' : data[v]}
@@ -470,6 +470,7 @@ class index extends Component {
   }
 
   DNStatusOnClickHandler(data, key) {
+    console.log('key::', key)
     if ((key === "" || key === null)) {
       this.setState({ DNStatus: { isOpenConfirmModal: true, data } })
     }

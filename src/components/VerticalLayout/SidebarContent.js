@@ -113,15 +113,10 @@ class SidebarContent extends Component {
             </li>
 
             <li>
-              <Link to="/#" className="waves-effect">
+              <Link to="/orderbank" className="waves-effect">
                 <i className="cs rts-logo"/>
                 <span>RTS</span>
               </Link>
-              <ul className="sub-menu" aria-expanded="false">
-                <li>
-                  <Link to="/orderbank">Order Bank</Link>
-                </li>
-              </ul>
             </li>
           </ul>
         </div>

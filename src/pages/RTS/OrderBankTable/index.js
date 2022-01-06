@@ -34,6 +34,7 @@ import {
   viewOrderBankDetail,
   getRTSOrderBankTableData,
   dragOrderBankToGanttChart,
+  onDragOrderToShipment,
 } from "store/actions"
 import { Draggable, Droppable, DragDropContext } from "react-beautiful-dnd"
 import InfiniteScroll from "react-infinite-scroll-component"
@@ -444,12 +445,15 @@ class index extends Component {
       }
     })
     let deleteEnable = checkedData //checkedData.filter((v) => (v.scheduling_status === "Unscheduled"))
-    // let checkCross = checkedData.filter(
-    //   v => v.product_category === "ASR" || v.product_category === "SMP"
-    let checkCross = checkedData.filter(//product_category
+    
+    let checkCross = checkedData.filter(
       v => v.order_type === "ASR" || v.order_type === "SMP"
     )
-    this.props.enabledCross(checkCross.length)
+    let unvalidCheckCross = checkedData.filter(
+      v => v.order_type === "" || v.order_type === null
+    )
+
+    this.props.enabledCross(unvalidCheckCross.length > 0 ? 0 : checkCross.length)
     this.props.deleteEnable(deleteEnable)
   }
 
@@ -499,8 +503,12 @@ class index extends Component {
   }
 
   onDragEnd() {
-    const { dragOrderBankToGanttChart } = this.props
-    dragOrderBankToGanttChart()
+    const { dragOrderBankToGanttChart, payloadFilter, activeTab, dragOrderToShipment } = this.props
+    if (activeTab === "1") {
+      dragOrderBankToGanttChart({shift_date : payloadFilter?.filterOrderBank?.shift_date?.date_from})
+    } else {
+      dragOrderToShipment()
+    }
   }
 
   render() {
@@ -654,7 +662,8 @@ const mapDispatchToProp = dispatch => ({
   getRTSOrderBankTableData: params => dispatch(getRTSOrderBankTableData(params)),
   onSendDNStatusRequest: params => dispatch(sendDNStatusRequest(params)),
   onGetViewOrderBankDetail: params => dispatch(viewOrderBankDetail(params)),
-  dragOrderBankToGanttChart: () => dispatch(dragOrderBankToGanttChart()),
+  dragOrderBankToGanttChart: payload => dispatch(dragOrderBankToGanttChart(payload)),
+  dragOrderToShipment: () => dispatch(onDragOrderToShipment()),
 })
 const mapStateToProps = ({ orderBank }) => ({
   totalRow: orderBank.totalRow,

@@ -1,20 +1,20 @@
 const tableColumns = [
   "priority",
   "notes",
-  "retail_storage_relation.retail",
-  "retail_storage_relation.retail_customer_relation.ship_to_company",
-  "retail_storage_relation.retail_customer_relation.cloud",
+  "format_ship_to",
+  "format_name",
+  "format_cloud",
   "trip_no",
   "requested_delivery_date",
-  "retail_storage_relation.product_relation_name",
+  "format_product",
   "volume",
   "retain",
   "runout",
-  "retail_storage_relation.sales_category",
+  "format_product_category",
   "dn_status",
   "split_id",
   "order_type",
-  "retail_storage_relation.retail_customer_relation.road_tanker_accessibility",
+  "format_accessibility",
   "order_remarks",
 ]
 
@@ -40,15 +40,15 @@ const tableMapping = {
     columnSize: "cell-text",
     key: "frozen",
   },
-  "retail_storage_relation.retail": {
+  format_ship_to: {
     label: "Ship To",
     columnSize: "cell-text",
   },
-  "retail_storage_relation.retail_customer_relation.ship_to_company": {
+  format_name: {
     label: "Name",
     columnSize: "cell-text",
   },
-  "retail_storage_relation.retail_customer_relation.cloud": {
+  format_cloud: {
     label: "Cloud",
     columnSize: "cell-text",
   },
@@ -60,7 +60,7 @@ const tableMapping = {
     label: "Delivery Date",
     columnSize: "cell-text",
   },
-  "retail_storage_relation.product_relation_name": {
+  format_product: {
     label: "Product",
     columnSize: "cell-text",
   },
@@ -83,7 +83,7 @@ const tableMapping = {
     columnSize: "cell-text",
     type: "date",
   },
-  "retail_storage_relation.sales_category": {
+  format_product_category: {
     label: "Product Category",
     columnSize: "cell-text",
   },
@@ -100,7 +100,7 @@ const tableMapping = {
     label: "Order Type",
     columnSize: "cell-text",
   },
-  "retail_storage_relation.retail_customer_relation.road_tanker_accessibility": {
+  format_accessibility: {
     label: "Accessibility",
     columnSize: "cell-text",
   },
@@ -116,15 +116,15 @@ const tableMapping = {
     label: "SR",
     columnSize: "cell-text",
   },
-  "retail_storage_relation.retail_customer_relation.site_id": {
+  format_site_id: {
     label: "Site ID",
     columnSize: "cell-text",
   },
-  "retail_storage_relation.retail_customer_relation.site_name": {
+  format_site_name: {
     label: "Site Name",
     columnSize: "cell-text",
   },
-  "retail_storage_relation.product": {
+  format_product_code: {
     label: "Product Code",
     columnSize: "cell-text",
   },
@@ -204,203 +204,203 @@ const tableMapping = {
     label: "Max Stock days",
     columnSize: "cell-text",
   },
-  "retail_storage_relation.monthly_fixed_quota": {
+  format_monthly_fixed_quota: {
     label: "Monthly Fixed Quota",
     columnSize: "cell-text",
   },
-  "retail_storage_relation.retail_customer_relation.road_tanker_requirement": {
+  format_rt_req: {
     label: "RT Req",
     columnSize: "cell-text",
   },
-  "retail_storage_relation.duration": {
+  format_duration: {
     label: "Duration (Hrs)",
     columnSize: "cell-text",
   },
-  "retail_storage_relation.distance": {
+  format_distance: {
     label: "Distance (KM)",
     columnSize: "cell-text",
   },
-  "retail_storage_relation.retail_customer_relation.address_relation.address_1": {
+  format_delivery_address: {
     label: "Delivery Address",
     columnSize: "cell-text",
   },
-  "retail_storage_relation.retail_customer_relation.address_relation.city": {
+  format_city: {
     label: "City",
     columnSize: "cell-text",
   },
-  "retail_storage_relation.retail_customer_relation.address_relation.postcode": {
+  format_postcode: {
     label: "Postcode",
     columnSize: "cell-text",
   },
-  "retail_storage_relation.retail_customer_relation.address_relation.state": {
+  format_state: {
     label: "State",
     columnSize: "cell-text",
   },
-  "retail_storage_relation.retail_customer_relation.address_relation.latitude": {
+  format_latitude: {
     label: "Latitude",
     columnSize: "cell-text",
   },
-  "retail_storage_relation.retail_customer_relation.address_relation.longitude": {
+  format_longitude: {
     label: "Longitude",
     columnSize: "cell-text",
   },
-  "retail_storage_relation.retail_customer_relation.address_relation.country": {
+  format_country: {
     label: "Country",
     columnSize: "cell-text",
   },
-  "retail_storage_relation.retail_customer_relation.cluster": {
+  format_cluster: {
     label: "Cluster ",
     columnSize: "cell-text",
   },
-  "retail_storage_relation.retail_customer_relation.alternative_cluster": {
+  format_alt_cluster: {
     label: "Alt cluster",
     columnSize: "cell-text",
   },
-  "retail_storage_relation.retail_customer_relation.border_station": {
+  format_border_station: {
     label: "Border Station",
     columnSize: "cell-text",
   },
-  "retail_storage_relation.retail_customer_relation.contact1_relation.name": {
+  format_contact_name_1: {
     label: "Contact Name 1",
     columnSize: "cell-text",
   },
-  "retail_storage_relation.retail_customer_relation.contact1_relation.number": {
+  format_contact_number_1: {
     label: "Contact Number 1",
     columnSize: "cell-text",
   },
-  "retail_storage_relation.retail_customer_relation.contact2_relation.name": {
+  format_contact_name_2: {
     label: "Contact Name 2",
     columnSize: "cell-text",
   },
-  "retail_storage_relation.retail_customer_relation.contact2_relation.number": {
+  format_contact_number_2: {
     label: "Contact Number 2",
     columnSize: "cell-text",
   },
-  "retail_storage_relation.retail_customer_relation.contact3_relation.name": {
+  format_contact_name_3: {
     label: "Contact Name 3",
     columnSize: "cell-text",
   },
-  "retail_storage_relation.retail_customer_relation.contact3_relation.number": {
+  format_contact_number_3: {
     label: "Contact Number 3",
     columnSize: "cell-text",
   },
-  "retail_storage_relation.retail_customer_relation.territory_manager_relation.name": {
+  format_tm_name: {
     label: "TM Name",
     columnSize: "cell-text",
   },
-  "retail_storage_relation.retail_customer_relation.territory_manager_relation.number": {
+  format_tm_number: {
     label: "TM Number",
     columnSize: "cell-text",
   },
-  "retail_storage_relation.retail_customer_relation.retail_sales_manager_relation.name": {
+  format_rs_name: {
     label: "RS Name",
     columnSize: "cell-text",
   },
-  "retail_storage_relation.retail_customer_relation.retail_sales_manager_relation.number": {
+  format_rs_number: {
     label: "RS Number",
     columnSize: "cell-text",
   },
-  "retail_storage_relation.retail_customer_relation.delivery_open_time.time_from": {
+  format_delivery_open_time_from: {
     label: "Delivery Open Time From",
     columnSize: "cell-text",
   },
-  "retail_storage_relation.retail_customer_relation.delivery_open_time.time_to": {
+  format_delivery_open_time_to: {
     label: "Delivery Open Time To",
     columnSize: "cell-text",
   },
-  "retail_storage_relation.retail_customer_relation.actual_open_time_1.days": {
+  format_open_time_1_day: {
     label: "Open Time 1 Day",
     columnSize: "cell-text",
   },
-  "retail_storage_relation.retail_customer_relation.actual_open_time_1.time_from": {
+  format_open_time_1_from: {
     label: "Open Time 1 From",
     columnSize: "cell-text",
   },
-  "retail_storage_relation.retail_customer_relation.actual_open_time_1.time_to": {
+  format_open_time_1_to: {
     label: "Open Time 1 To",
     columnSize: "cell-text",
   },
-  "retail_storage_relation.retail_customer_relation.actual_open_time_2.days": {
+  format_open_time_2_day: {
     label: "Open Time 2 Day",
     columnSize: "cell-text",
   },
-  "retail_storage_relation.retail_customer_relation.actual_open_time_2.time_from": {
+  format_open_time_2_from: {
     label: "Open Time 2 From",
     columnSize: "cell-text",
   },
-  "retail_storage_relation.retail_customer_relation.actual_open_time_2.time_to": {
+  format_open_time_2_to: {
     label: "Open Time 2 To",
     columnSize: "cell-text",
   },
-  "retail_storage_relation.retail_customer_relation.actual_open_time_3.days": {
+  format_open_time_3_day: {
     label: "Open Time 3 Day",
     columnSize: "cell-text",
   },
-  "retail_storage_relation.retail_customer_relation.actual_open_time_3.time_from": {
+  format_open_time_3_from: {
     label: "Open Time 3 From",
     columnSize: "cell-text",
   },
-  "retail_storage_relation.retail_customer_relation.actual_open_time_3.time_to": {
+  format_open_time_3_to: {
     label: "Open Time 3 To",
     columnSize: "cell-text",
   },
-  "retail_storage_relation.retail_customer_relation.no_delivery_interval_1.days": {
+  format_no_del_interval_1: {
     label: "No Del Interval 1",
     columnSize: "cell-text",
   },
-  "retail_storage_relation.retail_customer_relation.no_delivery_interval_1.time_from": {
+  format_no_del_interval_1_from: {
     label: "No Del Interval 1 From",
     columnSize: "cell-text",
   },
-  "retail_storage_relation.retail_customer_relation.no_delivery_interval_1.time_to": {
+  format_no_del_interval_1_to: {
     label: "No Del Interval 1 To",
     columnSize: "cell-text",
   },
-  "retail_storage_relation.retail_customer_relation.no_delivery_interval_2.days": {
+  format_no_del_interval_2: {
     label: "No Del Interval 2",
     columnSize: "cell-text",
   },
-  "retail_storage_relation.retail_customer_relation.no_delivery_interval_2.time_from": {
+  format_no_del_interval_2_from: {
     label: "No Del Interval 2 From",
     columnSize: "cell-text",
   },
-  "retail_storage_relation.retail_customer_relation.no_delivery_interval_2.time_to": {
+  format_no_del_interval_2_to: {
     label: "No Del Interval 2 To",
     columnSize: "cell-text",
   },
-  "retail_storage_relation.retail_customer_relation.no_delivery_interval_3.days": {
+  format_no_del_interval_3: {
     label: "No Del Interval 3",
     columnSize: "cell-text",
   },
-  "retail_storage_relation.retail_customer_relation.no_delivery_interval_3.time_from": {
+  format_no_del_interval_3_from: {
     label: "No Del Interval 3 From",
     columnSize: "cell-text",
   },
-  "retail_storage_relation.retail_customer_relation.no_delivery_interval_3.time_to": {
+  format_no_del_interval_3_to: {
     label: "No Del Interval 3 To",
     columnSize: "cell-text",
   },
-  "retail_storage_relation.retail_customer_relation.no_delivery_interval_4.days": {
+  format_no_del_interval_4: {
     label: "No Del Interval 4",
     columnSize: "cell-text",
   },
-  "retail_storage_relation.retail_customer_relation.no_delivery_interval_4.time_from": {
+  format_no_del_interval_4_from: {
     label: "No Del Interval 4 From",
     columnSize: "cell-text",
   },
-  "retail_storage_relation.retail_customer_relation.no_delivery_interval_4.time_to": {
+  format_no_del_interval_4_to: {
     label: "No Del Interval 4 To",
     columnSize: "cell-text",
   },
-  "retail_storage_relation.retail_customer_relation.no_delivery_interval_5.days": {
+  format_no_del_interval_5: {
     label: "No Del Interval 5",
     columnSize: "cell-text",
   },
-  "retail_storage_relation.retail_customer_relation.no_delivery_interval_5.time_from": {
+  format_no_del_interval_5_from: {
     label: "No Del Interval 5 From",
     columnSize: "cell-text",
   },
-  "retail_storage_relation.retail_customer_relation.no_delivery_interval_5.time_to": {
+  format_no_del_interval_5_to: {
     label: "No Del Interval 5 To",
     columnSize: "cell-text",
   },
@@ -428,8 +428,8 @@ const tableMapping = {
 
 const ganttChartTableColumns = [
   "vehicle",
-  "cap",
-  "rt_availability_status",
+  "max_volume",
+  "shift_type",
   "utilization_rate",
   "restriction_code",
 ]
@@ -439,16 +439,17 @@ const ganttChartTableDefaultColumns = {
     label: "VEHICLE ID",
     columnSize: "cell-text",
   },
-  cap: {
-    label: "Cap (L)",
-    columnSize: "cell-text",
-  },
-  rt_availability_status: {
-    label: "Status",
-    columnSize: "cell-text",
-  },
   utilization_rate: {
     label: "Util (%)",
+    columnSize: "cell-text",
+  },
+  shift_type: {
+    label: "Status",
+    columnSize: "cell-text",
+    type: "list",
+  },
+  max_volume: {
+    label: "Cap (L)",
     columnSize: "cell-text",
   },
   restriction_code: {
@@ -463,7 +464,7 @@ const ganttChartTableMapping = {
     columnSize: "cell-text",
     key: "frozen",
   },
-  cap: {
+  max_volume: {
     label: "Cap (L)",
     columnSize: "cell-text",
   },
@@ -475,12 +476,12 @@ const ganttChartTableMapping = {
     label: "Type",
     columnSize: "cell-text",
   },
-  rt_availability_status: {
+  shift_type: {
     label: "Status",
     columnSize: "cell-text",
     type: "list",
   },
-  shift_type: {
+  status: {
     label: "Shift",
     columnSize: "cell-text",
   },
@@ -500,7 +501,7 @@ const ganttChartTableMapping = {
     label: "Product",
     columnSize: "cell-text",
   },
-  max_volume: {
+  cap: {
     label: "Capacity",
     columnSize: "cell-text",
   },

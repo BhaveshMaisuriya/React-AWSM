@@ -12,6 +12,7 @@ import REGION_TERMINAL, { TERMINAL_CODE_MAPPING } from "common/data/regionAndTer
 import TimePicker from "../../components/Common/TableInformation/components/TimePicker"
 import NoDataIcon from "assets/images/AWSM-No-Data-Available-Inverted.svg"
 import { format } from "date-fns";
+import CloseButton from "components/Common/CloseButton"
 
 const timeData = []
 for (let i = 0; i < 24; i++) {
@@ -21,7 +22,7 @@ for (let i = 0; i < 24; i++) {
   timeData.push(`${i.toString().padStart(2, "0")}:45`)
 }
 timeData.push(`23:59`)
-const ORDER_PRIORITY = ["None", "Low Priority"]
+const ORDER_PRIORITY = ["None", "High Priority"]
 const NewOrderBankModal = props => {
   const { open, onCancel } = props
 
@@ -61,14 +62,17 @@ const NewOrderBankModal = props => {
     REGION_TERMINAL.map((item, index) => {
       temp.push(item.region);
     })
-    setRegionList(temp) 
+    setRegionList(temp)
   }, [REGION_TERMINAL])
-
+  
   const onConfirmCancel = () => {
-    setIsConfirm(false)
-    setCurrentState("")
+    if(currentState === "search"){
+      setIsConfirm(false)
+    }else{
+      setIsConfirm(false)
+      setCurrentState("")
+    }
   }
-
   const handleUpdate = async() => {
     setIsaddClicked(true);
     if((orderData?.myremark1?.length < 40 || orderData?.myremark2?.length < 40 || orderData?.myremark3?.length < 40) && orderData.terminal !== undefined && orderData.priority_order !== undefined && orderData.volume !== undefined && orderData.product_name !== undefined && shiptoNo !== ''){
@@ -110,9 +114,6 @@ const NewOrderBankModal = props => {
     }
   }
 
-  const toggle = () => {
-    setIsConfirm(true)
-  }
 
   const onAddressFieldChange = (key, value) => {
     const newOrderData = { ...orderData }
@@ -228,9 +229,12 @@ const NewOrderBankModal = props => {
   }, [props.orderBankData])
 
   const onCancelClick = () => {
-    shiptoNo !== "" || defaultDate !== shiftDate ? setIsConfirm(true) : onCancel('cancel');
-    // setShiptoNo("")
-    setCurrentState("")
+    if(shiptoNo !== "" || defaultDate !== shiftDate){
+      setIsConfirm(true)
+    }else{
+      onCancel("cancel")
+      setCurrentState("")  
+    } 
   }
 
   useEffect(() => {
@@ -321,13 +325,13 @@ const NewOrderBankModal = props => {
 
   return (
     <Modal isOpen={open} className="new-order-modal">
-      <ModalHeader toggle={toggle}>
+      <ModalHeader close={<CloseButton handleClose={onCancelClick} /> }>
         <span className="modal-title">Add New order</span>
       </ModalHeader>
 
-      <ModalBody className="position-relative h-70v scroll pl-30">
+      <ModalBody className={`position-relative scroll pl-40 ${ currentState === "search" || isConfirm === true ? "h-70v" :""}`}>
         {isConfirm && (
-          <ExitConfirmation onExit={onConfirmExit} onCancel={onConfirmCancel} />
+          <ExitConfirmation isAddOrder={true} onExit={onConfirmExit} onCancel={onConfirmCancel} />
         )}
         {!isConfirm && (
           <>
@@ -343,7 +347,7 @@ const NewOrderBankModal = props => {
                   orderBankShiftDate={true}
                 />
               </div>
-              <div className="col-4 p-0 ml-4">
+              <div className="col-4 p-0 ml-4 mr-2">
                 <label>
                 SHIP TO <span className="text-red">*</span>
                 </label>
@@ -375,7 +379,7 @@ const NewOrderBankModal = props => {
                 </Button>
               </div>
             </div>
-            <hr />
+            <hr className="mt-4 mb-4"/>
             {currentState === "search" && (
               <div className="w-100">
                 <h4>Ship To: {shiptoNo}</h4>
@@ -385,7 +389,7 @@ const NewOrderBankModal = props => {
                     <div className="d-flex">
                       <div className="w-50 mr-2">
                         <AWSMDropdown
-                          items={regionList}
+                          items={regionList.splice(6) && regionList}
                           onChange={value => onFieldChange("region", value)}
                           value={orderData.region ? orderData.region : ""}
                           error={(orderData.region === undefined && isaddClicked === true) ? true : false}
@@ -493,7 +497,7 @@ const NewOrderBankModal = props => {
                       <div className="d-flex">
                         <div className="w-85 relative">
                         <input
-                        onChange={e => onFieldChange("remarks", e.target.value)}
+                        onChange={e => onFieldChange("remarks",e.target.value)}
                         value={orderData?.remarks}
                         maxLength={40}
                         className={`awsm-input w-100 ${(inputValue && !isValid) ? "out-range " : ""}`}
@@ -521,7 +525,7 @@ const NewOrderBankModal = props => {
                             // defaultSelected='None'
                             value={orderData.priority_order}
                             disabled={false}
-                            // placeholder="select priority"
+                            placeholder={"None"}
                           />
                         </div>
                       </div>
@@ -606,7 +610,7 @@ const NewOrderBankModal = props => {
                         <strong>Order ID: </strong>
                       </p>
                       <p>
-                        <strong>Requested Delievry Date:</strong> {shiftDate.toLocaleDateString()}
+                        <strong>Requested Delivery Date:</strong> {(format(new Date(shiftDate.toLocaleDateString()), "dd-MM-yyyy")) }
                       </p>
                       <p>
                         <strong>Opening Stock Days: </strong> {" "}
@@ -818,8 +822,8 @@ const NewOrderBankModal = props => {
             )}
             {currentState !== "search" && (
               <div
-                className={`text-center h-340 w-100 table ${
-                  currentState === ""
+                className={`text-center h-340 w-100 table mt-3 ${
+                  currentState === "" || currentState === "cancel" 
                     ? "bg-grey"
                     : currentState === "error"
                     ? "bg-err"
@@ -844,7 +848,7 @@ const NewOrderBankModal = props => {
         )}
       </ModalBody>
 
-      {!isConfirm && (
+      {!isConfirm && currentState === "search" ? (
         <ModalFooter>
           <Button
             color="light-primary"
@@ -858,7 +862,7 @@ const NewOrderBankModal = props => {
             Add
           </Button>
         </ModalFooter>
-      )}
+      ) : ""}
       {showAlert && (
         <AWSMAlert
           status="success"

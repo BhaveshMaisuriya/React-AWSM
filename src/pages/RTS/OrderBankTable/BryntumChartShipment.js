@@ -375,8 +375,14 @@ function BryntumChartTable(props) {
   return (
     <div className="rts-table-container scroll" id="scrollableDivGanttChart">
       <div className="container-orderbank gant-chart-table" style={{ maxWidth: "100%" }}>
-        <Row className="w-100" style={{ height: "100%" }}>
-          <Col lg={12} className="pr-0">
+        <InfiniteScroll
+          next={handleScrollShipmentChartTable}
+          hasMore={props.ganttChartTableData.length < props.totalRow_ganttChart}
+          loader={<h5>Loading...</h5>}
+          dataLength={props.ganttChartTableData.length}
+          height={360}
+        >
+          <Col className="pr-0" style={{'width': '500px'}}>
             <Droppable key="shipment-chart" droppableId="shipment-chart">
               {(provided, snapshot) => {
                 return (
@@ -386,32 +392,24 @@ function BryntumChartTable(props) {
                     ref={provided.innerRef}
                   >
                     {snapshot.isDraggingOver && <div className="on-dragging" />}
-                    <div className="w-100 d-flex justify-content-between">
-                      <div className="rounded wrapper-bryntum-shipment-grid border-bryntum-table">
-                        <InfiniteScroll
-                          next={handleScrollShipmentChartTable}
-                          hasMore={props.ganttChartTableData.length < props.totalRow_ganttChart}
-                          loader={<h5>Loading...</h5>}
-                          dataLength={props.ganttChartTableData.length}
-                          height={390}
-                        >
-                          <BryntumGrid
-                            {...schedulerproConfig}
-                            autoSync
-                            resources={props.ganttChartTableData}
-                            syncDataOnLoad
-                            ref={schedulerProRef}
-                          />
-                        </InfiniteScroll>
-                      </div>
-                      <BryntumDragDropAreaShipment currentDate={dateConfig?.date_from} />
+                    <div className="rounded wrapper-bryntum-shipment-grid border-bryntum-table">
+                      <BryntumGrid
+                        {...schedulerproConfig}
+                        autoSync
+                        data={props.ganttChartTableData}
+                        syncDataOnLoad
+                        ref={schedulerProRef}
+                      />
                     </div>
                   </div>
                 )
               }}
             </Droppable>
           </Col>
-        </Row>
+        </InfiniteScroll>
+        <Col>
+          <BryntumDragDropAreaShipment currentDate={dateConfig?.date_from} />
+        </Col>
         {filterList.map(e => {
           return (
             <ChartColumnFilter

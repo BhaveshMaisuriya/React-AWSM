@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react"
+import React, { useEffect, useRef, useState, useCallback } from "react"
 import { connect } from "react-redux"
 import { Row, Col } from "reactstrap"
 import { createPopper } from "@popperjs/core"
@@ -11,10 +11,12 @@ import "@bryntum/schedulerpro/schedulerpro.classic.css"
 import "@bryntum/schedulerpro/schedulerpro.material.css"
 import "@bryntum/schedulerpro/schedulerpro.stockholm.css"
 import "../style.scss"
+import BryntumPopup from "./BryntumPopup"
 import RedAlertIcon from "./../../../assets/images/AWSM-Red-Alert.svg"
 import YellowAlertIcon from "./../../../assets/images/AWSM-Soft-Overrule.svg"
 import ConfirmDNStatusModal from "./confirmDNStatusModal"
 import TerminalRelayModal from "./TerminalRelayModal"
+import { TERMINAL_CODE_MAPPING } from "common/data/regionAndTerminal"
 import {
   processPaymentInGanttChart,
   cancelPaymentInGanttChart,
@@ -23,6 +25,7 @@ import {
   getShipmentOfOderBankGanttChart,
   removeEvent,
   updateOBEvent,
+  getGanttEventValidation,
   selectVehicleShipment,
 } from "../../../store/actions"
 import ChartColumnFilter from "./ChartColumnFilter"
@@ -56,7 +59,14 @@ const EventContextList = {
 export const bryntumSchedulerTableNameForCookie = "rts-gantt-chart-bryntum-scheduler"
 
 function BryntumChartTable(props) {
-  const { bryntumCurrentColumns, updateOBEvent, onSelectVehicle, dropOderSuccess } = props
+  const {
+    bryntumCurrentColumns,
+    updateOBEvent,
+    onSelectVehicle,
+    dropOderSuccess,
+    getGanttEventValidation,
+    ganttEventValidation,
+  } = props
   const tableData = useRef([])
   const setTableData = newData => {
     tableData.current = newData
@@ -74,6 +84,32 @@ function BryntumChartTable(props) {
   const firstRender = useRef(true)
   const [filterList, setFilterList] = useState([])
   const [currentPage, setCurrentPage] = useState(0)
+  const [popupShown, showPopup] = useState(false)
+  const [eventRecord, setEventRecord] = useState(null)
+  const [eventStore, setEventStore] = useState(null)
+  const [resourceStore, setResourceStore] = useState(null)
+  useEffect(() => {
+    const { eventStore, resourceStore } = schedulerProRef.current.instance
+    setEventStore(eventStore)
+    setResourceStore(resourceStore)
+  }, [])
+
+
+  const showEditor = useCallback(eventRecord => {
+    if (typeof(eventRecord._data.id) !== "number") return
+    setEventRecord(eventRecord)
+    showPopup(true)
+  }, [])
+
+  const hideEditor = useCallback(() => {
+    // If isCreating is still true, user clicked cancel
+    if (eventRecord.isCreating) {
+      eventStore.remove(eventRecord)
+      eventRecord.isCreating = false
+    }
+    setEventRecord(null)
+    showPopup(false)
+  }, [eventRecord, eventStore])
 
   const getGanttCharData = page => {
     const { getRTSOderBankGanttChart } = props
@@ -86,6 +122,7 @@ function BryntumChartTable(props) {
       sort_field: "vehicle",
       filter: {
         shift_date: props?.dateConfig,
+        terminal: TERMINAL_CODE_MAPPING[props?.terminal],
       },
     }
     if (page !== undefined) {
@@ -107,6 +144,7 @@ function BryntumChartTable(props) {
       sort_field: "vehicle",
       filter: {
         shift_date: props?.dateConfig,
+        terminal: TERMINAL_CODE_MAPPING[props?.terminal],
       },
     }
     setTimeout(() => {
@@ -134,6 +172,20 @@ function BryntumChartTable(props) {
   useEffect(() => {
     setTableData(props.ganttChartTableData)
   }, [props.ganttChartTableData])
+
+  useEffect(() => {
+    // validate gantt event 3
+    if (ganttEventValidation) {
+      if (ganttEventValidation?.alert === "soft") setAlertOverruleShow("soft")
+      else if (ganttEventValidation?.alert === "hard") setAlertOverruleShow("hard")
+      else updateOBEventHandler()
+    }
+  }, [ganttEventValidation])
+
+  // validate gantt event 4
+  const updateOBEventHandler = async () => {
+    await updateOBEvent(dropdownSelectedItem)
+  }
 
   const toggle = () => setModal(!modal)
 
@@ -278,7 +330,8 @@ function BryntumChartTable(props) {
     resourceMargin: 0,
     autoAdjustTimeAxis: false,
     fillTicks: true,
-    scheduleMenuFeature : false,
+    scheduleMenuFeature: false,
+    createEventOnDblClick:false,
     listeners: {
       cellClick: function (grid) {
         const { record } = grid
@@ -287,20 +340,23 @@ function BryntumChartTable(props) {
           onSelectVehicle({ resourceId, vehicle })
         }
       },
-      beforeEventEdit({ eventRecord }) {
+      beforeEventEdit({ eventRecord, resourceRecord }) {
         ShipmentDblclickModal(eventRecord)
+        eventRecord.resourceId = resourceRecord.id
+        showEditor(eventRecord)
+        return false
       },
       beforeEventDropFinalize: async ({ context }) => {
-        // const { instance: scheduler } = schedulerProRef.current
         const { eventRecord } = context
         context.async = true
         context.finalize(true)
-        updateModalHandler(EventContextList.UPDATE_SHIPMENT, eventRecord)
-        await updateOBEvent(eventRecord._data)
+        // validate gantt event 1
+        await getGanttEventValidation(eventRecord._data)
       },
-      afterEventDrop({ eventRecord }) {
-        // const { instance: scheduler } = schedulerProRef.current
-        // setAlertOverruleShow("soft")
+      afterEventDrop({ context }) {
+        const { eventRecord } = context
+        // validate gantt event 2
+        updateModalHandler(EventContextList.UPDATE_SHIPMENT, eventRecord)
       },
     },
     eventRenderer: ({ eventRecord, renderData }) => {
@@ -327,13 +383,21 @@ function BryntumChartTable(props) {
               <p>${eventRecord?._data?.id ? eventRecord._data.id : 1}</p>
             </div>
             <div class="blue-bg brdr-radius">
-              <p>${renderData.resource._data?.order_banks[0]?.terminal ? renderData.resource._data.order_banks[0].terminal : "M808"}</p>
+              <p>${
+                renderData.resource._data?.order_banks[0]?.terminal
+                  ? renderData.resource._data.order_banks[0].terminal
+                  : "M808"
+              }</p>
             </div>
             <div class="white-text brdr-radius">
               <p>${format(renderData.start, "HH:mm")} hrs</p>
             </div>
             <div class="green-bg brdr-radius">
-              <p>eta ${renderData.resource._data?.order_banks[0]?.eta?.substring(0,5) ? renderData.resource._data.order_banks[0].eta.substring(0,5) : "00:00"}</p>
+              <p>eta ${
+                renderData.resource._data?.order_banks[0]?.eta?.substring(0, 5)
+                  ? renderData.resource._data.order_banks[0].eta.substring(0, 5)
+                  : "00:00"
+              }</p>
             </div>
             <div class="white-text brdr-radius">
               <p>${format(renderData.end, "HH:mm")} hrs</p>
@@ -343,6 +407,7 @@ function BryntumChartTable(props) {
       `
     },
     features: {
+      taskEdit : false,
       eventEdit: {
         editorConfig: {
           type: "myCustomEditorType",
@@ -361,6 +426,11 @@ function BryntumChartTable(props) {
       timeRanges: {
         showCurrentTimeLine: false,
       },
+      scheduleMenu: {
+        items: {
+          addEvent: false
+        }
+      }
     },
     startDate: props?.dateConfig?.date_from ?? format(Date.now(), "yyyy-MM-dd"),
     resourceNonWorkingTimeFeature: true,
@@ -684,6 +754,7 @@ function BryntumChartTable(props) {
       sort_field: "vehicle",
       filter: {
         shift_date: props?.dateConfig,
+        terminal: TERMINAL_CODE_MAPPING[props?.termina],
       },
     }
     props.getRTSOderBankGanttChart(payload)
@@ -721,8 +792,18 @@ function BryntumChartTable(props) {
                         resources={props.ganttChartTableData}
                         syncDataOnLoad
                         ref={schedulerProRef}
-                        // other props, event handlers, etc
                       />
+                      <div>
+                {popupShown ? (
+                    <BryntumPopup
+                        text="Popup text"
+                        closePopup={hideEditor}
+                        eventRecord={eventRecord}
+                        eventStore={eventStore}
+                        resourceStore={resourceStore}
+                    ></BryntumPopup>
+                ) : null}
+            </div>
                     </div>
                   )
                 }}
@@ -782,10 +863,15 @@ function BryntumChartTable(props) {
         shiftDate={props.dateConfig.date_from}
         refreshTable={refreshGanttChartTable}
       />
+      {/* validate gantt event 5 */}
       <AlertOverruleModal
         alertType={alertOverruleShow}
-        onCancel={() => setAlertOverruleShow(false)}
-        onSend={() => {}}
+        onCancel={() => {
+          setAlertOverruleShow(false)
+          refreshGanttChartTable()
+        }}
+        alertMessage={ganttEventValidation?.message}
+        onSend={updateOBEventHandler}
       />
     </div>
   )
@@ -800,6 +886,7 @@ const mapStateToProps = ({ orderBank }) => {
     ganttChartTableFilter: orderBank.ganttChartTableFilter,
     ganttChartEventData: orderBank.ganttChartEventData,
     dropOderSuccess: orderBank.dropOderSuccess,
+    ganttEventValidation: orderBank.ganttEventValidation,
   }
 }
 
@@ -811,6 +898,7 @@ const mapDispatchToProps = dispatch => {
     getRTSOderBankGanttChart: params => dispatch(getRTSOderBankGanttChart(params)),
     getShipmentOfOderBankGanttChart: params => dispatch(getShipmentOfOderBankGanttChart(params)),
     updateOBEvent: params => dispatch(updateOBEvent(params)),
+    getGanttEventValidation: params => dispatch(getGanttEventValidation(params)),
     onRemoveEvent: params => dispatch(removeEvent(params)),
     onSelectVehicle: params => dispatch(selectVehicleShipment(params)),
   }

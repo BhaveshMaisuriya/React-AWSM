@@ -133,7 +133,7 @@ export const runValidation = data => {
   if (data.contact) {
     const validateContact = Object.keys(data.contact).map(key => {
       const contactKey = key.split("_").pop()
-      if (key.startsWith("contact_") && data.contact[key] && contactKey > 1 && contactKey < 4) {
+      if (key.startsWith("contact_") && data.contact[key] && ["2", "3"].includes(contactKey)) {
         if (data.contact[key].number && !/^\+?[0-9- ]+$/.test(data.contact[key].number)) {
           return false
         }
@@ -169,7 +169,6 @@ export const runValidation = data => {
       return true
     })
   }
-  // return true
 }
 
 export const removeKeywords = string => {
@@ -185,7 +184,6 @@ export const removeKeywords = string => {
         .replace("daily", "Every day")
         .replace("range ", "")
         .replace("single ", "")
-        .replace("0:00", "0")
         .replace("null", "-")
         .replace("None", "-")
         .replace("true", "Y")

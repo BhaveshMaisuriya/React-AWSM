@@ -49,9 +49,9 @@ class InformationModal extends Component {
       isConfirm: false,
       alertMsg: "",
       showError: [],
-      isUpdateAble: false
+      isUpdateAble: false,
     }
-    
+
     this.validateTerminal = this.validateTerminal.bind(this)
   }
 
@@ -75,49 +75,67 @@ class InformationModal extends Component {
       this.setState({ data: nextProps.currentRoadTanker })
     }
   }
-  
+
   componentDidUpdate(prevProps, prevState, snapshot) {
     if (!isEqual(prevState.data, this.state.data)) {
-      if (this.validateTerminal()) {
+      if (this.validateTerminal() && this.handleInputVisibility()) {
         this.setState({
           showError: [],
           isUpdateAble: true,
         })
       } else {
         this.setState({
-          isUpdateAble: false
+          isUpdateAble: false,
         })
       }
     }
   }
-  
+
+  handleInputVisibility = () => {
+    if (!isEqual(this.state.data, this.props.currentRoadTanker)) {
+      return true
+    }
+  }
+
   validateTerminal = () => {
     const { data } = this.state
-    let temp = [];
-    temp = [...temp];
+    let temp = []
+    temp = [...temp]
     if (
       data?.availability?.status_awsm === "Temporary Blocked" &&
       !isValidDate(data?.availability?.block_date_range)
     ) {
-      temp.push('block_date_range');
+      temp.push("block_date_range")
     }
 
-    if (isValidDate(data?.availability?.other_terminal_mobilization_1_date) && data?.availability?.other_terminal_mobilization_1_name === 'None') {
-      temp.push('other_terminal_mobilization_1_name');
+    if (
+      isValidDate(data?.availability?.other_terminal_mobilization_1_date) &&
+      data?.availability?.other_terminal_mobilization_1_name === "None"
+    ) {
+      temp.push("other_terminal_mobilization_1_name")
     }
 
-    if (isValidDate(data?.availability?.other_terminal_mobilization_2_date) && data?.availability?.other_terminal_mobilization_2_name === 'None') {
-      temp.push('other_terminal_mobilization_2_name');
+    if (
+      isValidDate(data?.availability?.other_terminal_mobilization_2_date) &&
+      data?.availability?.other_terminal_mobilization_2_name === "None"
+    ) {
+      temp.push("other_terminal_mobilization_2_name")
     }
 
-    if (!isValidDate(data?.availability?.other_terminal_mobilization_2_date) && data?.availability?.other_terminal_mobilization_2_name !== "None") {
-      temp.push('other_terminal_mobilization_2_date');
+    if (
+      !isValidDate(data?.availability?.other_terminal_mobilization_2_date) &&
+      data?.availability?.other_terminal_mobilization_2_name !== "None"
+    ) {
+      temp.push("other_terminal_mobilization_2_date")
     }
-    
-    if (!isValidDate(data?.availability?.other_terminal_mobilization_1_date) && data?.availability?.other_terminal_mobilization_1_name !== "None") {
-      temp.push('other_terminal_mobilization_1_date');
+
+    if (
+      !isValidDate(data?.availability?.other_terminal_mobilization_1_date) &&
+      data?.availability?.other_terminal_mobilization_1_name !== "None"
+    ) {
+      temp.push("other_terminal_mobilization_1_date")
     }
-    
+
     if (temp.length === 0) {
       return true
     } else {
@@ -142,7 +160,7 @@ class InformationModal extends Component {
     if (date?.type === "single" && date?.days?.length === 0) {
       return true
     } else if (date?.type === "range" && date?.date_from === null && date?.date_to === null) {
-      return true;
+      return true
     } else if (date?.type === "") {
       return true
     } else if (date === null) {
@@ -171,21 +189,14 @@ class InformationModal extends Component {
 
     const handleExitConfirmation = () => {
       if (!isEqual(this.state.data, this.props.currentRoadTanker))
-        return (
-          <ExitConfirmation
-            onExit={this.onConfirmExit}
-            onCancel={this.onConfirmCancel}
-          />
-        )
+        return <ExitConfirmation onExit={this.onConfirmExit} onCancel={this.onConfirmCancel} />
       else this.onConfirmExit()
     }
-
-    
 
     const handleUpdate = async e => {
       // e.preventDefault()
       if (this.validateTerminal()) {
-        this.setState({ showError: [] });
+        this.setState({ showError: [] })
         await onUpdateRoadTankerDetail({ vehicle_name: data.vehicle, data })
         // this.props.onCancel()
       }
@@ -199,8 +210,8 @@ class InformationModal extends Component {
     }
 
     const showNameError = ergMsg => {
-      let temp = [...this.state.showError];
-      temp.push(ergMsg);
+      let temp = [...this.state.showError]
+      temp.push(ergMsg)
       this.setState({
         showError: temp,
       })
@@ -216,10 +227,7 @@ class InformationModal extends Component {
       const footer =
         !scheduler && !this.state.isConfirm ? (
           <ModalFooter>
-            <button
-              className="btn-sec"
-              onClick={() => this.setState({ isConfirm: true })}
-            >
+            <button className="btn-sec" onClick={() => this.setState({ isConfirm: true })}>
               Cancel
             </button>
             {!scheduler && (
@@ -240,12 +248,13 @@ class InformationModal extends Component {
     return (
       <Modal isOpen={visible} className="table-information modal-lg">
         <ModalHeader close={<CloseButton handleClose={handleClose} />}>
-          <span className="modal-title">
-            {" "}
-            Vehicle Id: {currentRoadTanker?.vehicle}
-          </span>
+          <span className="modal-title"> Vehicle Id: {currentRoadTanker?.vehicle}</span>
           <span className="last-updated-sub-title">
-          {`Last Updated By: ${currentRoadTanker?.updated_by?.split("@")[0] || "Unknown"} on ${currentRoadTanker?.updated_at && format(new Date(currentRoadTanker?.updated_at), "do LLL yyyy") || ""}`}
+            {`Last Updated By: ${currentRoadTanker?.updated_by?.split("@")[0] || "Unknown"} on ${
+              (currentRoadTanker?.updated_at &&
+                format(new Date(currentRoadTanker?.updated_at), "do LLL yyyy")) ||
+              ""
+            }`}
           </span>
         </ModalHeader>
         <AWSMAlert
@@ -269,7 +278,7 @@ class InformationModal extends Component {
                     defaultValue={data?.owner}
                     onChange={e => onFieldValueChange("owner", e.target.value)}
                     disabled={true}
-                  // placeholder="Typing something here..."
+                    // placeholder="Typing something here..."
                   />
                 </div>
               </div>
@@ -280,9 +289,7 @@ class InformationModal extends Component {
                     className="form-control awsm-input"
                     type="text"
                     defaultValue={data?.status_sap}
-                    onChange={e =>
-                      onFieldValueChange("status_sap", e.target.value)
-                    }
+                    onChange={e => onFieldValueChange("status_sap", e.target.value)}
                     // placeholder="Typing something here..."
                     disabled={true}
                   />
@@ -293,9 +300,7 @@ class InformationModal extends Component {
                     className="form-control awsm-input"
                     type="number"
                     defaultValue={data?.max_volume}
-                    onChange={e =>
-                      onFieldValueChange("max_volume", e.target.value)
-                    }
+                    onChange={e => onFieldValueChange("max_volume", e.target.value)}
                     // placeholder="Numeric only..."
                     disabled={true}
                   />
@@ -308,13 +313,9 @@ class InformationModal extends Component {
                     className="form-control awsm-input"
                     type="text"
                     defaultValue={data?.remarks}
-                    onChange={e =>
-                      onFieldValueChange("remarks", e.target.value)
-                    }
+                    onChange={e => onFieldValueChange("remarks", e.target.value)}
                     placeholder={!scheduler ? "Typing something here..." : ""}
-                    disabled={
-                      (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
-                    }
+                    disabled={(mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler}
                   />
                 </div>
               </div>

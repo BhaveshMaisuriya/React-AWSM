@@ -25,7 +25,7 @@ import EditIcon from "assets/images/AWSM-Edit-Icon.svg"
 import TrashIcon from "assets/images/AWSM-Trash-Icon.svg"
 import NoDataIcon from "assets/images/AWSM-No-Data-Available.svg"
 import DeleteOrderBankConfirmation from "../deleteOrderBankModal"
-import EditOrderBankModal from "../editOrderBankModal"
+import EditOrderBankModal from "../editOrderBankModal"  
 import ConfirmDNStatusModal from "./confirmDNStatusModal"
 import {
   deleteOrderBankDetail,
@@ -302,7 +302,7 @@ class index extends Component {
             <td>
               {
                 <span
-                  className={`status ${data[v] === 'Clean DN' ? 'clean' : data[v] === 'Blocked DN' ? 'blocked' : data[v] === 'Late Unblock' ? 'unblock' : 'send' }`}
+                  className={`status ${data['dn_no'] === 'Clean DN' ? 'clean' : data['dn_no'] === 'Blocked DN' ? 'blocked' : data['dn_no'] === 'Late Unblock' ? 'unblock' : 'send' }`}
                   onClick={this.DNStatusOnClickHandler.bind(this, data, data[v])}
                 >
                   {(data[v] === '' || data[v] === null) ? 'Send for DN' : data[v]}
@@ -370,9 +370,10 @@ class index extends Component {
     await onGetViewOrderBankDetail(allData.id)
   }
 
-  editAlert = async(type, val) => {
+  editAlert = async(type, val = '') => {
     type === "edit" && this.setState({ showEditAlert: true })
     val !== "" ? this.setState({ showEditMsg: val }) : this.setState({ showEditAlert: "" })
+    if(type === "edit"){
     this.setState({showLoader: true});
     const { getRTSOrderBankTableData, payloadFilter } = this.props
     const { fieldSortDirection, fieldToSort } = this.state
@@ -387,7 +388,8 @@ class index extends Component {
             sort_field: fieldToSort,
             filter: payloadFilter.filterOrderBank,
           })
-        }, 2000)
+        }, 2000);
+      }
   }
 
   DataOfTableFixed = () => {
@@ -468,6 +470,7 @@ class index extends Component {
   }
 
   DNStatusOnClickHandler(data, key) {
+    console.log('key::', key)
     if ((key === "" || key === null)) {
       this.setState({ DNStatus: { isOpenConfirmModal: true, data } })
     }
@@ -618,8 +621,8 @@ class index extends Component {
             status={this.state.showEditMsg}
             message={
               this.state.showEditMsg === "success"
-                ? "Order updated successfully"
-                : "Order has not been update"
+                ? "Record successfully updated"
+                : "Order update failed"
             }
             openAlert={this.state.showEditAlert}
             closeAlert={() => this.setState({ showEditAlert: false })}
@@ -638,8 +641,8 @@ class index extends Component {
             status={this.state.showDeleteMsg}
             message={
               this.state.showDeleteMsg === "success"
-                ? "Order deleted successfully"
-                : "Order has not been deleted"
+                ? "An Order has been successfully deleted from Order Bank"
+                : "An Order has not been deleted from Order Bank"
             }
             openAlert={this.state.showDelete}
             closeAlert={() => this.setState({ showDelete: false })}

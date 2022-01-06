@@ -282,10 +282,10 @@ class index extends Component {
 
   RenderTRComponent = data => {
     const { expandSearch } = this.state
+   
     return this.props.tableColumns.map(v => {
       let typeOfColumn = tableMapping[v]?.type
       let result
-
       switch (typeOfColumn) {
         case "priority_type":
           result = (
@@ -302,10 +302,10 @@ class index extends Component {
             <td>
               {
                 <span
-                  className={`status ${data['dn_no'] === 'Clean DN' ? 'clean' : data['dn_no'] === 'Blocked DN' ? 'blocked' : data['dn_no'] === 'Late Unblock' ? 'unblock' : 'send' }`}
+                  className={`status ${data['dn_status'] === 'Clean DN' ? 'clean' : data['dn_status'] === 'Blocked DN' ? 'blocked' : data['dn_status'] === 'Late Unblock' ? 'unblock' : 'send' }`}
                   onClick={this.DNStatusOnClickHandler.bind(this, data, data[v])}
                 >
-                  {(data[v] === '' || data[v] === null) ? 'Send for DN' : data[v]}
+                  {(data['dn_no'] === '' || data['dn_no'] === null) ? 'Send for DN' : data[v]}
                 </span>
               }
             </td>
@@ -315,7 +315,7 @@ class index extends Component {
           result = (
             <td>
               <div className="custom-td-overflow">
-                {data[v] ? format(new Date(data[v].toString()), "dd-MM-yyyy") : ""}
+                {data[v] ? format(new Date(data[v].toString()), "dd-MM-yyyy HH:mm") : ""}
               </div>
             </td>
           )
@@ -470,8 +470,7 @@ class index extends Component {
   }
 
   DNStatusOnClickHandler(data, key) {
-    console.log('key::', key)
-    if ((key === "" || key === null)) {
+    if ((data.dn_no === "" || data.dn_no === null)) {
       this.setState({ DNStatus: { isOpenConfirmModal: true, data } })
     }
   }

@@ -52,7 +52,7 @@ const BryntumDragDropAreaShipment = ({currentDate}) => {
           <DragDropAreaHeader vehicle={selectedVehicle?.vehicle} currentDate={currentDate}/>
         </Col>
         <Col xs={12} className="px-4" style={{height: "77%"}}>
-          <OrderTableDropArea showTableColumns={testCurrentTableColumns}/>
+          <OrderTableDropArea showTableColumns={testCurrentTableColumns} currentDate={currentDate}/>
         </Col>
       </Row>
     </div>

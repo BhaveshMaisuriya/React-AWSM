@@ -28,7 +28,11 @@ import {
   UPDATE_OB_EVENT,
   GET_OB_RT_DETAILS,
   UPDATE_OB_RT_DETAILS,
-  GET_SHIPMENT_DETAIL
+  GET_SHIPMENT_DETAIL,
+  DRAG_AND_DROP_SHIPMENT_AREA,
+  GET_GANTT_EVENT_VALIDATION,
+  GET_SHIPMENT_DETAILS_ON_VEHICLE,
+  DRAG_ORDER_TO_SHIPMENT,
 } from "./actionTypes"
 
 import {
@@ -80,6 +84,14 @@ import {
   dragOrderBankToGanttChartFail,
   getShipmentDetailSuccess,
   getShipmentDetailFail,
+  onDragAndDropShipmentAreaFail,
+  onDragAndDropShipmentAreaSuccess,
+  getGanttEventValidationSuccess,
+  getGanttEventValidationFail,
+  getShipmentDetailsOnVehicleSuccess,
+  getShipmentDetailsOnVehicleFail,
+  onDragOrderToShipmentFail,
+  onDragOrderToShipmentSuccess,
 } from "./actions"
 import {
   getOrderBank,
@@ -103,6 +115,8 @@ import {
   getRTSOrderbankRTdetails,
   updateRTSOrderbankRTdetails,
   getShipmentDetail,
+  validateGanttEventChange,
+  getShipmentDetailsOnVehicle
 } from "../../helpers/fakebackend_helper"
 
 function* onGetOrderbank({ params = {} }) {
@@ -325,7 +339,7 @@ function* onGetRTSOrderBankGanttChart({ params = {} }) {
   }
 }
 
-function* onDragOrderBankToGanttChart() {
+function* onDragOrderBankToGanttChart({ shift_date }) {
   const dragOrder = yield select(store =>
     store.orderBank?.orderBankTableData?.filter(e => e.isChecked)
   )
@@ -335,6 +349,7 @@ function* onDragOrderBankToGanttChart() {
       yield call(sendOderToVehicle, {
         vehicle: selectedVehicle.vehicle,
         order_banks: dragOrder.map(e => e.id),
+        shift_date: shift_date,
       })
       yield put(dragOrderBankToGanttChartSuccess(dragOrder))
     }
@@ -370,6 +385,16 @@ function* onUpdateEvent(payload) {
   yield put(updateOBEventSuccess(payload.params))
 }
 
+function* onGetGanttEventValidation(payload) {
+  // call api to remove shipment here
+  try {
+    const response = yield call(validateGanttEventChange, payload.params)
+    yield put(getGanttEventValidationSuccess(response.data))
+  } catch (error) {
+    yield put(getGanttEventValidationFail(error))
+  }
+}
+
 function* onGetOBRTDetails(payload) {
   try {
     const response = yield call(getRTSOrderbankRTdetails, payload.params)
@@ -394,6 +419,36 @@ function* onGetShipmentDetails(payload) {
     yield put(getShipmentDetailSuccess(response.data))
   } catch (error) {
     yield put(getShipmentDetailFail(error))
+  }
+}
+
+function* onGetShipmentDetailsOnVehicle(payload) {
+  try {
+    const response = yield call(getShipmentDetailsOnVehicle, payload.params)
+    yield put(getShipmentDetailsOnVehicleSuccess(response.data))
+  } catch (error) {
+    yield put(getShipmentDetailsOnVehicleFail(error))
+  }
+}
+
+function* onDragAndDropShipmentArea(payload) {
+  try {
+    yield put(onDragAndDropShipmentAreaSuccess(payload?.params))
+  } catch (error) {
+    yield put(onDragAndDropShipmentAreaFail(error))
+  }
+}
+
+function* onDragOrderToShipment() {
+  const dragOrder = yield select(store =>
+    store.orderBank?.orderBankTableData?.filter(e => e.isChecked)
+  )
+  try {
+    if (dragOrder && dragOrder.length > 0) {
+      yield put(onDragOrderToShipmentSuccess(dragOrder))
+    }
+  } catch (error) {
+    yield put(onDragOrderToShipmentFail(error))
   }
 }
 
@@ -424,9 +479,13 @@ function* orderBankSaga() {
   yield takeLatest(REMOVE_SHIPMENT_FROM_EVENT, onRemoveShipmentFromEvent)
   yield takeLatest(REMOVE_EVENT, onRemoveEvent)
   yield takeLatest(UPDATE_OB_EVENT, onUpdateEvent)
+  yield takeLatest(GET_GANTT_EVENT_VALIDATION, onGetGanttEventValidation)
   yield takeLatest(GET_OB_RT_DETAILS, onGetOBRTDetails)
   yield takeLatest(UPDATE_OB_RT_DETAILS, onUpdateOBRTDetails)
   yield takeLatest(GET_SHIPMENT_DETAIL, onGetShipmentDetails)
+  yield takeLatest(DRAG_AND_DROP_SHIPMENT_AREA, onDragAndDropShipmentArea),
+  yield takeLatest(GET_SHIPMENT_DETAILS_ON_VEHICLE, onGetShipmentDetailsOnVehicle),
+  yield takeLatest(DRAG_ORDER_TO_SHIPMENT, onDragOrderToShipment)
 }
 
 export default orderBankSaga

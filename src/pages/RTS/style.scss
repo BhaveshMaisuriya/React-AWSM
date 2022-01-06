@@ -112,8 +112,11 @@
 .mt-27 {
     margin-top: 27px;
 }
-.new-order-modal {
+.new-order-modal{
     max-width: 80% !important;
+    .modal-header{
+        padding-bottom: 33px !important;
+    }
 }
 .table {
     display: table;

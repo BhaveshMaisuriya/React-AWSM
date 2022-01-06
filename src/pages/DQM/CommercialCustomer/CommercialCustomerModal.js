@@ -83,7 +83,11 @@ const CommercialCustomerModal = props => {
   }
   
   const isUpdateAble = useMemo(() => {
-    return runValidation(currentCommercialDetail || {})
+    if(!isEqual(currentCommercialDetail, props.currentCommercialDetail)){
+      return runValidation(currentCommercialDetail || {})
+    }else{
+      return false
+    }
   }, [currentCommercialDetail])
 
   const handleClose = () => {
@@ -135,15 +139,7 @@ const CommercialCustomerModal = props => {
     )
   }
 
-  // const handleAlert = () => {
-  //   return (
-  //     <AWSMAlert
-  //       status={alertStatus}
-  //       openAlert={alert}
-  //       closeAlert={() => setAlert(false)}
-  //     />
-  //   )
-  // }
+
 
   if (!data) {
     return null
@@ -151,7 +147,6 @@ const CommercialCustomerModal = props => {
 
   return (
     <>
-      {/* {handleAlert()} */}
       <Modal isOpen={visible} className="commercial-customer-modal modal-lg">
         {currentCommercialDetail ? (
           <div>

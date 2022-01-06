@@ -450,16 +450,28 @@ export const sendOderToVehicle = params => {
   return axios.post("rts/order-bank/order-to-gantt", params)
 }
 
+export const validateGanttEventChange = params => {
+  return axios.post("rts/order-bank/gantt-event-validate", params)
+}
+
 export const getRTSOrderbankRTdetails = params => {
-  return axios.get(`${url.GET_RTS_GANTT_CHART}/${params}`)
+  return axios.get(`${url.GET_RTS_GANTT_CHART}/${params.vehicle}/${params.date}`)
 }
 
 export const updateRTSOrderbankRTdetails = params => {
-  return axios.put(`${url.GET_RTS_GANTT_CHART}/${params.vehicle}`, { ...params })
+  return axios.post(`${url.UPDATE_RTS_GANTT_CHART}/${params.vehicle}`, { 
+    remarks: params.remarks,
+    shift_type: params.shift_type,
+    terminal_code: params.terminal_code,
+    shift_date: params.shift_date
+   })
 }
 
 export const getShipmentDetail = params => {
-  return axios.get(`rts/shipment/${params}`)
+  return axios.get(`rts/shipment/${params.vehicle}/${params.date}`)
+}
+export const getShipmentDetailsOnVehicle = params => {
+  return axios.get(`rts/gantt-chart/shipment/${params}`)
 }
 
 export {

@@ -17,14 +17,14 @@ import {
 } from "reactstrap"
 
 //Components
-import AWSMInput from "../../../components/Common/Input"
-import TabAddress from "../../../components/Common/TableInformation/tabAddress"
-import TabStatus from "../../../components/Common/TableInformation/tabStatus"
-import TabDelivery from "../../../components/Common/TableInformation/tabDelivery"
-import TabContact from "../../../components/Common/TableInformation/tabContact"
-import TabStorage from "../../../components/Common/TableInformation/tabStorage"
-import TabQuota from "../../../components/Common/TableInformation/tabQuota"
-import CloseButton from "../../../components/Common/CloseButton"
+import AWSMInput from "components/Common/Input"
+import TabAddress from "components/Common/TableInformation/tabAddress"
+import TabStatus from "components/Common/TableInformation/tabStatus"
+import TabDelivery from "components/Common/TableInformation/tabDelivery"
+import TabContact from "components/Common/TableInformation/tabContact"
+import TabStorage from "components/Common/TableInformation/tabStorage"
+import TabQuota from "components/Common/TableInformation/tabQuota"
+import CloseButton from "components/Common/CloseButton"
 //CSS
 import "./RetailCustomerModal.scss"
 import { Skeleton } from "@material-ui/core"
@@ -32,9 +32,9 @@ import {
   getTableInformation,
   resetRetailTableInformation,
   updateTableInformation,
-} from "../../../store/actions"
-import { isScheduler } from "../../../helpers/auth_helper"
-import ExitConfirmation from "../../../components/Common/ExitConfirmation"
+} from "store/actions"
+import { isScheduler } from "helpers/auth_helper"
+import ExitConfirmation from "components/Common/ExitConfirmation"
 import { runValidation } from "../Common/helper"
 import { isEqual } from "lodash"
 import SimpleBar from "simplebar-react"
@@ -51,25 +51,16 @@ const RetailCustomerModal = props => {
     updateTableInformation,
     updateSuccess,
     refreshMainTable,
-    // updateAlert,
   } = props
-  const [currentRetailDetail, setCurrentRetailDetail] = useState(
-    props.currentRetailDetail
-  )
+  const [currentRetailDetail, setCurrentRetailDetail] = useState(props.currentRetailDetail)
   const [activeTab, setActiveTab] = useState("1")
   const scheduler = isScheduler()
-  // const scheduler = false
-  // const [alert, setAlert] = useState(false)
-  // const [alertStatus, setAlertStatus] = useState("")
   const [isConfirm, setIsConfirm] = useState(false)
 
   useEffect(() => {
-    // setAlertStatus(updateAlert)
     if (updateSuccess && refreshMainTable) {
       refreshMainTable()
-      // setAlert(true)
     }
-    // if (updateSuccess === false) setAlert(true)
   }, [updateSuccess])
 
   const handleUpdate = e => {
@@ -81,7 +72,11 @@ const RetailCustomerModal = props => {
   }
 
   const isUpdateAble = useMemo(() => {
-    return runValidation(currentRetailDetail || {})
+    if (!isEqual(currentRetailDetail, props.currentRetailDetail)) {
+      return runValidation(currentRetailDetail || {})
+    } else {
+      return false
+    }
   }, [currentRetailDetail])
 
   const handleClose = () => {
@@ -125,16 +120,6 @@ const RetailCustomerModal = props => {
     }
   }
 
-  // const handleAlert = () => {
-  //   return (
-  //     <AWSMAlert
-  //       status={alertStatus}
-  //       openAlert={alert}
-  //       closeAlert={() => setAlert(false)}
-  //     />
-  //   )
-  // }
-
   const handleExitConfirmation = () => {
     return !isEqual(currentRetailDetail, props.currentRetailDetail) ? (
       <ExitConfirmation onExit={onConfirmExit} onCancel={onConfirmCancel} />
@@ -149,7 +134,6 @@ const RetailCustomerModal = props => {
 
   return (
     <>
-      {/* {handleAlert()} */}
       <Modal isOpen={visible} className="retail-customer-modal modal-lg">
         {currentRetailDetail ? (
           <div>
@@ -158,7 +142,9 @@ const RetailCustomerModal = props => {
                 Ship To Party: {currentRetailDetail.ship_to_party}
               </span>
               <span className="last-updated-sub-title">
-                {`Last Updated By: ${currentRetailDetail.updated_by?.split("@")[0] || "Unknown"} on ${format(new Date(currentRetailDetail.updated_at), "do LLL yyyy") || ""}`}
+                {`Last Updated By: ${
+                  currentRetailDetail.updated_by?.split("@")[0] || "Unknown"
+                } on ${format(new Date(currentRetailDetail.updated_at), "do LLL yyyy") || ""}`}
               </span>
             </ModalHeader>
             <ModalBody>
@@ -166,17 +152,11 @@ const RetailCustomerModal = props => {
               <Row className="row">
                 <Col className="col-md-6 form-group">
                   <label>SHIP TO (COMPANY NAME)</label>
-                  <AWSMInput
-                    disabled
-                    defaultValue={currentRetailDetail.ship_to_company}
-                  />
+                  <AWSMInput disabled defaultValue={currentRetailDetail.ship_to_company} />
                 </Col>
                 <Col className="col-md-6 form-group">
                   <label>STATUS IN SAP</label>
-                  <AWSMInput
-                    disabled
-                    defaultValue={currentRetailDetail.status_sap}
-                  />
+                  <AWSMInput disabled defaultValue={currentRetailDetail.status_sap} />
                 </Col>
               </Row>
               <Row className="row">
@@ -186,7 +166,7 @@ const RetailCustomerModal = props => {
                     defaultValue={currentRetailDetail.remarks}
                     onChange={value => onFieldValueChange("remarks", value)}
                     disabled={scheduler}
-                    placeholder='Type something here ...'
+                    placeholder="Type something here ..."
                   />
                 </Col>
               </Row>
@@ -326,7 +306,6 @@ const RetailCustomerModal = props => {
 const mapStateToProps = ({ retailCustomer }) => ({
   currentRetailDetail: retailCustomer.currentRetailDetail,
   currentRetailError: retailCustomer.error,
-  // updateAlert: retailCustomer.updateAlert,
   updateSuccess: retailCustomer.updateSuccess,
 })
 

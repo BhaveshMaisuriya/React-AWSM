@@ -162,7 +162,7 @@ class FixedCoulmnTable extends Component {
     const pathName = window.location.pathname
     const {config, modalPop, varianceControlData} = this.props
     return sliceArr.map((e, index) => {
-      const value = isUndefined(arr[e]) || isNull(arr[e]) ? "-" : (config[e] && config[e].type === 'date') ?
+      let value = isUndefined(arr[e]) || isNull(arr[e]) ? "-" : (config[e] && config[e].type === 'date') ?
         arr[e] : removeKeywords(arr[e])
       switch (config[e] && config[e].type) {
         case "badge":

@@ -93,6 +93,18 @@ import {
   GET_SHIPMENT_DETAIL_SUCCESS,
   GET_SHIPMENT_DETAIL_FAIL,
   GET_SHIPMENT_DETAIL,
+  DRAG_AND_DROP_SHIPMENT_AREA,
+  DRAG_AND_DROP_SHIPMENT_AREA_SUCCESS,
+  DRAG_AND_DROP_SHIPMENT_AREA_FAIL,
+  GET_GANTT_EVENT_VALIDATION,
+  GET_GANTT_EVENT_VALIDATION_SUCCESS,
+  GET_GANTT_EVENT_VALIDATION_FAIL,
+  GET_SHIPMENT_DETAILS_ON_VEHICLE,
+  GET_SHIPMENT_DETAILS_ON_VEHICLE_SUCCESS,
+  GET_SHIPMENT_DETAILS_ON_VEHICLE_FAIL,
+  DRAG_ORDER_TO_SHIPMENT,
+  DRAG_ORDER_TO_SHIPMENT_SUCCESS,
+  DRAG_ORDER_TO_SHIPMENT_FAIL,
 } from "./actionTypes"
 
 export const getRTSOrderBankTableData = params => ({
@@ -429,8 +441,9 @@ export const getRTSOderBankGanttChartFail = error => ({
   payload: error,
 })
 
-export const dragOrderBankToGanttChart = () => ({
+export const dragOrderBankToGanttChart = ({ shift_date }) => ({
   type: DRAG_RTS_ORDER_BANK_TO_GANTT_CHART,
+  shift_date,
 })
 
 export const dragOrderBankToGanttChartSuccess = dropData => ({
@@ -553,5 +566,64 @@ export const getShipmentDetailSuccess = response => ({
 
 export const getShipmentDetailFail = error => ({
   type: GET_SHIPMENT_DETAIL_FAIL,
+  payload: error,
+})
+export const getShipmentDetailsOnVehicle = params => ({
+  type: GET_SHIPMENT_DETAILS_ON_VEHICLE,
+  params,
+})
+
+export const getShipmentDetailsOnVehicleSuccess = response => ({
+  type: GET_SHIPMENT_DETAILS_ON_VEHICLE_SUCCESS,
+  payload: response,
+})
+
+export const getShipmentDetailsOnVehicleFail = error => ({
+  type: GET_SHIPMENT_DETAILS_ON_VEHICLE_FAIL,
+  payload: error,
+})
+
+export const onDragAndDropShipmentArea = params => ({
+  type: DRAG_AND_DROP_SHIPMENT_AREA,
+  params,
+})
+
+export const onDragAndDropShipmentAreaSuccess = response => ({
+  type: DRAG_AND_DROP_SHIPMENT_AREA_SUCCESS,
+  payload: response,
+})
+
+export const onDragAndDropShipmentAreaFail = error => ({
+  type: DRAG_AND_DROP_SHIPMENT_AREA_FAIL,
+  payload: error,
+})
+
+export const getGanttEventValidation = params => ({
+  type: GET_GANTT_EVENT_VALIDATION,
+  params,
+})
+
+export const getGanttEventValidationSuccess = params => ({
+  type: GET_GANTT_EVENT_VALIDATION_SUCCESS,
+  params,
+})
+
+export const getGanttEventValidationFail = params => ({
+  type: GET_GANTT_EVENT_VALIDATION_FAIL,
+  params,
+})
+
+export const onDragOrderToShipment = params => ({
+  type: DRAG_ORDER_TO_SHIPMENT,
+  params,
+})
+
+export const onDragOrderToShipmentSuccess = response => ({
+  type: DRAG_ORDER_TO_SHIPMENT_SUCCESS,
+  payload: response,
+})
+
+export const onDragOrderToShipmentFail = error => ({
+  type: DRAG_ORDER_TO_SHIPMENT_FAIL,
   payload: error,
 })

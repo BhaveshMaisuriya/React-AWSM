@@ -8,7 +8,7 @@ function CrossTerminalModal(props) {
   const { open, onCancel, onSave } = props
 
   const [region, setRegion] = useState(props.region)
-  const [terminal, setTerminal] = useState(null)
+  const [terminal, setTerminal] = useState(REGION_TERMINAL[0].terminal[0])
   const [isConfirm, setIsConfirm] = useState(false)
   const [regionList, setRegionList] = useState([])
 
@@ -17,25 +17,31 @@ function CrossTerminalModal(props) {
     return currentRegion ? currentRegion.terminal : []
   }, [region])
 
-  const onConfirmCancel = () => {
-    setIsConfirm(false)
+  const onCancelClick = () => {
+    if(region !== props.region || terminal !== "KVDT"){
+      setIsConfirm(true)
+    }else{
+      onCancel()
+    }
   }
 
   const onConfirmExit = () => {
     setIsConfirm(false)
+    setRegion(props.region)
+    setTerminal(REGION_TERMINAL[0].terminal[0])
     if (onCancel) {
       onCancel()
     }
   }
 
-  const toggle = () => {
-    setIsConfirm(true)
+  const onConfirmCancel = () => {
+      setIsConfirm(false)
   }
 
   const onSaveClick = () => {
     onSave(region, TERMINAL_CODE_MAPPING[terminal])
-    setRegion(props.defaultRegion)
-    setTerminal(null)
+    setRegion(props.defaultRegion !== undefined ? props.defaultRegion : props.region)
+    setTerminal(props.defaultTerminal !== undefined ? props.defaultTerminal : REGION_TERMINAL[0].terminal[0])
   }
 
   useEffect(() => {
@@ -48,14 +54,14 @@ function CrossTerminalModal(props) {
 
   const regionChange = (value) => {
     setRegion(value);
-    setTerminal('')
+    setTerminal(REGION_TERMINAL.find(item => item.region === value).terminal[0])
     // const currentRegion = REGION_TERMINAL.find(e => e.region === value);
     //   setTerminalList(currentRegion ? currentRegion.terminal : []);
   }
 
   return (
     <Modal  id="crossterminal-modal" isOpen={open} className="deleteModal">
-      <ModalHeader  toggle={toggle}>Cross Terminal</ModalHeader>
+      <ModalHeader  toggle={onCancelClick}>Cross Terminal</ModalHeader>
       <ModalBody className="position-relative h-250 scroll pl-30">
         {isConfirm && <ExitConfirmation onExit={onConfirmExit} onCancel={onConfirmCancel} />}
         {!isConfirm && (
@@ -72,7 +78,7 @@ function CrossTerminalModal(props) {
                   value={region}
                   onChange={value => regionChange(value)}
                   // disabled
-                  items={regionList}
+                  items={regionList.splice(6) && regionList}
                 />
               </Col>
               <Col lg={6}>
@@ -84,7 +90,7 @@ function CrossTerminalModal(props) {
               </Col>
             </Row>
             <div className="d-flex align-items-center justify-content-end pt-5">
-              <button onClick={() => setIsConfirm(true)} className="btn btn-outline-primary mr-2">
+              <button onClick={onCancelClick} className="btn btn-outline-primary mr-2">
                 Cancel
               </button>
               <button onClick={() => onSaveClick()} className="btn btn-primary">

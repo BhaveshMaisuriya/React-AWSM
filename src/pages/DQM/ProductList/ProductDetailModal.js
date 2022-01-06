@@ -109,6 +109,11 @@ class ProductDetailModal extends PureComponent {
     this.setState({updateDictionary: newData})
   }
 
+  isUpdateAble(){
+    if (!isEqual(this.state.updateDictionary, this.props.currentProduct)){
+      return true
+    }
+  }
 
 
   renderModalBody() {
@@ -263,7 +268,7 @@ class ProductDetailModal extends PureComponent {
             >
               Cancel
             </button>
-            <Button onClick={this.handleUpdate.bind(this)} color="primary">
+            <Button disabled={!this.isUpdateAble()} onClick={this.handleUpdate.bind(this)} color="primary">
               Update
             </Button>
           </ModalFooter>

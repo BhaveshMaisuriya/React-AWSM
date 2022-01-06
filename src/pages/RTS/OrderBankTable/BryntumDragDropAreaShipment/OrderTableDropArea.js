@@ -8,7 +8,12 @@ import selectAllIcon from "../../../../assets/images/AWSM-Select-all-Checkbox.sv
 import RedAlertIcon from "./../../../../assets/images/AWSM-Red-Alert.svg"
 import './OrderTableDropArea.scss'
 import ConfirmDNStatusModal from "../confirmDNStatusModal";
-import {removeOrderFromShipment, removeShipmentFromEvent, getShipmentDetail} from "../../../../store/orderBank/actions";
+import {
+  removeOrderFromShipment,
+  removeShipmentFromEvent,
+  getShipmentDetail,
+  onDragAndDropShipmentArea
+} from "../../../../store/orderBank/actions"
 
 const supportReorderShameShipment = (list, startIdx, endIdx) => {
   const result = Array.from(list)
@@ -21,11 +26,13 @@ const supportReorderShameShipment = (list, startIdx, endIdx) => {
 const OrderTableDropArea = ({
                               showTableColumns,
                               ganttChartEvents,
+                              currentDate,
                               resourceId,
                               removeOrderFromShipment,
                               removeShipmentFromEvent,
                               getShipmentDetail,
-                              dropDataShipment,
+                              dropData,
+                              onDragAndDropShipmentArea,
                             }) => {
 
   const [selectedShipment, setSelectedShipment] = useState(null);
@@ -34,38 +41,10 @@ const OrderTableDropArea = ({
 
   const [showCancelPopup, setShowCancelPopup] = useState(false)
   const [deleteShipmentList, setDeleteShipment] = useState(null)
-  const [dropData, setDropData] = useState(dropDataShipment)
 
   useEffect(() => {
-    // merge all orders from all events that belong to resource Id ( vehicle)
-    // if (resourceId && Array.isArray(ganttChartEvents) && ganttChartEvents.length > 0) {
-    //   let dropDataResult = []
-    //   const matchedEvents = ganttChartEvents.filter(({resourceId: id}) => resourceId === id)
-    //   if (matchedEvents && matchedEvents.length > 0) {
-    //     for (let event of matchedEvents) {
-    //       const {shipments} = event
-    //       if (shipments && Array.isArray(shipments) && shipments.length > 0) {
-    //         for (let shipment of shipments) {
-    //           const shipmentObj = {...shipment}
-    //           shipmentObj.event = event.id
-    //           const {orders} = shipment
-    //           if (orders && Array.isArray(orders) && orders.length > 0) {
-    //             shipmentObj.orders = orders.map(item => {
-    //               item.isChecked = false
-    //               item.isOnRemove = false
-    //               return item
-    //             })
-    //             dropDataResult.push(shipmentObj)
-    //           }
-    //         }
-    //       }
-    //     }
-    //   }
-    //   setDropData(dropDataResult)
-    // }
     if (resourceId) {
-      getShipmentDetail(resourceId)
-      setDropData(dropDataShipment)
+      getShipmentDetail({vehicle: resourceId, date: currentDate})
     }
   }, [resourceId])
 
@@ -87,7 +66,7 @@ const OrderTableDropArea = ({
     const checkedItem = selectedShip.orders.flat().find(item => item.id === order.id)
     if (checkedItem) {
       checkedItem.isChecked = !checkedItem.isChecked
-      setDropData(cloneDropData)
+      //setDropData(cloneDropData)
       setSelectedShipmentDependOnOrders(selectedShip)
     }
   }
@@ -100,13 +79,14 @@ const OrderTableDropArea = ({
     const checkedItem = selectedShip.orders.flat().find(item => item.id === order.id)
     if (checkedItem) {
       checkedItem.isOnRemove = onRemove
-      setDropData(cloneDropData)
+      // replace inner state by global state ---> setDropdata
+      onDragAndDropShipmentArea(cloneDropData)
     }
   }
 
-  const onRemoveOrderHandler = (order, shipmentId, eventId) => {
+  const onRemoveOrderHandler = (order, shipmentId) => {
     setSelectedShipment(null)
-    if (removeOrderFromShipment) removeOrderFromShipment({orderId: order.id, shipmentId, resourceId, eventId})
+    if (removeOrderFromShipment) removeOrderFromShipment({ orderId: order.id, shipmentId })
   }
 
   // Remove shipment from event
@@ -114,7 +94,7 @@ const OrderTableDropArea = ({
     const selectedShip = dropData.find(item => item.id === selectedShipment)
     setSelectedShipment(null)
     if (removeShipmentFromEvent && selectedShip) {
-      removeShipmentFromEvent({shipmentId: selectedShip.id, eventId: selectedShip.event})
+      removeShipmentFromEvent({ shipmentId: selectedShip.id })
       setShowCancelPopup(false)
     }
     if (deleteShipmentList) {
@@ -173,7 +153,7 @@ const OrderTableDropArea = ({
                     Cancel
                   </button>
                   <button className='btn btn-danger btn-sm'
-                          onClick={() => onRemoveOrderHandler(dataRow, shipment.id, shipment.event)}>
+                          onClick={() => onRemoveOrderHandler(dataRow, shipment.id)}>
                     Remove
                   </button>
                 </div>
@@ -251,7 +231,7 @@ const OrderTableDropArea = ({
       const selectedShipIndex = cloneDropData.findIndex(item => item.id === selectedShipment)
       cloneDropData[selectedShipIndex].orders = supportReorderShameShipment(cloneDropData[selectedShipIndex].orders, source.index, destination.index)
 
-      setDropData([...cloneDropData])
+      //setDropData([...cloneDropData])
     } else {
       // Drag order to other shipment
       // deep clone arr
@@ -268,7 +248,8 @@ const OrderTableDropArea = ({
 
       destinationShipment.orders.splice(destination.index, 0, {...removed})
 
-      setDropData(cloneDropData)
+      //setDropData(cloneDropData)
+      onDragAndDropShipmentArea(cloneDropData);
     }
   }
 
@@ -399,12 +380,13 @@ const mapDispatchToProps = dispatch => ({
   removeOrderFromShipment: payload => dispatch(removeOrderFromShipment(payload)),
   removeShipmentFromEvent: payload => dispatch(removeShipmentFromEvent(payload)),
   getShipmentDetail: payload => dispatch(getShipmentDetail(payload)),
+  onDragAndDropShipmentArea: payload => dispatch(onDragAndDropShipmentArea(payload)),
 })
 
 const mapStateToProps = ({orderBank}) => ({
   ganttChartEvents: orderBank?.ganttChart?.event,
   resourceId: orderBank?.selectedVehicleShipment?.resourceId,
-  dropDataShipment: orderBank?.shipmentDropData,
+  dropData: orderBank?.shipmentDropData,
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(OrderTableDropArea)

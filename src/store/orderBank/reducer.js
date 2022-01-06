@@ -55,8 +55,14 @@ import {
   GET_SHIPMENT_DETAIL_FAIL,
   GET_SHIPMENT_DETAIL_SUCCESS,
   CLEAR_RTS_ORDER_BANK_TABLE_DATA,
+  DRAG_AND_DROP_SHIPMENT_AREA_SUCCESS,
+  GET_GANTT_EVENT_VALIDATION_SUCCESS,
+  GET_GANTT_EVENT_VALIDATION_FAIL,
+  GET_SHIPMENT_DETAILS_ON_VEHICLE_SUCCESS,
+  GET_SHIPMENT_DETAILS_ON_VEHICLE_FAIL,
+  DRAG_ORDER_TO_SHIPMENT_SUCCESS,
 } from "./actionTypes"
-import { eventGanttChartFactory, shipmentFactory } from "./factory"
+import { eventGanttChartFactory, shipmentFactory, orderBankFactory } from "./factory"
 import { ToastSuccess, ToastError } from "../../helpers/swal"
 
 const initialState = {
@@ -88,6 +94,8 @@ const initialState = {
   ganttChartEventData: [],
   dropOderSuccess: false,
   shipmentDropData: [],
+  ganttEventValidation: null,
+  shipmentDetailsOnVehicle: []
 }
 
 const RTSOrderBank = (state = initialState, action) => {
@@ -95,17 +103,18 @@ const RTSOrderBank = (state = initialState, action) => {
     case GET_RTS_ORDER_BANK_TABLE_DATA_SUCCESS:
       const { data, scrolling } = action.payload
       const { list, total_rows, filter } = data
+      const formatedList = orderBankFactory(list)
       if (state.orderBankTableData.length !== 0 && scrolling) {
         return {
           ...state,
-          orderBankTableData: [...state.orderBankTableData, ...list],
+          orderBankTableData: [...state.orderBankTableData, ...formatedList],
           orderBankTableFilters: filter,
           totalRow: total_rows,
         }
       }
       return {
         ...state,
-        orderBankTableData: list,
+        orderBankTableData: formatedList,
         orderBankTableFilters: filter,
         totalRow: total_rows,
       }
@@ -253,7 +262,7 @@ const RTSOrderBank = (state = initialState, action) => {
       // ToastSuccess.fire({ title: "An order has been successfully sent for DN Creation" })
       return {
         ...state,
-        sendDn: 'success',
+        sendDn: "success",
       }
     case GET_ORDER_BANK_AUDITLOG_SUCCESS:
       return {
@@ -313,14 +322,14 @@ const RTSOrderBank = (state = initialState, action) => {
         return {
           ...state,
           ganttChartTableData: [...state.ganttChartTableData, ...newList],
-          ganttChartEventData: eventGanttChartFactory(list),
+          ganttChartEventData: eventGanttChartFactory([...state.ganttChartTableData, ...newList]),
           totalRow_ganttChart: total_rows,
         }
       }
       return {
         ...state,
         ganttChartTableData: newList,
-        ganttChartEventData: eventGanttChartFactory(list),
+        ganttChartEventData: eventGanttChartFactory(newList),
         totalRow_ganttChart: total_rows,
         ganttChartTableFilter: filter,
         dropOderSuccess: false,
@@ -384,55 +393,39 @@ const RTSOrderBank = (state = initialState, action) => {
       }
     }
     case REMOVE_ORDER_FROM_SHIPMENT_SUCCESS: {
-      // debugger
-      const { orderId, shipmentId, resourceId, eventId } = action.params
-
-      const event = state.ganttChart.event.find(item => item.id === eventId)
-      if (event) {
-        // remove from shipment
-        const shipment = event.shipments.find(item => item.id === shipmentId)
-        let removedOrders = shipment.orders.find(item => item.id === orderId)
-        removedOrders.isChecked = false // clear checked
-
-        shipment.orders = shipment.orders.filter(item => item.id !== orderId)
-
-        // add to order bank table
-        state.orderBankTableData.push(removedOrders)
-      }
+      const { orderId, shipmentId } = action.params
+      // remove from shipment
+      const shipment = state.shipmentDropData.find(item => item.id === shipmentId)
+      let removedOrders = shipment.orders.find(item => item.id === orderId)
+      removedOrders.isChecked = false // clear checked
+      shipment.orders = shipment.orders.filter(item => item.id !== orderId)
+      //let newShipmentDropData = [...state.shipmentDropData, {...shipment}]
+      let newShipmentDropData = [...state.shipmentDropData]
+      // add to order bank table
+      //state.orderBankTableData.push(removedOrders)
       ToastSuccess.fire()
 
       return {
         ...state,
+        shipmentDropData: newShipmentDropData,
         orderBankTableData: [...state.orderBankTableData],
-        ganttChart: {
-          ...state.ganttChart,
-          event: [...state.ganttChart.event],
-        },
       }
     }
     case REMOVE_SHIPMENT_FROM_EVENT_SUCCESS: {
-      const { eventId, shipmentId } = action.params
-      const event = state.ganttChart.event.find(item => item.id === eventId)
-      if (event) {
-        let removedShipment = event.shipments.find(item => item.id === shipmentId)
-        event.shipments = event.shipments.filter(item => item.id !== shipmentId)
+      const { shipmentId } = action.params
+      let removedShipment = state.shipmentDropData.find(item => item.id === shipmentId)
+      let newShipmentDropData = state.shipmentDropData.filter(item => item.id !== shipmentId)
 
-        state.orderBankTableData = state.orderBankTableData.concat(
-          removedShipment.orders.map(item => {
-            item.isChecked = false
-            return item
-          })
-        )
-      }
+      // state.orderBankTableData = state.orderBankTableData.concat(
+      //   removedShipment.orders.map(item => {
+      //     item.isChecked = false
+      //     return item
+      //   })
+      // )
       ToastSuccess.fire()
-
       return {
         ...state,
-        orderBankTableData: [...state.orderBankTableData],
-        ganttChart: {
-          ...state.ganttChart,
-          event: [...state.ganttChart.event],
-        },
+        shipmentDropData: newShipmentDropData,
       }
     }
     case REMOVE_EVENT_SUCCESS: {
@@ -466,11 +459,13 @@ const RTSOrderBank = (state = initialState, action) => {
           ...state.ganttChart,
           event: [...state.ganttChart.event],
         },
+        ganttEventValidation: null,
       }
     }
     case UPDATE_OB_EVENT_FAIL: {
       return {
         ...state,
+        ganttEventValidation: null,
       }
     }
     case GET_WEB_SOCKET_MESSAGE_SUCCESS: {
@@ -488,6 +483,7 @@ const RTSOrderBank = (state = initialState, action) => {
       }
     }
     case GET_OB_RT_DETAILS_SUCCESS: {
+      if (action.payload?.status === "Double") action.payload.status = "On"
       return {
         ...state,
         orderBankRTDetails: action.payload,
@@ -499,7 +495,7 @@ const RTSOrderBank = (state = initialState, action) => {
       }
     }
     case UPDATE_OB_RT_DETAILS_SUCCESS: {
-      ToastSuccess.fire()
+      ToastSuccess.fire({ title: "Road Tanker detail has been successfully updated" })
       return {
         ...state,
         // orderBankRTDetails: action.params,
@@ -512,14 +508,13 @@ const RTSOrderBank = (state = initialState, action) => {
       }
     }
     case SEND_ORDER_BANK_DN_FAIL: {
-      // ToastError.fire({ title: "Send DN failed!" })
+      ToastError.fire({ title: "Send DN failed!" })
       return {
         ...state,
-        
       }
     }
     case SEND_ORDER_BANK_DN_SUCCESS: {
-      // ToastSuccess.fire({ title: "Send DN success!" })
+      ToastSuccess.fire({ title: "Orders have been successfully sent for DN creation" })
       return {
         ...state,
       }
@@ -528,6 +523,49 @@ const RTSOrderBank = (state = initialState, action) => {
       return {
         ...state,
         shipmentDropData: shipmentFactory(action.payload),
+      }
+    }
+    case DRAG_AND_DROP_SHIPMENT_AREA_SUCCESS: {
+      return {
+        ...state,
+        shipmentDropData: action.payload,
+      }
+    }
+    case GET_GANTT_EVENT_VALIDATION_SUCCESS: {
+      return {
+        ...state,
+        ganttEventValidation: action.payload,
+      }
+    }
+    case GET_GANTT_EVENT_VALIDATION_FAIL: {
+      return {
+        ...state,
+        ganttEventValidation: action.payload,
+      }
+    }
+    
+    case GET_SHIPMENT_DETAILS_ON_VEHICLE_SUCCESS: {
+      return {
+        ...state,
+        shipmentDetailsOnVehicle: action.payload,
+      }
+    }
+    case GET_SHIPMENT_DETAILS_ON_VEHICLE_FAIL: {
+      return {
+        ...state,
+        shipmentDetailsOnVehicle: action.payload,
+      }
+    }
+    case DRAG_ORDER_TO_SHIPMENT_SUCCESS: {
+      let newShipment = []
+      let newShipmentItem = {
+        shipment: Math.floor(Math.random() * 100000),
+        order_banks: [...action.payload]
+      }
+      newShipment.push(newShipmentItem)
+      return {
+        ...state,
+        shipmentDropData: [...state.shipmentDropData, shipmentFactory(newShipment)[0]]
       }
     }
 

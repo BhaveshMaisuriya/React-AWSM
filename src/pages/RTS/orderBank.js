@@ -171,6 +171,7 @@ function OrderBank({
   const [showDeleteOption, setShowDeleteOption] = useState(false)
   const [clearScheduling, setClearScheduling] = useState(false)
   const [showAlertDMR, setShowAlertDMR] = useState(false)
+  const [showAlertCrossTerminal, setShowAlertCrossTerminal] = useState(false)
   const [deleteCheck, setDeleteCheck] = useState(deleteCheckOption)
   const [checkedValue, setCheckedValue] = useState("Manual Scheduling")
   const [isCustomizeGanttModalOpen, setIsCustomizeGanttModalOpen] = useState(false)
@@ -212,7 +213,7 @@ function OrderBank({
         sort_field: "vehicle",
         filter: {
           shift_date: shiftDateGantt,
-          // terminal: TERMINAL_CODE_MAPPING[terminal],
+          terminal: TERMINAL_CODE_MAPPING[terminal],
         },
       })
     }, 100)
@@ -350,21 +351,25 @@ function OrderBank({
     setOrderBankSetting(temp)
   }
 
-  useEffect(async() => {
+  const getRTSOrderBankData = async () => {
+    await getRTSOrderBankTableData({
+      limit: 10,
+      page: payloadFilter.currentPage,
+      search_fields: "*",
+      q: transformObjectToStringSentence(payloadFilter.filterQuery),
+      sort_dir: "asc",
+      sort_field: "vehicle",
+      filter: payloadFilter.filterOrderBank,
+    })
+  }
+
+  useEffect(async () => {
     if (multipleorder) {
-      setReloadData(true);
-      await getRTSOrderBankTableData({
-        limit: 10,
-        page: payloadFilter.currentPage,
-        search_fields: "*",
-        q: transformObjectToStringSentence(payloadFilter.filterQuery),
-        sort_dir: "asc",
-        sort_field: "vehicle",
-        filter: payloadFilter.filterOrderBank,
-      })
+      setReloadData(true)
+      getRTSOrderBankData()
       setDeleteMultipleStatus(multipleorder.order_banks !== undefined ? "success" : "error")
       setShowDeleteMultiple(true)
-      setReloadData(false);
+      setReloadData(false)
     }
   }, [multipleorder])
 
@@ -375,24 +380,20 @@ function OrderBank({
   const onSaveCrossTerminal = async (region, terminal) => {
     const payload = { order_id: multipleDeleteIds, terminal: terminal }
     await onGetCrossTerminal(payload)
+    setShowAlertCrossTerminal(true)
+    setReloadData(true)
+    getRTSOrderBankData()
+    setReloadData(false)
     setCrossTerminal(false)
   }
 
-  const onCloseNewOrder = async(type, val = "") => {
+  const onCloseNewOrder = async (type, val = "") => {
     setShowNewOrder(false)
     type === "add" && setShowAddNotification(true)
     val === "success" ? setNotiMessage("success") : setNotiMessage("error")
-    setReloadData(true);
-    await getRTSOrderBankTableData({
-      limit: 10,
-      page: payloadFilter.currentPage,
-      search_fields: "*",
-      q: transformObjectToStringSentence(payloadFilter.filterQuery),
-      sort_dir: "asc",
-      sort_field: "vehicle",
-      filter: payloadFilter.filterOrderBank,
-    });
-    setReloadData(false);
+    setReloadData(true)
+    getRTSOrderBankData()
+    setReloadData(false)
   }
 
   const enabledCross = val => {
@@ -971,7 +972,11 @@ function OrderBank({
                           return (
                             <MenuItem
                               className="awsm-option-button-content-item-rts"
-                              disabled={option.disabled}
+                              disabled={
+                                option.label === "Add New Order" && status === "Scheduled"
+                                  ? true
+                                  : option.disabled
+                              }
                               onClick={() => onSettingClick(option.value)}
                             >
                               {getIcon(option.icon)}
@@ -1003,6 +1008,7 @@ function OrderBank({
                   fieldSortDirectionHandler={fieldSortDirectionHandler}
                   fieldToSortHandler={fieldToSortHandler}
                   reloadData={reloadData}
+                  activeTab={activeTab}
                 />
               </div>
               <NewOrderModal open={showNewOrder} onCancel={onCloseNewOrder} />
@@ -1098,6 +1104,14 @@ function OrderBank({
                   message="All scheduling has been successfully cleared"
                   openAlert={showClearAlert}
                   closeAlert={() => setShowClearAlert(false)}
+                />
+              )}
+              {showAlertCrossTerminal && (
+                <AWSMAlert
+                  status="success"
+                  message="Record successfully updated"
+                  openAlert={showAlertCrossTerminal}
+                  closeAlert={() => setShowAlertCrossTerminal(false)}
                 />
               )}
               {showAlertDMR && (

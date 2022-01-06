@@ -28,13 +28,12 @@ const OrderBankRoadTankerModal = ({
     setOrderBankRTDetails(newData)
   }
   const rtAvailabilityStatusSelection = {
-    OH: ["OH", "OFF"],
-    Double: ["On", "ON", "On1", "On2", "OFF"],
-    DOUBLE: ["On", "ON", "On1", "On2", "OFF"],
+    OH: ["OH", "Off"],
+    Double: ["On", "On1", "On2", "Off"],
   }
 
   useEffect(() => {
-    if (isOpen) getOBRTDetails(selectedVehicleID)
+    if (isOpen) getOBRTDetails({vehicle: selectedVehicleID, date: shiftDate})
     else setOrderBankRTDetails(null)
   }, [isOpen])
 
@@ -51,7 +50,13 @@ const OrderBankRoadTankerModal = ({
   }
 
   const handleUpdate = () => {
-    updateOBRTDetails(currentOrderBankRTDetails)
+    updateOBRTDetails({
+      vehicle: currentOrderBankRTDetails.vehicle,
+      remarks: currentOrderBankRTDetails.remarks,
+      shift_type: currentOrderBankRTDetails.status,
+      terminal_code: currentOrderBankRTDetails.default_terminal,
+      shift_date: shiftDate
+    })
     refreshTable()
     toggle()
   }
@@ -135,9 +140,9 @@ const OrderBankRoadTankerModal = ({
           <Col className="col-md-4 form-group">
             <label>STATUS</label>
             <AWSMDropdown
-              value={currentOrderBankRTDetails?.rt_availability_status}
+              value={currentOrderBankRTDetails?.status}
               items={rtAvailabilityStatusSelection[currentOrderBankRTDetails?.shift_type]}
-              onChange={e => onFieldValueChange("rt_availability_status", e)}
+              onChange={e => onFieldValueChange("status", e)}
               disabled={!isScheduler}
               className="form-control awsm-input"
             />

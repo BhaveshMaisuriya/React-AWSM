@@ -243,6 +243,13 @@ class TerminalDetailModal extends PureComponent {
       )
     else this.onConfirmExit()
   }
+
+  handleInputVisibility = () => {
+    if (!isEqual(this.state.dataSource, this.props.currentTerminal)){
+      return true
+    }
+  }
+
   handleErrors = ({ tab, error, field }, pushError) => {
     if (this.errors?.[tab] && pushError) {
       const newErrors = { ...this.errors }
@@ -451,7 +458,7 @@ class TerminalDetailModal extends PureComponent {
                     Cancel
                   </button>
                   <Button
-                    disabled={isValidated}
+                    disabled={!this.handleInputVisibility() === true && isValidated === false ? true : false}
                     onClick={this.handleUpdate.bind(this)}
                     color="primary"
                   >

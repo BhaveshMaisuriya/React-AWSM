@@ -138,6 +138,7 @@ export class TableGroupEvent extends React.Component {
             onCancel={this.getEditCancel}
             viewData={this.props.viewData}
             region={this.props.orderregion}
+            terminal={this.props.orderterminal}
           />
         )}
       </>
@@ -178,6 +179,7 @@ class index extends Component {
       this.setState({showLoader: false});
       this.setState({ dataSource: nextProps.dataSource, filterData: nextProps.headerFilters })
     }
+    console.log('reload::', nextProps.reloadData, this.props.reloadData)
     if (nextProps.reloadData !== this.props.reloadData) {
       this.setState({showLoader: this.props.reloadData});
     }
@@ -408,6 +410,7 @@ class index extends Component {
               editAlert={this.editAlert}
               viewData={this.props.viewData}
               orderregion={this.props.orderregion}
+              orderterminal={this.props.orderterminal}
             />
           </th>
         </tr>

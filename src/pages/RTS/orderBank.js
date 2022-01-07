@@ -268,6 +268,7 @@ function OrderBank({
       currentPage: currentPage,
       filterQuery: filterQuery,
     })
+    setReloadData(false)
   }, [filterOrderBank, currentPage, filterQuery])
 
   useEffect(() => {
@@ -339,6 +340,7 @@ function OrderBank({
   }
 
   const onSaveDeleteMultiple = async () => {
+    setReloadData(true);
     const payload = { order_banks: multipleDeleteIds }
     await onGetDeleteMultipleOrder(payload)
     setDeleteMultiple(false)
@@ -389,9 +391,9 @@ function OrderBank({
 
   const onCloseNewOrder = async (type, val = "") => {
     setShowNewOrder(false)
-    type === "add" && setShowAddNotification(true)
-    val === "success" ? setNotiMessage("success") : setNotiMessage("error")
     setReloadData(true)
+    type === "add" && setShowAddNotification(true)
+    val === "success" ? setNotiMessage("success") : setNotiMessage("error")    
     getRTSOrderBankData()
     setReloadData(false)
   }
@@ -909,6 +911,7 @@ function OrderBank({
                             date_from: value?.date_from,
                             date_to: value?.date_to,
                           })
+                          setReloadData(true);
                           setCurrentPage(0)
                         }}
                       />
@@ -919,6 +922,7 @@ function OrderBank({
                         value={regionTable}
                         onChange={value => {
                           setRegionTable(value)
+                          setReloadData(true);
                           setTerminalTable(
                             REGION_TERMINAL.find(item => item.region === value).terminal[0]
                           )
@@ -933,6 +937,7 @@ function OrderBank({
                         onChange={value => {
                           setTerminalTable(value)
                           setCurrentPage(0)
+                          setReloadData(true);
                         }}
                         items={terminalListTable}
                       />
@@ -944,6 +949,7 @@ function OrderBank({
                         onChange={value => {
                           setStatusDropdown(value)
                           setCurrentPage(0)
+                          setReloadData(true);
                         }}
                         items={orderBankStatus.map(e => e.label)}
                       />
@@ -1005,6 +1011,7 @@ function OrderBank({
                   onChangeFilters={onChangeCurrentPage}
                   payloadFilter={payloadFilter}
                   orderregion={regionTable}
+                  orderterminal={terminalTable}
                   fieldSortDirectionHandler={fieldSortDirectionHandler}
                   fieldToSortHandler={fieldToSortHandler}
                   reloadData={reloadData}

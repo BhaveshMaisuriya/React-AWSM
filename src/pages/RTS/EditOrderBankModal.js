@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useMemo, useState } from "react"
+import React, { useEffect, useMemo, useState } from "react"
 import { connect } from "react-redux"
 import { format } from "date-fns"
 import {
@@ -8,21 +8,23 @@ import {
   ModalBody,
   ModalHeader,
   Row,
-  Col,
   Nav,
   TabPane,
   TabContent,
   NavItem,
   NavLink,
 } from "reactstrap"
-import DatePicker from "../../components/Common/DatePicker"
-import ExitConfirmation from "../../components/Common/ExitConfirmation"
-import AWSMInput from "../../components/Common/Input"
-import AWSMDropdown from "../../components/Common/Dropdown"
-import AWSMAlert from "../../components/Common/AWSMAlert"
-import { getEditOrderBankDetail } from "../../store/actions"
-import TimePicker from "../../components/Common/TableInformation/components/TimePicker"
-import REGION_TERMINAL, { TERMINAL_CODE_MAPPING_ID } from "common/data/regionAndTerminal"
+import DatePicker from "components/Common/DatePicker"
+import ExitConfirmation from "components/Common/ExitConfirmation"
+import AWSMInput from "components/Common/Input"
+import AWSMDropdown from "components/Common/Dropdown"
+import AWSMAlert from "components/Common/AWSMAlert"
+import { getEditOrderBankDetail } from "store/actions"
+import TimePicker from "components/Common/TableInformation/components/TimePicker"
+import REGION_TERMINAL, {
+  TERMINAL_CODE_MAPPING_ID,
+  TERMINAL_CODE_MAPPING,
+} from "common/data/regionAndTerminal"
 
 const ORDER_PRIORITY = ["None", "High Priority"]
 const timeData = []
@@ -35,7 +37,7 @@ for (let i = 0; i < 24; i++) {
 timeData.push(`23:59`)
 
 const EditOrderBankModal = props => {
-  const { open, onCancel, viewData } = props
+  const { open, onCancel, viewData, region } = props
 
   const [isConfirm, setIsConfirm] = useState(false)
   const [editOrderData, setEditOrderData] = useState(null)
@@ -44,26 +46,20 @@ const EditOrderBankModal = props => {
   const [isUpdate, setIsUpdate] = useState(false)
   const [activeTab, setActiveTab] = useState("1")
   const [inputValue1, setInputValue1] = useState("")
-  const [inputValue2, setInputValue2] = useState("") 
-  const [inputValue3, setInputValue3] = useState("")  
-  const [inputValue, setInputValue] = useState("")    
+  const [inputValue2, setInputValue2] = useState("")
+  const [inputValue3, setInputValue3] = useState("")
+  const [inputValue, setInputValue] = useState("")
   const [terminalList, setTerminalList] = useState([])
-  const [regionList, setRegionList] = useState([])
+  const regionList = REGION_TERMINAL.map(item => item.region)
 
   useEffect(() => {
-    let temp = []
-    REGION_TERMINAL.map((item, index) => {
-      temp.push(item.region)
-    })
-    setRegionList(temp)
-  }, [REGION_TERMINAL])
-
-  useEffect(async () => {
     if (viewData !== null) {
-      let temp = { ...viewData }
-      const currentRegion = REGION_TERMINAL.find(e => e.region === temp.region)
+      const temp = { ...viewData }
+      const currentRegion = REGION_TERMINAL.find(e => {
+        return e.region === region
+      })
       setTerminalList(currentRegion ? currentRegion.terminal : [])
-      temp.terminal_name = TERMINAL_CODE_MAPPING_ID[temp.terminal]
+      temp.terminal = TERMINAL_CODE_MAPPING_ID[temp.terminal]
       temp.region = props?.region
       setEditOrderData(temp)
       setoriginalEditOrderData(temp)
@@ -83,7 +79,7 @@ const EditOrderBankModal = props => {
       my_remark_1: editOrderData?.my_remark_1,
       my_remark_2: editOrderData?.my_remark_2,
       my_remark_3: editOrderData?.my_remark_3,
-      terminal: editOrderData?.terminal,
+      terminal: TERMINAL_CODE_MAPPING[editOrderData?.terminal],
       volume: parseInt(editOrderData?.volume),
       eta: editOrderData?.eta,
       planned_load_time: editOrderData?.planned_load_time,
@@ -132,18 +128,18 @@ const EditOrderBankModal = props => {
 
       const newOrderData = { ...editOrderData }
       newOrderData[key] = currentRegion ? currentRegion.region : ""
-      newOrderData["terminal_name"] = ""
+      newOrderData["terminal"] = currentRegion.terminal[0]
       setEditOrderData(newOrderData)
-    } else if(key === 'order_remarks') {
-      setInputValue(value);
-      if(value.length < 40) {
+    } else if (key === "order_remarks") {
+      setInputValue(value)
+      if (value.length < 40) {
         const newOrderData = { ...editOrderData }
         newOrderData[key] = value
         setEditOrderData(newOrderData)
       }
-    } else if(key === 'my_remark_1') {
-      setInputValue1(value);
-      if(value.length < 40) {
+    } else if (key === "my_remark_1") {
+      setInputValue1(value)
+      if (value.length < 40) {
         const newOrderData = { ...editOrderData }
         newOrderData[key] = value
         setEditOrderData(newOrderData)
@@ -201,6 +197,13 @@ const EditOrderBankModal = props => {
     return inputValue3 && remainChars3 >= 0
   }, [remainChars3])
 
+  const formatDate = date => {
+    if (date) {
+      const [year, month, day] = date.split("-")
+      return `${day}-${month}-${year}`
+    } else return ""
+  }
+
   return (
     <Modal isOpen={open} className="new-order-modal">
       <ModalHeader toggle={toggle}>
@@ -221,7 +224,11 @@ const EditOrderBankModal = props => {
             <div className="d-flex justify-content-between align-item-baseline">
               <div className="col-4 p-0">
                 <label>SHIFT DATE</label>
-                <AWSMInput type="text" value={editOrderData?.shift_date} disabled={true} />
+                <AWSMInput
+                  type="text"
+                  value={formatDate(editOrderData?.shift_date)}
+                  disabled={true}
+                />
               </div>
               <div className="col-8 p-0 ml-4">
                 <label className="text-upper">region & terminal</label>
@@ -237,8 +244,8 @@ const EditOrderBankModal = props => {
                   <div className="col-3">
                     <AWSMDropdown
                       items={terminalList}
-                      onChange={value => onFieldChange("terminal_name", value)}
-                      value={editOrderData?.terminal_name}
+                      onChange={value => onFieldChange("terminal", value)}
+                      value={editOrderData?.terminal}
                       disabled={false}
                     />
                   </div>
@@ -331,6 +338,7 @@ const EditOrderBankModal = props => {
                             <DatePicker
                               value={editOrderData?.requested_delivery_date}
                               placeholder="Select Date"
+                              disabled={true}
                             />
                           </div>
                         </div>
@@ -362,7 +370,7 @@ const EditOrderBankModal = props => {
                         <div className="d-flex">
                           <div className="w-100">
                             <AWSMInput
-                              value={editOrderData?.retail_storage_relation?.ordering_category}
+                              value={editOrderData?.retail_storage_relation?.sales_category}
                               disabled={true}
                             />
                           </div>
@@ -379,7 +387,7 @@ const EditOrderBankModal = props => {
                               onChange={value => onFieldChange("product_name", value)}
                               value={editOrderData?.product_name}
                               disabled={false}
-                              placeholder="select"
+                              placeholder="Select"
                             />
                           </div>
                         </div>
@@ -472,7 +480,11 @@ const EditOrderBankModal = props => {
                         <div className="d-flex">
                           <div className="w-100">
                             <AWSMInput
-                              value={editOrderData?.retain === null ? "00" : editOrderData?.retain}
+                              value={
+                                editOrderData?.retain === null
+                                  ? "00"
+                                  : format(new Date(editOrderData?.retain), "dd-MM-yyyy")
+                              }
                               disabled={true}
                             />
                           </div>
@@ -483,7 +495,11 @@ const EditOrderBankModal = props => {
                         <div className="d-flex">
                           <div className="w-100">
                             <AWSMInput
-                              value={editOrderData?.runout === null ? "00" : editOrderData?.runout}
+                              value={
+                                editOrderData?.runout === null
+                                  ? "00"
+                                  : format(new Date(editOrderData?.retain), "dd-MM-yyyy")
+                              }
                               disabled={true}
                             />
                           </div>
@@ -557,14 +573,15 @@ const EditOrderBankModal = props => {
                             <input
                               onChange={e => onFieldChange("order_remarks", e.target.value)}
                               value={editOrderData?.order_remarks}
-                              className={`awsm-input w-100 ${(inputValue && !isValid) ? "out-range " : ""}`}
+                              className={`awsm-input w-100 ${
+                                inputValue && !isValid ? "out-range " : ""
+                              }`}
                             />
-                        <span
-                          className={`position-absolute awsm-input-right-content ${
-                            (inputValue && !isValid) ? "out-range " : ""
-                          }`}
-                        >{`${remainChars >= 0 ? "+" : ""}${remainChars}`}</span>
-
+                            <span
+                              className={`position-absolute awsm-input-right-content ${
+                                inputValue && !isValid ? "out-range " : ""
+                              }`}
+                            >{`${remainChars >= 0 ? "+" : ""}${remainChars}`}</span>
                           </div>
                         </div>
                       </div>

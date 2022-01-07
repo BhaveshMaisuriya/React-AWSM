@@ -1,5 +1,5 @@
 import {connect} from "react-redux";
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, Fragment} from "react";
 import DragIndicatorIcon from "@material-ui/icons/DragIndicator";
 import {CustomInput} from "reactstrap";
 import CloseButton from "../../../../components/Common/CloseButton";
@@ -41,12 +41,22 @@ const OrderTableDropArea = ({
 
   const [showCancelPopup, setShowCancelPopup] = useState(false)
   const [deleteShipmentList, setDeleteShipment] = useState(null)
+  const [loading, setLoading] = useState(false)
+  const [alldropData, setAlldropData] = useState(null)
 
-  useEffect(() => {
-    if (resourceId) {
-      getShipmentDetail({vehicle: resourceId, date: currentDate})
+  useEffect(async() => {
+    if (resourceId) { 
+      setLoading(true)
+      await getShipmentDetail({vehicle: resourceId, date: currentDate})
     }
   }, [resourceId])
+
+  useEffect(() => {
+    if(dropData) {
+      setAlldropData(dropData);
+      alldropData !== dropData && setLoading(false);
+    }
+  }, [dropData]);
 
   // Handle checkbox click
   const setSelectedShipmentDependOnOrders = (selectedShip) => {
@@ -363,7 +373,10 @@ const OrderTableDropArea = ({
   }
 
   return (
-    <div className={`drag-drop-area d-flex
+    <Fragment>
+      {loading ? <p className="loading_screen">Please wait, Loading...</p> : 
+   ( 
+   <div className={`drag-drop-area d-flex
             text-primary-green font-weight-bold b-text-align-center
             ${dropData && dropData.length > 0 && resourceId ? "align-items-start justify-content-start" :
       "dash-green-border align-items-center justify-content-center"}`}>
@@ -372,7 +385,10 @@ const OrderTableDropArea = ({
           <span className="text-uppercase">Drag & drop the order here <br/> from order bank</span>) : (
           <span className="text-uppercase">Please select a vehicle <br/> to assign shipment</span>)
       }
+     
     </div>
+    )}
+    </Fragment>
   )
 }
 

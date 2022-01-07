@@ -5,7 +5,7 @@ export function orderBankFactory(data) {
   return data.map((item) => ({
     ...item,
     format_ship_to: item?.customer_type === "RETAIL" ? item["retail_storage_relation.retail_customer_relation.ship_to_party"] : item["commercial_storage_relation.commercial_customer_relation.ship_to_party"],
-    format_name: item?.customer_type === "RETAIL" ? item["retail_storage_relation.retail_customer_relation.territory_manager_relation.ship_to_company"] : item["commercial_storage_relation.commercial_customer_relation.territory_manager_relation.ship_to_company"],
+    format_name: item?.customer_type === "RETAIL" ? item["retail_storage_relation.retail_customer_relation.ship_to_company"] : item["commercial_storage_relation.commercial_customer_relation.ship_to_company"],
     format_cloud: item?.customer_type === "RETAIL" ? item["retail_storage_relation.retail_customer_relation.cloud"] : item["commercial_storage_relation.commercial_customer_relation.cloud"],
     format_product: item?.customer_type === "RETAIL" ? item["retail_storage_relation.product_relation.name"] : item["commercial_storage_relation.commercial_customer_relation.name"],
     format_product_category: item?.customer_type === "RETAIL" ? item["retail_storage_relation.sales_category"] : item["commercial_storage_relation.sales_category"],

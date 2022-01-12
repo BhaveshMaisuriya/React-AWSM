@@ -105,6 +105,12 @@ import {
   DRAG_ORDER_TO_SHIPMENT,
   DRAG_ORDER_TO_SHIPMENT_SUCCESS,
   DRAG_ORDER_TO_SHIPMENT_FAIL,
+  RUN_AUTO_SCHEDULE,
+  RUN_AUTO_SCHEDULE_SUCCESS,
+  RUN_AUTO_SCHEDULE_FAIL,
+  GET_OB_TOTAL_UNSCHEDULE,
+  GET_OB_TOTAL_UNSCHEDULE_SUCCESS,
+  GET_OB_TOTAL_UNSCHEDULE_FAIL
 } from "./actionTypes"
 
 export const getRTSOrderBankTableData = params => ({
@@ -625,5 +631,35 @@ export const onDragOrderToShipmentSuccess = response => ({
 
 export const onDragOrderToShipmentFail = error => ({
   type: DRAG_ORDER_TO_SHIPMENT_FAIL,
+  payload: error,
+})
+
+export const runAutoSchedule = params => ({
+  type: RUN_AUTO_SCHEDULE,
+  params
+})
+
+export const runAutoScheduleSuccess = response => ({
+  type: RUN_AUTO_SCHEDULE_SUCCESS,
+  payload: response,
+})
+
+export const runAutoScheduleFail = error => ({
+  type: RUN_AUTO_SCHEDULE_FAIL,
+  payload: error,
+})
+
+export const getOBTotalUnschedule = params => ({
+  type: GET_OB_TOTAL_UNSCHEDULE,
+  params
+})
+
+export const getOBTotalUnscheduleSuccess = response => ({
+  type: GET_OB_TOTAL_UNSCHEDULE_SUCCESS,
+  payload: response,
+})
+
+export const getOBTotalUnscheduleFail = error => ({
+  type: GET_OB_TOTAL_UNSCHEDULE_FAIL,
   payload: error,
 })

@@ -1,7 +1,7 @@
 import defaultAxios from "axios"
 import { del, get, post, put, realAxiosApi, realAxiosApi as axios } from "./api_helper"
 import * as url from "./url_helper"
-import { orderDetails, viewOrderDetails } from "../pages/RTS/newOrderData"
+import { viewOrderDetails } from "../pages/RTS/newOrderData"
 
 // Gets the logged in user data from local session
 const getLoggedInUser = () => {
@@ -472,6 +472,14 @@ export const getShipmentDetail = params => {
 }
 export const getShipmentDetailsOnVehicle = params => {
   return axios.get(`rts/gantt-chart/shipment/${params}`)
+}
+
+export const runAutoSchedule = params => {
+  return axios.post(url.RUN_AUTO_SCHEDULE, params)
+}
+
+export const getTotalUnscheduleOrder = params => {
+  return axios.get( `rts/count-total-order-unschedule`, { params })
 }
 
 export {

@@ -33,6 +33,8 @@ import {
   GET_GANTT_EVENT_VALIDATION,
   GET_SHIPMENT_DETAILS_ON_VEHICLE,
   DRAG_ORDER_TO_SHIPMENT,
+  RUN_AUTO_SCHEDULE,
+  GET_OB_TOTAL_UNSCHEDULE
 } from "./actionTypes"
 
 import {
@@ -92,6 +94,12 @@ import {
   getShipmentDetailsOnVehicleFail,
   onDragOrderToShipmentFail,
   onDragOrderToShipmentSuccess,
+  runAutoScheduleSuccess,
+  getRunAutoSchedulingSuccess,
+  getRunAutoSchedulingFail,
+  runAutoScheduleFail,
+  getOBTotalUnscheduleSuccess,
+  getOBTotalUnscheduleFail
 } from "./actions"
 import {
   getOrderBank,
@@ -116,7 +124,10 @@ import {
   updateRTSOrderbankRTdetails,
   getShipmentDetail,
   validateGanttEventChange,
-  getShipmentDetailsOnVehicle
+  getShipmentDetailsOnVehicle,
+  runAutoSchedule,
+  getTotalUnscheduleOrder
+
 } from "../../helpers/fakebackend_helper"
 
 function* onGetOrderbank({ params = {} }) {
@@ -195,6 +206,15 @@ function* onGetShipmentOrderBankData({ params = {} }) {
     yield put(getShipmentOfOderBankGanttChartSuccess(response))
   } catch (error) {
     yield put(getShipmentOfOderBankGanttChartFail(error))
+  }
+}
+
+function* onGetTotalOBUnschedule({params}) {
+  try {
+    const response = yield call(getTotalUnscheduleOrder, params)
+    yield put(getOBTotalUnscheduleSuccess(response.data))
+  } catch (error) {
+    yield put(getOBTotalUnscheduleFail(error))
   }
 }
 
@@ -452,6 +472,16 @@ function* onDragOrderToShipment() {
   }
 }
 
+
+function* onRunningAutoSchedule({params}) {
+  try {
+    const response = yield call(runAutoSchedule, params)
+    yield put(runAutoScheduleSuccess(response))
+  } catch (error) {
+    yield put(runAutoScheduleFail(error))
+  }
+}
+
 function* orderBankSaga() {
   yield takeLatest(GET_ORDERBANK, onGetOrderbank)
   yield takeLatest(ADD_ORDERBANK, onAddOrderbank)
@@ -486,6 +516,8 @@ function* orderBankSaga() {
   yield takeLatest(DRAG_AND_DROP_SHIPMENT_AREA, onDragAndDropShipmentArea),
   yield takeLatest(GET_SHIPMENT_DETAILS_ON_VEHICLE, onGetShipmentDetailsOnVehicle),
   yield takeLatest(DRAG_ORDER_TO_SHIPMENT, onDragOrderToShipment)
+  yield takeLatest(RUN_AUTO_SCHEDULE,onRunningAutoSchedule)
+  yield takeLatest(GET_OB_TOTAL_UNSCHEDULE,onGetTotalOBUnschedule)
 }
 
 export default orderBankSaga

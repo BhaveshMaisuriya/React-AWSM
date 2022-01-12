@@ -399,6 +399,7 @@ const OrderTableDropArea = ({
             })}
           </DragDropContext>
           <ConfirmDNStatusModal
+            key="cancel-modal"
             isOpen={showCancelPopup}
             headerContent="Cancel Shipment Confirmation"
             bodyContent={[
@@ -411,6 +412,7 @@ const OrderTableDropArea = ({
             onSend={() => onRemoveShipmentHandler()}
           />
           <ConfirmDNStatusModal
+            key="delete-modal"
             isOpen={deleteShipmentList}
             headerContent="Delete Shipment Confirmation"
             bodyContent={[
@@ -435,12 +437,12 @@ const OrderTableDropArea = ({
         <p className="loading_screen">Please wait, Loading...</p>
       ) : (
         <div
-          className={`drag-drop-area d-flex
+          className={`px-4 h-100 drag-drop-area d-flex
             text-primary-green font-weight-bold b-text-align-center
             ${
               dropData && dropData.length > 0 && resourceId
-                ? "align-items-start justify-content-start"
-                : "dash-green-border align-items-center justify-content-center"
+                ? 'align-items-start justify-content-start'
+                : 'dash-green-border align-items-center justify-content-center'
             }`}
         >
           {dropData && dropData.length > 0 && resourceId ? (

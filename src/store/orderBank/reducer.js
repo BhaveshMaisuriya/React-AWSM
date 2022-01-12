@@ -61,6 +61,8 @@ import {
   GET_SHIPMENT_DETAILS_ON_VEHICLE_SUCCESS,
   GET_SHIPMENT_DETAILS_ON_VEHICLE_FAIL,
   DRAG_ORDER_TO_SHIPMENT_SUCCESS,
+  GET_OB_TOTAL_UNSCHEDULE_SUCCESS,
+  GET_OB_TOTAL_UNSCHEDULE_FAIL
 } from "./actionTypes"
 import { eventGanttChartFactory, shipmentFactory, orderBankFactory } from "./factory"
 import { ToastSuccess, ToastError } from "../../helpers/swal"
@@ -84,6 +86,7 @@ const initialState = {
   crossTerminalDetails: null,
   socketData: [],
   totalRow: 0,
+  totalOrderUnschedule: 0,
   multipleorder: null,
   viewData: null,
   sendDn: null,
@@ -566,6 +569,17 @@ const RTSOrderBank = (state = initialState, action) => {
       return {
         ...state,
         shipmentDropData: [...state.shipmentDropData, shipmentFactory(newShipment)[0]]
+      }
+    }
+    case GET_OB_TOTAL_UNSCHEDULE_SUCCESS: {
+      return {
+        ...state,
+        totalOrderUnschedule: action.payload.total ?? 0
+      }
+    }
+    case GET_OB_TOTAL_UNSCHEDULE_FAIL: {
+      return {
+        ...state,
       }
     }
 

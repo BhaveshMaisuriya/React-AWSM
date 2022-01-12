@@ -1,18 +1,17 @@
-import React, { useEffect, useRef, useState } from "react"
-import { connect } from "react-redux"
-import { Col, Row } from "reactstrap"
-import { createPopper } from "@popperjs/core"
-import { ganttChartTableMapping } from "./tableMapping"
-import "./index.scss"
-import { BryntumGrid } from "@bryntum/schedulerpro-react"
-import "@bryntum/schedulerpro/schedulerpro.classic-dark.css"
-import "@bryntum/schedulerpro/schedulerpro.classic-light.css"
-import "@bryntum/schedulerpro/schedulerpro.classic.css"
-import "@bryntum/schedulerpro/schedulerpro.material.css"
-import "@bryntum/schedulerpro/schedulerpro.stockholm.css"
-import "../style.scss"
-import ConfirmDNStatusModal from "./confirmDNStatusModal"
-import TerminalRelayModal from "./TerminalRelayModal"
+import React, { useEffect, useRef, useState } from 'react'
+import { connect } from 'react-redux'
+import { createPopper } from '@popperjs/core'
+import { ganttChartTableMapping } from './tableMapping'
+import './index.scss'
+import { BryntumGrid } from '@bryntum/schedulerpro-react'
+import '@bryntum/schedulerpro/schedulerpro.classic-dark.css'
+import '@bryntum/schedulerpro/schedulerpro.classic-light.css'
+import '@bryntum/schedulerpro/schedulerpro.classic.css'
+import '@bryntum/schedulerpro/schedulerpro.material.css'
+import '@bryntum/schedulerpro/schedulerpro.stockholm.css'
+import '../style.scss'
+import ConfirmDNStatusModal from './confirmDNStatusModal'
+import TerminalRelayModal from './TerminalRelayModal'
 import {
   cancelPaymentInGanttChart,
   deselectVehicleShipment,
@@ -21,26 +20,26 @@ import {
   processPaymentInGanttChart,
   selectVehicleShipment,
   sendOrderInGanttChart,
-} from "store/actions"
-import { cloneDeep } from "lodash"
-import { Droppable } from "react-beautiful-dnd"
-import OrderBankShipmentModal from "./OrderBankShipmentModal"
-import PlannedLoadTimesModal from "./PlannedLoadTimesModal"
-import BryntumDragDropAreaShipment from "./BryntumDragDropAreaShipment/BryntumDragDropAreaShipment"
-import OrderBankRoadTankerModal from "./OrderBankRoadTankerModal"
-import ChartColumnFilter from "./ChartColumnFilter"
-import ShiftPopover from "./ShiftPopover"
-import InfiniteScroll from "react-infinite-scroll-component"
+} from 'store/actions'
+import { cloneDeep } from 'lodash'
+import { Droppable } from 'react-beautiful-dnd'
+import OrderBankShipmentModal from './OrderBankShipmentModal'
+import PlannedLoadTimesModal from './PlannedLoadTimesModal'
+import BryntumDragDropAreaShipment from './BryntumDragDropAreaShipment/BryntumDragDropAreaShipment'
+import OrderBankRoadTankerModal from './OrderBankRoadTankerModal'
+import ChartColumnFilter from './ChartColumnFilter'
+import ShiftPopover from './ShiftPopover'
+import InfiniteScroll from 'react-infinite-scroll-component'
 
 const EventContextList = {
-  SHIPMENT: "shipment",
-  CANCEL_SHIPMENT: "cancel_shipment",
-  SEND_ORDER: "send_order",
-  TERMINAL_RELAY: "terminal_relay",
-  PLAN_LOAD_TIMES: "planned_load_time",
+  SHIPMENT: 'shipment',
+  CANCEL_SHIPMENT: 'cancel_shipment',
+  SEND_ORDER: 'send_order',
+  TERMINAL_RELAY: 'terminal_relay',
+  PLAN_LOAD_TIMES: 'planned_load_time',
 }
 
-export const bryntumSchedulerTableNameForCookie = "rts-gantt-chart-bryntum-scheduler"
+export const bryntumSchedulerTableNameForCookie = 'rts-gantt-chart-bryntum-scheduler'
 
 function BryntumChartTable(props) {
   const { bryntumCurrentColumns, onSelectVehicle, onDeselectVehicle, dateConfig } = props
@@ -66,10 +65,10 @@ function BryntumChartTable(props) {
     const payload = {
       limit: 11,
       page: currentPage,
-      search_fields: "*",
-      q: "",
-      sort_dir: "desc",
-      sort_field: "vehicle",
+      search_fields: '*',
+      q: '',
+      sort_dir: 'desc',
+      sort_field: 'vehicle',
       filter: {
         shift_date: dateConfig,
       },
@@ -93,10 +92,10 @@ function BryntumChartTable(props) {
     const payload = {
       limit: 11,
       page: 0,
-      search_fields: "*",
-      q: "",
-      sort_dir: "desc",
-      sort_field: "vehicle",
+      search_fields: '*',
+      q: '',
+      sort_dir: 'desc',
+      sort_field: 'vehicle',
       filter: {
         shift_date: dateConfig,
       },
@@ -130,14 +129,14 @@ function BryntumChartTable(props) {
   const sendRequestsHandler = () => {
     switch (dropdownSelectedItem.type) {
       case EventContextList.SHIPMENT: {
-        changeColorOfEventHandler("#9F79B7", true)
+        changeColorOfEventHandler('#9F79B7', true)
         setTimeout(() => {
           props.processPaymentInGanttChart(null)
         }, 2000)
         break
       }
       case EventContextList.CANCEL_SHIPMENT: {
-        changeColorOfEventHandler("#aeaeae", true)
+        changeColorOfEventHandler('#aeaeae', true)
         setTimeout(() => {
           props.processCancelPaymentInGanttChart(dropdownSelectedItem)
           // removeShipmentHandler();
@@ -234,14 +233,14 @@ function BryntumChartTable(props) {
         ganttChartTableMapping?.[tableMap]?.label_short ??
         ganttChartTableMapping?.[tableMap]?.label,
       field: tableMap,
-      width: "100px",
+      width: '100px',
       editor: null,
       renderer: ({ value, column, record }) => {
         switch (column.field) {
-          case "vehicle": {
+          case 'vehicle': {
             return (
               <div className="chart-vehicle-cell">
-                <div className="value" onClick={showRoadTanker} style={{ cursor: "pointer" }}>
+                <div className="value" onClick={showRoadTanker} style={{ cursor: 'pointer' }}>
                   {value}
                 </div>
                 {record.pump_type && <div className="suffix">{record.pump_type}</div>}
@@ -255,7 +254,7 @@ function BryntumChartTable(props) {
           //     </div>
           //   )
           // }
-          case "status": {
+          case 'status': {
             return (
               <div className="chart-status-cell">
                 <ShiftPopover record={record} onChange={onStatusChange} type="status" />
@@ -271,7 +270,7 @@ function BryntumChartTable(props) {
                   <div>${column.data.text}</div>
                   <button id="chart-column-${column.data.field}-button">
                     <svg width="22px" height="22px" viewBox="0 0 22 22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                        <g id="AWSM-Calendar" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                        <g id="AWSM-Calendar" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
                             <g id="TF-Icon---Dropdown" transform="translate(1.000000, 3.000000)" fill="currentColor">
                                 <polygon id="Dropdown-Icon-Copy-2" points="6 6 11 11 16 6"></polygon>
                             </g>
@@ -291,7 +290,7 @@ function BryntumChartTable(props) {
       if (dropdownSelectedItem.type === EventContextList.CANCEL_SHIPMENT) {
         removeShipmentHandler()
       } else {
-        changeColorOfEventHandler("#615E9B")
+        changeColorOfEventHandler('#615E9B')
       }
     }
   }, [props.isSendRequestProcess])
@@ -301,26 +300,26 @@ function BryntumChartTable(props) {
       Object.keys(bryntumCurrentColumns).forEach(e => {
         const el = document.getElementById(`chart-column-${e}-button`)
         if (el) {
-          el.addEventListener("click", event => {
+          el.addEventListener('click', event => {
             event.stopPropagation()
             event.preventDefault()
             const tooltip = document.getElementById(`chart-tooltip-${e}`)
             createPopper(el, tooltip, {
-              placement: "bottom",
+              placement: 'bottom',
               modifiers: [
                 {
-                  name: "offset",
+                  name: 'offset',
                   options: {
                     offset: [0, 20],
                   },
                 },
               ],
             })
-            tooltip.classList.toggle("hide")
+            tooltip.classList.toggle('hide')
             Object.keys(bryntumCurrentColumns).forEach(f => {
               if (f !== e) {
                 const hideEl = document.getElementById(`chart-tooltip-${f}`)
-                hideEl.classList.add("hide")
+                hideEl.classList.add('hide')
               }
             })
           })
@@ -333,7 +332,7 @@ function BryntumChartTable(props) {
   const hideFilterElement = dataKey => {
     const hideEl = document.getElementById(`chart-tooltip-${dataKey}`)
     if (hideEl) {
-      hideEl.classList.add("hide")
+      hideEl.classList.add('hide')
     }
   }
 
@@ -373,17 +372,17 @@ function BryntumChartTable(props) {
   }
 
   return (
-    <div className="rts-table-container scroll" id="scrollableDivGanttChart">
-      <div className="container-orderbank gant-chart-table" style={{ maxWidth: "100%" }}>
-        <InfiniteScroll
-          next={handleScrollShipmentChartTable}
-          hasMore={props.ganttChartTableData.length < props.totalRow_ganttChart}
-          loader={<h5>Loading...</h5>}
-          dataLength={props.ganttChartTableData.length}
-          height={360}
-        >
-          <Col className="pr-0" style={{'width': '500px'}}>
-            <Droppable key="shipment-chart" droppableId="shipment-chart">
+    <div className="rts-table-container">
+      <div className="container-orderbank gant-chart-table row">
+        <div className="col-lg-5 col-md-6 col-sm-12 pr-0">
+          <InfiniteScroll
+            next={handleScrollShipmentChartTable}
+            hasMore={props.ganttChartTableData.length < props.totalRow_ganttChart}
+            loader={<h5>Loading...</h5>}
+            dataLength={props.ganttChartTableData.length}
+            height={360}
+          >
+            <Droppable droppableId="shipment-chart">
               {(provided, snapshot) => {
                 return (
                   <div
@@ -405,11 +404,11 @@ function BryntumChartTable(props) {
                 )
               }}
             </Droppable>
-          </Col>
-        </InfiniteScroll>
-        <Col>
+          </InfiniteScroll>
+        </div>
+        <div className="col-lg-7 col-md-6 col-sm-12">
           <BryntumDragDropAreaShipment currentDate={dateConfig?.date_from} />
-        </Col>
+        </div>
         {filterList.map(e => {
           return (
             <ChartColumnFilter
@@ -430,8 +429,8 @@ function BryntumChartTable(props) {
           isOpen={modal}
           onSend={sendRequestsHandler}
           onCancel={toggle}
-          headerContent={dropdownSelectedItem?.header || ""}
-          bodyContent={`Are you sure you want to ${dropdownSelectedItem?.body || ""}`}
+          headerContent={dropdownSelectedItem?.header || ''}
+          bodyContent={`Are you sure you want to ${dropdownSelectedItem?.body || ''}`}
           styleColor={dropdownSelectedItem?.styleColor}
         />
       )}

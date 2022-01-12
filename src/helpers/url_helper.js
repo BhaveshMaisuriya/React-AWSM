@@ -104,3 +104,6 @@ export const GET_RTS_ORDER_BANK = "/rts/order-bank"
 export const GET_SHIPMENT_ORDER_BANK = "/rts_shipment_oder_bank"
 export const GET_RTS_GANTT_CHART = "/rts/gantt-chart"
 export const UPDATE_RTS_GANTT_CHART = "/rts/gantt-chart/shift-type"
+
+// SCHEDULE
+export const RUN_AUTO_SCHEDULE = "/rts/auto-schedule"

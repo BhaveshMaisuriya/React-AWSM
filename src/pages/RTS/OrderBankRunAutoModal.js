@@ -1,7 +1,14 @@
 import React, { Fragment, useState } from "react"
-import { Modal, ModalFooter, ModalHeader, ModalBody, Button } from "reactstrap"
+import { Modal, ModalHeader, ModalBody, Button } from "reactstrap"
 import { connect } from "react-redux"
 import LinearWithValueLabel from "components/Common/Loader/LinearWithValueLabel"
+import {
+  runAutoSchedule
+} from "store/orderBank/actions"
+
+import {format} from 'date-fns'
+
+const DISPLAY_DATE_FORMAT = "do MMM yyyy"
 
 function OrderBankRunAutoModal(props) {
   const [displayRun, setDisplayRun] = useState(false)
@@ -14,7 +21,12 @@ function OrderBankRunAutoModal(props) {
     props.CloseModal()
   }
 
-  function RunModal() {
+  async function RunModal() {
+    const { runAutoSchedule, shift_date, region } = props
+    await runAutoSchedule( {
+      region: region,
+      delivery_date: shift_date?.date_from
+    })
     setDisplayRun(!displayRun)
   }
 
@@ -22,11 +34,10 @@ function OrderBankRunAutoModal(props) {
     <Fragment>
       <Modal
         isOpen={props.open}
-        toggle={toggle}
         id="runauto-modal"
         contentClassName="modalContainer"
       >
-        <ModalHeader toggle={toggle}>
+        <ModalHeader toggle={CloseModal}>
           <h3>Run Auto-Schedule</h3>
         </ModalHeader>
         <ModalBody>
@@ -34,7 +45,7 @@ function OrderBankRunAutoModal(props) {
             <Fragment>
               <p>
                 This action cannot be undone. Are you sure you want to Run
-                Auto-Schedule for all remaining KVDT orders on 11th Feb 2021?
+                Auto-Schedule for all remaining {props?.region} orders on {format(new Date(props?.shift_date?.date_from), DISPLAY_DATE_FORMAT)}
               </p>
               <div className="mt-3 mb-2 text-right">
                 <Button
@@ -70,7 +81,9 @@ const mapStateToProps = ({ orderBank }) => ({
   auditsCom: orderBank.auditsCom,
 })
 
-const mapDispatchToProps = dispatch => ({})
+const mapDispatchToProps = dispatch => ({
+  runAutoSchedule: payload => dispatch(runAutoSchedule(payload))
+})
 
 export default connect(
   mapStateToProps,

@@ -1,5 +1,5 @@
-import React, { useMemo, useState, useEffect, useCallback } from "react"
-import { connect, useSelector } from "react-redux"
+import React, { useMemo, useState, useEffect, useCallback } from 'react'
+import { connect, useSelector } from 'react-redux'
 import {
   Row,
   Col,
@@ -16,26 +16,27 @@ import {
   Button,
   Popover,
   PopoverBody,
-} from "reactstrap"
-import AuditLog from "components/Common/AuditLog"
-import "./style.scss"
-import MoreVertIcon from "@material-ui/icons/MoreVert"
-import { IconButton, MenuItem } from "@material-ui/core"
+} from 'reactstrap'
+import AuditLog from 'components/Common/AuditLog'
+import './style.scss'
+import MoreVertIcon from '@material-ui/icons/MoreVert'
+import { IconButton, MenuItem } from '@material-ui/core'
+import moment from 'moment'
 // import { CustomEyeIcon } from "pages/DQM/Common/icon"
-import awsmLogo from "assets/images/AWSM-logo-order-bank.png"
-import NewOrderModal from "./addOrderBankModal"
-import DateRangePicker from "components/Common/DateRangePicker"
-import AWSMDropdown from "components/Common/Dropdown"
-import OrderBankTable from "./OrderBankTable"
-import REGION_TERMINAL, { TERMINAL_CODE_MAPPING } from "common/data/regionAndTerminal"
+import awsmLogo from 'assets/images/AWSM-logo-order-bank.png'
+import NewOrderModal from './addOrderBankModal'
+import DateRangePicker from 'components/Common/DateRangePicker'
+import AWSMDropdown from 'components/Common/Dropdown'
+import OrderBankTable from './OrderBankTable'
+import REGION_TERMINAL, { TERMINAL_CODE_MAPPING } from 'common/data/regionAndTerminal'
 //custom icons import
-import customiseTableIcon from "assets/images/AWSM-Customise-Table.svg"
+import customiseTableIcon from 'assets/images/AWSM-Customise-Table.svg'
 
-import CustomizeTableModal from "components/Common/CustomizeTable"
+import CustomizeTableModal from 'components/Common/CustomizeTable'
 
-import { FormControlLabel } from "@material-ui/core"
-import Checkbox from "@material-ui/core/Checkbox"
-import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown"
+import { FormControlLabel } from '@material-ui/core'
+import Checkbox from '@material-ui/core/Checkbox'
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown'
 
 import {
   GanttChartBottom,
@@ -44,7 +45,7 @@ import {
   orderBankSettings,
   orderBankStatus,
   deleteCheckOption,
-} from "./helper.js"
+} from './helper.js'
 
 import {
   ganttChartTableColumns,
@@ -52,8 +53,8 @@ import {
   ganttChartTableMapping,
   tableColumns,
   tableMapping,
-} from "./OrderBankTable/tableMapping"
-import { format, addDays } from "date-fns"
+} from './OrderBankTable/tableMapping'
+import { format, addDays } from 'date-fns'
 import {
   getRTSOrderBankTableData,
   sendOrderBankDN,
@@ -68,20 +69,21 @@ import {
   getRTSOderBankGanttChart,
   clearGanttData,
   clearRTSOrderBankTableData,
-} from "store/orderBank/actions"
-import OrderBankActionModal from "./OrderBankActionModal"
-import CrossTerminalModal from "./crossTerminalModal"
-import BryntumChartTable from "./OrderBankTable/BryntumChartTable"
-import BryntumChartShipment from "./OrderBankTable/BryntumChartShipment"
-import CustomRadioButton from "components/Common/CustomRadioButton"
-import OrderBankRunAutoModal from "./OrderBankRunAutoModal"
-import OrderBankSendBulkModal from "./OrderBankSendBulkModal"
-import AWSMAlert from "components/Common/AWSMAlert"
-import selectAllIcon2 from "assets/images/AWSM-Checked-box.svg"
-import selectAllIcon3 from "assets/images/AWSM-Checkbox.svg"
-import { bryntumSchedulerTableNameForCookie } from "./OrderBankTable/BryntumChartTable"
-import { getCookieByKey } from "../DQM/Common/helper"
-import { DragDropContext } from "react-beautiful-dnd"
+  getOBTotalUnschedule
+} from 'store/orderBank/actions'
+import OrderBankActionModal from './OrderBankActionModal'
+import CrossTerminalModal from './crossTerminalModal'
+import BryntumChartTable from './OrderBankTable/BryntumChartTable'
+import BryntumChartShipment from './OrderBankTable/BryntumChartShipment'
+import CustomRadioButton from 'components/Common/CustomRadioButton'
+import OrderBankRunAutoModal from './OrderBankRunAutoModal'
+import OrderBankSendBulkModal from './OrderBankSendBulkModal'
+import AWSMAlert from 'components/Common/AWSMAlert'
+import selectAllIcon2 from 'assets/images/AWSM-Checked-box.svg'
+import selectAllIcon3 from 'assets/images/AWSM-Checkbox.svg'
+import { bryntumSchedulerTableNameForCookie } from './OrderBankTable/BryntumChartTable'
+import { getCookieByKey } from '../DQM/Common/helper'
+import { DragDropContext } from 'react-beautiful-dnd'
 import {
   AddOrderIcon,
   UploadIcon,
@@ -90,18 +92,18 @@ import {
   CustomizeTableIcon,
   CrossTerminalIcon,
   MultipleDNIcon,
-} from "pages/DQM/Common/icon"
+} from 'pages/DQM/Common/icon'
 
-import { isNull } from "lodash"
-import { removeKeywords } from "../DQM/Common/helper"
-import ClearScheduling from "./clearScheduling"
-import { transformObjectToStringSentence, filterObject } from "./../DQM/Common/helper"
+import { isNull } from 'lodash'
+import { removeKeywords } from '../DQM/Common/helper'
+import ClearScheduling from './clearScheduling'
+import { transformObjectToStringSentence, filterObject } from './../DQM/Common/helper'
 const UntickIcon = () => <img src={selectAllIcon3} alt="icon" />
 const CheckedIcon = () => <img src={selectAllIcon2} alt="icon" />
 
-import { ReactSVG } from "react-svg"
-import UploadDMRModal from "./uploadDMRModal"
-import DeleteMultipleModal from "./deleteMultiple"
+import { ReactSVG } from 'react-svg'
+import UploadDMRModal from './uploadDMRModal'
+import DeleteMultipleModal from './deleteMultiple'
 // import { sendMessage } from "SocketService"
 
 function OrderBank({
@@ -121,8 +123,10 @@ function OrderBank({
   multipleorder,
   getRTSOderBankGanttChart,
   clearGanttData,
+  onGetTotalOBUnschedule,
+  totalOrderUnschedule
 }) {
-  const defaultDate = format(addDays(Date.now(), 1), "yyyy-MM-dd")
+  const defaultDate = format(addDays(Date.now(), 1), 'yyyy-MM-dd')
   const ganttChartEvents = useSelector(state => state.orderBank.ganttChart.event)
   const [orderSummary, setOrderSummary] = useState({
     DNs: 0,
@@ -131,18 +135,18 @@ function OrderBank({
     SR: 0,
     HP: 0,
   })
-  const [activeTab, setActiveTab] = useState("1")
+  const [activeTab, setActiveTab] = useState('1')
   const [dropdownOpen, setOpen] = useState(false)
   const [crossTerminal, setCrossTerminal] = useState(false)
   const [showAddNotification, setShowAddNotification] = useState(false)
-  const [notiMessage, setNotiMessage] = useState("")
+  const [notiMessage, setNotiMessage] = useState('')
   const [uploadDmr, setUploadDmr] = useState(false)
   const [deleteMultiple, setDeleteMultiple] = useState(false)
   const [showNewOrder, setShowNewOrder] = useState(false)
   const [showCustomize, setShowCustomize] = useState(false)
   const [payloadFilter, setPayloadFilter] = useState({})
   const [searchFields, setSearchFields] = useState(
-    getCookieByKey("Order Bank") ? JSON.parse(getCookieByKey("Order Bank")) : tableColumns
+    getCookieByKey('Order Bank') ? JSON.parse(getCookieByKey('Order Bank')) : tableColumns
   )
   const [region, setRegionGantt] = useState(REGION_TERMINAL[0].region)
   const [terminal, setTerminalGantt] = useState(REGION_TERMINAL[0].terminal[0])
@@ -152,39 +156,39 @@ function OrderBank({
   const [displayAutoModal, setDisplayAutoModal] = useState(false)
   const [showClearAlert, setShowClearAlert] = useState(false)
   const [displayBulkModal, setDisplayBulkModal] = useState(false)
-  const [ganttChartAllRadio, setGanttChartAllRadio] = useState("")
+  const [ganttChartAllRadio, setGanttChartAllRadio] = useState('')
   const [sendDNModal, setSendDNModal] = useState(false)
-  const [status, setStatusDropdown] = useState("Unscheduled")
+  const [status, setStatusDropdown] = useState('Unscheduled')
   const [shiftDateGantt, setShiftDateGantt] = useState({
-    type: "single",
+    type: 'single',
     date_from: defaultDate,
   })
   const [shiftDateTable, setShiftDateTable] = useState({
-    type: "single",
+    type: 'single',
     date_from: defaultDate,
   })
   const [orderBankSetting, setOrderBankSetting] = useState(orderBankSettings)
   const [showAuditModal, setShowAuditModal] = useState(false)
-  const [snackStatus, setSnackStatus] = useState("")
-  const [snackMessage, setSnackMessage] = useState("")
+  const [snackStatus, setSnackStatus] = useState('')
+  const [snackMessage, setSnackMessage] = useState('')
   const [showSnackAlert, setShowSnackAlert] = useState(false)
   const [showDeleteOption, setShowDeleteOption] = useState(false)
   const [clearScheduling, setClearScheduling] = useState(false)
   const [showAlertDMR, setShowAlertDMR] = useState(false)
   const [showAlertCrossTerminal, setShowAlertCrossTerminal] = useState(false)
   const [deleteCheck, setDeleteCheck] = useState(deleteCheckOption)
-  const [checkedValue, setCheckedValue] = useState("Manual Scheduling")
+  const [checkedValue, setCheckedValue] = useState('Manual Scheduling')
   const [isCustomizeGanttModalOpen, setIsCustomizeGanttModalOpen] = useState(false)
   const [multipleDeleteIds, setMultipleDeleteIds] = useState(false)
-  const [deleteMultipleStatus, setDeleteMultipleStatus] = useState("")
+  const [deleteMultipleStatus, setDeleteMultipleStatus] = useState('')
   const [showDeleteMultiple, setShowDeleteMultiple] = useState(false)
-  const [fieldToSort, setFieldToSort] = useState("retail_storage_relation.retail")
-  const [fieldSortDirection, setFieldSortDirection] = useState("desc")
+  const [fieldToSort, setFieldToSort] = useState('retail_storage_relation.retail')
+  const [fieldSortDirection, setFieldSortDirection] = useState('desc')
   const [bryntumCurrentColumns, setBryntumCurrentColumns] = useState(() => {
     if (!getCookieByKey(bryntumSchedulerTableNameForCookie)) return ganttChartTableDefaultColumns
     const cookieParseData = JSON.parse(getCookieByKey(bryntumSchedulerTableNameForCookie))
     if (cookieParseData.length < 4) return ganttChartTableDefaultColumns
-    const columns = { vehicle: { ...ganttChartTableMapping["vehicle"] } }
+    const columns = { vehicle: { ...ganttChartTableMapping['vehicle'] } }
     cookieParseData.forEach(col => {
       columns[col] = { ...ganttChartTableMapping[col] }
     })
@@ -192,7 +196,7 @@ function OrderBank({
   })
   const [reloadData, setReloadData] = useState(false)
   const [currentPage, setCurrentPage] = useState(0)
-  const [filterQuery, setfilterQuery] = useState("")
+  const [filterQuery, setfilterQuery] = useState('')
   const filterOrderBank = useMemo(() => {
     return {
       terminal: TERMINAL_CODE_MAPPING[terminalTable],
@@ -202,8 +206,8 @@ function OrderBank({
   }, [terminalTable, shiftDateTable, status])
 
   useEffect(() => {
-    clearGanttData()
-    setTimeout(() => {
+    const asyncFunction = async () => {
+      await clearGanttData()
       getRTSOderBankGanttChart({
         limit: 10,
         page: 0,
@@ -216,16 +220,21 @@ function OrderBank({
           terminal: TERMINAL_CODE_MAPPING[terminal],
         },
       })
-    }, 100)
+      if (terminal === terminalTable && isShiftDateCorrect(shiftDateGantt?.date_from)){
+        onGetTotalOBUnschedule({
+          shift_date: shiftDateGantt?.date_from})
+      }
+    }
+    asyncFunction()
   }, [shiftDateGantt, terminal])
 
   useEffect(() => {
     const results = { DNs: 3, shipment: 2, backlog: 0, SR: 0, HP: 0 }
     if (ganttChartEvents) {
       ganttChartEvents.forEach(item => {
-        if (item.eventFilter === "backlog") results.backlog++
-        if (item.eventFilter === "request") results.SR++
-        if (item.eventFilter === "high") results.HP++
+        if (item.eventFilter === 'backlog') results.backlog++
+        if (item.eventFilter === 'request') results.SR++
+        if (item.eventFilter === 'high') results.HP++
       })
     }
     setOrderSummary(results)
@@ -235,9 +244,9 @@ function OrderBank({
     const payload = {
       limit: 6,
       pagination: 0,
-      sort_dir: "desc",
-      sort_field: "created",
-      q: "commercial_customer",
+      sort_dir: 'desc',
+      sort_field: 'created',
+      q: 'commercial_customer',
     }
     onGetOrderBankAuditLog(payload)
   }, [])
@@ -257,7 +266,7 @@ function OrderBank({
     getRTSOrderBankTableData({
       limit: 10,
       page: currentPage,
-      search_fields: "*",
+      search_fields: '*',
       q: transformObjectToStringSentence(filterQuery),
       sort_dir: fieldSortDirection,
       sort_field: fieldToSort,
@@ -277,7 +286,7 @@ function OrderBank({
       getRTSOrderBankTableData({
         limit: 10 * (currentPage + 1),
         page: 0,
-        search_fields: "*",
+        search_fields: '*',
         q: transformObjectToStringSentence(filterQuery),
         sort_dir: fieldSortDirection,
         sort_field: fieldToSort,
@@ -307,19 +316,19 @@ function OrderBank({
   }, [regionTable])
 
   const onSettingClick = val => {
-    if (val === "newOrder") {
+    if (val === 'newOrder') {
       setShowNewOrder(true)
-    } else if (val === "customizeCol") {
+    } else if (val === 'customizeCol') {
       setShowCustomize(true)
-    } else if (val === "RefreshDN") {
+    } else if (val === 'RefreshDN') {
       setRefreshDNModal(true)
-    } else if (val === "SendDN") {
+    } else if (val === 'SendDN') {
       setSendDNModal(true)
-    } else if (val === "CrossTerminal") {
+    } else if (val === 'CrossTerminal') {
       setCrossTerminal(true)
-    } else if (val === "uploadDmr") {
+    } else if (val === 'uploadDmr') {
       setUploadDmr(true)
-    } else if (val === "DeleteMultiple") {
+    } else if (val === 'DeleteMultiple') {
       setDeleteMultiple(true)
     }
   }
@@ -346,11 +355,21 @@ function OrderBank({
     setDeleteMultiple(false)
     let temp = [...orderBankSetting]
     temp.map(function (item) {
-      if (item.value === "DeleteMultiple") {
+      if (item.value === 'DeleteMultiple') {
         item.disabled = true
       }
     })
     setOrderBankSetting(temp)
+  }
+
+  const onChangeGanttChartDate = (value) => {
+    setShiftDateGantt({
+      ...shiftDateGantt,
+      type: value?.type,
+      date_from: value?.date_from,
+      date_to: value?.date_to,
+    })
+    setCurrentPage(0)
   }
 
   const reloadRTSOrderBankData = async () => {
@@ -358,19 +377,24 @@ function OrderBank({
     await getRTSOrderBankTableData({
       limit: 10,
       page: payloadFilter.currentPage,
-      search_fields: "*",
+      search_fields: '*',
       q: transformObjectToStringSentence(payloadFilter.filterQuery),
-      sort_dir: "asc",
-      sort_field: "vehicle",
+      sort_dir: 'asc',
+      sort_field: 'vehicle',
       filter: payloadFilter.filterOrderBank,
     })
     setReloadData(false)
   }
 
+  const isShiftDateCorrect = (date) => {
+    const diff = moment.duration(moment().startOf('day').diff(moment(date, "YYYY-MM-DD"))).asDays();
+    return diff >= -2 && diff <= 0
+  }
+
   useEffect(async () => {
     if (multipleorder) {
       reloadRTSOrderBankData()
-      setDeleteMultipleStatus(multipleorder.order_banks !== undefined ? "success" : "error")
+      setDeleteMultipleStatus(multipleorder.order_banks !== undefined ? 'success' : 'error')
       setShowDeleteMultiple(true)
     }
   }, [multipleorder])
@@ -387,7 +411,7 @@ function OrderBank({
     reloadRTSOrderBankData()
   }
 
-  const onCloseNewOrder = async (type, val = "") => {
+  const onCloseNewOrder = async (type, val = '') => {
     setShowNewOrder(false)
     setReloadData(true)
     type === "add" && setShowAddNotification(true)
@@ -400,7 +424,7 @@ function OrderBank({
     if (val !== 0) {
       let temp = [...orderBankSetting]
       temp.map(function (item) {
-        if (item.value === "CrossTerminal" || item.value === "SendDN") {
+        if (item.value === 'CrossTerminal' || item.value === 'SendDN') {
           item.disabled = false
         }
       })
@@ -408,7 +432,7 @@ function OrderBank({
     } else {
       let temp = [...orderBankSetting]
       temp.map(function (item) {
-        if (item.value === "CrossTerminal" || item.value === "SendDN") {
+        if (item.value === 'CrossTerminal' || item.value === 'SendDN') {
           item.disabled = true
         }
       })
@@ -425,7 +449,7 @@ function OrderBank({
       setMultipleDeleteIds(ids)
       let temp = [...orderBankSetting]
       temp.map(function (item) {
-        if (item.value === "DeleteMultiple") {
+        if (item.value === 'DeleteMultiple') {
           item.disabled = false
         }
       })
@@ -433,7 +457,7 @@ function OrderBank({
     } else {
       let temp = [...orderBankSetting]
       temp.map(function (item) {
-        if (item.value === "DeleteMultiple") {
+        if (item.value === 'DeleteMultiple') {
           item.disabled = true
         }
       })
@@ -518,7 +542,7 @@ function OrderBank({
       const value = target.value
       if (value === ganttChartAllRadio && target.checked) {
         target.checked = false
-        return setGanttChartAllRadio("")
+        return setGanttChartAllRadio('')
       }
       target.checked = true
       return setGanttChartAllRadio(value)
@@ -532,7 +556,7 @@ function OrderBank({
   const onChangeBryntumSchedulerColumns = newColumnsList => {
     if (newColumnsList) {
       setBryntumCurrentColumns(prevCols => {
-        const columns = { vehicle: { ...ganttChartTableMapping["vehicle"] } }
+        const columns = { vehicle: { ...ganttChartTableMapping['vehicle'] } }
         newColumnsList.forEach(col => {
           columns[col] = { ...ganttChartTableMapping[col] }
         })
@@ -570,8 +594,8 @@ function OrderBank({
         temp1.push(item.title)
       }
     })
-    var temp2 = temp1.join().split(",")
-    var temp3 = temp2.length > 1 === true ? temp2[0] + " & " + temp2[1] : temp2[0]
+    var temp2 = temp1.join().split(',')
+    var temp3 = temp2.length > 1 === true ? temp2[0] + ' & ' + temp2[1] : temp2[0]
     setCheckedValue(temp3)
     setDeleteCheck(temp)
   }
@@ -593,11 +617,11 @@ function OrderBank({
   }
 
   const changeFiltersHandler = (qValue, type) => {
-    if (type === "insert")
+    if (type === 'insert')
       setfilterQuery(prevFilters => {
         return { ...prevFilters, ...qValue }
       })
-    else if (type === "remove")
+    else if (type === 'remove')
       setfilterQuery(prevFilters => {
         return { ...filterObject(prevFilters, qValue) }
       })
@@ -607,7 +631,7 @@ function OrderBank({
   useEffect(() => {
     const isItemSelected = !!orderBankTableData?.find(e => e.isChecked)
     const newSettings = [...orderBankSetting]
-    const sendDN = newSettings?.find(e => e.value === "SendDN")
+    const sendDN = newSettings?.find(e => e.value === 'SendDN')
     if (sendDN) {
       sendDN.disabled = !isItemSelected
     }
@@ -640,16 +664,16 @@ function OrderBank({
                       <Nav pills justified>
                         <NavItem>
                           <NavLink
-                            className={activeTab === "1" ? "active" : ""}
-                            onClick={() => setActiveTab("1")}
+                            className={activeTab === '1' ? 'active' : ''}
+                            onClick={() => setActiveTab('1')}
                           >
                             <span className="d-none d-sm-block">Gantt Chart</span>
                           </NavLink>
                         </NavItem>
                         <NavItem>
                           <NavLink
-                            className={activeTab === "2" ? "active" : ""}
-                            onClick={() => setActiveTab("2")}
+                            className={activeTab === '2' ? 'active' : ''}
+                            onClick={() => setActiveTab('2')}
                           >
                             <span className="d-none d-sm-block">Shipment</span>
                           </NavLink>
@@ -673,15 +697,15 @@ function OrderBank({
                       </a>
                       <span className="bl-1-grey-half plr-15">
                         <Button
-                          color={"primary"}
-                          disabled={terminal === terminalTable ? false : true}
+                          color={'primary'}
+                          disabled={terminal === terminalTable && isShiftDateCorrect(shiftDateGantt.date_from) && totalOrderUnschedule > 0 ? false : true}
                           onClick={() => onClickRunAutoScheduling()}
                         >
                           Run Auto Schedule
                         </Button>
                       </span>
                       <span className="bl-1-grey-half plr-15">
-                        <Button color={"primary"} onClick={() => onClickSendBulkShipment()}>
+                        <Button color={'primary'} onClick={() => onClickSendBulkShipment()}>
                           Send Bulk Shipment
                         </Button>
                       </span>
@@ -693,19 +717,11 @@ function OrderBank({
                     <div className="order-bank-shift-date">
                       <div>DATE</div>
                       <DateRangePicker
-                        types={["single"]}
+                        types={['single']}
                         startDate={null}
                         defaultValue={shiftDateGantt}
                         defaultDate={defaultDate}
-                        onChange={value => {
-                          setShiftDateGantt({
-                            ...shiftDateGantt,
-                            type: value?.type,
-                            date_from: value?.date_from,
-                            date_to: value?.date_to,
-                          })
-                          setCurrentPage(0)
-                        }}
+                        onChange={onChangeGanttChartDate}
                       />
                     </div>
                     <p className="order-bank-region-label">REGION & TERMINAL</p>
@@ -757,7 +773,7 @@ function OrderBank({
                       placement="bottom"
                       isOpen={showDeleteOption}
                       trigger="legacy"
-                      style={{ width: "auto" }}
+                      style={{ width: 'auto' }}
                       toggle={toggleDownload}
                     >
                       <PopoverBody className="clear-scheduling">
@@ -768,7 +784,7 @@ function OrderBank({
                                 <div
                                   key={row.title}
                                   className={`d-flex align-items-center ${
-                                    row.checked ? "item-checked" : ""
+                                    row.checked ? 'item-checked' : ''
                                   }`}
                                 >
                                   <FormControlLabel
@@ -782,33 +798,33 @@ function OrderBank({
                                         icon={<UntickIcon />}
                                         checkedIcon={<CheckedIcon />}
                                         style={{
-                                          height: "20px",
-                                          width: "5px",
-                                          marginLeft: "16px",
-                                          marginTop: "8px",
+                                          height: '20px',
+                                          width: '5px',
+                                          marginLeft: '16px',
+                                          marginTop: '8px',
                                         }}
                                       />
                                     }
-                                    label={isNull(row.title) ? "-" : removeKeywords(row.title)}
+                                    label={isNull(row.title) ? '-' : removeKeywords(row.title)}
                                   />
                                 </div>
                               )
                             })}
-                          <div id="myMm" style={{ height: "1mm" }} />
+                          <div id="myMm" style={{ height: '1mm' }} />
                           <div className="pdf-wid">
                             <button
                               className="btn btn-primary btn-sm excel-btn-container pdf-btn"
                               onClick={ConfirmClearModal}
-                              disabled={checkedValue === "" ? true : false}
+                              disabled={checkedValue === '' ? true : false}
                             >
-                              {" "}
-                              Clear{" "}
+                              {' '}
+                              Clear{' '}
                             </button>
                           </div>
                         </>
                       </PopoverBody>
                     </Popover>
-                    {activeTab === "1" && (
+                    {activeTab === '1' && (
                       <div className="d-flex align-items-center justify-content-between radio_option m-0 order-bank-label">
                         {GanttChartFilterButtons &&
                           GanttChartFilterButtons.length > 0 &&
@@ -898,7 +914,7 @@ function OrderBank({
                     <div className="order-bank-shift-date">
                       <div>DATE</div>
                       <DateRangePicker
-                        types={["single", "range"]}
+                        types={['single', 'range']}
                         startDate={null}
                         defaultValue={shiftDateTable}
                         defaultDate={defaultDate}
@@ -945,7 +961,7 @@ function OrderBank({
                       <AWSMDropdown
                         value={status}
                         onChange={value => {
-                          setStatusDropdown(value)
+                          setStatusDropdown(value == "All"  ? "" : value)
                           setCurrentPage(0)
                           setReloadData(true);
                         }}
@@ -962,7 +978,7 @@ function OrderBank({
                           component="span"
                           className="setting_icon"
                           fontSize="large"
-                          style={{ color: "rgba(0,0,0,0.5)" }}
+                          style={{ color: 'rgba(0,0,0,0.5)' }}
                           aria-haspopup="true"
                         >
                           <MoreVertIcon />
@@ -977,7 +993,7 @@ function OrderBank({
                             <MenuItem
                               className="awsm-option-button-content-item-rts"
                               disabled={
-                                option.label === "Add New Order" && status === "Scheduled"
+                                option.label === 'Add New Order' && status === 'Scheduled'
                                   ? true
                                   : option.disabled
                               }
@@ -1083,6 +1099,9 @@ function OrderBank({
               {displayAutoModal && (
                 <OrderBankRunAutoModal
                   open={displayAutoModal}
+                  terminal={TERMINAL_CODE_MAPPING[terminalTable]}
+                  region={region}
+                  shift_date={shiftDateGantt}
                   istoggle={istoggleAuto}
                   CloseModal={CloseAutoModal}
                 />
@@ -1131,9 +1150,9 @@ function OrderBank({
                 <AWSMAlert
                   status={notiMessage}
                   message={
-                    notiMessage === "success"
-                      ? "New Order has successfully been added in Order Bank"
-                      : "Order has not been added"
+                    notiMessage === 'success'
+                      ? 'New Order has successfully been added in Order Bank'
+                      : 'Order has not been added'
                   }
                   openAlert={showAddNotification}
                   closeAlert={() => setShowAddNotification(false)}
@@ -1181,6 +1200,7 @@ const mapDispatchToProps = dispatch => ({
   getRTSOderBankGanttChart: params => dispatch(getRTSOderBankGanttChart(params)),
   clearGanttData: () => dispatch(clearGanttData()),
   clearRTSOrderBankTableData: () => dispatch(clearRTSOrderBankTableData()),
+  onGetTotalOBUnschedule: params => dispatch(getOBTotalUnschedule(params))
 })
 
 const mapStateToProps = ({ orderBank }) => ({
@@ -1189,6 +1209,7 @@ const mapStateToProps = ({ orderBank }) => ({
   auditsCom: orderBank.auditsCom,
   socketData: orderBank.socketData,
   multipleorder: orderBank.multipleorder,
+  totalOrderUnschedule: orderBank.totalOrderUnschedule
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(OrderBank)

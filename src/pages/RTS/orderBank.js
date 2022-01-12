@@ -353,7 +353,8 @@ function OrderBank({
     setOrderBankSetting(temp)
   }
 
-  const getRTSOrderBankData = async () => {
+  const reloadRTSOrderBankData = async () => {
+    setReloadData(true)
     await getRTSOrderBankTableData({
       limit: 10,
       page: payloadFilter.currentPage,
@@ -363,15 +364,14 @@ function OrderBank({
       sort_field: "vehicle",
       filter: payloadFilter.filterOrderBank,
     })
+    setReloadData(false)
   }
 
   useEffect(async () => {
     if (multipleorder) {
-      setReloadData(true)
-      getRTSOrderBankData()
+      reloadRTSOrderBankData()
       setDeleteMultipleStatus(multipleorder.order_banks !== undefined ? "success" : "error")
       setShowDeleteMultiple(true)
-      setReloadData(false)
     }
   }, [multipleorder])
 
@@ -383,18 +383,16 @@ function OrderBank({
     const payload = { order_id: multipleDeleteIds, terminal: terminal }
     await onGetCrossTerminal(payload)
     setShowAlertCrossTerminal(true)
-    setReloadData(true)
-    getRTSOrderBankData()
-    setReloadData(false)
     setCrossTerminal(false)
+    reloadRTSOrderBankData()
   }
 
   const onCloseNewOrder = async (type, val = "") => {
     setShowNewOrder(false)
     setReloadData(true)
     type === "add" && setShowAddNotification(true)
-    val === "success" ? setNotiMessage("success") : setNotiMessage("error")    
-    getRTSOrderBankData()
+    val === "success" ? setNotiMessage("success") : setNotiMessage("error")
+    reloadRTSOrderBankData()
     setReloadData(false)
   }
 

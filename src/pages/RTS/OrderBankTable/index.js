@@ -41,6 +41,7 @@ import InfiniteScroll from "react-infinite-scroll-component"
 import AWSMAlert from "components/Common/AWSMAlert"
 import { transformObjectToStringSentence } from "pages/DQM/Common/helper"
 import { format } from "date-fns"
+import CircularLoader from "components/Common/Loader/CircularLoader"
 
 export class TableGroupEvent extends React.Component {
   constructor(props) {
@@ -559,7 +560,15 @@ class index extends Component {
                         <tr>{this.headerTableConfiguration()}</tr>
                       </thead>
                       <tbody>
-                        {dataSource && dataSource.length && this.state.showLoader === false ? (
+                        {(this.state.showLoader === true) ? 
+                       <tr>
+                       <td colSpan={18} className={"rts-table-nodata"}>
+                         <div>
+                           <CircularLoader />
+                         </div>
+                       </td>
+                     </tr>
+                      : (dataSource && dataSource.length) ? (
                           dataSource.map((v, index) => {
                             return (
                               <Draggable

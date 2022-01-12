@@ -1146,8 +1146,8 @@ function OrderBank({
                   status={deleteMultipleStatus}
                   message={
                     deleteMultipleStatus === "success"
-                      ? "Orders deleted Successfully"
-                      : "Orders has not been deleted"
+                      ? "Selected Orders have been successfully Deleted"
+                      : "Selected Orders have not been Deleted"
                   }
                   openAlert={showDeleteMultiple}
                   closeAlert={() => setShowDeleteMultiple(false)}

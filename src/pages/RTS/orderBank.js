@@ -139,12 +139,17 @@ function OrderBank({
   const [dropdownOpen, setOpen] = useState(false)
   const [crossTerminal, setCrossTerminal] = useState(false)
   const [showAddNotification, setShowAddNotification] = useState(false)
+  const [multipleDelete, setMultipleDelete] = useState('')  
   const [notiMessage, setNotiMessage] = useState('')
   const [uploadDmr, setUploadDmr] = useState(false)
   const [deleteMultiple, setDeleteMultiple] = useState(false)
   const [showNewOrder, setShowNewOrder] = useState(false)
   const [showCustomize, setShowCustomize] = useState(false)
-  const [payloadFilter, setPayloadFilter] = useState({})
+  const [payloadFilter, setPayloadFilter] = useState({
+    filterOrderBank: {},
+    currentPage: 0,
+    filterQuery: '',
+  })
   const [searchFields, setSearchFields] = useState(
     getCookieByKey('Order Bank') ? JSON.parse(getCookieByKey('Order Bank')) : tableColumns
   )
@@ -249,6 +254,15 @@ function OrderBank({
       q: 'commercial_customer',
     }
     onGetOrderBankAuditLog(payload)
+    // alert
+
+
+    setShowDeleteMultiple(false)
+    setShowAddNotification(false)
+    setShowAlertDMR(false)
+    setShowAlertCrossTerminal(false)
+    setShowClearAlert(false)
+    setShowSnackAlert(false)
   }, [])
 
   useEffect(() => {
@@ -374,11 +388,12 @@ function OrderBank({
 
   const reloadRTSOrderBankData = async () => {
     setReloadData(true)
+    console.log('payloadFilter::', payloadFilter)
     await getRTSOrderBankTableData({
       limit: 10,
       page: payloadFilter.currentPage,
       search_fields: '*',
-      q: transformObjectToStringSentence(payloadFilter.filterQuery),
+      q: (payloadFilter?.filterQuery !== null || payloadFilter?.filterQuery !== undefined) ? transformObjectToStringSentence(payloadFilter?.filterQuery) : "",
       sort_dir: 'asc',
       sort_field: 'vehicle',
       filter: payloadFilter.filterOrderBank,
@@ -394,8 +409,10 @@ function OrderBank({
   useEffect(async () => {
     if (multipleorder) {
       reloadRTSOrderBankData()
-      setDeleteMultipleStatus(multipleorder.order_banks !== undefined ? 'success' : 'error')
-      setShowDeleteMultiple(true)
+      await setMultipleDelete(multipleorder.order_banks);
+      setDeleteMultipleStatus(multipleorder.order_banks !== undefined ? 'success' : 'error');
+      // console.log('ordr::', multipleorder.order_banks, '::', multipleDelete)
+      multipleorder.order_banks !== multipleDelete && multipleDelete === '' ? setShowDeleteMultiple(true) : setShowDeleteMultiple(false);
     }
   }, [multipleorder])
 

@@ -73,7 +73,7 @@ const EditOrderBankModal = props => {
         return e.region === region
       })
       setTerminalList(currentRegion ? currentRegion.terminal : [])
-      temp.terminal = TERMINAL_CODE_MAPPING_ID[temp.terminal]
+      temp.terminal_name = props.terminal;
       temp.region = props?.region
       setEditOrderData(temp)
       setoriginalEditOrderData(temp)

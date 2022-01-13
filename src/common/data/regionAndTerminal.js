@@ -24,8 +24,9 @@ const REGION_TERMINAL = [
     terminal: ["Bintulu JV", "Miri", "Senari IOT", "Tg Manis CODT"],
   },
   {
-    region: "Special Product",
+    region: "*Special Product",
     terminal: [
+      "All",
       "Melaka",
       "Prai",
       "Kerteh",
@@ -55,6 +56,7 @@ export const TERMINAL_CODE_MAPPING = {
   "Miri": "M859",
   "Senari IOT": "M855",
   "Tg Manis CODT":  "M857",
+  "All": "SPECIAL_ALL"
 }
 
 export const TERMINAL_CODE_MAPPING_ID = {
@@ -74,6 +76,7 @@ export const TERMINAL_CODE_MAPPING_ID = {
   "M859": "Miri",
   "M855": "Senari IOT",
   "M857": "Tg Manis CODT",
+  "SPECIAL_ALL": "All"
 }
 
 export default REGION_TERMINAL

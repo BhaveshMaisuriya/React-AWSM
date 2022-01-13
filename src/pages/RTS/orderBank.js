@@ -200,7 +200,7 @@ function OrderBank({
   const filterOrderBank = useMemo(() => {
     return {
       terminal: TERMINAL_CODE_MAPPING[terminalTable],
-      dn_status: status,
+      scheduled_status : status,
       shift_date: shiftDateTable,
     }
   }, [terminalTable, shiftDateTable, status])

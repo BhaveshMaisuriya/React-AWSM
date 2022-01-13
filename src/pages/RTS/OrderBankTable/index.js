@@ -42,6 +42,8 @@ import AWSMAlert from "components/Common/AWSMAlert"
 import { transformObjectToStringSentence } from "pages/DQM/Common/helper"
 import { format } from "date-fns"
 
+import CircularLoader from "components/Common/Loader/CircularLoader"
+
 export class TableGroupEvent extends React.Component {
   constructor(props) {
     super(props)
@@ -138,6 +140,7 @@ export class TableGroupEvent extends React.Component {
             onCancel={this.getEditCancel}
             viewData={this.props.viewData}
             region={this.props.orderregion}
+            terminal={this.props.orderterminal}
           />
         )}
       </>
@@ -178,6 +181,7 @@ class index extends Component {
       this.setState({ showLoader: false })
       this.setState({ dataSource: nextProps.dataSource, filterData: nextProps.headerFilters })
     }
+    console.log('reload::', nextProps.reloadData, this.props.reloadData)
     if (nextProps.reloadData !== this.props.reloadData) {
       this.setState({ showLoader: this.props.reloadData })
     }
@@ -415,6 +419,7 @@ class index extends Component {
               editAlert={this.editAlert}
               viewData={this.props.viewData}
               orderregion={this.props.orderregion}
+              orderterminal={this.props.orderterminal}
             />
           </th>
         </tr>
@@ -561,7 +566,15 @@ class index extends Component {
                         <tr>{this.headerTableConfiguration()}</tr>
                       </thead>
                       <tbody>
-                        {dataSource && dataSource.length && this.state.showLoader === false ? (
+                        {(this.state.showLoader === true) ? 
+                       <tr>
+                       <td colSpan={18} className={"rts-table-nodata"}>
+                         <div>
+                           <CircularLoader />
+                         </div>
+                       </td>
+                     </tr>
+                      : (dataSource && dataSource.length) ? (
                           dataSource.map((v, index) => {
                             return (
                               <Draggable

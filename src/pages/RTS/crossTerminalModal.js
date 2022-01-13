@@ -89,7 +89,7 @@ function CrossTerminalModal(props) {
                 />
               </Col>
             </Row>
-            <div className="d-flex align-items-center justify-content-end pt-5">
+            <div className="d-flex align-items-center justify-content-end pt-12">
               <button onClick={onCancelClick} className="btn btn-outline-primary mr-2">
                 Cancel
               </button>

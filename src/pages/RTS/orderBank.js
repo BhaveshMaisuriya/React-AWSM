@@ -277,6 +277,7 @@ function OrderBank({
       currentPage: currentPage,
       filterQuery: filterQuery,
     })
+    setReloadData(false)
   }, [filterOrderBank, currentPage, filterQuery])
 
   useEffect(() => {
@@ -348,6 +349,7 @@ function OrderBank({
   }
 
   const onSaveDeleteMultiple = async () => {
+    setReloadData(true);
     const payload = { order_banks: multipleDeleteIds }
     await onGetDeleteMultipleOrder(payload)
     setDeleteMultiple(false)
@@ -411,9 +413,11 @@ function OrderBank({
 
   const onCloseNewOrder = async (type, val = '') => {
     setShowNewOrder(false)
-    type === 'add' && setShowAddNotification(true)
-    val === 'success' ? setNotiMessage('success') : setNotiMessage('error')
+    setReloadData(true)
+    type === "add" && setShowAddNotification(true)
+    val === "success" ? setNotiMessage("success") : setNotiMessage("error")
     reloadRTSOrderBankData()
+    setReloadData(false)
   }
 
   const enabledCross = val => {
@@ -921,6 +925,7 @@ function OrderBank({
                             date_from: value?.date_from,
                             date_to: value?.date_to,
                           })
+                          setReloadData(true);
                           setCurrentPage(0)
                         }}
                       />
@@ -931,6 +936,7 @@ function OrderBank({
                         value={regionTable}
                         onChange={value => {
                           setRegionTable(value)
+                          setReloadData(true);
                           setTerminalTable(
                             REGION_TERMINAL.find(item => item.region === value).terminal[0]
                           )
@@ -945,6 +951,7 @@ function OrderBank({
                         onChange={value => {
                           setTerminalTable(value)
                           setCurrentPage(0)
+                          setReloadData(true);
                         }}
                         items={terminalListTable}
                       />
@@ -956,6 +963,7 @@ function OrderBank({
                         onChange={value => {
                           setStatusDropdown(value == "All"  ? "" : value)
                           setCurrentPage(0)
+                          setReloadData(true);
                         }}
                         items={orderBankStatus.map(e => e.label)}
                       />
@@ -1017,6 +1025,7 @@ function OrderBank({
                   onChangeFilters={onChangeCurrentPage}
                   payloadFilter={payloadFilter}
                   orderregion={regionTable}
+                  orderterminal={terminalTable}
                   fieldSortDirectionHandler={fieldSortDirectionHandler}
                   fieldToSortHandler={fieldToSortHandler}
                   reloadData={reloadData}
@@ -1153,9 +1162,9 @@ function OrderBank({
                 <AWSMAlert
                   status={deleteMultipleStatus}
                   message={
-                    deleteMultipleStatus === 'success'
-                      ? 'Orders deleted Successfully'
-                      : 'Orders has not been deleted'
+                    deleteMultipleStatus === "success"
+                      ? "Selected Orders have been successfully Deleted"
+                      : "Selected Orders have not been Deleted"
                   }
                   openAlert={showDeleteMultiple}
                   closeAlert={() => setShowDeleteMultiple(false)}

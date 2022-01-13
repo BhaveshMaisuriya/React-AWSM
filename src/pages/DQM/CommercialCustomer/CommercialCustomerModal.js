@@ -34,7 +34,6 @@ import {
   resetCommercialTableInformation,
   updateCommercialTableInformation,
 } from "../../../store/commercialCustomer/actions"
-import AWSMAlert from "../../../components/Common/AWSMAlert"
 import { isScheduler } from "../../../helpers/auth_helper"
 import { isEqual } from "lodash"
 import { runValidation } from "../Common/helper"
@@ -60,18 +59,12 @@ const CommercialCustomerModal = props => {
   )
   const [activeTab, setActiveTab] = useState("1")
   const scheduler = isScheduler()
-  // const scheduler = false
-  // const [alert, setAlert] = useState(false)
-  // const [alertStatus, setAlertStatus] = useState("")
   const [isConfirm, setIsConfirm] = useState(false)
 
   useEffect(() => {
-    // setAlertStatus(updateAlert)
     if (updateSuccess && refreshMainTable) {
       refreshMainTable()
-      // setAlert(true)
     }
-    // if (updateSuccess === false) setAlert(true)
   }, [updateSuccess])
 
   const handleUpdate = async e => {

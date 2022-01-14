@@ -71,7 +71,7 @@ const EditOrderBankModal = props => {
       let temp = { ...viewData }
       const currentRegion = REGION_TERMINAL.find(e => e.region === temp.region)
       setTerminalList(currentRegion ? currentRegion.terminal : [])
-      temp.terminal_name = props.terminal; 
+      temp.terminal_name = props.terminal;
       temp.region = props?.region
       setEditOrderData(temp)
       setoriginalEditOrderData(temp)

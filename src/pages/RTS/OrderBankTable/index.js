@@ -41,7 +41,6 @@ import InfiniteScroll from "react-infinite-scroll-component"
 import AWSMAlert from "components/Common/AWSMAlert"
 import { transformObjectToStringSentence } from "pages/DQM/Common/helper"
 import { format } from "date-fns"
-
 import CircularLoader from "components/Common/Loader/CircularLoader"
 
 export class TableGroupEvent extends React.Component {
@@ -52,6 +51,12 @@ export class TableGroupEvent extends React.Component {
       isOpenDeleteModal: false,
       isOpenEditModal: false,
     }
+  }
+
+  componentDidMount = () => {
+    this.setState({ showDelete: false })
+this.setState({ showSendDN: false })
+this.setState({ showEditAlert: false })
   }
 
   toggle = () => {
@@ -89,7 +94,7 @@ export class TableGroupEvent extends React.Component {
       <>
         <DragIndicatorIcon style={{ color: "#D9D9D9", transform: "translateX(5px)" }} />
         {editable ? (
-          <Dropdown isOpen={openDropDown} toggle={this.toggle}>
+          <Dropdown isOpen={ !isChecked && openDropDown} toggle={this.toggle}>
             <DropdownToggle data-toggle="dropdown" tag="div" aria-expanded={openDropDown}>
               <IconButton
                 color="primary"
@@ -638,8 +643,8 @@ class index extends Component {
             status={this.state.showEditMsg}
             message={
               this.state.showEditMsg === "success"
-                ? "Record successfully updated"
-                : "Order update failed"
+                ? "An order has been successfully updated"
+                : "An order has not been updated"
             }
             openAlert={this.state.showEditAlert}
             closeAlert={() => this.setState({ showEditAlert: false })}

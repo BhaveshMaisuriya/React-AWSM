@@ -71,7 +71,11 @@ const NewOrderBankModal = props => {
       setIsConfirm(false)
     } else {
       setIsConfirm(false)
-      setCurrentState("")
+      setOrderData({})
+      setIsaddClicked(false);
+      setShiptoNo("")
+      setCurrentState("");
+      setShiftDate(new Date(new Date().getTime() + 24 * 60 * 60 * 1000))
     }
   }
   const handleUpdate = async () => {
@@ -104,7 +108,9 @@ const NewOrderBankModal = props => {
       const { onAddOrderBank } = props
       await onAddOrderBank(temp)
       setOrderData({})
+      setIsaddClicked(false);
       setShiptoNo("")
+      setCurrentState("");
       setShiftDate(new Date(new Date().getTime() + 24 * 60 * 60 * 1000))
     }
   }

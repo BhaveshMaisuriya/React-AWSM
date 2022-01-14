@@ -12,7 +12,6 @@ async function initWebsocket() {
       }
     }
     webSocket.onopen = () => {
-      console.log('connected socket')
       resolve(webSocket);
     }
     webSocket.onerror = (err) => {

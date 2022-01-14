@@ -1,15 +1,15 @@
-import React, {Component} from "react"
+import React, { Component } from "react"
 import PropTypes from "prop-types"
 import Filter from "../FilterDropdown"
-import {Link} from "react-router-dom"
+import { Link } from "react-router-dom"
 import "./style.scss"
-import {isNull, isUndefined} from "lodash"
-import {Badge} from "reactstrap"
-import OverrideIcon from "../../../assets/images/AWSM-success-alert.svg"
-import {ReactSVG} from "react-svg"
-import {removeKeywords} from "../../../pages/DQM/Common/helper"
-import NoDataIcon from "../../../assets/images/AWSM-No-Data-Available.svg"
-import {format} from "date-fns";
+import { isNull, isUndefined } from "lodash"
+import { Badge } from "reactstrap"
+import OverrideIcon from "assets/images/AWSM-success-alert.svg"
+import { ReactSVG } from "react-svg"
+import { removeKeywords } from "pages/DQM/Common/helper"
+import NoDataIcon from "assets/images/AWSM-No-Data-Available.svg"
+import { format } from "date-fns"
 
 class FixedCoulmnTable extends Component {
   constructor(props) {
@@ -19,53 +19,46 @@ class FixedCoulmnTable extends Component {
       orderBy: "ship_to_party",
       tableDatas: this.props.tableData,
       fixedHeaders: this.props.headers.slice(0, this.props.frozen),
-      regularHeaders: this.props.headers.slice(
-        this.props.frozen,
-        this.props.headers.length
-      ),
+      regularHeaders: this.props.headers.slice(this.props.frozen, this.props.headers.length),
     }
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.tableData !== prevProps.tableData) {
-      this.setState({tableDatas: this.props.tableData})
+    const { tableData, headers } = this.props
+    if (tableData !== prevProps.tableData) {
+      this.setState({ tableDatas: tableData })
     }
-    if (this.props.headers !== prevProps.headers) {
-      const fixedHeaders = this.props.headers.slice(0, this.props.frozen)
-      const regularHeaders = this.props.headers.slice(
-        this.props.frozen,
-        this.props.headers.length
-      )
-      this.setState({fixedHeaders, regularHeaders})
+    if (headers !== prevProps.headers) {
+      const fixedHeaders = headers.slice(0, this.props.frozen)
+      const regularHeaders = headers.slice(this.props.frozen, headers.length)
+      this.setState({ fixedHeaders, regularHeaders })
     }
   }
 
   createSortHandler = property => event => {
-    const {headerSortHandler} = this.props
+    const { headerSortHandler } = this.props
     const orderBy = property
     let order = "asc"
 
     if (this.state.orderBy === property && this.state.order === "asc") {
       order = "desc"
     }
-    this.setState({order, orderBy})
+    this.setState({ order, orderBy })
     headerSortHandler(order, orderBy)
   }
 
   handleClickApply = (checkedFilter, dataKey) => {
-    const {filterApplyHandler} = this.props
     const tempObj = {}
     tempObj[dataKey] = checkedFilter
-    filterApplyHandler(tempObj, "insert")
+    this.props.filterApplyHandler(tempObj, "insert")
   }
 
   handleClickReset = dataKey => {
-    const {filterApplyHandler} = this.props
-    filterApplyHandler(dataKey, "remove")
+    this.props.filterApplyHandler(dataKey, "remove")
   }
 
   addTd = arr => {
-    const {config, filterData} = this.props
+    const { config, filterData } = this.props
     if (!arr) return null
     return arr.map((e, index) => (
       <td key={index}>
@@ -84,8 +77,7 @@ class FixedCoulmnTable extends Component {
     ))
   }
   renderFrozenTd = (arr, parentIndex) => {
-    const {headers} = this.props
-    const sliceArr = headers.slice(0, this.state.fixedHeaders.length)
+    const sliceArr = this.props.headers.slice(0, this.state.fixedHeaders.length)
     return this.getTdType(sliceArr, arr, parentIndex)
   }
   renderFrozenTr = arr => {
@@ -95,22 +87,23 @@ class FixedCoulmnTable extends Component {
         <td className="h-145"></td>
       </tr>
     ) : (
-      arr && arr.map((e, index) => {
-        return <tr key={index}>{this.renderFrozenTd(e, index)}</tr>
-      })
+      arr &&
+        arr.map((e, index) => {
+          return <tr key={index}>{this.renderFrozenTd(e, index)}</tr>
+        })
     )
   }
   renderRegularTd = arr => {
-    const {headers} = this.props
-    const sliceArr = headers.slice(this.state.fixedHeaders.length, arr.length);
+    const sliceArr = this.props.headers.slice(this.state.fixedHeaders.length, arr.length)
     return this.getTdType(sliceArr, arr)
   }
+
   renderRegular = arr => {
     if (!arr) return null
     return typeof arr === "string" ? (
       <tr>
         <td colSpan="0" className="no-data-svg">
-          <ReactSVG src={NoDataIcon}/>
+          <ReactSVG src={NoDataIcon} />
         </td>
       </tr>
     ) : (
@@ -120,23 +113,20 @@ class FixedCoulmnTable extends Component {
     )
   }
 
-  AddConditionalForActionColumn = (salesValue, inventoryValue, data, index) => {
-    const {overrideActionColumn} = this.props
-    let result
+  AddConditionalForActionColumn = (salesValue, inventoryValue, data) => {
+    const { overrideActionColumn } = this.props
+    let result = ""
     if (
       Math.abs(data.sales_variance) > salesValue?.variance_value ||
       Math.abs(data.inventory_variance) > inventoryValue?.variance_value ||
       Math.abs(data.sales_variance_percentage) > salesValue?.variance_percentage
     ) {
       result = (
-        <div
-          className="cursor-pointer"
-          onClick={() => overrideActionColumn(data)}
-        >
+        <div className="cursor-pointer" onClick={() => overrideActionColumn(data)}>
           {data?.override_status === "Override" ? (
-            <ReactSVG className="d-inline-block mr-2" src={OverrideIcon}/>
+            <ReactSVG className="d-inline-block mr-2" src={OverrideIcon} />
           ) : (
-            <span className="accurate d-inline-block mr-2"/>
+            <span className="accurate d-inline-block mr-2" />
           )}
           <span
             className={`d-inline-block override-text ${
@@ -150,7 +140,7 @@ class FixedCoulmnTable extends Component {
     } else {
       result = (
         <>
-          <ReactSVG className="d-inline-block mr-2" src={OverrideIcon}/>
+          <ReactSVG className="d-inline-block mr-2" src={OverrideIcon} />
           <span className="accurate-text">Accurate</span>
         </>
       )
@@ -158,21 +148,28 @@ class FixedCoulmnTable extends Component {
     return <div className="action-status">{result}</div>
   }
 
+  validateCellValue = (cellValue, config) => {
+    let value = ""
+    if (isUndefined(cellValue) || isNull(cellValue)) {
+      value = "-"
+    } else if (config && config.type === "date") {
+      value = cellValue
+    } else {
+      value = removeKeywords(cellValue)
+    }
+    return value
+  }
+
   getTdType = (sliceArr, arr, parentIndex = 0) => {
     const pathName = window.location.pathname
-    const {config, modalPop, varianceControlData} = this.props
+    const { config, modalPop, varianceControlData } = this.props
     return sliceArr.map((e, index) => {
-      let value = isUndefined(arr[e]) || isNull(arr[e]) ? "-" : (config[e] && config[e].type === 'date') ?
-        arr[e] : removeKeywords(arr[e])
+      let value = this.validateCellValue(arr[e], config[e])
       switch (config[e] && config[e].type) {
         case "badge":
           return (
             <td key={index}>
-              <Badge
-                className="font-weight-semibold"
-                color={config[e].getBadgeColor(arr[e])}
-                pill
-              >
+              <Badge className="font-weight-semibold" color={config[e].getBadgeColor(arr[e])} pill>
                 {value}
               </Badge>
             </td>
@@ -181,11 +178,9 @@ class FixedCoulmnTable extends Component {
         case "color": {
           if (pathName === "/sales-inventory") {
             let threshold
-            const salesValue = varianceControlData?.sales?.find(
-              e => {
-                return e.station_tank_status === arr.tank_status
-              }
-            )
+            const salesValue = varianceControlData?.sales?.find(e => {
+              return e.station_tank_status === arr.tank_status
+            })
             const inventoryValue = varianceControlData?.inventory?.find(
               e => e.station_tank_status === arr.tank_status
             )
@@ -210,28 +205,19 @@ class FixedCoulmnTable extends Component {
             if (config[e].type == "override_status") {
               return (
                 <td key={index}>
-                  {this.AddConditionalForActionColumn(
-                    salesValue,
-                    inventoryValue,
-                    arr,
-                    parentIndex
-                  )}
+                  {this.AddConditionalForActionColumn(salesValue, inventoryValue, arr, parentIndex)}
                 </td>
               )
             }
             return (
               <td key={index}>
-                <div className={`${config[e].getColor(arr[e], threshold)}`}>
-                  {value}
-                </div>
+                <div className={`${config[e].getColor(arr[e], threshold)}`}>{value}</div>
               </td>
             )
           } else {
             return (
               <td key={index}>
-                <div className={`${config[e].getColor(arr[`${e}_color`])}`}>
-                  {value}
-                </div>
+                <div className={`${config[e].getColor(arr[`${e}_color`])}`}>{value}</div>
               </td>
             )
           }
@@ -252,9 +238,7 @@ class FixedCoulmnTable extends Component {
         case "date":
           return (
             <td key={index}>
-              <div>
-                {value === '-' ? value : format(new Date(value), "dd-MM-yyyy , HH:mm:ss")}
-              </div>
+              <div>{value === "-" ? value : format(new Date(value), "dd-MM-yyyy , HH:mm:ss")}</div>
             </td>
           )
         default:
@@ -268,22 +252,21 @@ class FixedCoulmnTable extends Component {
   }
 
   render() {
-    const {tableData} = this.props
-    const {fixedHeaders, regularHeaders} = this.state
+    const { fixedHeaders, regularHeaders, tableDatas } = this.state
     return (
-      <div className="container" style={{maxWidth: "100%"}}>
+      <div className="container" style={{ maxWidth: "100%" }}>
         <table className="fixed">
           <thead>
-          <tr>{this.addTd(fixedHeaders)}</tr>
+            <tr>{this.addTd(fixedHeaders)}</tr>
           </thead>
-          <tbody>{this.renderFrozenTr(this.state.tableDatas)}</tbody>
+          <tbody>{this.renderFrozenTr(tableDatas)}</tbody>
         </table>
         <div className="scroll">
           <table className="scrollable">
             <thead>
-            <tr>{this.addTd(regularHeaders)}</tr>
+              <tr>{this.addTd(regularHeaders)}</tr>
             </thead>
-            <tbody>{this.renderRegular(this.state.tableDatas)}</tbody>
+            <tbody>{this.renderRegular(tableDatas)}</tbody>
           </table>
         </div>
       </div>
@@ -302,10 +285,8 @@ FixedCoulmnTable.propType = {
 }
 
 FixedCoulmnTable.defaultProps = {
-  headerSortHandler: () => {
-  },
-  filterApplyHandler: () => {
-  },
+  headerSortHandler: () => {},
+  filterApplyHandler: () => {},
 }
 
 export default FixedCoulmnTable

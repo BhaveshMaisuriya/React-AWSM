@@ -165,7 +165,6 @@ class Popup extends React.Component {
           break
       }
     }
-console.log("map this data on poup table",this.props.shipmentDetailsOnVehicle)
     return (
       <div className="popup-mask">
         <div className="popup">

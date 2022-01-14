@@ -1,85 +1,30 @@
-.rts-table-container{
-    overflow: auto;
-    //padding-right: 0.5rem;
-    margin-top: 5px;
-    border-radius: 5px;
-    height: 85%;
-    width: 100%;
-    .container-orderbank{
-        .scroll{
-            overflow-x: initial;
-            .scrollable{
-                border-right: 1px solid #D6C5E0;
-                thead{
-                    th{
-                        padding-left: 5px;
-                        height: 52px;
-                        background-color: #F8F9FA;
-                        font-size: 12px;
-                        color: #000000;
-                        font-weight: 600;
-                        border-bottom: 1px solid #D9D9D9;
-                        white-space: nowrap;
-                        .header-expand{
-                            color:#00A19C;
-                            &:hover{
-                                cursor: pointer;
-                            }
-                        }
-                        span{
-                            &:hover{
-                                cursor: pointer;
-                            }
-                        }
-                    }
-                }
-                tbody{
-                    td{
-                        padding-left: 5px;
-                        height: 36px;
-                        .status{
-                            display: flex;
-                            height: 20px;
-                            width: 84px;
-                            border-radius: 22px;
-                            font-size: 10px;
-                            align-items: center;
-                            justify-content: center;
-                        }
-                        .send{
-                            color:#00A19C;
-                            border:1px solid #00A19C;
-                            &:hover{
-                                cursor: pointer;
-                            }
-                            }
-                        .blocked{
-                            color:#D50000;
-                            background: #F2B2B2;
-                            box-sizing: border-box;
-                        }
-                        .Late{
-                            color:#763F98;
-                            background: #D6C5E0;
-                        }
-                        .clean{
-                            color:#4CAF50;
-                            background: #D5FBD6;
-                        }
-                        .unblock{
-                            color:#763F98;
-                            background: #D6C5E0;
-                            font-weight: 700;
-                        }
-                    }
-                    .rts-table-nodata{
-                       border-left: 1px solid #D9D9D9;
-                       height: 53.8vh;
-                       div{
-                           text-align: center;
-                       }
-                    }
-                }
+.rts-table-container {
+  overflow: auto;
+  //padding-right: 0.5rem;
+  margin-top: 5px;
+  border-radius: 5px;
+  height: 85%;
+  width: 100%;
+  .container-orderbank {
+    .scroll {
+      overflow-x: initial;
+      .scrollable {
+        border-right: 1px solid #d6c5e0;
+        thead {
+          th {
+            padding-left: 5px;
+            height: 52px;
+            background-color: #f8f9fa;
+            font-size: 12px;
+            color: #000000;
+            font-weight: 600;
+            border-bottom: 1px solid #d9d9d9;
+            white-space: nowrap;
+            .header-expand {
+              color: #00a19c;
+              &:hover {
+                cursor: pointer;
+              }
             }
             span {
               &:hover {
@@ -129,56 +74,108 @@
           }
           .rts-table-nodata {
             border-left: 1px solid #d9d9d9;
-            height: 30vh;
+            height: 53.8vh;
             div {
               text-align: center;
             }
           }
         }
-      // }
-      .bd-left {
-        border-left: 1px solid #d6c5e0;
+      }
+      span {
+        &:hover {
+          cursor: pointer;
+        }
       }
     }
-    .fixed {
-      thead {
-        th {
-          background-color: #f8f9fa;
-          text-align: right;
-          border-bottom: 1px solid #d9d9d9;
-          .header-select-icon {
-            margin-right: 10px;
-            &:hover {
-              cursor: pointer;
-            }
+  }
+  tbody {
+    td {
+      padding-left: 5px;
+      height: 36px;
+      .status {
+        display: flex;
+        height: 20px;
+        width: 84px;
+        border-radius: 22px;
+        font-size: 10px;
+        align-items: center;
+        justify-content: center;
+      }
+      .send {
+        color: #00a19c;
+        border: 1px solid #00a19c;
+        &:hover {
+          cursor: pointer;
+        }
+      }
+      .blocked {
+        color: #d50000;
+        background: #f2b2b2;
+        box-sizing: border-box;
+      }
+      .Late {
+        color: #763f98;
+        background: #d6c5e0;
+      }
+      .clean {
+        color: #4caf50;
+        background: #d5fbd6;
+      }
+      .unblock {
+        color: #763f98;
+        background: #d6c5e0;
+        font-weight: 700;
+      }
+    }
+    .rts-table-nodata {
+      border-left: 1px solid #d9d9d9;
+      height: 30vh;
+      div {
+        text-align: center;
+      }
+    }
+    .bd-left {
+      border-left: 1px solid #d6c5e0;
+    }
+  }
+  .fixed {
+    thead {
+      th {
+        background-color: #f8f9fa;
+        text-align: right;
+        border-bottom: 1px solid #d9d9d9;
+        .header-select-icon {
+          margin-right: 10px;
+          &:hover {
+            cursor: pointer;
           }
         }
       }
-      tbody {
-        th {
-          display: inline-flex;
-          align-items: center;
-          height: 36px;
-          text-align: right;
-          font-size: 12px;
-          color: #000000;
-          font-weight: 600;
-          border-bottom: 1px solid #d9d9d9;
-          font-family: 'Museo Sans';
-          .dropdown-menu {
-            button {
-              color: #22252b;
+    }
+    tbody {
+      th {
+        display: inline-flex;
+        align-items: center;
+        height: 36px;
+        text-align: right;
+        font-size: 12px;
+        color: #000000;
+        font-weight: 600;
+        border-bottom: 1px solid #d9d9d9;
+        font-family: "Museo Sans";
+        .dropdown-menu {
+          button {
+            color: #22252b;
+            border: none;
+            &:hover {
               border: none;
-              &:hover {
-                border: none;
-                background: #008f8a;
-                color: #ffffff;
-              }
+              background: #008f8a;
+              color: #ffffff;
             }
-            .event-content {
-              display: flex;
-              font-size: 12px;
-            }
+          }
+          .event-content {
+            display: flex;
+            font-size: 12px;
           }
         }
       }

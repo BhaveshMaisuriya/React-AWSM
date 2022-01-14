@@ -181,7 +181,6 @@ class index extends Component {
       this.setState({ showLoader: false })
       this.setState({ dataSource: nextProps.dataSource, filterData: nextProps.headerFilters })
     }
-    console.log('reload::', nextProps.reloadData, this.props.reloadData)
     if (nextProps.reloadData !== this.props.reloadData) {
       this.setState({ showLoader: this.props.reloadData })
     }

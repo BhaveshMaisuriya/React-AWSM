@@ -11,6 +11,7 @@ import '@bryntum/schedulerpro/schedulerpro.classic.css'
 import '@bryntum/schedulerpro/schedulerpro.material.css'
 import '@bryntum/schedulerpro/schedulerpro.stockholm.css'
 import '../style.scss'
+import './BryntumChartTable.scss'
 import BryntumPopup from './BryntumPopup'
 import RedAlertIcon from './../../../assets/images/AWSM-Red-Alert.svg'
 import YellowAlertIcon from './../../../assets/images/AWSM-Soft-Overrule.svg'
@@ -111,13 +112,22 @@ function BryntumChartTable(props) {
   }, [eventRecord, eventStore])
 
   const getGanttCharData = page => {
-    const { getRTSOderBankGanttChart } = props
+    let q = ''
+    if (filterCondition.length > 0) {
+      q = filterCondition
+        .filter(v => v.data.length > 0)
+        .map(e => {
+          return `(${e.data.map(k => `${e.key}=='${k}'`).join('||')})`
+        })
+        .join('&&')
+    }
+
     const payload = {
       limit: 10,
       page: page ?? currentPage,
       search_fields: '*',
-      q: `(status_awsm=='Active')`,
-      sort_dir: 'desc',
+      q,
+      sort_dir: 'asc',
       sort_field: 'vehicle',
       filter: {
         shift_date: props?.dateConfig,
@@ -127,7 +137,7 @@ function BryntumChartTable(props) {
     if (page !== undefined) {
       setCurrentPage(page)
     }
-    getRTSOderBankGanttChart(payload)
+    props.getRTSOderBankGanttChart(payload)
   }
 
   const refreshGanttChartTable = () => {
@@ -151,7 +161,7 @@ function BryntumChartTable(props) {
     }, 1000)
   }
 
-  useEffect(getGanttCharData, [currentPage])
+  useEffect(() => getGanttCharData(currentPage), [currentPage])
 
   useEffect(() => {
     if (dropOderSuccess) {
@@ -405,7 +415,10 @@ function BryntumChartTable(props) {
         </div>
       `
     },
+    zoomOnMouseWheel: false,
+    forceFit: true,
     features: {
+      eventDragCreate : false,
       taskEdit: false,
       eventEdit: {
         editorConfig: {
@@ -553,12 +566,12 @@ function BryntumChartTable(props) {
   }
 
   function generateColumnsObj(tableMap) {
+    const text =
+      ganttChartTableMapping?.[tableMap]?.label_short ?? ganttChartTableMapping?.[tableMap]?.label
     return {
-      text:
-        ganttChartTableMapping?.[tableMap]?.label_short ??
-        ganttChartTableMapping?.[tableMap]?.label,
+      text,
       field: tableMap,
-      width: '100px',
+      width: text.toLowerCase() === 'vehicle' ? '130px' : '100px',
       editor: null,
       renderer: ({ value, column, record }) => {
         switch (column.field) {
@@ -733,31 +746,7 @@ function BryntumChartTable(props) {
     hideFilterElement(dataKey)
   }
 
-  useEffect(() => {
-    let q = ''
-    if (filterCondition.length > 0) {
-      q = filterCondition
-        .filter(v => v.data.length > 0)
-        .map(e => {
-          return `(${e.data.map(k => `${e.key}=='${k}'`).join('||')})`
-        })
-        .join('&&')
-    }
-    setCurrentPage(0)
-    const payload = {
-      limit: 10,
-      page: 0,
-      search_fields: '*',
-      q: `(status_awsm=='Active')`,
-      sort_dir: 'desc',
-      sort_field: 'vehicle',
-      filter: {
-        shift_date: props?.dateConfig,
-        terminal: TERMINAL_CODE_MAPPING[props?.termina],
-      },
-    }
-    props.getRTSOderBankGanttChart(payload)
-  }, [filterCondition])
+  useEffect(() => getGanttCharData(0), [filterCondition])
 
   const handleScrollGanttChartTable = () => {
     setCurrentPage(currentPage + 1)
@@ -770,7 +759,7 @@ function BryntumChartTable(props) {
           <InfiniteScroll
             next={handleScrollGanttChartTable}
             hasMore={props.ganttChartTableData.length < props.totalRow_ganttChart}
-            loader={<h5>Loading...</h5>}
+            loader={<h5 className={props.totalRow_ganttChart > 10 ? '' : 'd-none'}>Loading...</h5>}
             dataLength={props.ganttChartTableData.length}
             height={360}
           >
@@ -811,18 +800,17 @@ function BryntumChartTable(props) {
           </InfiniteScroll>
         </Row>
         {props.ganttChartTableFilter &&
-          filterList.map(e => {
-            return (
-              <ChartColumnFilter
-                key={e.key}
-                filterKey={e.key}
-                filterData={props.ganttChartTableFilter[e.key] ?? []}
-                type={e.type}
-                onApply={onApplyFilter}
-                onReset={onResetFilter}
-              />
-            )
-          })}
+          filterList.map(e => (
+            <ChartColumnFilter
+              key={e.key}
+              isGantt={true}
+              filterKey={e.key}
+              filterData={props.ganttChartTableFilter[e.key] ?? []}
+              type={e.type}
+              onApply={onApplyFilter}
+              onReset={onResetFilter}
+            />
+          ))}
       </div>
       {(dropdownSelectedItem?.type === EventContextList.SHIPMENT ||
         dropdownSelectedItem?.type === EventContextList.CANCEL_SHIPMENT ||

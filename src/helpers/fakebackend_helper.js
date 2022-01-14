@@ -459,12 +459,12 @@ export const getRTSOrderbankRTdetails = params => {
 }
 
 export const updateRTSOrderbankRTdetails = params => {
-  return axios.post(`${url.UPDATE_RTS_GANTT_CHART}/${params.vehicle}`, { 
+  return axios.post(`${url.UPDATE_RTS_GANTT_CHART}/${params.vehicle}`, {
     remarks: params.remarks,
     shift_type: params.shift_type,
     terminal_code: params.terminal_code,
-    shift_date: params.shift_date
-   })
+    shift_date: params.shift_date,
+  })
 }
 
 export const getShipmentDetail = params => {
@@ -479,8 +479,10 @@ export const runAutoSchedule = params => {
 }
 
 export const getTotalUnscheduleOrder = params => {
-  return axios.get( `rts/count-total-order-unschedule`, { params })
+  return axios.get(`rts/count-total-order-unschedule`, { params })
 }
+
+export const removeOrder = ({ orderId }) => axios.delete(`/rts/shipment/remove-order/${orderId}`)
 
 export {
   getLoggedInUser,

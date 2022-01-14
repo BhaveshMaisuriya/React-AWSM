@@ -68,6 +68,7 @@ import {
   DESELECT_VEHICLE_RTS_SHIPMENT,
   REMOVE_ORDER_FROM_SHIPMENT,
   REMOVE_ORDER_FROM_SHIPMENT_SUCCESS,
+  REMOVE_ORDER_FROM_SHIPMENT_FAIL,
   REMOVE_SHIPMENT_FROM_EVENT,
   REMOVE_SHIPMENT_FROM_EVENT_SUCCESS,
   REMOVE_EVENT,
@@ -110,8 +111,8 @@ import {
   RUN_AUTO_SCHEDULE_FAIL,
   GET_OB_TOTAL_UNSCHEDULE,
   GET_OB_TOTAL_UNSCHEDULE_SUCCESS,
-  GET_OB_TOTAL_UNSCHEDULE_FAIL
-} from "./actionTypes"
+  GET_OB_TOTAL_UNSCHEDULE_FAIL,
+} from './actionTypes'
 
 export const getRTSOrderBankTableData = params => ({
   type: GET_RTS_ORDER_BANK_TABLE_DATA,
@@ -482,6 +483,11 @@ export const removeOrderFromShipmentSuccess = params => ({
   params,
 })
 
+export const removeOrderFromShipmentFail = params => ({
+  type: REMOVE_ORDER_FROM_SHIPMENT_FAIL,
+  params,
+})
+
 export const removeShipmentFromEvent = params => ({
   type: REMOVE_SHIPMENT_FROM_EVENT,
   params,
@@ -636,7 +642,7 @@ export const onDragOrderToShipmentFail = error => ({
 
 export const runAutoSchedule = params => ({
   type: RUN_AUTO_SCHEDULE,
-  params
+  params,
 })
 
 export const runAutoScheduleSuccess = response => ({
@@ -651,7 +657,7 @@ export const runAutoScheduleFail = error => ({
 
 export const getOBTotalUnschedule = params => ({
   type: GET_OB_TOTAL_UNSCHEDULE,
-  params
+  params,
 })
 
 export const getOBTotalUnscheduleSuccess = response => ({

@@ -242,7 +242,7 @@
   width: 200px;
 }
 .order-setting-options:before {
-  content: '';
+  content: "";
   position: absolute;
   right: 5px;
   top: -10px;
@@ -343,7 +343,7 @@
   margin: 0 10px;
 }
 .border-before::before {
-  content: ' ';
+  content: " ";
   border-left: 1px solid #eeeeee;
   position: absolute;
   bottom: -10px;
@@ -762,4 +762,23 @@
 
 .b-grid-header-container {
   max-height: 50px !important;
+}
+
+.b-first-visible-child,
+.b-last-visible-child {
+  .b-grid-row {
+    &.b-hover {
+      background-color: rgba(210, 255, 255, 0.55) !important;
+    }
+    &.b-selected {
+      background-color: rgba(235, 249, 249, 1) !important;
+    }
+  }
+}
+.b-last-visible-child {
+  .b-grid-row {
+    &.b-hover {
+      background-color: rgba(213, 247, 209, 0.5) !important;
+    }
+  }
 }

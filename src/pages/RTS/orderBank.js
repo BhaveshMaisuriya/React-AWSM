@@ -69,7 +69,7 @@ import {
   getRTSOderBankGanttChart,
   clearGanttData,
   clearRTSOrderBankTableData,
-  getOBTotalUnschedule
+  getOBTotalUnschedule,
 } from 'store/orderBank/actions'
 import OrderBankActionModal from './OrderBankActionModal'
 import CrossTerminalModal from './crossTerminalModal'
@@ -93,7 +93,7 @@ import {
   CrossTerminalIcon,
   MultipleDNIcon,
 } from 'pages/DQM/Common/icon'
-
+import OrderBankSummary from './orderBankSummary'
 import { isNull } from 'lodash'
 import { removeKeywords } from '../DQM/Common/helper'
 import ClearScheduling from './clearScheduling'
@@ -119,12 +119,13 @@ function OrderBank({
   onGetDeleteMultipleOrder,
   onGetCrossTerminal,
   dragOrderBankToGanttChart,
-  // socketData,
+  orderBankTableSummary,
   multipleorder,
   getRTSOderBankGanttChart,
   clearGanttData,
   onGetTotalOBUnschedule,
-  totalOrderUnschedule
+  totalOrderUnschedule,
+  totalRow,
 }) {
   const defaultDate = format(addDays(Date.now(), 1), 'yyyy-MM-dd')
   const ganttChartEvents = useSelector(state => state.orderBank.ganttChart.event)
@@ -205,7 +206,7 @@ function OrderBank({
   const filterOrderBank = useMemo(() => {
     return {
       terminal: TERMINAL_CODE_MAPPING[terminalTable],
-      scheduled_status : status,
+      scheduled_status: status,
       shift_date: shiftDateTable,
     }
   }, [terminalTable, shiftDateTable, status])
@@ -216,18 +217,19 @@ function OrderBank({
       getRTSOderBankGanttChart({
         limit: 10,
         page: 0,
-        search_fields: "*",
+        search_fields: '*',
         q: `(status_awsm=='Active')`,
-        sort_dir: "desc",
-        sort_field: "vehicle",
+        sort_dir: 'desc',
+        sort_field: 'vehicle',
         filter: {
           shift_date: shiftDateGantt,
           terminal: TERMINAL_CODE_MAPPING[terminal],
         },
       })
-      if (terminal === terminalTable && isShiftDateCorrect(shiftDateGantt?.date_from)){
+      if (terminal === terminalTable && isShiftDateCorrect(shiftDateGantt?.date_from)) {
         onGetTotalOBUnschedule({
-          shift_date: shiftDateGantt?.date_from})
+          shift_date: shiftDateGantt?.date_from,
+        })
       }
     }
     asyncFunction()
@@ -363,7 +365,7 @@ function OrderBank({
   }
 
   const onSaveDeleteMultiple = async () => {
-    setReloadData(true);
+    setReloadData(true)
     const payload = { order_banks: multipleDeleteIds }
     await onGetDeleteMultipleOrder(payload)
     setDeleteMultiple(false)
@@ -376,12 +378,12 @@ function OrderBank({
     setOrderBankSetting(temp)
   }
 
-  const onChangeGanttChartDate = (value) => {
+  const onChangeGanttChartDate = value => {
     setShiftDateGantt({
       ...shiftDateGantt,
       type: value?.type,
       date_from: value?.date_from,
-      date_to: value?.date_to,
+      // date_to: value?.date_to,
     })
     setCurrentPage(0)
   }
@@ -401,8 +403,8 @@ function OrderBank({
     setReloadData(false)
   }
 
-  const isShiftDateCorrect = (date) => {
-    const diff = moment.duration(moment().startOf('day').diff(moment(date, "YYYY-MM-DD"))).asDays();
+  const isShiftDateCorrect = date => {
+    const diff = moment.duration(moment().startOf('day').diff(moment(date, 'YYYY-MM-DD'))).asDays()
     return diff >= -2 && diff <= 0
   }
 
@@ -431,8 +433,8 @@ function OrderBank({
   const onCloseNewOrder = async (type, val = '') => {
     setShowNewOrder(false)
     setReloadData(true)
-    type === "add" && setShowAddNotification(true)
-    val === "success" ? setNotiMessage("success") : setNotiMessage("error")
+    type === 'add' && setShowAddNotification(true)
+    val === 'success' ? setNotiMessage('success') : setNotiMessage('error')
     reloadRTSOrderBankData()
     setReloadData(false)
   }
@@ -715,7 +717,13 @@ function OrderBank({
                       <span className="bl-1-grey-half plr-15">
                         <Button
                           color={'primary'}
-                          disabled={terminal === terminalTable && isShiftDateCorrect(shiftDateGantt.date_from) && totalOrderUnschedule > 0 ? false : true}
+                          disabled={
+                            terminal === terminalTable &&
+                            isShiftDateCorrect(shiftDateGantt.date_from) &&
+                            totalOrderUnschedule > 0
+                              ? false
+                              : true
+                          }
                           onClick={() => onClickRunAutoScheduling()}
                         >
                           Run Auto Schedule
@@ -940,9 +948,9 @@ function OrderBank({
                             ...shiftDateTable,
                             type: value?.type,
                             date_from: value?.date_from,
-                            date_to: value?.date_to,
+                            // date_to: value?.date_to,
                           })
-                          setReloadData(true);
+                          setReloadData(true)
                           setCurrentPage(0)
                         }}
                       />
@@ -953,7 +961,7 @@ function OrderBank({
                         value={regionTable}
                         onChange={value => {
                           setRegionTable(value)
-                          setReloadData(true);
+                          setReloadData(true)
                           setTerminalTable(
                             REGION_TERMINAL.find(item => item.region === value).terminal[0]
                           )
@@ -968,7 +976,7 @@ function OrderBank({
                         onChange={value => {
                           setTerminalTable(value)
                           setCurrentPage(0)
-                          setReloadData(true);
+                          setReloadData(true)
                         }}
                         items={terminalListTable}
                       />
@@ -978,9 +986,9 @@ function OrderBank({
                       <AWSMDropdown
                         value={status}
                         onChange={value => {
-                          setStatusDropdown(value == "All"  ? "" : value)
+                          setStatusDropdown(value == 'All' ? '' : value)
                           setCurrentPage(0)
-                          setReloadData(true);
+                          setReloadData(true)
                         }}
                         items={orderBankStatus.map(e => e.label)}
                       />
@@ -1026,7 +1034,7 @@ function OrderBank({
                       </DropdownMenu>
                     </Dropdown>
                     <span className="m-0 order-bank-label">
-                      141 orders, 3.2m ASR, 1.2m SMP, 1m Comm. Total 5.4m
+                      <OrderBankSummary data={orderBankTableSummary} totalOrders={totalRow} />
                     </span>
                   </Col>
                 </Row>
@@ -1179,9 +1187,9 @@ function OrderBank({
                 <AWSMAlert
                   status={deleteMultipleStatus}
                   message={
-                    deleteMultipleStatus === "success"
-                      ? "Selected Orders have been successfully Deleted"
-                      : "Selected Orders have not been Deleted"
+                    deleteMultipleStatus === 'success'
+                      ? 'Selected Orders have been successfully Deleted'
+                      : 'Selected Orders have not been Deleted'
                   }
                   openAlert={showDeleteMultiple}
                   closeAlert={() => setShowDeleteMultiple(false)}
@@ -1217,16 +1225,18 @@ const mapDispatchToProps = dispatch => ({
   getRTSOderBankGanttChart: params => dispatch(getRTSOderBankGanttChart(params)),
   clearGanttData: () => dispatch(clearGanttData()),
   clearRTSOrderBankTableData: () => dispatch(clearRTSOrderBankTableData()),
-  onGetTotalOBUnschedule: params => dispatch(getOBTotalUnschedule(params))
+  onGetTotalOBUnschedule: params => dispatch(getOBTotalUnschedule(params)),
 })
 
 const mapStateToProps = ({ orderBank }) => ({
   orderBankTableData: orderBank.orderBankTableData,
   orderBankTableFilters: orderBank.orderBankTableFilters,
+  orderBankTableSummary: orderBank.orderBankTableSummary,
+  totalRow: orderBank.totalRow,
   auditsCom: orderBank.auditsCom,
   socketData: orderBank.socketData,
   multipleorder: orderBank.multipleorder,
-  totalOrderUnschedule: orderBank.totalOrderUnschedule
+  totalOrderUnschedule: orderBank.totalOrderUnschedule,
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(OrderBank)

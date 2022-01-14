@@ -1,4 +1,4 @@
-import { takeLatest, put, call, select } from "redux-saga/effects"
+import { takeLatest, put, call, select } from 'redux-saga/effects'
 import {
   GET_ORDERBANK,
   ADD_ORDERBANK,
@@ -34,8 +34,8 @@ import {
   GET_SHIPMENT_DETAILS_ON_VEHICLE,
   DRAG_ORDER_TO_SHIPMENT,
   RUN_AUTO_SCHEDULE,
-  GET_OB_TOTAL_UNSCHEDULE
-} from "./actionTypes"
+  GET_OB_TOTAL_UNSCHEDULE,
+} from './actionTypes'
 
 import {
   getRTSOrderBankTableDataSuccess,
@@ -72,6 +72,7 @@ import {
   getRTSOderBankGanttChartFail,
   dragOrderBankToGanttChartSuccess,
   removeOrderFromShipmentSuccess,
+  removeOrderFromShipmentFail,
   removeShipmentFromEventSuccess,
   removeEventSuccess,
   updateOBEventSuccess,
@@ -99,8 +100,8 @@ import {
   getRunAutoSchedulingFail,
   runAutoScheduleFail,
   getOBTotalUnscheduleSuccess,
-  getOBTotalUnscheduleFail
-} from "./actions"
+  getOBTotalUnscheduleFail,
+} from './actions'
 import {
   getOrderBank,
   addOrderBank,
@@ -126,9 +127,9 @@ import {
   validateGanttEventChange,
   getShipmentDetailsOnVehicle,
   runAutoSchedule,
-  getTotalUnscheduleOrder
-
-} from "../../helpers/fakebackend_helper"
+  getTotalUnscheduleOrder,
+  removeOrder,
+} from '../../helpers/fakebackend_helper'
 
 function* onGetOrderbank({ params = {} }) {
   try {
@@ -209,7 +210,7 @@ function* onGetShipmentOrderBankData({ params = {} }) {
   }
 }
 
-function* onGetTotalOBUnschedule({params}) {
+function* onGetTotalOBUnschedule({ params }) {
   try {
     const response = yield call(getTotalUnscheduleOrder, params)
     yield put(getOBTotalUnscheduleSuccess(response.data))
@@ -381,7 +382,12 @@ function* onDragOrderBankToGanttChart({ shift_date }) {
 function* onRemoveOrderFromShipment(payload) {
   // call api to remove here
   // put data to success case
-  yield put(removeOrderFromShipmentSuccess(payload.params))
+  try {
+    const response = yield call(removeOrder, payload.params)
+    yield put(removeOrderFromShipmentSuccess(payload.params))
+  } catch (error) {
+    yield put(removeOrderFromShipmentFail(payload.params))
+  }
 }
 
 function* onRemoveShipmentFromEvent(payload) {
@@ -472,8 +478,7 @@ function* onDragOrderToShipment() {
   }
 }
 
-
-function* onRunningAutoSchedule({params}) {
+function* onRunningAutoSchedule({ params }) {
   try {
     const response = yield call(runAutoSchedule, params)
     yield put(runAutoScheduleSuccess(response))
@@ -514,10 +519,10 @@ function* orderBankSaga() {
   yield takeLatest(UPDATE_OB_RT_DETAILS, onUpdateOBRTDetails)
   yield takeLatest(GET_SHIPMENT_DETAIL, onGetShipmentDetails)
   yield takeLatest(DRAG_AND_DROP_SHIPMENT_AREA, onDragAndDropShipmentArea),
-  yield takeLatest(GET_SHIPMENT_DETAILS_ON_VEHICLE, onGetShipmentDetailsOnVehicle),
-  yield takeLatest(DRAG_ORDER_TO_SHIPMENT, onDragOrderToShipment)
-  yield takeLatest(RUN_AUTO_SCHEDULE,onRunningAutoSchedule)
-  yield takeLatest(GET_OB_TOTAL_UNSCHEDULE,onGetTotalOBUnschedule)
+    yield takeLatest(GET_SHIPMENT_DETAILS_ON_VEHICLE, onGetShipmentDetailsOnVehicle),
+    yield takeLatest(DRAG_ORDER_TO_SHIPMENT, onDragOrderToShipment)
+  yield takeLatest(RUN_AUTO_SCHEDULE, onRunningAutoSchedule)
+  yield takeLatest(GET_OB_TOTAL_UNSCHEDULE, onGetTotalOBUnschedule)
 }
 
 export default orderBankSaga

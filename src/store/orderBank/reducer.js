@@ -26,6 +26,7 @@ import {
   PROCESS_PAYMENT_IN_GANTT_CHART_FAIL,
   PROCESS_PAYMENT_IN_GANTT_CHART_SUCCESS,
   REMOVE_ORDER_FROM_SHIPMENT_SUCCESS,
+  REMOVE_ORDER_FROM_SHIPMENT_FAIL,
   REMOVE_SHIPMENT_FROM_EVENT_SUCCESS,
   SELECT_VEHICLE_RTS_SHIPMENT,
   SEND_DN_STATUS_REQUEST_SUCCESS,
@@ -62,15 +63,16 @@ import {
   GET_SHIPMENT_DETAILS_ON_VEHICLE_FAIL,
   DRAG_ORDER_TO_SHIPMENT_SUCCESS,
   GET_OB_TOTAL_UNSCHEDULE_SUCCESS,
-  GET_OB_TOTAL_UNSCHEDULE_FAIL
-} from "./actionTypes"
-import { eventGanttChartFactory, shipmentFactory, orderBankFactory } from "./factory"
-import { ToastSuccess, ToastError } from "../../helpers/swal"
+  GET_OB_TOTAL_UNSCHEDULE_FAIL,
+} from './actionTypes'
+import { eventGanttChartFactory, shipmentFactory, orderBankFactory } from './factory'
+import { ToastSuccess, ToastError } from '../../helpers/swal'
 
 const initialState = {
   orderBankData: null,
   orderBankTableData: [],
   orderBankTableFilters: {},
+  orderBankTableSummary: [],
   shipmentOrderBankTableData: null,
   error: null,
   currentOrderDetail: null,
@@ -98,14 +100,14 @@ const initialState = {
   dropOderSuccess: false,
   shipmentDropData: [],
   ganttEventValidation: null,
-  shipmentDetailsOnVehicle: []
+  shipmentDetailsOnVehicle: [],
 }
 
 const RTSOrderBank = (state = initialState, action) => {
   switch (action.type) {
     case GET_RTS_ORDER_BANK_TABLE_DATA_SUCCESS:
       const { data, scrolling } = action.payload
-      const { list, total_rows, filter } = data
+      const { list, total_rows, filter, summary } = data
       const formatedList = orderBankFactory(list)
       if (state.orderBankTableData.length !== 0 && scrolling) {
         return {
@@ -113,6 +115,7 @@ const RTSOrderBank = (state = initialState, action) => {
           orderBankTableData: [...state.orderBankTableData, ...formatedList],
           orderBankTableFilters: filter,
           totalRow: total_rows,
+          orderBankTableSummary: summary,
         }
       }
       return {
@@ -120,6 +123,7 @@ const RTSOrderBank = (state = initialState, action) => {
         orderBankTableData: formatedList,
         orderBankTableFilters: filter,
         totalRow: total_rows,
+        orderBankTableSummary: summary,
       }
     // return {
     //   ...state,
@@ -265,7 +269,7 @@ const RTSOrderBank = (state = initialState, action) => {
       // ToastSuccess.fire({ title: "An order has been successfully sent for DN Creation" })
       return {
         ...state,
-        sendDn: "success",
+        sendDn: 'success',
       }
     case GET_ORDER_BANK_AUDITLOG_SUCCESS:
       return {
@@ -280,38 +284,38 @@ const RTSOrderBank = (state = initialState, action) => {
       }
 
     case PROCESS_PAYMENT_IN_GANTT_CHART_SUCCESS:
-      ToastSuccess.fire({ title: "A shipment has been successfully created in SAP" })
+      ToastSuccess.fire({ title: 'A shipment has been successfully created in SAP' })
       return {
         ...state,
         isSendRequestProcess: state.isSendRequestProcess + 1,
       }
 
     case PROCESS_PAYMENT_IN_GANTT_CHART_FAIL:
-      ToastError.fire({ title: "A shipment has been fail created in SAP" })
+      ToastError.fire({ title: 'A shipment has been fail created in SAP' })
       return {
         ...state,
         error: action.payload,
         isSendRequestProcess: state.isSendRequestProcess + 1,
       }
     case CANCEL_PAYMENT_IN_GANTT_CHART_SUCCESS:
-      ToastSuccess.fire({ title: "A shipment has been successfully cancelled from schedule" })
+      ToastSuccess.fire({ title: 'A shipment has been successfully cancelled from schedule' })
       return {
         ...state,
         isSendRequestProcess: state.isSendRequestProcess + 1,
       }
     case CANCEL_PAYMENT_IN_GANTT_CHART_FAIL:
-      ToastError.fire({ title: "A shipment has been fail cancelled in SAP" })
+      ToastError.fire({ title: 'A shipment has been fail cancelled in SAP' })
       return {
         ...state,
         error: action.payload,
       }
     case SEND_ORDER_IN_GANTT_CHART_SUCCESS:
-      ToastSuccess.fire({ title: "A shipment has been successfully sent for Creation" })
+      ToastSuccess.fire({ title: 'A shipment has been successfully sent for Creation' })
       return {
         ...state,
       }
     case SEND_ORDER_IN_GANTT_CHART_FAIL:
-      ToastError.fire({ title: "A shipment has been fail to sent for Creation" })
+      ToastError.fire({ title: 'A shipment has been fail to sent for Creation' })
       return {
         ...state,
         error: action.payload,
@@ -321,6 +325,7 @@ const RTSOrderBank = (state = initialState, action) => {
       const { list, total_rows, filter } = data
       // add id to mapping with event
       const newList = list?.map(vehicle => ({ ...vehicle, id: vehicle?.vehicle }))
+
       if (state.ganttChartTableData.length !== 0 && scrolling && page > 0) {
         return {
           ...state,
@@ -406,13 +411,23 @@ const RTSOrderBank = (state = initialState, action) => {
       let newShipmentDropData = [...state.shipmentDropData]
       // add to order bank table
       //state.orderBankTableData.push(removedOrders)
-      ToastSuccess.fire()
+
+      if (newShipmentDropData.length)
+        ToastSuccess.fire({ text: 'Order has been successfully removed from a shipment' })
+      else ToastSuccess.fire({ text: 'A shipment has ben successfully cancelled from schedule' })
 
       return {
         ...state,
         shipmentDropData: newShipmentDropData,
-        orderBankTableData: [...state.orderBankTableData],
+        // orderBankTableData: [...state.orderBankTableData],
       }
+    }
+    case REMOVE_ORDER_FROM_SHIPMENT_FAIL: {
+      const { orderId, shipmentId } = action.params
+
+      ToastError.fire({})
+
+      return { ...state }
     }
     case REMOVE_SHIPMENT_FROM_EVENT_SUCCESS: {
       const { shipmentId } = action.params
@@ -486,7 +501,7 @@ const RTSOrderBank = (state = initialState, action) => {
       }
     }
     case GET_OB_RT_DETAILS_SUCCESS: {
-      if (action.payload?.status === "Double") action.payload.status = "On"
+      if (action.payload?.status === 'Double') action.payload.status = 'On'
       return {
         ...state,
         orderBankRTDetails: action.payload,
@@ -498,7 +513,7 @@ const RTSOrderBank = (state = initialState, action) => {
       }
     }
     case UPDATE_OB_RT_DETAILS_SUCCESS: {
-      ToastSuccess.fire({ title: "Road Tanker detail has been successfully updated" })
+      ToastSuccess.fire({ title: 'Road Tanker detail has been successfully updated' })
       return {
         ...state,
         // orderBankRTDetails: action.params,
@@ -511,13 +526,13 @@ const RTSOrderBank = (state = initialState, action) => {
       }
     }
     case SEND_ORDER_BANK_DN_FAIL: {
-      ToastError.fire({ title: "Send DN failed!" })
+      ToastError.fire({ title: 'Send DN failed!' })
       return {
         ...state,
       }
     }
     case SEND_ORDER_BANK_DN_SUCCESS: {
-      ToastSuccess.fire({ title: "Orders have been successfully sent for DN creation" })
+      ToastSuccess.fire({ title: 'Orders have been successfully sent for DN creation' })
       return {
         ...state,
       }
@@ -546,7 +561,7 @@ const RTSOrderBank = (state = initialState, action) => {
         ganttEventValidation: action.payload,
       }
     }
-    
+
     case GET_SHIPMENT_DETAILS_ON_VEHICLE_SUCCESS: {
       return {
         ...state,
@@ -563,18 +578,18 @@ const RTSOrderBank = (state = initialState, action) => {
       let newShipment = []
       let newShipmentItem = {
         shipment: Math.floor(Math.random() * 100000),
-        order_banks: [...action.payload]
+        order_banks: [...action.payload],
       }
       newShipment.push(newShipmentItem)
       return {
         ...state,
-        shipmentDropData: [...state.shipmentDropData, shipmentFactory(newShipment)[0]]
+        shipmentDropData: [...state.shipmentDropData, shipmentFactory(newShipment)[0]],
       }
     }
     case GET_OB_TOTAL_UNSCHEDULE_SUCCESS: {
       return {
         ...state,
-        totalOrderUnschedule: action.payload.total ?? 0
+        totalOrderUnschedule: action.payload.total ?? 0,
       }
     }
     case GET_OB_TOTAL_UNSCHEDULE_FAIL: {

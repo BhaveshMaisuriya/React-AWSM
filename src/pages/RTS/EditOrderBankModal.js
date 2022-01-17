@@ -54,8 +54,7 @@ const EditOrderBankModal = props => {
 
   useEffect(() => {
     if (viewData !== null) {
-      let temp = { ...viewData }
-      
+      let temp = { ...viewData }      
       const currentRegion = REGION_TERMINAL.find(e => e.region === temp.region)
       setTerminalList(currentRegion ? currentRegion.terminal : [])
       temp.terminal_name = props.terminal; //TERMINAL_CODE_MAPPING_ID[props.terminal]

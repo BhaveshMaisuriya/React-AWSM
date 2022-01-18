@@ -648,6 +648,7 @@ function OrderBank({
   }
 
   useEffect(() => {
+    // console.log("orderBankTableData::", orderBankTableData)
     const isItemSelected = !!orderBankTableData?.find(e => e.isChecked)
     const newSettings = [...orderBankSetting]
     const sendDN = newSettings?.find(e => e.value === 'SendDN')
@@ -1195,6 +1196,14 @@ function OrderBank({
                   closeAlert={() => setShowDeleteMultiple(false)}
                 />
               )}
+            {orderBankTableData === null && (
+                <AWSMAlert
+                  status='error'
+                  message='Something went wrong!'
+                  openAlert={true}
+                  // closeAlert={() => setShowDeleteMultiple(false)}
+                />
+              )}  
             </Card>
           </div>
         </div>

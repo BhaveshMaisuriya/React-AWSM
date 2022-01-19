@@ -175,6 +175,7 @@ function OrderBank({
   })
   const [orderBankSetting, setOrderBankSetting] = useState(orderBankSettings)
   const [showAuditModal, setShowAuditModal] = useState(false)
+  const [showTableError, setShowTableError] = useState(false)
   const [snackStatus, setSnackStatus] = useState('')
   const [snackMessage, setSnackMessage] = useState('')
   const [showSnackAlert, setShowSnackAlert] = useState(false)
@@ -691,6 +692,7 @@ function OrderBank({
   }
 
   useEffect(() => {
+    orderBankTableData === null && setShowTableError(true);
     const isItemSelected = !!orderBankTableData?.find(e => e.isChecked)
     const newSettings = [...orderBankSetting]
     const sendDN = newSettings?.find(e => e.value === 'SendDN')
@@ -1240,6 +1242,14 @@ function OrderBank({
                   closeAlert={() => setShowDeleteMultiple(false)}
                 />
               )}
+            {showTableError && (
+                <AWSMAlert
+                  status='error'
+                  message='Something went wrong!'
+                  openAlert={showTableError}
+                  closeAlert={() => setShowTableError(false)}
+                />
+              )}  
             </Card>
           </div>
         </div>

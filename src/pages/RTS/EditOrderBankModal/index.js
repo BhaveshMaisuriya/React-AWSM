@@ -90,7 +90,7 @@ const EditOrderBankModal = props => {
       my_remark_1: editOrderData?.my_remark_1,
       my_remark_2: editOrderData?.my_remark_2,
       my_remark_3: editOrderData?.my_remark_3,
-      terminal: editOrderData?.terminal,
+      terminal: TERMINAL_CODE_MAPPING[editOrderData?.terminal],
       volume: parseInt(editOrderData?.volume),
       eta: editOrderData?.eta,
       planned_load_time: editOrderData?.planned_load_time,
@@ -139,7 +139,7 @@ const EditOrderBankModal = props => {
 
       const newOrderData = { ...editOrderData }
       newOrderData[key] = currentRegion ? currentRegion.region : ''
-      newOrderData['terminal'] = TERMINAL_CODE_MAPPING[currentRegion.terminal[0]]
+      newOrderData['terminal'] = currentRegion.terminal[0];
       setEditOrderData(newOrderData)
     } else if (key === 'remarks') {
       setInputValue(value)
@@ -232,8 +232,8 @@ const EditOrderBankModal = props => {
                   <div className="col-3">
                     <AWSMDropdown
                       items={terminalList}
-                      onChange={value => onFieldChange('terminal', TERMINAL_CODE_MAPPING[value])}
-                      value={TERMINAL_CODE_MAPPING_ID[editOrderData?.terminal]}
+                      onChange={value => onFieldChange('terminal', value)}
+                      value={editOrderData?.terminal}
                       disabled={false}
                     />
                   </div>

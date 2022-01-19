@@ -248,8 +248,8 @@ function* onSendOrderBankDN({ params = {} }) {
 
 function* onSendDNStatusRequest({ params }) {
   try {
-    // const response = yield call(sendRTSOrderBank, params)
-    yield put(sendDNStatusRequestSuccess())
+    const response = yield call(sendRTSOrderBank, params)
+    yield put(sendDNStatusRequestSuccess(response))
   } catch (error) {
     yield put(sendDNStatusRequestFail(error))
   }

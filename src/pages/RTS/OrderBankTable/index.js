@@ -177,6 +177,7 @@ class index extends Component {
       fieldToSort: "retail_storage_relation.retail",
       fieldSortDirection: "desc",
       showLoader: false,
+      sendDnStatus: '',
     }
     this.onDragEnd = this.onDragEnd.bind(this)
   }
@@ -186,6 +187,11 @@ class index extends Component {
       this.setState({ showLoader: false })
       this.setState({ dataSource: nextProps.dataSource, filterData: nextProps.headerFilters })
     }
+    if (nextProps.sendDn !== this.props.sendDn) {
+      this.setState({ showSendDN: true })
+      this.setState({ showLoader: true })
+      this.setState({ sendDnStatus: this.props.sendDn })
+    }    
     if (nextProps.reloadData !== this.props.reloadData) {
       this.setState({ showLoader: this.props.reloadData })
     }
@@ -488,14 +494,11 @@ class index extends Component {
   }
 
   //DN-Status
-  onSendRequestOnDNStatusHandler() {
+  async onSendRequestOnDNStatusHandler() {
     const { DNStatus } = this.state
     const { onSendDNStatusRequest } = this.props
-    onSendDNStatusRequest(DNStatus.data)
+    await onSendDNStatusRequest(DNStatus.data?.id)
     this.setState({ DNStatus: { isOpenConfirmModal: false } })
-    // if(this.props.sendDn){
-    this.setState({ showSendDN: true })
-    // }
   }
 
   getStyle(style, snapshot) {

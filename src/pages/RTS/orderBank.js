@@ -140,7 +140,7 @@ function OrderBank({
   const [dropdownOpen, setOpen] = useState(false)
   const [crossTerminal, setCrossTerminal] = useState(false)
   const [showAddNotification, setShowAddNotification] = useState(false)
-  const [multipleDelete, setMultipleDelete] = useState('')  
+  const [multipleDelete, setMultipleDelete] = useState('')
   const [notiMessage, setNotiMessage] = useState('')
   const [uploadDmr, setUploadDmr] = useState(false)
   const [deleteMultiple, setDeleteMultiple] = useState(false)
@@ -212,29 +212,71 @@ function OrderBank({
     }
   }, [terminalTable, shiftDateTable, status])
 
+  const [bryntumTable, setBryntumTable] = useState({
+    currentPage: 0,
+    payload: {
+      limit: 10,
+      page: 0,
+      search_fields: '*',
+      q: '',
+      sort_dir: 'asc',
+      sort_field: 'vehicle',
+      filter: {
+        shift_date: shiftDateGantt,
+        terminal: TERMINAL_CODE_MAPPING[terminal],
+      },
+    },
+  })
+
+  const populateBryntumTable = ({
+    page = 0,
+    sortField = 'vehicle',
+    sortDirection = 'asc',
+    filterCondition = [],
+  }) => {
+    let q = ''
+    if (filterCondition.length > 0) {
+      q = filterCondition
+        .filter(v => v.data.length > 0)
+        .map(e => {
+          return `(${e.data.map(k => `${e.key}=='${k}'`).join('||')})`
+        })
+        .join('&&')
+    }
+
+    setBryntumTable(state => {
+      const payload = {
+        ...state.payload,
+        page,
+        q,
+        sort_dir: sortDirection,
+        sort_field: sortField,
+      }
+      return { payload, currentPage: page }
+    })
+  }
+
   useEffect(() => {
     const asyncFunction = async () => {
       await clearGanttData()
+
       getRTSOderBankGanttChart({
-        limit: 10,
-        page: 0,
-        search_fields: '*',
-        q: `(status_awsm=='Active')`,
-        sort_dir: 'desc',
-        sort_field: 'vehicle',
+        ...bryntumTable.payload,
         filter: {
           shift_date: shiftDateGantt,
           terminal: TERMINAL_CODE_MAPPING[terminal],
         },
       })
+
       if (terminal === terminalTable && isShiftDateCorrect(shiftDateGantt?.date_from)) {
         onGetTotalOBUnschedule({
           shift_date: shiftDateGantt?.date_from,
         })
       }
     }
+
     asyncFunction()
-  }, [shiftDateGantt, terminal])
+  }, [bryntumTable, shiftDateGantt, terminal])
 
   useEffect(() => {
     const results = { DNs: 3, shipment: 2, backlog: 0, SR: 0, HP: 0 }
@@ -258,7 +300,6 @@ function OrderBank({
     }
     onGetOrderBankAuditLog(payload)
     // alert
-
 
     setShowDeleteMultiple(false)
     setShowAddNotification(false)
@@ -384,19 +425,20 @@ function OrderBank({
       ...shiftDateGantt,
       type: value?.type,
       date_from: value?.date_from,
-      // date_to: value?.date_to,
     })
     setCurrentPage(0)
   }
 
   const reloadRTSOrderBankData = async () => {
     setReloadData(true)
-    console.log('payloadFilter::', payloadFilter)
     await getRTSOrderBankTableData({
       limit: 10,
       page: payloadFilter.currentPage,
       search_fields: '*',
-      q: (payloadFilter?.filterQuery !== null || payloadFilter?.filterQuery !== undefined) ? transformObjectToStringSentence(payloadFilter?.filterQuery) : "",
+      q:
+        payloadFilter?.filterQuery !== null || payloadFilter?.filterQuery !== undefined
+          ? transformObjectToStringSentence(payloadFilter?.filterQuery)
+          : '',
       sort_dir: 'asc',
       sort_field: 'vehicle',
       filter: payloadFilter.filterOrderBank,
@@ -412,10 +454,11 @@ function OrderBank({
   useEffect(async () => {
     if (multipleorder) {
       reloadRTSOrderBankData()
-      await setMultipleDelete(multipleorder.order_banks);
-      setDeleteMultipleStatus(multipleorder.order_banks !== undefined ? 'success' : 'error');
-      // console.log('ordr::', multipleorder.order_banks, '::', multipleDelete)
-      multipleorder.order_banks !== multipleDelete && multipleDelete === '' ? setShowDeleteMultiple(true) : setShowDeleteMultiple(false);
+      await setMultipleDelete(multipleorder.order_banks)
+      setDeleteMultipleStatus(multipleorder.order_banks !== undefined ? 'success' : 'error')
+      multipleorder.order_banks !== multipleDelete && multipleDelete === ''
+        ? setShowDeleteMultiple(true)
+        : setShowDeleteMultiple(false)
     }
   }, [multipleorder])
 
@@ -888,6 +931,7 @@ function OrderBank({
                             region={region}
                             terminal={terminal}
                             clearGanttData={clearGanttData}
+                            onFilterChange={params => populateBryntumTable({ ...params })}
                           />
                           <div className="square_border">
                             {GanttChartBottom.map(item => {
@@ -927,6 +971,7 @@ function OrderBank({
                             region={region}
                             terminal={terminal}
                             clearGanttData={clearGanttData}
+                            onFilterChange={params => populateBryntumTable({ ...params })}
                           />
                         </div>
                       </div>
@@ -950,7 +995,7 @@ function OrderBank({
                             ...shiftDateTable,
                             type: value?.type,
                             date_from: value?.date_from,
-                            // date_to: value?.date_to,
+                            date_to: value?.date_to,
                           })
                           setReloadData(true)
                           setCurrentPage(0)
@@ -986,7 +1031,7 @@ function OrderBank({
                     <p className="order-bank-region-label">STATUS</p>
                     <div className="order-bank-region">
                       <AWSMDropdown
-                        value={status}
+                        value={status === '' ? 'All' : status}
                         onChange={value => {
                           setStatusDropdown(value == 'All' ? '' : value)
                           setCurrentPage(0)

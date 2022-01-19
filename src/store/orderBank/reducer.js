@@ -64,8 +64,9 @@ import {
   DRAG_ORDER_TO_SHIPMENT_SUCCESS,
   GET_OB_TOTAL_UNSCHEDULE_SUCCESS,
   GET_OB_TOTAL_UNSCHEDULE_FAIL,
+  SET_BRYNTUM_FILTER,
 } from './actionTypes'
-import { eventGanttChartFactory, shipmentFactory, orderBankFactory } from './factory'
+import { eventGanttChartFactory, shipmentFactory } from './factory'
 import { ToastSuccess, ToastError } from '../../helpers/swal'
 
 const initialState = {
@@ -83,6 +84,7 @@ const initialState = {
   ganttChart: {
     table: [],
     event: [],
+    selectedFilters: {},
   },
   orderBankRTDetails: null,
   crossTerminalDetails: null,
@@ -108,11 +110,10 @@ const RTSOrderBank = (state = initialState, action) => {
     case GET_RTS_ORDER_BANK_TABLE_DATA_SUCCESS:
       const { data, scrolling } = action.payload
       const { list, total_rows, filter, summary } = data
-      const formatedList = orderBankFactory(list)
       if (state.orderBankTableData.length !== 0 && scrolling) {
         return {
           ...state,
-          orderBankTableData: [...state.orderBankTableData, ...formatedList],
+          orderBankTableData: [...state.orderBankTableData, ...list],
           orderBankTableFilters: filter,
           totalRow: total_rows,
           orderBankTableSummary: summary,
@@ -120,7 +121,7 @@ const RTSOrderBank = (state = initialState, action) => {
       }
       return {
         ...state,
-        orderBankTableData: formatedList,
+        orderBankTableData: list,
         orderBankTableFilters: filter,
         totalRow: total_rows,
         orderBankTableSummary: summary,
@@ -323,6 +324,18 @@ const RTSOrderBank = (state = initialState, action) => {
     case GET_RTS_GANTT_CHART_DATA_SUCCESS: {
       const { data, scrolling, page } = action.payload
       const { list, total_rows, filter } = data
+
+      const ganttChart = { ...state.ganttChart }
+
+      if (!Object.keys(state.ganttChart.selectedFilters).length) {
+        const selectedFilters = {}
+        state.ganttChart.selectedFilters = Object.keys(filter).forEach(k => {
+          selectedFilters[k] = []
+        })
+
+        ganttChart.selectedFilters = selectedFilters
+      }
+
       // add id to mapping with event
       const newList = list?.map(vehicle => ({ ...vehicle, id: vehicle?.vehicle }))
 
@@ -330,7 +343,7 @@ const RTSOrderBank = (state = initialState, action) => {
         return {
           ...state,
           ganttChartTableData: [...state.ganttChartTableData, ...newList],
-          ganttChartEventData: eventGanttChartFactory([...state.ganttChartTableData, ...newList]),
+          ganttChartEventData: [...state.ganttChartEventData, eventGanttChartFactory(newList)],
           totalRow_ganttChart: total_rows,
         }
       }
@@ -341,7 +354,7 @@ const RTSOrderBank = (state = initialState, action) => {
         totalRow_ganttChart: total_rows,
         ganttChartTableFilter: filter,
         dropOderSuccess: false,
-        //ganttChart: action.payload
+        ganttChart,
       }
     }
     case CLEAR_GANTT_DATA: {
@@ -351,6 +364,15 @@ const RTSOrderBank = (state = initialState, action) => {
         ganttChartEventData: [],
         dropOderSuccess: false,
       }
+    }
+    case SET_BRYNTUM_FILTER: {
+      // str, []
+      const { key, values } = action.payload
+
+      const selectedFilters = state.ganttChart.selectedFilters
+      selectedFilters[key] = values
+
+      return { ...state, ganttChart: { ...state.ganttChart, selectedFilters } }
     }
     case CLEAR_RTS_ORDER_BANK_TABLE_DATA: {
       return {
@@ -413,8 +435,9 @@ const RTSOrderBank = (state = initialState, action) => {
       //state.orderBankTableData.push(removedOrders)
 
       if (newShipmentDropData.length)
-        ToastSuccess.fire({ text: 'Order has been successfully removed from a shipment' })
-      else ToastSuccess.fire({ text: 'A shipment has ben successfully cancelled from schedule' })
+        ToastSuccess.fire({ titleText: 'Order has been successfully removed from a shipment' })
+      else
+        ToastSuccess.fire({ titleText: 'A shipment has ben successfully cancelled from schedule' })
 
       return {
         ...state,

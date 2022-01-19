@@ -1,6 +1,6 @@
-import React from "react"
-import AWSMInput from "components/Common/Input"
-import { Row, Col } from "reactstrap"
+import React from 'react'
+import AWSMInput from 'components/Common/Input'
+import { Row, Col } from 'reactstrap'
 
 const AddressTripTab = props => {
   const { data } = props
@@ -12,10 +12,7 @@ const AddressTripTab = props => {
           <label className="text-upper">Delivery Address</label>
           <div className="d-flex">
             <div className="w-100">
-              <AWSMInput
-                value={data?.retail_storage_relation?.retail_customer_relation?.address}
-                disabled={true}
-              />
+              <AWSMInput value={data?.format_delivery_address} disabled={true} />
             </div>
           </div>
         </Col>
@@ -23,7 +20,7 @@ const AddressTripTab = props => {
           <label className="text-upper">City</label>
           <div className="d-flex">
             <div className="w-100">
-              <AWSMInput value={""} disabled={true} />
+              <AWSMInput value={data?.format_city} disabled={true} />
             </div>
           </div>
         </Col>
@@ -31,7 +28,7 @@ const AddressTripTab = props => {
           <label className="text-upper">Postcode</label>
           <div className="d-flex">
             <div className="w-100">
-              <AWSMInput value={""} disabled={true} />
+              <AWSMInput value={data?.format_postcode} disabled={true} />
             </div>
           </div>
         </Col>
@@ -41,7 +38,7 @@ const AddressTripTab = props => {
           <label className="text-upper">state</label>
           <div className="d-flex">
             <div className="w-100">
-              <AWSMInput value={""} disabled={true} />
+              <AWSMInput value={data?.format_state} disabled={true} />
             </div>
           </div>
         </Col>
@@ -49,7 +46,7 @@ const AddressTripTab = props => {
           <label className="text-upper">Latitude</label>
           <div className="d-flex">
             <div className="w-100">
-              <AWSMInput value={""} disabled={true} />
+              <AWSMInput value={data?.format_latitude} disabled={true} />
             </div>
           </div>
         </Col>
@@ -57,7 +54,7 @@ const AddressTripTab = props => {
           <label className="text-upper">Longitude</label>
           <div className="d-flex">
             <div className="w-100">
-              <AWSMInput value={""} disabled={true} />
+              <AWSMInput value={data?.format_longitude} disabled={true} />
             </div>
           </div>
         </Col>
@@ -67,7 +64,7 @@ const AddressTripTab = props => {
           <label className="text-upper">Country</label>
           <div className="d-flex">
             <div className="w-100">
-              <AWSMInput value={""} disabled={true} />
+              <AWSMInput value={data?.format_country} disabled={true} />
             </div>
           </div>
         </Col>
@@ -75,10 +72,7 @@ const AddressTripTab = props => {
           <label className="text-upper">Cluster</label>
           <div className="d-flex">
             <div className="w-100">
-              <AWSMInput
-                value={data?.retail_storage_relation?.retail_customer_relation?.cluster}
-                disabled={true}
-              />
+              <AWSMInput value={data?.format_cluster} disabled={true} />
             </div>
           </div>
         </Col>
@@ -86,10 +80,7 @@ const AddressTripTab = props => {
           <label className="text-upper">Alt Cluster</label>
           <div className="d-flex">
             <div className="w-100">
-              <AWSMInput
-                value={data?.retail_storage_relation?.retail_customer_relation?.alternative_cluster}
-                disabled={true}
-              />
+              <AWSMInput value={data?.format_alt_cluster} disabled={true} />
             </div>
           </div>
         </Col>
@@ -99,10 +90,7 @@ const AddressTripTab = props => {
           <label className="text-upper">Cloud</label>
           <div className="d-flex">
             <div className="w-100">
-              <AWSMInput
-                value={data?.retail_storage_relation?.retail_customer_relation?.cloud}
-                disabled={true}
-              />
+              <AWSMInput value={data?.format_cloud} disabled={true} />
             </div>
           </div>
         </Col>
@@ -111,7 +99,7 @@ const AddressTripTab = props => {
           <div className="d-flex">
             <div className="w-100">
               <AWSMInput
-                value={data?.retail_storage_relation?.retail_customer_relation?.border_station}
+                value={data?.format_border_station === false ? 'N' : 'Y'}
                 disabled={true}
               />
             </div>

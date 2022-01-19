@@ -7,6 +7,8 @@ import { useEffect, useMemo, useState } from 'react'
 import { ReactSVG } from 'react-svg'
 import '../style.scss'
 import VirtualList from 'react-tiny-virtual-list'
+import { connect } from 'react-redux'
+import { setBryntumFilter } from '../../../store/actions'
 
 const CustomIcon = () => {
   // untick checkbox icon
@@ -21,80 +23,102 @@ const CustomIcon3 = () => {
   return <img src={selectAllIcon} alt="icon" />
 }
 
-const ChartColumnFilter = ({ filterData = [], filterKey, onApply, onReset, isGantt }) => {
-  const [selectedRows, setSelectedRows] = useState({
-    isFirst: true,
-    list: [],
-  })
+const ChartColumnFilter = ({
+  filterData,
+  filterKey,
+  onApply,
+  onReset,
+  isGantt,
+  selectedFilters,
+  setBryntumFilter,
+}) => {
+  const [first, setFirstTime] = useState(true)
 
-  function getData() {
-    return filterData.map(e => ({
+  const [visibleData, setData] = useState(
+    filterData.map(e => ({
       text: e,
-      checked: selectedRows.isFirst || !!selectedRows.list.find(v => v === e),
+      checked: first || selectedFilters[filterKey].includes(e),
       visible: true,
     }))
-  }
-
-  const [data, setData] = useState(getData())
-
-  const visibleData = useMemo(() => {
-    return data.filter(e => e.visible)
-  }, [data])
+  )
 
   useEffect(() => {
-    setData(getData())
-  }, [filterData])
+    const _data = filterData.map(e => ({
+      text: e,
+      checked: first || selectedFilters[filterKey].includes(e),
+      visible: true,
+    }))
+    setData(_data)
+  }, [filterData, selectedFilters])
 
   const onItemChange = text => {
-    const newData = [...data]
-    const selectedRow = newData.find(e => e.text === text)
-    selectedRow.checked = !selectedRow.checked
-    setData(newData)
-    setSelectedRows({ isFirst: false, list: newData.filter(e => e.checked).map(e => e.text) })
+    setData(data => {
+      const tmp = [...data]
+      const item = tmp.find(s => s.text === text)
+
+      item.checked = !item.checked
+
+      return tmp
+    })
+    setFirstTime(false)
   }
 
-  const isCheckAll = useMemo(() => {
-    return data.length === data.filter(e => e.checked).length
-  }, [data])
-
   const checkAllChange = () => {
-    setData([...data].map(e => ({ ...e, checked: !isCheckAll })))
-    setSelectedRows({ isFirst: false, list: data.filter(() => !isCheckAll).map(e => e.text) })
+    setData(data => {
+      const tmp = [...data]
+      tmp.forEach(s => (s.checked = !isCheckAll))
+
+      return tmp
+    })
+    setFirstTime(false)
   }
 
   const onInputSearchChange = event => {
     const value = event.target.value.toString()
-    setData(
-      [...data].map(e => ({
+    setData(data =>
+      data.map(e => ({
         ...e,
-        visible: !value || e.text.toString().toLowerCase().includes(value.toString().toLowerCase()),
+        visible: !value || e.text.toLowerCase().includes(value.toLowerCase()),
       }))
     )
   }
 
   const apply = () => {
+    const _data = visibleData.filter(e => e.checked && e.visible).map(e => e.text)
     if (onApply) {
-      onApply(
-        data.filter(e => e.checked && e.visible).map(e => e.text),
-        filterKey
-      )
+      onApply(_data, filterKey)
     }
+
+    const tmp = selectedFilters[filterKey]
+    _data.forEach(text => {
+      const index = tmp.indexOf(text)
+      if (index > -1) {
+        tmp.splice(index, 1)
+      }
+      tmp.push(text)
+    })
+
+    setBryntumFilter(tmp)
   }
 
   const reset = () => {
     if (onReset) {
       onReset(filterKey)
     }
-    setData([...data].map(e => ({ ...e, checked: true })))
+
+    setBryntumFilter([])
   }
 
-  const isApplyDisable = useMemo(() => {
-    return !data.some(e => e.checked)
-  }, [data])
+  const isApplyDisable = useMemo(() => !visibleData.some(e => e.checked), [visibleData])
+
+  const isCheckAll = useMemo(
+    () => visibleData.length === visibleData.filter(e => e.checked).length,
+    [visibleData]
+  )
 
   return (
     <div
-      className={`chart-column-filter hide`}
+      className="chart-column-filter hide"
       id={isGantt ? `gantt-chart-tooltip-${filterKey}` : `chart-tooltip-${filterKey}`}
     >
       <div className="chart-column-input-search">
@@ -108,7 +132,7 @@ const ChartColumnFilter = ({ filterData = [], filterKey, onApply, onReset, isGan
           itemCount={visibleData.length}
           itemSize={40}
           renderItem={({ index, style }) => {
-            const e = visibleData[index] ?? {}
+            const e = visibleData[index]
             return (
               <div
                 className={`chart-column-select-item ${e.checked ? 'checked' : ' '}`}
@@ -137,7 +161,7 @@ const ChartColumnFilter = ({ filterData = [], filterKey, onApply, onReset, isGan
         <div>
           <Checkbox
             checked={isCheckAll}
-            onChange={checkAllChange}
+            onChange={() => checkAllChange()}
             icon={<CustomIcon3 />}
             checkedIcon={<CustomIcon2 />}
             style={{
@@ -162,4 +186,11 @@ const ChartColumnFilter = ({ filterData = [], filterKey, onApply, onReset, isGan
   )
 }
 
-export default ChartColumnFilter
+export default connect(
+  ({ orderBank }) => ({
+    selectedFilters: orderBank.ganttChart.selectedFilters,
+  }),
+  dispatch => ({
+    setBryntumFilter: params => dispatch(setBryntumFilter(params)),
+  })
+)(ChartColumnFilter)

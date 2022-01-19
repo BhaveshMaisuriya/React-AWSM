@@ -112,6 +112,7 @@ import {
   GET_OB_TOTAL_UNSCHEDULE,
   GET_OB_TOTAL_UNSCHEDULE_SUCCESS,
   GET_OB_TOTAL_UNSCHEDULE_FAIL,
+  SET_BRYNTUM_FILTER,
 } from './actionTypes'
 
 export const getRTSOrderBankTableData = params => ({
@@ -560,6 +561,11 @@ export const updateOBRTDetailsFail = error => ({
 
 export const clearGanttData = () => ({
   type: CLEAR_GANTT_DATA,
+})
+
+export const setBryntumFilter = payload => ({
+  type: SET_BRYNTUM_FILTER,
+  payload,
 })
 
 export const clearRTSOrderBankTableData = () => ({

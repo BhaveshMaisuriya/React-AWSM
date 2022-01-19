@@ -21,7 +21,7 @@ import {
   selectVehicleShipment,
   sendOrderInGanttChart,
 } from 'store/actions'
-import { cloneDeep } from 'lodash'
+import { cloneDeep, isEqual } from 'lodash'
 import { Droppable } from 'react-beautiful-dnd'
 import OrderBankShipmentModal from './OrderBankShipmentModal'
 import PlannedLoadTimesModal from './PlannedLoadTimesModal'
@@ -42,15 +42,13 @@ const EventContextList = {
 export const bryntumSchedulerTableNameForCookie = 'rts-gantt-chart-bryntum-scheduler'
 
 function BryntumChartShipment(props) {
-  const { bryntumCurrentColumns, onSelectVehicle, onDeselectVehicle, dateConfig } = props
+  const { bryntumCurrentColumns, onSelectVehicle, onDeselectVehicle, dateConfig, onFilterChange } =
+    props
   const tableData = useRef([])
-  const setTableData = newData => {
-    tableData.current = newData
-  }
+
   const colsRef = useRef(bryntumCurrentColumns)
   const [modal, setModal] = useState(false)
   const [dropdownSelectedItem, setDropdownSelectedItem] = useState(null)
-  const [filterCondition, setFilterCondition] = useState([])
   const [eventsData, setEventsData] = useState([])
   const [shipmentDblclick, setShipmentDblclick] = useState(false)
   const [roadTankerModalShow, setRoadTankerModal] = useState(false)
@@ -58,40 +56,15 @@ function BryntumChartShipment(props) {
   const schedulerProRef = useRef()
   const firstRender = useRef(true)
   const [filterList, setFilterList] = useState([])
-  const [currentPage, setCurrentPage] = useState(0)
 
-  const getGanttCharData = (page = null) => {
-    if (page === null) {
-      setCurrentPage(0)
-    }
+  const [bryntumTable, setBryntumTable] = useState({
+    page: 0,
+    filterCondition: [],
+    sortDirection: 'asc',
+    sortField: 'vehicle',
+  })
 
-    let q = ''
-    if (filterCondition.length > 0) {
-      q = filterCondition
-        .filter(v => v.data.length > 0)
-        .map(e => {
-          return `(${e.data.map(k => `${e.key}=='${k}'`).join('||')})`
-        })
-        .join('&&')
-    }
-
-    const payload = {
-      limit: 10,
-      page: currentPage,
-      search_fields: '*',
-      q,
-      sort_dir: 'asc',
-      sort_field: 'vehicle',
-      filter: {
-        shift_date: props.dateConfig,
-        // terminal: TERMINAL_CODE_MAPPING[props?.terminal],
-      },
-    }
-
-    props.getRTSOderBankGanttChart(payload)
-  }
-
-  useEffect(() => getGanttCharData(currentPage), [currentPage])
+  useEffect(() => onFilterChange(bryntumTable), [bryntumTable])
 
   useEffect(() => {
     setFilterList(
@@ -104,21 +77,9 @@ function BryntumChartShipment(props) {
 
   const refreshGanttChartTable = () => {
     props.clearGanttData()
-    setCurrentPage(0)
-    const { getRTSOderBankGanttChart } = props
-    const payload = {
-      limit: 11,
-      page: 0,
-      search_fields: '*',
-      q: '',
-      sort_dir: 'desc',
-      sort_field: 'vehicle',
-      filter: {
-        shift_date: dateConfig,
-      },
-    }
+
     setTimeout(() => {
-      getRTSOderBankGanttChart(payload)
+      setBryntumTable(bryntumTable)
     }, 1000)
   }
 
@@ -180,7 +141,7 @@ function BryntumChartShipment(props) {
           scheduler?.store?.add(e)
         })
       }
-      setTableData(updateData)
+      tableData.current = updateData
     }
   }
 
@@ -196,13 +157,28 @@ function BryntumChartShipment(props) {
     barMargin: 0,
     resourceMargin: 0,
     listeners: {
-      cellClick: function (grid) {
+      cellClick(e) {
         // click row to select Vehicle shipment
-        const { record } = grid
+        const { record } = e
         if (record?.data?.vehicle && record?.data?.id) {
           const { id: resourceId, vehicle } = record.data
           onSelectVehicle({ resourceId, vehicle })
         }
+      },
+    },
+    store: {
+      listeners: {
+        sort(e) {
+          const { ascending, field } = e.sorters[0]
+          const opt = { sortDirection: ascending ? 'asc' : 'desc', sortField: field }
+
+          setBryntumTable(state => {
+            if (opt.sortField === state.sortField && opt.sortDirection === state.sortDirection)
+              return state
+
+            return { ...state, ...opt, page: 0 }
+          })
+        },
       },
     },
   }
@@ -264,13 +240,7 @@ function BryntumChartShipment(props) {
               </div>
             )
           }
-          // case "shift": {
-          //   return (
-          //     <div className="chart-shift-cell">
-          //       <ShiftPopover record={record} onChange={onShiftDateChange} type="shift" list="shift_list"/>
-          //     </div>
-          //   )
-          // }
+
           case 'status': {
             return (
               <div className="chart-status-cell">
@@ -282,8 +252,7 @@ function BryntumChartShipment(props) {
         return <div>{value}</div>
       },
       headerRenderer: ({ column }) => {
-        return `
-                <div class="d-flex align-items-center chart-header" id="chart-column-${column.data.field}">
+        return `<div class="d-flex align-items-center chart-header" id="chart-column-${column.data.field}">
                   <div>${column.data.text}</div>
                   <button id="chart-column-${column.data.field}-button">
                     <svg width="22px" height="22px" viewBox="0 0 22 22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -354,39 +323,36 @@ function BryntumChartShipment(props) {
   }
 
   const onApplyFilter = (data, dataKey) => {
-    const index = filterCondition.findIndex(e => e.key === dataKey)
-    const newFilterCondition = [...filterCondition]
+    const index = bryntumTable.filterCondition.findIndex(e => e.key === dataKey)
+    const newFilterCondition = [...bryntumTable.filterCondition]
     if (index >= 0) {
       newFilterCondition[index] = { ...newFilterCondition[index], data: data }
     } else {
       newFilterCondition.push({ data, key: dataKey })
     }
-    setFilterCondition(newFilterCondition)
+
+    setBryntumTable(state => ({ ...state, filterCondition: newFilterCondition }))
+
     hideFilterElement(dataKey)
   }
 
   const onResetFilter = dataKey => {
-    const index = filterCondition.findIndex(e => e.key === dataKey)
+    const index = bryntumTable.filterCondition.findIndex(e => e.key === dataKey)
     if (index >= 0) {
-      const newFilterCondition = [...filterCondition]
+      const newFilterCondition = [...bryntumTable.filterCondition]
       newFilterCondition.splice(index, 1)
-      setFilterCondition(newFilterCondition)
+
+      setBryntumTable(state => ({ ...state, filterCondition: newFilterCondition }))
     }
     hideFilterElement(dataKey)
   }
 
-  useEffect(() => getGanttCharData(0), [filterCondition, props.currentTab])
-
-  const handleScrollShipmentChartTable = () => {
-    setCurrentPage(currentPage + 1)
-  }
-
   return (
-    <div className="rts-table-container">
+    <div className="rts-table-container" style={{ overflow: 'unset' }}>
       <div className="container-orderbank gant-chart-table row">
         <div className="col-lg-5 col-md-6 col-sm-12 pr-0">
           <InfiniteScroll
-            next={handleScrollShipmentChartTable}
+            next={() => setBryntumTable(state => ({ ...state, page: state.page + 1 }))}
             hasMore={props.ganttChartTableData.length < props.totalRow_ganttChart}
             loader={<h5 className={props.totalRow_ganttChart > 10 ? '' : 'd-none'}>Loading...</h5>}
             dataLength={props.ganttChartTableData.length}

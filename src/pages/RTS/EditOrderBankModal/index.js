@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react"
-import { connect } from "react-redux"
-import { format } from "date-fns"
+import React, { useEffect, useState } from 'react'
+import { connect } from 'react-redux'
+import { format } from 'date-fns'
 import {
   Button,
   Modal,
@@ -14,55 +14,54 @@ import {
   NavItem,
   NavLink,
   Col,
-} from "reactstrap"
-import ExitConfirmation from "components/Common/ExitConfirmation"
-import AWSMInput from "components/Common/Input"
-import AWSMDropdown from "components/Common/Dropdown"
-import AWSMAlert from "components/Common/AWSMAlert"
-import { getEditOrderBankDetail } from "store/actions"
+} from 'reactstrap'
+import ExitConfirmation from 'components/Common/ExitConfirmation'
+import AWSMInput from 'components/Common/Input'
+import AWSMDropdown from 'components/Common/Dropdown'
+import AWSMAlert from 'components/Common/AWSMAlert'
+import { getEditOrderBankDetail } from 'store/actions'
 import REGION_TERMINAL, {
   TERMINAL_CODE_MAPPING_ID,
   TERMINAL_CODE_MAPPING,
-} from "common/data/regionAndTerminal"
+} from 'common/data/regionAndTerminal'
 import {
   AddressTripTab,
   DeliveryTab,
   IndicatorContactTab,
   SiteDNTab,
   OrderTab,
-} from "./exportAllTab"
+} from './exportAllTab'
 
 const timeData = []
-const ORDER_PRIORITY = ["None", "High Priority"]
 const navItems = [
-  { id: "1", name: "Order" },
-  { id: "2", name: "Delivery" },
-  { id: "3", name: "Site & DN" },
-  { id: "4", name: "Indicator & Contact" },
-  { id: "5", name: "Address & Trip" },
+  { id: '1', name: 'Order' },
+  { id: '2', name: 'Delivery' },
+  { id: '3', name: 'Site & DN' },
+  { id: '4', name: 'Indicator & Contact' },
+  { id: '5', name: 'Address & Trip' },
 ]
 
 for (let i = 0; i < 24; i++) {
-  timeData.push(`${i.toString().padStart(2, "0")}:00`)
-  timeData.push(`${i.toString().padStart(2, "0")}:15`)
-  timeData.push(`${i.toString().padStart(2, "0")}:30`)
-  timeData.push(`${i.toString().padStart(2, "0")}:45`)
+  timeData.push(`${i.toString().padStart(2, '0')}:00`)
+  timeData.push(`${i.toString().padStart(2, '0')}:15`)
+  timeData.push(`${i.toString().padStart(2, '0')}:30`)
+  timeData.push(`${i.toString().padStart(2, '0')}:45`)
 }
 timeData.push(`23:59`)
 
 const EditOrderBankModal = props => {
-  const { open, onCancel, viewData, region } = props
+  const { open, onCancel, viewData, region, terminal, editorderBankData } = props
 
   const [isConfirm, setIsConfirm] = useState(false)
   const [editOrderData, setEditOrderData] = useState(null)
   const [originalEditOrderData, setoriginalEditOrderData] = useState(null)
   const [showAlert, setShowAlert] = useState(false)
   const [isUpdate, setIsUpdate] = useState(false)
-  const [activeTab, setActiveTab] = useState("1")
-  const [inputValue, setInputValue] = useState("")
-  const [inputValue1, setInputValue1] = useState("")
-  const [inputValue2, setInputValue2] = useState("")
-  const [inputValue3, setInputValue3] = useState("")
+  const [activeTab, setActiveTab] = useState('1')
+  const [inputValue, setInputValue] = useState('')
+  const [inputValue1, setInputValue1] = useState('')
+  const [inputValue2, setInputValue2] = useState('')
+  const [inputValue3, setInputValue3] = useState('')
   const [terminalList, setTerminalList] = useState([])
   const regionList = REGION_TERMINAL.map(item => item.region)
 
@@ -78,7 +77,7 @@ const EditOrderBankModal = props => {
     }
   }, [viewData])
 
-  useEffect(async () => {}, [props.region])
+  useEffect(async () => {}, [region])
 
   const onConfirmCancel = () => {
     setIsConfirm(false)
@@ -91,7 +90,7 @@ const EditOrderBankModal = props => {
       my_remark_1: editOrderData?.my_remark_1,
       my_remark_2: editOrderData?.my_remark_2,
       my_remark_3: editOrderData?.my_remark_3,
-      terminal: TERMINAL_CODE_MAPPING[editOrderData?.terminal],
+      terminal: editOrderData?.terminal,
       volume: parseInt(editOrderData?.volume),
       eta: editOrderData?.eta,
       planned_load_time: editOrderData?.planned_load_time,
@@ -107,19 +106,19 @@ const EditOrderBankModal = props => {
   }
 
   useEffect(() => {
-    if (props.editorderBankData && isUpdate === true) {
-      typeof props.editorderBankData === "object" && props.editorderBankData.status === undefined
-        ? onCancel("edit", "success")
-        : onCancel("edit", "error")
+    if (editorderBankData && isUpdate === true) {
+      typeof editorderBankData === 'object' && editorderBankData.status === undefined
+        ? onCancel('edit', 'success')
+        : onCancel('edit', 'error')
       setEditOrderData(null)
       setIsUpdate(false)
     }
-  }, [props.editorderBankData])
+  }, [editorderBankData])
 
   const onConfirmExit = () => {
     setIsConfirm(false)
     if (onCancel) {
-      onCancel("cancel")
+      onCancel('cancel')
     }
   }
 
@@ -128,42 +127,42 @@ const EditOrderBankModal = props => {
       setIsConfirm(true)
     } else {
       if (onCancel) {
-        onCancel("cancel")
+        onCancel('cancel')
       }
     }
   }
 
   const onFieldChange = (key, value) => {
-    if (key === "region") {
+    if (key === 'region') {
       const currentRegion = REGION_TERMINAL.find(e => e.region === value)
       setTerminalList(currentRegion ? currentRegion.terminal : [])
 
       const newOrderData = { ...editOrderData }
-      newOrderData[key] = currentRegion ? currentRegion.region : ""
-      newOrderData["terminal"] = currentRegion.terminal[0]
+      newOrderData[key] = currentRegion ? currentRegion.region : ''
+      newOrderData['terminal'] = TERMINAL_CODE_MAPPING[currentRegion.terminal[0]]
       setEditOrderData(newOrderData)
-    } else if (key === "remarks") {
+    } else if (key === 'remarks') {
       setInputValue(value)
       if (value.length < 40) {
         const newOrderData = { ...editOrderData }
         newOrderData[key] = value
         setEditOrderData(newOrderData)
       }
-    } else if (key === "my_remark_1") {
+    } else if (key === 'my_remark_1') {
       setInputValue1(value)
       if (value.length < 40) {
         const newOrderData = { ...editOrderData }
         newOrderData[key] = value
         setEditOrderData(newOrderData)
       }
-    } else if (key === "my_remark_2") {
+    } else if (key === 'my_remark_2') {
       setInputValue2(value)
       if (value.length < 40) {
         const newOrderData = { ...editOrderData }
         newOrderData[key] = value
         setEditOrderData(newOrderData)
       }
-    } else if (key === "my_remark_3") {
+    } else if (key === 'my_remark_3') {
       setInputValue3(value)
       if (value.length < 40) {
         const newOrderData = { ...editOrderData }
@@ -179,9 +178,18 @@ const EditOrderBankModal = props => {
 
   const formatDate = date => {
     if (date) {
-      const [year, month, day] = date.split("-")
+      const [year, month, day] = date.split('-')
       return `${day}-${month}-${year}`
-    } else return ""
+    } else return ''
+  }
+
+  const hrMints = val => {
+    if (val !== '' && val !== undefined && val !== null) {
+      let temp = val.split(':')
+      return temp[0] + ':' + temp[1]
+    } else {
+      return ' - '
+    }
   }
 
   return (
@@ -189,10 +197,10 @@ const EditOrderBankModal = props => {
       <ModalHeader toggle={toggle}>
         <span className="modal-title">View/Edit Details: Order ID {editOrderData?.id}</span>
         <span className="last-updated-sub-title">
-          {`Last Updated By: ${editOrderData?.updated_by?.split("@")[0] || "Unknown"} on ${
+          {`Last Updated By: ${editOrderData?.updated_by?.split('@')[0] || 'Unknown'} on ${
             (editOrderData?.created_at &&
-              format(new Date(editOrderData?.created_at), "do LLL yyyy")) ||
-            ""
+              format(new Date(editOrderData?.created_at), 'do LLL yyyy')) ||
+            ''
           }`}
         </span>
       </ModalHeader>
@@ -216,16 +224,16 @@ const EditOrderBankModal = props => {
                   <div className="col-3">
                     <AWSMDropdown
                       items={regionList}
-                      onChange={value => onFieldChange("region", value)}
-                      value={editOrderData.region ? editOrderData.region : ""}
+                      onChange={value => onFieldChange('region', value)}
+                      value={editOrderData.region ? editOrderData.region : ''}
                       disabled={false}
                     />
                   </div>
                   <div className="col-3">
                     <AWSMDropdown
                       items={terminalList}
-                      onChange={value => onFieldChange("terminal", value)}
-                      value={editOrderData?.terminal}
+                      onChange={value => onFieldChange('terminal', TERMINAL_CODE_MAPPING[value])}
+                      value={TERMINAL_CODE_MAPPING_ID[editOrderData?.terminal]}
                       disabled={false}
                     />
                   </div>
@@ -239,7 +247,7 @@ const EditOrderBankModal = props => {
                     <NavItem>
                       <NavLink
                         id={key}
-                        className={activeTab === index.id ? "active" : ""}
+                        className={activeTab === index.id ? 'active' : ''}
                         onClick={() => setActiveTab(index.id)}
                       >
                         <span className="d-none d-sm-block">{index.name}</span>
@@ -263,7 +271,7 @@ const EditOrderBankModal = props => {
                   />
                 </TabPane>
                 <TabPane tabId="2">
-                  <DeliveryTab data={editOrderData} />
+                  <DeliveryTab hrMints={hrMints} data={editOrderData} />
                 </TabPane>
                 <TabPane tabId="3">
                   <SiteDNTab data={editOrderData} />

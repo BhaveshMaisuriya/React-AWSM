@@ -1,14 +1,14 @@
-import React, { useMemo } from "react"
-import AWSMInput from "components/Common/Input"
-import { Row, Col } from "reactstrap"
-import DatePicker from "components/Common/DatePicker"
-import TimePicker from "components/Common/TableInformation/components/TimePicker"
-import AWSMDropdown from "components/Common/Dropdown"
-import { format } from "date-fns"
+import React, { useMemo } from 'react'
+import AWSMInput from 'components/Common/Input'
+import { Row, Col } from 'reactstrap'
+import DatePicker from 'components/Common/DatePicker'
+import TimePicker from 'components/Common/TableInformation/components/TimePicker'
+import AWSMDropdown from 'components/Common/Dropdown'
+import { format } from 'date-fns'
 
 const OrderTab = props => {
   const { data, inputValue, inputValue1, inputValue2, inputValue3, onFieldChange, timeData } = props
-  const ORDER_PRIORITY = ["None", "High Priority"]
+  const ORDER_PRIORITY = ['None', 'High Priority']
 
   const remainChars1 = useMemo(() => {
     return 40 - inputValue1.length
@@ -49,10 +49,7 @@ const OrderTab = props => {
           <label className="text-upper">Ship To</label>
           <div className="d-flex">
             <div className="w-100">
-              <AWSMInput
-                value={data?.retail_storage_relation?.retail_customer_relation?.ship_to_party}
-                disabled={true}
-              />
+              <AWSMInput value={data?.format_ship_to} disabled={true} />
             </div>
           </div>
         </Col>
@@ -89,7 +86,7 @@ const OrderTab = props => {
               <AWSMInput
                 value={data?.volume}
                 disabled={false}
-                onChange={value => onFieldChange("volume", value)}
+                onChange={value => onFieldChange('volume', value)}
               />
             </div>
           </div>
@@ -106,7 +103,7 @@ const OrderTab = props => {
           <label className="text-upper">Product Category</label>
           <div className="d-flex">
             <div className="w-100">
-              <AWSMInput value={data?.retail_storage_relation?.sales_category} disabled={true} />
+              <AWSMInput value={data?.format_product_category} disabled={true} />
             </div>
           </div>
         </Col>
@@ -117,9 +114,9 @@ const OrderTab = props => {
           <div className="d-flex">
             <div className="w-100">
               <AWSMDropdown
-                items={""} //productList
-                onChange={value => onFieldChange("product_name", value)}
-                value={data?.product_name}
+                items={''} //productList
+                onChange={value => onFieldChange('product_name', value)}
+                value={data?.format_product}
                 disabled={false}
                 placeholder="Select"
               />
@@ -130,7 +127,7 @@ const OrderTab = props => {
           <label className="text-upper">Product Code</label>
           <div className="d-flex">
             <div className="w-100">
-              <AWSMInput value={data?.retail_storage_relation?.product} disabled={true} />
+              <AWSMInput value={data?.format_product_code} disabled={true} />
             </div>
           </div>
         </Col>
@@ -151,7 +148,7 @@ const OrderTab = props => {
               <TimePicker
                 value={data?.planned_load_time}
                 items={timeData}
-                onChange={value => onFieldChange("planned_load_time", value)}
+                onChange={value => onFieldChange('planned_load_time', value)}
                 hasNone
               />
             </div>
@@ -164,7 +161,7 @@ const OrderTab = props => {
               <TimePicker
                 value={data?.eta}
                 items={timeData}
-                onChange={value => onFieldChange("eta", value)}
+                onChange={value => onFieldChange('eta', value)}
                 hasNone
               />
             </div>
@@ -174,24 +171,24 @@ const OrderTab = props => {
           <label className="text-upper">Multiproduct ID</label>
           <span
             className="remove_text text-red"
-            onClick={() => onFieldChange("ConfirmMultiproduct", true)}
+            onClick={() => onFieldChange('ConfirmMultiproduct', true)}
           >
             Remove
           </span>
           <div className="d-flex">
-            <div className={`w-100 relative ${data?.ConfirmMultiproduct === true && "border-red"}`}>
+            <div className={`w-100 relative ${data?.ConfirmMultiproduct === true && 'border-red'}`}>
               <AWSMInput value={data?.multi_prod_id} disabled={true} />
               {data?.ConfirmMultiproduct === true && (
                 <div className="confirm-main">
                   <span
                     class="confirm-text text-red"
-                    onClick={() => onFieldChange("ConfirmMultiproduct", false)}
+                    onClick={() => onFieldChange('ConfirmMultiproduct', false)}
                   >
                     Confirm
                   </span>
                   <span
                     class="confirm-no-text text-red"
-                    onClick={() => onFieldChange("ConfirmMultiproduct", false)}
+                    onClick={() => onFieldChange('ConfirmMultiproduct', false)}
                   >
                     No
                   </span>
@@ -207,7 +204,7 @@ const OrderTab = props => {
           <div className="d-flex">
             <div className="w-100">
               <AWSMInput
-                value={data?.retain ? format(new Date(data?.retain), "dd-MM-yyyy") : "00"}
+                value={data?.retain ? format(new Date(data?.retain), 'dd-MM-yyyy') : '00'}
                 disabled={true}
               />
             </div>
@@ -218,7 +215,7 @@ const OrderTab = props => {
           <div className="d-flex">
             <div className="w-100">
               <AWSMInput
-                value={data?.runout ? format(new Date(data?.retain), "dd-MM-yyyy") : "00"}
+                value={data?.runout ? format(new Date(data?.retain), 'dd-MM-yyyy') : '00'}
                 disabled={true}
               />
             </div>
@@ -228,24 +225,24 @@ const OrderTab = props => {
           <label className="text-upper">Multiload ID</label>
           <span
             className="remove_text text-red"
-            onClick={() => onFieldChange("ConfirmMultiload", true)}
+            onClick={() => onFieldChange('ConfirmMultiload', true)}
           >
             Remove
           </span>
           <div className="d-flex">
-            <div className={`w-100 relative ${data?.ConfirmMultiload === true && "border-red"}`}>
+            <div className={`w-100 relative ${data?.ConfirmMultiload === true && 'border-red'}`}>
               <AWSMInput value={data?.multi_load_id} disabled={true} />
               {data?.ConfirmMultiload === true && (
                 <div className="confirm-main">
                   <span
                     class="confirm-text text-red"
-                    onClick={() => onFieldChange("ConfirmMultiload", false)}
+                    onClick={() => onFieldChange('ConfirmMultiload', false)}
                   >
                     Confirm
                   </span>
                   <span
                     class="confirm-no-text text-red"
-                    onClick={() => onFieldChange("ConfirmMultiload", false)}
+                    onClick={() => onFieldChange('ConfirmMultiload', false)}
                   >
                     No
                   </span>
@@ -264,7 +261,7 @@ const OrderTab = props => {
             <div className="w-100">
               <AWSMDropdown
                 items={ORDER_PRIORITY}
-                onChange={value => onFieldChange("priority", value)}
+                onChange={value => onFieldChange('priority', value)}
                 value={data?.priority}
               />
             </div>
@@ -285,15 +282,15 @@ const OrderTab = props => {
           <div className="d-flex">
             <div className="w-100 relative">
               <input
-                onChange={e => onFieldChange("remarks", e.target.value)}
+                onChange={e => onFieldChange('remarks', e.target.value)}
                 value={data?.remarks}
-                className={`awsm-input w-100 ${inputValue && !isValid ? "out-range " : ""}`}
+                className={`awsm-input w-100 ${inputValue && !isValid ? 'out-range ' : ''}`}
               />
               <span
                 className={`position-absolute awsm-input-right-content ${
-                  inputValue && !isValid ? "out-range " : ""
+                  inputValue && !isValid ? 'out-range ' : ''
                 }`}
-              >{`${remainChars >= 0 ? "+" : ""}${remainChars}`}</span>
+              >{`${remainChars >= 0 ? '+' : ''}${remainChars}`}</span>
             </div>
           </div>
         </Col>
@@ -303,45 +300,45 @@ const OrderTab = props => {
           <label className="text-upper">my Remarks 1</label>
           <div className="w-100 relative">
             <input
-              onChange={e => onFieldChange("my_remark_1", e.target.value)}
+              onChange={e => onFieldChange('my_remark_1', e.target.value)}
               value={data?.my_remark_1}
-              className={`awsm-input w-100 ${inputValue1 && !isValid1 ? "out-range " : ""}`}
+              className={`awsm-input w-100 ${inputValue1 && !isValid1 ? 'out-range ' : ''}`}
             />
             <span
               className={`position-absolute awsm-input-right-content ${
-                inputValue1 && !isValid1 ? "out-range " : ""
+                inputValue1 && !isValid1 ? 'out-range ' : ''
               }`}
-            >{`${remainChars1 >= 0 ? "+" : ""}${remainChars1}`}</span>
+            >{`${remainChars1 >= 0 ? '+' : ''}${remainChars1}`}</span>
           </div>
         </Col>
         <Col>
           <label className="text-upper">my Remarks 2</label>
           <div className="w-100 relative">
             <input
-              onChange={e => onFieldChange("my_remark_2", e.target.value)}
+              onChange={e => onFieldChange('my_remark_2', e.target.value)}
               value={data?.my_remark_2}
-              className={`awsm-input w-100 ${inputValue2 && !isValid2 ? "out-range " : ""}`}
+              className={`awsm-input w-100 ${inputValue2 && !isValid2 ? 'out-range ' : ''}`}
             />
             <span
               className={`position-absolute awsm-input-right-content ${
-                inputValue2 && !isValid2 ? "out-range " : ""
+                inputValue2 && !isValid2 ? 'out-range ' : ''
               }`}
-            >{`${remainChars2 >= 0 ? "+" : ""}${remainChars2}`}</span>
+            >{`${remainChars2 >= 0 ? '+' : ''}${remainChars2}`}</span>
           </div>
         </Col>
         <Col>
           <label className="text-upper">my Remarks 3</label>
           <div className="w-100 relative">
             <input
-              onChange={e => onFieldChange("my_remark_3", e.target.value)}
+              onChange={e => onFieldChange('my_remark_3', e.target.value)}
               value={data?.my_remark_3}
-              className={`awsm-input w-100 ${inputValue3 && !isValid3 ? "out-range " : ""}`}
+              className={`awsm-input w-100 ${inputValue3 && !isValid3 ? 'out-range ' : ''}`}
             />
             <span
               className={`position-absolute awsm-input-right-content ${
-                inputValue3 && !isValid3 ? "out-range " : ""
+                inputValue3 && !isValid3 ? 'out-range ' : ''
               }`}
-            >{`${remainChars3 >= 0 ? "+" : ""}${remainChars3}`}</span>
+            >{`${remainChars3 >= 0 ? '+' : ''}${remainChars3}`}</span>
           </div>
         </Col>
       </Row>

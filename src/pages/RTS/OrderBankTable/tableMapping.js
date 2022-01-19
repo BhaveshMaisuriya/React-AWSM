@@ -429,7 +429,7 @@ const tableMapping = {
 const ganttChartTableColumns = [
   "vehicle",
   "max_volume",
-  "shift_type",
+  "status",
   "utilization_rate",
   "restriction_code",
 ]
@@ -443,10 +443,9 @@ const ganttChartTableDefaultColumns = {
     label: "Util (%)",
     columnSize: "cell-text",
   },
-  shift_type: {
+  status: {
     label: "Status",
-    columnSize: "cell-text",
-    type: "list",
+    columnSize: "cell-text"
   },
   max_volume: {
     label: "Cap (L)",
@@ -477,12 +476,12 @@ const ganttChartTableMapping = {
     columnSize: "cell-text",
   },
   shift_type: {
-    label: "Status",
+    label: "Shift",
     columnSize: "cell-text",
     type: "list",
   },
   status: {
-    label: "Shift",
+    label: "Status",
     columnSize: "cell-text",
   },
   pump_type: {

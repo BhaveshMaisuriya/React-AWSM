@@ -67,15 +67,13 @@ function BryntumChartTable(props) {
     dropOderSuccess,
     getGanttEventValidation,
     ganttEventValidation,
+    onFilterChange,
   } = props
   const tableData = useRef([])
-  const setTableData = newData => {
-    tableData.current = newData
-  }
+
   const colsRef = useRef(bryntumCurrentColumns)
   const [modal, setModal] = useState(false)
   const [dropdownSelectedItem, setDropdownSelectedItem] = useState(null)
-  const [filterCondition, setFilterCondition] = useState([])
   const [eventsData, setEventsData] = useState([])
   const [shipmentDblclick, setShipmentDblclick] = useState(false)
   const [roadTankerModalShow, setRoadTankerModal] = useState(false)
@@ -84,12 +82,35 @@ function BryntumChartTable(props) {
   const schedulerProRef = useRef()
   const firstRender = useRef(true)
   const [filterList, setFilterList] = useState([])
-  const [currentPage, setCurrentPage] = useState(0)
   const [popupShown, showPopup] = useState(false)
   const [eventRecord, setEventRecord] = useState(null)
   const [eventStore, setEventStore] = useState(null)
   const [resourceStore, setResourceStore] = useState(null)
+
+  const [bryntumTable, setBryntumTable] = useState({
+    page: 0,
+    filterCondition: [],
+    sortDirection: 'asc',
+    sortField: 'vehicle',
+  })
+
+  useEffect(() => onFilterChange(bryntumTable), [bryntumTable])
+
   useEffect(() => {
+    schedulerProRef.current.instance.store.listeners = {
+      sort(e) {
+        const { ascending, field } = e.sorters[0]
+        const opt = { sortDirection: ascending ? 'asc' : 'desc', sortField: field }
+
+        setBryntumTable(state => {
+          if (opt.sortField === state.sortField && opt.sortDirection === state.sortDirection)
+            return state
+
+          return { ...state, ...opt, page: 0 }
+        })
+      },
+    }
+
     const { eventStore, resourceStore } = schedulerProRef.current.instance
     setEventStore(eventStore)
     setResourceStore(resourceStore)
@@ -111,61 +132,17 @@ function BryntumChartTable(props) {
     showPopup(false)
   }, [eventRecord, eventStore])
 
-  const getGanttCharData = page => {
-    let q = ''
-    if (filterCondition.length > 0) {
-      q = filterCondition
-        .filter(v => v.data.length > 0)
-        .map(e => {
-          return `(${e.data.map(k => `${e.key}=='${k}'`).join('||')})`
-        })
-        .join('&&')
-    }
-
-    const payload = {
-      limit: 10,
-      page: page ?? currentPage,
-      search_fields: '*',
-      q,
-      sort_dir: 'asc',
-      sort_field: 'vehicle',
-      filter: {
-        shift_date: props?.dateConfig,
-        terminal: TERMINAL_CODE_MAPPING[props?.terminal],
-      },
-    }
-    if (page !== undefined) {
-      setCurrentPage(page)
-    }
-    props.getRTSOderBankGanttChart(payload)
-  }
-
   const refreshGanttChartTable = () => {
     props.clearGanttData()
-    setCurrentPage(0)
-    const { getRTSOderBankGanttChart } = props
-    const payload = {
-      limit: 10,
-      page: 0,
-      search_fields: '*',
-      q: `(status_awsm=='Active')`,
-      sort_dir: 'desc',
-      sort_field: 'vehicle',
-      filter: {
-        shift_date: props?.dateConfig,
-        terminal: TERMINAL_CODE_MAPPING[props?.terminal],
-      },
-    }
+
     setTimeout(() => {
-      getRTSOderBankGanttChart(payload)
+      setBryntumTable(bryntumTable)
     }, 1000)
   }
 
-  useEffect(() => getGanttCharData(currentPage), [currentPage])
-
   useEffect(() => {
     if (dropOderSuccess) {
-      getGanttCharData(0)
+      onFilterChange({}) // leave argument empty so they will be set to default
     }
   }, [dropOderSuccess])
 
@@ -179,7 +156,7 @@ function BryntumChartTable(props) {
   }, [bryntumCurrentColumns])
 
   useEffect(() => {
-    setTableData(props.ganttChartTableData)
+    tableData.current = props.ganttChartTableData
   }, [props.ganttChartTableData])
 
   useEffect(() => {
@@ -324,7 +301,7 @@ function BryntumChartTable(props) {
           scheduler.resourceStore.add(e)
         })
       }
-      setTableData(updateData)
+      tableData.current = updateData
     }
   }
 
@@ -341,33 +318,6 @@ function BryntumChartTable(props) {
     fillTicks: true,
     scheduleMenuFeature: false,
     createEventOnDblClick: false,
-    listeners: {
-      cellClick: function (grid) {
-        const { record } = grid
-        if (record?.data?.vehicle && record?.data?.id) {
-          const { id: resourceId, vehicle } = record.data
-          onSelectVehicle({ resourceId, vehicle })
-        }
-      },
-      beforeEventEdit({ eventRecord, resourceRecord }) {
-        ShipmentDblclickModal(eventRecord)
-        eventRecord.resourceId = resourceRecord.id
-        showEditor(eventRecord)
-        return false
-      },
-      beforeEventDropFinalize: async ({ context }) => {
-        const { eventRecord } = context
-        context.async = true
-        context.finalize(true)
-        // validate gantt event 1
-        await getGanttEventValidation(eventRecord._data)
-      },
-      afterEventDrop({ context }) {
-        const { eventRecord } = context
-        // validate gantt event 2
-        updateModalHandler(EventContextList.UPDATE_SHIPMENT, eventRecord)
-      },
-    },
     eventRenderer: ({ eventRecord, renderData }) => {
       // customize content for event in here
       // if (!eventRecord.data?.highlight) {
@@ -418,7 +368,7 @@ function BryntumChartTable(props) {
     zoomOnMouseWheel: false,
     forceFit: true,
     features: {
-      eventDragCreate : false,
+      eventDragCreate: false,
       taskEdit: false,
       eventEdit: {
         editorConfig: {
@@ -524,6 +474,33 @@ function BryntumChartTable(props) {
           increment: 1,
         },
       ],
+    },
+    listeners: {
+      cellClick(grid) {
+        const { record } = grid
+        if (record?.data?.vehicle && record?.data?.id) {
+          const { id: resourceId, vehicle } = record.data
+          onSelectVehicle({ resourceId, vehicle })
+        }
+      },
+      beforeEventEdit({ eventRecord, resourceRecord }) {
+        ShipmentDblclickModal(eventRecord)
+        eventRecord.resourceId = resourceRecord.id
+        showEditor(eventRecord)
+        return false
+      },
+      beforeEventDropFinalize: async ({ context }) => {
+        const { eventRecord } = context
+        context.async = true
+        context.finalize(true)
+        // validate gantt event 1
+        await getGanttEventValidation(eventRecord._data)
+      },
+      afterEventDrop({ context }) {
+        const { eventRecord } = context
+        // validate gantt event 2
+        updateModalHandler(EventContextList.UPDATE_SHIPMENT, eventRecord)
+      },
     },
   }
 
@@ -725,31 +702,28 @@ function BryntumChartTable(props) {
   }
 
   const onApplyFilter = (data, dataKey) => {
-    const index = filterCondition.findIndex(e => e.key === dataKey)
-    const newFilterCondition = [...filterCondition]
+    const index = bryntumTable.filterCondition.findIndex(e => e.key === dataKey)
+    const newFilterCondition = [...bryntumTable.filterCondition]
     if (index >= 0) {
       newFilterCondition[index] = { ...newFilterCondition[index], data: data }
     } else {
       newFilterCondition.push({ data, key: dataKey })
     }
-    setFilterCondition(newFilterCondition)
+
+    setBryntumTable(state => ({ ...state, filterCondition: newFilterCondition }))
+
     hideFilterElement(dataKey)
   }
 
   const onResetFilter = dataKey => {
-    const index = filterCondition.findIndex(e => e.key === dataKey)
+    const index = bryntumTable.filterCondition.findIndex(e => e.key === dataKey)
     if (index >= 0) {
-      const newFilterCondition = [...filterCondition]
+      const newFilterCondition = [...bryntumTable.filterCondition]
       newFilterCondition.splice(index, 1)
-      setFilterCondition(newFilterCondition)
+
+      setBryntumTable(state => ({ ...state, filterCondition: newFilterCondition }))
     }
     hideFilterElement(dataKey)
-  }
-
-  useEffect(() => getGanttCharData(0), [filterCondition])
-
-  const handleScrollGanttChartTable = () => {
-    setCurrentPage(currentPage + 1)
   }
 
   return (
@@ -757,7 +731,7 @@ function BryntumChartTable(props) {
       <div className="container-orderbank gant-chart-table">
         <Row className="mr-0">
           <InfiniteScroll
-            next={handleScrollGanttChartTable}
+            next={() => setBryntumTable(state => ({ ...state, page: state.page + 1 }))}
             hasMore={props.ganttChartTableData.length < props.totalRow_ganttChart}
             loader={<h5 className={props.totalRow_ganttChart > 10 ? '' : 'd-none'}>Loading...</h5>}
             dataLength={props.ganttChartTableData.length}

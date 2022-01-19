@@ -256,12 +256,25 @@ function OrderBank({
     })
   }
 
+  useEffect(
+    () =>
+      getRTSOderBankGanttChart({
+        ...bryntumTable.payload,
+        filter: {
+          shift_date: shiftDateGantt,
+          terminal: TERMINAL_CODE_MAPPING[terminal],
+        },
+      }),
+    [bryntumTable]
+  )
+
   useEffect(() => {
     const asyncFunction = async () => {
       await clearGanttData()
 
       getRTSOderBankGanttChart({
         ...bryntumTable.payload,
+        page: 0,
         filter: {
           shift_date: shiftDateGantt,
           terminal: TERMINAL_CODE_MAPPING[terminal],
@@ -276,7 +289,7 @@ function OrderBank({
     }
 
     asyncFunction()
-  }, [bryntumTable, shiftDateGantt, terminal])
+  }, [shiftDateGantt, terminal])
 
   useEffect(() => {
     const results = { DNs: 3, shipment: 2, backlog: 0, SR: 0, HP: 0 }

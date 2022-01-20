@@ -286,14 +286,14 @@ class ProductDetailModal extends PureComponent {
 
     if (!currentProduct)
       return (
-        <Modal isOpen={visible} className="commercial-customer-modal modal-lg">
+        <Modal centered={true} isOpen={visible} className="commercial-customer-modal modal-lg">
           <ModalHeader close={externalCloseBtn}>
             <span className="modal-title">PRODUCT CODE</span>
           </ModalHeader>
         </Modal>
       )
     return (
-      <Modal isOpen={visible} className="commercial-customer-modal modal-lg">
+      <Modal centered={true} isOpen={visible} className="commercial-customer-modal modal-lg">
         <ModalHeader close={externalCloseBtn}>
           <span className="modal-title">
             Product Code: {updateDictionary.code}

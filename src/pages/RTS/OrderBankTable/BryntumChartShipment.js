@@ -42,8 +42,14 @@ const EventContextList = {
 export const bryntumSchedulerTableNameForCookie = 'rts-gantt-chart-bryntum-scheduler'
 
 function BryntumChartShipment(props) {
-  const { bryntumCurrentColumns, onSelectVehicle, onDeselectVehicle, dateConfig, onFilterChange } =
-    props
+  const {
+    bryntumCurrentColumns,
+    onSelectVehicle,
+    onDeselectVehicle,
+    onFilterChange,
+    dateConfig,
+    terminal,
+  } = props
   const tableData = useRef([])
 
   const colsRef = useRef(bryntumCurrentColumns)
@@ -65,6 +71,8 @@ function BryntumChartShipment(props) {
   })
 
   useEffect(() => onFilterChange(bryntumTable), [bryntumTable])
+
+  useEffect(() => setBryntumTable({ ...bryntumTable, page: 0 }), [dateConfig, terminal])
 
   useEffect(() => {
     setFilterList(
@@ -331,7 +339,7 @@ function BryntumChartShipment(props) {
       newFilterCondition.push({ data, key: dataKey })
     }
 
-    setBryntumTable(state => ({ ...state, filterCondition: newFilterCondition }))
+    setBryntumTable(state => ({ ...state, filterCondition: newFilterCondition, page: 0 }))
 
     hideFilterElement(dataKey)
   }
@@ -342,7 +350,7 @@ function BryntumChartShipment(props) {
       const newFilterCondition = [...bryntumTable.filterCondition]
       newFilterCondition.splice(index, 1)
 
-      setBryntumTable(state => ({ ...state, filterCondition: newFilterCondition }))
+      setBryntumTable(state => ({ ...state, filterCondition: newFilterCondition, page: 0 }))
     }
     hideFilterElement(dataKey)
   }

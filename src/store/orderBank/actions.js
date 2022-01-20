@@ -449,14 +449,16 @@ export const getRTSOderBankGanttChartFail = error => ({
   payload: error,
 })
 
-export const dragOrderBankToGanttChart = ({ shift_date }) => ({
+export const dragOrderBankToGanttChart = ({ shift_date, vehicle, order_banks }) => ({
   type: DRAG_RTS_ORDER_BANK_TO_GANTT_CHART,
   shift_date,
+  vehicle,
+  order_banks
 })
 
 export const dragOrderBankToGanttChartSuccess = dropData => ({
   type: DRAG_RTS_ORDER_BANK_TO_GANTT_CHART_SUCCESS,
-  dropData,
+  payload: dropData,
 })
 
 export const dragOrderBankToGanttChartFail = error => ({

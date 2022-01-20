@@ -60,7 +60,7 @@ function CrossTerminalModal(props) {
   }
 
   return (
-    <Modal  id="crossterminal-modal" isOpen={open} className="deleteModal">
+    <Modal id="crossterminal-modal" isOpen={open} className="deleteModal">
       <ModalHeader  toggle={onCancelClick}>Cross Terminal</ModalHeader>
       <ModalBody className="position-relative h-250 scroll pl-30">
         {isConfirm && <ExitConfirmation onExit={onConfirmExit} onCancel={onConfirmCancel} />}
@@ -77,7 +77,6 @@ function CrossTerminalModal(props) {
                 <AWSMDropdown
                   value={region}
                   onChange={value => regionChange(value)}
-                  // disabled
                   items={regionList.splice(6) && regionList}
                 />
               </Col>

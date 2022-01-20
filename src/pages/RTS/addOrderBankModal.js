@@ -348,7 +348,7 @@ const NewOrderBankModal = props => {
   }
 
   return (
-    <Modal isOpen={open} className="new-order-modal">
+    <Modal centered={true} isOpen={open} className="new-order-modal">
       <ModalHeader close={<CloseButton handleClose={onCancelClick} />}>
         <span className="modal-title">Add New order</span>
       </ModalHeader>
@@ -666,21 +666,24 @@ const NewOrderBankModal = props => {
                       <strong>Open Time 1: </strong>
                       {orderData?.delivery?.actual_open_time_1
                         ? removeKeywords(
-                            orderData?.delivery?.actual_open_time_1?.days !== ""
+                            orderData?.delivery?.actual_open_time_1?.days
                               ? orderData?.delivery?.actual_open_time_1?.days.join() + " - "
                               : ""
                           ) +
                           hrMints(orderData?.delivery.actual_open_time_1?.time_from) +
                           " to " +
                           hrMints(orderData?.delivery?.actual_open_time_1?.time_to)
-                        : "-"}{" "}
+                        : "-"}
                     </p>
                     <p>
                       <strong>Open Time 2:</strong>{" "}
                       {orderData?.delivery?.actual_open_time_2
-                        ? removeKeywords(orderData?.delivery.actual_open_time_2?.days.join()) +
-                          "-" +
-                          hrMints(orderData?.delivery?.actual_open_time_2?.time_from) +
+                        ? removeKeywords(
+                            orderData?.delivery?.actual_open_time_2?.days
+                              ? orderData?.delivery?.actual_open_time_2?.days.join() + " - "
+                              : ""
+                          ) +
+                          hrMints(orderData?.delivery.actual_open_time_2?.time_from) +
                           " to " +
                           hrMints(orderData?.delivery?.actual_open_time_2?.time_to)
                         : "-"}
@@ -688,9 +691,12 @@ const NewOrderBankModal = props => {
                     <p>
                       <strong>Open Time 3:</strong>{" "}
                       {orderData?.delivery?.actual_open_time_3
-                        ? removeKeywords(orderData?.delivery?.actual_open_time_3?.days.join()) +
-                          "-" +
-                          hrMints(orderData?.delivery?.actual_open_time_3?.time_from) +
+                        ? removeKeywords(
+                            orderData?.delivery?.actual_open_time_3?.days
+                              ? orderData?.delivery?.actual_open_time_3?.days.join() + " - "
+                              : ""
+                          ) +
+                          hrMints(orderData?.delivery.actual_open_time_3?.time_from) +
                           " to " +
                           hrMints(orderData?.delivery?.actual_open_time_3?.time_to)
                         : "-"}

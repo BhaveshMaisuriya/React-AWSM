@@ -134,7 +134,7 @@ const RetailCustomerModal = props => {
 
   return (
     <>
-      <Modal isOpen={visible} className="retail-customer-modal modal-lg">
+      <Modal centered={true} isOpen={visible} className="retail-customer-modal modal-lg">
         {currentRetailDetail ? (
           <div>
             <ModalHeader close={<CloseButton handleClose={handleClose} />}>

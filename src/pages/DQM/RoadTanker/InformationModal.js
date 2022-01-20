@@ -246,7 +246,7 @@ class InformationModal extends Component {
     }
 
     return (
-      <Modal isOpen={visible} className="table-information modal-lg">
+      <Modal centered={true} isOpen={visible} className="table-information modal-lg">
         <ModalHeader close={<CloseButton handleClose={handleClose} />}>
           <span className="modal-title"> Vehicle Id: {currentRoadTanker?.vehicle}</span>
           <span className="last-updated-sub-title">

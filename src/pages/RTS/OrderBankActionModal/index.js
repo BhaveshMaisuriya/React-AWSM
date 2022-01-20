@@ -13,7 +13,7 @@ const OrderBankActionModal = ({open, title, subTitle, onClose, type, onSubmit}) 
   }
 
   return (
-    <Modal isOpen={open} className="order-bank-action-modal">
+    <Modal centered={true} isOpen={open} className="order-bank-action-modal">
       <ModalHeader toggle={onClose}>
         {title}
       </ModalHeader>

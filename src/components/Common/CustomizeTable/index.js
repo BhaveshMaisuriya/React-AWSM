@@ -398,7 +398,7 @@ const CustomizeTableModal = ({
 
   return (
     <div onKeyDown={onKeyPress}>
-      <Modal isOpen={open} id="customize_popup">
+      <Modal isOpen={open} centered={true} id="customize_popup">
         <ModalHeader close={<CloseButton handleClose={onExit} />}>
           <div>Customise Column</div>
         </ModalHeader>

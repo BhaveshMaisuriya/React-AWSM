@@ -8,7 +8,7 @@ const DeleteConfirmationPopup = ({ open, istoggle, deleteFunction }) => {
     istoggle()
   }
   return (
-    <Modal isOpen={open} toggle={istoggle} id="auditLog-modal" > 
+    <Modal isOpen={open} toggle={istoggle} centered={true} id="auditLog-modal" > 
       <ModalHeader close={<CloseButton handleClose={istoggle}></CloseButton>} >Delete Shipment Confirmation</ModalHeader>
       <ModalBody>
         <p>

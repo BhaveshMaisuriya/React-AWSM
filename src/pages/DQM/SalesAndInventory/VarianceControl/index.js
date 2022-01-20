@@ -208,7 +208,7 @@ const VarianceControl = ({
   )
 
   return (
-    <Modal isOpen={open} className="variance-control-modal">
+    <Modal centered={true} isOpen={open} className="variance-control-modal">
       <div className="variance-control-container">
         <ModalHeader close={<CloseButton handleClose={() => setIsConfirm(true)} />}>
           <span className="modal-title">Threshold Control</span>

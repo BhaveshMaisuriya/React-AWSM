@@ -68,6 +68,8 @@ function BryntumChartTable(props) {
     getGanttEventValidation,
     ganttEventValidation,
     onFilterChange,
+    dateConfig,
+    terminal,
   } = props
   const tableData = useRef([])
 
@@ -95,6 +97,8 @@ function BryntumChartTable(props) {
   })
 
   useEffect(() => onFilterChange(bryntumTable), [bryntumTable])
+
+  useEffect(() => setBryntumTable({ ...bryntumTable, page: 0 }), [dateConfig, terminal])
 
   useEffect(() => {
     schedulerProRef.current.instance.store.listeners = {
@@ -142,7 +146,7 @@ function BryntumChartTable(props) {
 
   useEffect(() => {
     if (dropOderSuccess) {
-      onFilterChange({}) // leave argument empty so they will be set to default
+      onFilterChange({}, true) // leave argument empty so they will be set to default
     }
   }, [dropOderSuccess])
 
@@ -195,8 +199,8 @@ function BryntumChartTable(props) {
       }
       case EventContextList.SEND_ORDER: {
         data.type = EventContextList.SEND_ORDER
-        data.header = 'Send Order for DN'
-        data.body = "send this shipment's order for DN?"
+        data.header = 'Send Orders for DN'
+        data.body = "Send this shipment's order for DN?"
         data.styleColor = 'success'
         break
       }
@@ -394,7 +398,7 @@ function BryntumChartTable(props) {
         },
       },
     },
-    startDate: props?.dateConfig?.date_from ?? format(Date.now(), 'yyyy-MM-dd'),
+    startDate: dateConfig.date_from ?? format(Date.now(), 'yyyy-MM-dd'),
     resourceNonWorkingTimeFeature: true,
     nonWorkingTimeFeature: true,
     resourceTimeRangesFeature: true,
@@ -407,12 +411,12 @@ function BryntumChartTable(props) {
           eventRecord.data?.isPending
         )
           return false
+
         if (!eventRecord.data?.resourceOrder) {
           items.sendOrderForDS = {
             hidden: true,
           }
-        }
-        if (eventRecord.data?.resourceOrder) {
+        } else {
           let check = eventRecord.data?.resourceOrder.filter(v => !v.DNNumber)
           items.sendOrderForDS = {
             ...items.sendOrderForDS,
@@ -429,7 +433,7 @@ function BryntumChartTable(props) {
         editEvent: false,
         deleteEvent: false,
         sendOrderForDS: {
-          text: 'Send OrderS For DS',
+          text: 'Send Orders for DN',
           onItem({ eventRecord }) {
             updateModalHandler(EventContextList.SEND_ORDER, eventRecord)
           },
@@ -710,7 +714,7 @@ function BryntumChartTable(props) {
       newFilterCondition.push({ data, key: dataKey })
     }
 
-    setBryntumTable(state => ({ ...state, filterCondition: newFilterCondition }))
+    setBryntumTable(state => ({ ...state, filterCondition: newFilterCondition, page: 0 }))
 
     hideFilterElement(dataKey)
   }
@@ -721,7 +725,7 @@ function BryntumChartTable(props) {
       const newFilterCondition = [...bryntumTable.filterCondition]
       newFilterCondition.splice(index, 1)
 
-      setBryntumTable(state => ({ ...state, filterCondition: newFilterCondition }))
+      setBryntumTable(state => ({ ...state, filterCondition: newFilterCondition, page: 0 }))
     }
     hideFilterElement(dataKey)
   }

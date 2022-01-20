@@ -463,7 +463,7 @@ const RTSOrderBank = (state = initialState, action) => {
       //     return item
       //   })
       // )
-      ToastSuccess.fire()
+      ToastSuccess.fire({ titleText: 'A shipment has ben successfully cancelled from schedule' })
       return {
         ...state,
         shipmentDropData: newShipmentDropData,

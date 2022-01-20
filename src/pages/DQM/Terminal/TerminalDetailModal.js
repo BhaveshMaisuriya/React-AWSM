@@ -279,6 +279,7 @@ class TerminalDetailModal extends PureComponent {
     const isDisabledField = isScheduler()
     return (
       <Modal
+        centered={true}
         isOpen={visible}
         className="commercial-customer-modal terminal-detail-modal modal-lg"
       >

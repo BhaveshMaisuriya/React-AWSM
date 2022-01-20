@@ -38,7 +38,6 @@ const ChartColumnFilter = ({
     filterData.map(e => ({
       text: e,
       checked: first || selectedFilters[filterKey].includes(e),
-      visible: true,
     }))
   )
 
@@ -46,7 +45,6 @@ const ChartColumnFilter = ({
     const _data = filterData.map(e => ({
       text: e,
       checked: first || selectedFilters[filterKey].includes(e),
-      visible: true,
     }))
     setData(_data)
   }, [filterData, selectedFilters])
@@ -75,16 +73,19 @@ const ChartColumnFilter = ({
 
   const onInputSearchChange = event => {
     const value = event.target.value.toString()
-    setData(data =>
-      data.map(e => ({
-        ...e,
-        visible: !value || e.text.toLowerCase().includes(value.toLowerCase()),
-      }))
+    const _visibles = filterData.filter(
+      s => !value || s.toLowerCase().includes(value.toLowerCase())
     )
+    const data = _visibles.map(e => ({
+      text: e,
+      checked: first || selectedFilters[filterKey].includes(e),
+    }))
+
+    setData(data)
   }
 
   const apply = () => {
-    const _data = visibleData.filter(e => e.checked && e.visible).map(e => e.text)
+    const _data = visibleData.filter(e => e.checked).map(e => e.text)
     if (onApply) {
       onApply(_data, filterKey)
     }

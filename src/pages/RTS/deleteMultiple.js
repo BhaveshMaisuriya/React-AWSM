@@ -11,7 +11,7 @@ function DeleteMultipleModal(props) {
   }
 
   return (
-    <Modal isOpen={open} className="">
+    <Modal centered={true} isOpen={open}>
       <ModalHeader toggle={toggle}>Delete Multiple Order Confirmation</ModalHeader>
       <ModalBody className="position-relative scroll pl-30">
         <p>This action cannot be undone. Are you sure you want to delete these Orders?</p>

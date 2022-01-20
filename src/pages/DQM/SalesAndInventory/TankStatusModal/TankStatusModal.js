@@ -87,7 +87,7 @@ const TankStatusModal = props => {
   return (
     <>
       <div className={`tank_status`}>
-        <Modal isOpen={open} size={`lg`} className="tank-status-modal">
+        <Modal centered={true} isOpen={open} size={`lg`} className="tank-status-modal">
           <div className="variance-control-container">
             <ModalHeader close={<CloseButton handleClose={() => setModalConfirm(true)} />}>
               <span className="modal-title">{modalTitle}</span>

@@ -25,7 +25,6 @@ import { isScheduler } from "../../../../helpers/auth_helper"
 import CloseButton from "../../../../components/Common/CloseButton"
 import ExitConfirmation from "../../../../components/Common/ExitConfirmation"
 import _ from "lodash"
-
 class SalesAndInventoryTableInformation extends Component {
   constructor(props) {
     super(props)
@@ -141,7 +140,7 @@ class SalesAndInventoryTableInformation extends Component {
 
     return (
       <>
-        <Modal isOpen={visible} className="commercial-customer-modal modal-lg">
+        <Modal centered={true} isOpen={visible} className="commercial-customer-modal modal-lg">
           <ModalHeader
             close={
               <CloseButton
@@ -214,7 +213,7 @@ class SalesAndInventoryTableInformation extends Component {
                     </div>
                   </TabPane>
                   <TabPane tabId="2">
-                    <div className="simple-bar-sale">
+                  <div className="simple-bar-sale">
                       <SalesTab
                         data={data?.sales}
                         inventoryData={data?.inventory}

@@ -380,8 +380,6 @@ function* onDragOrderBankToGanttChart({ shift_date }) {
 }
 
 function* onRemoveOrderFromShipment(payload) {
-  // call api to remove here
-  // put data to success case
   try {
     const response = yield call(removeOrder, payload.params)
     yield put(removeOrderFromShipmentSuccess(payload.params))

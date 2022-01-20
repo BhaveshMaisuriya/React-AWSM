@@ -228,12 +228,10 @@ function OrderBank({
     },
   })
 
-  const populateBryntumTable = ({
-    page = 0,
-    sortField = 'vehicle',
-    sortDirection = 'asc',
-    filterCondition = [],
-  }) => {
+  const populateBryntumTable = (
+    { page = 0, sortField = 'vehicle', sortDirection = 'asc', filterCondition = [] },
+    trigger = false
+  ) => {
     let q = ''
     if (filterCondition.length > 0) {
       q = filterCondition
@@ -252,6 +250,9 @@ function OrderBank({
         sort_dir: sortDirection,
         sort_field: sortField,
       }
+
+      if (trigger) getRTSOderBankGanttChart(payload)
+
       return { payload, currentPage: page }
     })
   }
@@ -272,13 +273,16 @@ function OrderBank({
     const asyncFunction = async () => {
       await clearGanttData()
 
-      getRTSOderBankGanttChart({
-        ...bryntumTable.payload,
-        page: 0,
-        filter: {
-          shift_date: shiftDateGantt,
-          terminal: TERMINAL_CODE_MAPPING[terminal],
+      setBryntumTable({
+        payload: {
+          ...bryntumTable.payload,
+          page: 0,
+          filter: {
+            shift_date: shiftDateGantt,
+            terminal: TERMINAL_CODE_MAPPING[terminal],
+          },
         },
+        currentPage: 0,
       })
 
       if (terminal === terminalTable && isShiftDateCorrect(shiftDateGantt?.date_from)) {
@@ -705,7 +709,7 @@ function OrderBank({
   }
 
   useEffect(() => {
-    orderBankTableData === null && setShowTableError(true);
+    orderBankTableData === null && setShowTableError(true)
     const isItemSelected = !!orderBankTableData?.find(e => e.isChecked)
     const newSettings = [...orderBankSetting]
     const sendDN = newSettings?.find(e => e.value === 'SendDN')
@@ -944,7 +948,9 @@ function OrderBank({
                             region={region}
                             terminal={terminal}
                             clearGanttData={clearGanttData}
-                            onFilterChange={params => populateBryntumTable({ ...params })}
+                            onFilterChange={(params, trigger) =>
+                              populateBryntumTable({ ...params }, trigger)
+                            }
                           />
                           <div className="square_border">
                             {GanttChartBottom.map(item => {
@@ -1255,14 +1261,14 @@ function OrderBank({
                   closeAlert={() => setShowDeleteMultiple(false)}
                 />
               )}
-            {showTableError && (
+              {showTableError && (
                 <AWSMAlert
-                  status='error'
-                  message='Something went wrong!'
+                  status="error"
+                  message="Something went wrong!"
                   openAlert={showTableError}
                   closeAlert={() => setShowTableError(false)}
                 />
-              )}  
+              )}
             </Card>
           </div>
         </div>

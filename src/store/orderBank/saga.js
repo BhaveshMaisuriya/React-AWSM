@@ -360,26 +360,36 @@ function* onGetRTSOrderBankGanttChart({ params = {} }) {
   }
 }
 
-function* onDragOrderBankToGanttChart({ shift_date }) {
-  const dragOrder = yield select(store =>
-    store.orderBank?.orderBankTableData?.filter(e => e.isChecked)
-  )
-  const selectedVehicle = yield select(store => store?.orderBank?.selectedVehicleShipment)
+function* onDragOrderBankToGanttChart({ shift_date, vehicle, order_banks }) {
+  if (!order_banks){
+    const dragOrder = order_banks ? order_banks : yield select(store =>
+      store.orderBank?.orderBankTableData?.filter(e => e.isChecked)
+    )
+    order_banks = dragOrder.map(e => e.id)
+  }
+  
+  if (!vehicle){
+    const selectedVehicle =  yield select(store => store?.orderBank?.selectedVehicleShipment)
+    vehicle = selectedVehicle.vehicle
+  }
+  
   try {
-    if (dragOrder && dragOrder.length > 0) {
-      yield call(sendOderToVehicle, {
-        vehicle: selectedVehicle.vehicle,
-        order_banks: dragOrder.map(e => e.id),
+    if (order_banks && order_banks.length > 0) {
+      const response = yield call(sendOderToVehicle, {
+        vehicle: vehicle,
+        order_banks: order_banks,
         shift_date: shift_date,
       })
-      yield put(dragOrderBankToGanttChartSuccess(dragOrder))
+      yield put(dragOrderBankToGanttChartSuccess(response.data))
     }
   } catch (error) {
-    yield put(dragOrderBankToGanttChartFail(dragOrder))
+    yield put(dragOrderBankToGanttChartFail(order_banks))
   }
 }
 
 function* onRemoveOrderFromShipment(payload) {
+  // call api to remove here
+  // put data to success case
   try {
     const response = yield call(removeOrder, payload.params)
     yield put(removeOrderFromShipmentSuccess(payload.params))

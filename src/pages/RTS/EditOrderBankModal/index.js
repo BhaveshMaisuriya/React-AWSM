@@ -139,7 +139,7 @@ const EditOrderBankModal = props => {
 
       const newOrderData = { ...editOrderData }
       newOrderData[key] = currentRegion ? currentRegion.region : ''
-      newOrderData['terminal'] = currentRegion.terminal[0];
+      newOrderData['terminal'] = currentRegion.terminal[0]
       setEditOrderData(newOrderData)
     } else if (key === 'remarks') {
       setInputValue(value)
@@ -193,7 +193,7 @@ const EditOrderBankModal = props => {
   }
 
   return (
-    <Modal centered={true} isOpen={open} className="new-order-modal">
+    <Modal isOpen={open} className="new-order-modal">
       <ModalHeader toggle={toggle}>
         <span className="modal-title">View/Edit Details: Order ID {editOrderData?.id}</span>
         <span className="last-updated-sub-title">

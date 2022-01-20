@@ -97,10 +97,12 @@ const initialState = {
   sendDn: null,
   editorderBankData: null,
   ganttChartTableData: [],
+  ganttChartOrderDrag: [],
   ganttChartTableFilter: {},
+  isDragging: false,
   totalRow_ganttChart: 0,
   ganttChartEventData: [],
-  dropOderSuccess: false,
+  dropOderSuccess: true,
   shipmentDropData: [],
   ganttEventValidation: null,
   shipmentDetailsOnVehicle: [],
@@ -343,12 +345,11 @@ const RTSOrderBank = (state = initialState, action) => {
 
       // add id to mapping with event
       const newList = list?.map(vehicle => ({ ...vehicle, id: vehicle?.vehicle }))
-
       if (state.ganttChartTableData.length !== 0 && scrolling && page > 0) {
         return {
           ...state,
           ganttChartTableData: [...state.ganttChartTableData, ...newList],
-          ganttChartEventData: [...state.ganttChartEventData, eventGanttChartFactory(newList)],
+          ganttChartEventData: [...state.ganttChartEventData, ...eventGanttChartFactory(newList)],
           totalRow_ganttChart: total_rows,
         }
       }
@@ -416,14 +417,20 @@ const RTSOrderBank = (state = initialState, action) => {
     }
 
     case DRAG_RTS_ORDER_BANK_TO_GANTT_CHART_SUCCESS: {
+      ToastSuccess.fire({ title: 'Orderbank has been successfully updated' })
       return {
         ...state,
+        ganttChartOrderDrag: action.payload,
+        isDragging: !state.isDragging,
         dropOderSuccess: true,
       }
     }
     case DRAG_RTS_ORDER_BANK_TO_GANTT_CHART_FAIL: {
+      ToastError.fire({ title: 'Orderbank has been failed to update' })
       return {
         ...state,
+        ganttChartOrderDrag: [],
+        isDragging: !state.isDragging,
         dropOderSuccess: false,
       }
     }

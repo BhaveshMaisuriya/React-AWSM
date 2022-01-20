@@ -17,7 +17,6 @@ import RedAlertIcon from './../../../assets/images/AWSM-Red-Alert.svg'
 import YellowAlertIcon from './../../../assets/images/AWSM-Soft-Overrule.svg'
 import ConfirmDNStatusModal from './confirmDNStatusModal'
 import TerminalRelayModal from './TerminalRelayModal'
-import { TERMINAL_CODE_MAPPING } from 'common/data/regionAndTerminal'
 import {
   processPaymentInGanttChart,
   cancelPaymentInGanttChart,
@@ -28,6 +27,7 @@ import {
   updateOBEvent,
   getGanttEventValidation,
   selectVehicleShipment,
+  dragOrderBankToGanttChart
 } from '../../../store/actions'
 import ChartColumnFilter from './ChartColumnFilter'
 import ShiftPopover from './ShiftPopover'
@@ -39,7 +39,7 @@ import OrderBankRoadTankerModal from './OrderBankRoadTankerModal'
 import PlannedLoadTimesModal from './PlannedLoadTimesModal'
 import AlertOverruleModal from './AlertOverruleModal'
 import InfiniteScroll from 'react-infinite-scroll-component'
-import { format } from 'date-fns'
+import { format, parse } from 'date-fns'
 
 const EventSchedulerStatus = {
   ARE_YET_CREATED_PAYMENT: 'not yet to be created',
@@ -65,13 +65,26 @@ function BryntumChartTable(props) {
     updateOBEvent,
     onSelectVehicle,
     dropOderSuccess,
-    getGanttEventValidation,
     ganttEventValidation,
     onFilterChange,
+    dragOrderBankToGanttChart,
     dateConfig,
     terminal,
+    ganttChartOrderDrag,
+    ganttChartEventData,
+    isDragging
   } = props
   const tableData = useRef([])
+
+  const TIME_FORMAT = "HH:mm:ss"
+  const DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm"
+  const EVENT_COLOR = {
+    Scheduled: "#84B0E9",
+    PendingShipment: "#9F79B7",
+    ShipmentCreated: "#615E9B",
+    Cancellation: "#BDBDBD",
+    BlockedDN: "#E45E5E",
+  }
 
   const colsRef = useRef(bryntumCurrentColumns)
   const [modal, setModal] = useState(false)
@@ -145,10 +158,30 @@ function BryntumChartTable(props) {
   }
 
   useEffect(() => {
-    if (dropOderSuccess) {
+    if (dropOderSuccess && ganttChartOrderDrag.length > 0){
+      ganttChartOrderDrag.forEach(order => {
+        if (!ganttChartEventData.find(item => item.resourceId == order.vehicle && item.it == order.id)){
+          const { eventStore } = schedulerProRef.current.instance
+          const event = {
+            id: order?.id,
+            resourceId: order?.vehicle,
+            startDate: format(parse("00:00:00", TIME_FORMAT, new Date(order.shift_date)), DATE_TIME_FORMAT),
+            endDate: format(parse("23:59:59", TIME_FORMAT, new Date(order.shift_date)), DATE_TIME_FORMAT),
+            eventType: order?.scheduled_status,
+            eventColor: EVENT_COLOR[order?.scheduled_status],
+            draggable: true,
+          }
+          eventStore.add(event)
+        }
+      })
+    }
+  }, [dropOderSuccess, ganttChartOrderDrag])
+
+  useEffect(() => {
+  if (!dropOderSuccess) {
       onFilterChange({}, true) // leave argument empty so they will be set to default
     }
-  }, [dropOderSuccess])
+  }, [isDragging])
 
   useEffect(() => {
     setFilterList(
@@ -384,7 +417,7 @@ function BryntumChartTable(props) {
       },
       eventCopyPaste: false,
       eventDrag: {
-        constrainDragToResource: true,
+        // constrainDragToResource: true,
         nonWorkingTime: true,
       },
       nonWorkingTime: true,
@@ -411,7 +444,6 @@ function BryntumChartTable(props) {
           eventRecord.data?.isPending
         )
           return false
-
         if (!eventRecord.data?.resourceOrder) {
           items.sendOrderForDS = {
             hidden: true,
@@ -493,15 +525,19 @@ function BryntumChartTable(props) {
         showEditor(eventRecord)
         return false
       },
-      beforeEventDropFinalize: async ({ context }) => {
-        const { eventRecord } = context
+      beforeEventDropFinalize: async ({context}) => {
         context.async = true
-        context.finalize(true)
+       
         // validate gantt event 1
-        await getGanttEventValidation(eventRecord._data)
+        await dragOrderBankToGanttChart({
+          vehicle: context?.newResource?._data?.vehicle,
+          shift_date: format(context?.startDate ? context?.startDate : new Date(),  "yyyy-MM-dd") ,
+          order_banks: [context?.draggedRecords?.[0]?._data?.id]
+        }) 
+       context.finalize(true)
       },
-      afterEventDrop({ context }) {
-        const { eventRecord } = context
+      afterEventDrop: async (payload) => {
+        const { eventRecord } = payload.context
         // validate gantt event 2
         updateModalHandler(EventContextList.UPDATE_SHIPMENT, eventRecord)
       },
@@ -846,11 +882,13 @@ const mapStateToProps = ({ orderBank }) => {
   return {
     isSendRequestProcess: orderBank.isSendRequestProcess,
     ganttChartData: orderBank.ganttChart,
+    ganttChartOrderDrag: orderBank.ganttChartOrderDrag,
     ganttChartTableData: orderBank.ganttChartTableData,
     totalRow_ganttChart: orderBank.totalRow_ganttChart,
     ganttChartTableFilter: orderBank.ganttChartTableFilter,
     ganttChartEventData: orderBank.ganttChartEventData,
     dropOderSuccess: orderBank.dropOderSuccess,
+    isDragging: orderBank.isDragging,
     ganttEventValidation: orderBank.ganttEventValidation,
   }
 }
@@ -866,6 +904,7 @@ const mapDispatchToProps = dispatch => {
     getGanttEventValidation: params => dispatch(getGanttEventValidation(params)),
     onRemoveEvent: params => dispatch(removeEvent(params)),
     onSelectVehicle: params => dispatch(selectVehicleShipment(params)),
+    dragOrderBankToGanttChart: payload => dispatch(dragOrderBankToGanttChart(payload)),
   }
 }
 

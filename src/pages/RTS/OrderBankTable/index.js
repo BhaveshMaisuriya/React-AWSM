@@ -416,6 +416,7 @@ class index extends Component {
   DataOfTableFixed = () => {
     const { dataSource } = this.state
     return dataSource.map((v, i) => {
+      console.log('data::', v)
       return (
         <tr key={i} className={v.isChecked ? "selected-row" : "bg-white"}>
           <th>

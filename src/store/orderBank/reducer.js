@@ -30,6 +30,7 @@ import {
   REMOVE_SHIPMENT_FROM_EVENT_SUCCESS,
   SELECT_VEHICLE_RTS_SHIPMENT,
   SEND_DN_STATUS_REQUEST_SUCCESS,
+  SEND_DN_STATUS_REQUEST_FAIL,
   SEND_ORDER_IN_GANTT_CHART_FAIL,
   SEND_ORDER_IN_GANTT_CHART_SUCCESS,
   UPDATE_ORDER_BANK_TABLE_DATA,
@@ -265,13 +266,17 @@ const RTSOrderBank = (state = initialState, action) => {
         ...state,
         error: action.payload,
       }
-
     case SEND_DN_STATUS_REQUEST_SUCCESS:
-      // ToastSuccess.fire({ title: "An order has been successfully sent for DN Creation" })
       return {
         ...state,
         sendDn: 'success',
       }
+    case SEND_DN_STATUS_REQUEST_FAIL:
+      return {
+        ...state,
+        sendDn: 'error',
+      }
+      
     case GET_ORDER_BANK_AUDITLOG_SUCCESS:
       return {
         ...state,

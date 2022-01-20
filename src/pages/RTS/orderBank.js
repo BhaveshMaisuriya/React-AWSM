@@ -415,6 +415,25 @@ function OrderBank({
     setUploadDmr(false)
   }
 
+  const reloadUploadDMR = async () => {
+    setUploadDmr(false)
+    setReloadData(true)
+    setShowAlertDMR(true)
+    await getRTSOrderBankTableData({
+      limit: 10,
+      page: payloadFilter.currentPage,
+      search_fields: '*',
+      q:
+        payloadFilter?.filterQuery !== null || payloadFilter?.filterQuery !== undefined
+          ? transformObjectToStringSentence(payloadFilter?.filterQuery)
+          : '',
+      sort_dir: 'asc',
+      sort_field: 'vehicle',
+      filter: payloadFilter.filterOrderBank,
+    })
+    setReloadData(false)
+  }
+
   const onGetShowAlert = () => {
     setShowAlertDMR(!showAlertDMR)
   }
@@ -1144,7 +1163,7 @@ function OrderBank({
                 open={uploadDmr}
                 region={regionTable}
                 onCancel={onCloseUploadDMR}
-                onSave={onCloseUploadDMR}
+                onSave={reloadUploadDMR}
                 alertShow={onGetShowAlert}
               />
               <DeleteMultipleModal
@@ -1224,7 +1243,7 @@ function OrderBank({
               {showAlertCrossTerminal && (
                 <AWSMAlert
                   status="success"
-                  message="Record successfully updated"
+                  message="An order has been successfully updated"
                   openAlert={showAlertCrossTerminal}
                   closeAlert={() => setShowAlertCrossTerminal(false)}
                 />
@@ -1232,7 +1251,7 @@ function OrderBank({
               {showAlertDMR && (
                 <AWSMAlert
                   status="success"
-                  message="DMR File Uploaded!"
+                  message="Data has successfully been updated via CSV file"
                   openAlert={showAlertDMR}
                   closeAlert={() => setShowAlertDMR(false)}
                 />

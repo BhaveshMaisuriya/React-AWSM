@@ -55,7 +55,7 @@ function UploadDMRModal(props) {
       if (!!uploadDMR) {
         props.alertShow();
       }
-      props.onCancel();
+      props.onSave();
       
       setUploadCsvData(uploadDMR);
 
@@ -140,7 +140,7 @@ function UploadDMRModal(props) {
         </div>
         {showProgressbar === true && 
           <div className={`box-border ${progressColor}`}>
-            <p><strong>Uploading file and populating data into system ...</strong></p>
+            <p><strong>{ progressColor === 'successColor' ? 'Completed!' : 'Uploading file and populating data into system ...'}</strong></p>
              <Box sx={{ display: 'flex', alignItems: 'center'}}>
              <Box sx={{ width: '100%', mr: 1 }}>
                <LinearProgress variant="determinate" value={progress} />

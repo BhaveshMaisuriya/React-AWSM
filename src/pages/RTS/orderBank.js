@@ -729,7 +729,7 @@ function OrderBank({
 
   useEffect(() => {
     orderBankTableData === null && setShowTableError(true)
-    const isItemSelected = !!orderBankTableData?.find(e => e.isChecked)
+    // const isItemSelected = !!orderBankTableData?.find(e => e.isChecked)
     let checkedData = [];
     orderBankTableData!== null && orderBankTableData.map((item, index) => {
       if (item.isChecked === true) {
@@ -740,8 +740,7 @@ function OrderBank({
     const sendDN = newSettings?.find(e => e.value === 'SendDN')
     if (sendDN) {
       let checkDN = checkedData.filter(v => v.dn_no === null || v.dn_no === '')
-      console.log('isItemSelected::', checkDN)
-      sendDN.disabled = checkDN?.length > 0 ? false : true; //!isItemSelected
+      sendDN.disabled = (checkDN?.length > 0 && checkedData.length === checkDN?.length) ? false : true; //!isItemSelected
     }
     setOrderBankSetting(newSettings)
   }, [orderBankTableData])

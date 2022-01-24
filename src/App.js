@@ -1,23 +1,23 @@
-import React, { Component } from "react"
-import PropTypes from "prop-types"
-import { BrowserRouter as Router, Switch } from "react-router-dom"
-import { connect } from "react-redux"
-import { initWebsocket, sendMessage } from "./SocketService"
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import { BrowserRouter as Router, Switch } from 'react-router-dom'
+import { connect } from 'react-redux'
+import { initWebsocket, sendMessage } from './SocketService'
 
 // Import Routes
-import { authProtectedRoutes, publicRoutes } from "./routes/"
-import AppRoute from "./routes/route"
+import { authProtectedRoutes, publicRoutes } from './routes/'
+import AppRoute from './routes/route'
 
 // layouts
-import VerticalLayout from "./components/VerticalLayout/"
-import HorizontalLayout from "./components/HorizontalLayout/"
-import NonAuthLayout from "./components/NonAuthLayout"
+import VerticalLayout from './components/VerticalLayout/'
+import HorizontalLayout from './components/HorizontalLayout/'
+import NonAuthLayout from './components/NonAuthLayout'
 
 // Import scss
-import "./assets/scss/theme.scss"
+import './assets/scss/theme.scss'
 
 // Import fackbackend Configuration file
-import fakeBackend from "./helpers/AuthType/fakeBackend"
+import fakeBackend from './helpers/AuthType/fakeBackend'
 
 // Activating fake backend
 fakeBackend()
@@ -27,9 +27,17 @@ class App extends Component {
     super(props)
     this.state = {
       loginState: sessionStorage.getItem('loginState'),
-      accessToken: sessionStorage.getItem('graphAccessToken')
+      accessToken: sessionStorage.getItem('graphAccessToken'),
     }
     this.getLayout = this.getLayout.bind(this)
+
+    document.addEventListener('click', e => {
+      const $bigParent = e.path[0]
+      if (!$bigParent.id.includes('-chart-tooltip-'))
+        document
+          .querySelectorAll('[id*="-chart-tooltip-"]')
+          .forEach($el => $el.classList.add('hide'))
+    })
   }
 
   /**
@@ -39,7 +47,7 @@ class App extends Component {
     let layoutCls = VerticalLayout
 
     switch (this.props.layout.layoutType) {
-      case "horizontal":
+      case 'horizontal':
         layoutCls = HorizontalLayout
         break
       default:

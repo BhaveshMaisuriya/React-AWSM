@@ -55,6 +55,7 @@ import {
   tableMapping,
 } from './OrderBankTable/tableMapping'
 import { format, addDays } from 'date-fns'
+import { isEqual } from 'lodash'
 import {
   getRTSOrderBankTableData,
   sendOrderBankDN,
@@ -457,10 +458,14 @@ function OrderBank({
   }
 
   const onChangeGanttChartDate = value => {
-    setShiftDateGantt({
-      ...shiftDateGantt,
-      type: value?.type,
-      date_from: value?.date_from,
+    setShiftDateGantt(state => {
+      // make sure new values are actually new
+      if (value && !isEqual(state, value)) {
+        return { type: value.type, date_from: value.date_from }
+      }
+
+      // if not -> deny the state changes
+      return state
     })
     setCurrentPage(0)
   }
@@ -729,11 +734,17 @@ function OrderBank({
 
   useEffect(() => {
     orderBankTableData === null && setShowTableError(true)
-    const isItemSelected = !!orderBankTableData?.find(e => e.isChecked)
+    let checkedData = [];
+    orderBankTableData!== null && orderBankTableData.map((item, index) => {
+      if (item.isChecked === true) {
+        checkedData.push(item)
+      }
+    })
     const newSettings = [...orderBankSetting]
     const sendDN = newSettings?.find(e => e.value === 'SendDN')
     if (sendDN) {
-      sendDN.disabled = !isItemSelected
+      let checkDN = checkedData.filter(v => v.dn_no === null || v.dn_no === '')
+      sendDN.disabled = checkDN?.length > 0 ? false : true; 
     }
     setOrderBankSetting(newSettings)
   }, [orderBankTableData])

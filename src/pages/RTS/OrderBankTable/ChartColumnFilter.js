@@ -47,7 +47,7 @@ const ChartColumnFilter = ({
       checked: first || selectedFilters[filterKey].includes(e),
     }))
     setData(_data)
-  }, [filterData, selectedFilters])
+  }, [filterData, selectedFilters[filterKey]])
 
   const onItemChange = text => {
     setData(data => {
@@ -61,10 +61,13 @@ const ChartColumnFilter = ({
     setFirstTime(false)
   }
 
-  const checkAllChange = () => {
+  const checkAllChange = (setAllToChecked = false) => {
     setData(data => {
       const tmp = [...data]
-      tmp.forEach(s => (s.checked = !isCheckAll))
+      tmp.forEach(s => {
+        if (setAllToChecked) s.checked = true
+        else s.checked = !isCheckAll
+      })
 
       return tmp
     })
@@ -99,7 +102,7 @@ const ChartColumnFilter = ({
       tmp.push(text)
     })
 
-    setBryntumFilter(tmp)
+    setBryntumFilter({ key: filterKey, values: tmp })
   }
 
   const reset = () => {
@@ -107,7 +110,8 @@ const ChartColumnFilter = ({
       onReset(filterKey)
     }
 
-    setBryntumFilter([])
+    setFirstTime(true)
+    setBryntumFilter({ key: filterKey, values: [] })
   }
 
   const isApplyDisable = useMemo(() => !visibleData.some(e => e.checked), [visibleData])
@@ -140,6 +144,7 @@ const ChartColumnFilter = ({
                 style={style}
                 key={index}
               >
+                {e.checked ? 'true' : 'false'}
                 <Checkbox
                   checked={e.checked}
                   onChange={() => onItemChange(e.text)}
@@ -152,7 +157,7 @@ const ChartColumnFilter = ({
                     marginTop: '-1px',
                   }}
                 />
-                <label>{e.text.toString()}</label>
+                <label>{e.text}</label>
               </div>
             )
           }}

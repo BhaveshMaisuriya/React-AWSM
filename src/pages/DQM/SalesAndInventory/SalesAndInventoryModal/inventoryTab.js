@@ -1,29 +1,31 @@
-import React, { Component } from "react"
-import Tooltip from "@material-ui/core/Tooltip"
-import DatePicker from "components/Common/DatePicker"
-import VarianceInput from "../VarianceInput"
-import informationIcon from "assets/images/AWSM-Information.svg"
-import { differenceInDays } from "date-fns"
+import React from 'react'
+import Tooltip from '@material-ui/core/Tooltip'
+import DatePicker from 'components/Common/DatePicker'
+import VarianceInput from '../VarianceInput'
+import informationIcon from 'assets/images/AWSM-Information.svg'
+import { differenceInDays } from 'date-fns'
+import { validateNaN } from './helper'
 
-const INVENTORY_FINAL_FIGURE = "inventory_final_figure"
-const OPENING_INVENTORY = "opening_inventory"
-const CALCULATED_INVENTORY = "calculated_inventory"
-const INVENTORY_VARIANCE_PERCENT = "inventory_variance_percent"
-const INVENTORY_VARIANCE = "inventory_variance"
+const INVENTORY_FINAL_FIGURE = 'inventory_final_figure'
+const OPENING_INVENTORY = 'opening_inventory'
+const CALCULATED_INVENTORY = 'calculated_inventory'
+const INVENTORY_VARIANCE_PERCENT = 'inventory_variance_percent'
+const INVENTORY_VARIANCE = 'inventory_variance'
 
 const InventoryTab = ({ data, onChange, salesDate }) => {
   const onChangeHandler = (value, key) => {
     let newData = { ...data }
     newData[key] = value
-    onChange("inventory", newData)
+    onChange('inventory', newData)
   }
+
   const onVarianceControlChange = (value, field) => {
     let newData = { ...data }
     newData[field] = value
     if (
-      field === "dipping_to_midnight_diversion" ||
-      field === "dipping_adjustment" ||
-      field === "delivery_adjustment"
+      field === 'dipping_to_midnight_diversion' ||
+      field === 'dipping_adjustment' ||
+      field === 'delivery_adjustment'
     ) {
       newData[INVENTORY_FINAL_FIGURE] =
         Number(data?.dipping_value) -
@@ -34,7 +36,7 @@ const InventoryTab = ({ data, onChange, salesDate }) => {
         Number(newData?.delivery_adjustment)
       newData[OPENING_INVENTORY] = newData[INVENTORY_FINAL_FIGURE]
     }
-    if (field === "yesterday_diversion" || field === "yesterday_delivery_adjustment") {
+    if (field === 'yesterday_diversion' || field === 'yesterday_delivery_adjustment') {
       newData[CALCULATED_INVENTORY] =
         Number(data?.yesterday_opening_inventory) -
         Number(data?.yesterday_sales_final_figure) +
@@ -50,7 +52,7 @@ const InventoryTab = ({ data, onChange, salesDate }) => {
       (Number(newData?.inventory_variance) * 100) /
       Number(data?.calculated_inventory)
     ).toFixed(2)
-    onChange("inventory", newData)
+    onChange('inventory', newData)
   }
   const isDisableInventoryField = () => {
     return differenceInDays(new Date(), new Date(salesDate)) > 1
@@ -63,7 +65,7 @@ const InventoryTab = ({ data, onChange, salesDate }) => {
       <div className="row">
         <div className="col-md-6 form-group">
           <label>
-            INVENTORY VARIANCE (L){" "}
+            INVENTORY VARIANCE (L){' '}
             <Tooltip title="Inventory Final Figure - Calculated Inventory">
               <img src={informationIcon} />
             </Tooltip>
@@ -71,17 +73,14 @@ const InventoryTab = ({ data, onChange, salesDate }) => {
           </label>
           <input
             className="form-control awsm-input"
-            value={
-              !isNaN(data?.inventory_variance) ? Number(data?.inventory_variance).toFixed(1) : ""
-            }
+            value={parseFloat(validateNaN(data?.inventory_variance).toFixed(3))}
             disabled="true"
-            onChange={e => onChangeHandler(e.target.value, "inventory_variance")}
+            onChange={e => onChangeHandler(e.target.value, 'inventory_variance')}
           />
         </div>
         <div className="col-md-6 form-group">
           <label>
-            {" "}
-            INVENTORY VARIANCE (%){" "}
+            INVENTORY VARIANCE (%){' '}
             <Tooltip title="((Inventory Final Figure - Calculated Inventory)/Calculated Inventory) * 100">
               <img src={informationIcon} />
             </Tooltip>
@@ -89,7 +88,7 @@ const InventoryTab = ({ data, onChange, salesDate }) => {
           </label>
           <input
             className="form-control awsm-input"
-            value={data?.calculated_inventory ? data?.inventory_variance_percent : "NA"}
+            value={data?.calculated_inventory ? data?.inventory_variance_percent : 'NA'}
             disabled="true"
           />
         </div>
@@ -97,7 +96,7 @@ const InventoryTab = ({ data, onChange, salesDate }) => {
       <div className="row">
         <div className="col-md-6 form-group">
           <label>
-            INVENTORY FINAL FIGURE (L){" "}
+            INVENTORY FINAL FIGURE (L){' '}
             <Tooltip title="Total Inventory = Dipping Value(L) - Dipping to Midnight Sale Volume(L) + Dipping to Midnight Delivery(L)+ Dipping to Midnight Diversion(L) + Dipping Adjustment(L) + Delivery Adjustment">
               <img src={informationIcon} />
             </Tooltip>
@@ -105,11 +104,7 @@ const InventoryTab = ({ data, onChange, salesDate }) => {
           </label>
           <input
             className="form-control awsm-input"
-            value={
-              !isNaN(data?.inventory_final_figure)
-                ? Number(data?.inventory_final_figure).toFixed(1)
-                : ""
-            }
+            value={parseFloat(validateNaN(data?.inventory_final_figure).toFixed(3))}
             disabled="true"
           />
         </div>
@@ -119,11 +114,7 @@ const InventoryTab = ({ data, onChange, salesDate }) => {
           </label>
           <input
             className="form-control awsm-input"
-            value={
-              !isNaN(data?.calculated_inventory)
-                ? Number(data?.calculated_inventory).toFixed(1)
-                : ""
-            }
+            value={validateNaN(data?.calculated_inventory)}
             disabled="true"
           />
         </div>
@@ -137,7 +128,7 @@ const InventoryTab = ({ data, onChange, salesDate }) => {
           </label>
           <input
             className="form-control awsm-input"
-            value={!isNaN(data?.dipping_value) ? Number(data?.dipping_value).toFixed(1) : ""}
+            value={validateNaN(data?.dipping_value)}
             disabled="true"
           />
         </div>
@@ -148,7 +139,7 @@ const InventoryTab = ({ data, onChange, salesDate }) => {
           <DatePicker
             className="form-control awsm-input"
             value={data?.dipping_timestamp ? data?.dipping_timestamp : data?.dipping_datetime}
-            format={"DD-MM-yyyy , HH:mm:ss"}
+            format={'DD-MM-yyyy , HH:mm:ss'}
             disabled="true"
           />
         </div>
@@ -160,11 +151,7 @@ const InventoryTab = ({ data, onChange, salesDate }) => {
           </label>
           <input
             className="form-control awsm-input"
-            value={
-              !isNaN(data?.dipping_to_mid_night_sales_volume)
-                ? Number(data?.dipping_to_mid_night_sales_volume).toFixed(1)
-                : ""
-            }
+            value={validateNaN(data?.dipping_to_mid_night_sales_volume)}
             disabled="true"
           />
         </div>
@@ -174,11 +161,7 @@ const InventoryTab = ({ data, onChange, salesDate }) => {
           </label>
           <input
             className="form-control awsm-input"
-            value={
-              !isNaN(data?.dipping_to_midnight_delivery)
-                ? Number(data?.dipping_to_midnight_delivery).toFixed(1)
-                : ""
-            }
+            value={validateNaN(data?.dipping_to_midnight_delivery)}
             disabled="true"
           />
         </div>
@@ -192,14 +175,8 @@ const InventoryTab = ({ data, onChange, salesDate }) => {
           <VarianceInput
             disabled={isDisableInventoryField()}
             className="form-control awsm-input"
-            value={
-              !isNaN(data?.dipping_to_midnight_diversion)
-                ? Number(data?.dipping_to_midnight_diversion).toFixed(1)
-                : ""
-            }
-            onChange={(value, field = "dipping_to_midnight_diversion") =>
-              onVarianceControlChange(value, field)
-            }
+            value={validateNaN(data?.dipping_to_midnight_diversion)}
+            onChange={value => onVarianceControlChange(value, 'dipping_to_midnight_diversion')}
           />
         </div>
         <div className="col-md-6 form-group">
@@ -207,12 +184,8 @@ const InventoryTab = ({ data, onChange, salesDate }) => {
           <input
             disabled={isDisableInventoryField()}
             className="form-control awsm-input"
-            value={
-              !isNaN(data?.dipping_to_midnight_diversion_remarks)
-                ? Number(data?.dipping_to_midnight_diversion_remarks).toFixed(1)
-                : ""
-            }
-            onChange={e => onChangeHandler(e.target.value, "dipping_to_midnight_diversion_remarks")}
+            value={data?.dipping_to_midnight_diversion_remarks}
+            onChange={e => onChangeHandler(e.target.value, 'dipping_to_midnight_diversion_remarks')}
           />
         </div>
       </div>
@@ -225,12 +198,8 @@ const InventoryTab = ({ data, onChange, salesDate }) => {
           <VarianceInput
             disabled={isDisableInventoryField()}
             className="form-control awsm-input"
-            value={
-              !isNaN(data?.dipping_adjustment) ? Number(data?.dipping_adjustment).toFixed(1) : ""
-            }
-            onChange={(value, field = "dipping_adjustment") =>
-              onVarianceControlChange(value, field)
-            }
+            value={validateNaN(data?.dipping_adjustment)}
+            onChange={value => onVarianceControlChange(value, 'dipping_adjustment')}
           />
         </div>
         <div className="col-md-6 form-group">
@@ -239,7 +208,7 @@ const InventoryTab = ({ data, onChange, salesDate }) => {
             disabled={isDisableInventoryField()}
             className="form-control awsm-input"
             value={data?.dipping_adjustment_remarks}
-            onChange={e => onChangeHandler(e.target.value, "dipping_adjustment_remarks")}
+            onChange={e => onChangeHandler(e.target.value, 'dipping_adjustment_remarks')}
           />
         </div>
       </div>
@@ -252,12 +221,8 @@ const InventoryTab = ({ data, onChange, salesDate }) => {
           <VarianceInput
             disabled={isDisableInventoryField()}
             className="form-control awsm-input"
-            value={
-              !isNaN(data?.delivery_adjustment) ? Number(data?.delivery_adjustment).toFixed(1) : ""
-            }
-            onChange={(value, field = "delivery_adjustment") =>
-              onVarianceControlChange(value, field)
-            }
+            value={validateNaN(data?.delivery_adjustment)}
+            onChange={value => onVarianceControlChange(value, 'delivery_adjustment')}
           />
         </div>
         <div className="col-md-6 form-group">
@@ -266,7 +231,7 @@ const InventoryTab = ({ data, onChange, salesDate }) => {
             disabled={isDisableInventoryField()}
             className="form-control awsm-input"
             value={data?.delivery_adjustment_remark}
-            onChange={e => onChangeHandler(e.target.value, "delivery_adjustment_remark")}
+            onChange={e => onChangeHandler(e.target.value, 'delivery_adjustment_remark')}
           />
         </div>
       </div>
@@ -274,7 +239,7 @@ const InventoryTab = ({ data, onChange, salesDate }) => {
       <div className="row">
         <div className="col-md-6 form-group">
           <label>
-            OPENING INVENTORY @12AM (L){" "}
+            OPENING INVENTORY @12AM (L){' '}
             <Tooltip title="Total inventory=Dipping Value (L) - Dipping to Midnight Sales Volume (L) + Dipping to Midnight Delivery (L) + Dipping to Midnight Deversion (L) + Dipping Adjustment (L) + Delivery Adjustment (L)">
               <img src={informationIcon} />
             </Tooltip>
@@ -282,9 +247,7 @@ const InventoryTab = ({ data, onChange, salesDate }) => {
           </label>
           <input
             className="form-control awsm-input"
-            value={
-              !isNaN(data?.opening_inventory) ? Number(data?.opening_inventory).toFixed(1) : ""
-            }
+            value={validateNaN(data?.opening_inventory)}
             disabled="true"
           />
         </div>
@@ -302,17 +265,13 @@ const InventoryTab = ({ data, onChange, salesDate }) => {
           </label>
           <input
             className="form-control awsm-input"
-            value={
-              !isNaN(data?.yesterday_opening_inventory)
-                ? Number(data?.yesterday_opening_inventory).toFixed(1)
-                : ""
-            }
+            value={validateNaN(data?.yesterday_opening_inventory)}
             disabled="true"
           />
         </div>
         <div className="col-md-6 form-group">
           <label>
-            YESTERDAY SALES FINAL FIGURE (L){" "}
+            YESTERDAY SALES FINAL FIGURE (L){' '}
             <Tooltip title="Sales of Final Figure D-1">
               <img src={informationIcon} alt="yesterday sales final figure" />
             </Tooltip>
@@ -320,11 +279,7 @@ const InventoryTab = ({ data, onChange, salesDate }) => {
           </label>
           <input
             className="form-control awsm-input"
-            value={
-              !isNaN(data?.yesterday_sales_final_figure)
-                ? Number(data?.yesterday_sales_final_figure).toFixed(1)
-                : ""
-            }
+            value={validateNaN(data?.yesterday_sales_final_figure)}
             disabled="true"
           />
         </div>
@@ -335,9 +290,7 @@ const InventoryTab = ({ data, onChange, salesDate }) => {
           <label>YESTERDAY DELIVERY (L)</label>
           <input
             className="form-control awsm-input"
-            value={
-              !isNaN(data?.yesterday_delivery) ? Number(data?.yesterday_delivery).toFixed(1) : ""
-            }
+            value={validateNaN(data?.yesterday_delivery)}
             disabled="true"
           />
         </div>
@@ -350,10 +303,8 @@ const InventoryTab = ({ data, onChange, salesDate }) => {
           <VarianceInput
             disabled={isDisableInventoryField()}
             className="form-control awsm-input"
-            value={
-              !isNaN(data?.yesterday_diversion) ? Number(data?.yesterday_diversion).toFixed(1) : ""
-            }
-            onChange={(value, field = "yesterday_diversion") =>
+            value={validateNaN(data?.yesterday_diversion)}
+            onChange={(value, field = 'yesterday_diversion') =>
               onVarianceControlChange(value, field)
             }
           />
@@ -364,7 +315,7 @@ const InventoryTab = ({ data, onChange, salesDate }) => {
             disabled={isDisableInventoryField()}
             className="form-control awsm-input"
             value={data?.yesterday_diversion_remarks}
-            onChange={e => onChangeHandler(e.target.value, "yesterday_diversion_remarks")}
+            onChange={e => onChangeHandler(e.target.value, 'yesterday_diversion_remarks')}
           />
         </div>
       </div>
@@ -376,14 +327,8 @@ const InventoryTab = ({ data, onChange, salesDate }) => {
           <VarianceInput
             disabled={isDisableInventoryField()}
             className="form-control awsm-input"
-            value={
-              !isNaN(data?.yesterday_delivery_adjustment)
-                ? Number(data?.yesterday_delivery_adjustment).toFixed(1)
-                : ""
-            }
-            onChange={(value, field = "yesterday_delivery_adjustment") =>
-              onVarianceControlChange(value, field)
-            }
+            value={validateNaN(data?.yesterday_delivery_adjustment)}
+            onChange={value => onVarianceControlChange(value, 'yesterday_delivery_adjustment')}
           />
         </div>
         <div className="col-md-6 form-group">
@@ -392,7 +337,7 @@ const InventoryTab = ({ data, onChange, salesDate }) => {
             disabled={isDisableInventoryField()}
             className="form-control awsm-input"
             value={data?.yesterday_delivery_adjustment_remarks}
-            onChange={e => onChangeHandler(e.target.value, "yesterday_delivery_adjustment_remarks")}
+            onChange={e => onChangeHandler(e.target.value, 'yesterday_delivery_adjustment_remarks')}
           />
         </div>
       </div>
@@ -400,7 +345,7 @@ const InventoryTab = ({ data, onChange, salesDate }) => {
       <div className="row">
         <div className="col-md-6 form-group">
           <label>
-            CALCULATED INVENTORY @12AM (L){" "}
+            CALCULATED INVENTORY @12AM (L){' '}
             <Tooltip title="Calculated Inventory = Yesterday Opening Inventory (L) - Yesterday Sales Final Figure (L) + Yesterday Delivery(L)+ Yesterday Diversion(L) + Yesterday Delivery Adjustment(L)">
               <img src={informationIcon} alt="calculated inventory" />
             </Tooltip>
@@ -408,11 +353,7 @@ const InventoryTab = ({ data, onChange, salesDate }) => {
           </label>
           <input
             className="form-control awsm-input"
-            value={
-              !isNaN(data?.calculated_inventory)
-                ? Number(data?.calculated_inventory).toFixed(1)
-                : ""
-            }
+            value={validateNaN(data?.calculated_inventory)}
             disabled="true"
           />
         </div>
@@ -428,14 +369,8 @@ const InventoryTab = ({ data, onChange, salesDate }) => {
           <label>INVENTORY CORRECTION (L)</label>
           <VarianceInput
             className="form-control awsm-input"
-            value={
-              !isNaN(data?.inventory_correction)
-                ? Number(data?.inventory_correction).toFixed(1)
-                : ""
-            }
-            onChange={(value, field = "inventory_correction") =>
-              onVarianceControlChange(value, field)
-            }
+            value={validateNaN(data?.inventory_correction)}
+            onChange={value => onVarianceControlChange(value, 'inventory_correction')}
           />
         </div>
         <div className="col-md-6 form-group">
@@ -443,7 +378,7 @@ const InventoryTab = ({ data, onChange, salesDate }) => {
           <input
             className="form-control awsm-input"
             value={data?.inventory_correction_remarks}
-            onChange={e => onChangeHandler(e.target.value, "inventory_correction_remarks")}
+            onChange={e => onChangeHandler(e.target.value, 'inventory_correction_remarks')}
           />
         </div>
       </div>

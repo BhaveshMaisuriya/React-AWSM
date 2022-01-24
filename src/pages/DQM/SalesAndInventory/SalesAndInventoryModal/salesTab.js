@@ -1,19 +1,18 @@
-import React, { useState, useEffect } from "react"
-import Tooltip from "@material-ui/core/Tooltip"
-import VarianceInput from "../VarianceInput"
-import informationIcon from "assets/images/AWSM-Information.svg"
-
-const SALES_FINAL_FIGURE = "sales_final_figure"
-const SALES_VARIANCE = "sales_variance"
-const YESTERDAY_SALES_FINAL_FIGURE = "yesterday_sales_final_figure"
-const SALES_VARIANCE_PERCENT = "sales_variance_percent"
-const EXPECTED_SALES = "expected_sales"
+import React from 'react'
+import Tooltip from '@material-ui/core/Tooltip'
+import VarianceInput from '../VarianceInput'
+import informationIcon from 'assets/images/AWSM-Information.svg'
+import { validateNaN } from './helper'
+const SALES_FINAL_FIGURE = 'sales_final_figure'
+const SALES_VARIANCE = 'sales_variance'
+const YESTERDAY_SALES_FINAL_FIGURE = 'yesterday_sales_final_figure'
+const SALES_VARIANCE_PERCENT = 'sales_variance_percent'
 
 const SalesTab = ({ data, onChange, inventoryData }) => {
   const onChangeHandler = (value, key) => {
     let newData = { ...data }
     newData[key] = value
-    onChange("sales", newData)
+    onChange('sales', newData)
   }
   const onVarianceControlChange = (value, field) => {
     let newData = { ...data }
@@ -34,12 +33,10 @@ const SalesTab = ({ data, onChange, inventoryData }) => {
     // calculation % for sales variance
 
     if (Number(data?.expected_sales) != 0) {
-      newData[SALES_VARIANCE_PERCENT] = (
-        (Number(newData?.sales_variance) * 100) /
-        Number(data?.expected_sales)
-      ).toFixed(2)
+      newData[SALES_VARIANCE_PERCENT] =
+        (Number(newData?.sales_variance) * 100) / Number(data?.expected_sales)
     }
-    onChange(["inventory", "sales"], [newInventoryData, newData])
+    onChange(['inventory', 'sales'], [newInventoryData, newData])
   }
   return (
     <div>
@@ -50,9 +47,9 @@ const SalesTab = ({ data, onChange, inventoryData }) => {
           </label>
           <input
             className="form-control awsm-input"
-            value={!isNaN(data?.actual_sales) ? Number(data?.actual_sales).toFixed(1) : ""}
+            value={validateNaN(data?.actual_sales)}
             disabled="true"
-            onChange={e => onChangeHandler(e.target.value, "actual_sales")}
+            onChange={e => onChangeHandler(e.target.value, 'actual_sales')}
           />
         </div>
         <div className="form-group col-md-6">
@@ -61,9 +58,9 @@ const SalesTab = ({ data, onChange, inventoryData }) => {
           </label>
           <input
             className="form-control awsm-input"
-            value={!isNaN(data?.expected_sales) ? Number(data?.expected_sales).toFixed(1) : ""}
+            value={validateNaN(data?.expected_sales)}
             disabled="true"
-            onChange={e => onChangeHandler(e.target.value, "expected_sales")}
+            onChange={e => onChangeHandler(e.target.value, 'expected_sales')}
           />
         </div>
       </div>
@@ -75,10 +72,8 @@ const SalesTab = ({ data, onChange, inventoryData }) => {
           </label>
           <VarianceInput
             className="form-control awsm-input"
-            value={data?.yesterday_sales_adjustment}
-            onChange={(value, field = "yesterday_sales_adjustment") =>
-              onVarianceControlChange(value, field)
-            }
+            value={validateNaN(data?.yesterday_sales_adjustment)}
+            onChange={value => onVarianceControlChange(value, 'yesterday_sales_adjustment')}
           />
         </div>
         <div className="col-md-6 form-group">
@@ -87,8 +82,8 @@ const SalesTab = ({ data, onChange, inventoryData }) => {
           </label>
           <input
             className="form-control awsm-input"
-            value={data?.yesterday_sales_adjustment_remarks || ""}
-            onChange={e => onChangeHandler(e.target.value, "yesterday_sales_adjustment_remarks")}
+            value={data?.yesterday_sales_adjustment_remarks || ''}
+            onChange={e => onChangeHandler(e.target.value, 'yesterday_sales_adjustment_remarks')}
           />
         </div>
       </div>
@@ -96,7 +91,7 @@ const SalesTab = ({ data, onChange, inventoryData }) => {
       <div className="row">
         <div className="col-md-6 form-group">
           <label>
-            SALES FINAL FIGURE (L){" "}
+            SALES FINAL FIGURE (L){' '}
             <Tooltip title="Actual Sales + Yesterday's Sales Adjustment (L)">
               <img src={informationIcon} alt="sales final figure" />
             </Tooltip>
@@ -104,16 +99,14 @@ const SalesTab = ({ data, onChange, inventoryData }) => {
           </label>
           <input
             className="form-control awsm-input"
-            value={
-              !isNaN(data?.sales_final_figure) ? Number(data?.sales_final_figure).toFixed(1) : ""
-            }
+            value={parseFloat(validateNaN(data?.sales_final_figure).toFixed(3))}
             disabled="true"
-            onChange={e => onChangeHandler(e.target.value, "sales_final_figure")}
+            onChange={e => onChangeHandler(e.target.value, 'sales_final_figure')}
           />
         </div>
         <div className="col-md-6 form-group">
           <label>
-            SALES VARIANCE (L){" "}
+            SALES VARIANCE (L){' '}
             <Tooltip title="Sales Final Figure - Expected Sales">
               <img src={informationIcon} alt="sales variance" />
             </Tooltip>
@@ -122,8 +115,8 @@ const SalesTab = ({ data, onChange, inventoryData }) => {
           <input
             className="form-control awsm-input"
             disabled="true"
-            value={!isNaN(data?.sales_variance) ? Number(data?.sales_variance).toFixed(1) : ""}
-            onChange={e => onChangeHandler(e.target.value, "sales_variance")}
+            value={parseFloat(validateNaN(data?.sales_variance).toFixed(3))}
+            onChange={e => onChangeHandler(e.target.value, 'sales_variance')}
           />
         </div>
       </div>
@@ -131,7 +124,7 @@ const SalesTab = ({ data, onChange, inventoryData }) => {
       <div className="row">
         <div className="col-md-6 form-group">
           <label>
-            SALES VARIANCE (%){" "}
+            SALES VARIANCE (%){' '}
             <Tooltip title="((Sales Final Figure - ExpectedSales)/Expected Sales) * 100%">
               <img src={informationIcon} alt="sales variance" />
             </Tooltip>
@@ -139,9 +132,9 @@ const SalesTab = ({ data, onChange, inventoryData }) => {
           </label>
           <input
             className="form-control awsm-input"
-            value={data?.expected_sales ? data?.sales_variance_percent : "NA"}
+            value={data?.expected_sales ? data?.sales_variance_percent : 'NA'}
             disabled="true"
-            onChange={e => onChangeHandler(e.target.value, "sales_variance_percent")}
+            onChange={e => onChangeHandler(e.target.value, 'sales_variance_percent')}
           />
         </div>
       </div>

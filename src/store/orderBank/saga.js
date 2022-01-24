@@ -334,11 +334,13 @@ function* sendRequestCancelPaymentInGanttChart({ params = {} }) {
   }
 }
 
-function* sendRequestOrderPaymentInGanttChart({ params = {} }) {
+function* sendRequestOrderPaymentInGanttChart({ params }) {
   try {
-    // send request
+    const ids = [params.record.id]
 
-    yield put(sendOrderInGanttChartSuccess())
+    const response = yield call(sendRTSOrderBank, ids)
+
+    yield put(sendOrderInGanttChartSuccess(response.data))
   } catch (error) {
     yield put(sendOrderInGanttChartFail(error))
   }

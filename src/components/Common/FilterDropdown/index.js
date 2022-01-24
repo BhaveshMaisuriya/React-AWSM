@@ -1,17 +1,17 @@
-import React, { useState, Fragment, useEffect, useCallback } from "react"
-import { Button, Popover, PopoverBody, Input } from "reactstrap"
-import searchIcon from "../../../assets/images/AWSM-search.svg"
-import selectAllIcon from "../../../assets/images/AWSM-Select-all-Checkbox.svg"
-import selectAllIcon2 from "../../../assets/images/AWSM-Checked-box.svg"
-import selectAllIcon3 from "../../../assets/images/AWSM-Checkbox.svg"
-import { IconButton, FormControlLabel } from "@material-ui/core"
-import Checkbox from "@material-ui/core/Checkbox"
-import SimpleBar from "simplebar-react"
-import { isEmpty, isNull, isUndefined } from "lodash"
-import { removeKeywords } from "../../../pages/DQM/Common/helper"
-import "./index.scss"
-import ReplayIcon from "@material-ui/icons/Replay"
-import { format } from "date-fns"
+import React, { useState, Fragment, useEffect, useCallback } from 'react'
+import { Button, Popover, PopoverBody, Input } from 'reactstrap'
+import searchIcon from '../../../assets/images/AWSM-search.svg'
+import selectAllIcon from '../../../assets/images/AWSM-Select-all-Checkbox.svg'
+import selectAllIcon2 from '../../../assets/images/AWSM-Checked-box.svg'
+import selectAllIcon3 from '../../../assets/images/AWSM-Checkbox.svg'
+import { IconButton, FormControlLabel } from '@material-ui/core'
+import Checkbox from '@material-ui/core/Checkbox'
+import SimpleBar from 'simplebar-react'
+import { isEmpty, isNull, isUndefined } from 'lodash'
+import { removeKeywords } from '../../../pages/DQM/Common/helper'
+import './index.scss'
+import ReplayIcon from '@material-ui/icons/Replay'
+import { format } from 'date-fns'
 
 const FilterDropdown = ({
   dataFilter,
@@ -27,7 +27,7 @@ const FilterDropdown = ({
   const [checkedCount, setCheckedCount] = useState(0)
   const [visibilityCount, setVisibilityCount] = useState(0)
   const [count, setCount] = useState(0)
-  const [searchWords, setSearch] = useState("")
+  const [searchWords, setSearch] = useState('')
   const [hasMore, setHasMore] = useState(true)
   const [isRemark, setHasRemark] = useState(false)
   const [current, setCurrent] = useState([])
@@ -40,7 +40,7 @@ const FilterDropdown = ({
   useEffect(() => {
     if (dataFilter) {
       if (dataFilter && !isUndefined(dataFilter[dataKey])) {
-        dataKey === "remarks" ? setHasRemark(true) : setHasRemark(false)
+        dataKey === 'remarks' ? setHasRemark(true) : setHasRemark(false)
         const alldata = getFilterData()
         setData(alldata)
         setCount(rowsPerLoad)
@@ -61,24 +61,24 @@ const FilterDropdown = ({
     setVisibilityCount(arr.length)
     if (
       [
-        "inventory_variance",
-        "sales_variance",
-        "sales_variance_percentage",
-        "inventory_variance_percentage",
+        'inventory_variance',
+        'sales_variance',
+        'sales_variance_percentage',
+        'inventory_variance_percentage',
       ].includes(dataKey)
     ) {
       setCurrent([
         {
-          text: "Outside Threshold",
-          checked: data.find(e => e.text === "Outside Threshold")?.checked ?? false,
+          text: 'Outside Threshold',
+          checked: data.find(e => e.text === 'Outside Threshold')?.checked ?? false,
           visibility: true,
-          disabled: arr.findIndex(e => e.text === "Outside Threshold") < 0,
+          disabled: arr.findIndex(e => e.text === 'Outside Threshold') < 0,
         },
         {
-          text: "Within Threshold",
-          checked: data.find(e => e.text === "Within Threshold")?.checked ?? false,
+          text: 'Within Threshold',
+          checked: data.find(e => e.text === 'Within Threshold')?.checked ?? false,
           visibility: true,
-          disabled: arr.findIndex(e => e.text === "Within Threshold") < 0,
+          disabled: arr.findIndex(e => e.text === 'Within Threshold') < 0,
         },
       ])
     } else {
@@ -90,7 +90,7 @@ const FilterDropdown = ({
    * useEffect for filtering dropdown based on searched words
    */
   useEffect(() => {
-    const tempSearch = searchWords === "*" ? "" : searchWords
+    const tempSearch = searchWords === '*' ? '' : searchWords
     const newData = [...data]
     newData.forEach(item => {
       item.visibility =
@@ -134,7 +134,7 @@ const FilterDropdown = ({
     const value = event.target.value
     const newData = [...data]
     newData.forEach(item => {
-      const itemText = isNull(item.text) ? "-null" : item.text
+      const itemText = isNull(item.text) ? '-null' : item.text
       if (value.toString() === itemText.toString()) {
         item.checked = !item.checked
         item.checked ? setCheckedCount(checkedCount + 1) : setCheckedCount(checkedCount - 1)
@@ -156,7 +156,7 @@ const FilterDropdown = ({
    */
   function clickApply() {
     const checkedFilter = data.filter(item => item.checked === true).map(item => item.text)
-    setSearch("")
+    setSearch('')
     setAppliedFilters(checkedFilter)
     setPopoverOpen(!popoverOpen)
     handleClickApply(checkedFilter, dataKey)
@@ -188,8 +188,8 @@ const FilterDropdown = ({
   const toggle = () => {
     setPopoverOpen(!popoverOpen)
     if (popoverOpen) {
-      setSearch("")
-      dataFilter ? setData(getFilterData()) : ""
+      setSearch('')
+      dataFilter ? setData(getFilterData()) : ''
       if (appliedFiltersList.length > 0) setCheckedCount(appliedFiltersList.length)
       else setCheckAll(true)
     }
@@ -200,7 +200,7 @@ const FilterDropdown = ({
       visibilityCount > 0
         ? `${visibilityCount} results found for '${searchWords}'`
         : `Couldn't find '${searchWords}'`
-    return <span style={{ paddingLeft: "7px" }}>{string}</span>
+    return <span style={{ paddingLeft: '7px' }}>{string}</span>
   }
 
   /**
@@ -222,21 +222,21 @@ const FilterDropdown = ({
   }
 
   const checkNullValue = useCallback(
-    text => isNull(text) || isEmpty(text?.toString()) || text?.toString().includes("null"),
+    text => isNull(text) || isEmpty(text?.toString()) || text?.toString().includes('null'),
     []
   )
 
   const escapeRegExp = string => {
-    return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") // $& means the whole matched string
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') // $& means the whole matched string
   }
   const replaceAll = (str, match, replacement) => {
-    return str.replace(new RegExp(escapeRegExp(match), "g"), () => replacement)
+    return str.replace(new RegExp(escapeRegExp(match), 'g'), () => replacement)
   }
 
   return (
     <Fragment>
       <Button
-        id={replaceAll(dataKey, ".", "_")}
+        id={replaceAll(dataKey, '.', '_')}
         color="link"
         className="filter-button"
         onMouseDown={e => e.preventDefault()}
@@ -246,7 +246,7 @@ const FilterDropdown = ({
       <Popover
         placement="bottom"
         isOpen={popoverOpen}
-        target={replaceAll(dataKey, ".", "_")}
+        target={replaceAll(dataKey, '.', '_')}
         toggle={toggle}
         trigger="legacy"
       >
@@ -256,8 +256,8 @@ const FilterDropdown = ({
               placeholder="Search"
               onChange={onSearchTextChange}
               style={{
-                fontFamily: "Museo Sans",
-                fontSize: "12px",
+                fontFamily: 'Museo Sans',
+                fontSize: '12px',
               }}
             />
             <img
@@ -265,7 +265,7 @@ const FilterDropdown = ({
               src={searchIcon}
               alt="search"
               style={{
-                paddingRight: "8px",
+                paddingRight: '8px',
               }}
             />
           </div>
@@ -275,32 +275,34 @@ const FilterDropdown = ({
               e.preventDefault()
             }}
           >
-            {(!isRemark || searchWords !== "") && (
+            {(!isRemark || searchWords !== '') && (
               <Fragment>
                 <SimpleBar
                   autoHide={false}
                   style={{
-                    maxHeight: "211px",
-                    width: "100%",
-                    overflow: "auto",
+                    maxHeight: '211px',
+                    width: '100%',
+                    overflow: 'auto',
                   }}
                 >
                   {current.length > 0 && !isNull(current) && !isRemark
                     ? current.map((row, index) => {
                         const renderLabel = () => {
-                          if (dataKey === "dipping_timestamp") {
+                          if (dataKey === 'dipping_timestamp') {
                             return checkNullValue(row.text)
-                              ? "-"
-                              : format(new Date(row.text), "dd-MM-yyyy , HH:mm:ss")
+                              ? '-'
+                              : format(new Date(row.text), 'dd-MM-yyyy , HH:mm:ss')
                           }
-                          if (dataKey === "override_status") {
-                            return checkNullValue(row.text) ? "Accurate" : row.text
+                          if (dataKey === 'override_status') {
+                            return checkNullValue(row.text) ? 'Accurate' : row.text
                           }
-                          if (["retain", "runout", "dn_date"].includes(dataKey)) {
-                            return format(new Date(row.text), "dd-MM-yyyy")
+                          if (['retain', 'runout', 'dn_date'].includes(dataKey)) {
+                            return row.text.length < 24
+                              ? '-'
+                              : format(new Date(row.text), 'dd-MM-yyyy')
                           }
-                          if (dataKey !== "override_status") {
-                            return checkNullValue(row.text) ? "-" : removeKeywords(row.text)
+                          if (dataKey !== 'override_status') {
+                            return checkNullValue(row.text) ? '-' : removeKeywords(row.text)
                           }
                         }
 
@@ -309,12 +311,12 @@ const FilterDropdown = ({
                             <div
                               key={`${row.text}${index}`}
                               className={`d-flex align-items-center filter-selection ${
-                                row.checked ? "item-checked" : ""
+                                row.checked ? 'item-checked' : ''
                               }`}
                             >
                               <FormControlLabel
                                 key={`${row.text}${index}`}
-                                value={isNull(row.text) ? "-null" : row.text}
+                                value={isNull(row.text) ? '-null' : row.text}
                                 onChange={onInputChange}
                                 checked={row.checked}
                                 disabled={row.disabled}
@@ -324,10 +326,10 @@ const FilterDropdown = ({
                                     icon={<UntickIcon />}
                                     checkedIcon={<CheckedIcon />}
                                     style={{
-                                      height: "20px",
-                                      width: "5px",
-                                      marginLeft: "20px",
-                                      marginTop: "10px",
+                                      height: '20px',
+                                      width: '5px',
+                                      marginLeft: '20px',
+                                      marginTop: '10px',
                                     }}
                                   />
                                 }
@@ -350,10 +352,10 @@ const FilterDropdown = ({
                     </IconButton>
                   )}
                 </SimpleBar>
-                <p style={{ marginTop: "-10px" }} />
+                <p style={{ marginTop: '-10px' }} />
               </Fragment>
             )}
-            <div style={{ height: "25px", marginTop: "20px" }}>
+            <div style={{ height: '25px', marginTop: '20px' }}>
               {!isRemark && current.length > 0 && (
                 <Fragment>
                   <Checkbox
@@ -363,17 +365,17 @@ const FilterDropdown = ({
                     onClick={clickSelectAll}
                     disabled={current.every(e => e.disabled)}
                     style={{
-                      height: "20px",
-                      width: "5px",
-                      marginLeft: "8px",
-                      marginTop: "-1px",
+                      height: '20px',
+                      width: '5px',
+                      marginLeft: '8px',
+                      marginTop: '-1px',
                     }}
                   />
                   <label
                     style={{
-                      color: "#008F8A",
-                      fontFamily: "Museo Sans",
-                      margin: "3px auto auto 8px",
+                      color: '#008F8A',
+                      fontFamily: 'Museo Sans',
+                      margin: '3px auto auto 8px',
                     }}
                   >
                     Select All

@@ -420,8 +420,9 @@ export const cancelPaymentInGanttChartFail = error => ({
   payload: error,
 })
 
-export const sendOrderInGanttChart = () => ({
+export const sendOrderInGanttChart = params => ({
   type: SEND_ORDER_IN_GANTT_CHART,
+  params,
 })
 
 export const sendOrderInGanttChartSuccess = response => ({

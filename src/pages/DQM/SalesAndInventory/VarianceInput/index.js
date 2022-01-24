@@ -1,5 +1,5 @@
 import { ReactSVG } from "react-svg"
-import AWSMEditIcon from "../../../../assets/images/AWSM-Edit-Icon.svg"
+import AWSMEditIcon from "assets/images/AWSM-Edit-Icon.svg"
 import React, { useState, useEffect, useRef } from "react"
 import "./VarianceInput.scss"
 
@@ -16,15 +16,17 @@ const VarianceInput = ({ value, disabled = false, onChange }) => {
         setIsFocus(true)
     }
 
-    const onFocus = () => {
+    const onFocus = (event) => {
+        event.target.select()
         if(inputRef.current && !isFocus){
             inputRef.current.blur()
         }
     }
 
-    const onBlur = () => {
+    const onBlur = event => {
         if (isFocus) {
             setIsFocus(false)
+            onChange(Number(event.target.value).toFixed(3))
         }
     }
 

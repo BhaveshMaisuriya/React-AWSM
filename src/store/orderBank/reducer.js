@@ -278,7 +278,7 @@ const RTSOrderBank = (state = initialState, action) => {
         ...state,
         sendDn: 'error',
       }
-      
+
     case GET_ORDER_BANK_AUDITLOG_SUCCESS:
       return {
         ...state,
@@ -318,12 +318,23 @@ const RTSOrderBank = (state = initialState, action) => {
         error: action.payload,
       }
     case SEND_ORDER_IN_GANTT_CHART_SUCCESS:
-      ToastSuccess.fire({ title: 'A shipment has been successfully sent for Creation' })
+      ToastSuccess.fire({ title: 'A shipment has been successfully sent for DN Creation' })
+
+      const records = action.payload // array of Order records
+
+      const eventData = state.ganttChartEventData
+      records.forEach(o => {
+        const existingEventData = eventData.find(s => s.id === o.id)
+
+        if (existingEventData) existingEventData.resourceOrder[0].DNNumber = o.dn_no
+      })
+
       return {
         ...state,
+        ganttChartEventData: eventData,
       }
     case SEND_ORDER_IN_GANTT_CHART_FAIL:
-      ToastError.fire({ title: 'A shipment has been fail to sent for Creation' })
+      ToastError.fire({ title: 'A shipment has been fail to sent for DN Creation' })
       return {
         ...state,
         error: action.payload,
@@ -375,10 +386,10 @@ const RTSOrderBank = (state = initialState, action) => {
       // str, []
       const { key, values } = action.payload
 
-      const selectedFilters = state.ganttChart.selectedFilters
-      selectedFilters[key] = values
+      const ganttChart = { ...state.ganttChart }
+      ganttChart.selectedFilters[key] = values
 
-      return { ...state, ganttChart: { ...state.ganttChart, selectedFilters } }
+      return { ...state, ganttChart }
     }
     case CLEAR_RTS_ORDER_BANK_TABLE_DATA: {
       return {

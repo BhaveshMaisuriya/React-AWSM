@@ -21,7 +21,7 @@ import {
   selectVehicleShipment,
   sendOrderInGanttChart,
 } from 'store/actions'
-import { cloneDeep, isEqual } from 'lodash'
+import { cloneDeep } from 'lodash'
 import { Droppable } from 'react-beautiful-dnd'
 import OrderBankShipmentModal from './OrderBankShipmentModal'
 import PlannedLoadTimesModal from './PlannedLoadTimesModal'
@@ -130,7 +130,8 @@ function BryntumChartShipment(props) {
         break
       }
       case EventContextList.SEND_ORDER: {
-        props.processSendOrderInGanttChart(null)
+        // props.processSendOrderInGanttChart(null)
+        console.log('what are you doing dude ?? :D ??')
         break
       }
       default:
@@ -324,9 +325,9 @@ function BryntumChartShipment(props) {
   }, [bryntumCurrentColumns])
 
   const hideFilterElement = dataKey => {
-    const hideEl = document.getElementById(`chart-tooltip-${dataKey}`)
-    if (hideEl) {
-      hideEl.classList.add('hide')
+    const $el = document.getElementById(`chart-tooltip-${dataKey}`)
+    if ($el) {
+      $el.classList.add('hide')
     }
   }
 

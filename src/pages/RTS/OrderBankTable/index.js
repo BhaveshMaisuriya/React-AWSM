@@ -295,7 +295,7 @@ class index extends Component {
 
   RenderTRComponent = data => {
     const { expandSearch } = this.state
-
+    
     return this.props.tableColumns.map(v => {
       let typeOfColumn = tableMapping[v]?.type
       let result
@@ -310,6 +310,30 @@ class index extends Component {
             </td>
           )
           break
+          case "company_name":
+            result = (
+              <td className="ellips_txt">
+                {data['customer_type'] === "RETAIL" ? data['retail_storage_relation.retail_customer_relation.ship_to_company'] : data['commercial_storage_relation.commercial_customer_relation.ship_to_company'] }
+              </td>
+            )
+          break
+          case "order_remarks":
+            result = (
+              <td>
+                {data['remarks']}
+              </td>
+            )
+          break
+        case "priority_type":
+          result = (
+            <td>
+              {_.isArray(data[v]) &&
+                data[v].map(e => {
+                  return <span className={`circle ${e}`}>{e}</span>
+                })}
+            </td>
+          )
+          break          
         case "dn_status":
           result = (
             <td>
@@ -416,6 +440,7 @@ class index extends Component {
   DataOfTableFixed = () => {
     const { dataSource } = this.state
     return dataSource.map((v, i) => {
+      console.log('data::', v)
       return (
         <tr key={i} className={v.isChecked ? "selected-row" : "bg-white"}>
           <th>

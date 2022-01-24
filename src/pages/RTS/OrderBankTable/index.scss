@@ -482,3 +482,8 @@ span.b-sch-header-text.b-sticky-header {
 .infinite-scroll-component {
   overflow-anchor: none;
 }
+.ellips_txt {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

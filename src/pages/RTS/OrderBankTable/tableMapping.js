@@ -47,6 +47,7 @@ const tableMapping = {
   format_name: {
     label: "Name",
     columnSize: "cell-text",
+    type: "company_name"
   },
   format_cloud: {
     label: "Cloud",
@@ -107,6 +108,7 @@ const tableMapping = {
   order_remarks: {
     label: "Order Remarks",
     columnSize: "cell-text",
+    type: "order_remarks"
   },
   shift_date: {
     label: "Shift Date",

@@ -744,7 +744,7 @@ function OrderBank({
     const sendDN = newSettings?.find(e => e.value === 'SendDN')
     if (sendDN) {
       let checkDN = checkedData.filter(v => v.dn_no === null || v.dn_no === '')
-      sendDN.disabled = checkDN?.length > 0 ? false : true; 
+      sendDN.disabled = (checkDN?.length > 0 && checkedData.length === checkDN?.length) ? false : true; //!isItemSelected
     }
     setOrderBankSetting(newSettings)
   }, [orderBankTableData])

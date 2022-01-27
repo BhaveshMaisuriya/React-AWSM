@@ -737,13 +737,18 @@ if(sendMultipleDn){
   }
 
   const changeFiltersHandler = (qValue, type) => {
+    let tempVol = {volume: []};
+    qValue?.volume?.map((item, index)=>{
+      tempVol.volume.push(item.toString());
+    })
+    let temp = qValue?.volume ? tempVol : qValue;
     if (type === 'insert')
       setfilterQuery(prevFilters => {
-        return { ...prevFilters, ...qValue }
+        return { ...prevFilters, ...temp }
       })
     else if (type === 'remove')
       setfilterQuery(prevFilters => {
-        return { ...filterObject(prevFilters, qValue) }
+        return { ...filterObject(prevFilters, temp) }
       })
     setCurrentPage(0)
   }

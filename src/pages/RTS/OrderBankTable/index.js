@@ -168,7 +168,7 @@ class index extends Component {
         isOpenConfirmModal: false,
       },
       filterCondition: [],
-      currentPage: 1,
+      currentPage: 0,
       showEditAlert: false,
       showEditMsg: "",
       callDelete: false,
@@ -299,14 +299,15 @@ class index extends Component {
     return this.props.tableColumns.map(v => {
       let typeOfColumn = tableMapping[v]?.type
       let result
+     
       switch (typeOfColumn) {
         case "priority_type":
           result = (
             <td>
-              {_.isArray(data[v]) &&
+              {_.isArray(data[v]) ?
                 data[v].map(e => {
                   return <span className={`circle ${e}`}>{e}</span>
-                })}
+                }) : data?.priority}
             </td>
           )
           break
@@ -323,17 +324,7 @@ class index extends Component {
                 {data['remarks']}
               </td>
             )
-          break
-        case "priority_type":
-          result = (
-            <td>
-              {_.isArray(data[v]) &&
-                data[v].map(e => {
-                  return <span className={`circle ${e}`}>{e}</span>
-                })}
-            </td>
-          )
-          break          
+          break         
         case "dn_status":
           result = (
             <td>
@@ -426,7 +417,7 @@ class index extends Component {
       setTimeout(async function () {
         await getRTSOrderBankTableData({
           limit: 10,
-          page: payloadFilter.currentPage,
+          page: 0,
           search_fields: "*",
           q: transformObjectToStringSentence(payloadFilter.filterQuery),
           sort_dir: fieldSortDirection,

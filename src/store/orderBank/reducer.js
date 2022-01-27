@@ -104,6 +104,7 @@ const initialState = {
   ganttChartEventData: [],
   dropOderSuccess: true,
   shipmentDropData: [],
+  sendMultipleDn: null,
   ganttEventValidation: null,
   shipmentDetailsOnVehicle: [],
 }
@@ -572,15 +573,17 @@ const RTSOrderBank = (state = initialState, action) => {
       }
     }
     case SEND_ORDER_BANK_DN_FAIL: {
-      ToastError.fire({ title: 'Send DN failed!' })
+      // ToastError.fire({ title: 'Send DN failed!' })
       return {
         ...state,
+        sendMultipleDn: 'error'
       }
     }
     case SEND_ORDER_BANK_DN_SUCCESS: {
-      ToastSuccess.fire({ title: 'Orders have been successfully sent for DN creation' })
+      // ToastSuccess.fire({ title: 'Orders have been successfully sent for DN creation' })
       return {
         ...state,
+        sendMultipleDn: 'success'
       }
     }
     case GET_SHIPMENT_DETAIL_SUCCESS: {

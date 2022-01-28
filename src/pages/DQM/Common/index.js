@@ -95,7 +95,7 @@ class Pages extends Component {
       limit: 10,
       page: currentPage,
       search_term: searchTerm,
-      search_fields: transformArrayToString(searchFields),
+      search_fields: pathName === "/sales-inventory" ? "*" : transformArrayToString(searchFields),
       q: transformObjectToStringSentence(q),
       sort_dir: sortDir,
       sort_field: sortField,
@@ -315,13 +315,14 @@ class Pages extends Component {
   onDateAndTerminalChange = () => {
     const { searchFields, salesDate, terminal } = this.state
     const { onGetMainTable } = this.props
+    const pathName = window.location.pathname
     const params = {
       limit: 10,
       page: 0,
       sort_dir: "",
       sort_field: "",
       search_term: "",
-      search_fields: transformArrayToString(searchFields),
+      search_fields: pathName === "/sales-inventory" ? "*" : transformArrayToString(searchFields),
       search_date: salesDate ? format(salesDate, "yyyy-MM-dd") : "",
       terminal: TERMINAL_CODE_MAPPING[terminal],
     }

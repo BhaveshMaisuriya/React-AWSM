@@ -109,9 +109,13 @@ const SLATable = ({ items, onDeleteSLADetail, scheduler, onUpdate }) => {
     <div className="sla-table">
       <table>
         <thead>
-          {columns?.map(col => (
-            <th style={{ width: getColSize(col) }}>{col.label}</th>
-          ))}
+          <tr>
+            {columns?.map((col, index) => (
+              <th key={index} style={{ width: getColSize(col) }}>
+                {col.label}
+              </th>
+            ))}
+          </tr>
         </thead>
         <tbody>
           {items?.map((item, index) => {
@@ -124,7 +128,7 @@ const SLATable = ({ items, onDeleteSLADetail, scheduler, onUpdate }) => {
                     <td
                       className="ck ck-content"
                       dangerouslySetInnerHTML={{
-                        __html: createDOMPurify.sanitize(apiKey ? item[apiKey] || "" : ""),
+                        __html: createDOMPurify.sanitize(apiKey ? item[apiKey] || '' : ''),
                       }}
                     />
                   )
@@ -149,7 +153,7 @@ const SLATable = ({ items, onDeleteSLADetail, scheduler, onUpdate }) => {
         </tbody>
       </table>
       <SLAModalDetail
-        type={"update"}
+        type={'update'}
         openModalDetail={modalDetail.isShow}
         data={modalDetail.data}
         handleCloseModal={handleCloseModalDetail}

@@ -262,7 +262,9 @@
 .container-orderbank thead tr {
   background-color: #f8f9fa;
   height: 64px;
+  z-index: 15;
   // fixed header order bank table
+  box-shadow: 0 0 0 1px #d9d9d9;
   position: sticky;
   top: 0;
   td {
@@ -673,15 +675,6 @@
     .pt-12 {
       padding-top: 12em;
     }
-  }
-}
-
-#crossterminal-modal .modal-content {
-  h5 {
-    padding-left: 20px !important;
-  }
-  .btn {
-    width: 120px !important;
   }
 }
 

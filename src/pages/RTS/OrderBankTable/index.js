@@ -42,6 +42,7 @@ import AWSMAlert from "components/Common/AWSMAlert"
 import { transformObjectToStringSentence } from "pages/DQM/Common/helper"
 import { format } from "date-fns"
 import CircularLoader from "components/Common/Loader/CircularLoader"
+import _ from 'lodash'
 
 export class TableGroupEvent extends React.Component {
   constructor(props) {
@@ -301,30 +302,29 @@ class index extends Component {
       let result
      
       switch (typeOfColumn) {
-        case "priority_type":
+        case "company_name":
           result = (
-            <td>
-              {_.isArray(data[v]) ?
-                data[v].map(e => {
-                  return <span className={`circle ${e}`}>{e}</span>
-                }) : data?.priority}
+            <td className="ellips_txt">
+              {data['customer_type'] === "RETAIL" ? data['retail_storage_relation.retail_customer_relation.ship_to_company'] : data['commercial_storage_relation.commercial_customer_relation.ship_to_company'] }
             </td>
           )
           break
-          case "company_name":
-            result = (
-              <td className="ellips_txt">
-                {data['customer_type'] === "RETAIL" ? data['retail_storage_relation.retail_customer_relation.ship_to_company'] : data['commercial_storage_relation.commercial_customer_relation.ship_to_company'] }
-              </td>
-            )
+        case "order_remarks":
+          result = (
+            <td>
+              {data['remarks']}
+            </td>
+          )
           break
-          case "order_remarks":
-            result = (
-              <td>
-                {data['remarks']}
-              </td>
-            )
-          break         
+        case "priority_type":
+          result = (
+            <td>
+              {
+                <span className={`priority ${_.camelCase(data[v])}`}></span>
+              }
+            </td>
+          )
+          break          
         case "dn_status":
           result = (
             <td>
@@ -369,10 +369,12 @@ class index extends Component {
   }
 
   OnDeleteRecords = async allData => {
-    this.setState({ showLoader: true })
+    const { selectedAllItem} = this.state
     const { onGetDeleteOrderBankDetail } = this.props
-    await onGetDeleteOrderBankDetail(allData.id)
-    // setTimeout(function(){  this.setState( prevState => ({ callDelete: true })); }, 1000);
+
+    this.setState({ showLoader: true })
+
+    await onGetDeleteOrderBankDetail(!selectedAllItem ? allData.id : { selectedAllItem : true } )
     await this.setState({ callDelete: true })
   }
 
@@ -431,7 +433,6 @@ class index extends Component {
   DataOfTableFixed = () => {
     const { dataSource } = this.state
     return dataSource.map((v, i) => {
-      console.log('data::', v)
       return (
         <tr key={i} className={v.isChecked ? "selected-row" : "bg-white"}>
           <th>
@@ -465,6 +466,13 @@ class index extends Component {
     filterApplyHandler(tempObj, "insert")
   }
 
+  OnEnableCrossTerminal = (checkedData) => {
+    let checkCross = checkedData.filter(v => v.order_type === "ASR" || v.order_type === "SMP")
+    let unvalidCheckCross = checkedData.filter(v => v.order_type === "" || v.order_type === null)
+
+    this.props.enabledCross(unvalidCheckCross.length > 0 ? 0 : checkCross.length)
+  }
+
   OnChangeCheckBoxHandler = (status, i) => {
     const { dataSource } = this.state
     const { updateOrderBankTableData } = this.props
@@ -484,22 +492,22 @@ class index extends Component {
     })
     let deleteEnable = checkedData //checkedData.filter((v) => (v.scheduling_status === "Unscheduled"))
 
-    let checkCross = checkedData.filter(v => v.order_type === "ASR" || v.order_type === "SMP")
-    let unvalidCheckCross = checkedData.filter(v => v.order_type === "" || v.order_type === null)
-
-    this.props.enabledCross(unvalidCheckCross.length > 0 ? 0 : checkCross.length)
+    this.OnEnableCrossTerminal(checkedData)
     this.props.deleteEnable(deleteEnable)
   }
 
+
   OnSelectedAllItems = () => {
     const { selectedAllItem, dataSource } = this.state
-    const { updateOrderBankTableData } = this.props
-    // const { dataSource } = this.props
+    const { updateOrderBankTableData ,deleteEnable} = this.props
+
     let data = [...dataSource]
     data = data.map(v => {
       return { ...v, isChecked: selectedAllItem ? false : true }
     })
     this.setState({ selectedAllItem: !selectedAllItem, dataSource: data })
+    this.OnEnableCrossTerminal(selectedAllItem ? [] : data)
+    deleteEnable(selectedAllItem ? 0 : data)
     updateOrderBankTableData(data)
   }
 
@@ -529,8 +537,14 @@ class index extends Component {
   }
 
   handleInfiniteScrolling() {
-    const { currentPage, onChangeCurrentPage } = this.props
+    const { onChangeCurrentPage } = this.props
+    const { selectedAllItem} = this.state
+    if(selectedAllItem){
+      onChangeCurrentPage()
+      this.OnSelectedAllItems()
+    }else{
     onChangeCurrentPage()
+    }
   }
 
   onDragEnd() {
@@ -601,7 +615,7 @@ class index extends Component {
                           dataSource.map((v, index) => {
                             return (
                               <Draggable
-                                isDragDisabled={!v.isChecked}
+                                isDragDisabled={!v.isChecked || selectedAllItem}
                                 key={v.id}
                                 draggableId={index.toString()}
                                 index={index}

@@ -356,6 +356,7 @@ const RTSOrderBank = (state = initialState, action) => {
 
       // add id to mapping with event
       const newList = list?.map(vehicle => ({ ...vehicle, id: vehicle?.vehicle }))
+
       if (state.ganttChartTableData.length !== 0 && scrolling && page > 0) {
         return {
           ...state,
@@ -372,6 +373,16 @@ const RTSOrderBank = (state = initialState, action) => {
         ganttChartTableFilter: filter,
         dropOderSuccess: false,
         ganttChart,
+      }
+    }
+    case GET_RTS_GANTT_CHART_DATA_FAIL: {
+      return {
+        ...state,
+        ganttChart: {
+          table: [],
+          event: [],
+        },
+        error: action.payload,
       }
     }
     case CLEAR_GANTT_DATA: {
@@ -396,16 +407,6 @@ const RTSOrderBank = (state = initialState, action) => {
         ...state,
         orderBankTableData: [],
         dropOderSuccess: false,
-      }
-    }
-    case GET_RTS_GANTT_CHART_DATA_FAIL: {
-      return {
-        ...state,
-        ganttChart: {
-          table: [],
-          event: [],
-        },
-        error: action.payload,
       }
     }
 
@@ -469,8 +470,6 @@ const RTSOrderBank = (state = initialState, action) => {
       }
     }
     case REMOVE_ORDER_FROM_SHIPMENT_FAIL: {
-      const { orderId, shipmentId } = action.params
-
       ToastError.fire({})
 
       return { ...state }
@@ -553,11 +552,11 @@ const RTSOrderBank = (state = initialState, action) => {
         orderBankRTDetails: action.payload,
       }
     }
-    case GET_OB_RT_DETAILS_FAIL: {
-      return {
-        ...state,
-      }
-    }
+    // case GET_OB_RT_DETAILS_FAIL: {
+    //   return {
+    //     ...state,
+    //   }
+    // }
     case UPDATE_OB_RT_DETAILS_SUCCESS: {
       ToastSuccess.fire({ title: 'Road Tanker detail has been successfully updated' })
       return {
@@ -638,11 +637,11 @@ const RTSOrderBank = (state = initialState, action) => {
         totalOrderUnschedule: action.payload.total ?? 0,
       }
     }
-    case GET_OB_TOTAL_UNSCHEDULE_FAIL: {
-      return {
-        ...state,
-      }
-    }
+    // case GET_OB_TOTAL_UNSCHEDULE_FAIL: {
+    //   return {
+    //     ...state,
+    //   }
+    // }
 
     default:
       return state

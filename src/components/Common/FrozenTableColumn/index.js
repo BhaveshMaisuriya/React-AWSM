@@ -1,22 +1,22 @@
-import React, { Component } from "react"
-import PropTypes from "prop-types"
-import Filter from "../FilterDropdown"
-import { Link } from "react-router-dom"
-import "./style.scss"
-import { isNull, isUndefined } from "lodash"
-import { Badge } from "reactstrap"
-import OverrideIcon from "assets/images/AWSM-success-alert.svg"
-import { ReactSVG } from "react-svg"
-import { removeKeywords } from "pages/DQM/Common/helper"
-import NoDataIcon from "assets/images/AWSM-No-Data-Available.svg"
-import { format } from "date-fns"
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import Filter from '../FilterDropdown'
+import { Link } from 'react-router-dom'
+import './style.scss'
+import { isNull, isUndefined } from 'lodash'
+import { Badge } from 'reactstrap'
+import OverrideIcon from 'assets/images/AWSM-success-alert.svg'
+import { ReactSVG } from 'react-svg'
+import { removeKeywords } from 'pages/DQM/Common/helper'
+import NoDataIcon from 'assets/images/AWSM-No-Data-Available.svg'
+import { format } from 'date-fns'
 
 class FixedCoulmnTable extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      order: "asc",
-      orderBy: "ship_to_party",
+      order: 'asc',
+      orderBy: 'ship_to_party',
       tableDatas: this.props.tableData,
       fixedHeaders: this.props.headers.slice(0, this.props.frozen),
       regularHeaders: this.props.headers.slice(this.props.frozen, this.props.headers.length),
@@ -38,10 +38,10 @@ class FixedCoulmnTable extends Component {
   createSortHandler = property => event => {
     const { headerSortHandler } = this.props
     const orderBy = property
-    let order = "asc"
+    let order = 'asc'
 
-    if (this.state.orderBy === property && this.state.order === "asc") {
-      order = "desc"
+    if (this.state.orderBy === property && this.state.order === 'asc') {
+      order = 'desc'
     }
     this.setState({ order, orderBy })
     headerSortHandler(order, orderBy)
@@ -50,11 +50,11 @@ class FixedCoulmnTable extends Component {
   handleClickApply = (checkedFilter, dataKey) => {
     const tempObj = {}
     tempObj[dataKey] = checkedFilter
-    this.props.filterApplyHandler(tempObj, "insert")
+    this.props.filterApplyHandler(tempObj, 'insert')
   }
 
   handleClickReset = dataKey => {
-    this.props.filterApplyHandler(dataKey, "remove")
+    this.props.filterApplyHandler(dataKey, 'remove')
   }
 
   addTd = arr => {
@@ -62,7 +62,7 @@ class FixedCoulmnTable extends Component {
     if (!arr) return null
     return arr.map((e, index) => (
       <td key={index}>
-        <div className={"d-flex align-items-center table_header_fit_text"}>
+        <div className={'d-flex align-items-center table_header_fit_text'}>
           <span onClick={this.createSortHandler(e)} className="header_text">
             {config[e] && config[e].label}
           </span>
@@ -82,7 +82,7 @@ class FixedCoulmnTable extends Component {
   }
   renderFrozenTr = arr => {
     if (!arr) return null
-    return typeof arr === "string" ? (
+    return typeof arr === 'string' ? (
       <tr>
         <td className="h-145"></td>
       </tr>
@@ -100,7 +100,7 @@ class FixedCoulmnTable extends Component {
 
   renderRegular = arr => {
     if (!arr) return null
-    return typeof arr === "string" ? (
+    return typeof arr === 'string' ? (
       <tr>
         <td colSpan="0" className="no-data-svg">
           <ReactSVG src={NoDataIcon} />
@@ -115,7 +115,7 @@ class FixedCoulmnTable extends Component {
 
   AddConditionalForActionColumn = (salesValue, inventoryValue, data) => {
     const { overrideActionColumn } = this.props
-    let result = ""
+    let result = ''
     if (
       Math.abs(data.sales_variance) > salesValue?.variance_value ||
       Math.abs(data.inventory_variance) > inventoryValue?.variance_value ||
@@ -123,14 +123,14 @@ class FixedCoulmnTable extends Component {
     ) {
       result = (
         <div className="cursor-pointer" onClick={() => overrideActionColumn(data)}>
-          {data?.override_status === "Override" ? (
+          {data?.override_status === 'Override' ? (
             <ReactSVG className="d-inline-block mr-2" src={OverrideIcon} />
           ) : (
             <span className="accurate d-inline-block mr-2" />
           )}
           <span
             className={`d-inline-block override-text ${
-              data?.override_status === "Override" ? "override-text-green" : ""
+              data?.override_status === 'Override' ? 'override-text-green' : ''
             }`}
           >
             Override
@@ -149,10 +149,10 @@ class FixedCoulmnTable extends Component {
   }
 
   validateCellValue = (cellValue, config) => {
-    let value = ""
+    let value = ''
     if (isUndefined(cellValue) || isNull(cellValue)) {
-      value = "-"
-    } else if (config && config.type === "date") {
+      value = '-'
+    } else if (config && config.type === 'date') {
       value = cellValue
     } else {
       value = removeKeywords(cellValue)
@@ -166,7 +166,7 @@ class FixedCoulmnTable extends Component {
     return sliceArr.map((e, index) => {
       let value = this.validateCellValue(arr[e], config[e])
       switch (config[e] && config[e].type) {
-        case "badge":
+        case 'badge':
           return (
             <td key={index}>
               <Badge className="font-weight-semibold" color={config[e].getBadgeColor(arr[e])} pill>
@@ -174,38 +174,50 @@ class FixedCoulmnTable extends Component {
               </Badge>
             </td>
           )
-        case "override_status":
-        case "color": {
-          if (pathName === "/sales-inventory") {
+        case 'override_status':
+        case 'color': {
+          if (pathName === '/sales-inventory') {
             let threshold
-            const salesValue = varianceControlData?.sales?.find(e => {
-              return e.station_tank_status === arr.tank_status
+            let expected_sales
+            const salesValue = varianceControlData?.sales?.find(salesData => {
+              return salesData.station_tank_status === arr.tank_status
             })
             const inventoryValue = varianceControlData?.inventory?.find(
-              e => e.station_tank_status === arr.tank_status
+              inventoryData => inventoryData.station_tank_status === arr.tank_status
             )
             switch (e) {
-              case "sales_variance": {
+              case 'sales_variance': {
                 threshold = salesValue?.variance_value
                 break
               }
-              case "sales_variance_percentage": {
+              case 'sales_variance_percentage': {
                 threshold = salesValue?.variance_percentage
+                expected_sales = arr['expected_sales']
                 break
               }
-              case "inventory_variance": {
+              case 'inventory_variance': {
                 threshold = inventoryValue?.variance_value
                 break
               }
-              case "inventory_variance_percentage": {
+              case 'inventory_variance_percentage': {
                 threshold = inventoryValue?.variance_percentage
+                expected_sales = arr['calculated_inventory']
                 break
               }
             }
-            if (config[e].type == "override_status") {
+            if (config[e].type == 'override_status') {
               return (
                 <td key={index}>
                   {this.AddConditionalForActionColumn(salesValue, inventoryValue, arr, parentIndex)}
+                </td>
+              )
+            }
+            if (config[e].checker === true) {
+              return (
+                <td key={index}>
+                  <div className={`${config[e].getColor(arr[e], threshold, expected_sales)}`}>
+                    {expected_sales !== '-' && expected_sales !== 0 ? value : 'NA'}
+                  </div>
                 </td>
               )
             }
@@ -222,7 +234,7 @@ class FixedCoulmnTable extends Component {
             )
           }
         }
-        case "link":
+        case 'link':
           return (
             <td key={index}>
               <Link
@@ -235,15 +247,15 @@ class FixedCoulmnTable extends Component {
               </Link>
             </td>
           )
-        case "date":
+        case 'date':
           return (
             <td key={index}>
-              <div>{value === "-" ? value : format(new Date(value), "dd-MM-yyyy , HH:mm:ss")}</div>
+              <div>{value === '-' ? value : format(new Date(value), 'dd-MM-yyyy , HH:mm:ss')}</div>
             </td>
           )
         default:
           return (
-            <td key={index} className={config[e]?.columnFixed && "product_wid"}>
+            <td key={index} className={config[e]?.columnFixed && 'product_wid'}>
               <div className="table_text_ellipsis">{value}</div>
             </td>
           )
@@ -254,7 +266,7 @@ class FixedCoulmnTable extends Component {
   render() {
     const { fixedHeaders, regularHeaders, tableDatas } = this.state
     return (
-      <div className="container" style={{ maxWidth: "100%" }}>
+      <div className="container" style={{ maxWidth: '100%' }}>
         <table className="fixed">
           <thead>
             <tr>{this.addTd(fixedHeaders)}</tr>

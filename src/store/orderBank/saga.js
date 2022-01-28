@@ -129,6 +129,7 @@ import {
   runAutoSchedule,
   getTotalUnscheduleOrder,
   removeOrder,
+  updateOrdersPositionInShipment,
 } from '../../helpers/fakebackend_helper'
 
 function* onGetOrderbank({ params = {} }) {
@@ -358,23 +359,24 @@ function* onGetRTSOrderBankGanttChart({ params = {} }) {
     }
     yield put(getRTSOderBankGanttChartSuccess(newResponse))
   } catch (error) {
+    console.log(error)
     yield put(getRTSOderBankGanttChartFail(error))
   }
 }
 
 function* onDragOrderBankToGanttChart({ shift_date, vehicle, order_banks }) {
-  if (!order_banks){
-    const dragOrder = order_banks ? order_banks : yield select(store =>
-      store.orderBank?.orderBankTableData?.filter(e => e.isChecked)
-    )
+  if (!order_banks) {
+    const dragOrder = order_banks
+      ? order_banks
+      : yield select(store => store.orderBank?.orderBankTableData?.filter(e => e.isChecked))
     order_banks = dragOrder.map(e => e.id)
   }
-  
-  if (!vehicle){
-    const selectedVehicle =  yield select(store => store?.orderBank?.selectedVehicleShipment)
+
+  if (!vehicle) {
+    const selectedVehicle = yield select(store => store?.orderBank?.selectedVehicleShipment)
     vehicle = selectedVehicle.vehicle
   }
-  
+
   try {
     if (order_banks && order_banks.length > 0) {
       const response = yield call(sendOderToVehicle, {
@@ -393,7 +395,7 @@ function* onRemoveOrderFromShipment(payload) {
   // call api to remove here
   // put data to success case
   try {
-    const response = yield call(removeOrder, payload.params)
+    yield call(removeOrder, payload.params)
     yield put(removeOrderFromShipmentSuccess(payload.params))
   } catch (error) {
     yield put(removeOrderFromShipmentFail(payload.params))
@@ -467,9 +469,17 @@ function* onGetShipmentDetailsOnVehicle(payload) {
   }
 }
 
-function* onDragAndDropShipmentArea(payload) {
+function* onDragAndDropShipmentArea({ params }) {
   try {
-    yield put(onDragAndDropShipmentAreaSuccess(payload?.params))
+    const { data, shipmentId } = params
+
+    const sendThis = {
+      shipmentId,
+      orderIds: data[shipmentId].orders.map(o => o.id),
+    }
+
+    const response = yield call(updateOrdersPositionInShipment, sendThis)
+    yield put(onDragAndDropShipmentAreaSuccess(data))
   } catch (error) {
     yield put(onDragAndDropShipmentAreaFail(error))
   }

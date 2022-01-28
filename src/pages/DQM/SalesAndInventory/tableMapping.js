@@ -82,9 +82,14 @@ const tableMapping = {
   sales_variance_percentage: {
     label: "SALES VARIANCE (%)",
     columnSize: "cell-text",
+    checker: true,
     type: "color",
-    getColor: (value, threshold) => {
-      return _.isNil(value) || Math.abs(value) <= threshold ? "green-text" : "red-text"
+    getColor: (value, threshold , expected_sales) => {
+      if(expected_sales !== "-" && expected_sales !== 0){
+        return _.isNil(value) || Math.abs(value) <= threshold ? "green-text" : "red-text"
+      }else{
+        return "red-text"
+      }
     },
   },
   dipping_value: {
@@ -179,9 +184,14 @@ const tableMapping = {
   inventory_variance_percentage: {
     label: "INVENTORY VARIANCE (%)",
     columnSize: "cell-text",
+    checker: true,
     type: "color",
-    getColor: (value, threshold) => {
-      return _.isNil(value) || Math.abs(value) <= threshold ? "green-text" : "red-text"
+    getColor: (value, threshold , expected_sales) => {
+      if(expected_sales !== "-" && expected_sales !== 0){
+        return _.isNil(value) || Math.abs(value) <= threshold ? "green-text" : "red-text"
+      }else{
+        return "red-text"
+      }
     },
   },
   remarks: {

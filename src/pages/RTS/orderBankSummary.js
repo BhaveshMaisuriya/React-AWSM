@@ -16,8 +16,6 @@ const OrderBankSummary = props => {
     }
   }, [data])
 
-  // const convertToMillions = value => (Math.abs(Number(value)) / 1.0e6).toFixed(1) + 'm'
-
   const convertToSummaryVolume = value => {
     const absoluteValue = Math.round(Number(value))
     const numberOfDigits = absoluteValue.toString().length

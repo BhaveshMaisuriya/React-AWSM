@@ -1,9 +1,14 @@
-import React from "react"
-import AWSMInput from "components/Common/Input"
-import { Row, Col } from "reactstrap"
+import React from 'react'
+import AWSMInput from 'components/Common/Input'
+import { Row, Col } from 'reactstrap'
 
 const SiteDNTab = props => {
   const { data } = props
+
+  const dataChecker = inputValue => {
+    return inputValue ? inputValue : ''
+  }
+
   return (
     <>
       <Row className="w-100 mt-4">
@@ -47,7 +52,7 @@ const SiteDNTab = props => {
           <label className="text-upper">DN No.</label>
           <div className="d-flex">
             <div className="w-100">
-              <AWSMInput value={data?.dn_no} disabled={true} />
+              <AWSMInput value={dataChecker(data?.dn_no)} disabled={true} />
             </div>
           </div>
         </Col>
@@ -55,7 +60,7 @@ const SiteDNTab = props => {
           <label className="text-upper">DN Status</label>
           <div className="d-flex">
             <div className="w-100">
-              <AWSMInput value={data?.dn_status} disabled={true} />
+              <AWSMInput value={dataChecker(data?.dn_status)} disabled={true} />
             </div>
           </div>
         </Col>
@@ -63,7 +68,7 @@ const SiteDNTab = props => {
           <label className="text-upper">DN Date</label>
           <div className="d-flex">
             <div className="w-100">
-              <AWSMInput value={data?.dn_date} disabled={true} />
+              <AWSMInput value={dataChecker(data?.dn_date)} disabled={true} />
             </div>
           </div>
         </Col>
@@ -73,7 +78,7 @@ const SiteDNTab = props => {
           <label className="text-upper">DN Time Creation.</label>
           <div className="d-flex">
             <div className="w-100">
-              <AWSMInput value={data?.dn_created_at} disabled={true} />
+              <AWSMInput value={dataChecker(data?.dn_created_at)} disabled={true} />
             </div>
           </div>
         </Col>
@@ -81,7 +86,7 @@ const SiteDNTab = props => {
           <label className="text-upper">DN Created By</label>
           <div className="d-flex">
             <div className="w-100">
-              <AWSMInput value={data?.dn_created_by} disabled={true} />
+              <AWSMInput value={dataChecker(data?.dn_created_by)} disabled={true} />
             </div>
           </div>
         </Col>
@@ -89,7 +94,7 @@ const SiteDNTab = props => {
           <label className="text-upper">Sales Order No</label>
           <div className="d-flex">
             <div className="w-100">
-              <AWSMInput value={data?.sales_order_no} disabled={true} />
+              <AWSMInput value={dataChecker(data?.sales_order_no)} disabled={true} />
             </div>
           </div>
         </Col>

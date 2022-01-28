@@ -16,7 +16,7 @@ import {
   Col,
 } from 'reactstrap'
 import ExitConfirmation from 'components/Common/ExitConfirmation'
-import AWSMInput from 'components/Common/Input'
+import DatePicker from 'components/Common/DatePicker'
 import AWSMDropdown from 'components/Common/Dropdown'
 import AWSMAlert from 'components/Common/AWSMAlert'
 import { getEditOrderBankDetail } from 'store/actions'
@@ -63,6 +63,7 @@ const EditOrderBankModal = props => {
   const [inputValue2, setInputValue2] = useState('')
   const [inputValue3, setInputValue3] = useState('')
   const [terminalList, setTerminalList] = useState([])
+  const [defaultDate] = useState(new Date(new Date().getTime() + 24 * 60 * 60 * 1000))
   const regionList = REGION_TERMINAL.map(item => item.region)
 
   useEffect(() => {
@@ -70,7 +71,7 @@ const EditOrderBankModal = props => {
       let temp = { ...viewData }
       const currentRegion = REGION_TERMINAL.find(e => e.region === props?.region)
       setTerminalList(currentRegion ? currentRegion.terminal : [])
-      temp.terminal = props.terminal;
+      temp.terminal = props.terminal
       temp.region = props?.region
       setEditOrderData(temp)
       setoriginalEditOrderData(temp)
@@ -192,6 +193,18 @@ const EditOrderBankModal = props => {
     }
   }
 
+  const disableEdit = (dn_status, dn_no) => {
+    if (dn_status !== 'Clean DN') {
+      if (dn_no) {
+        return true
+      } else {
+        return false
+      }
+    } else {
+      return true
+    }
+  }
+
   return (
     <Modal isOpen={open} className="new-order-modal">
       <ModalHeader toggle={toggle}>
@@ -212,10 +225,12 @@ const EditOrderBankModal = props => {
             <Row className="w-100">
               <Col md={4}>
                 <label>SHIFT DATE</label>
-                <AWSMInput
-                  type="text"
-                  value={formatDate(editOrderData?.shift_date)}
-                  disabled={true}
+                <DatePicker
+                  value={editOrderData?.shift_date}
+                  startDate={defaultDate}
+                  defaultValue={defaultDate}
+                  onChange={value => onFieldChange('shift_date', value)}
+                  disabled={disableEdit(editOrderData?.dn_status, editOrderData?.dn_no)}
                 />
               </Col>
               <Col>
@@ -226,7 +241,7 @@ const EditOrderBankModal = props => {
                       items={regionList}
                       onChange={value => onFieldChange('region', value)}
                       value={editOrderData.region ? editOrderData.region : ''}
-                      disabled={false}
+                      disabled={disableEdit(editOrderData?.dn_status, editOrderData?.dn_no)}
                     />
                   </div>
                   <div className="col-3">
@@ -234,7 +249,7 @@ const EditOrderBankModal = props => {
                       items={terminalList}
                       onChange={value => onFieldChange('terminal', value)}
                       value={editOrderData?.terminal}
-                      disabled={false}
+                      disabled={disableEdit(editOrderData?.dn_status, editOrderData?.dn_no)}
                     />
                   </div>
                 </Row>

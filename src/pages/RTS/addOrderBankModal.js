@@ -202,33 +202,28 @@ const NewOrderBankModal = props => {
         typeof props.orderBankData === "object" &&
         props.orderBankData.ship_to_party === shiptoNo
       ) {
-        setTimeout(async function () {
-          await setShowAlert(true)
+        setTimeout(function () {
+          setShowAlert(true)
           let temporderBankData = { ...props.orderBankData }
-          ;(temporderBankData.myremark1 = ""),
-            (temporderBankData.myremark2 = ""),
-            (temporderBankData.myremark3 = ""),
-            await setOrderData(temporderBankData)
+          temporderBankData.myremark1 = ""
+          temporderBankData.myremark2 = ""
+          temporderBankData.myremark3 = ""
+          setOrderData(temporderBankData)
           let temp = []
           let temp1 = []
-          Object.keys(props.orderBankData?.storage).map((key, index) => {
+          Object.keys(props.orderBankData?.storage).map(key => {
             if (key.startsWith("storage_")) {
               if (props.orderBankData?.storage[key].ordering_category !== "SMP") {
                 temp1.push(
                   props.orderBankData?.storage[key]
-                  //   {
-                  //   name: .name,
-                  //   code: props.orderBankData?.storage[key].code,
-                  //   id: props.orderBankData?.storage[key].id,
-                  // }
                 )
                 temp.push(props.orderBankData?.storage[key].name)
               }
             }
           })
-          await setAllProductDetailList(temp1)
-          await setProductList(temp)
-          await setCurrentState("search")
+          setAllProductDetailList(temp1)
+          setProductList(temp)
+          setCurrentState("search")
         }, 1000)
       } else if (props?.orderBankData?.data && props.orderBankData.status === 404) {
         setTimeout(function () {

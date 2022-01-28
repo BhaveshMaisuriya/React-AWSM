@@ -38,15 +38,15 @@ class ProfileMenu extends Component {
   }
 
   componentDidMount() {
-    if (localStorage.getItem("authUser")) {
-      if (process.env.REACT_APP_DEFAULTAUTH === "firebase") {
-        const obj = JSON.parse(localStorage.getItem("authUser"))
+    if (sessionStorage.getItem('authUser')) {
+      if (process.env.REACT_APP_DEFAULTAUTH === 'firebase') {
+        const obj = JSON.parse(sessionStorage.getItem('authUser'))
         this.setState({ name: obj.displayName })
       } else if (
-        process.env.REACT_APP_DEFAULTAUTH === "fake" ||
-        process.env.REACT_APP_DEFAULTAUTH === "jwt"
+        process.env.REACT_APP_DEFAULTAUTH === 'fake' ||
+        process.env.REACT_APP_DEFAULTAUTH === 'jwt'
       ) {
-        const obj = JSON.parse(localStorage.getItem("authUser"))
+        const obj = JSON.parse(sessionStorage.getItem('authUser'))
         this.setState({ name: obj.username })
       }
     }

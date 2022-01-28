@@ -13,14 +13,14 @@ function SLATable(props) {
   useEffect(() => {
     async function fetchData() {
       const { allData, tableHead } = props
-      await setTableDatas(allData)
-      await setTableHeader(tableHead)
-      await setCollection(cloneDeep(allData.slice(0, rowsPerPage)))
+      setTableDatas(allData)
+      setTableHeader(tableHead)
+      setCollection(cloneDeep(allData.slice(0, rowsPerPage)))
     }
     fetchData()
   }, [props.allData])
 
-  const GetSearchedValue = async val => {
+  const GetSearchedValue = val => {
     setValue(val)
     if (!val) {
       updatePage(1)
@@ -30,7 +30,7 @@ function SLATable(props) {
       const data = cloneDeep(
         tableDatas.filter(item => item.name.toLowerCase().indexOf(query) > -1).slice(0, rowsPerPage)
       )
-      await setCollection(data)
+      setCollection(data)
     }
   }
 

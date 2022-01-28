@@ -17,14 +17,15 @@ export function eventGanttChartFactory(roadTankerList) {
     roadTankerList.forEach(vehicle => {
       vehicle?.order_banks?.forEach(orderBank => {
         const { planned_load_time, planned_end_time, shift_date, scheduled_status } = orderBank
+
         const event = {
           id: orderBank?.id,
           resourceId: vehicle?.vehicle,
-          startDate: planned_load_time
-            ? format(parse(planned_load_time, TIME_FORMAT, new Date(shift_date)), DATE_TIME_FORMAT)
+          startDate: planned_load_time // ? format(parse(planned_load_time, TIME_FORMAT, new Date(shift_date)), DATE_TIME_FORMAT)
+            ? format(new Date(planned_load_time), DATE_TIME_FORMAT)
             : format(parse('00:00:00', TIME_FORMAT, new Date(shift_date)), DATE_TIME_FORMAT),
-          endDate: planned_end_time
-            ? format(parse(planned_end_time, TIME_FORMAT, new Date(shift_date)), DATE_TIME_FORMAT)
+          endDate: planned_end_time // ? format(parse(planned_end_time, TIME_FORMAT, new Date(shift_date)), DATE_TIME_FORMAT)
+            ? format(new Date(planned_end_time), DATE_TIME_FORMAT)
             : format(parse('23:59:59', TIME_FORMAT, new Date(shift_date)), DATE_TIME_FORMAT),
           eventType: scheduled_status,
           eventColor: EVENT_COLOR[scheduled_status],

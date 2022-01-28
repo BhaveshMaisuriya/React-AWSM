@@ -20,7 +20,8 @@ import {
 import AuditLog from 'components/Common/AuditLog'
 import './style.scss'
 import MoreVertIcon from '@material-ui/icons/MoreVert'
-import { IconButton, MenuItem } from '@material-ui/core'
+import { IconButton, MenuItem, FormControlLabel } from '@material-ui/core'
+import Checkbox from '@material-ui/core/Checkbox'
 import moment from 'moment'
 // import { CustomEyeIcon } from "pages/DQM/Common/icon"
 import awsmLogo from 'assets/images/AWSM-logo-order-bank.png'
@@ -34,8 +35,6 @@ import customiseTableIcon from 'assets/images/AWSM-Customise-Table.svg'
 
 import CustomizeTableModal from 'components/Common/CustomizeTable'
 
-import { FormControlLabel } from '@material-ui/core'
-import Checkbox from '@material-ui/core/Checkbox'
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown'
 
 import {
@@ -55,7 +54,7 @@ import {
   tableMapping,
 } from './OrderBankTable/tableMapping'
 import { format, addDays } from 'date-fns'
-import { isEqual } from 'lodash'
+import { isEqual, isNull } from 'lodash'
 import {
   getRTSOrderBankTableData,
   sendOrderBankDN,
@@ -74,7 +73,7 @@ import {
 } from 'store/orderBank/actions'
 import OrderBankActionModal from './OrderBankActionModal'
 import CrossTerminalModal from './crossTerminalModal'
-import BryntumChartTable from './OrderBankTable/BryntumChartTable'
+import BryntumChartTable, { bryntumSchedulerTableNameForCookie } from './OrderBankTable/BryntumChartTable'
 import BryntumChartShipment from './OrderBankTable/BryntumChartShipment'
 import CustomRadioButton from 'components/Common/CustomRadioButton'
 import OrderBankRunAutoModal from './OrderBankRunAutoModal'
@@ -82,7 +81,6 @@ import OrderBankSendBulkModal from './OrderBankSendBulkModal'
 import AWSMAlert from 'components/Common/AWSMAlert'
 import selectAllIcon2 from 'assets/images/AWSM-Checked-box.svg'
 import selectAllIcon3 from 'assets/images/AWSM-Checkbox.svg'
-import { bryntumSchedulerTableNameForCookie } from './OrderBankTable/BryntumChartTable'
 import { getCookieByKey } from '../DQM/Common/helper'
 import { DragDropContext } from 'react-beautiful-dnd'
 import {
@@ -95,10 +93,12 @@ import {
   MultipleDNIcon,
 } from 'pages/DQM/Common/icon'
 import OrderBankSummary from './orderBankSummary'
-import { isNull } from 'lodash'
-import { removeKeywords } from '../DQM/Common/helper'
 import ClearScheduling from './clearScheduling'
-import { transformObjectToStringSentence, filterObject } from './../DQM/Common/helper'
+import {
+  transformObjectToStringSentence,
+  filterObject,
+  removeKeywords,
+} from './../DQM/Common/helper'
 const UntickIcon = () => <img src={selectAllIcon3} alt="icon" />
 const CheckedIcon = () => <img src={selectAllIcon2} alt="icon" />
 
@@ -233,15 +233,15 @@ function OrderBank({
     { page = 0, sortField = 'vehicle', sortDirection = 'asc', filterCondition = [] },
     trigger = false
   ) => {
-    let q = ''
-    if (filterCondition.length > 0) {
-      q = filterCondition
-        .filter(v => v.data.length > 0)
-        .map(e => {
-          return `(${e.data.map(k => `${e.key}=='${k}'`).join('||')})`
-        })
-        .join('&&')
-    }
+    let q = transformObjectToStringSentence(filterCondition)
+    // if (filterCondition.length > 0) {
+    //   q = filterCondition
+    //     .filter(v => v.data.length > 0)
+    //     .map(e => {
+    //       return `(${e.data.map(k => `${e.key}=='${k == '-' ? '' : k}'`).join('||')})`
+    //     })
+    //     .join('&&')
+    // }
 
     setBryntumTable(state => {
       const payload = {
@@ -492,10 +492,10 @@ function OrderBank({
     return diff >= -2 && diff <= 0
   }
 
-  useEffect(async () => {
+  useEffect(() => {
     if (multipleorder) {
       reloadRTSOrderBankData()
-      await setMultipleDelete(multipleorder.order_banks)
+      setMultipleDelete(multipleorder.order_banks)
       setDeleteMultipleStatus(multipleorder.order_banks !== undefined ? 'success' : 'error')
       multipleorder.order_banks !== multipleDelete && multipleDelete === ''
         ? setShowDeleteMultiple(true)

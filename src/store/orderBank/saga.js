@@ -9,6 +9,7 @@ import {
   VIEW_ORDERBANK_DETAIL,
   GET_RTS_ORDER_BANK_TABLE_DATA,
   SEND_ORDER_BANK_DN,
+  SEND_MULTIPLE_ORDER_BANK_DN,
   REFRESH_ORDER_BANK_DN,
   SEND_DN_STATUS_REQUEST,
   GET_ORDER_BANK_AUDITLOG,
@@ -54,6 +55,8 @@ import {
   deleteOrderBankDetailSuccess,
   viewOrderBankDetailFail,
   viewOrderBankDetailSuccess,
+  sendMultipleOrderBankDNFail,
+  sendMultipleOrderBankDNSuccess,  
   sendOrderBankDNFail,
   sendOrderBankDNSuccess,
   refreshOderBankDNFail,
@@ -244,6 +247,15 @@ function* onSendOrderBankDN({ params = {} }) {
     yield put(sendOrderBankDNSuccess(response))
   } catch (error) {
     yield put(sendOrderBankDNFail(error))
+  }
+}
+
+function* onSendMultipleOrderBankDN({ params = {} }) {
+  try {
+    const response = yield call(sendRTSOrderBank, params)
+    yield put(sendMultipleOrderBankDNSuccess(response))
+  } catch (error) {
+    yield put(sendMultipleOrderBankDNFail(error))
   }
 }
 
@@ -518,6 +530,7 @@ function* orderBankSaga() {
   yield takeLatest(VIEW_ORDERBANK_DETAIL, onViewOrderbankTableInformation)
   yield takeLatest(REFRESH_ORDER_BANK_DN, onRefreshOrderBankDN)
   yield takeLatest(SEND_ORDER_BANK_DN, onSendOrderBankDN)
+  yield takeLatest(SEND_MULTIPLE_ORDER_BANK_DN, onSendMultipleOrderBankDN)  
   yield takeLatest(SEND_DN_STATUS_REQUEST, onSendDNStatusRequest)
   yield takeLatest(GET_ORDER_BANK_AUDITLOG, onGetOrderBankAuditLog)
   yield takeLatest(GET_CLEAR_SCHEDULING, onGetClearScheduling)

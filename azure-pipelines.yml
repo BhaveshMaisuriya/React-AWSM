@@ -36,6 +36,11 @@ steps:
     displayName: "Lint Source Code"
   - script: npm test
     displayName: "Run Unit Tests"
+  # - script: sed -i "s|SF:/__w|SF:/home/vsts/work|g" coverage/lcov.info
+  #   displayName: Change Source File path in LCOV
+  # - publish: coverage/lcov.info
+  #   displayName: Create/Publish LCOV file
+  #   artifact: jest-lcov-sonar
   - task: SonarCloudPrepare@1
     inputs:
       SonarCloud: "awsm-sonarcloud"
@@ -45,6 +50,11 @@ steps:
       cliProjectKey: "PDB-AWSM-Frontend"
       cliProjectName: "PDB-AWSM-Frontend"
       cliSources: "."
+      extraProperties: |
+        sonar.sources=./src
+        sonar.tests=./src/test
+        sonar.exclusions= **/reducer/**, **/sagas/**, **/action/**, **/factory/**, **/*style.js, **/*styles.js, **/business/utils/**, **/core/utils/**, **/Typography/**, **/styles/**, **/*Style.js, **/*Styles.js, **/core/actions/**, **/core/base/**, **/core/translate/**, **/core/enums/**, **/serviceWorker.js, **/App.jsx, **/Landing/Base.jsx, **/*.js, **/MapsVsMops/**, **/Landing/**, **/routes.jsx, src/index.jsx, **/common/utils/**, **/core/components/**, src/delta/pdb/index.jsx, src/delta/RBDdemandPlanner/index.jsx, src/delta/petcoUser/index.jsx, src/delta/kpi/index.jsx, src/delta/demandPlanner/index.jsx, src/delta/enterpriseOptimizer/index.jsx, src/delta/PETCO/index.jsx, src/delta/pricingAnalyst/index.jsx, src/delta/commercialPricingAnalyst/index.jsx, src/delta/pricingAnalystPDB/index.jsx, src/delta/melakaPlanner/index.jsx, src/delta/CBDdemandPlanner/index.jsx,
+        sonar.javascript.lcov.reportPaths= $(Pipeline.Workspace)/jest-lcov-sonar/lcov.info
   - task: SonarCloudAnalyze@1
   - script: npm run build
     displayName: "Compile Application"

@@ -505,7 +505,7 @@ const NewOrderBankModal = props => {
                     <div className="relative">
                       <input
                         onChange={e => onFieldChange("remarks", e.target.value)}
-                        value={orderData?.remarks}
+                        // value={orderData?.remarks}
                         maxLength={40}
                         className={`awsm-input w-100 ${inputValue && !isValid ? "out-range " : ""}`}
                       />
@@ -534,15 +534,6 @@ const NewOrderBankModal = props => {
                       value={orderData.priority_order}
                       disabled={false}
                       placeholder={"None"}
-                    />
-                  </Col>
-                  <Col md={8}>
-                    <label className="text-upper">Special Request Remarks</label>
-                    <AWSMInput
-                      onChange={value => onFieldChange("request_remark_order", value)}
-                      value={orderData.request_remark_order}
-                      disabled={true}
-                      placeholder="Lorem ipsum"
                     />
                   </Col>
                 </Row>
@@ -760,7 +751,7 @@ const NewOrderBankModal = props => {
                 </Row>
                 <Row className="mt-4">
                   <Col md={8}>
-                    <label className="text-upper">Remarks</label>
+                    <label className="text-upper">Remarks DQM</label>
                     <AWSMInput
                       onChange={value => onFieldChange("remarks", value)}
                       value={orderData?.remarks}

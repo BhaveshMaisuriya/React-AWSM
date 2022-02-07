@@ -52,6 +52,8 @@ import {
   GET_DELETE_MULTIPLE_ORDER_FAIL,
   SEND_ORDER_BANK_DN_FAIL,
   SEND_ORDER_BANK_DN_SUCCESS,
+  SEND_MULTIPLE_ORDER_BANK_DN_FAIL,
+  SEND_MULTIPLE_ORDER_BANK_DN_SUCCESS,  
   DRAG_RTS_ORDER_BANK_TO_GANTT_CHART_FAIL,
   CLEAR_GANTT_DATA,
   GET_SHIPMENT_DETAIL_FAIL,
@@ -569,6 +571,20 @@ const RTSOrderBank = (state = initialState, action) => {
       ToastError.fire()
       return {
         ...state,
+      }
+    }
+    case SEND_MULTIPLE_ORDER_BANK_DN_FAIL: {
+      // ToastError.fire({ title: 'Send DN failed!' })
+      return {
+        ...state,
+        sendMultipleDn: 'error'
+      }
+    }
+    case SEND_MULTIPLE_ORDER_BANK_DN_SUCCESS: {
+      // ToastSuccess.fire({ title: 'Orders have been successfully sent for DN creation' })
+      return {
+        ...state,
+        sendMultipleDn: 'success'
       }
     }
     case SEND_ORDER_BANK_DN_FAIL: {

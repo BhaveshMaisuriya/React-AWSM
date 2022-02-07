@@ -58,6 +58,7 @@ import { isEqual, isNull } from 'lodash'
 import {
   getRTSOrderBankTableData,
   sendOrderBankDN,
+  sendMultipleOrderBankDN,
   refreshOderBankDN,
   getOrderBankAuditLog,
   dragOrderBankToGanttChart,
@@ -112,6 +113,7 @@ function OrderBank({
   orderBankTableData,
   orderBankTableFilters,
   sendOrderBankDN,
+  sendMultipleOrderBankDN,
   refreshOderBankDN,
   onGetOrderBankAuditLog,
   onGetClearScheduling,
@@ -579,8 +581,9 @@ function OrderBank({
 
   const onSendOrderBankDN = () => {
     // setReloadData(true);
-    sendOrderBankDN(orderBankTableData.filter(e => e.isChecked).map(e => e.id))
-    
+    // sendOrderBankDN(orderBankTableData.filter(e => e.isChecked).map(e => e.id))    
+    sendMultipleOrderBankDN(orderBankTableData.filter(e => e.isChecked).map(e => e.id))    
+
   }
 
   useEffect(() => {
@@ -1353,6 +1356,7 @@ const mapDispatchToProps = dispatch => ({
   getRTSOrderBankTableData: params => dispatch(getRTSOrderBankTableData(params)),
   refreshOderBankDN: params => dispatch(refreshOderBankDN(params)),
   sendOrderBankDN: params => dispatch(sendOrderBankDN(params)),
+  sendMultipleOrderBankDN: params => dispatch(sendMultipleOrderBankDN(params)),  
   onGetOrderBankAuditLog: payload => dispatch(getOrderBankAuditLog(payload)),
   dragOrderBankToGanttChart: () => dispatch(dragOrderBankToGanttChart()),
   onGetClearScheduling: payload => dispatch(getClearScheduling(payload)),

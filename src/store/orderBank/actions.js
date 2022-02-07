@@ -27,6 +27,9 @@ import {
   SEND_ORDER_BANK_DN,
   SEND_ORDER_BANK_DN_SUCCESS,
   SEND_ORDER_BANK_DN_FAIL,
+  SEND_MULTIPLE_ORDER_BANK_DN,
+  SEND_MULTIPLE_ORDER_BANK_DN_SUCCESS,
+  SEND_MULTIPLE_ORDER_BANK_DN_FAIL,  
   UPDATE_ORDER_BANK_TABLE_DATA,
   DELETE_ORDERBANK_DETAIL,
   DELETE_ORDERBANK_DETAIL_SUCCESS,
@@ -249,6 +252,21 @@ export const sendOrderBankDNSuccess = response => ({
 
 export const sendOrderBankDNFail = error => ({
   type: SEND_ORDER_BANK_DN_FAIL,
+  payload: error,
+})
+
+export const sendMultipleOrderBankDN = params => ({
+  type: SEND_MULTIPLE_ORDER_BANK_DN,
+  params,
+})
+
+export const sendMultipleOrderBankDNSuccess = response => ({
+  type: SEND_MULTIPLE_ORDER_BANK_DN_SUCCESS,
+  payload: response,
+})
+
+export const sendMultipleOrderBankDNFail = error => ({
+  type: SEND_MULTIPLE_ORDER_BANK_DN_FAIL,
   payload: error,
 })
 

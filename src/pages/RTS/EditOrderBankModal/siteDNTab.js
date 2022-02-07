@@ -37,7 +37,7 @@ const SiteDNTab = props => {
       </Row>
       <Row className="w-100 mt-4">
         <Col md={8}>
-          <label className="text-upper">Remarks</label>
+          <label className="text-upper">Remarks DQM</label>
           <div className="d-flex">
             <div className="w-100">
               <AWSMInput value={data?.remarks} disabled={true} />

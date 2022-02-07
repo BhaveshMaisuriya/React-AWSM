@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
 import AWSMInput from 'components/Common/Input'
 import { Row, Col } from 'reactstrap'
 import DatePicker from 'components/Common/DatePicker'
@@ -9,7 +9,8 @@ import { format } from 'date-fns'
 const OrderTab = props => {
   const { data, inputValue, inputValue1, inputValue2, inputValue3, onFieldChange, timeData } = props
   const ORDER_PRIORITY = ['None', 'High Priority']
-
+  const [multiProductToggle, setMultiProductToggle] = useState(false)
+  const [multiLoadToggle, setMultiLoadToggle] = useState(false)
   const remainChars1 = useMemo(() => {
     return 40 - inputValue1.length
   }, [inputValue1])
@@ -169,26 +170,28 @@ const OrderTab = props => {
         </Col>
         <Col>
           <label className="text-upper">Multiproduct ID</label>
-          <span
-            className="remove_text text-red"
-            onClick={() => onFieldChange('ConfirmMultiproduct', true)}
-          >
-            Remove
-          </span>
+          {data?.multi_prod_id && (
+            <span className="remove_text text-red" onClick={() => setMultiProductToggle(true)}>
+              Remove
+            </span>
+          )}
           <div className="d-flex">
-            <div className={`w-100 relative ${data?.ConfirmMultiproduct === true && 'border-red'}`}>
+            <div className={`w-100 relative ${multiProductToggle && 'border-red'}`}>
               <AWSMInput value={data?.multi_prod_id} disabled={true} />
-              {data?.ConfirmMultiproduct === true && (
+              {multiProductToggle && (
                 <div className="confirm-main">
                   <span
                     class="confirm-text text-red"
-                    onClick={() => onFieldChange('ConfirmMultiproduct', false)}
+                    onClick={() => {
+                      onFieldChange('multi_prod_id', '')
+                      setMultiProductToggle(false)
+                    }}
                   >
                     Confirm
                   </span>
                   <span
                     class="confirm-no-text text-red"
-                    onClick={() => onFieldChange('ConfirmMultiproduct', false)}
+                    onClick={() => setMultiProductToggle(false)}
                   >
                     No
                   </span>
@@ -204,7 +207,11 @@ const OrderTab = props => {
           <div className="d-flex">
             <div className="w-100">
               <AWSMInput
-                value={data?.retain ? format(new Date(data?.retain), 'dd-MM-yyyy') : '00'}
+                value={
+                  data?.retain
+                    ? format(new Date(data?.retain.toString()), 'dd-MM-yyyy HH:mm')
+                    : '00'
+                }
                 disabled={true}
               />
             </div>
@@ -215,7 +222,11 @@ const OrderTab = props => {
           <div className="d-flex">
             <div className="w-100">
               <AWSMInput
-                value={data?.runout ? format(new Date(data?.retain), 'dd-MM-yyyy') : '00'}
+                value={
+                  data?.runout
+                    ? format(new Date(data?.runout.toString()), 'dd-MM-yyyy HH:mm')
+                    : '00'
+                }
                 disabled={true}
               />
             </div>
@@ -223,27 +234,26 @@ const OrderTab = props => {
         </Col>
         <Col>
           <label className="text-upper">Multiload ID</label>
-          <span
-            className="remove_text text-red"
-            onClick={() => onFieldChange('ConfirmMultiload', true)}
-          >
-            Remove
-          </span>
+          {data?.multi_load_id && (
+            <span className="remove_text text-red" onClick={() => setMultiLoadToggle(true)}>
+              Remove
+            </span>
+          )}
           <div className="d-flex">
-            <div className={`w-100 relative ${data?.ConfirmMultiload === true && 'border-red'}`}>
+            <div className={`w-100 relative ${multiLoadToggle && 'border-red'}`}>
               <AWSMInput value={data?.multi_load_id} disabled={true} />
-              {data?.ConfirmMultiload === true && (
+              {multiLoadToggle === true && (
                 <div className="confirm-main">
                   <span
                     class="confirm-text text-red"
-                    onClick={() => onFieldChange('ConfirmMultiload', false)}
+                    onClick={() => {
+                      onFieldChange('multi_load_id', '')
+                      setMultiLoadToggle(false)
+                    }}
                   >
                     Confirm
                   </span>
-                  <span
-                    class="confirm-no-text text-red"
-                    onClick={() => onFieldChange('ConfirmMultiload', false)}
-                  >
+                  <span class="confirm-no-text text-red" onClick={() => setMultiLoadToggle(false)}>
                     No
                   </span>
                 </div>
@@ -263,6 +273,7 @@ const OrderTab = props => {
                 items={ORDER_PRIORITY}
                 onChange={value => onFieldChange('priority', value)}
                 value={data?.priority}
+                placeholder={'None'}
               />
             </div>
           </div>

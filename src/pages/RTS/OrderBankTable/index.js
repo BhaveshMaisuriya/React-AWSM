@@ -169,7 +169,7 @@ class index extends Component {
         isOpenConfirmModal: false,
       },
       filterCondition: [],
-      currentPage: 1,
+      currentPage: 0,
       showEditAlert: false,
       showEditMsg: "",
       callDelete: false,
@@ -300,6 +300,7 @@ class index extends Component {
     return this.props.tableColumns.map(v => {
       let typeOfColumn = tableMapping[v]?.type
       let result
+     
       switch (typeOfColumn) {
         case "company_name":
           result = (
@@ -418,7 +419,7 @@ class index extends Component {
       setTimeout(async function () {
         await getRTSOrderBankTableData({
           limit: 10,
-          page: payloadFilter.currentPage,
+          page: 0,
           search_fields: "*",
           q: transformObjectToStringSentence(payloadFilter.filterQuery),
           sort_dir: fieldSortDirection,

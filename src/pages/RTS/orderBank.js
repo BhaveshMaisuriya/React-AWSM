@@ -127,6 +127,7 @@ function OrderBank({
   onGetTotalOBUnschedule,
   totalOrderUnschedule,
   totalRow,
+  sendMultipleDn,
 }) {
   const defaultDate = format(addDays(Date.now(), 1), 'yyyy-MM-dd')
   const ganttChartEvents = useSelector(state => state.orderBank.ganttChart.event)
@@ -141,6 +142,8 @@ function OrderBank({
   const [dropdownOpen, setOpen] = useState(false)
   const [crossTerminal, setCrossTerminal] = useState(false)
   const [showAddNotification, setShowAddNotification] = useState(false)
+  const [showSendMultiNotification, setShowSendMultiNotification] = useState(false)  
+  const [SendMultipleMessage, setSendMultipleMessage] = useState('')    
   const [multipleDelete, setMultipleDelete] = useState('')
   const [notiMessage, setNotiMessage] = useState('')
   const [uploadDmr, setUploadDmr] = useState(false)
@@ -325,6 +328,7 @@ function OrderBank({
     setShowAlertCrossTerminal(false)
     setShowClearAlert(false)
     setShowSnackAlert(false)
+    setShowSendMultiNotification(false);
   }, [])
 
   useEffect(() => {
@@ -480,7 +484,7 @@ function OrderBank({
         payloadFilter?.filterQuery !== null || payloadFilter?.filterQuery !== undefined
           ? transformObjectToStringSentence(payloadFilter?.filterQuery)
           : '',
-      sort_dir: 'asc',
+      sort_dir: 'desc',
       sort_field: 'vehicle',
       filter: payloadFilter.filterOrderBank,
     })
@@ -515,7 +519,7 @@ function OrderBank({
     reloadRTSOrderBankData()
   }
 
-  const onCloseNewOrder = async (type, val = '') => {
+  const onCloseNewOrder = async (type, val = '') => { //sendMultipleDn
     setShowNewOrder(false)
     setReloadData(true)
     type === 'add' && setShowAddNotification(true)
@@ -574,8 +578,20 @@ function OrderBank({
   }
 
   const onSendOrderBankDN = () => {
+    // setReloadData(true);
     sendOrderBankDN(orderBankTableData.filter(e => e.isChecked).map(e => e.id))
+    
   }
+
+  useEffect(() => {
+if(sendMultipleDn){
+   setShowSendMultiNotification(true)
+   setSendMultipleMessage(sendMultipleDn);
+    reloadRTSOrderBankData()
+    // setReloadData(false)
+}
+  }, [sendMultipleDn])
+ 
 
   const onRefreshOrderBankDN = () => {
     refreshOderBankDN(orderBankTableData.filter(e => e.isChecked))
@@ -721,13 +737,18 @@ function OrderBank({
   }
 
   const changeFiltersHandler = (qValue, type) => {
+    let tempVol = {volume: []};
+    qValue?.volume?.map((item, index)=>{
+      tempVol.volume.push(item.toString());
+    })
+    let temp = qValue?.volume ? tempVol : qValue;
     if (type === 'insert')
       setfilterQuery(prevFilters => {
-        return { ...prevFilters, ...qValue }
+        return { ...prevFilters, ...temp }
       })
     else if (type === 'remove')
       setfilterQuery(prevFilters => {
-        return { ...filterObject(prevFilters, qValue) }
+        return { ...filterObject(prevFilters, temp) }
       })
     setCurrentPage(0)
   }
@@ -1267,6 +1288,19 @@ function OrderBank({
                   closeAlert={() => setShowAlertDMR(false)}
                 />
               )}
+              {showSendMultiNotification === true && (
+                <AWSMAlert
+                  status={SendMultipleMessage}
+                  message={
+                    SendMultipleMessage === 'success'
+                      ? 'Orders have been successfully sent for DN creation'
+                      : 'Send DN failed!'
+                  }
+                  openAlert={showSendMultiNotification}
+                  closeAlert={() => setShowSendMultiNotification(false)}
+                />
+              )}
+
               {showAddNotification && (
                 <AWSMAlert
                   status={notiMessage}
@@ -1341,6 +1375,7 @@ const mapStateToProps = ({ orderBank }) => ({
   socketData: orderBank.socketData,
   multipleorder: orderBank.multipleorder,
   totalOrderUnschedule: orderBank.totalOrderUnschedule,
+  sendMultipleDn: orderBank.sendMultipleDn
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(OrderBank)

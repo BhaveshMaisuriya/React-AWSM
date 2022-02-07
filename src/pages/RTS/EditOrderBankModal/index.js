@@ -100,6 +100,8 @@ const EditOrderBankModal = props => {
       vehicle: editOrderData?.vehicle,
       commercial_storage: editOrderData?.commercial_storage,
       retail_storage: editOrderData?.retail_storage,
+      multi_load_id: editOrderData?.multi_load_id,
+      multi_prod_id: editOrderData?.multi_prod_id,
     }
     const { onGetEditOrderBankDetails } = props
     await onGetEditOrderBankDetails({ id: editOrderData.id, data: temp })
@@ -226,11 +228,8 @@ const EditOrderBankModal = props => {
               <Col md={4}>
                 <label>SHIFT DATE</label>
                 <DatePicker
-                  value={editOrderData?.shift_date}
-                  startDate={defaultDate}
-                  defaultValue={defaultDate}
-                  onChange={value => onFieldChange('shift_date', value)}
-                  disabled={disableEdit(editOrderData?.dn_status, editOrderData?.dn_no)}
+                  value={editOrderData?.requested_delivery_date}
+                  disabled={true}
                 />
               </Col>
               <Col>

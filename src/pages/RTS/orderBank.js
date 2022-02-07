@@ -583,6 +583,7 @@ function OrderBank({
     // setReloadData(true);
     // sendOrderBankDN(orderBankTableData.filter(e => e.isChecked).map(e => e.id))    
     sendMultipleOrderBankDN(orderBankTableData.filter(e => e.isChecked).map(e => e.id))    
+
   }
 
   useEffect(() => {

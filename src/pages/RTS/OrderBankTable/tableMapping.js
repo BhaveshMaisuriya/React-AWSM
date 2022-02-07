@@ -407,7 +407,7 @@ const tableMapping = {
     columnSize: "cell-text",
   },
   remarks: {
-    label: "Remarks",
+    label: "Remarks DQM",
     columnSize: "cell-text",
   },
   sales_order_no: {

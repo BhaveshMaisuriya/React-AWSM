@@ -54,6 +54,8 @@ import {
   SEND_ORDER_BANK_DN_SUCCESS,
   SEND_MULTIPLE_ORDER_BANK_DN_FAIL,
   SEND_MULTIPLE_ORDER_BANK_DN_SUCCESS,  
+  CLEAR_SCHEDULING_FAIL,
+  CLEAR_SCHEDULING_SUCCESS,    
   DRAG_RTS_ORDER_BANK_TO_GANTT_CHART_FAIL,
   CLEAR_GANTT_DATA,
   GET_SHIPMENT_DETAIL_FAIL,
@@ -107,6 +109,7 @@ const initialState = {
   dropOderSuccess: true,
   shipmentDropData: [],
   sendMultipleDn: null,
+  clearScheduling: null,
   ganttEventValidation: null,
   shipmentDetailsOnVehicle: [],
 }
@@ -587,6 +590,20 @@ const RTSOrderBank = (state = initialState, action) => {
         sendMultipleDn: action.payload
       }
     }
+    case CLEAR_SCHEDULING_FAIL: {
+      // ToastError.fire({ title: 'Send DN failed!' })
+      return {
+        ...state,
+        clearScheduling: 'error'
+      }
+    }
+    case CLEAR_SCHEDULING_SUCCESS: {
+      // ToastSuccess.fire({ title: 'Orders have been successfully sent for DN creation' })
+      return {
+        ...state,
+        clearScheduling: action.payload
+      }
+    }    
     case SEND_ORDER_BANK_DN_FAIL: {
       ToastError.fire({ title: 'Send DN failed!' })
       return {

@@ -59,6 +59,7 @@ import {
   getRTSOrderBankTableData,
   sendOrderBankDN,
   sendMultipleOrderBankDN,
+  // clearScheduling,
   refreshOderBankDN,
   getOrderBankAuditLog,
   dragOrderBankToGanttChart,
@@ -114,6 +115,7 @@ function OrderBank({
   orderBankTableFilters,
   sendOrderBankDN,
   sendMultipleOrderBankDN,
+  // clearScheduling,
   refreshOderBankDN,
   onGetOrderBankAuditLog,
   onGetClearScheduling,
@@ -631,6 +633,7 @@ if(sendMultipleDn !== allResponseMultipleDN){
   }
 
   const showConfirmAlert = () => {
+    // clearScheduling();
     setClearScheduling(!clearScheduling)
     setShowClearAlert(true)
   }
@@ -1357,6 +1360,7 @@ const mapDispatchToProps = dispatch => ({
   refreshOderBankDN: params => dispatch(refreshOderBankDN(params)),
   sendOrderBankDN: params => dispatch(sendOrderBankDN(params)),
   sendMultipleOrderBankDN: params => dispatch(sendMultipleOrderBankDN(params)),  
+  // clearScheduling: params => dispatch(clearScheduling()),  
   onGetOrderBankAuditLog: payload => dispatch(getOrderBankAuditLog(payload)),
   dragOrderBankToGanttChart: () => dispatch(dragOrderBankToGanttChart()),
   onGetClearScheduling: payload => dispatch(getClearScheduling(payload)),

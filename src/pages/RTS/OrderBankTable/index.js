@@ -419,7 +419,7 @@ class index extends Component {
       setTimeout(async function () {
         await getRTSOrderBankTableData({
           limit: 10,
-          page: 0,
+          page: payloadFilter.currentPage,
           search_fields: "*",
           q: transformObjectToStringSentence(payloadFilter.filterQuery),
           sort_dir: fieldSortDirection,

@@ -7,7 +7,7 @@ import { initWebsocket, sendMessage } from './SocketService'
 // Import Routes
 import { authProtectedRoutes, publicRoutes } from './routes/'
 import AppRoute from './routes/route'
-
+import moment from "moment"
 // layouts
 import VerticalLayout from './components/VerticalLayout/'
 import HorizontalLayout from './components/HorizontalLayout/'
@@ -38,6 +38,15 @@ class App extends Component {
           .querySelectorAll('[id*="-chart-tooltip-"]')
           .forEach($el => $el.classList.add('hide'))
     })
+  }
+
+  componentDidMount = () => {
+
+    var admission = moment(sessionStorage.getItem('extExpiresOn'), 'DD-MM-YYYY'); 
+    var discharge = moment(new Date(), 'DD-MM-YYYY');
+
+    console.log('expire::', discharge.diff(admission, 'h'));
+    
   }
 
   /**

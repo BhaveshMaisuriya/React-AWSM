@@ -146,6 +146,7 @@ function OrderBank({
   const [showAddNotification, setShowAddNotification] = useState(false)
   const [showSendMultiNotification, setShowSendMultiNotification] = useState(false)  
   const [SendMultipleMessage, setSendMultipleMessage] = useState('')    
+  const [allResponseMultipleDN, setAllResponseMultipleDN] = useState(null)    
   const [multipleDelete, setMultipleDelete] = useState('')
   const [notiMessage, setNotiMessage] = useState('')
   const [uploadDmr, setUploadDmr] = useState(false)
@@ -586,11 +587,11 @@ function OrderBank({
   }
 
   useEffect(() => {
-if(sendMultipleDn){
+if(sendMultipleDn !== allResponseMultipleDN){
    setShowSendMultiNotification(true)
-   setSendMultipleMessage(sendMultipleDn);
-    reloadRTSOrderBankData()
-    // setReloadData(false)
+   setAllResponseMultipleDN(sendMultipleDn);
+   setSendMultipleMessage(sendMultipleDn?.status === 200 ? 'success' : 'error');
+   setTimeout(function () { reloadRTSOrderBankData() }, 2000);
 }
   }, [sendMultipleDn])
  

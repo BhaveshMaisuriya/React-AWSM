@@ -183,7 +183,7 @@ class index extends Component {
     this.onDragEnd = this.onDragEnd.bind(this)
   }
 
-  UNSAFE_componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps = async(nextProps) => {
     if (nextProps.dataSource !== this.props.dataSource) {
       this.setState({ showLoader: false })
       this.setState({ dataSource: nextProps.dataSource, filterData: nextProps.headerFilters })
@@ -191,6 +191,19 @@ class index extends Component {
     if (nextProps.sendDn !== this.props.sendDn) {
       this.setState({ showSendDN: true })
       this.setState({ showLoader: true })
+      const { getRTSOrderBankTableData, payloadFilter } = this.props
+      const { fieldSortDirection, fieldToSort } = this.state
+      setTimeout(async function () {
+        await getRTSOrderBankTableData({
+          limit: 10,
+          page: payloadFilter.currentPage,
+          search_fields: "*",
+          q: transformObjectToStringSentence(payloadFilter.filterQuery),
+          sort_dir: fieldSortDirection,
+          sort_field: fieldToSort,
+          filter: payloadFilter.filterOrderBank,
+        })
+      }, 2000)
       this.setState({ sendDnStatus: this.props.sendDn })
     }    
     if (nextProps.reloadData !== this.props.reloadData) {

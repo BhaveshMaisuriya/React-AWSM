@@ -274,12 +274,12 @@ const RTSOrderBank = (state = initialState, action) => {
     case SEND_DN_STATUS_REQUEST_SUCCESS:
       return {
         ...state,
-        sendDn: 'success',
+        sendDn: action.payload,
       }
     case SEND_DN_STATUS_REQUEST_FAIL:
       return {
         ...state,
-        sendDn: 'error',
+        sendDn: action.payload,
       }
 
     case GET_ORDER_BANK_AUDITLOG_SUCCESS:
@@ -584,7 +584,7 @@ const RTSOrderBank = (state = initialState, action) => {
       // ToastSuccess.fire({ title: 'Orders have been successfully sent for DN creation' })
       return {
         ...state,
-        sendMultipleDn: 'success'
+        sendMultipleDn: action.payload
       }
     }
     case SEND_ORDER_BANK_DN_FAIL: {

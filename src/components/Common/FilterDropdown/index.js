@@ -301,11 +301,15 @@ const FilterDropdown = ({
                               ? '-'
                               : format(new Date(row.text), 'dd-MM-yyyy')
                           }
+                          if (dataKey === 'requested_delivery_date') {
+                            return checkNullValue(row.text)
+                              ? '-'
+                              : format(new Date(row.text), 'dd-MM-yyyy')
+                          }
                           if (dataKey !== 'override_status') {
                             return checkNullValue(row.text) ? '-' : removeKeywords(row.text)
                           }
                         }
-
                         return (
                           row.visibility && (
                             <div

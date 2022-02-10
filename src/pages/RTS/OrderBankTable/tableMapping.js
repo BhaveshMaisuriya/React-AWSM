@@ -60,6 +60,7 @@ const tableMapping = {
   requested_delivery_date: {
     label: "Delivery Date",
     columnSize: "cell-text",
+    type: "single_date"
   },
   format_product: {
     label: "Product",

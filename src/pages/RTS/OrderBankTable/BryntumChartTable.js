@@ -28,6 +28,7 @@ import {
   getGanttEventValidation,
   selectVehicleShipment,
   dragOrderBankToGanttChart,
+  updateShipment,
 } from '../../../store/actions'
 import ChartColumnFilter from './ChartColumnFilter'
 import ShiftPopover from './ShiftPopover'
@@ -252,6 +253,7 @@ function BryntumChartTable(props) {
       }
       case EventContextList.PLAN_LOAD_TIMES: {
         data.type = EventContextList.PLAN_LOAD_TIMES
+        data.record = eventRecord.originalData
         break
       }
       case EventContextList.UPDATE_SHIPMENT: {
@@ -298,7 +300,7 @@ function BryntumChartTable(props) {
     setEventsData(newData)
   }
 
-  const sendRequestsHandler = () => {
+  const sendRequestsHandler = val => {
     switch (dropdownSelectedItem.type) {
       case EventContextList.SHIPMENT: {
         changeColorOfEventHandler('#9F79B7', true)
@@ -327,8 +329,16 @@ function BryntumChartTable(props) {
       case EventContextList.UNDO_LAST_UPDATE: {
         break
       }
-      default:
-        break
+      case EventContextList.PLAN_LOAD_TIMES: {
+        // $val now is format HH:mm:ss
+        // console.log(dropdownSelectedItem)
+        // console.log(val)
+        const planned_load_time = dateConfig.date_from + 'T' + val
+        props.updateShipment({
+          id: dropdownSelectedItem.record.id,
+          data: { planned_load_time },
+        })
+      }
     }
     toggle()
   }
@@ -846,7 +856,12 @@ function BryntumChartTable(props) {
         <TerminalRelayModal isOpen={modal} onSend={sendRequestsHandler} onCancel={toggle} />
       )}
       {dropdownSelectedItem?.type === EventContextList.PLAN_LOAD_TIMES && (
-        <PlannedLoadTimesModal isOpen={modal} onSend={sendRequestsHandler} onCancel={toggle} />
+        <PlannedLoadTimesModal
+          data={dropdownSelectedItem.startDate}
+          isOpen={modal}
+          onSend={sendRequestsHandler}
+          onCancel={toggle}
+        />
       )}
       {shipmentDblclick && (
         <OrderBankShipmentModal open={shipmentDblclick} istoggle={toggleShipment} />
@@ -909,6 +924,7 @@ const mapDispatchToProps = dispatch => {
     onRemoveEvent: params => dispatch(removeEvent(params)),
     onSelectVehicle: params => dispatch(selectVehicleShipment(params)),
     dragOrderBankToGanttChart: payload => dispatch(dragOrderBankToGanttChart(payload)),
+    updateShipment: params => dispatch(updateShipment(params)),
   }
 }
 

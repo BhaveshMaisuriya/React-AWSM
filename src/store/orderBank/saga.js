@@ -36,6 +36,7 @@ import {
   DRAG_ORDER_TO_SHIPMENT,
   RUN_AUTO_SCHEDULE,
   GET_OB_TOTAL_UNSCHEDULE,
+  UPDATE_SHIPMENT,
 } from './actionTypes'
 
 import {
@@ -104,6 +105,9 @@ import {
   runAutoScheduleFail,
   getOBTotalUnscheduleSuccess,
   getOBTotalUnscheduleFail,
+  updateShipment,
+  updateShipmentSuccess,
+  updateShipmentFail,
 } from './actions'
 import {
   getOrderBank,
@@ -133,6 +137,7 @@ import {
   getTotalUnscheduleOrder,
   removeOrder,
   updateOrdersPositionInShipment,
+  putShipment,
 } from '../../helpers/fakebackend_helper'
 
 function* onGetOrderbank({ params = {} }) {
@@ -519,6 +524,16 @@ function* onRunningAutoSchedule({ params }) {
   }
 }
 
+function* onUpdateShipment({ params }) {
+  try {
+    const response = yield call(putShipment, params)
+    // console.log(response)
+    yield put(updateShipmentSuccess(response))
+  } catch (error) {
+    yield put(updateShipmentFail(error))
+  }
+}
+
 function* orderBankSaga() {
   yield takeLatest(GET_ORDERBANK, onGetOrderbank)
   yield takeLatest(ADD_ORDERBANK, onAddOrderbank)
@@ -556,6 +571,7 @@ function* orderBankSaga() {
     yield takeLatest(DRAG_ORDER_TO_SHIPMENT, onDragOrderToShipment)
   yield takeLatest(RUN_AUTO_SCHEDULE, onRunningAutoSchedule)
   yield takeLatest(GET_OB_TOTAL_UNSCHEDULE, onGetTotalOBUnschedule)
+  yield takeLatest(UPDATE_SHIPMENT, onUpdateShipment)
 }
 
 export default orderBankSaga

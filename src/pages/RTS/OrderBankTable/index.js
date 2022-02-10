@@ -348,7 +348,7 @@ class index extends Component {
                       ? "clean"
                       : data["dn_status"] === "Blocked DN"
                       ? "blocked"
-                      : data["dn_status"] === "Late Unblock"
+                      : data["dn_status"] === "Late Unblocked"
                       ? "unblock"
                       : "send"
                   }`}
@@ -369,6 +369,15 @@ class index extends Component {
             </td>
           )
           break
+          case "single_date":
+            result = (
+              <td>
+                <div className="custom-td-overflow">
+                  {data[v] ? format(new Date(data[v].toString()), "dd-MM-yyyy") : ""}
+                </div>
+              </td>
+            )
+            break
         default:
           result = (
             <td>

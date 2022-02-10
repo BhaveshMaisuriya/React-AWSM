@@ -119,6 +119,9 @@ import {
   GET_OB_TOTAL_UNSCHEDULE_SUCCESS,
   GET_OB_TOTAL_UNSCHEDULE_FAIL,
   SET_BRYNTUM_FILTER,
+  UPDATE_SHIPMENT,
+  UPDATE_SHIPMENT_SUCCESS,
+  UPDATE_SHIPMENT_FAIL,
 } from './actionTypes'
 
 export const getRTSOrderBankTableData = params => ({
@@ -490,7 +493,7 @@ export const dragOrderBankToGanttChart = ({ shift_date, vehicle, order_banks }) 
   type: DRAG_RTS_ORDER_BANK_TO_GANTT_CHART,
   shift_date,
   vehicle,
-  order_banks
+  order_banks,
 })
 
 export const dragOrderBankToGanttChartSuccess = dropData => ({
@@ -712,5 +715,20 @@ export const getOBTotalUnscheduleSuccess = response => ({
 
 export const getOBTotalUnscheduleFail = error => ({
   type: GET_OB_TOTAL_UNSCHEDULE_FAIL,
+  payload: error,
+})
+
+export const updateShipment = params => ({
+  type: UPDATE_SHIPMENT,
+  params,
+})
+
+export const updateShipmentSuccess = params => ({
+  type: UPDATE_SHIPMENT_SUCCESS,
+  params,
+})
+
+export const updateShipmentFail = error => ({
+  type: UPDATE_SHIPMENT_FAIL,
   payload: error,
 })

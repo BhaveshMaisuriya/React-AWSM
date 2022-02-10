@@ -70,6 +70,8 @@ import {
   GET_OB_TOTAL_UNSCHEDULE_SUCCESS,
   GET_OB_TOTAL_UNSCHEDULE_FAIL,
   SET_BRYNTUM_FILTER,
+  UPDATE_SHIPMENT_SUCCESS,
+  UPDATE_SHIPMENT_FAIL,
 } from './actionTypes'
 import { eventGanttChartFactory, shipmentFactory } from './factory'
 import { ToastSuccess, ToastError } from '../../helpers/swal'
@@ -387,6 +389,7 @@ const RTSOrderBank = (state = initialState, action) => {
         ganttChart: {
           table: [],
           event: [],
+          selectedFilters: {},
         },
         error: action.payload,
       }
@@ -676,7 +679,18 @@ const RTSOrderBank = (state = initialState, action) => {
     //     ...state,
     //   }
     // }
-
+    case UPDATE_SHIPMENT_SUCCESS: {
+      ToastSuccess.fire()
+      return {
+        ...state,
+      }
+    }
+    case UPDATE_SHIPMENT_FAIL: {
+      ToastError.fire()
+      return {
+        ...state,
+      }
+    }
     default:
       return state
   }

@@ -115,8 +115,7 @@ function BryntumChartTable(props) {
   useEffect(() => setBryntumTable({ ...bryntumTable, page: 0 }), [dateConfig, terminal])
 
   useEffect(() => {
-if(schedulerProRef?.current?.instance) {   
-   schedulerProRef.current.instance.store.listeners = {
+    schedulerProRef.current.instance.store.listeners = {
       sort(e) {
         const { ascending, field } = e.sorters[0]
         const opt = { sortDirection: ascending ? 'asc' : 'desc', sortField: field }
@@ -128,7 +127,7 @@ if(schedulerProRef?.current?.instance) {
           return { ...state, ...opt, page: 0 }
         })
       },
-    }}
+    }
 
     const { eventStore, resourceStore } = schedulerProRef.current.instance
     setEventStore(eventStore)

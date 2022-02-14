@@ -45,6 +45,10 @@
               font-size: 10px;
               align-items: center;
               justify-content: center;
+              font-weight: 700;
+              &:hover {
+                cursor: default;
+              }
             }
             .send {
               color: #00a19c;
@@ -69,7 +73,6 @@
             .unblock {
               color: #763f98;
               background: #d6c5e0;
-              font-weight: 700;
             }
             .pending {
               color: #ccc;
@@ -149,7 +152,7 @@
         text-align: right;
         border-bottom: 1px solid #d9d9d9;
         .header-select-icon {
-          margin-right: 10px;
+          margin-right: 6.5px;
           &:hover {
             cursor: pointer;
           }
@@ -212,7 +215,7 @@
   color: white;
 }
 .priority.highPriority::before {
-  content: "HP";
+  content: 'HP';
 }
 
 .priority.specialRequest {
@@ -220,7 +223,7 @@
   color: white;
 }
 .priority.specialRequest::before {
-  content: "SP";
+  content: 'SP';
 }
 
 .rts-search {
@@ -514,4 +517,4 @@ span.b-sch-header-text.b-sticky-header {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-} 
+}

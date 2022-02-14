@@ -28,6 +28,7 @@ import {
   getGanttEventValidation,
   selectVehicleShipment,
   dragOrderBankToGanttChart,
+  updateShipment,
 } from '../../../store/actions'
 import ChartColumnFilter from './ChartColumnFilter'
 import ShiftPopover from './ShiftPopover'
@@ -114,8 +115,7 @@ function BryntumChartTable(props) {
   useEffect(() => setBryntumTable({ ...bryntumTable, page: 0 }), [dateConfig, terminal])
 
   useEffect(() => {
-if(schedulerProRef?.current?.instance) {   
-   schedulerProRef.current.instance.store.listeners = {
+    schedulerProRef.current.instance.store.listeners = {
       sort(e) {
         const { ascending, field } = e.sorters[0]
         const opt = { sortDirection: ascending ? 'asc' : 'desc', sortField: field }
@@ -127,7 +127,7 @@ if(schedulerProRef?.current?.instance) {
           return { ...state, ...opt, page: 0 }
         })
       },
-    }}
+    }
 
     const { eventStore, resourceStore } = schedulerProRef.current.instance
     setEventStore(eventStore)
@@ -227,8 +227,10 @@ if(schedulerProRef?.current?.instance) {
       case EventContextList.SHIPMENT: {
         data.type = EventContextList.SHIPMENT
         data.header = 'Create Shipment'
-        data.body = 'proceed for Shipment Creation?'
+        data.body = 'Proceed for Shipment Creation?'
         data.styleColor = 'success'
+        // this is Event data, consult factory.js
+        data.record = eventRecord.originalData
         break
       }
       case EventContextList.CANCEL_SHIPMENT: {
@@ -236,7 +238,7 @@ if(schedulerProRef?.current?.instance) {
         data.header = 'Cancel Shipment Confirmation'
         data.body = 'proceed with this shipment cancellation?'
         data.styleColor = 'danger'
-        data.record = eventRecord
+        data.record = eventRecord.originalData
         break
       }
       case EventContextList.SEND_ORDER: {
@@ -253,6 +255,7 @@ if(schedulerProRef?.current?.instance) {
       }
       case EventContextList.PLAN_LOAD_TIMES: {
         data.type = EventContextList.PLAN_LOAD_TIMES
+        data.record = eventRecord.originalData
         break
       }
       case EventContextList.UPDATE_SHIPMENT: {
@@ -288,36 +291,20 @@ if(schedulerProRef?.current?.instance) {
     setEventsData(newEventsData)
   }
 
-  const changeColorOfEventHandler = (color, isPending = false, eventType = undefined) => {
-    const newData = cloneDeep(eventsData)
-    let itemSelected = newData.filter(v => v.id == dropdownSelectedItem.itemSelectedId)
-    itemSelected[0].eventColor = color
-    itemSelected[0].isPending = isPending
-    if (eventType) {
-      itemSelected[0].eventType = eventType
-    }
-    setEventsData(newData)
-  }
-
-  const sendRequestsHandler = () => {
+  const sendRequestsHandler = val => {
     switch (dropdownSelectedItem.type) {
       case EventContextList.SHIPMENT: {
-        changeColorOfEventHandler('#9F79B7', true)
-        setTimeout(() => {
-          props.processPaymentInGanttChart(null)
-        }, 2000)
+        props.processPaymentInGanttChart(dropdownSelectedItem.record)
+        eventStore.data = props.ganttChartEventData
         break
       }
       case EventContextList.CANCEL_SHIPMENT: {
-        changeColorOfEventHandler('#aeaeae', true)
-        setTimeout(() => {
-          props.processCancelPaymentInGanttChart(dropdownSelectedItem)
-          // removeShipmentHandler();
-        }, 2000)
+        props.processCancelPaymentInGanttChart(dropdownSelectedItem.record)
+        eventStore.data = props.ganttChartEventData
         break
       }
       case EventContextList.SEND_ORDER: {
-        props.processSendOrderInGanttChart(dropdownSelectedItem)
+        props.processSendOrderInGanttChart(dropdownSelectedItem.record)
         break
       }
       case EventContextList.DELETE_SHIPMENT: {
@@ -328,8 +315,16 @@ if(schedulerProRef?.current?.instance) {
       case EventContextList.UNDO_LAST_UPDATE: {
         break
       }
-      default:
-        break
+      case EventContextList.PLAN_LOAD_TIMES: {
+        // $val now is format HH:mm:ss
+        // console.log(dropdownSelectedItem)
+        // console.log(val)
+        const planned_load_time = dateConfig.date_from + 'T' + val
+        props.updateShipment({
+          id: dropdownSelectedItem.record.id,
+          data: { planned_load_time },
+        })
+      }
     }
     toggle()
   }
@@ -373,6 +368,10 @@ if(schedulerProRef?.current?.instance) {
       // if (eventRecord.data?.highlight) {
       //   renderData.cls.remove("opacity-20")
       // }
+      if (eventRecord.data.isBackground) {
+        return '<div></div>'
+      }
+
       return `
         <div
           onmouseover="document.getElementById('gethighlight').style.display = 'flex';" 
@@ -449,6 +448,8 @@ if(schedulerProRef?.current?.instance) {
     eventMenuFeature: {
       // menuitem of event right click handler
       processItems({ eventRecord, items }) {
+        if (eventRecord.data.isBackground) return false
+
         if (
           eventRecord.data?.eventType === EventSchedulerStatus.CANCELLATION ||
           eventRecord.data?.isPending
@@ -695,15 +696,15 @@ if(schedulerProRef?.current?.instance) {
     }
   }, [bryntumCurrentColumns])
 
-  useEffect(() => {
-    if (props.isSendRequestProcess && dropdownSelectedItem?.itemSelectedId) {
-      if (dropdownSelectedItem.type === EventContextList.CANCEL_SHIPMENT) {
-        removeShipmentHandler()
-      } else {
-        changeColorOfEventHandler('#615E9B')
-      }
-    }
-  }, [props.isSendRequestProcess])
+  // useEffect(() => {
+  // if (props.isSendRequestProcess && dropdownSelectedItem?.itemSelectedId) {
+  //   if (dropdownSelectedItem.type === EventContextList.CANCEL_SHIPMENT) {
+  //     removeShipmentHandler()
+  //   } else {
+  //     changeColorOfEventHandler('#615E9B')
+  //   }
+  // }
+  // }, [props.isSendRequestProcess])
 
   useEffect(() => {
     if (bryntumCurrentColumns) {
@@ -792,6 +793,7 @@ if(schedulerProRef?.current?.instance) {
                       ref={provided.innerRef}
                     >
                       {snapshot.isDraggingOver && <div className="on-dragging" />}
+
                       <BryntumSchedulerPro
                         {...schedulerproConfig}
                         events={props.ganttChartEventData}
@@ -800,17 +802,16 @@ if(schedulerProRef?.current?.instance) {
                         syncDataOnLoad
                         ref={schedulerProRef}
                       />
-                      <div>
-                        {popupShown ? (
-                          <BryntumPopup
-                            text="Popup text"
-                            closePopup={hideEditor}
-                            eventRecord={eventRecord}
-                            eventStore={eventStore}
-                            resourceStore={resourceStore}
-                          ></BryntumPopup>
-                        ) : null}
-                      </div>
+
+                      {popupShown ? (
+                        <BryntumPopup
+                          text="Popup text"
+                          closePopup={hideEditor}
+                          eventRecord={eventRecord}
+                          eventStore={eventStore}
+                          resourceStore={resourceStore}
+                        />
+                      ) : null}
                     </div>
                   )
                 }}
@@ -847,7 +848,12 @@ if(schedulerProRef?.current?.instance) {
         <TerminalRelayModal isOpen={modal} onSend={sendRequestsHandler} onCancel={toggle} />
       )}
       {dropdownSelectedItem?.type === EventContextList.PLAN_LOAD_TIMES && (
-        <PlannedLoadTimesModal isOpen={modal} onSend={sendRequestsHandler} onCancel={toggle} />
+        <PlannedLoadTimesModal
+          data={dropdownSelectedItem.startDate}
+          isOpen={modal}
+          onSend={sendRequestsHandler}
+          onCancel={toggle}
+        />
       )}
       {shipmentDblclick && (
         <OrderBankShipmentModal open={shipmentDblclick} istoggle={toggleShipment} />
@@ -883,20 +889,18 @@ if(schedulerProRef?.current?.instance) {
   )
 }
 
-const mapStateToProps = ({ orderBank }) => {
-  return {
-    isSendRequestProcess: orderBank.isSendRequestProcess,
-    ganttChartData: orderBank.ganttChart,
-    ganttChartOrderDrag: orderBank.ganttChartOrderDrag,
-    ganttChartTableData: orderBank.ganttChartTableData,
-    totalRow_ganttChart: orderBank.totalRow_ganttChart,
-    ganttChartTableFilter: orderBank.ganttChartTableFilter,
-    ganttChartEventData: orderBank.ganttChartEventData,
-    dropOderSuccess: orderBank.dropOderSuccess,
-    isDragging: orderBank.isDragging,
-    ganttEventValidation: orderBank.ganttEventValidation,
-  }
-}
+const mapStateToProps = ({ orderBank }) => ({
+  isSendRequestProcess: orderBank.isSendRequestProcess,
+  ganttChartData: orderBank.ganttChart,
+  ganttChartOrderDrag: orderBank.ganttChartOrderDrag,
+  ganttChartTableData: orderBank.ganttChartTableData,
+  totalRow_ganttChart: orderBank.totalRow_ganttChart,
+  ganttChartTableFilter: orderBank.ganttChartTableFilter,
+  ganttChartEventData: orderBank.ganttChartEventData,
+  dropOderSuccess: orderBank.dropOderSuccess,
+  isDragging: orderBank.isDragging,
+  ganttEventValidation: orderBank.ganttEventValidation,
+})
 
 const mapDispatchToProps = dispatch => {
   return {
@@ -910,6 +914,7 @@ const mapDispatchToProps = dispatch => {
     onRemoveEvent: params => dispatch(removeEvent(params)),
     onSelectVehicle: params => dispatch(selectVehicleShipment(params)),
     dragOrderBankToGanttChart: payload => dispatch(dragOrderBankToGanttChart(payload)),
+    updateShipment: params => dispatch(updateShipment(params)),
   }
 }
 

@@ -7,6 +7,9 @@ const OrderBankSummary = props => {
   const [smp, setSMP] = useState(0)
 
   useEffect(() => {
+    setASR(0)
+    setComm(0)
+    setSMP(0)
     if (data) {
       data.map(item => {
         if (item.order_type.toString().toUpperCase() === 'ASR') setASR(item.volume)

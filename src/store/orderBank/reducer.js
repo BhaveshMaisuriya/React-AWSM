@@ -70,8 +70,10 @@ import {
   GET_OB_TOTAL_UNSCHEDULE_SUCCESS,
   GET_OB_TOTAL_UNSCHEDULE_FAIL,
   SET_BRYNTUM_FILTER,
+  UPDATE_SHIPMENT_SUCCESS,
+  UPDATE_SHIPMENT_FAIL,
 } from './actionTypes'
-import { eventGanttChartFactory, shipmentFactory } from './factory'
+import { eventGanttChartFactory, EVENT_COLOR, shipmentFactory } from './factory'
 import { ToastSuccess, ToastError } from '../../helpers/swal'
 
 const initialState = {
@@ -297,33 +299,50 @@ const RTSOrderBank = (state = initialState, action) => {
         error: action.payload,
       }
 
-    case PROCESS_PAYMENT_IN_GANTT_CHART_SUCCESS:
+    case PROCESS_PAYMENT_IN_GANTT_CHART_SUCCESS: {
       ToastSuccess.fire({ title: 'A shipment has been successfully created in SAP' })
+
+      const { id, scheduled_status } = action.payload
+      const eventData = state.ganttChartEventData.find(s => s.id === id)
+      eventData.eventType = scheduled_status
+      eventData.eventColor = EVENT_COLOR[scheduled_status]
+
+      // state.isSendRequestProcess += 1
+
       return {
         ...state,
-        isSendRequestProcess: state.isSendRequestProcess + 1,
       }
-
-    case PROCESS_PAYMENT_IN_GANTT_CHART_FAIL:
+    }
+    case PROCESS_PAYMENT_IN_GANTT_CHART_FAIL: {
       ToastError.fire({ title: 'A shipment has been fail created in SAP' })
       return {
         ...state,
         error: action.payload,
         isSendRequestProcess: state.isSendRequestProcess + 1,
       }
-    case CANCEL_PAYMENT_IN_GANTT_CHART_SUCCESS:
+    }
+    case CANCEL_PAYMENT_IN_GANTT_CHART_SUCCESS: {
       ToastSuccess.fire({ title: 'A shipment has been successfully cancelled from schedule' })
+
+      const { id, scheduled_status } = action.payload
+      const eventData = state.ganttChartEventData.find(s => s.id === id)
+      eventData.eventType = scheduled_status
+      eventData.eventColor = EVENT_COLOR[scheduled_status]
+
+      // state.isSendRequestProcess += 1
+
       return {
         ...state,
-        isSendRequestProcess: state.isSendRequestProcess + 1,
       }
-    case CANCEL_PAYMENT_IN_GANTT_CHART_FAIL:
+    }
+    case CANCEL_PAYMENT_IN_GANTT_CHART_FAIL: {
       ToastError.fire({ title: 'A shipment has been fail cancelled in SAP' })
       return {
         ...state,
         error: action.payload,
       }
-    case SEND_ORDER_IN_GANTT_CHART_SUCCESS:
+    }
+    case SEND_ORDER_IN_GANTT_CHART_SUCCESS: {
       ToastSuccess.fire({ title: 'A shipment has been successfully sent for DN Creation' })
 
       const records = action.payload // array of Order records
@@ -339,6 +358,7 @@ const RTSOrderBank = (state = initialState, action) => {
         ...state,
         ganttChartEventData: eventData,
       }
+    }
     case SEND_ORDER_IN_GANTT_CHART_FAIL:
       ToastError.fire({ title: 'A shipment has been fail to sent for DN Creation' })
       return {
@@ -387,6 +407,7 @@ const RTSOrderBank = (state = initialState, action) => {
         ganttChart: {
           table: [],
           event: [],
+          selectedFilters: {},
         },
         error: action.payload,
       }
@@ -580,14 +601,14 @@ const RTSOrderBank = (state = initialState, action) => {
       // ToastError.fire({ title: 'Send DN failed!' })
       return {
         ...state,
-        sendMultipleDn: 'error'
+        sendMultipleDn: 'error',
       }
     }
     case SEND_MULTIPLE_ORDER_BANK_DN_SUCCESS: {
       // ToastSuccess.fire({ title: 'Orders have been successfully sent for DN creation' })
       return {
         ...state,
-        sendMultipleDn: action.payload
+        sendMultipleDn: 'success',
       }
     }
     case CLEAR_SCHEDULING_FAIL: {
@@ -676,7 +697,19 @@ const RTSOrderBank = (state = initialState, action) => {
     //     ...state,
     //   }
     // }
-
+    case UPDATE_SHIPMENT_SUCCESS: {
+      ToastSuccess.fire()
+      console.log(action.payload)
+      return {
+        ...state,
+      }
+    }
+    case UPDATE_SHIPMENT_FAIL: {
+      ToastError.fire()
+      return {
+        ...state,
+      }
+    }
     default:
       return state
   }

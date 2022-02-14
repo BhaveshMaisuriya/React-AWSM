@@ -487,6 +487,11 @@ export const removeOrder = ({ orderId }) => axios.delete(`/rts/shipment/remove-o
 export const updateOrdersPositionInShipment = params =>
   axios.post(`/rts/order-bank/order-sequence`, params)
 
+export const putShipment = params => axios.put(`/rts/shipment/${params.id}`, params.data)
+
+export const createShipment = params => axios.post(`/rts/shipment/${params.id}`)
+export const cancelShipment = params => axios.post(`/rts/shipment/canceled/${params.id}`)
+
 export {
   getLoggedInUser,
   isUserAuthenticated,

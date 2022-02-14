@@ -608,7 +608,11 @@ const RTSOrderBank = (state = initialState, action) => {
       // ToastSuccess.fire({ title: 'Orders have been successfully sent for DN creation' })
       return {
         ...state,
+<<<<<<< HEAD
         sendMultipleDn: 'success',
+=======
+        sendMultipleDn: action.payload
+>>>>>>> b369619823ad4ea3337286c33293c96e140f696d
       }
     }
     case CLEAR_SCHEDULING_FAIL: {

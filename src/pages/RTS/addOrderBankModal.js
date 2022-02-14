@@ -91,18 +91,20 @@ const NewOrderBankModal = props => {
       shiptoNo !== ""
     ) {
       const temp = {
-        shift_date: shiftDate.toISOString().split("T")[0],
-        requested_delivery_date: shiftDate.toISOString().split("T")[0],
-        my_remark_1: orderData.myremark1 !== undefined ? orderData.myremark1 : "",
-        my_remark_2: orderData.myremark2 !== undefined ? orderData.myremark2 : "",
-        my_remark_3: orderData.myremark3 !== undefined ? orderData.myremark3 : "",
-        terminal: orderData.terminal !== undefined ? TERMINAL_CODE_MAPPING[orderData.terminal] : "",
+        shift_date: shiftDate.toISOString().split('T')[0],
+        requested_delivery_date: shiftDate.toISOString().split('T')[0],
+        my_remark_1: orderData.myremark1 !== undefined ? orderData.myremark1 : '',
+        my_remark_2: orderData.myremark2 !== undefined ? orderData.myremark2 : '',
+        my_remark_3: orderData.myremark3 !== undefined ? orderData.myremark3 : '',
+        terminal: orderData.terminal !== undefined ? TERMINAL_CODE_MAPPING[orderData.terminal] : '',
         volume: orderData.volume !== undefined ? parseInt(orderData.volume) : 0,
-        eta: orderData.eta !== undefined ? orderData.eta : "",
-        planned_load_time: orderData.load_time !== undefined ? orderData.load_time : "",
-        remarks: orderData.remarks !== undefined ? orderData.remarks : "",
-        priority: orderData.priority_order !== undefined ? orderData.priority_order : "",
+        eta: orderData.eta !== undefined ? orderData.eta : '',
+        planned_load_time: orderData.load_time !== undefined ? orderData.load_time : '',
+        order_remarks: orderData.order_remarks !== undefined ? orderData.order_remarks : '',
+        priority: orderData.priority_order !== undefined ? orderData.priority_order : '',
         retail_storage: parseInt(orderData.product_id),
+        product: orderData.product_code,
+        customer_type: "RETAIL"
       }
 
       const { onAddOrderBank } = props
@@ -155,7 +157,7 @@ const NewOrderBankModal = props => {
       newOrderData[key] = currentRegion ? currentRegion.region : ""
       newOrderData["terminal"] = ""
       setOrderData(newOrderData)
-    } else if (key === "remarks") {
+    } else if (key === "order_remarks") {
       setInputValue(value)
       if (value.length <= 40) {
         const newOrderData = { ...orderData }
@@ -504,7 +506,7 @@ const NewOrderBankModal = props => {
                     <label className="text-upper">Order Remarks</label>
                     <div className="relative">
                       <input
-                        onChange={e => onFieldChange("remarks", e.target.value)}
+                        onChange={e => onFieldChange("order_remarks", e.target.value)}
                         // value={orderData?.remarks}
                         maxLength={40}
                         className={`awsm-input w-100 ${inputValue && !isValid ? "out-range " : ""}`}
@@ -753,7 +755,6 @@ const NewOrderBankModal = props => {
                   <Col md={8}>
                     <label className="text-upper">Remarks DQM</label>
                     <AWSMInput
-                      onChange={value => onFieldChange("remarks", value)}
                       value={orderData?.remarks}
                       placeholder="Lorem ipsum"
                       disabled={true}

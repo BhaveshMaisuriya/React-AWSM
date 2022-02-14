@@ -45,6 +45,7 @@
               font-size: 10px;
               align-items: center;
               justify-content: center;
+              font-weight: 700;
               &:hover {
                 cursor: default;
               }
@@ -60,7 +61,6 @@
               color: #d50000;
               background: #f2b2b2;
               box-sizing: border-box;
-              font-weight: 700;
             }
             .Late {
               color: #763f98;
@@ -73,7 +73,6 @@
             .unblock {
               color: #763f98;
               background: #d6c5e0;
-              font-weight: 700;
             }
           }
           .rts-table-nodata {
@@ -149,7 +148,7 @@
         text-align: right;
         border-bottom: 1px solid #d9d9d9;
         .header-select-icon {
-          margin-right: 10px;
+          margin-right: 6.5px;
           &:hover {
             cursor: pointer;
           }

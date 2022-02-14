@@ -29,7 +29,10 @@ import {
   SEND_ORDER_BANK_DN_FAIL,
   SEND_MULTIPLE_ORDER_BANK_DN,
   SEND_MULTIPLE_ORDER_BANK_DN_SUCCESS,
-  SEND_MULTIPLE_ORDER_BANK_DN_FAIL,
+  SEND_MULTIPLE_ORDER_BANK_DN_FAIL,  
+  CLEAR_SCHEDULING,
+  CLEAR_SCHEDULING_SUCCESS,
+  CLEAR_SCHEDULING_FAIL,    
   UPDATE_ORDER_BANK_TABLE_DATA,
   DELETE_ORDERBANK_DETAIL,
   DELETE_ORDERBANK_DETAIL_SUCCESS,
@@ -273,6 +276,21 @@ export const sendMultipleOrderBankDNFail = error => ({
   payload: error,
 })
 
+export const clearScheduling = params => ({
+  type: CLEAR_SCHEDULING,
+  params,
+})
+
+export const clearSchedulingSuccess = response => ({
+  type: CLEAR_SCHEDULING_SUCCESS,
+  payload: response,
+})
+
+export const clearSchedulingFail = error => ({
+  type: CLEAR_SCHEDULING_FAIL,
+  payload: error,
+})
+
 export const updateOrderBankTableData = payload => ({
   type: UPDATE_ORDER_BANK_TABLE_DATA,
   payload,
@@ -412,8 +430,9 @@ export const getCrossTerminalFail = error => ({
   payload: error,
 })
 
-export const processPaymentInGanttChart = () => ({
+export const processPaymentInGanttChart = params => ({
   type: PROCESS_PAYMENT_IN_GANTT_CHART,
+  payload: params
 })
 
 export const processPaymentInGanttChartSuccess = response => ({
@@ -426,9 +445,9 @@ export const processPaymentInGanttChartFail = error => ({
   payload: error,
 })
 
-export const cancelPaymentInGanttChart = param => ({
+export const cancelPaymentInGanttChart = params => ({
   type: CANCEL_PAYMENT_IN_GANTT_CHART,
-  payload: param,
+  payload: URLSearchParams,
 })
 
 export const cancelPaymentInGanttChartSuccess = response => ({

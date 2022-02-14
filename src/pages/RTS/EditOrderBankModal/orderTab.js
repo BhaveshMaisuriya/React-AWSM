@@ -282,7 +282,7 @@ const OrderTab = props => {
           <label className="text-upper">Special Request Remarks</label>
           <div className="d-flex">
             <div className="w-100">
-              <AWSMInput value={data?.order_remarks} disabled={true} />
+              <AWSMInput value={data?.remarks} disabled={true} />
             </div>
           </div>
         </Col>
@@ -293,8 +293,8 @@ const OrderTab = props => {
           <div className="d-flex">
             <div className="w-100 relative">
               <input
-                onChange={e => onFieldChange('remarks', e.target.value)}
-                value={data?.remarks}
+                onChange={e => onFieldChange('order_remarks', e.target.value)}
+                value={data?.order_remarks}
                 className={`awsm-input w-100 ${inputValue && !isValid ? 'out-range ' : ''}`}
               />
               <span

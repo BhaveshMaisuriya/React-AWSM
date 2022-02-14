@@ -75,6 +75,10 @@ const EditOrderBankModal = props => {
       temp.region = props?.region
       setEditOrderData(temp)
       setoriginalEditOrderData(temp)
+      setInputValue(viewData.order_remarks)
+      setInputValue1(viewData.my_remark_1)
+      setInputValue2(viewData.my_remark_2)
+      setInputValue3(viewData.my_remark_3)
     }
   }, [viewData])
 
@@ -95,7 +99,7 @@ const EditOrderBankModal = props => {
       volume: parseInt(editOrderData?.volume),
       eta: editOrderData?.eta,
       planned_load_time: editOrderData?.planned_load_time,
-      remarks: editOrderData?.remarks,
+      order_remarks: editOrderData?.order_remarks,
       priority: editOrderData?.priority,
       vehicle: editOrderData?.vehicle,
       commercial_storage: editOrderData?.commercial_storage,
@@ -144,7 +148,7 @@ const EditOrderBankModal = props => {
       newOrderData[key] = currentRegion ? currentRegion.region : ''
       newOrderData['terminal'] = currentRegion.terminal[0]
       setEditOrderData(newOrderData)
-    } else if (key === 'remarks') {
+    } else if (key === 'order_remarks') {
       setInputValue(value)
       if (value.length < 40) {
         const newOrderData = { ...editOrderData }
@@ -227,10 +231,7 @@ const EditOrderBankModal = props => {
             <Row className="w-100">
               <Col md={4}>
                 <label>SHIFT DATE</label>
-                <DatePicker
-                  value={editOrderData?.requested_delivery_date}
-                  disabled={true}
-                />
+                <DatePicker value={editOrderData?.requested_delivery_date} disabled={true} />
               </Col>
               <Col>
                 <label className="text-upper">region & terminal</label>

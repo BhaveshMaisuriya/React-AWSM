@@ -1,17 +1,14 @@
 import React, { useState, Fragment, useEffect, useCallback } from 'react'
 import { Button, Popover, PopoverBody, Input } from 'reactstrap'
-import searchIcon from '../../../assets/images/AWSM-search.svg'
-import selectAllIcon from '../../../assets/images/AWSM-Select-all-Checkbox.svg'
-import selectAllIcon2 from '../../../assets/images/AWSM-Checked-box.svg'
-import selectAllIcon3 from '../../../assets/images/AWSM-Checkbox.svg'
+import searchIcon from 'assets/images/AWSM-search.svg'
 import { IconButton, FormControlLabel } from '@material-ui/core'
-import Checkbox from '@material-ui/core/Checkbox'
 import SimpleBar from 'simplebar-react'
 import { isEmpty, isNull, isUndefined } from 'lodash'
-import { removeKeywords } from '../../../pages/DQM/Common/helper'
+import { removeKeywords } from 'pages/DQM/Common/helper'
 import './index.scss'
 import ReplayIcon from '@material-ui/icons/Replay'
 import { format } from 'date-fns'
+import CustomCheckbox from 'components/Common/CustomCheckbox'
 
 const FilterDropdown = ({
   dataFilter,
@@ -29,18 +26,13 @@ const FilterDropdown = ({
   const [count, setCount] = useState(0)
   const [searchWords, setSearch] = useState('')
   const [hasMore, setHasMore] = useState(true)
-  const [isRemark, setHasRemark] = useState(false)
   const [current, setCurrent] = useState([])
-  const UntickIcon = () => <img src={selectAllIcon3} alt="icon" />
-  const CheckedIcon = () => <img src={selectAllIcon2} alt="icon" />
-  const UndeterminateIcon = () => <img src={selectAllIcon} alt="icon" />
   /**
    * initial useEffect
    */
   useEffect(() => {
     if (dataFilter) {
       if (dataFilter && !isUndefined(dataFilter[dataKey])) {
-        dataKey === 'remarks' ? setHasRemark(true) : setHasRemark(false)
         const alldata = getFilterData()
         setData(alldata)
         setCount(rowsPerLoad)
@@ -229,6 +221,7 @@ const FilterDropdown = ({
   const escapeRegExp = string => {
     return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') // $& means the whole matched string
   }
+
   const replaceAll = (str, match, replacement) => {
     return str.replace(new RegExp(escapeRegExp(match), 'g'), () => replacement)
   }
@@ -275,105 +268,106 @@ const FilterDropdown = ({
               e.preventDefault()
             }}
           >
-            {(!isRemark || searchWords !== '') && (
-              <Fragment>
-                <SimpleBar
-                  autoHide={false}
-                  style={{
-                    maxHeight: '211px',
-                    width: '100%',
-                    overflow: 'auto',
-                  }}
-                >
-                  {current.length > 0 && !isNull(current) && !isRemark
-                    ? current.map((row, index) => {
-                        const renderLabel = () => {
-                          if (dataKey === 'dipping_timestamp') {
-                            return checkNullValue(row.text)
-                              ? '-'
-                              : format(new Date(row.text), 'dd-MM-yyyy , HH:mm:ss')
-                          }
-                          if (dataKey === 'override_status') {
-                            return checkNullValue(row.text) ? 'Accurate' : row.text
-                          }
-                          if (['retain', 'runout', 'dn_date'].includes(dataKey)) {
-                            return row.text.length < 24
-                              ? '-'
-                              : format(new Date(row.text), 'dd-MM-yyyy')
-                          }
-                          if (dataKey === 'requested_delivery_date') {
-                            return checkNullValue(row.text)
-                              ? '-'
-                              : format(new Date(row.text), 'dd-MM-yyyy')
-                          }
-                          if (dataKey !== 'override_status') {
-                            return checkNullValue(row.text) ? '-' : removeKeywords(row.text)
-                          }
+            <Fragment>
+              <SimpleBar
+                autoHide={false}
+                style={{
+                  maxHeight: '211px',
+                  width: '100%',
+                  overflow: 'auto',
+                }}
+              >
+                {current.length > 0 && !isNull(current)
+                  ? current.map((row, index) => {
+                      const renderLabel = () => {
+                        if (dataKey === 'dn_status') {
+                          return row.text === '-' ? 'Send for DN' : row.text
                         }
-                        return (
-                          row.visibility && (
-                            <div
+                        if (dataKey === 'dipping_timestamp') {
+                          return checkNullValue(row.text)
+                            ? '-'
+                            : format(new Date(row.text), 'dd-MM-yyyy , HH:mm:ss')
+                        }
+                        if (dataKey === 'override_status') {
+                          return checkNullValue(row.text) ? 'Accurate' : row.text
+                        }
+                        if (['retain', 'runout', 'dn_date'].includes(dataKey)) {
+                          return row.text.length < 24
+                            ? '-'
+                            : format(new Date(row.text), 'dd-MM-yyyy HH:mm')
+                        }
+                        if (dataKey === 'requested_delivery_date') {
+                          return checkNullValue(row.text)
+                            ? '-'
+                            : format(new Date(row.text), 'dd-MM-yyyy')
+                        }
+                        if (dataKey !== 'override_status') {
+                          return checkNullValue(row.text) ? '-' : removeKeywords(row.text)
+                        }
+                      }
+                      return (
+                        row.visibility && (
+                          <div
+                            key={`${row.text}${index}`}
+                            className={`d-flex align-items-center filter-selection ${
+                              row.checked ? 'item-checked' : ''
+                            }`}
+                          >
+                            <FormControlLabel
                               key={`${row.text}${index}`}
-                              className={`d-flex align-items-center filter-selection ${
-                                row.checked ? 'item-checked' : ''
-                              }`}
-                            >
-                              <FormControlLabel
-                                key={`${row.text}${index}`}
-                                value={isNull(row.text) ? '-null' : row.text}
-                                onChange={onInputChange}
-                                checked={row.checked}
-                                disabled={row.disabled}
-                                className="checkmark"
-                                control={
-                                  <Checkbox
-                                    icon={<UntickIcon />}
-                                    checkedIcon={<CheckedIcon />}
+                              value={isNull(row.text) ? '-null' : row.text}
+                              onChange={onInputChange}
+                              checked={row.checked}
+                              disabled={row.disabled}
+                              className="checkmark"
+                              control={
+                                  <CustomCheckbox
+                                    onClick={onInputChange}
                                     style={{
                                       height: '20px',
                                       width: '5px',
                                       marginLeft: '20px',
                                       marginTop: '10px',
                                     }}
+                                    value={isNull(row.text) ? '-null' : row.text}
+                                    checked={row.checked}
                                   />
-                                }
-                                label={renderLabel()}
-                              />
-                            </div>
-                          )
+                              }
+                              label={renderLabel()}
+                            />
+                          </div>
                         )
-                      })
-                    : ResultsMessage()}
-                  {hasMore && (
-                    <IconButton
-                      color="primary"
-                      aria-label="Load More"
-                      component="span"
-                      className="Loadmore_Filters"
-                      onClick={getMoreData}
-                    >
-                      <ReplayIcon />
-                    </IconButton>
-                  )}
-                </SimpleBar>
-                <p style={{ marginTop: '-10px' }} />
-              </Fragment>
-            )}
+                      )
+                    })
+                  : ResultsMessage()}
+                {hasMore && (
+                  <IconButton
+                    color="primary"
+                    aria-label="Load More"
+                    component="span"
+                    className="Loadmore_Filters"
+                    onClick={getMoreData}
+                  >
+                    <ReplayIcon />
+                  </IconButton>
+                )}
+              </SimpleBar>
+              <p style={{ marginTop: '-10px' }} />
+            </Fragment>
             <div style={{ height: '25px', marginTop: '20px' }}>
-              {!isRemark && current.length > 0 && (
+              {current.length > 0 && (
                 <Fragment>
-                  <Checkbox
-                    checked={current.every(e => e.disabled) ? false : checkAll}
-                    icon={<UndeterminateIcon />}
-                    checkedIcon={<CheckedIcon />}
+                  <CustomCheckbox
                     onClick={clickSelectAll}
-                    disabled={current.every(e => e.disabled)}
                     style={{
                       height: '20px',
                       width: '5px',
-                      marginLeft: '8px',
+                      marginLeft: '9px',
                       marginTop: '-1px',
                     }}
+                    checked={current.every(e => e.disabled) ? false : checkAll}
+                    disabled={current.every(e => e.disabled)}
+                    selectAll
                   />
                   <label
                     style={{

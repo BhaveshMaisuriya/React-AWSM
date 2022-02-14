@@ -57,7 +57,7 @@ import {
   viewOrderBankDetailFail,
   viewOrderBankDetailSuccess,
   sendMultipleOrderBankDNFail,
-  sendMultipleOrderBankDNSuccess,  
+  sendMultipleOrderBankDNSuccess,
   sendOrderBankDNFail,
   sendOrderBankDNSuccess,
   refreshOderBankDNFail,
@@ -105,7 +105,6 @@ import {
   runAutoScheduleFail,
   getOBTotalUnscheduleSuccess,
   getOBTotalUnscheduleFail,
-  updateShipment,
   updateShipmentSuccess,
   updateShipmentFail,
 } from './actions'
@@ -138,6 +137,8 @@ import {
   removeOrder,
   updateOrdersPositionInShipment,
   putShipment,
+  createShipment,
+  cancelShipment,
 } from '../../helpers/fakebackend_helper'
 
 function* onGetOrderbank({ params = {} }) {
@@ -227,15 +228,6 @@ function* onGetTotalOBUnschedule({ params }) {
     yield put(getOBTotalUnscheduleFail(error))
   }
 }
-
-// function* onPutOrderbankTableInformation({ data }) {
-//   try {
-//     yield call(putOrderbankDetail, data)
-//     yield put(updateOrderbankTableInformationSuccess())
-//   } catch (error) {
-//     yield put(updateOrderbankTableInformationFail(error))
-//   }
-// }
 
 function* onRefreshOrderBankDN({ params = {} }) {
   try {
@@ -334,30 +326,36 @@ function* onGetCrossTerminal(params) {
   }
 }
 
-function* sendRequestPaymentInGanttChart({ params = {} }) {
+function* sendRequestPaymentInGanttChart({ payload }) {
+  // <payload> is Event data, consult factory.js
   try {
-    // send request
-    yield put(processPaymentInGanttChartSuccess(params))
+    // HACK: US 258072 - GanttChart Create-Shipment
+    const response = yield call(createShipment, { id: payload.id })
+    // const response = { data: { id: 632, scheduled_status: 'BlockedDN' } }
+    yield put(processPaymentInGanttChartSuccess(response.data))
   } catch (error) {
     yield put(processPaymentInGanttChartFail(error))
   }
 }
 
-function* sendRequestCancelPaymentInGanttChart({ params = {} }) {
+function* sendRequestCancelPaymentInGanttChart({ payload }) {
+  // <payload> is Event data, consult factory.js
   try {
-    // send request
-    yield put(cancelPaymentInGanttChartSuccess(params))
+    // HACK: US 258067 - GanttChart Cancel-Shipment
+    const response = yield call(cancelShipment, { id: payload.id })
+    // const response = { data: { id: 632, scheduled_status: 'PendingShipment' } }
+    yield put(cancelPaymentInGanttChartSuccess(response.data))
   } catch (error) {
     yield put(cancelPaymentInGanttChartFail(error))
   }
 }
 
 function* sendRequestOrderPaymentInGanttChart({ params }) {
+  // <params> is Event data, consult factory.js
   try {
-    const ids = [params.record.id]
+    const ids = [params.id]
 
     const response = yield call(sendRTSOrderBank, ids)
-
     yield put(sendOrderInGanttChartSuccess(response.data))
   } catch (error) {
     yield put(sendOrderInGanttChartFail(error))
@@ -382,19 +380,18 @@ function* onGetRTSOrderBankGanttChart({ params = {} }) {
 }
 
 function* onDragOrderBankToGanttChart({ shift_date, vehicle, order_banks }) {
-  if (!order_banks) {
-    const dragOrder = order_banks
-      ? order_banks
-      : yield select(store => store.orderBank?.orderBankTableData?.filter(e => e.isChecked))
-    order_banks = dragOrder.map(e => e.id)
-  }
-
-  if (!vehicle) {
-    const selectedVehicle = yield select(store => store?.orderBank?.selectedVehicleShipment)
-    vehicle = selectedVehicle.vehicle
-  }
-
   try {
+    if (!order_banks) {
+      const dragOrder = order_banks
+        ? order_banks
+        : yield select(store => store.orderBank?.orderBankTableData?.filter(e => e.isChecked))
+      order_banks = dragOrder.map(e => e.id)
+    }
+
+    if (!vehicle) {
+      const selectedVehicle = yield select(store => store?.orderBank?.selectedVehicleShipment)
+      vehicle = selectedVehicle.vehicle
+    }
     if (order_banks && order_banks.length > 0) {
       const response = yield call(sendOderToVehicle, {
         vehicle: vehicle,
@@ -409,8 +406,6 @@ function* onDragOrderBankToGanttChart({ shift_date, vehicle, order_banks }) {
 }
 
 function* onRemoveOrderFromShipment(payload) {
-  // call api to remove here
-  // put data to success case
   try {
     yield call(removeOrder, payload.params)
     yield put(removeOrderFromShipmentSuccess(payload.params))
@@ -420,28 +415,24 @@ function* onRemoveOrderFromShipment(payload) {
 }
 
 function* onRemoveShipmentFromEvent(payload) {
-  // call api to remove shipment here
-
-  // call success case
-  yield put(removeShipmentFromEventSuccess(payload.params))
+  try {
+    yield put(removeShipmentFromEventSuccess(payload.params))
+  } catch (error) {}
 }
 
 function* onRemoveEvent(payload) {
-  // call api to remove shipment here
-
-  // call success case
-  yield put(removeEventSuccess(payload.params))
+  try {
+    yield put(removeEventSuccess(payload.params))
+  } catch (error) {}
 }
 
 function* onUpdateEvent(payload) {
-  // call api to remove shipment here
-
-  // call success case
-  yield put(updateOBEventSuccess(payload.params))
+  try {
+    yield put(updateOBEventSuccess(payload.params))
+  } catch (error) {}
 }
 
 function* onGetGanttEventValidation(payload) {
-  // call api to remove shipment here
   try {
     const response = yield call(validateGanttEventChange, payload.params)
     yield put(getGanttEventValidationSuccess(response.data))
@@ -489,13 +480,11 @@ function* onGetShipmentDetailsOnVehicle(payload) {
 function* onDragAndDropShipmentArea({ params }) {
   try {
     const { data, shipmentId } = params
-
     const sendThis = {
       shipmentId,
       orderIds: data[shipmentId].orders.map(o => o.id),
     }
-
-    const response = yield call(updateOrdersPositionInShipment, sendThis)
+    yield call(updateOrdersPositionInShipment, sendThis)
     yield put(onDragAndDropShipmentAreaSuccess(data))
   } catch (error) {
     yield put(onDragAndDropShipmentAreaFail(error))
@@ -503,10 +492,10 @@ function* onDragAndDropShipmentArea({ params }) {
 }
 
 function* onDragOrderToShipment() {
-  const dragOrder = yield select(store =>
-    store.orderBank?.orderBankTableData?.filter(e => e.isChecked)
-  )
   try {
+    const dragOrder = yield select(store =>
+      store.orderBank?.orderBankTableData?.filter(e => e.isChecked)
+    )
     if (dragOrder && dragOrder.length > 0) {
       yield put(onDragOrderToShipmentSuccess(dragOrder))
     }
@@ -528,7 +517,8 @@ function* onUpdateShipment({ params }) {
   try {
     const response = yield call(putShipment, params)
     // console.log(response)
-    yield put(updateShipmentSuccess(response))
+    // <params> is { id: number, data: {...order_bank}}
+    yield put(updateShipmentSuccess(params))
   } catch (error) {
     yield put(updateShipmentFail(error))
   }
@@ -545,7 +535,7 @@ function* orderBankSaga() {
   yield takeLatest(VIEW_ORDERBANK_DETAIL, onViewOrderbankTableInformation)
   yield takeLatest(REFRESH_ORDER_BANK_DN, onRefreshOrderBankDN)
   yield takeLatest(SEND_ORDER_BANK_DN, onSendOrderBankDN)
-  yield takeLatest(SEND_MULTIPLE_ORDER_BANK_DN, onSendMultipleOrderBankDN)  
+  yield takeLatest(SEND_MULTIPLE_ORDER_BANK_DN, onSendMultipleOrderBankDN)
   yield takeLatest(SEND_DN_STATUS_REQUEST, onSendDNStatusRequest)
   yield takeLatest(GET_ORDER_BANK_AUDITLOG, onGetOrderBankAuditLog)
   yield takeLatest(GET_CLEAR_SCHEDULING, onGetClearScheduling)

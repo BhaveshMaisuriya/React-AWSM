@@ -111,10 +111,6 @@ const tableMapping = {
     columnSize: "cell-text",
     type: "order_remarks"
   },
-  shift_date: {
-    label: "Shift Date",
-    columnSize: "cell-text",
-  },
   sr: {
     label: "SR",
     columnSize: "cell-text",

@@ -41,7 +41,7 @@ const tagColor = {
   'Blocked DN': 'blocked',
   'Late Unblock': 'unblock',
   'Late Unblocked': 'unblock',
-  Pending: '',
+  Pending: 'pending',
   Unblocked: 'clean',
   null: 'send',
 }

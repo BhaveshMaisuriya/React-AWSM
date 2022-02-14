@@ -589,12 +589,12 @@ function OrderBank({
   }
 
   useEffect(() => {
-if(sendMultipleDn !== allResponseMultipleDN){
-   setShowSendMultiNotification(true)
-   setAllResponseMultipleDN(sendMultipleDn);
-   setSendMultipleMessage(sendMultipleDn?.status === 200 ? 'success' : 'error');
-   setTimeout(function () { reloadRTSOrderBankData() }, 2000);
-}
+    if(sendMultipleDn !== allResponseMultipleDN){
+      setShowSendMultiNotification(true)
+      setAllResponseMultipleDN(sendMultipleDn);
+      setSendMultipleMessage(sendMultipleDn?.status === 200 ? 'success' : 'error');
+      setTimeout(function () { reloadRTSOrderBankData() }, 2000);
+    }
   }, [sendMultipleDn])
  
 

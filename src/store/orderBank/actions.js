@@ -29,7 +29,10 @@ import {
   SEND_ORDER_BANK_DN_FAIL,
   SEND_MULTIPLE_ORDER_BANK_DN,
   SEND_MULTIPLE_ORDER_BANK_DN_SUCCESS,
-  SEND_MULTIPLE_ORDER_BANK_DN_FAIL,
+  SEND_MULTIPLE_ORDER_BANK_DN_FAIL,  
+  CLEAR_SCHEDULING,
+  CLEAR_SCHEDULING_SUCCESS,
+  CLEAR_SCHEDULING_FAIL,    
   UPDATE_ORDER_BANK_TABLE_DATA,
   DELETE_ORDERBANK_DETAIL,
   DELETE_ORDERBANK_DETAIL_SUCCESS,
@@ -270,6 +273,21 @@ export const sendMultipleOrderBankDNSuccess = response => ({
 
 export const sendMultipleOrderBankDNFail = error => ({
   type: SEND_MULTIPLE_ORDER_BANK_DN_FAIL,
+  payload: error,
+})
+
+export const clearScheduling = params => ({
+  type: CLEAR_SCHEDULING,
+  params,
+})
+
+export const clearSchedulingSuccess = response => ({
+  type: CLEAR_SCHEDULING_SUCCESS,
+  payload: response,
+})
+
+export const clearSchedulingFail = error => ({
+  type: CLEAR_SCHEDULING_FAIL,
   payload: error,
 })
 

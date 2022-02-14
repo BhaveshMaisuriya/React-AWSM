@@ -16,6 +16,7 @@ import saleAndInventorySaga from "./salesAndInventory/saga"
 import slaSaga from "./sla/saga"
 import orderBankSaga from "./orderBank/saga"
 import dqmCommonSaga from "./dqm/saga"
+import Logout from "pages/Authentication/Logout"
 
 export default function* rootSaga() {
   yield all([

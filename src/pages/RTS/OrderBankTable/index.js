@@ -41,7 +41,7 @@ const tagColor = {
   'Blocked DN': 'blocked',
   'Late Unblock': 'unblock',
   'Late Unblocked': 'unblock',
-  Pending: '',
+  Pending: 'pending',
   Unblocked: 'clean',
   null: 'send',
 }
@@ -199,7 +199,7 @@ class index extends Component {
           filter: payloadFilter.filterOrderBank,
         })
       }, 2000)
-      this.setState({ sendDnStatus: this.props.sendDn })
+      this.setState({ sendDnStatus: nextProps.sendDn?.status ? 'success' : 'error' })
     }
     if (nextProps.reloadData !== this.props.reloadData) {
       this.setState({ showLoader: this.props.reloadData })
@@ -516,7 +516,7 @@ class index extends Component {
   }
 
   DNStatusOnClickHandler(data, key) {
-    if (data.dn_no === '' || data.dn_no === null) {
+    if ((data.dn_no === "" || data.dn_no === null) && key !== 'Pending') {
       this.setState({ DNStatus: { isOpenConfirmModal: true, data } })
     }
   }
@@ -689,8 +689,8 @@ class index extends Component {
         )}
         {this.state.showSendDN && (
           <AWSMAlert
-            status="success"
-            message="An order has been successfully sent for DN Creation"
+            status={this.state.sendDnStatus}
+            message={this.state.sendDnStatus === "success" ? "An order has been successfully sent for DN Creation" : "An Order DN creation failed"}
             openAlert={this.state.showSendDN}
             closeAlert={() => this.setState({ showSendDN: false })}
           />

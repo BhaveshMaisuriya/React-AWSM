@@ -592,7 +592,7 @@ function OrderBank({
     if(sendMultipleDn !== allResponseMultipleDN){
       setShowSendMultiNotification(true)
       setAllResponseMultipleDN(sendMultipleDn);
-      setSendMultipleMessage(sendMultipleDn?.status === 200 ? 'success' : 'error');
+      setSendMultipleMessage(sendMultipleDn);
       setTimeout(function () { reloadRTSOrderBankData() }, 2000);
     }
   }, [sendMultipleDn])
@@ -770,8 +770,8 @@ function OrderBank({
     const newSettings = [...orderBankSetting]
     const sendDN = newSettings?.find(e => e.value === 'SendDN')
     if (sendDN) {
-      let checkDN = checkedData.filter(v => v.dn_no === null || v.dn_no === '')
-      sendDN.disabled = (checkDN?.length > 0 && checkedData.length === checkDN?.length) ? false : true; //!isItemSelected
+      let checkDN = checkedData.filter(v => (v.dn_no === null || v.dn_no === '') && v.dn_status !== "Pending");
+      sendDN.disabled = (checkDN?.length > 0 && checkedData.length === checkDN?.length) ? false : true; //! 
     }
     setOrderBankSetting(newSettings)
   }, [orderBankTableData])

@@ -63,7 +63,6 @@ const EditOrderBankModal = props => {
   const [inputValue2, setInputValue2] = useState('')
   const [inputValue3, setInputValue3] = useState('')
   const [terminalList, setTerminalList] = useState([])
-  const [defaultDate] = useState(new Date(new Date().getTime() + 24 * 60 * 60 * 1000))
   const regionList = REGION_TERMINAL.map(item => item.region)
 
   useEffect(() => {
@@ -75,10 +74,10 @@ const EditOrderBankModal = props => {
       temp.region = props?.region
       setEditOrderData(temp)
       setoriginalEditOrderData(temp)
-      setInputValue(viewData.order_remarks)
-      setInputValue1(viewData.my_remark_1)
-      setInputValue2(viewData.my_remark_2)
-      setInputValue3(viewData.my_remark_3)
+      setInputValue(viewData.order_remarks ? viewData.order_remarks : "" )
+      setInputValue1(viewData.my_remark_1 ? viewData.my_remark_1 : "")
+      setInputValue2(viewData.my_remark_2 ? viewData.my_remark_1 : "")
+      setInputValue3(viewData.my_remark_3 ? viewData.my_remark_1 : "")
     }
   }, [viewData])
 
@@ -97,8 +96,9 @@ const EditOrderBankModal = props => {
       my_remark_3: editOrderData?.my_remark_3,
       terminal: TERMINAL_CODE_MAPPING[editOrderData?.terminal],
       volume: parseInt(editOrderData?.volume),
-      eta: editOrderData?.eta,
-      planned_load_time: editOrderData?.planned_load_time,
+      eta: editOrderData?.shift_date + ' ' + editOrderData?.eta,
+      planned_load_time:
+        editOrderData?.shift_date + ' ' + editOrderData?.planned_load_time,
       order_remarks: editOrderData?.order_remarks,
       priority: editOrderData?.priority,
       vehicle: editOrderData?.vehicle,
@@ -150,28 +150,28 @@ const EditOrderBankModal = props => {
       setEditOrderData(newOrderData)
     } else if (key === 'order_remarks') {
       setInputValue(value)
-      if (value.length < 40) {
+      if (value.length <= 40) {
         const newOrderData = { ...editOrderData }
         newOrderData[key] = value
         setEditOrderData(newOrderData)
       }
     } else if (key === 'my_remark_1') {
       setInputValue1(value)
-      if (value.length < 40) {
+      if (value.length <= 40) {
         const newOrderData = { ...editOrderData }
         newOrderData[key] = value
         setEditOrderData(newOrderData)
       }
     } else if (key === 'my_remark_2') {
       setInputValue2(value)
-      if (value.length < 40) {
+      if (value.length <= 40) {
         const newOrderData = { ...editOrderData }
         newOrderData[key] = value
         setEditOrderData(newOrderData)
       }
     } else if (key === 'my_remark_3') {
       setInputValue3(value)
-      if (value.length < 40) {
+      if (value.length <= 40) {
         const newOrderData = { ...editOrderData }
         newOrderData[key] = value
         setEditOrderData(newOrderData)

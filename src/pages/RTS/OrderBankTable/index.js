@@ -199,7 +199,7 @@ class index extends Component {
           filter: payloadFilter.filterOrderBank,
         })
       }, 2000)
-      this.setState({ sendDnStatus: nextProps.sendDn?.status ? 'success' : 'error' })
+      this.setState({ sendDnStatus: nextProps?.sendDn?.status ? 'success' : 'error' })
     }
     if (nextProps.reloadData !== this.props.reloadData) {
       this.setState({ showLoader: this.props.reloadData })
@@ -234,6 +234,8 @@ class index extends Component {
 
   headerTableConfiguration = () => {
     const { filterData, expandSearch, searchText } = this.state
+    const { resetAllHandler } = this.props
+
     return this.props.tableColumns.map(v => {
       return v != 'notes' ? (
         <th>
@@ -243,6 +245,7 @@ class index extends Component {
             dataKey={v}
             handleClickReset={this.ResetDataFilterHandler}
             handleClickApply={this.ApplyFilterHandler}
+            handleResetAll={resetAllHandler}
           />
           {v === 'priority' ? (
             <span
@@ -361,6 +364,15 @@ class index extends Component {
             </td>
           )
           break
+        case 'time':
+          result = (
+            <td>
+              <div className="custom-td-overflow">
+                {data[v] ? format(new Date(data[v].toString()), 'HH:mm') : ''}
+              </div>
+            </td>
+          )
+          break
         default:
           result = (
             <td>
@@ -467,7 +479,7 @@ class index extends Component {
   ApplyFilterHandler = (data, key) => {
     const { filterApplyHandler } = this.props
     const tempObj = {}
-    tempObj[key] = data
+    tempObj[key] = data.map(String)
     filterApplyHandler(tempObj, 'insert')
   }
 
@@ -503,7 +515,8 @@ class index extends Component {
 
   OnSelectedAllItems = () => {
     const { selectedAllItem, dataSource } = this.state
-    const { updateOrderBankTableData, deleteEnable } = this.props
+    const { updateOrderBankTableData, deleteEnable, selectAllHandler } = this.props
+    selectAllHandler()
 
     let data = [...dataSource]
     data = data.map(v => {
@@ -525,7 +538,7 @@ class index extends Component {
   async onSendRequestOnDNStatusHandler() {
     const { DNStatus } = this.state
     const { onSendDNStatusRequest } = this.props
-    await onSendDNStatusRequest(DNStatus.data?.id)
+    await onSendDNStatusRequest({ order_id: DNStatus.data?.id})
     this.setState({ DNStatus: { isOpenConfirmModal: false } })
   }
 

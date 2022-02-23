@@ -1,16 +1,18 @@
 function checkType(value) {
-  let string = ""
-  switch (typeof value) {
-    case "number":
-      string = value
-      break
-    case "string":
-      string = `'${value}'`
-      break
-    default:
-      string = value
-  }
-  return string
+  // let string = ""
+  // switch (typeof value) {
+  //   case "number":
+  //     string = value
+  //     break
+  //   case "string":
+  //     string = `'${value}'`
+  //     break
+  //   default:
+  //     string = value
+  // }
+  // return string
+  
+  return `'${value}'` // according to Truong...
 }
 
 export function transformObjectToStringSentence(qObject) {
@@ -138,7 +140,7 @@ export const runValidation = data => {
           return false
         }
         if (
-          data.contact[key].email &&
+          data?.contact[key]?.email && data?.contact[key]?.email.trim().length !== 0 &&
           !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(data.contact[key].email)
         ) {
           return false

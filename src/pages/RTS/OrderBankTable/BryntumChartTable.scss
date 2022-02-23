@@ -4,3 +4,36 @@
 .infinite-scroll-component__outerdiv {
   width: 100%;
 }
+
+.terminal-hours {
+  // position: relative;
+
+  &.has-indicator {
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      margin: 0 auto;
+      width: 0;
+      height: 0;
+      border-bottom: solid 8px #262626;
+      border-left: solid 8px transparent;
+      border-right: solid 8px transparent;
+    }
+
+    &.has-indicator-middle::after {
+      left: 0;
+      right: 0;
+    }
+
+    &.has-indicator-left::after {
+      left: 0;
+      right: 1;
+    }
+
+    &.has-indicator-right::after {
+      left: 1;
+      right: 0;
+    }
+  }
+}

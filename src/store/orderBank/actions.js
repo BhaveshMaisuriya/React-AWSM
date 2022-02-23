@@ -432,7 +432,7 @@ export const getCrossTerminalFail = error => ({
 
 export const processPaymentInGanttChart = params => ({
   type: PROCESS_PAYMENT_IN_GANTT_CHART,
-  payload: params
+  payload: params,
 })
 
 export const processPaymentInGanttChartSuccess = response => ({
@@ -447,7 +447,7 @@ export const processPaymentInGanttChartFail = error => ({
 
 export const cancelPaymentInGanttChart = params => ({
   type: CANCEL_PAYMENT_IN_GANTT_CHART,
-  payload: URLSearchParams,
+  payload: params,
 })
 
 export const cancelPaymentInGanttChartSuccess = response => ({

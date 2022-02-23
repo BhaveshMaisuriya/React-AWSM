@@ -53,9 +53,9 @@ import {
   SEND_ORDER_BANK_DN_FAIL,
   SEND_ORDER_BANK_DN_SUCCESS,
   SEND_MULTIPLE_ORDER_BANK_DN_FAIL,
-  SEND_MULTIPLE_ORDER_BANK_DN_SUCCESS,  
+  SEND_MULTIPLE_ORDER_BANK_DN_SUCCESS,
   CLEAR_SCHEDULING_FAIL,
-  CLEAR_SCHEDULING_SUCCESS,    
+  CLEAR_SCHEDULING_SUCCESS,
   DRAG_RTS_ORDER_BANK_TO_GANTT_CHART_FAIL,
   CLEAR_GANTT_DATA,
   GET_SHIPMENT_DETAIL_FAIL,
@@ -73,7 +73,12 @@ import {
   UPDATE_SHIPMENT_SUCCESS,
   UPDATE_SHIPMENT_FAIL,
 } from './actionTypes'
-import { eventGanttChartFactory, EVENT_COLOR, shipmentFactory } from './factory'
+import {
+  ensureDateRangeNotExceedingADay,
+  factorizeGanttChartEventBars,
+  EVENT_COLOR,
+  shipmentFactory,
+} from './factory'
 import { ToastSuccess, ToastError } from '../../helpers/swal'
 
 const initialState = {
@@ -92,6 +97,12 @@ const initialState = {
     table: [],
     event: [],
     selectedFilters: {},
+    terminal: {
+      operatingTime: {
+        from: null,
+        to: null,
+      },
+    },
   },
   orderBankRTDetails: null,
   crossTerminalDetails: null,
@@ -300,7 +311,10 @@ const RTSOrderBank = (state = initialState, action) => {
       }
 
     case PROCESS_PAYMENT_IN_GANTT_CHART_SUCCESS: {
-      ToastSuccess.fire({ title: 'A shipment has been successfully created in SAP' })
+      // HACK: US 258072 - GanttChart Create-Shipment
+      ToastSuccess.fire({
+        title: 'A shipment has been successfully created in SAP',
+      })
 
       const { id, scheduled_status } = action.payload
       const eventData = state.ganttChartEventData.find(s => s.id === id)
@@ -322,7 +336,10 @@ const RTSOrderBank = (state = initialState, action) => {
       }
     }
     case CANCEL_PAYMENT_IN_GANTT_CHART_SUCCESS: {
-      ToastSuccess.fire({ title: 'A shipment has been successfully cancelled from schedule' })
+      // HACK: US 258067 - GanttChart Cancel-Shipment
+      ToastSuccess.fire({
+        title: 'A shipment has been successfully cancelled from schedule',
+      })
 
       const { id, scheduled_status } = action.payload
       const eventData = state.ganttChartEventData.find(s => s.id === id)
@@ -343,7 +360,9 @@ const RTSOrderBank = (state = initialState, action) => {
       }
     }
     case SEND_ORDER_IN_GANTT_CHART_SUCCESS: {
-      ToastSuccess.fire({ title: 'A shipment has been successfully sent for DN Creation' })
+      ToastSuccess.fire({
+        title: 'A shipment has been successfully sent for DN Creation',
+      })
 
       const records = action.payload // array of Order records
 
@@ -351,7 +370,8 @@ const RTSOrderBank = (state = initialState, action) => {
       records.forEach(o => {
         const existingEventData = eventData.find(s => s.id === o.id)
 
-        if (existingEventData) existingEventData.resourceOrder[0].DNNumber = o.dn_no
+        if (existingEventData)
+          existingEventData.resourceOrder[0].DNNumber = o.dn_no
       })
 
       return {
@@ -360,17 +380,40 @@ const RTSOrderBank = (state = initialState, action) => {
       }
     }
     case SEND_ORDER_IN_GANTT_CHART_FAIL:
-      ToastError.fire({ title: 'A shipment has been fail to sent for DN Creation' })
+      ToastError.fire({
+        title: 'A shipment has been fail to sent for DN Creation',
+      })
       return {
         ...state,
         error: action.payload,
       }
     case GET_RTS_GANTT_CHART_DATA_SUCCESS: {
-      const { data, scrolling, page } = action.payload
-      const { list, total_rows, filter } = data
+      // HACK: GanttChart Data
+      const { data, scrolling, page, shiftDate } = action.payload
+      const {
+        list,
+        total_rows,
+        filter,
+        terminal_operating_time_from,
+        terminal_operating_time_to,
+      } = data
 
       const ganttChart = { ...state.ganttChart }
 
+      // triangle indicators for GanttChart's headers
+      if (terminal_operating_time_from && terminal_operating_time_to) {
+        const { from, to } = ensureDateRangeNotExceedingADay({
+          from: terminal_operating_time_from,
+          to: terminal_operating_time_to,
+          date: shiftDate,
+          includeGanttChartVisual: false,
+        })
+
+        ganttChart.terminal.operatingTime.from = from
+        ganttChart.terminal.operatingTime.to = to
+      }
+
+      // filters for the table on left-hand-side
       if (!Object.keys(state.ganttChart.selectedFilters).length) {
         const selectedFilters = {}
         state.ganttChart.selectedFilters = Object.keys(filter).forEach(k => {
@@ -381,20 +424,29 @@ const RTSOrderBank = (state = initialState, action) => {
       }
 
       // add id to mapping with event
-      const newList = list?.map(vehicle => ({ ...vehicle, id: vehicle?.vehicle }))
+      const roadTankers = list.map(vehicle => ({
+        ...vehicle,
+        id: vehicle.vehicle,
+      }))
 
       if (state.ganttChartTableData.length !== 0 && scrolling && page > 0) {
         return {
           ...state,
-          ganttChartTableData: [...state.ganttChartTableData, ...newList],
-          ganttChartEventData: [...state.ganttChartEventData, ...eventGanttChartFactory(newList)],
+          ganttChartTableData: [...state.ganttChartTableData, ...roadTankers],
+          ganttChartEventData: [
+            ...state.ganttChartEventData,
+            ...factorizeGanttChartEventBars(roadTankers, shiftDate),
+          ],
           totalRow_ganttChart: total_rows,
         }
       }
       return {
         ...state,
-        ganttChartTableData: newList,
-        ganttChartEventData: eventGanttChartFactory(newList),
+        ganttChartTableData: roadTankers,
+        ganttChartEventData: factorizeGanttChartEventBars(
+          roadTankers,
+          shiftDate
+        ),
         totalRow_ganttChart: total_rows,
         ganttChartTableFilter: filter,
         dropOderSuccess: false,
@@ -408,6 +460,12 @@ const RTSOrderBank = (state = initialState, action) => {
           table: [],
           event: [],
           selectedFilters: {},
+          terminal: {
+            operatingTime: {
+              from: null,
+              to: null,
+            },
+          },
         },
         error: action.payload,
       }
@@ -476,7 +534,9 @@ const RTSOrderBank = (state = initialState, action) => {
     case REMOVE_ORDER_FROM_SHIPMENT_SUCCESS: {
       const { orderId, shipmentId } = action.params
       // remove from shipment
-      const shipment = state.shipmentDropData.find(item => item.id === shipmentId)
+      const shipment = state.shipmentDropData.find(
+        item => item.id === shipmentId
+      )
       let removedOrders = shipment.orders.find(item => item.id === orderId)
       removedOrders.isChecked = false // clear checked
       shipment.orders = shipment.orders.filter(item => item.id !== orderId)
@@ -486,9 +546,13 @@ const RTSOrderBank = (state = initialState, action) => {
       //state.orderBankTableData.push(removedOrders)
 
       if (newShipmentDropData.length)
-        ToastSuccess.fire({ titleText: 'Order has been successfully removed from a shipment' })
+        ToastSuccess.fire({
+          titleText: 'Order has been successfully removed from a shipment',
+        })
       else
-        ToastSuccess.fire({ titleText: 'A shipment has ben successfully cancelled from schedule' })
+        ToastSuccess.fire({
+          titleText: 'A shipment has ben successfully cancelled from schedule',
+        })
 
       return {
         ...state,
@@ -503,8 +567,12 @@ const RTSOrderBank = (state = initialState, action) => {
     }
     case REMOVE_SHIPMENT_FROM_EVENT_SUCCESS: {
       const { shipmentId } = action.params
-      let removedShipment = state.shipmentDropData.find(item => item.id === shipmentId)
-      let newShipmentDropData = state.shipmentDropData.filter(item => item.id !== shipmentId)
+      let removedShipment = state.shipmentDropData.find(
+        item => item.id === shipmentId
+      )
+      let newShipmentDropData = state.shipmentDropData.filter(
+        item => item.id !== shipmentId
+      )
 
       // state.orderBankTableData = state.orderBankTableData.concat(
       //   removedShipment.orders.map(item => {
@@ -512,7 +580,9 @@ const RTSOrderBank = (state = initialState, action) => {
       //     return item
       //   })
       // )
-      ToastSuccess.fire({ titleText: 'A shipment has ben successfully cancelled from schedule' })
+      ToastSuccess.fire({
+        titleText: 'A shipment has ben successfully cancelled from schedule',
+      })
       return {
         ...state,
         shipmentDropData: newShipmentDropData,
@@ -585,7 +655,9 @@ const RTSOrderBank = (state = initialState, action) => {
     //   }
     // }
     case UPDATE_OB_RT_DETAILS_SUCCESS: {
-      ToastSuccess.fire({ title: 'Road Tanker detail has been successfully updated' })
+      ToastSuccess.fire({
+        title: 'Road Tanker detail has been successfully updated',
+      })
       return {
         ...state,
         // orderBankRTDetails: action.params,
@@ -598,33 +670,31 @@ const RTSOrderBank = (state = initialState, action) => {
       }
     }
     case SEND_MULTIPLE_ORDER_BANK_DN_FAIL: {
-      // ToastError.fire({ title: 'Send DN failed!' })
       return {
         ...state,
-        sendMultipleDn: 'error',
+        sendMultipleDn: action.payload,
       }
     }
     case SEND_MULTIPLE_ORDER_BANK_DN_SUCCESS: {
-      // ToastSuccess.fire({ title: 'Orders have been successfully sent for DN creation' })
       return {
         ...state,
-        sendMultipleDn: 'success',
+        sendMultipleDn: action.payload,
       }
     }
     case CLEAR_SCHEDULING_FAIL: {
       // ToastError.fire({ title: 'Send DN failed!' })
       return {
         ...state,
-        clearScheduling: 'error'
+        clearScheduling: 'error',
       }
     }
     case CLEAR_SCHEDULING_SUCCESS: {
       // ToastSuccess.fire({ title: 'Orders have been successfully sent for DN creation' })
       return {
         ...state,
-        clearScheduling: action.payload
+        clearScheduling: action.payload,
       }
-    }    
+    }
     case SEND_ORDER_BANK_DN_FAIL: {
       ToastError.fire({ title: 'Send DN failed!' })
       return {
@@ -632,7 +702,9 @@ const RTSOrderBank = (state = initialState, action) => {
       }
     }
     case SEND_ORDER_BANK_DN_SUCCESS: {
-      ToastSuccess.fire({ title: 'Orders have been successfully sent for DN creation' })
+      ToastSuccess.fire({
+        title: 'Orders have been successfully sent for DN creation',
+      })
       return {
         ...state,
       }
@@ -683,7 +755,10 @@ const RTSOrderBank = (state = initialState, action) => {
       newShipment.push(newShipmentItem)
       return {
         ...state,
-        shipmentDropData: [...state.shipmentDropData, shipmentFactory(newShipment)[0]],
+        shipmentDropData: [
+          ...state.shipmentDropData,
+          shipmentFactory(newShipment)[0],
+        ],
       }
     }
     case GET_OB_TOTAL_UNSCHEDULE_SUCCESS: {
@@ -699,7 +774,7 @@ const RTSOrderBank = (state = initialState, action) => {
     // }
     case UPDATE_SHIPMENT_SUCCESS: {
       ToastSuccess.fire()
-      console.log(action.payload)
+      // console.log(action.payload)
       return {
         ...state,
       }

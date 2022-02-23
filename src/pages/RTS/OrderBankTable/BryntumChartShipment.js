@@ -15,7 +15,6 @@ import TerminalRelayModal from './TerminalRelayModal'
 import {
   cancelPaymentInGanttChart,
   deselectVehicleShipment,
-  getRTSOderBankGanttChart,
   getShipmentOfOderBankGanttChart,
   processPaymentInGanttChart,
   selectVehicleShipment,
@@ -39,7 +38,8 @@ const EventContextList = {
   PLAN_LOAD_TIMES: 'planned_load_time',
 }
 
-export const bryntumSchedulerTableNameForCookie = 'rts-gantt-chart-bryntum-scheduler'
+export const bryntumSchedulerTableNameForCookie =
+  'rts-gantt-chart-bryntum-scheduler'
 
 function BryntumChartShipment(props) {
   const {
@@ -72,7 +72,10 @@ function BryntumChartShipment(props) {
 
   useEffect(() => onFilterChange(bryntumTable), [bryntumTable])
 
-  useEffect(() => setBryntumTable({ ...bryntumTable, page: 0 }), [dateConfig, terminal])
+  useEffect(
+    () => setBryntumTable({ ...bryntumTable, page: 0 }),
+    [dateConfig, terminal]
+  )
 
   useEffect(() => {
     setFilterList(
@@ -95,15 +98,23 @@ function BryntumChartShipment(props) {
 
   const removeShipmentHandler = () => {
     const { instance: scheduler } = schedulerProRef.current
-    const newEventsData = eventsData.filter(v => v.id !== dropdownSelectedItem.itemSelectedId)
+    const newEventsData = eventsData.filter(
+      v => v.id !== dropdownSelectedItem.itemSelectedId
+    )
     scheduler.eventStore.remove(dropdownSelectedItem.record)
     scheduler.eventStore.data = newEventsData
     setEventsData(newEventsData)
   }
 
-  const changeColorOfEventHandler = (color, isPending = false, eventType = undefined) => {
+  const changeColorOfEventHandler = (
+    color,
+    isPending = false,
+    eventType = undefined
+  ) => {
     const newData = cloneDeep(eventsData)
-    let itemSelected = newData.filter(v => v.id == dropdownSelectedItem.itemSelectedId)
+    let itemSelected = newData.filter(
+      v => v.id == dropdownSelectedItem.itemSelectedId
+    )
     itemSelected[0].eventColor = color
     itemSelected[0].isPending = isPending
     if (eventType) {
@@ -131,7 +142,7 @@ function BryntumChartShipment(props) {
       }
       case EventContextList.SEND_ORDER: {
         // props.processSendOrderInGanttChart(null)
-        console.log('what are you doing dude ?? :D ??')
+        // console.log('what are you doing dude ?? :D ??')
         break
       }
       default:
@@ -179,10 +190,16 @@ function BryntumChartShipment(props) {
       listeners: {
         sort(e) {
           const { ascending, field } = e.sorters[0]
-          const opt = { sortDirection: ascending ? 'asc' : 'desc', sortField: field }
+          const opt = {
+            sortDirection: ascending ? 'asc' : 'desc',
+            sortField: field,
+          }
 
           setBryntumTable(state => {
-            if (opt.sortField === state.sortField && opt.sortDirection === state.sortDirection)
+            if (
+              opt.sortField === state.sortField &&
+              opt.sortDirection === state.sortDirection
+            )
               return state
 
             return { ...state, ...opt, page: 0 }
@@ -231,7 +248,8 @@ function BryntumChartShipment(props) {
 
   function generateColumnsObj(tableMap) {
     const text =
-      ganttChartTableMapping?.[tableMap]?.label_short ?? ganttChartTableMapping?.[tableMap]?.label
+      ganttChartTableMapping?.[tableMap]?.label_short ??
+      ganttChartTableMapping?.[tableMap]?.label
     return {
       text,
       field: tableMap,
@@ -242,10 +260,15 @@ function BryntumChartShipment(props) {
           case 'vehicle': {
             return (
               <div className="chart-vehicle-cell">
-                <div className="value" onClick={showRoadTanker} style={{ cursor: 'pointer' }}>
+                <div
+                  className="value"
+                  onClick={showRoadTanker}
+                  style={{ cursor: 'pointer' }}>
                   {value}
                 </div>
-                {record.pump_type && <div className="suffix">{record.pump_type}</div>}
+                {record.pump_type && (
+                  <div className="suffix">{record.pump_type}</div>
+                )}
               </div>
             )
           }
@@ -253,7 +276,11 @@ function BryntumChartShipment(props) {
           case 'status': {
             return (
               <div className="chart-status-cell">
-                <ShiftPopover record={record} onChange={onStatusChange} type="status" />
+                <ShiftPopover
+                  record={record}
+                  onChange={onStatusChange}
+                  type="status"
+                />
               </div>
             )
           }
@@ -340,7 +367,11 @@ function BryntumChartShipment(props) {
       newFilterCondition.push({ data, key: dataKey })
     }
 
-    setBryntumTable(state => ({ ...state, filterCondition: newFilterCondition, page: 0 }))
+    setBryntumTable(state => ({
+      ...state,
+      filterCondition: newFilterCondition,
+      page: 0,
+    }))
 
     hideFilterElement(dataKey)
   }
@@ -351,7 +382,11 @@ function BryntumChartShipment(props) {
       const newFilterCondition = [...bryntumTable.filterCondition]
       newFilterCondition.splice(index, 1)
 
-      setBryntumTable(state => ({ ...state, filterCondition: newFilterCondition, page: 0 }))
+      setBryntumTable(state => ({
+        ...state,
+        filterCondition: newFilterCondition,
+        page: 0,
+      }))
     }
     hideFilterElement(dataKey)
   }
@@ -361,20 +396,26 @@ function BryntumChartShipment(props) {
       <div className="container-orderbank gant-chart-table row">
         <div className="col-lg-5 col-md-6 col-sm-12 pr-0">
           <InfiniteScroll
-            next={() => setBryntumTable(state => ({ ...state, page: state.page + 1 }))}
-            hasMore={props.ganttChartTableData.length < props.totalRow_ganttChart}
-            loader={<h5 className={props.totalRow_ganttChart > 10 ? '' : 'd-none'}>Loading...</h5>}
+            next={() =>
+              setBryntumTable(state => ({ ...state, page: state.page + 1 }))
+            }
+            hasMore={
+              props.ganttChartTableData.length < props.totalRow_ganttChart
+            }
+            loader={
+              <h5 className={props.totalRow_ganttChart > 10 ? '' : 'd-none'}>
+                Loading...
+              </h5>
+            }
             dataLength={props.ganttChartTableData.length}
-            height={360}
-          >
+            height={360}>
             <Droppable droppableId="shipment-chart">
               {(provided, snapshot) => {
                 return (
                   <div
                     className="rts-gantt-chart border-0"
                     {...provided.droppableProps}
-                    ref={provided.innerRef}
-                  >
+                    ref={provided.innerRef}>
                     {snapshot.isDraggingOver && <div className="on-dragging" />}
                     <div className="rounded wrapper-bryntum-shipment-grid border-bryntum-table">
                       <BryntumGrid
@@ -415,18 +456,31 @@ function BryntumChartShipment(props) {
           onSend={sendRequestsHandler}
           onCancel={toggle}
           headerContent={dropdownSelectedItem?.header || ''}
-          bodyContent={`Are you sure you want to ${dropdownSelectedItem?.body || ''}`}
+          bodyContent={`Are you sure you want to ${
+            dropdownSelectedItem?.body || ''
+          }`}
           styleColor={dropdownSelectedItem?.styleColor}
         />
       )}
       {dropdownSelectedItem?.type === EventContextList.TERMINAL_RELAY && (
-        <TerminalRelayModal isOpen={modal} onSend={sendRequestsHandler} onCancel={toggle} />
+        <TerminalRelayModal
+          isOpen={modal}
+          onSend={sendRequestsHandler}
+          onCancel={toggle}
+        />
       )}
       {dropdownSelectedItem?.type === EventContextList.PLAN_LOAD_TIMES && (
-        <PlannedLoadTimesModal isOpen={modal} onSend={sendRequestsHandler} onCancel={toggle} />
+        <PlannedLoadTimesModal
+          isOpen={modal}
+          onSend={sendRequestsHandler}
+          onCancel={toggle}
+        />
       )}
       {shipmentDblclick && (
-        <OrderBankShipmentModal open={shipmentDblclick} istoggle={toggleShipment} />
+        <OrderBankShipmentModal
+          open={shipmentDblclick}
+          istoggle={toggleShipment}
+        />
       )}
       <OrderBankRoadTankerModal
         isOpen={roadTankerModalShow}
@@ -451,14 +505,20 @@ const mapStateToProps = ({ orderBank }) => ({
 
 const mapDispatchToProps = dispatch => {
   return {
-    processPaymentInGanttChart: params => dispatch(processPaymentInGanttChart(params)),
-    processCancelPaymentInGanttChart: params => dispatch(cancelPaymentInGanttChart(params)),
-    processSendOrderInGanttChart: params => dispatch(sendOrderInGanttChart(params)),
-    getRTSOderBankGanttChart: params => dispatch(getRTSOderBankGanttChart(params)),
-    getShipmentOfOderBankGanttChart: params => dispatch(getShipmentOfOderBankGanttChart(params)),
+    processPaymentInGanttChart: params =>
+      dispatch(processPaymentInGanttChart(params)),
+    processCancelPaymentInGanttChart: params =>
+      dispatch(cancelPaymentInGanttChart(params)),
+    processSendOrderInGanttChart: params =>
+      dispatch(sendOrderInGanttChart(params)),
+    getShipmentOfOderBankGanttChart: params =>
+      dispatch(getShipmentOfOderBankGanttChart(params)),
     onSelectVehicle: params => dispatch(selectVehicleShipment(params)),
     onDeselectVehicle: () => dispatch(deselectVehicleShipment()),
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(BryntumChartShipment)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(BryntumChartShipment)

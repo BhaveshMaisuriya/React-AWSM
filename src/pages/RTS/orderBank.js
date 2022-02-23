@@ -154,6 +154,7 @@ function OrderBank({
   const [uploadDmr, setUploadDmr] = useState(false)
   const [deleteMultiple, setDeleteMultiple] = useState(false)
   const [showNewOrder, setShowNewOrder] = useState(false)
+  const [selectAll, setSelectAll] = useState(false)
   const [showCustomize, setShowCustomize] = useState(false)
   const [payloadFilter, setPayloadFilter] = useState({
     filterOrderBank: {},
@@ -213,6 +214,7 @@ function OrderBank({
   const [reloadData, setReloadData] = useState(false)
   const [currentPage, setCurrentPage] = useState(0)
   const [filterQuery, setfilterQuery] = useState('')
+  const [resetTable, setResetTable] = useState(false)
   const filterOrderBank = useMemo(() => {
     return {
       terminal: TERMINAL_CODE_MAPPING[terminalTable],
@@ -242,14 +244,6 @@ function OrderBank({
     trigger = false
   ) => {
     let q = transformObjectToStringSentence(filterCondition)
-    // if (filterCondition.length > 0) {
-    //   q = filterCondition
-    //     .filter(v => v.data.length > 0)
-    //     .map(e => {
-    //       return `(${e.data.map(k => `${e.key}=='${k == '-' ? '' : k}'`).join('||')})`
-    //     })
-    //     .join('&&')
-    // }
 
     setBryntumTable(state => {
       const payload = {
@@ -585,14 +579,18 @@ function OrderBank({
   const onSendOrderBankDN = () => {
     // setReloadData(true);
     // sendOrderBankDN(orderBankTableData.filter(e => e.isChecked).map(e => e.id))    
-    sendMultipleOrderBankDN(orderBankTableData.filter(e => e.isChecked).map(e => e.id))    
+    selectAll ? sendMultipleOrderBankDN({filter: filterOrderBank , all : true }) : sendMultipleOrderBankDN({order_id : orderBankTableData.filter(e => e.isChecked).map(e => e.id)}) 
+  }
+
+  const changeSelectAllHandler = () => {
+    setSelectAll(!selectAll)
   }
 
   useEffect(() => {
     if(sendMultipleDn !== allResponseMultipleDN){
       setShowSendMultiNotification(true)
       setAllResponseMultipleDN(sendMultipleDn);
-      setSendMultipleMessage(sendMultipleDn?.status === 200 ? 'success' : 'error');
+      SendMultipleMessage(sendMultipleDn);
       setTimeout(function () { reloadRTSOrderBankData() }, 2000);
     }
   }, [sendMultipleDn])
@@ -770,10 +768,11 @@ function OrderBank({
     const newSettings = [...orderBankSetting]
     const sendDN = newSettings?.find(e => e.value === 'SendDN')
     if (sendDN) {
-      let checkDN = checkedData.filter(v => v.dn_no === null || v.dn_no === '')
-      sendDN.disabled = (checkDN?.length > 0 && checkedData.length === checkDN?.length) ? false : true; //!isItemSelected
+      let checkDN = checkedData.filter(v => (v.dn_no === null || v.dn_no === '') && v.dn_status !== "Pending");
+      sendDN.disabled = (checkDN?.length > 0 && checkedData.length === checkDN?.length) ? false : true; 
     }
     setOrderBankSetting(newSettings)
+    setResetTable(false)
   }, [orderBankTableData])
 
   //Object literal checking icon type
@@ -787,6 +786,18 @@ function OrderBank({
       customiseMultipleDeleteOrderIcon: <DeleteOrderIcon />,
     }
     return icons[type]
+  }
+
+
+  const onChangeDateHandler = (value) => {
+    setShiftDateTable({
+      ...shiftDateTable,
+      type: value?.type,
+      date_from: value?.date_from,
+      date_to: value?.date_to,
+    })
+    setfilterQuery({})
+    setResetTable(true)
   }
 
   return (
@@ -1067,12 +1078,7 @@ function OrderBank({
                         defaultValue={shiftDateTable}
                         defaultDate={defaultDate}
                         onChange={value => {
-                          setShiftDateTable({
-                            ...shiftDateTable,
-                            type: value?.type,
-                            date_from: value?.date_from,
-                            date_to: value?.date_to,
-                          })
+                          onChangeDateHandler(value)
                           setReloadData(true)
                           setCurrentPage(0)
                         }}
@@ -1178,6 +1184,8 @@ function OrderBank({
                   fieldToSortHandler={fieldToSortHandler}
                   reloadData={reloadData}
                   activeTab={activeTab}
+                  selectAllHandler={changeSelectAllHandler}
+                  resetAllHandler={resetTable}
                 />
               </div>
               <NewOrderModal open={showNewOrder} onCancel={onCloseNewOrder} />

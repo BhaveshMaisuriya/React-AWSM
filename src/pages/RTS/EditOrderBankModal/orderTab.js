@@ -7,7 +7,15 @@ import AWSMDropdown from 'components/Common/Dropdown'
 import { format } from 'date-fns'
 
 const OrderTab = props => {
-  const { data, inputValue, inputValue1, inputValue2, inputValue3, onFieldChange, timeData } = props
+  const {
+    data,
+    inputValue,
+    inputValue1,
+    inputValue2,
+    inputValue3,
+    onFieldChange,
+    timeData,
+  } = props
   const ORDER_PRIORITY = ['None', 'High Priority']
   const [multiProductToggle, setMultiProductToggle] = useState(false)
   const [multiLoadToggle, setMultiLoadToggle] = useState(false)
@@ -59,7 +67,10 @@ const OrderTab = props => {
           <div className="d-flex">
             <div className="w-100">
               <AWSMInput
-                value={data?.retail_storage_relation?.retail_customer_relation?.ship_to_company}
+                value={
+                  data?.retail_storage_relation?.retail_customer_relation
+                    ?.ship_to_company
+                }
                 disabled={true}
               />
             </div>
@@ -104,7 +115,10 @@ const OrderTab = props => {
           <label className="text-upper">Product Category</label>
           <div className="d-flex">
             <div className="w-100">
-              <AWSMInput value={data?.format_product_category} disabled={true} />
+              <AWSMInput
+                value={data?.format_product_category}
+                disabled={true}
+              />
             </div>
           </div>
         </Col>
@@ -147,9 +161,22 @@ const OrderTab = props => {
           <div className="d-flex">
             <div className="w-100">
               <TimePicker
-                value={data?.planned_load_time}
+                value={
+                  data?.planned_load_time &&
+                  format(new Date(data?.planned_load_time), 'HH:mm')
+                }
                 items={timeData}
-                onChange={value => onFieldChange('planned_load_time', value)}
+                onChange={value =>
+                  onFieldChange(
+                    'planned_load_time',
+                    format(
+                      new Date(data?.requested_delivery_date),
+                      'yyyy-MM-dd'
+                    ) +
+                      ' ' +
+                      value
+                  )
+                }
                 hasNone
               />
             </div>
@@ -160,9 +187,14 @@ const OrderTab = props => {
           <div className="d-flex">
             <div className="w-100">
               <TimePicker
-                value={data?.eta}
+                value={data?.eta && format(new Date(data?.eta), 'HH:mm')}
                 items={timeData}
-                onChange={value => onFieldChange('eta', value)}
+                onChange={value =>
+                  onFieldChange(
+                    'eta',
+                    format(new Date(data?.eta), 'yyyy-MM-dd') + ' ' + value
+                  )
+                }
                 hasNone
               />
             </div>
@@ -171,12 +203,17 @@ const OrderTab = props => {
         <Col>
           <label className="text-upper">Multiproduct ID</label>
           {data?.multi_prod_id && (
-            <span className="remove_text text-red" onClick={() => setMultiProductToggle(true)}>
+            <span
+              className="remove_text text-red"
+              onClick={() => setMultiProductToggle(true)}
+            >
               Remove
             </span>
           )}
           <div className="d-flex">
-            <div className={`w-100 relative ${multiProductToggle && 'border-red'}`}>
+            <div
+              className={`w-100 relative ${multiProductToggle && 'border-red'}`}
+            >
               <AWSMInput value={data?.multi_prod_id} disabled={true} />
               {multiProductToggle && (
                 <div className="confirm-main">
@@ -209,7 +246,10 @@ const OrderTab = props => {
               <AWSMInput
                 value={
                   data?.retain
-                    ? format(new Date(data?.retain.toString()), 'dd-MM-yyyy HH:mm')
+                    ? format(
+                        new Date(data?.retain.toString()),
+                        'dd-MM-yyyy HH:mm'
+                      )
                     : '00'
                 }
                 disabled={true}
@@ -224,7 +264,10 @@ const OrderTab = props => {
               <AWSMInput
                 value={
                   data?.runout
-                    ? format(new Date(data?.runout.toString()), 'dd-MM-yyyy HH:mm')
+                    ? format(
+                        new Date(data?.runout.toString()),
+                        'dd-MM-yyyy HH:mm'
+                      )
                     : '00'
                 }
                 disabled={true}
@@ -235,12 +278,17 @@ const OrderTab = props => {
         <Col>
           <label className="text-upper">Multiload ID</label>
           {data?.multi_load_id && (
-            <span className="remove_text text-red" onClick={() => setMultiLoadToggle(true)}>
+            <span
+              className="remove_text text-red"
+              onClick={() => setMultiLoadToggle(true)}
+            >
               Remove
             </span>
           )}
           <div className="d-flex">
-            <div className={`w-100 relative ${multiLoadToggle && 'border-red'}`}>
+            <div
+              className={`w-100 relative ${multiLoadToggle && 'border-red'}`}
+            >
               <AWSMInput value={data?.multi_load_id} disabled={true} />
               {multiLoadToggle === true && (
                 <div className="confirm-main">
@@ -253,7 +301,10 @@ const OrderTab = props => {
                   >
                     Confirm
                   </span>
-                  <span class="confirm-no-text text-red" onClick={() => setMultiLoadToggle(false)}>
+                  <span
+                    class="confirm-no-text text-red"
+                    onClick={() => setMultiLoadToggle(false)}
+                  >
                     No
                   </span>
                 </div>
@@ -295,7 +346,10 @@ const OrderTab = props => {
               <input
                 onChange={e => onFieldChange('order_remarks', e.target.value)}
                 value={data?.order_remarks}
-                className={`awsm-input w-100 ${inputValue && !isValid ? 'out-range ' : ''}`}
+                maxLength={40}
+                className={`awsm-input w-100 ${
+                  inputValue && !isValid ? 'out-range ' : ''
+                }`}
               />
               <span
                 className={`position-absolute awsm-input-right-content ${
@@ -313,7 +367,10 @@ const OrderTab = props => {
             <input
               onChange={e => onFieldChange('my_remark_1', e.target.value)}
               value={data?.my_remark_1}
-              className={`awsm-input w-100 ${inputValue1 && !isValid1 ? 'out-range ' : ''}`}
+              maxLength={40}
+              className={`awsm-input w-100 ${
+                inputValue1 && !isValid1 ? 'out-range ' : ''
+              }`}
             />
             <span
               className={`position-absolute awsm-input-right-content ${
@@ -328,7 +385,10 @@ const OrderTab = props => {
             <input
               onChange={e => onFieldChange('my_remark_2', e.target.value)}
               value={data?.my_remark_2}
-              className={`awsm-input w-100 ${inputValue2 && !isValid2 ? 'out-range ' : ''}`}
+              maxLength={40}
+              className={`awsm-input w-100 ${
+                inputValue2 && !isValid2 ? 'out-range ' : ''
+              }`}
             />
             <span
               className={`position-absolute awsm-input-right-content ${
@@ -343,7 +403,10 @@ const OrderTab = props => {
             <input
               onChange={e => onFieldChange('my_remark_3', e.target.value)}
               value={data?.my_remark_3}
-              className={`awsm-input w-100 ${inputValue3 && !isValid3 ? 'out-range ' : ''}`}
+              maxLength={40}
+              className={`awsm-input w-100 ${
+                inputValue3 && !isValid3 ? 'out-range ' : ''
+              }`}
             />
             <span
               className={`position-absolute awsm-input-right-content ${

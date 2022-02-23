@@ -174,10 +174,12 @@ const tableMapping = {
   planned_load_time: {
     label: "Planned Load time",
     columnSize: "cell-text",
+    type: "time",
   },
   eta: {
     label: "ETA",
     columnSize: "cell-text",
+    type: "time"
   },
   opening_stock_days: {
     label: "Opening Stock days",

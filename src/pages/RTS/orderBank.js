@@ -348,6 +348,7 @@ function OrderBank({
         "limit": 10,
       } 
     }))*/
+    console.log('list::1')
     getRTSOrderBankTableData({
       limit: 10,
       page: currentPage,
@@ -746,8 +747,13 @@ function OrderBank({
     let tempVol = {volume: []};
     qValue?.volume?.map((item, index)=>{
       tempVol.volume.push(item.toString());
-    })
-    let temp = qValue?.volume ? tempVol : qValue;
+    });
+  let tempId = {id: []};
+    qValue?.id?.map((item, index)=>{
+      tempId.id.push(item.toString());
+    });  
+    let temp = qValue?.volume ? tempVol : qValue?.id ? tempId : qValue;
+    
     if (type === 'insert')
       setfilterQuery(prevFilters => {
         return { ...prevFilters, ...temp }
@@ -760,7 +766,8 @@ function OrderBank({
   }
 
   useEffect(() => {
-    orderBankTableData === null && setShowTableError(true)
+    console.log('orderBankTableData::', orderBankTableData)
+    orderBankTableData === null && setShowTableError(true);
     let checkedData = [];
     orderBankTableData!== null && orderBankTableData.map((item, index) => {
       if (item.isChecked === true) {

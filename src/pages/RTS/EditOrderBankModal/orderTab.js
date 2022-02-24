@@ -12,19 +12,19 @@ const OrderTab = props => {
   const [multiProductToggle, setMultiProductToggle] = useState(false)
   const [multiLoadToggle, setMultiLoadToggle] = useState(false)
   const remainChars1 = useMemo(() => {
-    return 40 - inputValue1.length
+    return 40 - inputValue1?.length
   }, [inputValue1])
 
   const remainChars2 = useMemo(() => {
-    return 40 - inputValue2.length
+    return 40 - inputValue2?.length
   }, [inputValue2])
 
   const remainChars3 = useMemo(() => {
-    return 40 - inputValue3.length
+    return 40 - inputValue3?.length
   }, [inputValue3])
 
   const remainChars = useMemo(() => {
-    return 40 - inputValue.length
+    return 40 - inputValue?.length
   }, [inputValue])
 
   const isValid = useMemo(() => {

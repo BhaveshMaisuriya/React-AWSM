@@ -117,10 +117,12 @@ const initialState = {
 }
 
 const RTSOrderBank = (state = initialState, action) => {
+  console.log('11list::2', action)
   switch (action.type) {
     case GET_RTS_ORDER_BANK_TABLE_DATA_SUCCESS:
       const { data, scrolling } = action.payload
       const { list, total_rows, filter, summary } = data
+      console.log("list::", total_rows, scrolling, state.orderBankTableData)
       if (state.orderBankTableData.length !== 0 && scrolling) {
         return {
           ...state,

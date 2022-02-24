@@ -11,6 +11,7 @@ import { format } from 'date-fns'
 import CustomCheckbox from 'components/Common/CustomCheckbox'
 
 const FilterDropdown = ({
+  handleResetAll,
   dataFilter,
   dataKey,
   handleClickApply,
@@ -31,16 +32,16 @@ const FilterDropdown = ({
    * initial useEffect
    */
   useEffect(() => {
-    if (dataFilter) {
-      if (dataFilter && !isUndefined(dataFilter[dataKey])) {
-        const alldata = getFilterData()
-        setData(alldata)
-        setCount(rowsPerLoad)
-        appliedFiltersList.length === 0
-          ? setCheckedCount(dataFilter[dataKey].length)
-          : setCheckedCount(appliedFiltersList.length)
+      if (dataFilter) {
+        if (dataFilter && !isUndefined(dataFilter[dataKey])) {
+          const alldata = getFilterData()
+          setData(alldata)
+          setCount(rowsPerLoad)
+          appliedFiltersList.length === 0
+            ? setCheckedCount(dataFilter[dataKey].length)
+            : setCheckedCount(appliedFiltersList.length)
+        }
       }
-    }
   }, [dataFilter])
 
   /**
@@ -101,6 +102,10 @@ const FilterDropdown = ({
     if (checkedCount < data.length) setCheckAll(false)
     else if (checkedCount === data.length) setCheckAll(true)
   }, [checkedCount])
+  
+  useEffect(() => {
+    !handleResetAll ? resetAll() : null
+  }, [handleResetAll])
 
   /**
    * set filter object with text checked and visibility value
@@ -162,6 +167,15 @@ const FilterDropdown = ({
     setCheckedCount(dataFilter?.[dataKey]?.length)
     setAppliedFilters([])
     toggle()
+  }
+
+    /**
+   * Handle reset all filtering
+   */
+  function resetAll() {
+    handleClickReset(dataKey)
+    setCheckedCount(dataFilter?.[dataKey]?.length)
+    setAppliedFilters([])
   }
 
   /**
@@ -296,6 +310,11 @@ const FilterDropdown = ({
                             ? '-'
                             : format(new Date(row.text), 'dd-MM-yyyy HH:mm')
                         }
+                        if (['planned_load_time', 'eta'].includes(dataKey)) {
+                          return row.text.length < 24
+                            ? '-'
+                            : format(new Date(row.text), 'HH:mm')
+                        }
                         if (dataKey === 'requested_delivery_date') {
                           return checkNullValue(row.text)
                             ? '-'
@@ -321,17 +340,17 @@ const FilterDropdown = ({
                               disabled={row.disabled}
                               className="checkmark"
                               control={
-                                  <CustomCheckbox
-                                    onClick={onInputChange}
-                                    style={{
-                                      height: '20px',
-                                      width: '5px',
-                                      marginLeft: '20px',
-                                      marginTop: '10px',
-                                    }}
-                                    value={isNull(row.text) ? '-null' : row.text}
-                                    checked={row.checked}
-                                  />
+                                <CustomCheckbox
+                                  onClick={onInputChange}
+                                  style={{
+                                    height: '20px',
+                                    width: '5px',
+                                    marginLeft: '20px',
+                                    marginTop: '10px',
+                                  }}
+                                  value={isNull(row.text) ? '-null' : row.text}
+                                  checked={row.checked}
+                                />
                               }
                               label={renderLabel()}
                             />

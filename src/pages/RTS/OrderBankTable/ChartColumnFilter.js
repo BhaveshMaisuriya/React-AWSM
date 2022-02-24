@@ -144,7 +144,6 @@ const ChartColumnFilter = ({
                 style={style}
                 key={index}
               >
-                {e.checked ? 'true' : 'false'}
                 <Checkbox
                   checked={e.checked}
                   onChange={() => onItemChange(e.text)}

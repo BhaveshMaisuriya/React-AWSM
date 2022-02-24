@@ -1,54 +1,69 @@
-import React, { Fragment, useEffect, useMemo, useState } from "react"
-import { connect } from "react-redux"
-import { Button, Modal, ModalFooter, ModalBody, ModalHeader, Row, Col } from "reactstrap"
-import DatePicker from "components/Common/DatePicker"
-import ExitConfirmation from "components/Common/ExitConfirmation"
-import AWSMInput from "components/Common/Input"
-import AWSMDropdown from "components/Common/Dropdown"
-import AWSMAlert from "components/Common/AWSMAlert"
-import TimePicker from "components/Common/TableInformation/components/TimePicker"
+import React, { Fragment, useEffect, useMemo, useState } from 'react'
+import { connect } from 'react-redux'
+import {
+  Button,
+  Modal,
+  ModalFooter,
+  ModalBody,
+  ModalHeader,
+  Row,
+  Col,
+} from 'reactstrap'
+import DatePicker from 'components/Common/DatePicker'
+import ExitConfirmation from 'components/Common/ExitConfirmation'
+import AWSMInput from 'components/Common/Input'
+import AWSMDropdown from 'components/Common/Dropdown'
+import AWSMAlert from 'components/Common/AWSMAlert'
+import TimePicker from 'components/Common/TableInformation/components/TimePicker'
 
-import { getOrderBank, addOrderBank } from "../../store/actions"
-import { removeKeywords } from "../../pages/DQM/Common/helper"
-import REGION_TERMINAL, { TERMINAL_CODE_MAPPING } from "common/data/regionAndTerminal"
-import NoDataIcon from "assets/images/AWSM-No-Data-Available-Inverted.svg"
-import { format } from "date-fns"
-import CloseButton from "components/Common/CloseButton"
+import { getOrderBank, addOrderBank, getTableInformation } from 'store/actions'
+import { removeKeywords } from '../../pages/DQM/Common/helper'
+import REGION_TERMINAL, {
+  TERMINAL_CODE_MAPPING,
+} from 'common/data/regionAndTerminal'
+import NoDataIcon from 'assets/images/AWSM-No-Data-Available-Inverted.svg'
+import { format } from 'date-fns'
+import CloseButton from 'components/Common/CloseButton'
+import { isNull, isUndefined } from 'lodash'
 
 const timeData = []
 for (let i = 0; i < 24; i++) {
-  timeData.push(`${i.toString().padStart(2, "0")}:00`)
-  timeData.push(`${i.toString().padStart(2, "0")}:15`)
-  timeData.push(`${i.toString().padStart(2, "0")}:30`)
-  timeData.push(`${i.toString().padStart(2, "0")}:45`)
+  timeData.push(`${i.toString().padStart(2, '0')}:00`)
+  timeData.push(`${i.toString().padStart(2, '0')}:15`)
+  timeData.push(`${i.toString().padStart(2, '0')}:30`)
+  timeData.push(`${i.toString().padStart(2, '0')}:45`)
 }
 timeData.push(`23:59`)
-const ORDER_PRIORITY = ["None", "High Priority"]
+const ORDER_PRIORITY = ['High Priority']
 const NewOrderBankModal = props => {
-  const { open, onCancel } = props
+  const { open, onCancel, addOrderDetailsData, onGetAddOrderBankDetails } =
+    props
 
   const [isConfirm, setIsConfirm] = useState(false)
-  const [currentState, setCurrentState] = useState("")
+  const [currentState, setCurrentState] = useState('')
   const [orderData, setOrderData] = useState({})
-  const [shiptoNo, setShiptoNo] = useState("")
+  const [productCode, setProductCode] = useState()
+  const [shiptoNo, setShiptoNo] = useState('')
   const [progress, setProgress] = useState(0)
   const [showAlert, setShowAlert] = useState(false)
   const [isaddClicked, setIsaddClicked] = useState(false)
   const [terminalList, setTerminalList] = useState([])
   const [regionList, setRegionList] = useState([])
   const [productList, setProductList] = useState([])
-  const [inputValue, setInputValue] = useState("")
-  const [inputValue1, setInputValue1] = useState("")
-  const [inputValue2, setInputValue2] = useState("")
-  const [inputValue3, setInputValue3] = useState("")
+  const [inputValue, setInputValue] = useState('')
+  const [inputValue1, setInputValue1] = useState('')
+  const [inputValue2, setInputValue2] = useState('')
+  const [inputValue3, setInputValue3] = useState('')
   const [allProductDetailList, setAllProductDetailList] = useState([])
-  const [defaultDate] = useState(new Date(new Date().getTime() + 24 * 60 * 60 * 1000))
+  const [priorityDisable, setPriorityDisable] = useState(false)
+  const defaultDate = new Date(new Date().getTime() + 24 * 60 * 60 * 1000)
   const [shiftDate, setShiftDate] = useState(defaultDate)
-
   useEffect(() => {
-    if (currentState === "loading") {
+    if (currentState === 'loading') {
       const timer = setInterval(() => {
-        setProgress(prevProgress => (prevProgress >= 100 ? 100 : prevProgress + 10))
+        setProgress(prevProgress =>
+          prevProgress >= 100 ? 100 : prevProgress + 10
+        )
       }, 400)
       return () => {
         clearInterval(timer)
@@ -59,203 +74,218 @@ const NewOrderBankModal = props => {
   }, [currentState])
 
   useEffect(() => {
-    let temp = []
-    REGION_TERMINAL.map((item, index) => {
+    const temp = []
+    REGION_TERMINAL.map(item => {
       temp.push(item.region)
     })
     setRegionList(temp)
   }, [REGION_TERMINAL])
 
+  useEffect(() => {
+    if (shiptoNo && productCode && shiftDate) {
+      const params = {
+        ship_to: shiptoNo,
+        product_code: productCode,
+        shift_date: format(shiftDate, 'yyyy-MM-dd'),
+      }
+      onGetAddOrderBankDetails(params)
+    }
+  }, [productCode])
+
+  useEffect(() => {
+    if (addOrderDetailsData) {
+      const runout =
+        addOrderDetailsData?.runout &&
+        format(new Date(addOrderDetailsData?.runout), 'dd-MM-yyyy')
+      const formattedShiftDate = format(new Date(shiftDate), 'dd-MM-yyyy')
+      if (runout === formattedShiftDate) {
+        setPriorityDisable(true)
+        const newOrderData = { ...orderData }
+        newOrderData['priority_order'] = 'High Priority'
+        setOrderData(newOrderData)
+      } else if (priorityDisable) setPriorityDisable(false)
+    }
+  }, [addOrderDetailsData])
+
+  const checkUndefinedorNull = (value, defaultValue = '-') =>
+    !isUndefined(value) && !isNull(value) ? value : defaultValue
+
   const onConfirmCancel = () => {
-    if (currentState === "search") {
+    if (currentState === 'search') {
       setIsConfirm(false)
     } else {
       setIsConfirm(false)
       setOrderData({})
-      setIsaddClicked(false);
-      setShiptoNo("")
-      setCurrentState("");
+      setIsaddClicked(false)
+      setShiptoNo('')
+      setCurrentState('')
       setShiftDate(new Date(new Date().getTime() + 24 * 60 * 60 * 1000))
     }
   }
   const handleUpdate = async () => {
     setIsaddClicked(true)
     if (
-      (orderData?.myremark1?.length < 40 ||
-        orderData?.myremark2?.length < 40 ||
-        orderData?.myremark3?.length < 40) &&
-      orderData.terminal !== undefined &&
-      orderData.priority_order !== undefined &&
-      orderData.volume !== undefined &&
-      orderData.product_name !== undefined &&
-      shiptoNo !== ""
+      !isUndefined(orderData.terminal) &&
+      // !isUndefined(orderData.priority_order) &&
+      !isUndefined(orderData.volume) &&
+      !isUndefined(orderData.product_name) &&
+      shiptoNo !== ''
     ) {
       const temp = {
         shift_date: shiftDate.toISOString().split('T')[0],
         requested_delivery_date: shiftDate.toISOString().split('T')[0],
-        my_remark_1: orderData.myremark1 !== undefined ? orderData.myremark1 : '',
-        my_remark_2: orderData.myremark2 !== undefined ? orderData.myremark2 : '',
-        my_remark_3: orderData.myremark3 !== undefined ? orderData.myremark3 : '',
-        terminal: orderData.terminal !== undefined ? TERMINAL_CODE_MAPPING[orderData.terminal] : '',
-        volume: orderData.volume !== undefined ? parseInt(orderData.volume) : 0,
-        eta: orderData.eta !== undefined ? orderData.eta : '',
-        planned_load_time: orderData.load_time !== undefined ? orderData.load_time : '',
-        order_remarks: orderData.order_remarks !== undefined ? orderData.order_remarks : '',
-        priority: orderData.priority_order !== undefined ? orderData.priority_order : '',
+        my_remark_1: checkUndefinedorNull(orderData.myremark1, ''),
+        my_remark_2: checkUndefinedorNull(orderData.myremark2, ''),
+        my_remark_3: checkUndefinedorNull(orderData.myremark3, ''),
+        terminal: checkUndefinedorNull(
+          TERMINAL_CODE_MAPPING[orderData.terminal],
+          ''
+        ),
+        volume: checkUndefinedorNull(parseInt(orderData.volume), 0),
+        eta:
+          shiftDate.toISOString().split('T')[0] +
+          ' ' +
+          checkUndefinedorNull(orderData.eta, ''),
+        planned_load_time:
+          shiftDate.toISOString().split('T')[0] +
+          ' ' +
+          checkUndefinedorNull(orderData.load_time, ''),
+        order_remarks: checkUndefinedorNull(orderData.order_remarks, ''),
+        remarks: checkUndefinedorNull(orderData.remarks, ''),
+        priority: checkUndefinedorNull(orderData.priority_order, null),
         retail_storage: parseInt(orderData.product_id),
-        product: orderData.product_code,
-        customer_type: "RETAIL"
+        product: checkUndefinedorNull(orderData.product_code, ''),
+        customer_type: 'RETAIL',
       }
 
       const { onAddOrderBank } = props
       await onAddOrderBank(temp)
       setOrderData({})
-      setIsaddClicked(false);
-      setShiptoNo("")
-      setCurrentState("");
+      setIsaddClicked(false)
+      setShiptoNo('')
+      setCurrentState('')
       setShiftDate(new Date(new Date().getTime() + 24 * 60 * 60 * 1000))
     }
   }
   useEffect(() => {
     if (props.addorderBankData) {
-      typeof props.addorderBankData === "object" && props.addorderBankData.status === undefined
-        ? onCancel("add", "success")
-        : onCancel("add", "error")
+      typeof props.addorderBankData === 'object' &&
+      isUndefined(props.addorderBankData.status)
+        ? onCancel('add', 'success')
+        : onCancel('add', 'error')
     }
   }, [props.addorderBankData])
 
   const onConfirmExit = () => {
     setIsConfirm(false)
-    setCurrentState("")
-    setShiptoNo("")
+    setCurrentState('')
+    setShiptoNo('')
     setShiftDate(defaultDate)
     if (onCancel) {
-      onCancel("cancel")
+      onCancel('cancel')
     }
-  }
-
-  const onAddressFieldChange = (key, value) => {
-    const newOrderData = { ...orderData }
-    newOrderData.address.address[key] = value
-    setOrderData(newOrderData)
   }
 
   const onFieldChange = (key, value) => {
-    if (key === "product_name") {
+    const newOrderData = { ...orderData }
+    if (key === 'product_name') {
       const pro_code = allProductDetailList.find(res => res.name === value)
-      const newOrderData = { ...orderData }
       newOrderData[key] = value
-      newOrderData["product_code"] = pro_code.code
-      newOrderData["product_id"] = pro_code.id
-      newOrderData["storeData"] = pro_code
-      setOrderData(newOrderData)
-    } else if (key === "region") {
+      newOrderData['product_code'] = pro_code.code
+      setProductCode(pro_code.code)
+      newOrderData['product_id'] = pro_code.id
+      newOrderData['storeData'] = pro_code
+    } else if (key === 'region') {
       const currentRegion = REGION_TERMINAL.find(e => e.region === value)
       setTerminalList(currentRegion ? currentRegion.terminal : [])
-
-      const newOrderData = { ...orderData }
-      newOrderData[key] = currentRegion ? currentRegion.region : ""
-      newOrderData["terminal"] = ""
-      setOrderData(newOrderData)
-    } else if (key === "order_remarks") {
+      newOrderData[key] = currentRegion ? currentRegion.region : ''
+      newOrderData['terminal'] = ''
+    } else if (key === 'order_remarks') {
       setInputValue(value)
-      if (value.length <= 40) {
-        const newOrderData = { ...orderData }
-        newOrderData[key] = value
-        setOrderData(newOrderData)
-      }
-    } else if (key === "myremark1") {
-      setInputValue1(value)
-      if (value.length <= 40) {
-        const newOrderData = { ...orderData }
-        newOrderData[key] = value
-        setOrderData(newOrderData)
-      }
-    } else if (key === "myremark2") {
-      setInputValue2(value)
-      if (value.length <= 40) {
-        const newOrderData = { ...orderData }
-        newOrderData[key] = value
-        setOrderData(newOrderData)
-      }
-    } else if (key === "myremark3") {
-      setInputValue3(value)
-      if (value.length <= 40) {
-        const newOrderData = { ...orderData }
-        newOrderData[key] = value
-        setOrderData(newOrderData)
-      }
-    } else {
-      const newOrderData = { ...orderData }
       newOrderData[key] = value
-      setOrderData(newOrderData)
+    } else if (key === 'myremark1') {
+      setInputValue1(value)
+      newOrderData[key] = value
+    } else if (key === 'myremark2') {
+      setInputValue2(value)
+      newOrderData[key] = value
+    } else if (key === 'myremark3') {
+      setInputValue3(value)
+      newOrderData[key] = value
+    } else {
+      newOrderData[key] = value
     }
+    setOrderData(newOrderData)
   }
 
   const onSearchOrder = async () => {
-    setCurrentState("loading")
-    const { onGetOrderBank } = props
-    await onGetOrderBank(shiptoNo)
+    setCurrentState('loading')
+    const { onGetTableInformation } = props
+    await onGetTableInformation({ ship_to_party: shiptoNo })
   }
 
-  useEffect(async () => {
-    if (props.orderBankData !== null) {
+  useEffect(() => {
+    if (props.currentRetailDetail !== null) {
       if (
-        typeof props.orderBankData === "object" &&
-        props.orderBankData.ship_to_party === shiptoNo
+        typeof props.currentRetailDetail === 'object' &&
+        props.currentRetailDetail.ship_to_party === shiptoNo
       ) {
         setTimeout(function () {
           setShowAlert(true)
-          let temporderBankData = { ...props.orderBankData }
-          temporderBankData.myremark1 = ""
-          temporderBankData.myremark2 = ""
-          temporderBankData.myremark3 = ""
+          const temporderBankData = { ...props.currentRetailDetail }
+          temporderBankData.myremark1 = ''
+          temporderBankData.myremark2 = ''
+          temporderBankData.myremark3 = ''
           setOrderData(temporderBankData)
-          let temp = []
-          let temp1 = []
-          Object.keys(props.orderBankData?.storage).map(key => {
-            if (key.startsWith("storage_")) {
-              if (props.orderBankData?.storage[key].ordering_category !== "SMP") {
-                temp1.push(
-                  props.orderBankData?.storage[key]
-                )
-                temp.push(props.orderBankData?.storage[key].name)
+          const temp = []
+          const temp1 = []
+          Object.keys(props.currentRetailDetail?.storage).map(key => {
+            if (key.startsWith('storage_')) {
+              if (
+                props.currentRetailDetail?.storage[key].ordering_category !==
+                'SMP'
+              ) {
+                temp1.push(props.currentRetailDetail?.storage[key])
+                temp.push(props.currentRetailDetail?.storage[key].name)
               }
             }
           })
           setAllProductDetailList(temp1)
           setProductList(temp)
-          setCurrentState("search")
+          setCurrentState('search')
         }, 1000)
-      } else if (props?.orderBankData?.data && props.orderBankData.status === 404) {
+      } else if (
+        props?.currentRetailDetail?.data &&
+        props.currentRetailDetail.status === 404
+      ) {
         setTimeout(function () {
-          setCurrentState("error")
+          setCurrentState('error')
         }, 500)
       } else {
         setTimeout(function () {
-          setCurrentState("error")
+          setCurrentState('error')
         }, 500)
       }
     }
-  }, [props.orderBankData])
+  }, [props.currentRetailDetail])
 
   const onCancelClick = () => {
-    if (shiptoNo !== "" || defaultDate !== shiftDate) {
+    if (shiptoNo !== '' || defaultDate !== shiftDate) {
       setIsConfirm(true)
     } else {
-      onCancel("cancel")
-      setCurrentState("")
+      onCancel('cancel')
+      setCurrentState('')
     }
   }
 
   useEffect(() => {
     const currentRegion = REGION_TERMINAL.find(
       e => e.region === orderData?.address?.address.region_group
-    ) //"Nothern"
+    )
     setTerminalList(currentRegion ? currentRegion.terminal : [])
 
     const newOrderData = { ...orderData }
-    newOrderData["region"] = currentRegion ? currentRegion.region : ""
+    newOrderData['region'] = currentRegion ? currentRegion.region : ''
     setOrderData(newOrderData)
   }, [orderData?.address])
 
@@ -292,15 +322,36 @@ const NewOrderBankModal = props => {
   }, [remainChars3])
 
   const hrMints = val => {
-    if (val !== "" && val !== undefined && val !== null) {
-      let temp = val.split(":")
-      return temp[0] + ":" + temp[1]
+    if (val) {
+      const temp = val.split(':')
+      return temp[0] + ':' + temp[1]
     } else {
-      return "00:00"
+      return '00:00'
     }
   }
 
-  const deliveryIntervalText = (
+  const getActualOpenTimeText = openTimeValue =>
+    openTimeValue
+      ? removeKeywords(
+          openTimeValue?.days ? openTimeValue?.days.join() + ' - ' : ''
+        ) +
+        hrMints(openTimeValue?.time_from) +
+        ' to ' +
+        hrMints(openTimeValue?.time_to)
+      : '-'
+
+  const getDeliveryIntervalText = deliveryObject =>
+    generateDeliveryIntervalText(
+      deliveryObject,
+      deliveryObject?.type,
+      deliveryObject?.time_from,
+      deliveryObject?.time_to,
+      deliveryObject?.date_from,
+      deliveryObject?.date_to,
+      deliveryObject?.days
+    )
+
+  const generateDeliveryIntervalText = (
     deliveryNumber,
     deliveryType,
     deliveryTimeFrom,
@@ -309,38 +360,49 @@ const NewOrderBankModal = props => {
     deliveryDateTo,
     deliveryDays
   ) => {
-    let formattedDateFrom =
-      deliveryDateFrom && deliveryDateFrom !== null
-        ? format(new Date(deliveryDateFrom), "dd-MM-yyyy")
-        : ""
-    let formattedDateTo =
-      deliveryDateTo && deliveryDateTo !== null
-        ? format(new Date(deliveryDateTo), "dd-MM-yyyy")
-        : ""
-
-    if (deliveryNumber !== undefined && deliveryType === "daily") {
-      return " Every day" + " - " + hrMints(deliveryTimeFrom) + " to " + hrMints(deliveryTimeTo)
-    }
-    if (deliveryNumber !== undefined && deliveryType === "single") {
-      return `${formattedDateFrom !== null ? formattedDateFrom : ""} - ${hrMints(deliveryTimeFrom)} 
-      to ${formattedDateTo !== null ? formattedDateTo : ""} ${hrMints(deliveryTimeTo)}`
-    }
-    if (deliveryNumber !== undefined && deliveryType === "every") {
-      return deliveryNumber
-        ? " " +
-            removeKeywords(deliveryDays !== "" ? deliveryDays.join() + " - " : "") +
-            hrMints(deliveryTimeFrom) +
-            " to " +
-            hrMints(deliveryTimeTo)
-        : " - "
-    }
-    if (deliveryNumber !== undefined && deliveryType === "range") {
-      return `${formattedDateFrom !== null ? formattedDateFrom : ""} to ${
-        formattedDateTo !== null ? formattedDateTo : ""
+    const formattedDateFrom = deliveryDateFrom
+      ? format(new Date(deliveryDateFrom), 'dd-MM-yyyy')
+      : ''
+    const formattedDateTo = deliveryDateTo
+      ? format(new Date(deliveryDateTo), 'dd-MM-yyyy')
+      : ''
+    if (deliveryNumber !== undefined) {
+      if (deliveryType === 'daily') {
+        return (
+          ' Every day' +
+          ' - ' +
+          hrMints(deliveryTimeFrom) +
+          ' to ' +
+          hrMints(deliveryTimeTo)
+        )
       }
+      if (deliveryType === 'single') {
+        return `${
+          formattedDateFrom !== null ? formattedDateFrom : ''
+        } - ${hrMints(deliveryTimeFrom)} 
+      to ${formattedDateTo !== null ? formattedDateTo : ''} ${hrMints(
+          deliveryTimeTo
+        )}`
+      }
+      if (deliveryType === 'every') {
+        return (
+          ' ' +
+          removeKeywords(
+            deliveryDays !== '' ? deliveryDays.join() + ' - ' : ''
+          ) +
+          hrMints(deliveryTimeFrom) +
+          ' to ' +
+          hrMints(deliveryTimeTo)
+        )
+      }
+      if (deliveryType === 'range') {
+        return `${formattedDateFrom !== null ? formattedDateFrom : ''} to ${
+          formattedDateTo !== null ? formattedDateTo : ''
+        }
       - ${hrMints(deliveryTimeFrom)} to ${hrMints(deliveryTimeTo)}`
-    } else {
-      return " - "
+      } else {
+        return ' - '
+      }
     }
   }
 
@@ -352,11 +414,15 @@ const NewOrderBankModal = props => {
 
       <ModalBody
         className={`position-relative scroll pl-40 ${
-          currentState === "search" || isConfirm === true ? "h-70v" : ""
+          currentState === 'search' || isConfirm ? 'h-70v' : ''
         }`}
       >
         {isConfirm && (
-          <ExitConfirmation isAddOrder={true} onExit={onConfirmExit} onCancel={onConfirmCancel} />
+          <ExitConfirmation
+            isAddOrder={true}
+            onExit={onConfirmExit}
+            onCancel={onConfirmCancel}
+          />
         )}
         {!isConfirm && (
           <>
@@ -378,7 +444,7 @@ const NewOrderBankModal = props => {
                 </label>
                 <AWSMInput
                   type="number"
-                  error={shiptoNo === "" && isaddClicked === true ? true : false}
+                  error={shiptoNo === '' && isaddClicked ? true : false}
                   defaultValue=""
                   placeholder="Numeric Only"
                   onChange={val => setShiptoNo(val)}
@@ -390,22 +456,14 @@ const NewOrderBankModal = props => {
                   color="primary"
                   className="mt-27 ml-3 p-1320"
                   onClick={() => onSearchOrder()}
-                  disabled={
-                    shiftDate === ""
-                      ? shiptoNo === ""
-                        ? true
-                        : false
-                      : shiptoNo === ""
-                      ? true
-                      : false
-                  }
+                  disabled={!shiftDate && !shiptoNo ? true : false}
                 >
                   Search
                 </Button>
               </Col>
             </Row>
             <hr className="mt-4 mb-4" />
-            {currentState === "search" && (
+            {currentState === 'search' && (
               <>
                 <h4>Ship To: {shiptoNo}</h4>
                 <Row className="mt-4">
@@ -417,24 +475,26 @@ const NewOrderBankModal = props => {
                       <Col>
                         <AWSMDropdown
                           items={regionList.splice(6) && regionList}
-                          onChange={value => onFieldChange("region", value)}
-                          value={orderData.region ? orderData.region : ""}
+                          onChange={value => onFieldChange('region', value)}
+                          value={orderData.region ? orderData.region : ''}
                           error={
-                            orderData.region === undefined && isaddClicked === true ? true : false
+                            isUndefined(orderData.region) && isaddClicked
+                              ? true
+                              : false
                           }
                           // value={orderData?.address?.address?.region_group}
-                          disabled={false}
                         />
                       </Col>
                       <Col>
                         <AWSMDropdown
                           items={terminalList}
-                          onChange={value => onFieldChange("terminal", value)}
+                          onChange={value => onFieldChange('terminal', value)}
                           error={
-                            orderData.terminal === undefined && isaddClicked === true ? true : false
+                            isUndefined(orderData.terminal) && isaddClicked
+                              ? true
+                              : false
                           }
-                          value={orderData.terminal ? orderData.terminal : ""}
-                          disabled={false}
+                          value={orderData.terminal ? orderData.terminal : ''}
                         />
                       </Col>
                     </Row>
@@ -446,8 +506,12 @@ const NewOrderBankModal = props => {
                     <AWSMInput
                       type="number"
                       placeholder="Numeric Only"
-                      error={orderData.volume === undefined && isaddClicked === true ? true : false}
-                      onChange={value => onFieldChange("volume", value)}
+                      error={
+                        isUndefined(orderData.volume) && isaddClicked
+                          ? true
+                          : false
+                      }
+                      onChange={value => onFieldChange('volume', value)}
                       value={orderData.volume}
                     />
                   </Col>
@@ -460,23 +524,18 @@ const NewOrderBankModal = props => {
                     </label>
                     <AWSMDropdown
                       items={productList}
-                      onChange={value => onFieldChange("product_name", value)}
+                      onChange={value => onFieldChange('product_name', value)}
                       error={
-                        orderData.product_name === undefined && isaddClicked === true ? true : false
+                        isUndefined(orderData.product_name) && isaddClicked
+                          ? true
+                          : false
                       }
                       value={orderData.product_name}
-                      disabled={false}
-                      placeholder="select"
                     />
                   </Col>
                   <Col md={4}>
                     <label className="text-upper">Product Code</label>
-                    <AWSMInput
-                      onChange={value => onFieldChange("product_code", value)}
-                      value={orderData.product_code}
-                      disabled={true}
-                      placeholder="Lorem ipsum"
-                    />
+                    <AWSMInput value={productCode} disabled={true} />
                   </Col>
                 </Row>
                 <h5 className="text-bold mt-4 mb-3">Order Details</h5>
@@ -487,7 +546,7 @@ const NewOrderBankModal = props => {
                     <TimePicker
                       value={orderData.load_time}
                       items={timeData}
-                      onChange={value => onFieldChange("load_time", value)}
+                      onChange={value => onFieldChange('load_time', value)}
                       hasNone
                     />
                   </Col>
@@ -496,7 +555,7 @@ const NewOrderBankModal = props => {
                     <TimePicker
                       value={orderData.eta}
                       items={timeData}
-                      onChange={value => onFieldChange("eta", value)}
+                      onChange={value => onFieldChange('eta', value)}
                       hasNone
                     />
                   </Col>
@@ -506,36 +565,36 @@ const NewOrderBankModal = props => {
                     <label className="text-upper">Order Remarks</label>
                     <div className="relative">
                       <input
-                        onChange={e => onFieldChange("order_remarks", e.target.value)}
-                        // value={orderData?.remarks}
+                        onChange={e =>
+                          onFieldChange('order_remarks', e.target.value)
+                        }
                         maxLength={40}
-                        className={`awsm-input w-100 ${inputValue && !isValid ? "out-range " : ""}`}
+                        className={`awsm-input w-100 ${
+                          inputValue && !isValid ? 'out-range ' : ''
+                        }`}
                       />
                       <span
                         className={`position-absolute awsm-input-right-content ${
-                          inputValue && !isValid ? "out-range " : ""
+                          inputValue && !isValid ? 'out-range ' : ''
                         }`}
-                      >{`${remainChars >= 0 ? "+" : ""}${remainChars}`}</span>
+                      >{`${remainChars >= 0 ? '+' : ''}${remainChars}`}</span>
                     </div>
                   </Col>
                 </Row>
                 <Row className="mt-4">
                   <Col md={4}>
                     <label className="text-upper">
-                      Priority<span className="text-red">*</span>
+                      Priority
+                      {/* <span className="text-red">*</span> */}
                     </label>
                     <AWSMDropdown
                       items={ORDER_PRIORITY}
-                      onChange={value => onFieldChange("priority_order", value)}
-                      error={
-                        orderData.priority_order === undefined && isaddClicked === true
-                          ? true
-                          : false
-                      }
-                      // defaultSelected='None'
+                      onChange={value => onFieldChange('priority_order', value)}
+                      // error={isUndefined(orderData.priority_order) && isaddClicked ? true : false}
                       value={orderData.priority_order}
-                      disabled={false}
-                      placeholder={"None"}
+                      disabled={priorityDisable}
+                      hasNone
+                      placeholder={'None'}
                     />
                   </Col>
                 </Row>
@@ -543,8 +602,14 @@ const NewOrderBankModal = props => {
                   <Col md={4}>
                     <label className="text-upper">Retain</label>
                     <AWSMInput
-                      onChange={value => onFieldChange("retain", value)}
-                      value={orderData.retain}
+                      onChange={value => onFieldChange('retain', value)}
+                      value={
+                        addOrderDetailsData?.retain &&
+                        format(
+                          new Date(addOrderDetailsData?.retain),
+                          'dd-MM-yyyy HH:mm'
+                        )
+                      }
                       disabled={true}
                       placeholder="Lorem ipsum"
                     />
@@ -552,8 +617,14 @@ const NewOrderBankModal = props => {
                   <Col md={4}>
                     <label className="text-upper">Runout</label>
                     <AWSMInput
-                      onChange={value => onFieldChange("runout", value)}
-                      value={orderData.runout}
+                      onChange={value => onFieldChange('runout', value)}
+                      value={
+                        addOrderDetailsData?.runout &&
+                        format(
+                          new Date(addOrderDetailsData?.runout),
+                          'dd-MM-yyyy HH:mm'
+                        )
+                      }
                       disabled={true}
                       placeholder="Lorem ipsum"
                     />
@@ -563,190 +634,174 @@ const NewOrderBankModal = props => {
                   <Col lg={4} sm={6} xs={12}>
                     <p>
                       <strong>Name: </strong>
-                      {orderData?.ship_to_company}
+                      {checkUndefinedorNull(orderData?.ship_to_company)}
                     </p>
                     <p>
                       <strong>Cloud: </strong>
-                      {orderData?.address?.cloud}
+                      {checkUndefinedorNull(orderData?.address?.cloud)}
                     </p>
                     <p>
-                      <strong>Product Category:</strong> {orderData?.storeData?.sales_category}
+                      <strong>Product Category: </strong>
+                      {checkUndefinedorNull(
+                        orderData?.storeData?.sales_category
+                      )}
                     </p>
                     <p>
-                      <strong>Order Type:</strong> {orderData?.storeData?.ordering_category}
+                      <strong>Order Type:</strong>
+                      {checkUndefinedorNull(
+                        orderData?.storeData?.ordering_category
+                      )}
                     </p>
                     <p>
-                      <strong>Accessibility:</strong>{" "}
-                      {orderData?.delivery?.road_tanker_accessibility}
+                      <strong>Accessibility: </strong>
+                      {checkUndefinedorNull(
+                        orderData?.delivery?.road_tanker_accessibility
+                      )}
                     </p>
                     <p>
                       <strong>Site ID: </strong>
-                      {orderData?.address?.site_id}
+                      {checkUndefinedorNull(orderData?.address?.site_id)}
                     </p>
                     <p>
                       <strong>Site Name: </strong>
-                      {orderData?.address?.site_name}
+                      {checkUndefinedorNull(orderData?.address?.site_name)}
                     </p>
                     <p>
                       <strong>Cust Type:</strong> Retail
                     </p>
+                    {/* <p>
+                      <strong>Order ID: </strong> 
+                    </p> */}
                     <p>
-                      <strong>Order ID: </strong>
+                      <strong>Requested Delivery Date: </strong>
+                      {format(
+                        new Date(shiftDate.toLocaleDateString()),
+                        'dd-MM-yyyy'
+                      )}
                     </p>
                     <p>
-                      <strong>Requested Delivery Date:</strong>{" "}
-                      {format(new Date(shiftDate.toLocaleDateString()), "dd-MM-yyyy")}
-                    </p>
-                    <p>
-                      <strong>Opening Stock Days: </strong>{" "}
+                      <strong>Opening Stock Days: </strong>
+                      {checkUndefinedorNull(
+                        addOrderDetailsData?.opening_stock_days
+                      )}
                     </p>
                   </Col>
                   <Col lg={4} sm={6} xs={12}>
                     <p>
-                      <strong>Closing Stock Days:</strong>{" "}
+                      <strong>Closing Stock Days: </strong>
+                      {checkUndefinedorNull(
+                        addOrderDetailsData?.closing_stock_days
+                      )}
                     </p>
                     <p>
-                      <strong>Current Stock Days:</strong>{" "}
+                      <strong>Current Stock Days: </strong>
+                      {checkUndefinedorNull(
+                        addOrderDetailsData?.current_stock_days
+                      )}
                     </p>
                     <p>
-                      <strong>Ullage (L):</strong>{" "}
+                      <strong>Ullage (L): </strong>
+                      {checkUndefinedorNull(addOrderDetailsData?.ullage)}
                     </p>
                     <p>
-                      <strong>Out Of Stock:</strong>{" "}
+                      <strong>Out Of Stock: </strong>
+                      {checkUndefinedorNull(addOrderDetailsData?.out_of_stock)}
                     </p>
                     <p>
-                      <strong>Max Stock Days:</strong>{" "}
+                      <strong>Max Stock Days: </strong>
+                      {checkUndefinedorNull(
+                        addOrderDetailsData?.max_stock_days
+                      )}
                     </p>
                     <p>
-                      <strong>Monthly Fixed Quota:</strong>{" "}
-                      {orderData?.storeData?.monthly_fixed_quota}
+                      <strong>Monthly Fixed Quota: </strong>
+                      {checkUndefinedorNull(
+                        orderData?.storeData?.monthly_fixed_quota
+                      )}
                     </p>
                     <p>
-                      <strong>RT Req:</strong> {orderData?.delivery?.road_tanker_requirement}
+                      <strong>RT Req: </strong>
+                      {checkUndefinedorNull(
+                        orderData?.delivery?.road_tanker_requirement
+                      )}
                     </p>
                     <p>
-                      <strong>City:</strong> {orderData?.address?.address?.city}
+                      <strong>City: </strong>{' '}
+                      {checkUndefinedorNull(orderData?.address?.address?.city)}
                     </p>
                     <p>
                       <strong>Postcode: </strong>
-                      {orderData?.address?.address?.postcode}
+                      {checkUndefinedorNull(
+                        orderData?.address?.address?.postcode
+                      )}
                     </p>
                     <p>
                       <strong>State: </strong>
-                      {orderData?.address?.address?.state}
+                      {checkUndefinedorNull(orderData?.address?.address?.state)}
                     </p>
                     <p>
                       <strong>Cluster: </strong>
-                      {orderData?.address?.cluster}
+                      {checkUndefinedorNull(orderData?.address?.cluster)}
                     </p>
                   </Col>
                   <Col lg={4} sm={6} xs={12}>
                     <p>
                       <strong>Alt Cluster: </strong>
-                      {orderData?.address?.alternative_cluster}
+                      {checkUndefinedorNull(
+                        orderData?.address?.alternative_cluster
+                      )}
                     </p>
                     <p>
                       <strong>Delivery Open Time: </strong>
-                      {orderData?.delivery?.delivery_open_time_1?.time_from} to{" "}
+                      {orderData?.delivery?.delivery_open_time_1?.time_from} to
                       {orderData?.delivery?.delivery_open_time_1?.time_to}
                     </p>
                     <p>
                       <strong>Open Time 1: </strong>
-                      {orderData?.delivery?.actual_open_time_1
-                        ? removeKeywords(
-                            orderData?.delivery?.actual_open_time_1?.days
-                              ? orderData?.delivery?.actual_open_time_1?.days.join() + " - "
-                              : ""
-                          ) +
-                          hrMints(orderData?.delivery.actual_open_time_1?.time_from) +
-                          " to " +
-                          hrMints(orderData?.delivery?.actual_open_time_1?.time_to)
-                        : "-"}
+                      {getActualOpenTimeText(
+                        orderData?.delivery?.actual_open_time_1
+                      )}
                     </p>
                     <p>
-                      <strong>Open Time 2:</strong>{" "}
-                      {orderData?.delivery?.actual_open_time_2
-                        ? removeKeywords(
-                            orderData?.delivery?.actual_open_time_2?.days
-                              ? orderData?.delivery?.actual_open_time_2?.days.join() + " - "
-                              : ""
-                          ) +
-                          hrMints(orderData?.delivery.actual_open_time_2?.time_from) +
-                          " to " +
-                          hrMints(orderData?.delivery?.actual_open_time_2?.time_to)
-                        : "-"}
+                      <strong>Open Time 2:</strong>
+                      {getActualOpenTimeText(
+                        orderData?.delivery?.actual_open_time_2
+                      )}
                     </p>
                     <p>
-                      <strong>Open Time 3:</strong>{" "}
-                      {orderData?.delivery?.actual_open_time_3
-                        ? removeKeywords(
-                            orderData?.delivery?.actual_open_time_3?.days
-                              ? orderData?.delivery?.actual_open_time_3?.days.join() + " - "
-                              : ""
-                          ) +
-                          hrMints(orderData?.delivery.actual_open_time_3?.time_from) +
-                          " to " +
-                          hrMints(orderData?.delivery?.actual_open_time_3?.time_to)
-                        : "-"}
+                      <strong>Open Time 3:</strong>
+                      {getActualOpenTimeText(
+                        orderData?.delivery?.actual_open_time_3
+                      )}
                     </p>
                     <p>
-                      <strong>No Del Interval 1:</strong>{" "}
-                      {deliveryIntervalText(
-                        orderData?.delivery?.no_delivery_interval_1,
-                        orderData?.delivery?.no_delivery_interval_1?.type,
-                        orderData?.delivery?.no_delivery_interval_1?.time_from,
-                        orderData?.delivery?.no_delivery_interval_1?.time_to,
-                        orderData?.delivery?.no_delivery_interval_1?.date_from,
-                        orderData?.delivery?.no_delivery_interval_1?.date_to,
-                        orderData?.delivery?.no_delivery_interval_1?.days
+                      <strong>No Del Interval 1:</strong>
+                      {getDeliveryIntervalText(
+                        orderData?.delivery?.no_delivery_interval_1
                       )}
                     </p>
                     <p>
                       <strong>No Del Interval 2: </strong>
-                      {deliveryIntervalText(
-                        orderData?.delivery?.no_delivery_interval_2,
-                        orderData?.delivery?.no_delivery_interval_2?.type,
-                        orderData?.delivery?.no_delivery_interval_2?.time_from,
-                        orderData?.delivery?.no_delivery_interval_2?.time_to,
-                        orderData?.delivery?.no_delivery_interval_2?.date_from,
-                        orderData?.delivery?.no_delivery_interval_2?.date_to,
-                        orderData?.delivery?.no_delivery_interval_2?.days
+                      {getDeliveryIntervalText(
+                        orderData?.delivery?.no_delivery_interval_2
                       )}
                     </p>
                     <p>
-                      <strong>No Del Interval 3:</strong>{" "}
-                      {deliveryIntervalText(
-                        orderData?.delivery?.no_delivery_interval_3,
-                        orderData?.delivery?.no_delivery_interval_3?.type,
-                        orderData?.delivery?.no_delivery_interval_3?.time_from,
-                        orderData?.delivery?.no_delivery_interval_3?.time_to,
-                        orderData?.delivery?.no_delivery_interval_3?.date_from,
-                        orderData?.delivery?.no_delivery_interval_3?.date_to,
-                        orderData?.delivery?.no_delivery_interval_3?.days
+                      <strong>No Del Interval 3:</strong>
+                      {getDeliveryIntervalText(
+                        orderData?.delivery?.no_delivery_interval_3
                       )}
                     </p>
                     <p>
-                      <strong>No Del Interval 4:</strong>{" "}
-                      {deliveryIntervalText(
-                        orderData?.delivery?.no_delivery_interval_4,
-                        orderData?.delivery?.no_delivery_interval_4?.type,
-                        orderData?.delivery?.no_delivery_interval_4?.time_from,
-                        orderData?.delivery?.no_delivery_interval_4?.time_to,
-                        orderData?.delivery?.no_delivery_interval_4?.date_from,
-                        orderData?.delivery?.no_delivery_interval_4?.date_to,
-                        orderData?.delivery?.no_delivery_interval_4?.days
+                      <strong>No Del Interval 4:</strong>
+                      {getDeliveryIntervalText(
+                        orderData?.delivery?.no_delivery_interval_4
                       )}
                     </p>
                     <p>
-                      <strong>No Del Interval 5:</strong>{" "}
-                      {deliveryIntervalText(
-                        orderData?.delivery?.no_delivery_interval_5,
-                        orderData?.delivery?.no_delivery_interval_5?.type,
-                        orderData?.delivery?.no_delivery_interval_5?.time_from,
-                        orderData?.delivery?.no_delivery_interval_5?.time_to,
-                        orderData?.delivery?.no_delivery_interval_5?.date_from,
-                        orderData?.delivery?.no_delivery_interval_5?.date_to,
-                        orderData?.delivery?.no_delivery_interval_5?.days
+                      <strong>No Del Interval 5:</strong>
+                      {getDeliveryIntervalText(
+                        orderData?.delivery?.no_delivery_interval_5
                       )}
                     </p>
                   </Col>
@@ -754,11 +809,7 @@ const NewOrderBankModal = props => {
                 <Row className="mt-4">
                   <Col md={8}>
                     <label className="text-upper">Remarks DQM</label>
-                    <AWSMInput
-                      value={orderData?.remarks}
-                      placeholder="Lorem ipsum"
-                      disabled={true}
-                    />
+                    <AWSMInput value={orderData?.remarks} disabled={true} />
                   </Col>
                 </Row>
                 <Row xs={1} md={2} lg={3} className="mt-4">
@@ -766,78 +817,86 @@ const NewOrderBankModal = props => {
                     <label className="text-upper">my Remarks 1</label>
                     <div className="relative">
                       <input
-                        onChange={e => onFieldChange("myremark1", e.target.value)}
+                        onChange={e =>
+                          onFieldChange('myremark1', e.target.value)
+                        }
                         value={orderData?.myremark1}
                         maxLength={40}
                         className={`awsm-input w-100 ${
-                          inputValue1 && !isValid1 ? "out-range " : ""
+                          inputValue1 && !isValid1 ? 'out-range ' : ''
                         }`}
                       />
                       <span
                         className={`position-absolute awsm-input-right-content ${
-                          inputValue1 && !isValid1 ? "out-range " : ""
+                          inputValue1 && !isValid1 ? 'out-range ' : ''
                         }`}
-                      >{`${remainChars1 >= 0 ? "+" : ""}${remainChars1}`}</span>
+                      >{`${remainChars1 >= 0 ? '+' : ''}${remainChars1}`}</span>
                     </div>
                   </Col>
                   <Col>
                     <label className="text-upper">my Remarks 2</label>
                     <div className="relative">
                       <input
-                        onChange={e => onFieldChange("myremark2", e.target.value)}
+                        onChange={e =>
+                          onFieldChange('myremark2', e.target.value)
+                        }
                         value={orderData?.myremark2}
                         maxLength={40}
                         className={`awsm-input w-100 ${
-                          inputValue2 && !isValid2 ? "out-range " : ""
+                          inputValue2 && !isValid2 ? 'out-range ' : ''
                         }`}
                       />
                       <span
                         className={`position-absolute awsm-input-right-content ${
-                          inputValue2 && !isValid2 ? "out-range " : ""
+                          inputValue2 && !isValid2 ? 'out-range ' : ''
                         }`}
-                      >{`${remainChars2 >= 0 ? "+" : ""}${remainChars2}`}</span>
+                      >{`${remainChars2 >= 0 ? '+' : ''}${remainChars2}`}</span>
                     </div>
                   </Col>
                   <Col>
                     <label className="text-upper">my Remarks 3</label>
                     <div className="relative">
                       <input
-                        onChange={e => onFieldChange("myremark3", e.target.value)}
+                        onChange={e =>
+                          onFieldChange('myremark3', e.target.value)
+                        }
                         value={orderData?.myremark3}
                         maxLength={40}
                         className={`awsm-input w-100 ${
-                          inputValue3 && !isValid3 ? "out-range " : ""
+                          inputValue3 && !isValid3 ? 'out-range ' : ''
                         }`}
                       />
                       <span
                         className={`position-absolute awsm-input-right-content ${
-                          inputValue3 && !isValid3 ? "out-range " : ""
+                          inputValue3 && !isValid3 ? 'out-range ' : ''
                         }`}
-                      >{`${remainChars3 >= 0 ? "+" : ""}${remainChars3}`}</span>
+                      >{`${remainChars3 >= 0 ? '+' : ''}${remainChars3}`}</span>
                     </div>
                   </Col>
                 </Row>
               </>
             )}
-            {currentState !== "search" && (
+            {currentState !== 'search' && (
               <div
                 className={`text-center h-340 w-100 table mt-3 ${
-                  currentState === "" || currentState === "cancel"
-                    ? "bg-grey"
-                    : currentState === "error"
-                    ? "bg-err"
-                    : "bg-loading"
+                  currentState === '' || currentState === 'cancel'
+                    ? 'bg-grey'
+                    : currentState === 'error'
+                    ? 'bg-err'
+                    : 'bg-loading'
                 }`}
               >
                 <div className="relative table_cell h-100 verticle-middle">
                   <img src={NoDataIcon} alt="No Data" />
                   <p className="text-18">
-                    {currentState === "" ? (
-                      "No Data Available, Please Search Your Order"
-                    ) : currentState === "error" ? (
-                      "Details Not Found, Try Again"
+                    {currentState === '' ? (
+                      'No Data Available, Please Search Your Order'
+                    ) : currentState === 'error' ? (
+                      'Details Not Found, Try Again'
                     ) : (
-                      <Fragment>Please wait, Loading Details.. {progress}% </Fragment>
+                      <Fragment>
+                        Please wait, Loading Details.. {progress}%{' '}
+                      </Fragment>
                     )}
                   </p>
                 </div>
@@ -847,7 +906,7 @@ const NewOrderBankModal = props => {
         )}
       </ModalBody>
 
-      {!isConfirm && currentState === "search" ? (
+      {!isConfirm && currentState === 'search' ? (
         <ModalFooter>
           <Button
             color="light-primary"
@@ -862,7 +921,7 @@ const NewOrderBankModal = props => {
           </Button>
         </ModalFooter>
       ) : (
-        ""
+        ''
       )}
       {showAlert && (
         <AWSMAlert
@@ -876,13 +935,15 @@ const NewOrderBankModal = props => {
   )
 }
 
-const mapStateToProps = ({ orderBank }) => ({
-  orderBankData: orderBank.orderBankData,
+const mapStateToProps = ({ orderBank, retailCustomer }) => ({
+  currentRetailDetail: retailCustomer.currentRetailDetail,
+  addOrderDetailsData: orderBank.orderBankData,
   addorderBankData: orderBank.addorderBankData,
 })
 
 const mapDispatchToProps = dispatch => ({
-  onGetOrderBank: params => dispatch(getOrderBank(params)),
+  onGetTableInformation: params => dispatch(getTableInformation(params)),
+  onGetAddOrderBankDetails: params => dispatch(getOrderBank(params)),
   onAddOrderBank: params => dispatch(addOrderBank(params)),
 })
 

@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { BrowserRouter as Router, Switch } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { initWebsocket, sendMessage } from './SocketService'
+import { initWebsocket, sendMessage } from './SocketService' // ?? why use websocket ?? :D ??
 
 // Import Routes
 import { authProtectedRoutes, publicRoutes } from './routes/'
@@ -58,7 +58,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    initWebsocket()
+    // initWebsocket()
   }
 
   render() {

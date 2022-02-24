@@ -172,8 +172,12 @@ export const getUsers = () => get(url.GET_USERS)
 export const getUserProfile = () => get(url.GET_USER_PROFILE)
 
 // get order bank
-export const getOrderBank = code =>
-  code !== undefined && axios.get(`/retail-customer/${code}`).then(response => response.data)
+export const getOrderBank = params =>
+  axios
+    .get(
+      `/rts/order-bank/opening-close/${params.ship_to}/${params.product_code}/${params.shift_date}`
+    )
+    .then(response => response.data)
 
 export const addOrderBank = params =>
   axios.post(`/rts/order-bank/create`, { ...params }).then(response => response.data)
@@ -437,9 +441,7 @@ export const refreshRTSOrderBank = params => {
 }
 
 export const sendRTSOrderBank = params => {
-  return axios.post('/rts/order-bank/send-dn', {
-    order_id: params,
-  })
+  return axios.post('/rts/order-bank/send-dn', params)
 }
 
 export const getRTSOderBankGanttChart = params => {

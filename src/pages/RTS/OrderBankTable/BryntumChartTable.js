@@ -21,7 +21,6 @@ import {
   processPaymentInGanttChart,
   cancelPaymentInGanttChart,
   sendOrderInGanttChart,
-  getRTSOderBankGanttChart,
   getShipmentOfOderBankGanttChart,
   removeEvent,
   updateOBEvent,
@@ -32,7 +31,6 @@ import {
 } from '../../../store/actions'
 import ChartColumnFilter from './ChartColumnFilter'
 import ShiftPopover from './ShiftPopover'
-import { cloneDeep } from 'lodash'
 import { Droppable } from 'react-beautiful-dnd'
 import OrderBankShipmentModal from './OrderBankShipmentModal'
 import OrderBankSapAlertModal from './OrderBankSapAlertModal'
@@ -41,6 +39,8 @@ import PlannedLoadTimesModal from './PlannedLoadTimesModal'
 import AlertOverruleModal from './AlertOverruleModal'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { format, parse } from 'date-fns'
+import moment from 'moment'
+import { EVENT_COLOR, TIME_FORMAT_SHORT } from 'store/orderBank/factory'
 
 const EventSchedulerStatus = {
   ARE_YET_CREATED_PAYMENT: 'not yet to be created',
@@ -58,7 +58,8 @@ const EventContextList = {
   UNDO_LAST_UPDATE: 'undo_last_update',
 }
 
-export const bryntumSchedulerTableNameForCookie = 'rts-gantt-chart-bryntum-scheduler'
+export const bryntumSchedulerTableNameForCookie =
+  'rts-gantt-chart-bryntum-scheduler'
 
 function BryntumChartTable(props) {
   const {
@@ -79,13 +80,6 @@ function BryntumChartTable(props) {
 
   const TIME_FORMAT = 'HH:mm:ss'
   const DATE_TIME_FORMAT = 'yyyy-MM-dd HH:mm'
-  const EVENT_COLOR = {
-    Scheduled: '#84B0E9',
-    PendingShipment: '#9F79B7',
-    ShipmentCreated: '#615E9B',
-    Cancellation: '#BDBDBD',
-    BlockedDN: '#E45E5E',
-  }
 
   const colsRef = useRef(bryntumCurrentColumns)
   const [modal, setModal] = useState(false)
@@ -112,16 +106,25 @@ function BryntumChartTable(props) {
 
   useEffect(() => onFilterChange(bryntumTable), [bryntumTable])
 
-  useEffect(() => setBryntumTable({ ...bryntumTable, page: 0 }), [dateConfig, terminal])
+  useEffect(
+    () => setBryntumTable({ ...bryntumTable, page: 0 }),
+    [dateConfig, terminal]
+  )
 
   useEffect(() => {
     schedulerProRef.current.instance.store.listeners = {
       sort(e) {
         const { ascending, field } = e.sorters[0]
-        const opt = { sortDirection: ascending ? 'asc' : 'desc', sortField: field }
+        const opt = {
+          sortDirection: ascending ? 'asc' : 'desc',
+          sortField: field,
+        }
 
         setBryntumTable(state => {
-          if (opt.sortField === state.sortField && opt.sortDirection === state.sortDirection)
+          if (
+            opt.sortField === state.sortField &&
+            opt.sortDirection === state.sortDirection
+          )
             return state
 
           return { ...state, ...opt, page: 0 }
@@ -162,7 +165,9 @@ function BryntumChartTable(props) {
     if (dropOderSuccess && ganttChartOrderDrag.length > 0) {
       ganttChartOrderDrag.forEach(order => {
         if (
-          !ganttChartEventData.find(item => item.resourceId == order.vehicle && item.it == order.id)
+          !ganttChartEventData.find(
+            item => item.resourceId == order.vehicle && item.it == order.id
+          )
         ) {
           const { eventStore } = schedulerProRef.current.instance
           const event = {
@@ -209,7 +214,8 @@ function BryntumChartTable(props) {
     // validate gantt event 3
     if (ganttEventValidation) {
       if (ganttEventValidation?.alert === 'soft') setAlertOverruleShow('soft')
-      else if (ganttEventValidation?.alert === 'hard') setAlertOverruleShow('hard')
+      else if (ganttEventValidation?.alert === 'hard')
+        setAlertOverruleShow('hard')
       else updateOBEventHandler()
     }
   }, [ganttEventValidation])
@@ -238,6 +244,7 @@ function BryntumChartTable(props) {
         data.header = 'Cancel Shipment Confirmation'
         data.body = 'proceed with this shipment cancellation?'
         data.styleColor = 'danger'
+        // this is Event data, consult factory.js
         data.record = eventRecord.originalData
         break
       }
@@ -283,24 +290,16 @@ function BryntumChartTable(props) {
     setDropdownSelectedItem(data)
   }
 
-  const removeShipmentHandler = () => {
-    const { instance: scheduler } = schedulerProRef.current
-    const newEventsData = eventsData.filter(v => v.id !== dropdownSelectedItem.itemSelectedId)
-    scheduler.eventStore.remove(dropdownSelectedItem.record)
-    scheduler.eventStore.data = newEventsData
-    setEventsData(newEventsData)
-  }
-
   const sendRequestsHandler = val => {
+    const scheduler = schedulerProRef.current.instance
+
     switch (dropdownSelectedItem.type) {
       case EventContextList.SHIPMENT: {
         props.processPaymentInGanttChart(dropdownSelectedItem.record)
-        eventStore.data = props.ganttChartEventData
         break
       }
       case EventContextList.CANCEL_SHIPMENT: {
         props.processCancelPaymentInGanttChart(dropdownSelectedItem.record)
-        eventStore.data = props.ganttChartEventData
         break
       }
       case EventContextList.SEND_ORDER: {
@@ -308,8 +307,8 @@ function BryntumChartTable(props) {
         break
       }
       case EventContextList.DELETE_SHIPMENT: {
-        removeShipmentHandler()
         props.onRemoveEvent(dropdownSelectedItem?.itemSelectedId)
+        // scheduler.eventStore.remove(dropdownSelectedItem.record)
         break
       }
       case EventContextList.UNDO_LAST_UPDATE: {
@@ -317,8 +316,6 @@ function BryntumChartTable(props) {
       }
       case EventContextList.PLAN_LOAD_TIMES: {
         // $val now is format HH:mm:ss
-        // console.log(dropdownSelectedItem)
-        // console.log(val)
         const planned_load_time = dateConfig.date_from + 'T' + val
         props.updateShipment({
           id: dropdownSelectedItem.record.id,
@@ -326,6 +323,10 @@ function BryntumChartTable(props) {
         })
       }
     }
+
+    scheduler.eventStore.data = props.ganttChartEventData
+    scheduler.renderRows()
+
     toggle()
   }
 
@@ -361,6 +362,8 @@ function BryntumChartTable(props) {
     scheduleMenuFeature: false,
     createEventOnDblClick: false,
     eventRenderer: ({ eventRecord, renderData }) => {
+      const { eventType, isBackground, hasSoftRestriction, time } =
+        eventRecord.data
       // customize content for event in here
       // if (!eventRecord.data?.highlight) {
       //   renderData.cls.add("opacity-20")
@@ -368,7 +371,7 @@ function BryntumChartTable(props) {
       // if (eventRecord.data?.highlight) {
       //   renderData.cls.remove("opacity-20")
       // }
-      if (eventRecord.data.isBackground) {
+      if (isBackground) {
         return '<div></div>'
       }
 
@@ -378,12 +381,16 @@ function BryntumChartTable(props) {
           onmouseout="document.getElementById('gethighlight').style.display = 'none';"
         >
           ${
-            eventRecord.data.eventType === 'SAP Alert'
+            eventType === 'SAP Alert'
               ? `<img src=${RedAlertIcon} class="icon-alignment" alt="alerticon"/>`
               : ''
           } 
-          ${eventRecord.data.eventType === 'Soft Overrule' ? `<img src=${YellowAlertIcon} />` : ''} 
-          <div class="eventCustomize ${renderData.width < 360 ? 'marquee' : ''}" >
+          
+          ${hasSoftRestriction ? `<img src=${YellowAlertIcon} />` : ''} 
+
+          <div class="eventCustomize ${
+            renderData.width < 360 ? 'marquee' : ''
+          }" >
             <div class="white-bg brdr-radius">
               <p>${eventRecord?._data?.id ? eventRecord._data.id : 1}</p>
             </div>
@@ -395,7 +402,7 @@ function BryntumChartTable(props) {
               }</p>
             </div>
             <div class="white-text brdr-radius">
-              <p>${format(renderData.start, 'HH:mm')} hrs</p>
+              <p>${time.start.format(TIME_FORMAT_SHORT)} hrs</p>
             </div>
             <div class="green-bg brdr-radius">
               <p>eta ${
@@ -405,7 +412,7 @@ function BryntumChartTable(props) {
               }</p>
             </div>
             <div class="white-text brdr-radius">
-              <p>${format(renderData.end, 'HH:mm')} hrs</p>
+              <p>${time.end.format(TIME_FORMAT_SHORT)} hrs</p>
             </div>
           </div>
         </div>
@@ -514,6 +521,43 @@ function BryntumChartTable(props) {
           unit: 'hour',
           dateFormat: 'HH',
           increment: 1,
+          renderer(startDate, endDate, headerConfig, i) {
+            const hour = moment(startDate)
+
+            // these are <momentjs objects>
+            const { from, to } = props.terminalOperatingTime
+
+            const classList = ['terminal-hours']
+
+            if (
+              from &&
+              to &&
+              from.isValid() &&
+              to.isValid() &&
+              (hour.hour() === from.hour() || hour.hour() === to.hour())
+            ) {
+              classList.push('has-indicator', 'font-weight-bold')
+
+              const presenter = hour.hour() === from.hour() ? from : to
+              const minute = presenter.minute()
+              // minute 00-19 => move arrow to left
+              if (minute >= 0 && minute <= 19)
+                classList.push('has-indicator-left')
+              // minute 41-59 => move arrow to right
+              else if (minute >= 41 && minute < 60)
+                classList.push('has-indicator-right')
+              // minute 20-40 => arrow center
+              else classList.push('has-indicator-middle')
+
+              // start = left, end = right, undefined = center
+              // headerConfig.align = undefined
+
+              // add CSS classes to header cell
+              headerConfig.headerCellCls = classList.join(' ')
+            }
+
+            return hour.format('HH')
+          },
         },
       ],
     },
@@ -537,7 +581,10 @@ function BryntumChartTable(props) {
         // validate gantt event 1
         await dragOrderBankToGanttChart({
           vehicle: context?.newResource?._data?.vehicle,
-          shift_date: format(context?.startDate ? context?.startDate : new Date(), 'yyyy-MM-dd'),
+          shift_date: format(
+            context?.startDate ? context?.startDate : new Date(),
+            'yyyy-MM-dd'
+          ),
           order_banks: [context?.draggedRecords?.[0]?._data?.id],
         })
         context.finalize(true)
@@ -590,7 +637,8 @@ function BryntumChartTable(props) {
 
   function generateColumnsObj(tableMap) {
     const text =
-      ganttChartTableMapping?.[tableMap]?.label_short ?? ganttChartTableMapping?.[tableMap]?.label
+      ganttChartTableMapping?.[tableMap]?.label_short ??
+      ganttChartTableMapping?.[tableMap]?.label
     return {
       text,
       field: tableMap,
@@ -601,17 +649,27 @@ function BryntumChartTable(props) {
           case 'vehicle': {
             return (
               <div className="chart-vehicle-cell">
-                <div className="value" onClick={showRoadTanker} style={{ cursor: 'pointer' }}>
+                <div
+                  className="value"
+                  onClick={showRoadTanker}
+                  style={{ cursor: 'pointer' }}
+                >
                   {value}
                 </div>
-                {record.pump_type && <div className="suffix">{record.pump_type}</div>}
+                {record.pump_type && (
+                  <div className="suffix">{record.pump_type}</div>
+                )}
               </div>
             )
           }
           case 'status': {
             return (
               <div className="chart-status-cell">
-                <ShiftPopover record={record} onChange={onStatusChange} type="status" />
+                <ShiftPopover
+                  record={record}
+                  onChange={onStatusChange}
+                  type="status"
+                />
               </div>
             )
           }
@@ -729,7 +787,9 @@ function BryntumChartTable(props) {
             tooltip.classList.toggle('hide')
             Object.keys(bryntumCurrentColumns).forEach(f => {
               if (f !== e) {
-                const hideEl = document.getElementById(`gantt-chart-tooltip-${f}`)
+                const hideEl = document.getElementById(
+                  `gantt-chart-tooltip-${f}`
+                )
                 hideEl.classList.add('hide')
               }
             })
@@ -756,7 +816,11 @@ function BryntumChartTable(props) {
       newFilterCondition.push({ data, key: dataKey })
     }
 
-    setBryntumTable(state => ({ ...state, filterCondition: newFilterCondition, page: 0 }))
+    setBryntumTable(state => ({
+      ...state,
+      filterCondition: newFilterCondition,
+      page: 0,
+    }))
 
     hideFilterElement(dataKey)
   }
@@ -767,7 +831,11 @@ function BryntumChartTable(props) {
       const newFilterCondition = [...bryntumTable.filterCondition]
       newFilterCondition.splice(index, 1)
 
-      setBryntumTable(state => ({ ...state, filterCondition: newFilterCondition, page: 0 }))
+      setBryntumTable(state => ({
+        ...state,
+        filterCondition: newFilterCondition,
+        page: 0,
+      }))
     }
     hideFilterElement(dataKey)
   }
@@ -777,9 +845,17 @@ function BryntumChartTable(props) {
       <div className="container-orderbank gant-chart-table">
         <Row className="mr-0">
           <InfiniteScroll
-            next={() => setBryntumTable(state => ({ ...state, page: state.page + 1 }))}
-            hasMore={props.ganttChartTableData.length < props.totalRow_ganttChart}
-            loader={<h5 className={props.totalRow_ganttChart > 10 ? '' : 'd-none'}>Loading...</h5>}
+            next={() =>
+              setBryntumTable(state => ({ ...state, page: state.page + 1 }))
+            }
+            hasMore={
+              props.ganttChartTableData.length < props.totalRow_ganttChart
+            }
+            loader={
+              <h5 className={props.totalRow_ganttChart > 10 ? '' : 'd-none'}>
+                Loading...
+              </h5>
+            }
             dataLength={props.ganttChartTableData.length}
             height={360}
           >
@@ -792,7 +868,9 @@ function BryntumChartTable(props) {
                       {...provided.droppableProps}
                       ref={provided.innerRef}
                     >
-                      {snapshot.isDraggingOver && <div className="on-dragging" />}
+                      {snapshot.isDraggingOver && (
+                        <div className="on-dragging" />
+                      )}
 
                       <BryntumSchedulerPro
                         {...schedulerproConfig}
@@ -840,12 +918,18 @@ function BryntumChartTable(props) {
           onSend={sendRequestsHandler}
           onCancel={toggle}
           headerContent={dropdownSelectedItem?.header || ''}
-          bodyContent={`Are you sure you want to ${dropdownSelectedItem?.body || ''}`}
+          bodyContent={`Are you sure you want to ${
+            dropdownSelectedItem?.body || ''
+          }`}
           styleColor={dropdownSelectedItem?.styleColor}
         />
       )}
       {dropdownSelectedItem?.type === EventContextList.TERMINAL_RELAY && (
-        <TerminalRelayModal isOpen={modal} onSend={sendRequestsHandler} onCancel={toggle} />
+        <TerminalRelayModal
+          isOpen={modal}
+          onSend={sendRequestsHandler}
+          onCancel={toggle}
+        />
       )}
       {dropdownSelectedItem?.type === EventContextList.PLAN_LOAD_TIMES && (
         <PlannedLoadTimesModal
@@ -856,7 +940,10 @@ function BryntumChartTable(props) {
         />
       )}
       {shipmentDblclick && (
-        <OrderBankShipmentModal open={shipmentDblclick} istoggle={toggleShipment} />
+        <OrderBankShipmentModal
+          open={shipmentDblclick}
+          istoggle={toggleShipment}
+        />
       )}
       {dropdownSelectedItem?.type === EventContextList.DELETE_SHIPMENT && (
         <OrderBankSapAlertModal
@@ -892,6 +979,7 @@ function BryntumChartTable(props) {
 const mapStateToProps = ({ orderBank }) => ({
   isSendRequestProcess: orderBank.isSendRequestProcess,
   ganttChartData: orderBank.ganttChart,
+  terminalOperatingTime: orderBank.ganttChart.terminal.operatingTime,
   ganttChartOrderDrag: orderBank.ganttChartOrderDrag,
   ganttChartTableData: orderBank.ganttChartTableData,
   totalRow_ganttChart: orderBank.totalRow_ganttChart,
@@ -904,16 +992,21 @@ const mapStateToProps = ({ orderBank }) => ({
 
 const mapDispatchToProps = dispatch => {
   return {
-    processPaymentInGanttChart: params => dispatch(processPaymentInGanttChart(params)),
-    processCancelPaymentInGanttChart: params => dispatch(cancelPaymentInGanttChart(params)),
-    processSendOrderInGanttChart: params => dispatch(sendOrderInGanttChart(params)),
-    getRTSOderBankGanttChart: params => dispatch(getRTSOderBankGanttChart(params)),
-    getShipmentOfOderBankGanttChart: params => dispatch(getShipmentOfOderBankGanttChart(params)),
+    processPaymentInGanttChart: params =>
+      dispatch(processPaymentInGanttChart(params)),
+    processCancelPaymentInGanttChart: params =>
+      dispatch(cancelPaymentInGanttChart(params)),
+    processSendOrderInGanttChart: params =>
+      dispatch(sendOrderInGanttChart(params)),
+    getShipmentOfOderBankGanttChart: params =>
+      dispatch(getShipmentOfOderBankGanttChart(params)),
     updateOBEvent: params => dispatch(updateOBEvent(params)),
-    getGanttEventValidation: params => dispatch(getGanttEventValidation(params)),
+    getGanttEventValidation: params =>
+      dispatch(getGanttEventValidation(params)),
     onRemoveEvent: params => dispatch(removeEvent(params)),
     onSelectVehicle: params => dispatch(selectVehicleShipment(params)),
-    dragOrderBankToGanttChart: payload => dispatch(dragOrderBankToGanttChart(payload)),
+    dragOrderBankToGanttChart: payload =>
+      dispatch(dragOrderBankToGanttChart(payload)),
     updateShipment: params => dispatch(updateShipment(params)),
   }
 }

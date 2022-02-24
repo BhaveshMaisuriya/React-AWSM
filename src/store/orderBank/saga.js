@@ -362,19 +362,19 @@ function* sendRequestOrderPaymentInGanttChart({ params }) {
   }
 }
 
-function* onGetRTSOrderBankGanttChart({ params = {} }) {
+function* onGetRTSOrderBankGanttChart({ params }) {
   try {
     const response = yield call(getRTSOderBankGanttChart, params)
-    let newResponse = {}
-    // when user increase page params -> scrolling action
-    if (params?.page !== 0) {
-      newResponse = { ...response, scrolling: true, page: params.page }
-    } else {
-      newResponse = { ...response, scrolling: false, page: params.page }
+    const payload = {
+      ...response,
+      page: params.page,
+      shiftDate: params.filter.shift_date.date_from,
     }
-    yield put(getRTSOderBankGanttChartSuccess(newResponse))
+    // page > 0 means user is scrolling
+    payload.scrolling = params.page > 0
+    yield put(getRTSOderBankGanttChartSuccess(payload))
   } catch (error) {
-    console.log(error)
+    console.error(error)
     yield put(getRTSOderBankGanttChartFail(error))
   }
 }
@@ -384,12 +384,16 @@ function* onDragOrderBankToGanttChart({ shift_date, vehicle, order_banks }) {
     if (!order_banks) {
       const dragOrder = order_banks
         ? order_banks
-        : yield select(store => store.orderBank?.orderBankTableData?.filter(e => e.isChecked))
+        : yield select(store =>
+            store.orderBank?.orderBankTableData?.filter(e => e.isChecked)
+          )
       order_banks = dragOrder.map(e => e.id)
     }
 
     if (!vehicle) {
-      const selectedVehicle = yield select(store => store?.orderBank?.selectedVehicleShipment)
+      const selectedVehicle = yield select(
+        store => store?.orderBank?.selectedVehicleShipment
+      )
       vehicle = selectedVehicle.vehicle
     }
     if (order_banks && order_banks.length > 0) {
@@ -515,7 +519,7 @@ function* onRunningAutoSchedule({ params }) {
 
 function* onUpdateShipment({ params }) {
   try {
-    const response = yield call(putShipment, params)
+    yield call(putShipment, params)
     // console.log(response)
     // <params> is { id: number, data: {...order_bank}}
     yield put(updateShipmentSuccess(params))
@@ -529,8 +533,14 @@ function* orderBankSaga() {
   yield takeLatest(ADD_ORDERBANK, onAddOrderbank)
   yield takeLatest(EDIT_ORDERBANK, onEditOrderBankDetail)
   yield takeLatest(GET_RTS_ORDER_BANK_TABLE_DATA, onGetRTSOrderBank)
-  yield takeLatest(GET_SHIPMENT_ORDER_BANK_TABLE_DATA, onGetShipmentOrderBankData)
-  yield takeLatest(GET_ORDERBANK_TABLE_INFORMATION, onGetOrderbankTableInformation)
+  yield takeLatest(
+    GET_SHIPMENT_ORDER_BANK_TABLE_DATA,
+    onGetShipmentOrderBankData
+  )
+  yield takeLatest(
+    GET_ORDERBANK_TABLE_INFORMATION,
+    onGetOrderbankTableInformation
+  )
   yield takeLatest(DELETE_ORDERBANK_DETAIL, onDeleteOrderbankTableInformation)
   yield takeLatest(VIEW_ORDERBANK_DETAIL, onViewOrderbankTableInformation)
   yield takeLatest(REFRESH_ORDER_BANK_DN, onRefreshOrderBankDN)
@@ -543,11 +553,23 @@ function* orderBankSaga() {
   yield takeLatest(GET_RUN_AUTO_SCHEDULING, onGetRunAutoScheduling)
   yield takeLatest(GET_DELETE_MULTIPLE_ORDER, onGetDeleteMultipleOrder)
   yield takeLatest(GET_CROSS_TERMINAL, onGetCrossTerminal)
-  yield takeLatest(PROCESS_PAYMENT_IN_GANTT_CHART, sendRequestPaymentInGanttChart)
-  yield takeLatest(CANCEL_PAYMENT_IN_GANTT_CHART, sendRequestCancelPaymentInGanttChart)
-  yield takeLatest(SEND_ORDER_IN_GANTT_CHART, sendRequestOrderPaymentInGanttChart)
+  yield takeLatest(
+    PROCESS_PAYMENT_IN_GANTT_CHART,
+    sendRequestPaymentInGanttChart
+  )
+  yield takeLatest(
+    CANCEL_PAYMENT_IN_GANTT_CHART,
+    sendRequestCancelPaymentInGanttChart
+  )
+  yield takeLatest(
+    SEND_ORDER_IN_GANTT_CHART,
+    sendRequestOrderPaymentInGanttChart
+  )
   yield takeLatest(GET_RTS_GANTT_CHART_DATA, onGetRTSOrderBankGanttChart)
-  yield takeLatest(DRAG_RTS_ORDER_BANK_TO_GANTT_CHART, onDragOrderBankToGanttChart)
+  yield takeLatest(
+    DRAG_RTS_ORDER_BANK_TO_GANTT_CHART,
+    onDragOrderBankToGanttChart
+  )
   yield takeLatest(REMOVE_ORDER_FROM_SHIPMENT, onRemoveOrderFromShipment)
   yield takeLatest(REMOVE_SHIPMENT_FROM_EVENT, onRemoveShipmentFromEvent)
   yield takeLatest(REMOVE_EVENT, onRemoveEvent)
@@ -557,7 +579,10 @@ function* orderBankSaga() {
   yield takeLatest(UPDATE_OB_RT_DETAILS, onUpdateOBRTDetails)
   yield takeLatest(GET_SHIPMENT_DETAIL, onGetShipmentDetails)
   yield takeLatest(DRAG_AND_DROP_SHIPMENT_AREA, onDragAndDropShipmentArea),
-    yield takeLatest(GET_SHIPMENT_DETAILS_ON_VEHICLE, onGetShipmentDetailsOnVehicle),
+    yield takeLatest(
+      GET_SHIPMENT_DETAILS_ON_VEHICLE,
+      onGetShipmentDetailsOnVehicle
+    ),
     yield takeLatest(DRAG_ORDER_TO_SHIPMENT, onDragOrderToShipment)
   yield takeLatest(RUN_AUTO_SCHEDULE, onRunningAutoSchedule)
   yield takeLatest(GET_OB_TOTAL_UNSCHEDULE, onGetTotalOBUnschedule)

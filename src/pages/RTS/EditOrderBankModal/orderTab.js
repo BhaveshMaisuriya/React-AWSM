@@ -333,7 +333,7 @@ const OrderTab = props => {
           <label className="text-upper">Special Request Remarks</label>
           <div className="d-flex">
             <div className="w-100">
-              <AWSMInput value={data?.remarks} disabled={true} />
+              <AWSMInput value={data?.sr} disabled={true} />
             </div>
           </div>
         </Col>

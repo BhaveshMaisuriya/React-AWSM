@@ -6,8 +6,6 @@
 }
 
 .terminal-hours {
-  // position: relative;
-
   &.has-indicator {
     &::after {
       content: '';
@@ -34,6 +32,80 @@
     &.has-indicator-right::after {
       left: 1;
       right: 0;
+    }
+  }
+}
+
+.b-sch-event {
+  &.has-background {
+    overflow: visible;
+
+    .b-sch-event-content {
+      margin: 0;
+
+      & .event {
+        &-background {
+          position: absolute;
+          height: 100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          border: none;
+        }
+
+        &-data {
+          position: absolute;
+          height: 100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          border: none;
+
+          &.event-data-marquee:hover {
+            .event-data-details {
+              visibility: visible;
+              -moz-transform: translateX(100%);
+              -webkit-transform: translateX(100%);
+              transform: translateX(100%);
+              -moz-animation: scroll-left 8s linear infinite;
+              -webkit-animation: scroll-left 8s linear infinite;
+              animation: scroll-left 8s linear infinite;
+            }
+          }
+
+          &-details {
+            visibility: hidden;
+            text-align: center;
+            width: 180%;
+          
+            & > div {
+              display: inline-block;
+              border-radius: 20px;
+              p {
+                margin-bottom: 0;
+                padding: 2px 8px;
+              }
+            }
+          
+            .white-bg {
+              background-color: #ffffff;
+              color: #000 !important;
+            }
+          
+            .blue-bg {
+              background-color: rgb(54, 148, 236);
+            }
+          
+            .white-text {
+              color: #fff;
+            }
+          
+            .green-bg {
+              background-color: green;
+            }
+          }
+        }
+      }
     }
   }
 }

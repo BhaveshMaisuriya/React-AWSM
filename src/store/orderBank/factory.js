@@ -3,9 +3,10 @@ import moment from 'moment'
 
 export const TIME_FORMAT_SHORT = 'HH:mm'
 const DATE_FORMAT = 'YYYY-MM-DD'
-const DATE_TIME_FORMAT = 'YYYY-MM-DD HH:mm'
+export const DATE_TIME_FORMAT = 'YYYY-MM-DD HH:mm'
 export const EVENT_COLOR = {
   Scheduled: '#84B0E9',
+  Unscheduled: 'green',
   PendingShipment: '#9F79B7',
   ShipmentCreated: '#615E9B',
   Cancellation: '#BDBDBD',
@@ -26,18 +27,14 @@ export function ensureDateRangeNotExceedingADay({
   to,
   date = new Date().format(DATE_FORMAT),
   fillTime = true,
-  includeGanttChartVisual = true,
 }) {
   if (!from || !to) {
-    const result = fillTime
+    return fillTime
       ? {
           from: moment(date, DATE_FORMAT, true).startOf('date').utc(),
           to: moment(date, DATE_FORMAT, true).endOf('date').utc(),
         }
       : { from: moment.invalid(), to: moment.invalid() }
-
-    includeGanttChartVisual && (result.ganttChartVisual = { ...result })
-    return
   }
 
   const targetDate = moment.utc(date, DATE_FORMAT, true)
@@ -50,146 +47,83 @@ export function ensureDateRangeNotExceedingADay({
   end.dayOfYear() > targetDate.dayOfYear() &&
     (end = targetDate.clone().endOf('date'))
 
-  const result = {
+  return {
     from: start,
     to: end,
   }
-
-  if (includeGanttChartVisual) {
-    result.ganttChartVisual = {
-      from:
-        start.minutes() < 30
-          ? start.clone().startOf('hour')
-          : start.clone().endOf('hour'),
-      to:
-        end.minutes() < 30
-          ? end.clone().startOf('hour')
-          : end.clone().endOf('hour'),
-    }
-
-    if (
-      result.ganttChartVisual.from.hours() < 23 &&
-      result.ganttChartVisual.from.minutes() === 59
-    )
-      // add 1 minute to make sure it bumps up to the next hour
-      result.ganttChartVisual.from.add(1, 'minute')
-
-    if (
-      result.ganttChartVisual.to.hours() < 23 &&
-      result.ganttChartVisual.to.minutes() === 59
-    )
-      // add 1 minute to make sure it bumps up to the next hour
-      result.ganttChartVisual.to.add(1, 'minute')
-  }
-
-  return result
 }
 
 export function factorizeGanttChartEventBars(
   roadTankers,
   date = new Date().format(DATE_FORMAT)
 ) {
-  let eventGanttChartList = []
+  const events = []
+
   roadTankers.forEach(vehicle => {
     const rtHours = ensureDateRangeNotExceedingADay({
       from: vehicle.rt_avaiblity_hour_from,
       to: vehicle.rt_avaiblity_hour_to,
       date,
       fillTime: false,
-      includeGanttChartVisual: true,
     })
 
     if (vehicle.order_banks && vehicle.order_banks.length) {
-      vehicle.order_banks.forEach(orderBank => {
-        const { planned_load_time, planned_end_time, scheduled_status } =
-          orderBank
+      vehicle.order_banks.forEach(ob => {
+        const { planned_load_time, planned_end_time, scheduled_status } = ob
 
         const timerange = ensureDateRangeNotExceedingADay({
           from: planned_load_time,
           to: planned_end_time,
           date,
-          includeGanttChartVisual: true,
         })
 
         const event = {
-          id: orderBank.id,
-          resourceId: vehicle.vehicle,
-          startDate: timerange.ganttChartVisual.from.format(DATE_TIME_FORMAT),
-          endDate: timerange.ganttChartVisual.to.format(DATE_TIME_FORMAT),
-          time: { start: timerange.from, end: timerange.to },
+          id: ob.id,
+          resourceId: vehicle.id,
+          startDate: timerange.from.format(DATE_TIME_FORMAT),
+          endDate: timerange.to.format(DATE_TIME_FORMAT),
           eventType: scheduled_status,
           eventColor: EVENT_COLOR[scheduled_status],
-          draggable: true,
+          draggable: false,
+          resizable: false,
+          background: {
+            startDate: rtHours.from.format(DATE_TIME_FORMAT),
+            endDate: rtHours.to.format(DATE_TIME_FORMAT),
+            color: EVENT_COLOR.RT_Availability,
+          },
+          flags: {
+            isBackground: false,
+            hasSoftRestriction : ob.soft_restriction ? true : false,
+            eta: ob.eta ? moment.utc(ob.eta).format(TIME_FORMAT_SHORT) : '00:00',
+            terminal: ob.terminal ?? 'M808'
+          },
         }
 
-        !orderBank.shipment &&
-          (event.resourceOrder = [{ DNNumber: orderBank.dn_no }])
+        !ob.shipment && (event.resourceOrder = [{ DNNumber: ob.dn_no }])
 
-        orderBank.soft_restriction && (event.hasSoftRestriction = true)
-
-        eventGanttChartList.push(event)
-
-        // the RT Availability Hours background
-        if (rtHours.from.isValid() && rtHours.to.isValid()) {
-          const leftGap = timerange.ganttChartVisual.from.diff(
-            rtHours.ganttChartVisual.from,
-            'minute'
-          )
-          if (leftGap > 0) {
-            const leftStop = rtHours.ganttChartVisual.from
-              .clone()
-              .add(leftGap, 'minute')
-            eventGanttChartList.push({
-              // id: `${orderBank.id}_lfill`,
-              isBackground: true,
-              resourceId: vehicle.id,
-              startDate: rtHours.ganttChartVisual.from.format(DATE_TIME_FORMAT),
-              endDate: leftStop.format(DATE_TIME_FORMAT),
-              eventType: 'RT_Availability',
-              eventColor: EVENT_COLOR.RT_Availability,
-              draggable: false,
-              resizable: false,
-            })
-          }
-
-          const rightGap = rtHours.ganttChartVisual.to.diff(
-            timerange.ganttChartVisual.to,
-            'minute'
-          )
-          if (rightGap > 0) {
-            const rightStart = rtHours.ganttChartVisual.to
-              .clone()
-              .subtract(rightGap, 'minute')
-            eventGanttChartList.push({
-              // id: `${orderBank.id}_rfill`,
-              isBackground: true,
-              resourceId: vehicle?.vehicle,
-              startDate: rightStart.format(DATE_TIME_FORMAT),
-              endDate: rtHours.ganttChartVisual.to.format(DATE_TIME_FORMAT),
-              eventType: 'RT_Availability',
-              eventColor: EVENT_COLOR.RT_Availability,
-              draggable: false,
-              resizable: false,
-            })
-          }
-        }
+        events.push(event)
       })
-    } else if (rtHours.from.isValid() && rtHours.to.isValid()) {
-      eventGanttChartList.push({
-        // id: `${orderBank.id}_fill`,
-        isBackground: true,
-        resourceId: vehicle.vehicle,
+    } else
+      events.push({
+        resourceId: vehicle.id,
         startDate: rtHours.from.format(DATE_TIME_FORMAT),
         endDate: rtHours.to.format(DATE_TIME_FORMAT),
         eventType: 'RT_Availability',
         eventColor: EVENT_COLOR.RT_Availability,
         draggable: false,
         resizable: false,
+        background: {
+          startDate: rtHours.from.format(DATE_TIME_FORMAT),
+          endDate: rtHours.to.format(DATE_TIME_FORMAT),
+          color: EVENT_COLOR.RT_Availability,
+        },
+        flags: {
+          isBackground: true,
+        },
       })
-    }
   })
 
-  return eventGanttChartList
+  return events
 }
 
 export function shipmentFactory(shipments) {

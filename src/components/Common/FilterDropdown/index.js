@@ -32,16 +32,16 @@ const FilterDropdown = ({
    * initial useEffect
    */
   useEffect(() => {
-      if (dataFilter) {
-        if (dataFilter && !isUndefined(dataFilter[dataKey])) {
-          const alldata = getFilterData()
-          setData(alldata)
-          setCount(rowsPerLoad)
-          appliedFiltersList.length === 0
-            ? setCheckedCount(dataFilter[dataKey].length)
-            : setCheckedCount(appliedFiltersList.length)
-        }
+    if (dataFilter) {
+      if (dataFilter && !isUndefined(dataFilter[dataKey])) {
+        const alldata = getFilterData()
+        setData(alldata)
+        setCount(rowsPerLoad)
+        appliedFiltersList.length === 0
+          ? setCheckedCount(dataFilter[dataKey].length)
+          : setCheckedCount(appliedFiltersList.length)
       }
+    }
   }, [dataFilter])
 
   /**
@@ -63,13 +63,15 @@ const FilterDropdown = ({
       setCurrent([
         {
           text: 'Outside Threshold',
-          checked: data.find(e => e.text === 'Outside Threshold')?.checked ?? false,
+          checked:
+            data.find(e => e.text === 'Outside Threshold')?.checked ?? false,
           visibility: true,
           disabled: arr.findIndex(e => e.text === 'Outside Threshold') < 0,
         },
         {
           text: 'Within Threshold',
-          checked: data.find(e => e.text === 'Within Threshold')?.checked ?? false,
+          checked:
+            data.find(e => e.text === 'Within Threshold')?.checked ?? false,
           visibility: true,
           disabled: arr.findIndex(e => e.text === 'Within Threshold') < 0,
         },
@@ -88,9 +90,14 @@ const FilterDropdown = ({
     newData.forEach(item => {
       item.visibility =
         item.text !== null &&
-        item.text.toString().toLowerCase().includes(tempSearch.toString().toLowerCase())
+        item.text
+          .toString()
+          .toLowerCase()
+          .includes(tempSearch.toString().toLowerCase())
       item.checked =
-        appliedFiltersList.length > 0 ? appliedFiltersList.includes(item.text) : item.visibility
+        appliedFiltersList.length > 0
+          ? appliedFiltersList.includes(item.text)
+          : item.visibility
     })
     setData(newData)
   }, [searchWords])
@@ -102,7 +109,7 @@ const FilterDropdown = ({
     if (checkedCount < data.length) setCheckAll(false)
     else if (checkedCount === data.length) setCheckAll(true)
   }, [checkedCount])
-  
+
   useEffect(() => {
     !handleResetAll ? resetAll() : null
   }, [handleResetAll])
@@ -116,7 +123,10 @@ const FilterDropdown = ({
     dataFilter[dataKey]?.forEach(item => {
       newArr.push({
         text: item,
-        checked: appliedFiltersList.length > 0 ? appliedFiltersList.includes(item) : true,
+        checked:
+          appliedFiltersList.length > 0
+            ? appliedFiltersList.includes(item)
+            : true,
         visibility: true,
       })
     })
@@ -134,7 +144,9 @@ const FilterDropdown = ({
       const itemText = isNull(item.text) ? '-null' : item.text
       if (value.toString() === itemText.toString()) {
         item.checked = !item.checked
-        item.checked ? setCheckedCount(checkedCount + 1) : setCheckedCount(checkedCount - 1)
+        item.checked
+          ? setCheckedCount(checkedCount + 1)
+          : setCheckedCount(checkedCount - 1)
       }
     })
     setData(newData)
@@ -152,7 +164,9 @@ const FilterDropdown = ({
    * Handle apply button onclick
    */
   function clickApply() {
-    const checkedFilter = data.filter(item => item.checked === true).map(item => item.text)
+    const checkedFilter = data
+      .filter(item => item.checked === true)
+      .map(item => item.text)
     setSearch('')
     setAppliedFilters(checkedFilter)
     setPopoverOpen(!popoverOpen)
@@ -169,7 +183,7 @@ const FilterDropdown = ({
     toggle()
   }
 
-    /**
+  /**
    * Handle reset all filtering
    */
   function resetAll() {
@@ -196,7 +210,8 @@ const FilterDropdown = ({
     if (popoverOpen) {
       setSearch('')
       dataFilter ? setData(getFilterData()) : ''
-      if (appliedFiltersList.length > 0) setCheckedCount(appliedFiltersList.length)
+      if (appliedFiltersList.length > 0)
+        setCheckedCount(appliedFiltersList.length)
       else setCheckAll(true)
     }
   }
@@ -228,7 +243,10 @@ const FilterDropdown = ({
   }
 
   const checkNullValue = useCallback(
-    text => isNull(text) || isEmpty(text?.toString()) || text?.toString().includes('null'),
+    text =>
+      isNull(text) ||
+      isEmpty(text?.toString()) ||
+      text?.toString().includes('null'),
     []
   )
 
@@ -300,20 +318,28 @@ const FilterDropdown = ({
                         if (dataKey === 'dipping_timestamp') {
                           return checkNullValue(row.text)
                             ? '-'
-                            : format(new Date(row.text), 'dd-MM-yyyy , HH:mm:ss')
+                            : format(
+                                new Date(row.text),
+                                'dd-MM-yyyy , HH:mm:ss'
+                              )
                         }
                         if (dataKey === 'override_status') {
-                          return checkNullValue(row.text) ? 'Accurate' : row.text
+                          return checkNullValue(row.text)
+                            ? 'Accurate'
+                            : row.text
                         }
-                        if (['retain', 'runout', 'dn_date'].includes(dataKey)) {
-                          return row.text.length < 24
+                        if (
+                          [
+                            'retain',
+                            'runout',
+                            'dn_date',
+                            'planned_load_time',
+                            'eta',
+                          ].includes(dataKey)
+                        ) {
+                          return row?.text && row?.text.length < 24
                             ? '-'
                             : format(new Date(row.text), 'dd-MM-yyyy HH:mm')
-                        }
-                        if (['planned_load_time', 'eta'].includes(dataKey)) {
-                          return row.text.length < 24
-                            ? '-'
-                            : format(new Date(row.text), 'HH:mm')
                         }
                         if (dataKey === 'requested_delivery_date') {
                           return checkNullValue(row.text)
@@ -321,7 +347,9 @@ const FilterDropdown = ({
                             : format(new Date(row.text), 'dd-MM-yyyy')
                         }
                         if (dataKey !== 'override_status') {
-                          return checkNullValue(row.text) ? '-' : removeKeywords(row.text)
+                          return checkNullValue(row.text)
+                            ? '-'
+                            : removeKeywords(row.text)
                         }
                       }
                       return (
@@ -334,7 +362,7 @@ const FilterDropdown = ({
                           >
                             <FormControlLabel
                               key={`${row.text}${index}`}
-                              value={isNull(row.text) ? '-null' : row.text}
+                              value={isNull(row.text) ? '-null' : row.text.toString()}
                               onChange={onInputChange}
                               checked={row.checked}
                               disabled={row.disabled}

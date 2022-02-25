@@ -406,7 +406,6 @@ const RTSOrderBank = (state = initialState, action) => {
           from: terminal_operating_time_from,
           to: terminal_operating_time_to,
           date: shiftDate,
-          includeGanttChartVisual: false,
         })
 
         ganttChart.terminal.operatingTime.from = from

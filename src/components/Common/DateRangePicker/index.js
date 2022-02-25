@@ -169,7 +169,14 @@ const DateRangePicker = ({
         newValue.date_from = format(day, SAVE_DATE_FORMAT)
         newValue.date_to = null
       } else if (newValue.date_from) {
+        if(newValue.date_from > format(day, SAVE_DATE_FORMAT))
+        {
+          newValue.date_to = newValue.date_from
+          newValue.date_from = format(day, SAVE_DATE_FORMAT)
+        }
+        else {
         newValue.date_to = format(day, SAVE_DATE_FORMAT)
+      }
       } else {
         newValue.date_from = format(day, SAVE_DATE_FORMAT)
       }

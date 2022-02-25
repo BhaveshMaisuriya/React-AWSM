@@ -3,7 +3,13 @@ import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import Filter from 'components/Common/FilterDropdown'
 import { tableMapping } from './tableMapping'
-import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Input } from 'reactstrap'
+import {
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownToggle,
+  Input,
+} from 'reactstrap'
 import MoreVertIcon from '@material-ui/icons/MoreVert'
 import DragIndicatorIcon from '@material-ui/icons/DragIndicator'
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline'
@@ -11,7 +17,11 @@ import RemoveCircleOutlineOutlinedIcon from '@material-ui/icons/RemoveCircleOutl
 import { IconButton } from '@material-ui/core'
 import searchIcon from 'assets/images/AWSM-search.svg'
 import { ReactSVG } from 'react-svg'
+
+// STYLE
 import './index.scss'
+import '@bryntum/schedulerpro/schedulerpro.stockholm.css'
+
 import EditIcon from 'assets/images/AWSM-Edit-Icon.svg'
 import TrashIcon from 'assets/images/AWSM-Trash-Icon.svg'
 import NoDataIcon from 'assets/images/AWSM-No-Data-Available.svg'
@@ -94,10 +104,16 @@ export class TableGroupEvent extends React.Component {
     const { isChecked = false, editable = true } = this.props
     return (
       <>
-        <DragIndicatorIcon style={{ color: '#D9D9D9', transform: 'translateX(5px)' }} />
+        <DragIndicatorIcon
+          style={{ color: '#D9D9D9', transform: 'translateX(5px)' }}
+        />
         {editable ? (
           <Dropdown isOpen={!isChecked && openDropDown} toggle={this.toggle}>
-            <DropdownToggle data-toggle="dropdown" tag="div" aria-expanded={openDropDown}>
+            <DropdownToggle
+              data-toggle="dropdown"
+              tag="div"
+              aria-expanded={openDropDown}
+            >
               <IconButton
                 color="primary"
                 aria-label="Setting"
@@ -111,14 +127,14 @@ export class TableGroupEvent extends React.Component {
               </IconButton>
             </DropdownToggle>
             <DropdownMenu>
-              <DropdownItem>
-                <div className="event-content" onClick={this.OnClickEditHandler}>
+              <DropdownItem onClick={this.OnClickEditHandler}>
+                <div className="event-content">
                   <ReactSVG className="mr-2" src={EditIcon} />
                   View/Edit Details
                 </div>
               </DropdownItem>
-              <DropdownItem>
-                <div className="event-content" onClick={() => this.OnClickRemoveHandler()}>
+              <DropdownItem onClick={this.OnClickRemoveHandler}>
+                <div className="event-content">
                   <ReactSVG className="mr-2" src={TrashIcon} />
                   Delete Order
                 </div>
@@ -126,7 +142,10 @@ export class TableGroupEvent extends React.Component {
             </DropdownMenu>
           </Dropdown>
         ) : null}
-        <CustomCheckbox onClick={this.onChangeCheckBox.bind(this)} checked={isChecked} />
+        <CustomCheckbox
+          onClick={this.onChangeCheckBox.bind(this)}
+          checked={isChecked}
+        />
         {this.state.isOpenDeleteModal && (
           <DeleteOrderBankConfirmation
             isOpen={this.state.isOpenDeleteModal}
@@ -178,10 +197,13 @@ class index extends Component {
     this.onDragEnd = this.onDragEnd.bind(this)
   }
 
-  UNSAFE_componentWillReceiveProps = async(nextProps) => {
+  UNSAFE_componentWillReceiveProps = async nextProps => {
     if (nextProps.dataSource !== this.props.dataSource) {
       this.setState({ showLoader: false })
-      this.setState({ dataSource: nextProps.dataSource, filterData: nextProps.headerFilters })
+      this.setState({
+        dataSource: nextProps.dataSource,
+        filterData: nextProps.headerFilters,
+      })
     }
     if (nextProps.sendDn !== this.props.sendDn) {
       this.setState({ showSendDN: true })
@@ -192,14 +214,16 @@ class index extends Component {
         await getRTSOrderBankTableData({
           limit: 10,
           page: payloadFilter.currentPage,
-          search_fields: "*",
+          search_fields: '*',
           q: transformObjectToStringSentence(payloadFilter.filterQuery),
           sort_dir: fieldSortDirection,
           sort_field: fieldToSort,
           filter: payloadFilter.filterOrderBank,
         })
       }, 2000)
-      this.setState({ sendDnStatus: nextProps?.sendDn?.status ? 'success' : 'error' })
+      this.setState({
+        sendDnStatus: nextProps?.sendDn?.status ? 'success' : 'error',
+      })
     }
     if (nextProps.reloadData !== this.props.reloadData) {
       this.setState({ showLoader: this.props.reloadData })
@@ -239,7 +263,9 @@ class index extends Component {
     return this.props.tableColumns.map(v => {
       return v != 'notes' ? (
         <th>
-          <span onClick={() => this.onSorting(v)}>{tableMapping[v]?.label.toUpperCase()}</span>
+          <span onClick={() => this.onSorting(v)}>
+            {tableMapping[v]?.label.toUpperCase()}
+          </span>
           <Filter
             dataFilter={filterData}
             dataKey={v}
@@ -252,7 +278,11 @@ class index extends Component {
               className="header-expand"
               onClick={() => this.setState({ expandSearch: !expandSearch })}
             >
-              {expandSearch ? <RemoveCircleOutlineOutlinedIcon /> : <AddCircleOutlineIcon />}
+              {expandSearch ? (
+                <RemoveCircleOutlineOutlinedIcon />
+              ) : (
+                <AddCircleOutlineIcon />
+              )}
             </span>
           ) : null}
         </th>
@@ -316,13 +346,21 @@ class index extends Component {
           result = (
             <td className="ellips_txt">
               {data['customer_type'] === 'RETAIL'
-                ? data['retail_storage_relation.retail_customer_relation.ship_to_company']
-                : data['commercial_storage_relation.commercial_customer_relation.ship_to_company']}
+                ? data[
+                    'retail_storage_relation.retail_customer_relation.ship_to_company'
+                  ]
+                : data[
+                    'commercial_storage_relation.commercial_customer_relation.ship_to_company'
+                  ]}
             </td>
           )
           break
         case 'priority_type':
-          result = <td>{<span className={`priority ${_.camelCase(data[v])}`}></span>}</td>
+          result = (
+            <td>
+              {<span className={`priority ${_.camelCase(data[v])}`}></span>}
+            </td>
+          )
           break
         case 'dn_status':
           result = (
@@ -330,7 +368,11 @@ class index extends Component {
               {
                 <span
                   className={`status ${tagColor[data['dn_status']]}`}
-                  onClick={this.DNStatusOnClickHandler.bind(this, data, data[v])}
+                  onClick={this.DNStatusOnClickHandler.bind(
+                    this,
+                    data,
+                    data[v]
+                  )}
                 >
                   {data['dn_status'] === null
                     ? data['dn_no'] === '' || data['dn_no'] === null
@@ -350,7 +392,9 @@ class index extends Component {
           result = (
             <td>
               <div className="custom-td-overflow">
-                {data[v] ? format(new Date(data[v].toString()), 'dd-MM-yyyy HH:mm') : ''}
+                {data[v]
+                  ? format(new Date(data[v].toString()), 'dd-MM-yyyy HH:mm')
+                  : ''}
               </div>
             </td>
           )
@@ -359,7 +403,9 @@ class index extends Component {
           result = (
             <td>
               <div className="custom-td-overflow">
-                {data[v] ? format(new Date(data[v].toString()), 'dd-MM-yyyy') : ''}
+                {data[v]
+                  ? format(new Date(data[v].toString()), 'dd-MM-yyyy')
+                  : ''}
               </div>
             </td>
           )
@@ -391,14 +437,19 @@ class index extends Component {
 
     this.setState({ showLoader: true })
 
-    await onGetDeleteOrderBankDetail(!selectedAllItem ? allData.id : { selectedAllItem: true })
+    await onGetDeleteOrderBankDetail(
+      !selectedAllItem ? allData.id : { selectedAllItem: true }
+    )
     await this.setState({ callDelete: true })
   }
 
   CallTable = async () => {
     const { getRTSOrderBankTableData, payloadFilter } = this.props
     const { fieldSortDirection, fieldToSort } = this.state
-    if ((await this.props.deleteSuccess) !== undefined && this.state.callDelete === true) {
+    if (
+      (await this.props.deleteSuccess) !== undefined &&
+      this.state.callDelete === true
+    ) {
       if (this.props.deleteSuccess === true) {
         setTimeout(async function () {
           await getRTSOrderBankTableData({
@@ -413,7 +464,8 @@ class index extends Component {
         }, 2000)
         await this.setState({ callDelete: false })
         await this.setState({
-          showDeleteMsg: this.props.deleteSuccess === true ? 'success' : 'error',
+          showDeleteMsg:
+            this.props.deleteSuccess === true ? 'success' : 'error',
         })
         await this.setState({ showDelete: true })
       }
@@ -427,7 +479,9 @@ class index extends Component {
 
   editAlert = async (type, val = '') => {
     type === 'edit' && this.setState({ showEditAlert: true })
-    val !== '' ? this.setState({ showEditMsg: val }) : this.setState({ showEditAlert: '' })
+    val !== ''
+      ? this.setState({ showEditMsg: val })
+      : this.setState({ showEditAlert: '' })
     if (type === 'edit') {
       this.setState({ showLoader: true })
       const { getRTSOrderBankTableData, payloadFilter } = this.props
@@ -484,10 +538,16 @@ class index extends Component {
   }
 
   OnEnableCrossTerminal = checkedData => {
-    let checkCross = checkedData.filter(v => v.order_type === 'ASR' || v.order_type === 'SMP')
-    let unvalidCheckCross = checkedData.filter(v => v.order_type === '' || v.order_type === null)
+    let checkCross = checkedData.filter(
+      v => v.order_type === 'ASR' || v.order_type === 'SMP'
+    )
+    let unvalidCheckCross = checkedData.filter(
+      v => v.order_type === '' || v.order_type === null
+    )
 
-    this.props.enabledCross(unvalidCheckCross.length > 0 ? 0 : checkCross.length)
+    this.props.enabledCross(
+      unvalidCheckCross.length > 0 ? 0 : checkCross.length
+    )
   }
 
   OnChangeCheckBoxHandler = (status, i) => {
@@ -515,7 +575,8 @@ class index extends Component {
 
   OnSelectedAllItems = () => {
     const { selectedAllItem, dataSource } = this.state
-    const { updateOrderBankTableData, deleteEnable, selectAllHandler } = this.props
+    const { updateOrderBankTableData, deleteEnable, selectAllHandler } =
+      this.props
     selectAllHandler()
 
     let data = [...dataSource]
@@ -529,7 +590,7 @@ class index extends Component {
   }
 
   DNStatusOnClickHandler(data, key) {
-    if ((data.dn_no === "" || data.dn_no === null) && key !== 'Pending') {
+    if ((data.dn_no === '' || data.dn_no === null) && key !== 'Pending') {
       this.setState({ DNStatus: { isOpenConfirmModal: true, data } })
     }
   }
@@ -538,7 +599,7 @@ class index extends Component {
   async onSendRequestOnDNStatusHandler() {
     const { DNStatus } = this.state
     const { onSendDNStatusRequest } = this.props
-    await onSendDNStatusRequest({ order_id: DNStatus.data?.id})
+    await onSendDNStatusRequest({ order_id: DNStatus.data?.id })
     this.setState({ DNStatus: { isOpenConfirmModal: false } })
   }
 
@@ -565,7 +626,12 @@ class index extends Component {
   }
 
   onDragEnd() {
-    const { dragOrderBankToGanttChart, payloadFilter, activeTab, dragOrderToShipment } = this.props
+    const {
+      dragOrderBankToGanttChart,
+      payloadFilter,
+      activeTab,
+      dragOrderToShipment,
+    } = this.props
     if (activeTab === '1') {
       dragOrderBankToGanttChart({
         shift_date: payloadFilter?.filterOrderBank?.shift_date?.date_from,
@@ -614,7 +680,9 @@ class index extends Component {
                     <table
                       {...provided.droppableProps}
                       ref={provided.innerRef}
-                      className={`scrollable ${!dataSource.length ? 'bd-left' : ''}`}
+                      className={`scrollable ${
+                        !dataSource.length ? 'bd-left' : ''
+                      }`}
                     >
                       <thead>
                         <tr>{this.headerTableConfiguration()}</tr>
@@ -641,18 +709,32 @@ class index extends Component {
                                   <>
                                     <tr
                                       className={`${
-                                        v.isChecked && !snapshot.isDragging ? 'selected-row' : ''
-                                      } ${snapshot.isDragging ? 'tr-dragging' : ''}`}
+                                        v.isChecked && !snapshot.isDragging
+                                          ? 'selected-row'
+                                          : ''
+                                      } ${
+                                        snapshot.isDragging ? 'tr-dragging' : ''
+                                      }`}
                                       ref={provided.innerRef}
                                       {...provided.draggableProps}
                                       {...provided.dragHandleProps}
-                                      style={this.getStyle(provided.draggableProps.style, snapshot)}
+                                      style={this.getStyle(
+                                        provided.draggableProps.style,
+                                        snapshot
+                                      )}
                                     >
-                                      {this.bodyTableConfiguration(v, snapshot.isDragging)}
+                                      {this.bodyTableConfiguration(
+                                        v,
+                                        snapshot.isDragging
+                                      )}
                                     </tr>
                                     {snapshot.isDragging && (
                                       <tr
-                                        className={`${v.isChecked ? 'selected-row' : 'bg-white'}`}
+                                        className={`${
+                                          v.isChecked
+                                            ? 'selected-row'
+                                            : 'bg-white'
+                                        }`}
                                       >
                                         {this.bodyTableConfiguration(v)}
                                       </tr>
@@ -683,7 +765,9 @@ class index extends Component {
           <ConfirmDNStatusModal
             isOpen={DNStatus.isOpenConfirmModal}
             onSend={this.onSendRequestOnDNStatusHandler.bind(this)}
-            onCancel={() => this.setState({ DNStatus: { isOpenConfirmModal: false } })}
+            onCancel={() =>
+              this.setState({ DNStatus: { isOpenConfirmModal: false } })
+            }
             headerContent={`Send for DN`}
             bodyContent={`Are you sure you want to send this order for DN Creation?`}
           />
@@ -703,7 +787,11 @@ class index extends Component {
         {this.state.showSendDN && (
           <AWSMAlert
             status={this.state.sendDnStatus}
-            message={this.state.sendDnStatus === "success" ? "An order has been successfully sent for DN Creation" : "An Order DN creation failed"}
+            message={
+              this.state.sendDnStatus === 'success'
+                ? 'An order has been successfully sent for DN Creation'
+                : 'An Order DN creation failed'
+            }
             openAlert={this.state.showSendDN}
             closeAlert={() => this.setState({ showSendDN: false })}
           />
@@ -730,12 +818,15 @@ index.propTypes = {
   filterApplyHandler: PropTypes.func.isRequired,
 }
 const mapDispatchToProp = dispatch => ({
-  updateOrderBankTableData: payload => dispatch(updateOrderBankTableData(payload)),
+  updateOrderBankTableData: payload =>
+    dispatch(updateOrderBankTableData(payload)),
   onGetDeleteOrderBankDetail: params => dispatch(deleteOrderBankDetail(params)),
-  getRTSOrderBankTableData: params => dispatch(getRTSOrderBankTableData(params)),
+  getRTSOrderBankTableData: params =>
+    dispatch(getRTSOrderBankTableData(params)),
   onSendDNStatusRequest: params => dispatch(sendDNStatusRequest(params)),
   onGetViewOrderBankDetail: params => dispatch(viewOrderBankDetail(params)),
-  dragOrderBankToGanttChart: payload => dispatch(dragOrderBankToGanttChart(payload)),
+  dragOrderBankToGanttChart: payload =>
+    dispatch(dragOrderBankToGanttChart(payload)),
   dragOrderToShipment: () => dispatch(onDragOrderToShipment()),
 })
 const mapStateToProps = ({ orderBank }) => ({

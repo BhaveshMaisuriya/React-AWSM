@@ -21,4 +21,3 @@ runValidateUser().then(() => {
   ReactDOM.render(app, document.getElementById("root"))
   serviceWorker.unregister()
 })
-

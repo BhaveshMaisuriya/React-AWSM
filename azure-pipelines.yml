@@ -15,27 +15,28 @@ pool:
 steps:
   - task: NodeTool@0
     inputs:
-      versionSpec: "12.x"
+      versionSpec: "14.x"
     displayName: "Install Node.js"
-  - script: rm .env && cp .env.staging .env && cat .env && cat .env.staging
+  - script: rm .env && rm .env.staging && rm .env.production && cp .env.development .env && cat .env && cat .env.development
+    displayName: "Add Development Environment"
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))
+  - script: rm .env && rm .env.development && rm .env.production && cp .env.staging .env && cat .env && cat .env.staging
     displayName: "Add Staging Environment"
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/stage'))
-  - script: rm .env && cp .env.prod .env && cat .env && cat .env.prod
+  - script: rm .env && rm .env.staging && rm .env.development && cp .env.production .env && cat .env && cat .env.production
     displayName: "Add Prod Environment"
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
-  - script: cp .npmrc.trial ~/.npmrc
-    displayName: "Add Bryntum Repo"
-  - script: npm install @bryntum/schedulerpro@npm:@bryntum/schedulerpro-trial --legacy-peer-deps
-    displayName: "Install Bryntum Trial Version"
-  - script: npm install --force --no-save
+  - script: cp .npmrc ~/.npmrc
+    displayName: "Add Bryntum keys"
+  - script: npm ci
     displayName: "Install NPM Packages"
-  - script: cat ~/.npmrc && ls node_modules && ls node_modules/@bryntum && ls node_modules/@bryntum/schedulerpro
+  - script: cat ~/.npmrc && cat .env && ls node_modules && ls node_modules/@bryntum/schedulerpro
   #- script: ls node_module
   # displayName: "Debug"
-  - script: npm run lint
-    displayName: "Lint Source Code"
-  - script: npm test
-    displayName: "Run Unit Tests"
+  # - script: npm run lint
+  #   displayName: "Lint Source Code"
+  # - script: npm test
+  #   displayName: "Run Unit Tests"
   # - script: sed -i "s|SF:/__w|SF:/home/vsts/work|g" coverage/lcov.info
   #   displayName: Change Source File path in LCOV
   # - publish: coverage/lcov.info

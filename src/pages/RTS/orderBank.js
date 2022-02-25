@@ -477,7 +477,7 @@ function OrderBank({
     setReloadData(true)
     await getRTSOrderBankTableData({
       limit: 10,
-      page: '', //payloadFilter.currentPage,
+      page: payloadFilter.currentPage,
       search_fields: '*',
       q:
         payloadFilter?.filterQuery !== null || payloadFilter?.filterQuery !== undefined
@@ -745,11 +745,7 @@ function OrderBank({
     qValue?.volume?.map((item, index)=>{
       tempVol.volume.push(item.toString());
     });
-  let tempId = {id: []};
-    qValue?.id?.map((item, index)=>{
-      tempId.id.push(item.toString());
-    });  
-    let temp = qValue?.volume ? tempVol : qValue?.id ? tempId : qValue;
+    let temp = qValue?.volume ? tempVol : qValue;
     
     if (type === 'insert')
       setfilterQuery(prevFilters => {

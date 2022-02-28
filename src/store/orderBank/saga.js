@@ -331,7 +331,7 @@ function* sendRequestPaymentInGanttChart({ payload }) {
   try {
     // HACK: US 258072 - GanttChart Create-Shipment
     const response = yield call(createShipment, { id: payload.id })
-    // const response = { data: { id: 632, scheduled_status: 'BlockedDN' } }
+    // const response = { data: { id: payload.id, scheduled_status: 'BlockedDN' } }
     yield put(processPaymentInGanttChartSuccess(response.data))
   } catch (error) {
     yield put(processPaymentInGanttChartFail(error))
@@ -387,7 +387,7 @@ function* onDragOrderBankToGanttChart({ shift_date, vehicle, order_banks }) {
         : yield select(store =>
             store.orderBank?.orderBankTableData?.filter(e => e.isChecked)
           )
-      order_banks = dragOrder.map(e => e.id)
+      order_banks = dragOrder.map(e => ({ ...e, vehicle: 'BHF 6666' }))
     }
 
     if (!vehicle) {
@@ -396,15 +396,26 @@ function* onDragOrderBankToGanttChart({ shift_date, vehicle, order_banks }) {
       )
       vehicle = selectedVehicle.vehicle
     }
+
     if (order_banks && order_banks.length > 0) {
-      const response = yield call(sendOderToVehicle, {
-        vehicle: vehicle,
-        order_banks: order_banks,
-        shift_date: shift_date,
-      })
+      // const response = yield call(sendOderToVehicle, {
+      //   vehicle: vehicle,
+      //   order_banks: order_banks,
+      //   shift_date: shift_date,
+      // })
+
+      const response = {
+        data: {
+          soft_constraint: 'soft constraint detected',
+          hard_constraint: 'hard constraint detected',
+          order_banks,
+        },
+      }
+
       yield put(dragOrderBankToGanttChartSuccess(response.data))
     }
   } catch (error) {
+    console.error(error)
     yield put(dragOrderBankToGanttChartFail(order_banks))
   }
 }

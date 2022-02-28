@@ -15,6 +15,7 @@ const OrderTab = props => {
     inputValue3,
     onFieldChange,
     timeData,
+    productList,
   } = props
   const ORDER_PRIORITY = ['None', 'High Priority']
   const [multiProductToggle, setMultiProductToggle] = useState(false)
@@ -129,7 +130,7 @@ const OrderTab = props => {
           <div className="d-flex">
             <div className="w-100">
               <AWSMDropdown
-                items={''} //productList
+                items={productList}
                 onChange={value => onFieldChange('product_name', value)}
                 value={data?.format_product}
                 disabled={false}

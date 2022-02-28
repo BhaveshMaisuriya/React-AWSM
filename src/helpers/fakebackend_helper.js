@@ -1,5 +1,12 @@
 import defaultAxios from 'axios'
-import { del, get, post, put, realAxiosApi, realAxiosApi as axios } from './api_helper'
+import {
+  del,
+  get,
+  post,
+  put,
+  realAxiosApi,
+  realAxiosApi as axios,
+} from './api_helper'
 import * as url from './url_helper'
 import { viewOrderDetails } from '../pages/RTS/newOrderData'
 
@@ -31,7 +38,8 @@ const postFakeRegister = data => {
             message = 'Sorry! the page you are looking for could not be found'
             break
           case 500:
-            message = 'Sorry! something went wrong, please contact our support team'
+            message =
+              'Sorry! something went wrong, please contact our support team'
             break
           case 401:
             message = 'Invalid credentials'
@@ -72,7 +80,8 @@ const postJwtRegister = (url, data) => {
             message = 'Sorry! the page you are looking for could not be found'
             break
           case 500:
-            message = 'Sorry! something went wrong, please contact our support team'
+            message =
+              'Sorry! something went wrong, please contact our support team'
             break
           case 401:
             message = 'Invalid credentials'
@@ -112,7 +121,8 @@ export const addNewEvent = event => post(url.ADD_NEW_EVENT, event)
 export const updateEvent = event => put(url.UPDATE_EVENT, event)
 
 // delete Event
-export const deleteEvent = event => del(url.DELETE_EVENT, { headers: { event } })
+export const deleteEvent = event =>
+  del(url.DELETE_EVENT, { headers: { event } })
 
 // get Categories
 export const getCategories = () => get(url.GET_CATEGORIES)
@@ -155,13 +165,15 @@ export const getCryptoOrder = () => get(url.GET_CRYPTO_ORDERS)
 export const getInvoices = () => get(url.GET_INVOICES)
 
 // get invoice details
-export const getInvoiceDetail = id => get(`${url.GET_INVOICE_DETAIL}/${id}`, { params: { id } })
+export const getInvoiceDetail = id =>
+  get(`${url.GET_INVOICE_DETAIL}/${id}`, { params: { id } })
 
 // get project
 export const getProjects = () => get(url.GET_PROJECTS)
 
 // get project details
-export const getProjectsDetails = id => get(`${url.GET_PROJECT_DETAIL}/${id}`, { params: { id } })
+export const getProjectsDetails = id =>
+  get(`${url.GET_PROJECT_DETAIL}/${id}`, { params: { id } })
 
 // get tasks
 export const getTasks = () => get(url.GET_TASKS)
@@ -180,10 +192,14 @@ export const getOrderBank = params =>
     .then(response => response.data)
 
 export const addOrderBank = params =>
-  axios.post(`/rts/order-bank/create`, { ...params }).then(response => response.data)
+  axios
+    .post(`/rts/order-bank/create`, { ...params })
+    .then(response => response.data)
 
 export const editOrderBankDetail = params =>
-  axios.put(`/rts/order-bank/${params.id}`, { ...params.data }).then(response => response.data)
+  axios
+    .put(`/rts/order-bank/${params.id}`, { ...params.data })
+    .then(response => response.data)
 
 // get single order bank
 export const getOrderBankDetail = params => viewOrderDetails
@@ -195,15 +211,18 @@ export const viewOrderBankDetail = params =>
   axios.get(`/rts/order-bank/${params}`).then(response => response.data)
 
 // get dqm main table excel file from s3
-export const getDQMExcel = params => axios.post(`/${params.subModule}/download`, { ...params })
+export const getDQMExcel = params =>
+  axios.post(`/${params.subModule}/download`, { ...params })
 
 // get retail customer
-export const getRetailCustomer = params => axios.post('/retail-customer', { ...params })
+export const getRetailCustomer = params =>
+  axios.post('/retail-customer', { ...params })
 
 export const getDownloadRetailCustomer = params =>
   axios.post('/retail-customer/download', { ...params })
 
-export const getUploadCsv = params => axios.post(`${params.api}/upload`, { data: params.data })
+export const getUploadCsv = params =>
+  axios.post(`${params.api}/upload`, { data: params.data })
 
 export const getUploadDMR = async ({ uploadFile, region }) => {
   const singedResponse = await realAxiosApi.post('/file', {
@@ -223,83 +242,107 @@ export const getUploadDMR = async ({ uploadFile, region }) => {
   })
 }
 
-export const getDownloadCsv = params => axios.get(`${params.api}/download/excel`)
+export const getDownloadCsv = params =>
+  axios.get(`${params.api}/download/excel`)
 
-export const getCommercialCustomer = params => axios.post('/commercial-customer', { ...params })
+export const getCommercialCustomer = params =>
+  axios.post('/commercial-customer', { ...params })
 
 export const getDownloadCommercialCustomer = params =>
   axios.post('/commercial-customer/download', { ...params })
 
-export const getDownloadSales = params => axios.post('/sales-inventory/download', { ...params })
+export const getDownloadSales = params =>
+  axios.post('/sales-inventory/download', { ...params })
 
 export const getRoadTanker = params => axios.post('/road-tanker', { ...params })
 
-export const getRoadTankerDetail = vehical_id => axios.get(`/road-tanker/${vehical_id}`)
+export const getRoadTankerDetail = vehical_id =>
+  axios.get(`/road-tanker/${vehical_id}`)
 
 export const updateRoadTankerDetail = payload => {
   return axios.put(`/road-tanker/${payload.vehicle_name}`, payload.data)
 }
 
-export const getDownloadRoadTanker = params => axios.post('/road-tanker/download', { ...params })
+export const getDownloadRoadTanker = params =>
+  axios.post('/road-tanker/download', { ...params })
 
 export const getTerminal = params => axios.post('/terminal', { ...params })
 
-export const getDownloadTerminal = params => axios.post('/terminal/download', { ...params })
+export const getDownloadTerminal = params =>
+  axios.post('/terminal/download', { ...params })
 
 export const getSLAPdfs = () => axios.get('/file?category=sla')
 
-export const getSLAPdfDownload = params => axios.get(`/file/${params}?action=download`)
+export const getSLAPdfDownload = params =>
+  axios.get(`/file/${params}?action=download`)
 
 export const getRenamePdf = params =>
-  axios.put(`/file/${params.id}`, { filename: params.filename, remarks: params.remarks })
+  axios.put(`/file/${params.id}`, {
+    filename: params.filename,
+    remarks: params.remarks,
+  })
 
 export const getDeletePdf = params => axios.delete(`/file/${params.id}`)
 
 export const getAttchments = params => axios.post('/file/upload', { ...params })
 
 // get DQM Master Retail Cust Audit Log
-export const getRetailAuditLog = payload => get(url.GET_RETAIL_AUDITLOG, { payload: payload })
+export const getRetailAuditLog = payload =>
+  get(url.GET_RETAIL_AUDITLOG, { payload: payload })
 
 // get DQM Master Commercial Cust Audit Log
 export const getAuditLog = params =>
   axios.get(
-    `/audit-log?module=${params.module}&page=${params.page}&limit=${params.limit}${
-      params.module === 'sales-and-inventory' ? `&trans_date=${params.trans_date}` : ''
+    `/audit-log?module=${params.module}&page=${params.page}&limit=${
+      params.limit
+    }${
+      params.module === 'sales-and-inventory'
+        ? `&trans_date=${params.trans_date}`
+        : ''
     }`
   )
 
 // get DQM Master Commercial Cust Audit Log
-export const getSalesAuditLog = payload => get(url.GET_COMMERCIAL_AUDITLOG, { payload: payload })
+export const getSalesAuditLog = payload =>
+  get(url.GET_COMMERCIAL_AUDITLOG, { payload: payload })
 
 export const getOrderBankAuditLog = payload =>
   get(url.GET_COMMERCIAL_AUDITLOG, { payload: payload })
 
-export const getClearScheduling = payload => get(url.GET_COMMERCIAL_AUDITLOG, { payload: payload })
+export const getClearScheduling = payload =>
+  get(url.GET_COMMERCIAL_AUDITLOG, { payload: payload })
 
-export const getSendBulkShipment = payload => get(url.GET_COMMERCIAL_AUDITLOG, { payload: payload })
+export const getSendBulkShipment = payload =>
+  get(url.GET_COMMERCIAL_AUDITLOG, { payload: payload })
 
 export const getRunAutoScheduling = payload =>
   get(url.GET_COMMERCIAL_AUDITLOG, { payload: payload })
 
 export const getdeleteMultipleOrder = params =>
-  axios.delete(`/rts/order-bank`, { data: params.params }).then(response => response.data)
+  axios
+    .delete(`/rts/order-bank`, { data: params.params })
+    .then(response => response.data)
 
 export const getCrossTerminal = params =>
-  axios.post(`/rts/order-bank/cross-terminal`, { ...params.params }).then(response => response.data)
+  axios
+    .post(`/rts/order-bank/cross-terminal`, { ...params.params })
+    .then(response => response.data)
 
 // get DQM Road Tanker Audit Log
 export const getRoadTankerAuditLog = payload =>
   get(url.GET_ROADTANKER_AUDITLOG, { payload: payload })
 
 // get DQM Terminal Audit Log
-export const getTerminalAuditLog = payload => get(url.GET_TERMINAL_AUDITLOG, { payload: payload })
+export const getTerminalAuditLog = payload =>
+  get(url.GET_TERMINAL_AUDITLOG, { payload: payload })
 
 export const getTerminalTableInformation = code =>
   axios.get(`/terminal/${code}`).then(response => response.data)
 
 // get Retail Customer Table Information
 export const getTableInformation = code =>
-  code !== undefined && axios.get(`/retail-customer/${code}`).then(response => response.data)
+  code !== undefined &&
+  axios.get(`/retail-customer/${code}`).then(response => response.data)
 
 // update Table Information
 export const updateTableInformation = event => {
@@ -328,19 +371,23 @@ export const getTerminalFilter = params => {
 // export const getProducts = params => get(url.GET_PRODUCTS, { params: params })
 export const getProducts = params => axios.post('/product', { ...params })
 
-export const getDownloadProducts = params => axios.post('/product/download', { ...params })
+export const getDownloadProducts = params =>
+  axios.post('/product/download', { ...params })
 
 // get DQM Master Product Audit Log
-export const getProductAuditLog = payload => get(url.GET_PRODUCT_AUDITLOG, { payload: payload })
+export const getProductAuditLog = payload =>
+  get(url.GET_PRODUCT_AUDITLOG, { payload: payload })
 
 // get DQM Master Product Filter
-export const getProductFilter = params => get(url.GET_PRODUCT_FILTER, { params: params })
+export const getProductFilter = params =>
+  get(url.GET_PRODUCT_FILTER, { params: params })
 
 // Get DQM Master Product Details
 // export const getProductDetail = productCode =>
 //   get(`${url.GET_PRODUCT_DETAILS}/${productCode}`)
 
-export const getProductDetail = productCode => axios.get(`/product/${productCode}`)
+export const getProductDetail = productCode =>
+  axios.get(`/product/${productCode}`)
 
 // export const updateProductDetail = payload =>
 //   put(`${url.GET_PRODUCT_DETAILS}/${payload.code}`, payload.body)
@@ -387,17 +434,22 @@ export const updateSaleAndInventoryDetail = (recordId, payload) =>
 
 // get sales and inventory table data
 // "https://6073f3f2066e7e0017e78a3d.mockapi.io/api/v1/sales"
-export const getSaleAndInventory = params => axios.post('/sales-inventory', { ...params })
+export const getSaleAndInventory = params =>
+  axios.post('/sales-inventory', { ...params })
 
-export const getSaleAndInventoryByRecordId = recordId => axios.get(`/sales-inventory/${recordId}`)
+export const getSaleAndInventoryByRecordId = recordId =>
+  axios.get(`/sales-inventory/${recordId}`)
 
 export const updateSaleAndInventoryOverride = (recordId, override) =>
   axios.put(`/sales-inventory/${recordId}/override`, { override: override })
 
-export const getSlaItems = params => axios.get('/sla').then(response => response.data)
+export const getSlaItems = params =>
+  axios.get('/sla').then(response => response.data)
 
 export const updateSLASection = ({ category, id, data }) =>
-  axios.put(`/sla/${category}/section/${id}`, data).then(response => response.data)
+  axios
+    .put(`/sla/${category}/section/${id}`, data)
+    .then(response => response.data)
 
 export const getSLASection = ({ category }) =>
   axios.get(`/sla/${category}`).then(response => response.data)
@@ -410,11 +462,16 @@ export const createSLASection = ({ category, data }) =>
 
 export const createSLATableRecord = data =>
   axios
-    .post(`/sla/${data.category}/section/${data.sectionId}/record`, data.recordValue)
+    .post(
+      `/sla/${data.category}/section/${data.sectionId}/record`,
+      data.recordValue
+    )
     .then(response => response.data)
 
 export const deleteSLARecord = ({ category, id, recordId }) =>
-  axios.delete(`/sla/${category}/section/${id}/record/${recordId}`).then(response => response.data)
+  axios
+    .delete(`/sla/${category}/section/${id}/record/${recordId}`)
+    .then(response => response.data)
 
 export const updateSLARecord = data =>
   axios
@@ -449,7 +506,7 @@ export const getRTSOderBankGanttChart = params => {
 }
 
 export const sendOderToVehicle = params => {
-  return axios.post('rts/order-bank/order-to-gantt', params)
+  return axios.post('/rts/order-bank/order-to-gantt', params)
 }
 
 export const validateGanttEventChange = params => {
@@ -457,7 +514,9 @@ export const validateGanttEventChange = params => {
 }
 
 export const getRTSOrderbankRTdetails = params => {
-  return axios.get(`${url.GET_RTS_GANTT_CHART}/${params.vehicle}/${params.date}`)
+  return axios.get(
+    `${url.GET_RTS_GANTT_CHART}/${params.vehicle}/${params.date}`
+  )
 }
 
 export const updateRTSOrderbankRTdetails = params => {
@@ -484,15 +543,18 @@ export const getTotalUnscheduleOrder = params => {
   return axios.get(`rts/count-total-order-unschedule`, { params })
 }
 
-export const removeOrder = ({ orderId }) => axios.delete(`/rts/shipment/remove-order/${orderId}`)
+export const removeOrder = ({ orderId }) =>
+  axios.delete(`/rts/shipment/remove-order/${orderId}`)
 
 export const updateOrdersPositionInShipment = params =>
   axios.post(`/rts/order-bank/order-sequence`, params)
 
-export const putShipment = params => axios.put(`/rts/shipment/${params.id}`, params.data)
+export const putShipment = params =>
+  axios.put(`/rts/shipment/${params.id}`, params.data)
 
 export const createShipment = params => axios.post(`/rts/shipment/${params.id}`)
-export const cancelShipment = params => axios.post(`/rts/shipment/canceled/${params.id}`)
+export const cancelShipment = params =>
+  axios.post(`/rts/shipment/canceled/${params.id}`)
 
 export {
   getLoggedInUser,

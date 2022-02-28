@@ -158,7 +158,6 @@ export class TableGroupEvent extends React.Component {
           <EditOrderBankModal
             open={this.state.isOpenEditModal}
             onCancel={this.getEditCancel}
-            viewData={this.props.viewData}
             region={this.props.orderregion}
             terminal={this.props.orderterminal}
           />
@@ -528,7 +527,6 @@ class index extends Component {
               deleteRecords={this.OnDeleteRecords}
               viewRecords={this.OnViewRecords}
               editAlert={this.editAlert}
-              viewData={this.props.viewData}
               orderregion={this.props.orderregion}
               orderterminal={this.props.orderterminal}
             />
@@ -844,7 +842,6 @@ const mapDispatchToProp = dispatch => ({
 })
 const mapStateToProps = ({ orderBank }) => ({
   totalRow: orderBank.totalRow,
-  viewData: orderBank.viewData,
   deleteSuccess: orderBank.deleteSuccess,
   sendDn: orderBank.sendDn,
 })

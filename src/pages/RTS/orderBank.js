@@ -431,8 +431,8 @@ function OrderBank({
         payloadFilter?.filterQuery !== null || payloadFilter?.filterQuery !== undefined
           ? transformObjectToStringSentence(payloadFilter?.filterQuery)
           : '',
-      sort_dir: 'asc',
-      sort_field: 'vehicle',
+      sort_dir: 'desc',
+      sort_field: "retail_storage_relation.retail",
       filter: payloadFilter.filterOrderBank,
     })
     setReloadData(false)

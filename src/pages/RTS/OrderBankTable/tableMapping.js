@@ -78,12 +78,12 @@ const tableMapping = {
   retain: {
     label: 'Retain',
     columnSize: 'cell-text',
-    type: 'date',
+    type: 'retainrunout',
   },
   runout: {
     label: 'Runout',
     columnSize: 'cell-text',
-    type: 'date',
+    type: 'retainrunout',
   },
   format_product_category: {
     label: 'Product Category',

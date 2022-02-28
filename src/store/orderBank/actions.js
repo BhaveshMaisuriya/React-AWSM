@@ -15,6 +15,7 @@ import {
   EDIT_ORDERBANK,
   EDIT_ORDERBANK_SUCCESS,
   EDIT_ORDERBANK_FAIL,
+  EDIT_ORDERBANK_CLEAR,
   UPDATE_ORDERBANK_TABLE_INFORMATION,
   UPDATE_ORDERBANK_TABLE_INFORMATION_SUCCESS,
   UPDATE_ORDERBANK_TABLE_INFORMATION_FAIL,
@@ -29,10 +30,10 @@ import {
   SEND_ORDER_BANK_DN_FAIL,
   SEND_MULTIPLE_ORDER_BANK_DN,
   SEND_MULTIPLE_ORDER_BANK_DN_SUCCESS,
-  SEND_MULTIPLE_ORDER_BANK_DN_FAIL,  
+  SEND_MULTIPLE_ORDER_BANK_DN_FAIL,
   CLEAR_SCHEDULING,
   CLEAR_SCHEDULING_SUCCESS,
-  CLEAR_SCHEDULING_FAIL,    
+  CLEAR_SCHEDULING_FAIL,
   UPDATE_ORDER_BANK_TABLE_DATA,
   DELETE_ORDERBANK_DETAIL,
   DELETE_ORDERBANK_DETAIL_SUCCESS,
@@ -197,6 +198,10 @@ export const getEditOrderBankDetailSuccess = response => ({
 export const getEditOrderBankDetailFail = error => ({
   type: EDIT_ORDERBANK_FAIL,
   payload: error,
+})
+
+export const getEditOrderBankDetailClear = () => ({
+  type: EDIT_ORDERBANK_CLEAR,
 })
 
 export const getOrderBankDetail = params => {
@@ -490,16 +495,21 @@ export const getRTSOderBankGanttChartFail = error => ({
   payload: error,
 })
 
-export const dragOrderBankToGanttChart = ({ shift_date, vehicle, order_banks }) => ({
+export const dragOrderBankToGanttChart = ({
+  shift_date,
+  vehicle,
+  order_banks,
+}) => ({
   type: DRAG_RTS_ORDER_BANK_TO_GANTT_CHART,
   shift_date,
   vehicle,
   order_banks,
 })
 
-export const dragOrderBankToGanttChartSuccess = dropData => ({
+// <params> is <order_banks[]>
+export const dragOrderBankToGanttChartSuccess = params => ({
   type: DRAG_RTS_ORDER_BANK_TO_GANTT_CHART_SUCCESS,
-  payload: dropData,
+  payload: params,
 })
 
 export const dragOrderBankToGanttChartFail = error => ({

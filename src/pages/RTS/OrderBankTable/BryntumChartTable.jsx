@@ -66,20 +66,15 @@ function BryntumChartTable(props) {
     bryntumCurrentColumns,
     updateOBEvent,
     onSelectVehicle,
-    dropOderSuccess,
     ganttEventValidation,
     onFilterChange,
     dragOrderBankToGanttChart,
     dateConfig,
     terminal,
-    ganttChartOrderDrag,
-    ganttChartEventData,
-    isDragging,
+    ganttChartState,
   } = props
   const tableData = useRef([])
   const chartRef = useRef()
-
-  const TIME_FORMAT = 'HH:mm:ss'
 
   const colsRef = useRef(bryntumCurrentColumns)
   const [modal, setModal] = useState(false)
@@ -160,41 +155,14 @@ function BryntumChartTable(props) {
     }, 1000)
   }
 
+  // CONTROL GANTTCHART EVENTS
   useEffect(() => {
-    if (dropOderSuccess && ganttChartOrderDrag.length > 0) {
-      ganttChartOrderDrag.forEach(order => {
-        if (
-          !ganttChartEventData.find(
-            item => item.resourceId == order.vehicle && item.it == order.id
-          )
-        ) {
-          const { eventStore } = chartRef.current.instance
-          const event = {
-            id: order?.id,
-            resourceId: order?.vehicle,
-            startDate: format(
-              parse('00:00:00', TIME_FORMAT, new Date(order.shift_date)),
-              DATE_TIME_FORMAT
-            ),
-            endDate: format(
-              parse('23:59:59', TIME_FORMAT, new Date(order.shift_date)),
-              DATE_TIME_FORMAT
-            ),
-            eventType: order?.scheduled_status,
-            eventColor: EVENT_COLOR[order?.scheduled_status],
-            draggable: true,
-          }
-          eventStore.add(event)
-        }
-      })
-    }
-  }, [dropOderSuccess, ganttChartOrderDrag])
+    const { instance: scheduler } = chartRef.current
+    const { eventStore } = scheduler
 
-  useEffect(() => {
-    if (!dropOderSuccess) {
-      onFilterChange({}, true) // leave argument empty so they will be set to default
-    }
-  }, [isDragging])
+    eventStore.data = ganttChartState.events
+    scheduler.renderRows()
+  }, [ganttChartState.events])
 
   useEffect(() => {
     setFilterList(
@@ -290,8 +258,6 @@ function BryntumChartTable(props) {
   }
 
   const sendRequestsHandler = val => {
-    // const scheduler = schedulerProRef.current.instance
-
     switch (dropdownSelectedItem.type) {
       case EventContextList.SHIPMENT: {
         props.processPaymentInGanttChart(dropdownSelectedItem.record)
@@ -314,7 +280,7 @@ function BryntumChartTable(props) {
         break
       }
       case EventContextList.PLAN_LOAD_TIMES: {
-        // $val now is format HH:mm:ss
+        // $val format is HH:mm:ss
         const planned_load_time = dateConfig.date_from + 'T' + val
         props.updateShipment({
           id: dropdownSelectedItem.record.id,
@@ -322,9 +288,6 @@ function BryntumChartTable(props) {
         })
       }
     }
-
-    // scheduler.eventStore.data = props.ganttChartEventData
-    // scheduler.renderRows()
 
     toggle()
   }
@@ -349,6 +312,9 @@ function BryntumChartTable(props) {
 
   const chartConfig = {
     columns: [],
+    autoCommit: true,
+    autoLoad: true,
+    syncDataOnLoad: true,
     autoHeight: true,
     rowHeight: 30,
     barMargin: 0,
@@ -399,7 +365,7 @@ function BryntumChartTable(props) {
             const hour = moment(startDate)
 
             // these are <momentjs objects>
-            const { from, to } = props.terminalOperatingTime
+            const { from, to } = ganttChartState.terminal.operatingTime
 
             const classList = ['terminal-hours']
 
@@ -540,22 +506,27 @@ function BryntumChartTable(props) {
       // <eventRecord.originalData> consult factory.js
       const data = eventRecord.originalData,
         { flags, background } = eventRecord.originalData
-      const bgOffset = {
+
+      let bgTemplate = ''
+
+      if (background.startDate && background.endDate) {
+        const bgOffset = {
           start: dateToPx(
             moment(background.startDate, DATE_TIME_FORMAT, true).toDate()
           ),
           end: dateToPx(
             moment(background.endDate, DATE_TIME_FORMAT, true).toDate()
           ),
-        },
+        }
+
         bgTemplate = `
-        <div class="event-background"
-            style="background-color: ${background.color};
-                    transform: translateX(${bgOffset.start}px);
-                    width: ${bgOffset.end - bgOffset.start}px;">
-        </div>
-      `
-      // const bgTemplate = ''
+          <div class="event-background"
+              style="background-color: ${background.color};
+                      transform: translateX(${bgOffset.start}px);
+                      width: ${bgOffset.end - bgOffset.start}px;">
+          </div>
+        `
+      }
 
       return flags.isBackground
         ? ''
@@ -755,16 +726,6 @@ function BryntumChartTable(props) {
     }
   }, [bryntumCurrentColumns])
 
-  // useEffect(() => {
-  // if (props.isSendRequestProcess && dropdownSelectedItem?.itemSelectedId) {
-  //   if (dropdownSelectedItem.type === EventContextList.CANCEL_SHIPMENT) {
-  //     removeShipmentHandler()
-  //   } else {
-  //     changeColorOfEventHandler('#615E9B')
-  //   }
-  // }
-  // }, [props.isSendRequestProcess])
-
   useEffect(() => {
     if (bryntumCurrentColumns) {
       Object.keys(bryntumCurrentColumns).forEach(e => {
@@ -878,11 +839,8 @@ function BryntumChartTable(props) {
 
                       <BryntumSchedulerPro
                         {...chartConfig}
-                        events={props.ganttChartEventData}
-                        autoSync
-                        resources={props.ganttChartTableData}
-                        syncDataOnLoad
                         ref={chartRef}
+                        resources={props.ganttChartTableData}
                       />
 
                       {popupShown ? (
@@ -980,19 +938,17 @@ function BryntumChartTable(props) {
   )
 }
 
-const mapStateToProps = ({ orderBank }) => ({
-  isSendRequestProcess: orderBank.isSendRequestProcess,
-  ganttChartData: orderBank.ganttChart,
-  terminalOperatingTime: orderBank.ganttChart.terminal.operatingTime,
-  ganttChartOrderDrag: orderBank.ganttChartOrderDrag,
-  ganttChartTableData: orderBank.ganttChartTableData,
-  totalRow_ganttChart: orderBank.totalRow_ganttChart,
-  ganttChartTableFilter: orderBank.ganttChartTableFilter,
-  ganttChartEventData: orderBank.ganttChartEventData,
-  dropOderSuccess: orderBank.dropOderSuccess,
-  isDragging: orderBank.isDragging,
-  ganttEventValidation: orderBank.ganttEventValidation,
-})
+const mapStateToProps = ({ orderBank }) => {
+  return {
+    ganttChartState: orderBank.ganttChart,
+    ganttChartOrderDrag: orderBank.ganttChartOrderDrag,
+    ganttChartTableData: orderBank.ganttChartTableData,
+    totalRow_ganttChart: orderBank.totalRow_ganttChart,
+    ganttChartTableFilter: orderBank.ganttChartTableFilter,
+    isDragging: orderBank.isDragging,
+    ganttEventValidation: orderBank.ganttEventValidation,
+  }
+}
 
 const mapDispatchToProps = dispatch => {
   return {

@@ -19,9 +19,11 @@ import ExitConfirmation from 'components/Common/ExitConfirmation'
 import DatePicker from 'components/Common/DatePicker'
 import AWSMDropdown from 'components/Common/Dropdown'
 import AWSMAlert from 'components/Common/AWSMAlert'
-import { getEditOrderBankDetail } from 'store/actions'
+import {
+  getEditOrderBankDetail,
+  getEditOrderBankDetailClear,
+} from 'store/actions'
 import REGION_TERMINAL, {
-  TERMINAL_CODE_MAPPING_ID,
   TERMINAL_CODE_MAPPING,
 } from 'common/data/regionAndTerminal'
 import {
@@ -50,8 +52,12 @@ for (let i = 0; i < 24; i++) {
 timeData.push(`23:59`)
 
 const EditOrderBankModal = props => {
-  const { open, onCancel, viewData, region, terminal, editorderBankData } = props
-
+  const {
+    open,
+    onCancel,
+    editorderBankData,
+    onEditOrderBankDetailClear,
+  } = props
   const [isConfirm, setIsConfirm] = useState(false)
   const [editOrderData, setEditOrderData] = useState(null)
   const [originalEditOrderData, setoriginalEditOrderData] = useState(null)
@@ -63,28 +69,36 @@ const EditOrderBankModal = props => {
   const [inputValue2, setInputValue2] = useState('')
   const [inputValue3, setInputValue3] = useState('')
   const [terminalList, setTerminalList] = useState([])
+  const [productList, setProductList] = useState([])
+
   const regionList = REGION_TERMINAL.map(item => item.region)
 
   useEffect(() => {
-    if (viewData !== null) {
-      let temp = { ...viewData }
-      const currentRegion = REGION_TERMINAL.find(e => e.region === props?.region)
+    if (editorderBankData) {
+      const temp = { ...editorderBankData }
+      setEditOrderData(temp)
+      setoriginalEditOrderData(temp)
+
+      const currentRegion = REGION_TERMINAL.find(
+        e => e.region === props?.region
+      )
       setTerminalList(currentRegion ? currentRegion.terminal : [])
       temp.terminal = props.terminal
       temp.region = props?.region
-      setEditOrderData(temp)
-      setoriginalEditOrderData(temp)
-      setInputValue(viewData.order_remarks ? viewData.order_remarks : "" )
-      setInputValue1(viewData.my_remark_1 ? viewData.my_remark_1 : "")
-      setInputValue2(viewData.my_remark_2 ? viewData.my_remark_1 : "")
-      setInputValue3(viewData.my_remark_3 ? viewData.my_remark_1 : "")
-    }
-  }, [viewData])
 
-  useEffect(async () => {}, [region])
+      const productListName = editorderBankData?.storage.map(a => a.name)
+      setProductList(productListName)
+
+      setInputValue(editorderBankData.order_remarks ? editorderBankData.order_remarks : '')
+      setInputValue1(editorderBankData.my_remark_1 ? editorderBankData.my_remark_1 : '')
+      setInputValue2(editorderBankData.my_remark_2 ? editorderBankData.my_remark_1 : '')
+      setInputValue3(editorderBankData.my_remark_3 ? editorderBankData.my_remark_1 : '')
+    }
+  }, [editorderBankData])
 
   const onConfirmCancel = () => {
     setIsConfirm(false)
+    onEditOrderBankDetailClear()
   }
 
   const handleUpdate = async () => {
@@ -114,16 +128,18 @@ const EditOrderBankModal = props => {
 
   useEffect(() => {
     if (editorderBankData && isUpdate === true) {
-      typeof editorderBankData === 'object' && editorderBankData.status === undefined
+      typeof editorderBankData === 'object' &&
+      editorderBankData.status === undefined
         ? onCancel('edit', 'success')
         : onCancel('edit', 'error')
-      setEditOrderData(null)
       setIsUpdate(false)
+      onEditOrderBankDetailClear()
     }
-  }, [editorderBankData])
+  }, [editorderBankData , isUpdate])
 
   const onConfirmExit = () => {
     setIsConfirm(false)
+    onEditOrderBankDetailClear()
     if (onCancel) {
       onCancel('cancel')
     }
@@ -132,14 +148,18 @@ const EditOrderBankModal = props => {
   const toggle = () => {
     if (originalEditOrderData !== editOrderData) {
       setIsConfirm(true)
+      onEditOrderBankDetailClear()
     } else {
       if (onCancel) {
         onCancel('cancel')
+        onEditOrderBankDetailClear()
       }
     }
   }
 
   const onFieldChange = (key, value) => {
+    const newOrderData = { ...editOrderData }
+
     if (key === 'region') {
       const currentRegion = REGION_TERMINAL.find(e => e.region === value)
       setTerminalList(currentRegion ? currentRegion.terminal : [])
@@ -151,48 +171,45 @@ const EditOrderBankModal = props => {
     } else if (key === 'order_remarks') {
       setInputValue(value)
       if (value.length <= 40) {
-        const newOrderData = { ...editOrderData }
         newOrderData[key] = value
         setEditOrderData(newOrderData)
       }
     } else if (key === 'my_remark_1') {
       setInputValue1(value)
       if (value.length <= 40) {
-        const newOrderData = { ...editOrderData }
         newOrderData[key] = value
         setEditOrderData(newOrderData)
       }
     } else if (key === 'my_remark_2') {
       setInputValue2(value)
       if (value.length <= 40) {
-        const newOrderData = { ...editOrderData }
         newOrderData[key] = value
         setEditOrderData(newOrderData)
       }
     } else if (key === 'my_remark_3') {
       setInputValue3(value)
       if (value.length <= 40) {
-        const newOrderData = { ...editOrderData }
         newOrderData[key] = value
         setEditOrderData(newOrderData)
       }
+    }
+    if (key === 'product_name') {
+      const pro_code = newOrderData.storage.find(res => res.name === value)
+      newOrderData['retail_storage'] = pro_code.id
+      newOrderData['format_product_code'] = pro_code.product
+      newOrderData['format_product'] = pro_code.name
+      newOrderData['format_product_category'] = pro_code.sales_category
+      newOrderData['order_type'] = pro_code.ordering_category
+      setEditOrderData(newOrderData)
     } else {
-      const newOrderData = { ...editOrderData }
       newOrderData[key] = value
       setEditOrderData(newOrderData)
     }
   }
 
-  const formatDate = date => {
-    if (date) {
-      const [year, month, day] = date.split('-')
-      return `${day}-${month}-${year}`
-    } else return ''
-  }
-
   const hrMints = val => {
     if (val !== '' && val !== undefined && val !== null) {
-      let temp = val.split(':')
+      const temp = val.split(':')
       return temp[0] + ':' + temp[1]
     } else {
       return ' - '
@@ -214,9 +231,13 @@ const EditOrderBankModal = props => {
   return (
     <Modal isOpen={open} className="new-order-modal">
       <ModalHeader toggle={toggle}>
-        <span className="modal-title">View/Edit Details: Order ID {editOrderData?.id}</span>
+        <span className="modal-title">
+          View/Edit Details: Order ID {editOrderData?.id}
+        </span>
         <span className="last-updated-sub-title">
-          {`Last Updated By: ${editOrderData?.updated_by?.split('@')[0] || 'Unknown'} on ${
+          {`Last Updated By: ${
+            editOrderData?.updated_by?.split('@')[0] || 'Unknown'
+          } on ${
             (editOrderData?.created_at &&
               format(new Date(editOrderData?.created_at), 'do LLL yyyy')) ||
             ''
@@ -225,13 +246,18 @@ const EditOrderBankModal = props => {
       </ModalHeader>
 
       <ModalBody className="position-relative h-70v pl-30">
-        {isConfirm && <ExitConfirmation onExit={onConfirmExit} onCancel={onConfirmCancel} />}
+        {isConfirm && (
+          <ExitConfirmation onExit={onConfirmExit} onCancel={onConfirmCancel} />
+        )}
         {!isConfirm && editOrderData !== null && (
           <>
             <Row className="w-100">
               <Col md={4}>
                 <label>SHIFT DATE</label>
-                <DatePicker value={editOrderData?.requested_delivery_date} disabled={true} />
+                <DatePicker
+                  value={editOrderData?.requested_delivery_date}
+                  disabled={true}
+                />
               </Col>
               <Col>
                 <label className="text-upper">region & terminal</label>
@@ -241,7 +267,10 @@ const EditOrderBankModal = props => {
                       items={regionList}
                       onChange={value => onFieldChange('region', value)}
                       value={editOrderData.region ? editOrderData.region : ''}
-                      disabled={disableEdit(editOrderData?.dn_status, editOrderData?.dn_no)}
+                      disabled={disableEdit(
+                        editOrderData?.dn_status,
+                        editOrderData?.dn_no
+                      )}
                     />
                   </div>
                   <div className="col-3">
@@ -249,7 +278,10 @@ const EditOrderBankModal = props => {
                       items={terminalList}
                       onChange={value => onFieldChange('terminal', value)}
                       value={editOrderData?.terminal}
-                      disabled={disableEdit(editOrderData?.dn_status, editOrderData?.dn_no)}
+                      disabled={disableEdit(
+                        editOrderData?.dn_status,
+                        editOrderData?.dn_no
+                      )}
                     />
                   </div>
                 </Row>
@@ -282,6 +314,7 @@ const EditOrderBankModal = props => {
                     inputValue2={inputValue2}
                     inputValue3={inputValue3}
                     onFieldChange={onFieldChange}
+                    productList={productList}
                     timeData={timeData}
                   />
                 </TabPane>
@@ -305,7 +338,12 @@ const EditOrderBankModal = props => {
 
       {!isConfirm && (
         <ModalFooter>
-          <Button color="light-primary" className="light-primary p-1320" outline onClick={toggle}>
+          <Button
+            color="light-primary"
+            className="light-primary p-1320"
+            outline
+            onClick={toggle}
+          >
             Cancel
           </Button>
           <Button color="primary" className="p-1320" onClick={handleUpdate}>
@@ -332,6 +370,8 @@ const mapStateToProps = ({ orderBank }) => ({
 
 const mapDispatchToProps = dispatch => ({
   onGetEditOrderBankDetails: params => dispatch(getEditOrderBankDetail(params)),
+  onEditOrderBankDetailClear: params =>
+    dispatch(getEditOrderBankDetailClear(params)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditOrderBankModal)

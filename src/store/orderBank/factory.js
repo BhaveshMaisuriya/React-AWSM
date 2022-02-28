@@ -31,8 +31,8 @@ export function ensureDateRangeNotExceedingADay({
   if (!from || !to) {
     return fillTime
       ? {
-          from: moment(date, DATE_FORMAT, true).startOf('date').utc(),
-          to: moment(date, DATE_FORMAT, true).endOf('date').utc(),
+          from: moment.utc(date, DATE_FORMAT, true).startOf('date'),
+          to: moment.utc(date, DATE_FORMAT, true).endOf('date'),
         }
       : { from: moment.invalid(), to: moment.invalid() }
   }
@@ -53,6 +53,69 @@ export function ensureDateRangeNotExceedingADay({
   }
 }
 
+export function factorizeGanttChartEventBar({
+  orderBank,
+  vehicleId,
+  rtHours,
+  isBackground = false,
+  date = new Date().format(DATE_FORMAT),
+}) {
+  const background = {
+    startDate: rtHours.from.isValid()
+      ? rtHours.from.format(DATE_TIME_FORMAT)
+      : null,
+    endDate: rtHours.to.isValid() ? rtHours.to.format(DATE_TIME_FORMAT) : null,
+    color: EVENT_COLOR.RT_Availability,
+  }
+
+  if (isBackground)
+    return {
+      resourceId: vehicleId,
+      startDate: background.startDate,
+      endDate: background.endDate,
+      eventType: 'RT_Availability',
+      eventColor: EVENT_COLOR.RT_Availability,
+      draggable: false,
+      resizable: false,
+      background,
+      flags: {
+        isBackground,
+      },
+    }
+
+  const { planned_load_time, planned_end_time, scheduled_status } = orderBank
+
+  const timerange = ensureDateRangeNotExceedingADay({
+    from: planned_load_time,
+    to: planned_end_time,
+    date,
+  })
+
+  const event = {
+    id: orderBank.id,
+    resourceId: vehicleId,
+    startDate: timerange.from.format(DATE_TIME_FORMAT),
+    endDate: timerange.to.format(DATE_TIME_FORMAT),
+    eventType: scheduled_status,
+    eventColor: EVENT_COLOR[scheduled_status],
+    draggable: false,
+    resizable: false,
+    background,
+    flags: {
+      isBackground,
+      hasSoftRestriction: orderBank.soft_restriction ? true : false,
+      eta: orderBank.eta
+        ? moment.utc(orderBank.eta).format(TIME_FORMAT_SHORT)
+        : '00:00',
+      terminal: orderBank.terminal ?? 'M808',
+    },
+  }
+
+  !orderBank.shipment && (event.resourceOrder = [{ DNNumber: orderBank.dn_no }])
+
+  return event
+}
+
 export function factorizeGanttChartEventBars(
   roadTankers,
   date = new Date().format(DATE_FORMAT)
@@ -68,59 +131,26 @@ export function factorizeGanttChartEventBars(
     })
 
     if (vehicle.order_banks && vehicle.order_banks.length) {
-      vehicle.order_banks.forEach(ob => {
-        const { planned_load_time, planned_end_time, scheduled_status } = ob
-
-        const timerange = ensureDateRangeNotExceedingADay({
-          from: planned_load_time,
-          to: planned_end_time,
+      vehicle.order_banks.forEach(orderBank =>
+        events.push(
+          factorizeGanttChartEventBar({
+            orderBank,
+            vehicleId: vehicle.id,
+            rtHours,
+            isBackground: false,
+            date,
+          })
+        )
+      )
+    } else
+      events.push(
+        factorizeGanttChartEventBar({
+          vehicleId: vehicle.id,
+          rtHours,
+          isBackground: true,
           date,
         })
-
-        const event = {
-          id: ob.id,
-          resourceId: vehicle.id,
-          startDate: timerange.from.format(DATE_TIME_FORMAT),
-          endDate: timerange.to.format(DATE_TIME_FORMAT),
-          eventType: scheduled_status,
-          eventColor: EVENT_COLOR[scheduled_status],
-          draggable: false,
-          resizable: false,
-          background: {
-            startDate: rtHours.from.format(DATE_TIME_FORMAT),
-            endDate: rtHours.to.format(DATE_TIME_FORMAT),
-            color: EVENT_COLOR.RT_Availability,
-          },
-          flags: {
-            isBackground: false,
-            hasSoftRestriction : ob.soft_restriction ? true : false,
-            eta: ob.eta ? moment.utc(ob.eta).format(TIME_FORMAT_SHORT) : '00:00',
-            terminal: ob.terminal ?? 'M808'
-          },
-        }
-
-        !ob.shipment && (event.resourceOrder = [{ DNNumber: ob.dn_no }])
-
-        events.push(event)
-      })
-    } else
-      events.push({
-        resourceId: vehicle.id,
-        startDate: rtHours.from.format(DATE_TIME_FORMAT),
-        endDate: rtHours.to.format(DATE_TIME_FORMAT),
-        eventType: 'RT_Availability',
-        eventColor: EVENT_COLOR.RT_Availability,
-        draggable: false,
-        resizable: false,
-        background: {
-          startDate: rtHours.from.format(DATE_TIME_FORMAT),
-          endDate: rtHours.to.format(DATE_TIME_FORMAT),
-          color: EVENT_COLOR.RT_Availability,
-        },
-        flags: {
-          isBackground: true,
-        },
-      })
+      )
   })
 
   return events

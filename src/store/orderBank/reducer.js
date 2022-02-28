@@ -14,6 +14,7 @@ import {
   ADD_ORDERBANK_FAIL,
   ADD_ORDERBANK_SUCCESS,
   EDIT_ORDERBANK_FAIL,
+  EDIT_ORDERBANK_CLEAR,
   EDIT_ORDERBANK_SUCCESS,
   GET_ORDERBANK_TABLE_INFORMATION_FAIL,
   GET_ORDERBANK_TABLE_INFORMATION_SUCCESS,
@@ -78,8 +79,11 @@ import {
   factorizeGanttChartEventBars,
   EVENT_COLOR,
   shipmentFactory,
+  factorizeGanttChartEventBar,
+  DATE_TIME_FORMAT,
 } from './factory'
 import { ToastSuccess, ToastError } from '../../helpers/swal'
+import moment from 'moment'
 
 const initialState = {
   orderBankData: null,
@@ -95,9 +99,10 @@ const initialState = {
   auditsCom: null,
   ganttChart: {
     table: [],
-    event: [],
+    events: [],
     selectedFilters: {},
     terminal: {
+      shiftDate: null,
       operatingTime: {
         from: null,
         to: null,
@@ -110,7 +115,6 @@ const initialState = {
   totalRow: 0,
   totalOrderUnschedule: 0,
   multipleorder: null,
-  viewData: null,
   sendDn: null,
   editorderBankData: null,
   ganttChartTableData: [],
@@ -118,8 +122,6 @@ const initialState = {
   ganttChartTableFilter: {},
   isDragging: false,
   totalRow_ganttChart: 0,
-  ganttChartEventData: [],
-  dropOderSuccess: true,
   shipmentDropData: [],
   sendMultipleDn: null,
   clearScheduling: null,
@@ -132,7 +134,8 @@ const RTSOrderBank = (state = initialState, action) => {
     case GET_RTS_ORDER_BANK_TABLE_DATA_SUCCESS:
       const { data, scrolling } = action.payload
       const { list, total_rows, filter, summary } = data
-      if (state.orderBankTableData.length !== 0 && scrolling) {
+      
+      if ((state.orderBankTableData !== null || state.orderBankTableData?.length) && scrolling) {
         return {
           ...state,
           orderBankTableData: [...state.orderBankTableData, ...list],
@@ -148,16 +151,13 @@ const RTSOrderBank = (state = initialState, action) => {
         totalRow: total_rows,
         orderBankTableSummary: summary,
       }
-    // return {
-    //   ...state,
-    //   orderBankTableData: action.payload,
-    //   error: null
-    // }
     case GET_RTS_ORDER_BANK_TABLE_DATA_FAIL:
       return {
         ...state,
         orderBankTableData: null,
         error: action.payload,
+        totalRow: '0',
+        orderBankTableSummary: null
       }
     case GET_SHIPMENT_ORDER_BANK_TABLE_DATA_SUCCESS:
       return {
@@ -204,12 +204,15 @@ const RTSOrderBank = (state = initialState, action) => {
     case EDIT_ORDERBANK_SUCCESS:
       return {
         ...state,
-        editorderBankData: action.payload,
       }
     case EDIT_ORDERBANK_FAIL:
       return {
         ...state,
-        editorderBankData: action.payload,
+      }
+    case EDIT_ORDERBANK_CLEAR:
+      return {
+        ...state,
+        editorderBankData: null,
       }
     case GET_ORDERBANK_TABLE_INFORMATION_SUCCESS:
       return {
@@ -279,7 +282,7 @@ const RTSOrderBank = (state = initialState, action) => {
     case VIEW_ORDERBANK_DETAIL_SUCCESS: {
       return {
         ...state,
-        viewData: action.payload,
+        editorderBankData: action.payload,
       }
     }
     case VIEW_ORDERBANK_DETAIL_FAIL:
@@ -316,23 +319,22 @@ const RTSOrderBank = (state = initialState, action) => {
         title: 'A shipment has been successfully created in SAP',
       })
 
+      const events = [...state.ganttChart.events]
+
       const { id, scheduled_status } = action.payload
-      const eventData = state.ganttChartEventData.find(s => s.id === id)
+      const eventData = events.find(s => s.id === id)
       eventData.eventType = scheduled_status
       eventData.eventColor = EVENT_COLOR[scheduled_status]
 
-      // state.isSendRequestProcess += 1
+      state.ganttChart.events = events
 
-      return {
-        ...state,
-      }
+      return { ...state }
     }
     case PROCESS_PAYMENT_IN_GANTT_CHART_FAIL: {
       ToastError.fire({ title: 'A shipment has been fail created in SAP' })
       return {
         ...state,
         error: action.payload,
-        isSendRequestProcess: state.isSendRequestProcess + 1,
       }
     }
     case CANCEL_PAYMENT_IN_GANTT_CHART_SUCCESS: {
@@ -341,16 +343,16 @@ const RTSOrderBank = (state = initialState, action) => {
         title: 'A shipment has been successfully cancelled from schedule',
       })
 
+      const events = [...state.ganttChart.events]
+
       const { id, scheduled_status } = action.payload
-      const eventData = state.ganttChartEventData.find(s => s.id === id)
-      eventData.eventType = scheduled_status
-      eventData.eventColor = EVENT_COLOR[scheduled_status]
+      const event = events.find(s => s.id === id)
+      event.eventType = scheduled_status
+      event.eventColor = EVENT_COLOR[scheduled_status]
 
-      // state.isSendRequestProcess += 1
+      state.ganttChart.events = events
 
-      return {
-        ...state,
-      }
+      return { ...state }
     }
     case CANCEL_PAYMENT_IN_GANTT_CHART_FAIL: {
       ToastError.fire({ title: 'A shipment has been fail cancelled in SAP' })
@@ -366,18 +368,16 @@ const RTSOrderBank = (state = initialState, action) => {
 
       const records = action.payload // array of Order records
 
-      const eventData = state.ganttChartEventData
+      const events = [...state.ganttChart.events]
       records.forEach(o => {
-        const existingEventData = eventData.find(s => s.id === o.id)
+        const existingEvent = events.find(s => s.id === o.id)
 
-        if (existingEventData)
-          existingEventData.resourceOrder[0].DNNumber = o.dn_no
+        if (existingEvent) existingEvent.resourceOrder[0].DNNumber = o.dn_no
       })
 
-      return {
-        ...state,
-        ganttChartEventData: eventData,
-      }
+      state.ganttChart.events = events
+
+      return { ...state }
     }
     case SEND_ORDER_IN_GANTT_CHART_FAIL:
       ToastError.fire({
@@ -399,6 +399,7 @@ const RTSOrderBank = (state = initialState, action) => {
       } = data
 
       const ganttChart = { ...state.ganttChart }
+      ganttChart.terminal.shiftDate = shiftDate
 
       // triangle indicators for GanttChart's headers
       if (terminal_operating_time_from && terminal_operating_time_to) {
@@ -423,41 +424,57 @@ const RTSOrderBank = (state = initialState, action) => {
       }
 
       // add id to mapping with event
-      const roadTankers = list.map(vehicle => ({
+      const vehicles = list.map(vehicle => ({
         ...vehicle,
         id: vehicle.vehicle,
       }))
 
+      const newEvents = factorizeGanttChartEventBars(vehicles, shiftDate)
+
       if (state.ganttChartTableData.length !== 0 && scrolling && page > 0) {
+        ganttChart.events = [...ganttChart.events, ...newEvents]
+
         return {
           ...state,
-          ganttChartTableData: [...state.ganttChartTableData, ...roadTankers],
-          ganttChartEventData: [
-            ...state.ganttChartEventData,
-            ...factorizeGanttChartEventBars(roadTankers, shiftDate),
-          ],
+          ganttChart,
+          ganttChartTableData: [...state.ganttChartTableData, ...vehicles],
           totalRow_ganttChart: total_rows,
         }
       }
+
+      ganttChart.events = newEvents
       return {
         ...state,
-        ganttChartTableData: roadTankers,
-        ganttChartEventData: factorizeGanttChartEventBars(
-          roadTankers,
-          shiftDate
-        ),
+        ganttChart,
+        ganttChartTableData: vehicles,
         totalRow_ganttChart: total_rows,
         ganttChartTableFilter: filter,
-        dropOderSuccess: false,
-        ganttChart,
       }
     }
     case GET_RTS_GANTT_CHART_DATA_FAIL: {
+      state.ganttChart = {
+        table: [],
+        events: [],
+        selectedFilters: {},
+        terminal: {
+          operatingTime: {
+            from: null,
+            to: null,
+          },
+        },
+      }
+
+      return {
+        ...state,
+        error: action.payload,
+      }
+    }
+    case CLEAR_GANTT_DATA: {
       return {
         ...state,
         ganttChart: {
+          events: [],
           table: [],
-          event: [],
           selectedFilters: {},
           terminal: {
             operatingTime: {
@@ -466,15 +483,7 @@ const RTSOrderBank = (state = initialState, action) => {
             },
           },
         },
-        error: action.payload,
-      }
-    }
-    case CLEAR_GANTT_DATA: {
-      return {
-        ...state,
         ganttChartTableData: [],
-        ganttChartEventData: [],
-        dropOderSuccess: false,
       }
     }
     case SET_BRYNTUM_FILTER: {
@@ -490,7 +499,6 @@ const RTSOrderBank = (state = initialState, action) => {
       return {
         ...state,
         orderBankTableData: [],
-        dropOderSuccess: false,
       }
     }
 
@@ -514,20 +522,55 @@ const RTSOrderBank = (state = initialState, action) => {
 
     case DRAG_RTS_ORDER_BANK_TO_GANTT_CHART_SUCCESS: {
       ToastSuccess.fire({ title: 'Orderbank has been successfully updated' })
+
+      // action.payload = { soft_restriction, hard_restriction, order_banks }
+      const {
+        soft_restriction,
+        hard_restriction,
+        order_banks: orders,
+      } = action.payload
+
+      const {
+        terminal: { shiftDate },
+      } = state.ganttChart
+
+      const events = [...state.ganttChart.events]
+      orders.forEach(o => {
+        // find rtHours by taking them from one of the Event at has the same resourceId
+        // always return array with at least 1 element
+        const eventsWithinResource = events.filter(
+          item => item.resourceId === o.vehicle
+        )
+
+        // copy background from existing event
+        const { startDate, endDate } = eventsWithinResource[0].background
+        const rtHours = {
+          from: moment.utc(startDate, DATE_TIME_FORMAT, true),
+          to: moment.utc(endDate, DATE_TIME_FORMAT, true),
+        }
+
+        if (eventsWithinResource.findIndex(item => item.id === o.id) === -1)
+          events.push(
+            factorizeGanttChartEventBar({
+              orderBank: o,
+              vehicleId: o.vehicle,
+              rtHours,
+              date: shiftDate,
+            })
+          )
+      })
+
+      state.ganttChart.events = events
       return {
         ...state,
-        ganttChartOrderDrag: action.payload,
         isDragging: !state.isDragging,
-        dropOderSuccess: true,
       }
     }
     case DRAG_RTS_ORDER_BANK_TO_GANTT_CHART_FAIL: {
       ToastError.fire({ title: 'Orderbank has been failed to update' })
       return {
         ...state,
-        ganttChartOrderDrag: [],
         isDragging: !state.isDragging,
-        dropOderSuccess: false,
       }
     }
     case REMOVE_ORDER_FROM_SHIPMENT_SUCCESS: {
@@ -588,16 +631,14 @@ const RTSOrderBank = (state = initialState, action) => {
       }
     }
     case REMOVE_EVENT_SUCCESS: {
-      const { id } = action.params
-      const event = state.ganttChart.event.filter(item => item.id !== id)
-      if (event) {
-        state.ganttChart.event = [...event]
-      }
       ToastSuccess.fire()
 
-      return {
-        ...state,
-      }
+      const { id } = action.params
+      state.ganttChart.events = [...state.ganttChart.events].filter(
+        item => item.id !== id
+      )
+
+      return { ...state }
     }
     case REMOVE_EVENT_FAIL: {
       ToastError.fire()
@@ -608,15 +649,15 @@ const RTSOrderBank = (state = initialState, action) => {
 
     case UPDATE_OB_EVENT_SUCCESS: {
       const { id } = action.params
-      const event = state.ganttChart.event.filter(item => item.id !== id)
+      const event = state.ganttChart.events.filter(item => item.id !== id)
       if (event) {
-        state.ganttChart.event = [...event, action.params]
+        state.ganttChart.events = [...event, action.params]
       }
       return {
         ...state,
         ganttChart: {
           ...state.ganttChart,
-          event: [...state.ganttChart.event],
+          event: [...state.ganttChart.events],
         },
         ganttEventValidation: null,
       }

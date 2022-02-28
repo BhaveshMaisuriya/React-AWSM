@@ -139,7 +139,7 @@ function OrderBank({
 }) {
   const defaultDate = format(addDays(Date.now(), 1), 'yyyy-MM-dd')
   const ganttChartEvents = useSelector(
-    state => state.orderBank.ganttChart.event
+    state => state.orderBank.ganttChart.events
   )
   const [orderSummary, setOrderSummary] = useState({
     DNs: 0,
@@ -282,22 +282,18 @@ function OrderBank({
     })
   }
 
-  useEffect(
-    () =>
-      getRTSOderBankGanttChart({
-        ...bryntumTable.payload,
-        filter: {
-          shift_date: shiftDateGantt,
-          terminal: TERMINAL_CODE_MAPPING[terminal],
-        },
-      }),
-    [bryntumTable]
-  )
+  useEffect(() => {
+    getRTSOderBankGanttChart({
+      ...bryntumTable.payload,
+      filter: {
+        shift_date: shiftDateGantt,
+        terminal: TERMINAL_CODE_MAPPING[terminal],
+      },
+    })
+  }, [bryntumTable])
 
   useEffect(() => {
     const asyncFunction = async () => {
-      await clearGanttData()
-
       setBryntumTable({
         payload: {
           ...bryntumTable.payload,
@@ -626,7 +622,9 @@ function OrderBank({
     if (sendMultipleDn !== allResponseMultipleDN) {
       setShowSendMultiNotification(true)
       setAllResponseMultipleDN(sendMultipleDn)
-      setSendMultipleMessage(sendMultipleDn)
+      setSendMultipleMessage(
+        sendMultipleDn?.status === 200 ? 'success' : 'fail'
+      )
       setTimeout(function () {
         reloadRTSOrderBankData()
       }, 2000)

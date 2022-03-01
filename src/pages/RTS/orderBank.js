@@ -431,8 +431,8 @@ function OrderBank({
         payloadFilter?.filterQuery !== null || payloadFilter?.filterQuery !== undefined
           ? transformObjectToStringSentence(payloadFilter?.filterQuery)
           : '',
-      sort_dir: 'asc',
-      sort_field: 'vehicle',
+      sort_dir: 'desc',
+      sort_field: "retail_storage_relation.retail",
       filter: payloadFilter.filterOrderBank,
     })
     setReloadData(false)
@@ -590,7 +590,7 @@ function OrderBank({
     if(sendMultipleDn !== allResponseMultipleDN){
       setShowSendMultiNotification(true)
       setAllResponseMultipleDN(sendMultipleDn);
-      SendMultipleMessage(sendMultipleDn);
+      setSendMultipleMessage(sendMultipleDn?.status === 200 ? 'success' : 'fail');
       setTimeout(function () { reloadRTSOrderBankData() }, 2000);
     }
   }, [sendMultipleDn])
@@ -744,8 +744,9 @@ function OrderBank({
     let tempVol = {volume: []};
     qValue?.volume?.map((item, index)=>{
       tempVol.volume.push(item.toString());
-    })
+    });
     let temp = qValue?.volume ? tempVol : qValue;
+    
     if (type === 'insert')
       setfilterQuery(prevFilters => {
         return { ...prevFilters, ...temp }
@@ -758,7 +759,7 @@ function OrderBank({
   }
 
   useEffect(() => {
-    orderBankTableData === null && setShowTableError(true)
+    orderBankTableData === null && setShowTableError(true);
     let checkedData = [];
     orderBankTableData!== null && orderBankTableData.map((item, index) => {
       if (item.isChecked === true) {
@@ -787,7 +788,6 @@ function OrderBank({
     }
     return icons[type]
   }
-
 
   const onChangeDateHandler = (value) => {
     setShiftDateTable({

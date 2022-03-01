@@ -17,7 +17,7 @@ import RemoveCircleOutlineOutlinedIcon from '@material-ui/icons/RemoveCircleOutl
 import { IconButton } from '@material-ui/core'
 import searchIcon from 'assets/images/AWSM-search.svg'
 import { ReactSVG } from 'react-svg'
-
+import moment from "moment"
 // STYLE
 import './index.scss'
 import '@bryntum/schedulerpro/schedulerpro.stockholm.css'
@@ -376,6 +376,19 @@ class index extends Component {
             </span>
           )
 
+          break
+        case 'retainrunout':
+          var d = new Date(data[v]);
+          result = (
+            <td>
+              <div className="custom-td-overflow">
+                {data[v]
+                  ? moment(data[v]).utc().format('DD-MM-yyyy HH:mm')
+                  //format(new Date(data[v]), 'dd-MM-yyyy ') + d.getUTCHours() + ':' + d.getUTCMinutes()
+                  : ''}
+              </div>
+            </td>
+          )
           break
         case 'date':
           result = (

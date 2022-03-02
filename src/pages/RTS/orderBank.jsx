@@ -13,17 +13,15 @@ import {
   Dropdown,
   DropdownMenu,
   DropdownToggle,
+  DropdownItem,
   Button,
   Popover,
   PopoverBody,
 } from 'reactstrap'
 import AuditLog from 'components/Common/AuditLog'
 import './style.scss'
-import MoreVertIcon from '@material-ui/icons/MoreVert'
-import { IconButton, MenuItem, FormControlLabel } from '@material-ui/core'
-import Checkbox from '@material-ui/core/Checkbox'
+import { IconButton, FormControlLabel, Checkbox } from '@material-ui/core'
 import moment from 'moment'
-// import { CustomEyeIcon } from "pages/DQM/Common/icon"
 import awsmLogo from 'assets/images/AWSM-logo-order-bank.png'
 import NewOrderModal from './addOrderBankModal'
 import DateRangePicker from 'components/Common/DateRangePicker'
@@ -34,9 +32,8 @@ import REGION_TERMINAL, {
 } from 'common/data/regionAndTerminal'
 //custom icons import
 import customiseTableIcon from 'assets/images/AWSM-Customise-Table.svg'
-
 import CustomizeTableModal from 'components/Common/CustomizeTable'
-
+import MoreVertIcon from '@material-ui/icons/MoreVert'
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown'
 
 import {
@@ -61,7 +58,6 @@ import {
   getRTSOrderBankTableData,
   sendOrderBankDN,
   sendMultipleOrderBankDN,
-  // clearScheduling,
   refreshOderBankDN,
   getOrderBankAuditLog,
   dragOrderBankToGanttChart,
@@ -1105,9 +1101,12 @@ function OrderBank({
                             }
                           />
                           <div className="square_border">
-                            {GanttChartBottom.map(item => {
+                            {GanttChartBottom.map((item) => {
                               return (
-                                <div className="d-flex align-items-center mr-2">
+                                <div
+                                  className="d-flex align-items-center mr-2"
+                                  key={item.title}
+                                >
                                   <div
                                     className={`square ${item.color} mr-1 ml-2`}
                                   >
@@ -1233,23 +1232,31 @@ function OrderBank({
                         right
                         className="awsm-option-button-content order-bank-transform"
                       >
-                        {orderBankSetting.map((option, index) => {
+                        {orderBankSetting.map(option => {
+                          const disable =
+                            option.label === 'Add New Order' &&
+                            status === 'Scheduled'
+                              ? true
+                              : option.disabled
                           return (
-                            <MenuItem
-                              className="awsm-option-button-content-item-rts"
-                              disabled={
-                                option.label === 'Add New Order' &&
-                                status === 'Scheduled'
-                                  ? true
-                                  : option.disabled
-                              }
+                            <DropdownItem
+                              className={`awsm-option-button-content-item-rts ${
+                                disable ? 'disabled-dropdown-item' : ''
+                              }`}
+                              disabled={disable}
                               onClick={() => onSettingClick(option.value)}
+                              key={option.label}
                             >
-                              {getIcon(option.icon)}
-                              <div className="pl-2" disabled key={index}>
-                                {option.label}
+                              <div className="event-content">
+                                {getIcon(option.icon)}
+                                <span
+                                  className="ml-2"
+                                  style={{ fontSize: '16px' }}
+                                >
+                                  {option.label}
+                                </span>
                               </div>
-                            </MenuItem>
+                            </DropdownItem>
                           )
                         })}
                       </DropdownMenu>

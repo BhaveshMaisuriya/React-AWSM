@@ -261,7 +261,7 @@ class index extends Component {
 
     return this.props.tableColumns.map(v => {
       return v != 'notes' ? (
-        <th>
+        <th key={v}>
           <span onClick={() => this.onSorting(v)}>
             {tableMapping[v]?.label.toUpperCase()}
           </span>
@@ -336,14 +336,14 @@ class index extends Component {
 
   RenderTRComponent = data => {
     const { expandSearch } = this.state
-    return this.props.tableColumns.map(v => {
+    return this.props.tableColumns.map((v, index) => {
       let typeOfColumn = tableMapping[v]?.type
       let result
 
       switch (typeOfColumn) {
         case 'company_name':
           result = (
-            <td className="ellips_txt">
+            <span className="ellips_txt">
               {data['customer_type'] === 'RETAIL'
                 ? data[
                     'retail_storage_relation.retail_customer_relation.ship_to_company'
@@ -351,7 +351,7 @@ class index extends Component {
                 : data[
                     'commercial_storage_relation.commercial_customer_relation.ship_to_company'
                   ]}
-            </td>
+            </span>
           )
           break
         case 'priority_type':
@@ -366,29 +366,22 @@ class index extends Component {
           break
         case 'dn_status':
           result = (
-            <td>
-              {
-                <span
-                  className={`status ${tagColor[data['dn_status']]}`}
-                  onClick={this.DNStatusOnClickHandler.bind(
-                    this,
-                    data,
-                    data[v]
-                  )}
-                >
-                  {data['dn_status'] === null
-                    ? data['dn_no'] === '' || data['dn_no'] === null
-                      ? 'Send for DN'
-                      : data[v] === 'Pending'
-                      ? 'Pending..'
-                      : data[v]
-                    : data[v] === 'Pending'
-                    ? 'Pending..'
-                    : data[v]}
-                </span>
-              }
-            </td>
+            <span
+              className={`status ${tagColor[data['dn_status']]}`}
+              onClick={this.DNStatusOnClickHandler.bind(this, data, data[v])}
+            >
+              {data['dn_status'] === null
+                ? data['dn_no'] === '' || data['dn_no'] === null
+                  ? 'Send for DN'
+                  : data[v] === 'Pending'
+                  ? 'Pending..'
+                  : data[v]
+                : data[v] === 'Pending'
+                ? 'Pending..'
+                : data[v]}
+            </span>
           )
+
           break
         case 'retainrunout':
           var d = new Date(data[v]);
@@ -405,44 +398,34 @@ class index extends Component {
           break
         case 'date':
           result = (
-            <td>
-              <div className="custom-td-overflow">
-                {data[v]
-                  ? format(new Date(data[v].toString()), 'dd-MM-yyyy HH:mm')
-                  : ''}
-              </div>
-            </td>
+            <div className="custom-td-overflow">
+              {data[v]
+                ? format(new Date(data[v].toString()), 'dd-MM-yyyy HH:mm')
+                : ''}
+            </div>
           )
           break
         case 'single_date':
           result = (
-            <td>
-              <div className="custom-td-overflow">
-                {data[v]
-                  ? format(new Date(data[v].toString()), 'dd-MM-yyyy')
-                  : ''}
-              </div>
-            </td>
+            <div className="custom-td-overflow">
+              {data[v]
+                ? format(new Date(data[v].toString()), 'dd-MM-yyyy')
+                : ''}
+            </div>
           )
           break
         case 'time':
           result = (
-            <td>
-              <div className="custom-td-overflow">
-                {data[v] ? format(new Date(data[v].toString()), 'HH:mm') : ''}
-              </div>
-            </td>
+            <div className="custom-td-overflow">
+              {data[v] ? format(new Date(data[v].toString()), 'HH:mm') : ''}
+            </div>
           )
           break
         default:
-          result = (
-            <td>
-              <div className="custom-td-overflow">{data[v]}</div>
-            </td>
-          )
+          result = <div className="custom-td-overflow">{data[v]}</div>
           break
       }
-      return (v != 'notes' || expandSearch) && result
+      return (v != 'notes' || expandSearch) && <td key={data[v]+ index}>{result}</td>
     })
   }
 
@@ -704,7 +687,7 @@ class index extends Component {
                       <tbody>
                         {this.state.showLoader === true ? (
                           <tr>
-                            <td colSpan={18} className={'rts-table-nodata'}>
+                            <td key="circular-loader" colSpan={18} className={'rts-table-nodata'}>
                               <div>
                                 <CircularLoader />
                               </div>
@@ -715,9 +698,9 @@ class index extends Component {
                             return (
                               <Draggable
                                 isDragDisabled={!v.isChecked || selectedAllItem}
-                                key={v.id}
                                 draggableId={index.toString()}
                                 index={index}
+                                key={v.id}
                               >
                                 {(provided, snapshot) => (
                                   <>

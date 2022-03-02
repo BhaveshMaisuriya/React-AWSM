@@ -210,14 +210,16 @@
   display: inline-flex;
 }
 
-.priority.highPriority {
+.priority.highPriority, .priority.sr {
   background: red;
   color: white;
 }
 .priority.highPriority::before {
   content: 'HP';
 }
-
+.priority.sr::before {
+  content: 'SR';
+}
 .priority.specialRequest {
   background: orange;
   color: white;

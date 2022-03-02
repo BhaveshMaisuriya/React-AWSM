@@ -133,6 +133,7 @@ const RetailCustomer = (state = initialState, action) => {
     case GET_TABLE_INFORMATION_FAIL:
       return {
         ...state,
+        currentRetailDetail: action.payload?.response,
         error: action.payload,
         updateSuccess: null,
       }

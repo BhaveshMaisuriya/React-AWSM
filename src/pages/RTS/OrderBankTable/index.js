@@ -357,7 +357,10 @@ class index extends Component {
         case 'priority_type':
           result = (
             <td>
-              {<span className={`priority ${_.camelCase(data[v])}`}></span>}
+              <span className={`priority ${_.camelCase(data[v])}`}></span>
+              {data['sr'] &&  
+              <span className={`priority sr`}></span>
+              }
             </td>
           )
           break

@@ -17,7 +17,7 @@ const OrderTab = props => {
     timeData,
     productList,
   } = props
-  const ORDER_PRIORITY = ['None', 'High Priority']
+  const ORDER_PRIORITY = ['High Priority']
   const [multiProductToggle, setMultiProductToggle] = useState(false)
   const [multiLoadToggle, setMultiLoadToggle] = useState(false)
   const remainChars1 = useMemo(() => {
@@ -325,6 +325,7 @@ const OrderTab = props => {
                 items={ORDER_PRIORITY}
                 onChange={value => onFieldChange('priority', value)}
                 value={data?.priority}
+                hasNone
                 placeholder={'None'}
               />
             </div>

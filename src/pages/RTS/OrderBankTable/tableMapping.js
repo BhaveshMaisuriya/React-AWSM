@@ -39,6 +39,7 @@ const tableMapping = {
     label: 'notes',
     columnSize: 'cell-text',
     key: 'frozen',
+    type: 'notes',
   },
   format_ship_to: {
     label: 'Ship To',

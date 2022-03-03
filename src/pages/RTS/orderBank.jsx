@@ -83,7 +83,6 @@ import OrderBankSendBulkModal from './OrderBankSendBulkModal'
 import AWSMAlert from 'components/Common/AWSMAlert'
 import selectAllIcon2 from 'assets/images/AWSM-Checked-box.svg'
 import selectAllIcon3 from 'assets/images/AWSM-Checkbox.svg'
-import { getCookieByKey } from '../DQM/Common/helper'
 import { DragDropContext } from 'react-beautiful-dnd'
 import {
   AddOrderIcon,
@@ -98,6 +97,7 @@ import OrderBankSummary from './orderBankSummary'
 import ClearScheduling from './clearScheduling'
 import {
   transformObjectToStringSentence,
+  getCookieByKey,
   filterObject,
   removeKeywords,
 } from '../DQM/Common/helper'
@@ -261,7 +261,17 @@ function OrderBank({
     },
     trigger = false
   ) => {
-    let q = transformObjectToStringSentence(filterCondition)
+    let q = ''
+    if (filterCondition.length > 0) {
+      q = filterCondition
+        .filter(v => v.data.length > 0)
+        .map(e => {
+          return `(${e.data
+            .map(k => `${e.key}=='${k == '-' ? '' : k}'`)
+            .join('||')})`
+        })
+        .join('&&')
+    }
 
     setBryntumTable(state => {
       const payload = {
@@ -449,8 +459,8 @@ function OrderBank({
         payloadFilter?.filterQuery !== undefined
           ? transformObjectToStringSentence(payloadFilter?.filterQuery)
           : '',
-      sort_dir: 'asc',
-      sort_field: 'vehicle',
+      sort_dir: 'desc',
+      sort_field: 'retail_storage_relation.retail',
       filter: payloadFilter.filterOrderBank,
     })
     setReloadData(false)
@@ -1101,7 +1111,7 @@ function OrderBank({
                             }
                           />
                           <div className="square_border">
-                            {GanttChartBottom.map((item) => {
+                            {GanttChartBottom.map(item => {
                               return (
                                 <div
                                   className="d-flex align-items-center mr-2"

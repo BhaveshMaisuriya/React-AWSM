@@ -60,7 +60,11 @@ const PlannedLoadTimesModal = ({ isOpen, onSend, onCancel, data }) => {
           <button onClick={onCancel} className="btn btn-outline-success mr-2">
             Cancel
           </button>
-          <button className="btn btn-success" disabled={form.isSubmitBlocked} onClick={submit}>
+          <button
+            className="btn btn-success"
+            disabled={form.isSubmitBlocked}
+            onClick={submit}
+          >
             Update
           </button>
         </div>

@@ -17,7 +17,7 @@ import RemoveCircleOutlineOutlinedIcon from '@material-ui/icons/RemoveCircleOutl
 import { IconButton } from '@material-ui/core'
 import searchIcon from 'assets/images/AWSM-search.svg'
 import { ReactSVG } from 'react-svg'
-import moment from "moment"
+import moment from 'moment'
 // STYLE
 import './index.scss'
 import '@bryntum/schedulerpro/schedulerpro.stockholm.css'
@@ -341,6 +341,9 @@ class index extends Component {
       let result
 
       switch (typeOfColumn) {
+        case 'notes':
+          result = <div className="custom-td-overflow">{data['sr']}</div>
+          break
         case 'company_name':
           result = (
             <span className="ellips_txt">
@@ -356,12 +359,12 @@ class index extends Component {
           break
         case 'priority_type':
           result = (
-            <td>
+            <>
               <span className={`priority ${_.camelCase(data[v])}`}></span>
-              {data['sr'] &&  
-              <span className={`priority sr`}></span>
-              }
-            </td>
+              {data['sr'] ? (
+                <span className={'priority specialRequest'}></span>
+              ) : null}
+            </>
           )
           break
         case 'dn_status':
@@ -382,19 +385,6 @@ class index extends Component {
             </span>
           )
 
-          break
-        case 'retainrunout':
-          var d = new Date(data[v]);
-          result = (
-            <td>
-              <div className="custom-td-overflow">
-                {data[v]
-                  ? moment(data[v]).utc().format('DD-MM-yyyy HH:mm')
-                  //format(new Date(data[v]), 'dd-MM-yyyy ') + d.getUTCHours() + ':' + d.getUTCMinutes()
-                  : ''}
-              </div>
-            </td>
-          )
           break
         case 'date':
           result = (
@@ -421,11 +411,26 @@ class index extends Component {
             </div>
           )
           break
+        case 'retainrunout':
+          var d = new Date(data[v])
+          result = (
+            <div className="custom-td-overflow">
+              {data[v]
+                ? moment(data[v]).utc().format('DD-MM-yyyy HH:mm')
+                : //format(new Date(data[v]), 'dd-MM-yyyy ') + d.getUTCHours() + ':' + d.getUTCMinutes()
+                  ''}
+            </div>
+          )
+          break
         default:
           result = <div className="custom-td-overflow">{data[v]}</div>
           break
       }
-      return (v != 'notes' || expandSearch) && <td key={data[v]+ index}>{result}</td>
+      return (
+        (v != 'notes' || expandSearch) && (
+          <td key={data[v] + index}>{result}</td>
+        )
+      )
     })
   }
 
@@ -687,7 +692,11 @@ class index extends Component {
                       <tbody>
                         {this.state.showLoader === true ? (
                           <tr>
-                            <td key="circular-loader" colSpan={18} className={'rts-table-nodata'}>
+                            <td
+                              key="circular-loader"
+                              colSpan={18}
+                              className={'rts-table-nodata'}
+                            >
                               <div>
                                 <CircularLoader />
                               </div>

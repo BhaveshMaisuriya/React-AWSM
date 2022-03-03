@@ -52,12 +52,8 @@ for (let i = 0; i < 24; i++) {
 timeData.push(`23:59`)
 
 const EditOrderBankModal = props => {
-  const {
-    open,
-    onCancel,
-    editorderBankData,
-    onEditOrderBankDetailClear,
-  } = props
+  const { open, onCancel, editorderBankData, onEditOrderBankDetailClear } =
+    props
   const [isConfirm, setIsConfirm] = useState(false)
   const [editOrderData, setEditOrderData] = useState(null)
   const [originalEditOrderData, setoriginalEditOrderData] = useState(null)
@@ -89,10 +85,18 @@ const EditOrderBankModal = props => {
       const productListName = editorderBankData?.storage.map(a => a.name)
       setProductList(productListName)
 
-      setInputValue(editorderBankData.order_remarks ? editorderBankData.order_remarks : '')
-      setInputValue1(editorderBankData.my_remark_1 ? editorderBankData.my_remark_1 : '')
-      setInputValue2(editorderBankData.my_remark_2 ? editorderBankData.my_remark_1 : '')
-      setInputValue3(editorderBankData.my_remark_3 ? editorderBankData.my_remark_1 : '')
+      setInputValue(
+        editorderBankData.order_remarks ? editorderBankData.order_remarks : ''
+      )
+      setInputValue1(
+        editorderBankData.my_remark_1 ? editorderBankData.my_remark_1 : ''
+      )
+      setInputValue2(
+        editorderBankData.my_remark_2 ? editorderBankData.my_remark_1 : ''
+      )
+      setInputValue3(
+        editorderBankData.my_remark_3 ? editorderBankData.my_remark_1 : ''
+      )
     }
   }, [editorderBankData])
 
@@ -120,6 +124,8 @@ const EditOrderBankModal = props => {
       retail_storage: editOrderData?.retail_storage,
       multi_load_id: editOrderData?.multi_load_id,
       multi_prod_id: editOrderData?.multi_prod_id,
+      order_type: editOrderData?.order_type,
+      product_category: editOrderData?.format_product_category,
     }
     const { onGetEditOrderBankDetails } = props
     await onGetEditOrderBankDetails({ id: editOrderData.id, data: temp })
@@ -135,7 +141,7 @@ const EditOrderBankModal = props => {
       setIsUpdate(false)
       onEditOrderBankDetailClear()
     }
-  }, [editorderBankData , isUpdate])
+  }, [editorderBankData, isUpdate])
 
   const onConfirmExit = () => {
     setIsConfirm(false)

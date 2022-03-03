@@ -32,11 +32,18 @@ class App extends Component {
     this.getLayout = this.getLayout.bind(this)
 
     document.addEventListener('click', e => {
-      const $bigParent = e.path[0]
-      if (!$bigParent.id.includes('-chart-tooltip-'))
+      if (
+        e.path.findIndex(
+          s => s.classList && s.classList.contains('chart-column-filter')
+        ) === -1
+      )
+        // for (const path of e.path) {
+        //   const $bigParent = e.path[0]
+        //   if (!$bigParent.id.includes('-chart-tooltip-'))
         document
           .querySelectorAll('[id*="-chart-tooltip-"]')
           .forEach($el => $el.classList.add('hide'))
+      // }
     })
   }
 

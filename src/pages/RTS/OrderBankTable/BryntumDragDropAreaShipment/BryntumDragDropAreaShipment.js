@@ -1,11 +1,9 @@
 import React from 'react'
 import '../index.scss'
-import { Col, Row } from 'reactstrap'
 import { useSelector } from 'react-redux'
 import DragDropAreaHeader from './DragDropAreaHeader'
 import OrderTableDropArea from './OrderTableDropArea'
 
-// const testCurrentTableColumns = ["priority", "ship to", "name", "cloud", "trip", "delivery date", "product", "volume(l)"]
 const testCurrentTableColumns = [
   {
     objKey: 'priority',
@@ -42,14 +40,19 @@ const testCurrentTableColumns = [
 ]
 
 const BryntumDragDropAreaShipment = ({ currentDate }) => {
-  const selectedVehicle = useSelector(state => state?.orderBank?.selectedVehicleShipment)
+  const selectedVehicle = useSelector(
+    state => state?.orderBank?.selectedVehicleShipment
+  )
   return (
     <div
       className="wrapper-bryntum-shipment-dragdrop-area border-bryntum-table rounded"
       style={{ height: 360, display: 'flex', flexFlow: 'column' }}
     >
       <div className="font-weight-bold text-uppercase w-100">
-        <DragDropAreaHeader vehicle={selectedVehicle?.vehicle} currentDate={currentDate} />
+        <DragDropAreaHeader
+          vehicle={selectedVehicle?.vehicle}
+          currentDate={currentDate}
+        />
       </div>
 
       <div
@@ -58,7 +61,10 @@ const BryntumDragDropAreaShipment = ({ currentDate }) => {
         } rounded h-100 justify-content-start align-items-start`}
         style={{ overflow: 'auto' }}
       >
-        <OrderTableDropArea showTableColumns={testCurrentTableColumns} currentDate={currentDate} />
+        <OrderTableDropArea
+          showTableColumns={testCurrentTableColumns}
+          currentDate={currentDate}
+        />
       </div>
     </div>
   )

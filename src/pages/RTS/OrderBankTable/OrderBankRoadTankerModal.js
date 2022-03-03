@@ -1,12 +1,20 @@
-import React, { useState, useEffect } from "react"
-import { Button, Modal, ModalBody, ModalHeader, ModalFooter, Row, Col } from "reactstrap"
-import CloseButton from "components/Common/CloseButton"
-import ExitConfirmation from "components/Common/ExitConfirmation"
-import AWSMDropdown from "components/Common/Dropdown"
-import { isEqual } from "lodash"
-import { isScheduler } from "helpers/auth_helper"
-import { getOBRTDetails, updateOBRTDetails } from "store/actions"
-import { connect } from "react-redux"
+import React, { useState, useEffect } from 'react'
+import {
+  Button,
+  Modal,
+  ModalBody,
+  ModalHeader,
+  ModalFooter,
+  Row,
+  Col,
+} from 'reactstrap'
+import CloseButton from 'components/Common/CloseButton'
+import ExitConfirmation from 'components/Common/ExitConfirmation'
+import AWSMDropdown from 'components/Common/Dropdown'
+import { isEqual } from 'lodash'
+import { isScheduler } from 'helpers/auth_helper'
+import { getOBRTDetails, updateOBRTDetails } from 'store/actions'
+import { connect } from 'react-redux'
 
 const OrderBankRoadTankerModal = ({
   isOpen,
@@ -15,9 +23,9 @@ const OrderBankRoadTankerModal = ({
   orderBankRTDetails,
   getOBRTDetails,
   updateOBRTDetails,
-  terminal = "",
-  region = "",
-  shiftDate = "",
+  terminal = '',
+  region = '',
+  shiftDate = '',
   refreshTable,
 }) => {
   const [currentOrderBankRTDetails, setOrderBankRTDetails] = useState()
@@ -28,12 +36,12 @@ const OrderBankRoadTankerModal = ({
     setOrderBankRTDetails(newData)
   }
   const rtAvailabilityStatusSelection = {
-    OH: ["OH", "Off"],
-    Double: ["On", "On1", "On2", "Off"],
+    OH: ['OH', 'Off'],
+    Double: ['On', 'On1', 'On2', 'Off'],
   }
 
   useEffect(() => {
-    if (isOpen) getOBRTDetails({vehicle: selectedVehicleID, date: shiftDate})
+    if (isOpen) getOBRTDetails({ vehicle: selectedVehicleID, date: shiftDate })
     else setOrderBankRTDetails(null)
   }, [isOpen])
 
@@ -55,7 +63,7 @@ const OrderBankRoadTankerModal = ({
       remarks: currentOrderBankRTDetails.remarks,
       shift_type: currentOrderBankRTDetails.status,
       terminal_code: currentOrderBankRTDetails.default_terminal,
-      shift_date: shiftDate
+      shift_date: shiftDate,
     })
     refreshTable()
     toggle()
@@ -79,7 +87,11 @@ const OrderBankRoadTankerModal = ({
   }
 
   return (
-    <Modal centered={true} isOpen={isOpen} className="modal-xl commercial-customer-modal">
+    <Modal
+      centered={true}
+      isOpen={isOpen}
+      className="modal-xl commercial-customer-modal"
+    >
       <ModalHeader close={<CloseButton handleClose={handleClose} />}>
         <div className="header-title">Vehicle: {selectedVehicleID}</div>
       </ModalHeader>
@@ -106,7 +118,7 @@ const OrderBankRoadTankerModal = ({
                   disabled
                 />
               </Col>
-              <Col className="col-md-7" style={{ paddingLeft: "0px" }}>
+              <Col className="col-md-7" style={{ paddingLeft: '0px' }}>
                 <input
                   className="form-control awsm-input"
                   type="text"
@@ -117,7 +129,7 @@ const OrderBankRoadTankerModal = ({
             </Row>
           </Col>
         </Row>
-        <hr style={{ margin: "1px 0 1em 0" }} />
+        <hr style={{ margin: '1px 0 1em 0' }} />
         <Row>
           <Col className="col-md-4 form-group">
             <label>UTILIZATION RATE (%)</label>
@@ -141,8 +153,12 @@ const OrderBankRoadTankerModal = ({
             <label>STATUS</label>
             <AWSMDropdown
               value={currentOrderBankRTDetails?.status}
-              items={rtAvailabilityStatusSelection[currentOrderBankRTDetails?.shift_type]}
-              onChange={e => onFieldValueChange("status", e)}
+              items={
+                rtAvailabilityStatusSelection[
+                  currentOrderBankRTDetails?.shift_type
+                ]
+              }
+              onChange={e => onFieldValueChange('status', e)}
               disabled={!isScheduler}
               className="form-control awsm-input"
             />
@@ -251,7 +267,7 @@ const OrderBankRoadTankerModal = ({
               className="form-control awsm-input"
               type="text"
               defaultValue={currentOrderBankRTDetails?.remarks}
-              onChange={e => onFieldValueChange("remarks", e.target.value)}
+              onChange={e => onFieldValueChange('remarks', e.target.value)}
               disabled={!isScheduler}
             />
           </Col>
@@ -285,4 +301,7 @@ const mapDispatchToProps = dispatch => ({
   updateOBRTDetails: params => dispatch(updateOBRTDetails(params)),
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(OrderBankRoadTankerModal)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(OrderBankRoadTankerModal)

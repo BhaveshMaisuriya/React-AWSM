@@ -145,17 +145,19 @@ const NewOrderBankModal = props => {
         eta: orderData.eta ? 
           shiftDate.toISOString().split('T')[0] +
           ' ' +
-          checkUndefinedorNull(orderData.eta, '') : "",
+          checkUndefinedorNull(orderData.eta, '') : '',
         planned_load_time: orderData.load_time ? 
           shiftDate.toISOString().split('T')[0] +
           ' ' +
-          checkUndefinedorNull(orderData.load_time, '') : "",
+          checkUndefinedorNull(orderData.load_time, '') : '',
         order_remarks: checkUndefinedorNull(orderData.order_remarks, ''),
         remarks: checkUndefinedorNull(orderData.remarks, ''),
         priority: checkUndefinedorNull(orderData.priority_order, null),
         retail_storage: parseInt(orderData.product_id),
         product: checkUndefinedorNull(orderData.product_code, ''),
         customer_type: 'RETAIL',
+        order_type: checkUndefinedorNull(orderData?.storeData?.ordering_category, ''),
+        product_category:checkUndefinedorNull(orderData?.storeData?.sales_category, ''),
       }
 
       const { onAddOrderBank } = props

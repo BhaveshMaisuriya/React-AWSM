@@ -2,10 +2,10 @@ import { connect } from 'react-redux'
 import React, { useEffect, useState, Fragment } from 'react'
 import DragIndicatorIcon from '@material-ui/icons/DragIndicator'
 import { CustomInput } from 'reactstrap'
-import CloseButton from '../../../../components/Common/CloseButton'
+import CloseButton from 'components/Common/CloseButton'
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
-import selectAllIcon from '../../../../assets/images/AWSM-Select-all-Checkbox.svg'
-import RedAlertIcon from './../../../../assets/images/AWSM-Red-Alert.svg'
+import selectAllIcon from 'assets/images/AWSM-Select-all-Checkbox.svg'
+import RedAlertIcon from 'assets/images/AWSM-Red-Alert.svg'
 import './OrderTableDropArea.scss'
 import ConfirmDNStatusModal from '../confirmDNStatusModal'
 import {
@@ -13,7 +13,7 @@ import {
   removeShipmentFromEvent,
   getShipmentDetail,
   onDragAndDropShipmentArea,
-} from '../../../../store/orderBank/actions'
+} from 'store/orderBank/actions'
 
 const supportReorderSameShipment = (list, startIdx, endIdx) => {
   const result = Array.from(list)
@@ -61,10 +61,16 @@ const OrderTableDropArea = ({
 
   // Handle checkbox click
   const setSelectedShipmentDependOnOrders = selectedShip => {
-    const selectedOrders = selectedShip.orders.filter(item => item.isChecked === true)
-    setSelectedShipment(selectedOrders && selectedOrders.length > 0 ? selectedShip.id : null)
+    const selectedOrders = selectedShip.orders.filter(
+      item => item.isChecked === true
+    )
+    setSelectedShipment(
+      selectedOrders && selectedOrders.length > 0 ? selectedShip.id : null
+    )
     setShipmentReadyToCancel(
-      selectedOrders.length === selectedShip.orders.length ? selectedShip.id : null
+      selectedOrders.length === selectedShip.orders.length
+        ? selectedShip.id
+        : null
     )
   }
 
@@ -76,7 +82,9 @@ const OrderTableDropArea = ({
     setInvalidSelectedShipment(null)
     const cloneDropData = [...dropData]
     const selectedShip = cloneDropData.find(item => item.id === shipmentId)
-    const checkedItem = selectedShip.orders.flat().find(item => item.id === order.id)
+    const checkedItem = selectedShip.orders
+      .flat()
+      .find(item => item.id === order.id)
     if (checkedItem) {
       checkedItem.isChecked = !checkedItem.isChecked
       //setDropData(cloneDropData)
@@ -89,7 +97,9 @@ const OrderTableDropArea = ({
     setInvalidSelectedShipment(null)
     const cloneDropData = [...dropData]
     const selectedShip = cloneDropData.find(item => item.id === shipmentId)
-    const checkedItem = selectedShip.orders.flat().find(item => item.id === order.id)
+    const checkedItem = selectedShip.orders
+      .flat()
+      .find(item => item.id === order.id)
     if (checkedItem) {
       checkedItem.isOnRemove = onRemove
       // replace inner state by global state ---> setDropdata
@@ -99,7 +109,8 @@ const OrderTableDropArea = ({
 
   const onRemoveOrderHandler = (order, shipmentId) => {
     setSelectedShipment(null)
-    if (removeOrderFromShipment) removeOrderFromShipment({ orderId: order.id, shipmentId })
+    if (removeOrderFromShipment)
+      removeOrderFromShipment({ orderId: order.id, shipmentId })
   }
 
   // Remove shipment from event
@@ -111,8 +122,13 @@ const OrderTableDropArea = ({
       setShowCancelPopup(false)
     }
     if (deleteShipmentList) {
-      const shipmentToDelete = dropData.find(item => item.id === deleteShipmentList)
-      removeShipmentFromEvent({ shipmentId: shipmentToDelete.id, eventId: shipmentToDelete.event })
+      const shipmentToDelete = dropData.find(
+        item => item.id === deleteShipmentList
+      )
+      removeShipmentFromEvent({
+        shipmentId: shipmentToDelete.id,
+        eventId: shipmentToDelete.event,
+      })
       setDeleteShipment(null)
     }
   }
@@ -121,7 +137,9 @@ const OrderTableDropArea = ({
   const renderOptionCell = (order, shipmentId, isSap = false) => {
     return (
       <td className="d-flex align-items-center justify-content-around">
-        <DragIndicatorIcon style={{ color: '#D9D9D9', transform: 'translateX(5px)' }} />
+        <DragIndicatorIcon
+          style={{ color: '#D9D9D9', transform: 'translateX(5px)' }}
+        />
         <CustomInput
           type="checkbox"
           id={order.id}
@@ -136,10 +154,17 @@ const OrderTableDropArea = ({
   // transform data to show on table
   const filterShowData = shipment => {
     const { orders } = shipment
-    if (orders && orders.length > 0 && showTableColumns && showTableColumns.length > 0) {
+    if (
+      orders &&
+      orders.length > 0 &&
+      showTableColumns &&
+      showTableColumns.length > 0
+    ) {
       return orders.map(order => {
         const filteredItem = { id: order?.id }
-        showTableColumns.forEach(({ objKey }) => (filteredItem[objKey] = order[objKey]))
+        showTableColumns.forEach(
+          ({ objKey }) => (filteredItem[objKey] = order[objKey])
+        )
         filteredItem['isChecked'] = order['isChecked']
         filteredItem['isOnRemove'] = order['isOnRemove']
         return filteredItem
@@ -163,7 +188,9 @@ const OrderTableDropArea = ({
                   </p>
                   <button
                     className="mr-2 btn btn-outline-danger btn-sm"
-                    onClick={() => prepareRemoveOrderHandler(dataRow, shipment.id, false)}
+                    onClick={() =>
+                      prepareRemoveOrderHandler(dataRow, shipment.id, false)
+                    }
                   >
                     Cancel
                   </button>
@@ -179,7 +206,9 @@ const OrderTableDropArea = ({
           )
         }
         const dataCells = Object.keys(dataRow)
-          .filter(key => key !== 'id' && key !== 'isChecked' && key !== 'isOnRemove')
+          .filter(
+            key => key !== 'id' && key !== 'isChecked' && key !== 'isOnRemove'
+          )
           .map(key => {
             if (key === 'priority') {
               return (
@@ -202,7 +231,9 @@ const OrderTableDropArea = ({
         dataCells.push(
           <td className="text-right pr-4">
             <CloseButton
-              handleClose={() => prepareRemoveOrderHandler(dataRow, shipment.id, true)}
+              handleClose={() =>
+                prepareRemoveOrderHandler(dataRow, shipment.id, true)
+              }
             />
           </td>
         )
@@ -225,9 +256,11 @@ const OrderTableDropArea = ({
                   {...provided.draggableProps}
                   {...provided.dragHandleProps}
                   ref={provided.innerRef}
-                  className={`text-left ${isDragging ? 'override-dragging' : 'table-row-shadow'} ${
-                    dataRow.isChecked ? 'selected-row' : 'bg-white'
-                  } ${shipment.type === 'SAP' ? 'red-outline' : ''}`}
+                  className={`text-left ${
+                    isDragging ? 'override-dragging' : 'table-row-shadow'
+                  } ${dataRow.isChecked ? 'selected-row' : 'bg-white'} ${
+                    shipment.type === 'SAP' ? 'red-outline' : ''
+                  }`}
                 >
                   {dataCells}
                 </tr>
@@ -262,21 +295,30 @@ const OrderTableDropArea = ({
       // In the same shipment
       if (destination.index === source.index) return
       const cloneDropData = [...dropData]
-      const selectedShipIndex = cloneDropData.findIndex(item => item.id === selectedShipment)
+      const selectedShipIndex = cloneDropData.findIndex(
+        item => item.id === selectedShipment
+      )
       cloneDropData[selectedShipIndex].orders = supportReorderSameShipment(
         cloneDropData[selectedShipIndex].orders,
         source.index,
         destination.index
       )
 
-      onDragAndDropShipmentArea({ data: cloneDropData, shipmentId: selectedShipIndex })
+      onDragAndDropShipmentArea({
+        data: cloneDropData,
+        shipmentId: selectedShipIndex,
+      })
     } else {
       // Drag order to other shipment
       // deep clone arr
       const cloneDropData = JSON.parse(JSON.stringify(dropData))
 
-      const fromShipment = cloneDropData.find(item => +item.id === +source.droppableId)
-      const destinationShipment = cloneDropData.find(item => +item.id === +destination.droppableId)
+      const fromShipment = cloneDropData.find(
+        item => +item.id === +source.droppableId
+      )
+      const destinationShipment = cloneDropData.find(
+        item => +item.id === +destination.droppableId
+      )
 
       const [removed] = fromShipment.orders.splice(source.index, 1)
       // clear checked and reset selected
@@ -286,7 +328,10 @@ const OrderTableDropArea = ({
 
       destinationShipment.orders.splice(destination.index, 0, { ...removed })
 
-      onDragAndDropShipmentArea({ data: cloneDropData, shipmentId: destinationShipment.id })
+      onDragAndDropShipmentArea({
+        data: cloneDropData,
+        shipmentId: destinationShipment.id,
+      })
     }
   }
 
@@ -297,7 +342,11 @@ const OrderTableDropArea = ({
           <thead>
             <tr className="text-dark ">
               <th>
-                <img src={selectAllIcon} className="header-select-icon" alt="icon" />
+                <img
+                  src={selectAllIcon}
+                  className="header-select-icon"
+                  alt="icon"
+                />
               </th>
               {renderTableHeadings()}
               <th />
@@ -307,7 +356,10 @@ const OrderTableDropArea = ({
             {dropData.map((shipment, index) => {
               if (shipment.orders && shipment.orders.length > 0) {
                 return (
-                  <Droppable droppableId={shipment.id?.toString()} key={shipment.id}>
+                  <Droppable
+                    droppableId={shipment.id?.toString()}
+                    key={shipment.id}
+                  >
                     {provided => {
                       return (
                         <>
@@ -316,7 +368,11 @@ const OrderTableDropArea = ({
                               <tr className="clear-bg-tr">
                                 <td
                                   colSpan={showTableColumns.length + 2}
-                                  style={{ textAlign: 'right', color: 'red', height: 'auto' }}
+                                  style={{
+                                    textAlign: 'right',
+                                    color: 'red',
+                                    height: 'auto',
+                                  }}
                                 >
                                   <p
                                     className="clear-mb-alert"
@@ -334,12 +390,18 @@ const OrderTableDropArea = ({
                               <tr className="clear-bg-tr">
                                 <td
                                   colSpan={showTableColumns.length + 2}
-                                  style={{ textAlign: 'right', color: 'red', height: 'auto' }}
+                                  style={{
+                                    textAlign: 'right',
+                                    color: 'red',
+                                    height: 'auto',
+                                  }}
                                 >
                                   <p
                                     className="clear-mb-alert"
                                     style={{ cursor: 'pointer' }}
-                                    onClick={() => setDeleteShipment(shipment.id)}
+                                    onClick={() =>
+                                      setDeleteShipment(shipment.id)
+                                    }
                                   >
                                     Delete shipment
                                   </p>
@@ -347,7 +409,10 @@ const OrderTableDropArea = ({
                               </tr>
                             </tbody>
                           )}
-                          <tbody {...provided.droppableProps} ref={provided.innerRef}>
+                          <tbody
+                            {...provided.droppableProps}
+                            ref={provided.innerRef}
+                          >
                             {renderBodyRow(shipment)}
                             {provided.placeholder}
                           </tbody>
@@ -357,7 +422,11 @@ const OrderTableDropArea = ({
                               <tr className="clear-bg-tr">
                                 <td
                                   colSpan="4"
-                                  style={{ textAlign: 'left', color: 'red', height: 'auto' }}
+                                  style={{
+                                    textAlign: 'left',
+                                    color: 'red',
+                                    height: 'auto',
+                                  }}
                                 >
                                   <p className="clear-mb-alert">
                                     Cross shipment selection is not allowed
@@ -372,11 +441,18 @@ const OrderTableDropArea = ({
                               <tr className="clear-bg-tr">
                                 <td
                                   colSpan="4"
-                                  style={{ textAlign: 'left', color: 'red', height: 'auto' }}
+                                  style={{
+                                    textAlign: 'left',
+                                    color: 'red',
+                                    height: 'auto',
+                                  }}
                                 >
                                   <p className="clear-mb-alert">
                                     <img
-                                      style={{ paddingBottom: '4px', paddingRight: '3px' }}
+                                      style={{
+                                        paddingBottom: '4px',
+                                        paddingRight: '3px',
+                                      }}
                                       src={RedAlertIcon}
                                     />
                                     SAP Alert found
@@ -464,10 +540,13 @@ const OrderTableDropArea = ({
 }
 
 const mapDispatchToProps = dispatch => ({
-  removeOrderFromShipment: payload => dispatch(removeOrderFromShipment(payload)),
-  removeShipmentFromEvent: payload => dispatch(removeShipmentFromEvent(payload)),
+  removeOrderFromShipment: payload =>
+    dispatch(removeOrderFromShipment(payload)),
+  removeShipmentFromEvent: payload =>
+    dispatch(removeShipmentFromEvent(payload)),
   getShipmentDetail: payload => dispatch(getShipmentDetail(payload)),
-  onDragAndDropShipmentArea: payload => dispatch(onDragAndDropShipmentArea(payload)),
+  onDragAndDropShipmentArea: payload =>
+    dispatch(onDragAndDropShipmentArea(payload)),
 })
 
 const mapStateToProps = ({ orderBank }) => ({

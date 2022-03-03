@@ -1,6 +1,6 @@
-import React from "react"
-import closeIcon from "../../../assets/images/AWSM-Cancel-Icon.svg"
-import "./closeButton.scss"
+import React from 'react'
+import closeIcon from 'assets/images/AWSM-Cancel-Icon.svg'
+import './closeButton.scss'
 
 const closeButton = props => {
   const { handleClose } = props

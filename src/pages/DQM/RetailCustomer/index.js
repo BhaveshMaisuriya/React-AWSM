@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from "react"
+import React, { useEffect, Fragment, useState } from "react"
 import { connect } from "react-redux"
 import Page from "../Common"
 import { getRetailCustomer } from "store/actions"
@@ -9,70 +9,73 @@ import Loader from "components/Common/Loader"
 
 const RetailTableName = "retail-table"
 
-class RetailCustomer extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      searchFields: getCookieByKey(RetailTableName)
-        ? JSON.parse(getCookieByKey(RetailTableName))
-        : tableColumns,
-      subModule: "retail-customer",
-    }
-  }
+function RetailCustomer (props) {
+  const {
+    onGetRetailCustomer,
+    retailCustomerIsLoading,
+    retailCustomer,
+    filter,
+    tableError,
+  } = props
+const [searchFields, setSearchFields] = useState(getCookieByKey(RetailTableName)
+? JSON.parse(getCookieByKey(RetailTableName))
+: tableColumns);
+const [subModule, setSubModule] = useState("retail-customer");
+const [isApiCalled, setIsApiCalled] = useState(false);
 
-  componentDidMount() {
-    const { onGetRetailCustomer } = this.props
-    const { searchFields } = this.state
-    const params = {
-      limit: 10,
-      page: 0,
-      sort_dir: "asc",
-      sort_field: "ship_to_party",
-      search_fields: transformArrayToString(searchFields),
-    }
-    onGetRetailCustomer(params)
-  }
+useEffect(() => {
+  // console.log('call::1', isApiCalled);
+  // if(isApiCalled === false) {
+    // await setIsApiCalled(true);
+    return fetchData();
+    
+  // }
+  
 
-  render() {
-    const {
-      onGetRetailCustomer,
-      retailCustomerIsLoading,
-      retailCustomer,
-      filter,
-      tableError,
-    } = this.props
-    const { searchFields, subModule } = this.state
-    return (
-      <Fragment>
-        {retailCustomerIsLoading ? <Loader /> : ""}
-        {retailCustomer.list && (
-          <Page
-            tableName={RetailTableName}
-            onGetMainTable={onGetRetailCustomer}
-            tableColumns={searchFields}
-            defaultColumns={tableColumns}
-            tableMapping={tableMapping}
-            tableData={retailCustomer}
-            filter={filter}
-            headerTitle="Retail Customer"
-            cardTitle="Retail Customer List"
-            modalComponent={RetailCustomerModal}
-            subModule={subModule}
-          />
-        )}
-        {tableError && (
-          <div className="page-content">
-            <div className="container-fluid">
-              <p>
-                There's some issue loading the data. Please refresh the page or
-                try again later
-              </p>
-            </div>
-          </div>
-        )}
-      </Fragment>
-    )
+}, []);
+
+const fetchData = async() => {
+  const params = {
+    limit: 10,
+    page: 0,
+    sort_dir: "asc",
+    sort_field: "ship_to_party",
+    search_fields: transformArrayToString(searchFields),
   }
+  // console.log('call::', isApiCalled);
+  await onGetRetailCustomer(params)
+}
+
+  return(
+    <Fragment>
+    {retailCustomerIsLoading ? <Loader /> : ""}
+    {retailCustomer.list && (
+      <Page
+        tableName={RetailTableName}
+        onGetMainTable={onGetRetailCustomer}
+        tableColumns={searchFields}
+        defaultColumns={tableColumns}
+        tableMapping={tableMapping}
+        tableData={retailCustomer}
+        filter={filter}
+        headerTitle="Retail Customer"
+        cardTitle="Retail Customer List"
+        modalComponent={RetailCustomerModal}
+        subModule={subModule}
+      />
+    )}
+    {tableError && (
+      <div className="page-content">
+        <div className="container-fluid">
+          <p>
+            There's some issue loading the data. Please refresh the page or
+            try again later
+          </p>
+        </div>
+      </div>
+    )}
+  </Fragment>
+  )
 }
 
 const mapStateToProps = ({ retailCustomer }) => ({

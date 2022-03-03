@@ -499,7 +499,7 @@ class Pages extends Component {
                                   <AWSMDropdown
                                     placeholder=""
                                     items={REGION_TERMINAL.filter(
-                                      option => option.region !== "Special Product"
+                                      option => option.region !== "*Special Product"
                                     ).map(e => e.region)}
                                     value={this.state.region}
                                     onChange={this.onRegionChange}

@@ -197,6 +197,10 @@ class index extends Component {
   }
 
   UNSAFE_componentWillReceiveProps = async nextProps => {
+    if (this.props.resetAllHandler) {
+      this.setState({ searchText: '' })
+      this.setState({ expandSearch: false })
+    }
     if (nextProps.dataSource !== this.props.dataSource) {
       this.setState({ showLoader: false })
       this.setState({
@@ -235,9 +239,8 @@ class index extends Component {
 
   applyExpandSearchHandler = () => {
     let { searchText } = this.state
-    const { dataSource } = this.props
-    let newData = [...dataSource].filter(e => e.notes.includes(searchText))
-    this.setState({ dataSource: newData })
+    const { srFilterApplyHandler } = this.props
+    searchText ? srFilterApplyHandler(searchText) : srFilterApplyHandler('')
   }
 
   onSorting(col) {
@@ -292,7 +295,7 @@ class index extends Component {
               <Input
                 placeholder="Search"
                 onChange={this.onSearchTextChange.bind(this)}
-                defaultValue={searchText}
+                value={searchText}
                 style={{
                   fontFamily: 'Museo Sans',
                 }}

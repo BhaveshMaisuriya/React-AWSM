@@ -2,44 +2,23 @@ import React, { useEffect, useRef, useState } from 'react'
 import { connect } from 'react-redux'
 import { createPopper } from '@popperjs/core'
 import { ganttChartTableMapping } from './tableMapping'
-
 import { BryntumGrid } from '@bryntum/schedulerpro-react'
-import ConfirmDNStatusModal from './confirmDNStatusModal'
-import TerminalRelayModal from './TerminalRelayModal'
 import {
-  cancelPaymentInGanttChart,
-  deselectVehicleShipment,
   getShipmentOfOderBankGanttChart,
   processPaymentInGanttChart,
   selectVehicleShipment,
-  sendOrderInGanttChart,
 } from 'store/actions'
-import { cloneDeep } from 'lodash'
 import { Droppable } from 'react-beautiful-dnd'
-import OrderBankShipmentModal from './OrderBankShipmentModal'
-import PlannedLoadTimesModal from './PlannedLoadTimesModal'
 import BryntumDragDropAreaShipment from './BryntumDragDropAreaShipment/BryntumDragDropAreaShipment'
 import OrderBankRoadTankerModal from './OrderBankRoadTankerModal'
 import ChartColumnFilter from './ChartColumnFilter'
 import ShiftPopover from './ShiftPopover'
 import InfiniteScroll from 'react-infinite-scroll-component'
 
-const EventContextList = {
-  SHIPMENT: 'shipment',
-  CANCEL_SHIPMENT: 'cancel_shipment',
-  SEND_ORDER: 'send_order',
-  TERMINAL_RELAY: 'terminal_relay',
-  PLAN_LOAD_TIMES: 'planned_load_time',
-}
-
-export const bryntumSchedulerTableNameForCookie =
-  'rts-gantt-chart-bryntum-scheduler'
-
 function BryntumChartShipment(props) {
   const {
     bryntumCurrentColumns,
     onSelectVehicle,
-    onDeselectVehicle,
     onFilterChange,
     dateConfig,
     terminal,
@@ -47,16 +26,11 @@ function BryntumChartShipment(props) {
   const tableData = useRef([])
 
   const colsRef = useRef(bryntumCurrentColumns)
-  const [modal, setModal] = useState(false)
-  const [dropdownSelectedItem, setDropdownSelectedItem] = useState(null)
-  const [eventsData, setEventsData] = useState([])
-  const [shipmentDblclick, setShipmentDblclick] = useState(false)
   const [roadTankerModalShow, setRoadTankerModal] = useState(false)
   const [selectedVehicleID, setSelectedVehicleID] = useState(null)
   const schedulerProRef = useRef()
   const firstRender = useRef(true)
   const [filterList, setFilterList] = useState([])
-
   const [bryntumTable, setBryntumTable] = useState({
     page: 0,
     filterCondition: [],
@@ -86,63 +60,6 @@ function BryntumChartShipment(props) {
     setTimeout(() => {
       setBryntumTable(bryntumTable)
     }, 1000)
-  }
-
-  const toggle = () => setModal(!modal)
-
-  const removeShipmentHandler = () => {
-    const { instance: scheduler } = schedulerProRef.current
-    const newEventsData = eventsData.filter(
-      v => v.id !== dropdownSelectedItem.itemSelectedId
-    )
-    scheduler.eventStore.remove(dropdownSelectedItem.record)
-    scheduler.eventStore.data = newEventsData
-    setEventsData(newEventsData)
-  }
-
-  const changeColorOfEventHandler = (
-    color,
-    isPending = false,
-    eventType = undefined
-  ) => {
-    const newData = cloneDeep(eventsData)
-    let itemSelected = newData.filter(
-      v => v.id == dropdownSelectedItem.itemSelectedId
-    )
-    itemSelected[0].eventColor = color
-    itemSelected[0].isPending = isPending
-    if (eventType) {
-      itemSelected[0].eventType = eventType
-    }
-    setEventsData(newData)
-  }
-
-  const sendRequestsHandler = () => {
-    switch (dropdownSelectedItem.type) {
-      case EventContextList.SHIPMENT: {
-        changeColorOfEventHandler('#9F79B7', true)
-        setTimeout(() => {
-          props.processPaymentInGanttChart(null)
-        }, 2000)
-        break
-      }
-      case EventContextList.CANCEL_SHIPMENT: {
-        changeColorOfEventHandler('#aeaeae', true)
-        setTimeout(() => {
-          props.processCancelPaymentInGanttChart(dropdownSelectedItem)
-          // removeShipmentHandler();
-        }, 2000)
-        break
-      }
-      case EventContextList.SEND_ORDER: {
-        // props.processSendOrderInGanttChart(null)
-        // console.log('what are you doing dude ?? :D ??')
-        break
-      }
-      default:
-        break
-    }
-    toggle()
   }
 
   const updateResourceRecords = (updateData, preventClear = false) => {
@@ -203,29 +120,13 @@ function BryntumChartShipment(props) {
     },
   }
 
-  function toggleShipment() {
-    setShipmentDblclick(!shipmentDblclick)
-  }
-
   function showRoadTanker(event) {
     setSelectedVehicleID(event.target.innerText)
     toggleRoadTanker()
   }
 
   function toggleRoadTanker() {
-    setRoadTankerModal(!roadTankerModalShow)
-  }
-
-  function onShiftDateChange(recordId, value) {
-    const currentTableData = tableData.current
-    const recordIndex = currentTableData.findIndex(e => e.id === recordId)
-    if (recordIndex >= 0) {
-      currentTableData[recordIndex] = {
-        ...currentTableData[recordIndex],
-        shift: value,
-      }
-    }
-    updateResourceRecords([...currentTableData], true)
+    setRoadTankerModal(prevRoadTankerModalShow => !prevRoadTankerModalShow)
   }
 
   function onStatusChange(recordId, value) {
@@ -280,7 +181,7 @@ function BryntumChartShipment(props) {
             )
           }
         }
-        return <div>{value}</div>
+        return <>{value}</>
       },
       headerRenderer: ({ column }) => {
         return `<div class="d-flex align-items-center chart-header" id="chart-column-${column.data.field}">
@@ -302,15 +203,6 @@ function BryntumChartShipment(props) {
   for (const tableMap of Object.keys(colsRef.current)) {
     schedulerproConfig.columns.push(generateColumnsObj(tableMap))
   }
-  useEffect(() => {
-    if (props.isSendRequestProcess && dropdownSelectedItem?.itemSelectedId) {
-      if (dropdownSelectedItem.type === EventContextList.CANCEL_SHIPMENT) {
-        removeShipmentHandler()
-      } else {
-        changeColorOfEventHandler('#615E9B')
-      }
-    }
-  }, [props.isSendRequestProcess])
 
   useEffect(() => {
     if (bryntumCurrentColumns) {
@@ -445,40 +337,7 @@ function BryntumChartShipment(props) {
             />
           ))}
       </div>
-      {(dropdownSelectedItem?.type === EventContextList.SHIPMENT ||
-        dropdownSelectedItem?.type === EventContextList.CANCEL_SHIPMENT ||
-        dropdownSelectedItem?.type === EventContextList.SEND_ORDER) && (
-        <ConfirmDNStatusModal
-          isOpen={modal}
-          onSend={sendRequestsHandler}
-          onCancel={toggle}
-          headerContent={dropdownSelectedItem?.header || ''}
-          bodyContent={`Are you sure you want to ${
-            dropdownSelectedItem?.body || ''
-          }`}
-          styleColor={dropdownSelectedItem?.styleColor}
-        />
-      )}
-      {dropdownSelectedItem?.type === EventContextList.TERMINAL_RELAY && (
-        <TerminalRelayModal
-          isOpen={modal}
-          onSend={sendRequestsHandler}
-          onCancel={toggle}
-        />
-      )}
-      {dropdownSelectedItem?.type === EventContextList.PLAN_LOAD_TIMES && (
-        <PlannedLoadTimesModal
-          isOpen={modal}
-          onSend={sendRequestsHandler}
-          onCancel={toggle}
-        />
-      )}
-      {shipmentDblclick && (
-        <OrderBankShipmentModal
-          open={shipmentDblclick}
-          istoggle={toggleShipment}
-        />
-      )}
+
       <OrderBankRoadTankerModal
         isOpen={roadTankerModalShow}
         toggle={toggleRoadTanker}
@@ -493,8 +352,6 @@ function BryntumChartShipment(props) {
 }
 
 const mapStateToProps = ({ orderBank }) => ({
-  isSendRequestProcess: orderBank.isSendRequestProcess,
-  ganttChartData: orderBank.ganttChart,
   ganttChartTableData: orderBank.ganttChartTableData,
   totalRow_ganttChart: orderBank.totalRow_ganttChart,
   ganttChartTableFilter: orderBank.ganttChartTableFilter,
@@ -504,14 +361,9 @@ const mapDispatchToProps = dispatch => {
   return {
     processPaymentInGanttChart: params =>
       dispatch(processPaymentInGanttChart(params)),
-    processCancelPaymentInGanttChart: params =>
-      dispatch(cancelPaymentInGanttChart(params)),
-    processSendOrderInGanttChart: params =>
-      dispatch(sendOrderInGanttChart(params)),
     getShipmentOfOderBankGanttChart: params =>
       dispatch(getShipmentOfOderBankGanttChart(params)),
     onSelectVehicle: params => dispatch(selectVehicleShipment(params)),
-    onDeselectVehicle: () => dispatch(deselectVehicleShipment()),
   }
 }
 

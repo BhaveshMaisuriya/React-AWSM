@@ -73,14 +73,17 @@ import {
   SET_BRYNTUM_FILTER,
   UPDATE_SHIPMENT_SUCCESS,
   UPDATE_SHIPMENT_FAIL,
+  DRAG_RTS_ORDER_BANK_TO_GANTT_CHART,
+  DRAG_RTS_ORDER_BANK_TO_GANTT_CHART_CONFIRM_RESTRICTIONS,
 } from './actionTypes'
 import {
   ensureDateRangeNotExceedingADay,
   factorizeGanttChartEventBars,
   EVENT_COLOR,
-  shipmentFactory,
+  factorizeShipmentTableRows,
   factorizeGanttChartEventBar,
   DATE_TIME_FORMAT,
+  factorizeShipmentTableRow,
 } from './factory'
 import { ToastSuccess, ToastError } from '../../helpers/swal'
 import moment from 'moment'
@@ -108,6 +111,11 @@ const initialState = {
         to: null,
       },
     },
+    scheduling: {
+      orderIndexes: [],
+      constraints: [],
+      requiresConfirmation: false,
+    },
   },
   orderBankRTDetails: null,
   crossTerminalDetails: null,
@@ -120,7 +128,6 @@ const initialState = {
   ganttChartTableData: [],
   ganttChartOrderDrag: [],
   ganttChartTableFilter: {},
-  isDragging: false,
   totalRow_ganttChart: 0,
   shipmentDropData: [],
   sendMultipleDn: null,
@@ -134,8 +141,12 @@ const RTSOrderBank = (state = initialState, action) => {
     case GET_RTS_ORDER_BANK_TABLE_DATA_SUCCESS:
       const { data, scrolling } = action.payload
       const { list, total_rows, filter, summary } = data
-      
-      if ((state.orderBankTableData !== null || state.orderBankTableData?.length) && scrolling) {
+
+      if (
+        (state.orderBankTableData !== null ||
+          state.orderBankTableData?.length) &&
+        scrolling
+      ) {
         return {
           ...state,
           orderBankTableData: [...state.orderBankTableData, ...list],
@@ -157,7 +168,7 @@ const RTSOrderBank = (state = initialState, action) => {
         orderBankTableData: null,
         error: action.payload,
         totalRow: '0',
-        orderBankTableSummary: null
+        orderBankTableSummary: null,
       }
     case GET_SHIPMENT_ORDER_BANK_TABLE_DATA_SUCCESS:
       return {
@@ -520,26 +531,27 @@ const RTSOrderBank = (state = initialState, action) => {
       }
     }
 
+    case DRAG_RTS_ORDER_BANK_TO_GANTT_CHART: {
+      return { ...state }
+    }
+
     case DRAG_RTS_ORDER_BANK_TO_GANTT_CHART_SUCCESS: {
-      ToastSuccess.fire({ title: 'Orderbank has been successfully updated' })
+      // consult <file saga.js>, <func onDragOrderBankToGanttChart>
+      const { orders, constraints, requiresConfirmation, vehicle } =
+        action.payload
 
-      // action.payload = { soft_restriction, hard_restriction, order_banks }
-      const {
-        soft_restriction,
-        hard_restriction,
-        order_banks: orders,
-      } = action.payload
+      if (!constraints) {
+        ToastSuccess.fire({ title: 'Orderbank has been successfully updated' })
 
-      const {
-        terminal: { shiftDate },
-      } = state.ganttChart
+        const {
+          terminal: { shiftDate },
+        } = state.ganttChart
 
-      const events = [...state.ganttChart.events]
-      orders.forEach(o => {
-        // find rtHours by taking them from one of the Event at has the same resourceId
+        let events = [...state.ganttChart.events]
+        // find rtHours by taking them from one of the Event that has the same resourceId
         // always return array with at least 1 element
-        const eventsWithinResource = events.filter(
-          item => item.resourceId === o.vehicle
+        let eventsWithinResource = events.filter(
+          item => item.resourceId === vehicle
         )
 
         // copy background from existing event
@@ -549,30 +561,70 @@ const RTSOrderBank = (state = initialState, action) => {
           to: moment.utc(endDate, DATE_TIME_FORMAT, true),
         }
 
-        if (eventsWithinResource.findIndex(item => item.id === o.id) === -1)
-          events.push(
-            factorizeGanttChartEventBar({
-              orderBank: o,
-              vehicleId: o.vehicle,
-              rtHours,
-              date: shiftDate,
-            })
-          )
-      })
+        for (let i = 0; i < orders.length; i++) {
+          const order = orders[i]
 
-      state.ganttChart.events = events
-      return {
-        ...state,
-        isDragging: !state.isDragging,
+          if (
+            eventsWithinResource.findIndex(item => item.id === order.id) === -1
+          )
+            eventsWithinResource.push(
+              factorizeGanttChartEventBar({
+                order,
+                vehicleId: vehicle,
+                rtHours,
+                date: shiftDate,
+              })
+            )
+
+          // remove the default background, consult <factory.js> ;)
+          if (i === orders.length - 1)
+            eventsWithinResource = eventsWithinResource.filter(
+              s => !s.flags.isBackground
+            )
+        }
+
+        // purges all old events, updates the new ones
+        events = [
+          ...events.filter(s => s.resourceId !== vehicle),
+          ...eventsWithinResource,
+        ]
+
+        state.ganttChart.events = events
+        state.ganttChart.scheduling = {
+          orderIndexes: [],
+          constraints: [],
+          requiresConfirmation: false,
+        }
+
+        return { ...state }
       }
+
+      // preseve all state here, I will use it later in
+      // <saga.js onDragOrderBankToGanttChartConfirm>
+      state.ganttChart.scheduling = {
+        orderIndexes: orders,
+        constraints,
+        requiresConfirmation,
+      }
+
+      return { ...state }
     }
+
+    case DRAG_RTS_ORDER_BANK_TO_GANTT_CHART_CONFIRM_RESTRICTIONS: {
+      // trigger to empty the constraints, so popup will close ;)
+      state.ganttChart.scheduling = {
+        ...state.ganttChart.scheduling,
+        constraints: [],
+      }
+
+      return { ...state }
+    }
+
     case DRAG_RTS_ORDER_BANK_TO_GANTT_CHART_FAIL: {
       ToastError.fire({ title: 'Orderbank has been failed to update' })
-      return {
-        ...state,
-        isDragging: !state.isDragging,
-      }
+      return { ...state }
     }
+
     case REMOVE_ORDER_FROM_SHIPMENT_SUCCESS: {
       const { orderId, shipmentId } = action.params
       // remove from shipment
@@ -608,7 +660,7 @@ const RTSOrderBank = (state = initialState, action) => {
       return { ...state }
     }
     case REMOVE_SHIPMENT_FROM_EVENT_SUCCESS: {
-      const { shipmentId } = action.params
+      const { shipmentId } = action.payload
       let removedShipment = state.shipmentDropData.find(
         item => item.id === shipmentId
       )
@@ -752,7 +804,7 @@ const RTSOrderBank = (state = initialState, action) => {
     case GET_SHIPMENT_DETAIL_SUCCESS: {
       return {
         ...state,
-        shipmentDropData: shipmentFactory(action.payload),
+        shipmentDropData: factorizeShipmentTableRows(action.payload),
       }
     }
     case DRAG_AND_DROP_SHIPMENT_AREA_SUCCESS: {
@@ -787,19 +839,17 @@ const RTSOrderBank = (state = initialState, action) => {
       }
     }
     case DRAG_ORDER_TO_SHIPMENT_SUCCESS: {
-      let newShipment = []
-      let newShipmentItem = {
-        shipment: Math.floor(Math.random() * 100000),
-        order_banks: [...action.payload],
-      }
-      newShipment.push(newShipmentItem)
-      return {
-        ...state,
-        shipmentDropData: [
-          ...state.shipmentDropData,
-          shipmentFactory(newShipment)[0],
-        ],
-      }
+      // I only rewrite to get a better codebase, no logic changes
+      state.shipmentDropData = [
+        ...state.shipmentDropData,
+        // single new Shipment Table Row
+        factorizeShipmentTableRow({
+          shipment: Math.floor(Math.random() * 100000),
+          order_banks: action.payload,
+        }),
+      ]
+
+      return { ...state }
     }
     case GET_OB_TOTAL_UNSCHEDULE_SUCCESS: {
       return {

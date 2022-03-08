@@ -163,6 +163,7 @@ function OrderBank({
     filterOrderBank: {},
     currentPage: 0,
     filterQuery: '',
+    srFilterQuery: '',
   })
   const [searchFields, setSearchFields] = useState(
     getCookieByKey('Order Bank')
@@ -227,14 +228,16 @@ function OrderBank({
   const [reloadData, setReloadData] = useState(false)
   const [currentPage, setCurrentPage] = useState(0)
   const [filterQuery, setfilterQuery] = useState('')
+  const [srFilterQuery, setSrFilterQuery] = useState('')
   const [resetTable, setResetTable] = useState(false)
   const filterOrderBank = useMemo(() => {
     return {
       terminal: TERMINAL_CODE_MAPPING[terminalTable],
       scheduled_status: status,
       shift_date: shiftDateTable,
+      sr: srFilterQuery,
     }
-  }, [terminalTable, shiftDateTable, status])
+  }, [terminalTable, shiftDateTable, status, srFilterQuery])
 
   const [bryntumTable, setBryntumTable] = useState({
     currentPage: 0,
@@ -801,6 +804,11 @@ function OrderBank({
     setCurrentPage(0)
   }
 
+  const changeSrFilterHandler = srValue => {
+    setSrFilterQuery(srValue)
+    setCurrentPage(0)
+  }
+
   useEffect(() => {
     orderBankTableData === null && setShowTableError(true)
     let checkedData = []
@@ -867,6 +875,7 @@ function OrderBank({
   }
 
   const resetTableAndFilters = () => {
+    setSrFilterQuery('')
     setfilterQuery({})
     setResetTable(true)
     setReloadData(true)
@@ -1284,6 +1293,7 @@ function OrderBank({
                   dataSource={orderBankTableData || []}
                   headerFilters={orderBankTableFilters}
                   filterApplyHandler={changeFiltersHandler}
+                  srFilterApplyHandler={changeSrFilterHandler}
                   enabledCross={enabledCross}
                   deleteEnable={deleteEnable}
                   currentPage={currentPage}
@@ -1334,7 +1344,6 @@ function OrderBank({
                 onCancel={onCloseCustomize}
                 tableName="Order Bank"
                 onChange={onTableColumnsChange}
-                open={showCustomize}
                 closeDialog={onCloseCustomize}
                 availableMetric={tableMapping}
                 initialMetric={searchFields}

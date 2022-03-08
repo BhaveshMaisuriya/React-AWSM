@@ -22,7 +22,7 @@ import REGION_TERMINAL, {
   TERMINAL_CODE_MAPPING,
 } from 'common/data/regionAndTerminal'
 import NoDataIcon from 'assets/images/AWSM-No-Data-Available-Inverted.svg'
-import { format } from 'date-fns'
+import { format, sub } from 'date-fns'
 import CloseButton from 'components/Common/CloseButton'
 import { isNull, isUndefined } from 'lodash'
 
@@ -56,8 +56,9 @@ const NewOrderBankModal = props => {
   const [inputValue3, setInputValue3] = useState('')
   const [allProductDetailList, setAllProductDetailList] = useState([])
   const [priorityDisable, setPriorityDisable] = useState(false)
-  const defaultDate = new Date(new Date().getTime() + 24 * 60 * 60 * 1000)
+  const defaultDate = new Date()
   const [shiftDate, setShiftDate] = useState(defaultDate)
+
   useEffect(() => {
     if (currentState === 'loading') {
       const timer = setInterval(() => {
@@ -94,11 +95,11 @@ const NewOrderBankModal = props => {
 
   useEffect(() => {
     if (addOrderDetailsData) {
-      const runout =
+      const runoutDate =
         addOrderDetailsData?.runout &&
         format(new Date(addOrderDetailsData?.runout), 'dd-MM-yyyy')
       const formattedShiftDate = format(new Date(shiftDate), 'dd-MM-yyyy')
-      if (runout === formattedShiftDate) {
+      if (runoutDate === formattedShiftDate) {
         setPriorityDisable(true)
         const newOrderData = { ...orderData }
         newOrderData['priority_order'] = 'High Priority'
@@ -119,21 +120,21 @@ const NewOrderBankModal = props => {
       setIsaddClicked(false)
       setShiptoNo('')
       setCurrentState('')
-      setShiftDate(new Date(new Date().getTime() + 24 * 60 * 60 * 1000))
+      setShiftDate(defaultDate)
     }
   }
   const handleUpdate = async () => {
     setIsaddClicked(true)
     if (
       !isUndefined(orderData.terminal) &&
-      // !isUndefined(orderData.priority_order) &&
       !isUndefined(orderData.volume) &&
       !isUndefined(orderData.product_name) &&
       shiptoNo !== ''
     ) {
+      const formattedShiftDate = format(shiftDate, 'yyyy-MM-dd')
       const temp = {
-        shift_date: shiftDate.toISOString().split('T')[0],
-        requested_delivery_date: shiftDate.toISOString().split('T')[0],
+        shift_date: formattedShiftDate,
+        requested_delivery_date: formattedShiftDate,
         my_remark_1: checkUndefinedorNull(orderData.myremark1, ''),
         my_remark_2: checkUndefinedorNull(orderData.myremark2, ''),
         my_remark_3: checkUndefinedorNull(orderData.myremark3, ''),
@@ -142,22 +143,28 @@ const NewOrderBankModal = props => {
           ''
         ),
         volume: checkUndefinedorNull(parseInt(orderData.volume), 0),
-        eta: orderData.eta ? 
-          shiftDate.toISOString().split('T')[0] +
-          ' ' +
-          checkUndefinedorNull(orderData.eta, '') : '',
-        planned_load_time: orderData.load_time ? 
-          shiftDate.toISOString().split('T')[0] +
-          ' ' +
-          checkUndefinedorNull(orderData.load_time, '') : '',
+        eta: orderData.eta
+          ? formattedShiftDate + ' ' + checkUndefinedorNull(orderData.eta, '')
+          : '',
+        planned_load_time: orderData.load_time
+          ? formattedShiftDate +
+            ' ' +
+            checkUndefinedorNull(orderData.load_time, '')
+          : '',
         order_remarks: checkUndefinedorNull(orderData.order_remarks, ''),
         remarks: checkUndefinedorNull(orderData.remarks, ''),
         priority: checkUndefinedorNull(orderData.priority_order, null),
         retail_storage: parseInt(orderData.product_id),
         product: checkUndefinedorNull(orderData.product_code, ''),
         customer_type: 'RETAIL',
-        order_type: checkUndefinedorNull(orderData?.storeData?.ordering_category, ''),
-        product_category:checkUndefinedorNull(orderData?.storeData?.sales_category, ''),
+        order_type: checkUndefinedorNull(
+          orderData?.storeData?.ordering_category,
+          ''
+        ),
+        product_category: checkUndefinedorNull(
+          orderData?.storeData?.sales_category,
+          ''
+        ),
       }
 
       const { onAddOrderBank } = props
@@ -166,7 +173,7 @@ const NewOrderBankModal = props => {
       setIsaddClicked(false)
       setShiptoNo('')
       setCurrentState('')
-      setShiftDate(new Date(new Date().getTime() + 24 * 60 * 60 * 1000))
+      setShiftDate(defaultDate)
     }
   }
   useEffect(() => {
@@ -354,13 +361,13 @@ const NewOrderBankModal = props => {
     )
 
   const generateDeliveryIntervalText = (
-    deliveryNumber,
-    deliveryType,
-    deliveryTimeFrom,
-    deliveryTimeTo,
-    deliveryDateFrom,
-    deliveryDateTo,
-    deliveryDays
+    deliveryNumber = '',
+    deliveryType = '',
+    deliveryTimeFrom = '',
+    deliveryTimeTo = '',
+    deliveryDateFrom = '',
+    deliveryDateTo = '',
+    deliveryDays = ''
   ) => {
     const formattedDateFrom = deliveryDateFrom
       ? format(new Date(deliveryDateFrom), 'dd-MM-yyyy')
@@ -466,9 +473,9 @@ const NewOrderBankModal = props => {
             </Row>
             <hr className="mt-4 mb-4" />
             {currentState === 'search' && (
-              <>
+              <div className="scroll order-scroll">
                 <h4>Ship To: {shiptoNo}</h4>
-                <Row className="mt-4">
+                <Row className="mt-4 w-100">
                   <Col md={4}>
                     <label className="text-upper">
                       Region & Terminal<span className="text-red">*</span>
@@ -484,7 +491,6 @@ const NewOrderBankModal = props => {
                               ? true
                               : false
                           }
-                          // value={orderData?.address?.address?.region_group}
                         />
                       </Col>
                       <Col>
@@ -519,7 +525,7 @@ const NewOrderBankModal = props => {
                   </Col>
                 </Row>
 
-                <Row className="mt-4">
+                <Row className="mt-4 w-100">
                   <Col md={4}>
                     <label className="text-upper">
                       Product Name<span className="text-red">*</span>
@@ -542,7 +548,7 @@ const NewOrderBankModal = props => {
                 </Row>
                 <h5 className="text-bold mt-4 mb-3">Order Details</h5>
 
-                <Row className="mt-4">
+                <Row className="mt-4 w-100">
                   <Col md={4}>
                     <label className="text-upper">Planned Load Time</label>
                     <TimePicker
@@ -562,7 +568,7 @@ const NewOrderBankModal = props => {
                     />
                   </Col>
                 </Row>
-                <Row className="mt-4">
+                <Row className="mt-4 w-100">
                   <Col md={8}>
                     <label className="text-upper">Order Remarks</label>
                     <div className="relative">
@@ -583,16 +589,12 @@ const NewOrderBankModal = props => {
                     </div>
                   </Col>
                 </Row>
-                <Row className="mt-4">
+                <Row className="mt-4 w-100">
                   <Col md={4}>
-                    <label className="text-upper">
-                      Priority
-                      {/* <span className="text-red">*</span> */}
-                    </label>
+                    <label className="text-upper">Priority</label>
                     <AWSMDropdown
                       items={ORDER_PRIORITY}
                       onChange={value => onFieldChange('priority_order', value)}
-                      // error={isUndefined(orderData.priority_order) && isaddClicked ? true : false}
                       value={orderData.priority_order}
                       disabled={priorityDisable}
                       hasNone
@@ -600,17 +602,20 @@ const NewOrderBankModal = props => {
                     />
                   </Col>
                 </Row>
-                <Row className="mt-4">
+                <Row className="mt-4 w-100">
                   <Col md={4}>
                     <label className="text-upper">Retain</label>
                     <AWSMInput
                       onChange={value => onFieldChange('retain', value)}
                       value={
-                        addOrderDetailsData?.retain &&
-                        format(
-                          new Date(addOrderDetailsData?.retain),
-                          'dd-MM-yyyy HH:mm'
-                        )
+                        addOrderDetailsData?.retain
+                          ? format(
+                              sub(new Date(addOrderDetailsData?.retain), {
+                                hours: 8,
+                              }),
+                              'dd-MM-yyyy HH:mm'
+                            )
+                          : ''
                       }
                       disabled={true}
                       placeholder="Lorem ipsum"
@@ -621,11 +626,14 @@ const NewOrderBankModal = props => {
                     <AWSMInput
                       onChange={value => onFieldChange('runout', value)}
                       value={
-                        addOrderDetailsData?.runout &&
-                        format(
-                          new Date(addOrderDetailsData?.runout),
-                          'dd-MM-yyyy HH:mm'
-                        )
+                        addOrderDetailsData?.runout
+                          ? format(
+                              sub(new Date(addOrderDetailsData?.runout), {
+                                hours: 8,
+                              }),
+                              'dd-MM-yyyy HH:mm'
+                            )
+                          : ''
                       }
                       disabled={true}
                       placeholder="Lorem ipsum"
@@ -676,10 +684,7 @@ const NewOrderBankModal = props => {
                     </p> */}
                     <p>
                       <strong>Requested Delivery Date: </strong>
-                      {format(
-                        new Date(shiftDate.toLocaleDateString()),
-                        'dd-MM-yyyy'
-                      )}
+                      {format(new Date(shiftDate), 'dd-MM-yyyy')}
                     </p>
                     <p>
                       <strong>Opening Stock Days: </strong>
@@ -808,16 +813,16 @@ const NewOrderBankModal = props => {
                     </p>
                   </Col>
                 </Row>
-                <Row className="mt-4">
+                <Row className="mt-4 w-100">
                   <Col md={8}>
                     <label className="text-upper">Remarks DQM</label>
                     <AWSMInput value={orderData?.remarks} disabled={true} />
                   </Col>
                 </Row>
-                <Row xs={1} md={2} lg={3} className="mt-4">
+                <Row className="w-100 mt-4">
                   <Col>
                     <label className="text-upper">my Remarks 1</label>
-                    <div className="relative">
+                    <div className="w-100 relative">
                       <input
                         onChange={e =>
                           onFieldChange('myremark1', e.target.value)
@@ -837,7 +842,7 @@ const NewOrderBankModal = props => {
                   </Col>
                   <Col>
                     <label className="text-upper">my Remarks 2</label>
-                    <div className="relative">
+                    <div className="w-100 relative">
                       <input
                         onChange={e =>
                           onFieldChange('myremark2', e.target.value)
@@ -857,7 +862,7 @@ const NewOrderBankModal = props => {
                   </Col>
                   <Col>
                     <label className="text-upper">my Remarks 3</label>
-                    <div className="relative">
+                    <div className="w-100 relative">
                       <input
                         onChange={e =>
                           onFieldChange('myremark3', e.target.value)
@@ -876,7 +881,7 @@ const NewOrderBankModal = props => {
                     </div>
                   </Col>
                 </Row>
-              </>
+              </div>
             )}
             {currentState !== 'search' && (
               <div

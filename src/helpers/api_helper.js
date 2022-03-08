@@ -17,9 +17,7 @@ const axiosApi = axios.create({
 // ADTODO
 axiosApi.interceptors.response.use(
   response => response,
-  error => {
-    console.log('err::11', error?.response?.status)
-  }
+  error => Promise.reject(error)
 )
 
 export { axiosApi }

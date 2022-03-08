@@ -76,7 +76,9 @@ const ChartColumnFilter = ({
 
   const onInputSearchChange = event => {
     const value = event.target.value.toString()
-    const _visibles = filterData.filter(
+    const arrToString = [...filterData].map(String)
+
+    const _visibles = arrToString.filter(
       s => !value || s.toLowerCase().includes(value.toLowerCase())
     )
     const data = _visibles.map(e => ({

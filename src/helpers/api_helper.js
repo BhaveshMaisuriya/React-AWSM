@@ -28,6 +28,10 @@ const realAxiosApi = axios.create({
     'content-type': 'application/json',
   },
 })
+const expireDt = JSON.parse(sessionStorage.getItem('authUser'))?.extExpiresOn; //sessionStorage.getItem('extExpiresOn');
+ const expire = moment(expireDt).utcOffset("+08:00").format("YYYY-DD-MM hh:mm a"); //moment(new Date()); 
+ const current = moment().utcOffset("+08:00").format("YYYY-DD-MM hh:mm a") //moment(new Date());
+
 
 realAxiosApi.interceptors.request.use(
   async (config) => {
@@ -37,7 +41,12 @@ realAxiosApi.interceptors.request.use(
       window.location.href = '/login';
       signOut();      
       return;
-    }
+    } 
+    // if(expire >= current === false) {
+    //   signOut();
+    //   window.location.href = '/login';
+    //   return;
+    // }
     const userInfo = JSON.parse(userSession);
     config.headers = {
       Authorization: await getIdToken(userInfo),
@@ -49,7 +58,7 @@ realAxiosApi.interceptors.request.use(
 
 realAxiosApi.interceptors.response.use(
   response => response,
-  (error) => { error?.response?.status === 401 && signIn(); } //Promise.reject(error)
+  (error) => { error?.response?.status === 401 && signIn() } //Promise.reject(error)
 )
 
 export { realAxiosApi }

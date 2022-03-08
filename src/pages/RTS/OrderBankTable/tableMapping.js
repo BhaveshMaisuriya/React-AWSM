@@ -516,10 +516,6 @@ const ganttChartTableMapping = {
     columnSize: "cell-text",
     label_short: "MAX W...",
   },
-  max_weight: {
-    label: "Max Weight",
-    columnSize: "cell-text",
-  },
   customer_type: {
     label: "Cust Type",
     columnSize: "cell-text",

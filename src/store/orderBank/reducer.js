@@ -462,24 +462,17 @@ const RTSOrderBank = (state = initialState, action) => {
         ganttChartTableFilter: filter,
       }
     }
-    case GET_RTS_GANTT_CHART_DATA_FAIL: {
-      state.ganttChart = {
-        table: [],
-        events: [],
-        selectedFilters: {},
-        terminal: {
-          operatingTime: {
-            from: null,
-            to: null,
-          },
-        },
-      }
-
+    case GET_RTS_GANTT_CHART_DATA_FAIL:
       return {
         ...state,
+        ganttChart: {
+          ...state.ganttChart,
+          table: [],
+          events: [],
+        },
         error: action.payload,
       }
-    }
+
     case CLEAR_GANTT_DATA: {
       return {
         ...state,

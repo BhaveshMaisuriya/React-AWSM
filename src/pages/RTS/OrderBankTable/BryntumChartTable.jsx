@@ -105,6 +105,7 @@ function BryntumChartTable(props) {
         }
 
         setBryntumTable(state => {
+          // no changes? do not trigger sorting ;)
           if (
             opt.sortField === state.sortField &&
             opt.sortDirection === state.sortDirection
@@ -115,6 +116,7 @@ function BryntumChartTable(props) {
         })
       },
     }
+
     const { eventStore, resourceStore } = instance
     setEventStore(eventStore)
     setResourceStore(resourceStore)
@@ -274,7 +276,6 @@ function BryntumChartTable(props) {
     autoHeight: true,
     rowHeight: 30,
     barMargin: 0,
-    fillTicks: true,
     createEventOnDblClick: false,
     zoomOnMouseWheel: false,
     forceFit: true,
@@ -355,6 +356,10 @@ function BryntumChartTable(props) {
           },
         },
       ],
+      timeResolution: {
+        unit: 'second',
+        increment: 1,
+      },
     },
     listeners: {
       cellClick(grid) {
@@ -457,8 +462,7 @@ function BryntumChartTable(props) {
 
         bgTemplate = `
           <div class="event-background"
-              style="background-color: ${background.color};
-                      transform: translateX(${bgOffset.start}px);
+              style="transform: translateX(${bgOffset.start}px);
                       width: ${bgOffset.end - bgOffset.start}px;">
           </div>
         `

@@ -190,9 +190,7 @@ export function factorizeShipmentTableRow(shipment) {
 }
 
 export function factorizeShipmentTableRows(shipments) {
-  const rows = []
-
-  shipments.map(shipment => factorizeShipmentTableRow(shipment))
+  const rows = shipments.map(shipment => factorizeShipmentTableRow(shipment))
 
   return rows
 }

@@ -110,9 +110,9 @@ const FilterDropdown = ({
     else if (checkedCount === data.length) setCheckAll(true)
   }, [checkedCount])
 
-  useEffect(() => {
-    !handleResetAll ? resetAll() : null
-  }, [handleResetAll])
+  // useEffect(() => {
+  //   !handleResetAll ? resetAll() : null
+  // }, [handleResetAll])
 
   /**
    * set filter object with text checked and visibility value

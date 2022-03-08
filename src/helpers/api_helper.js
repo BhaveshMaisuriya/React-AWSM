@@ -1,5 +1,5 @@
 import axios from "axios"
-import { getIdToken, signOut } from "../AuthService"
+import { getIdToken, signIn, signOut } from "../AuthService"
 import moment from "moment"
 
 //apply base url for axios
@@ -29,11 +29,6 @@ const realAxiosApi = axios.create({
   },
 })
 
- const expireDt = JSON.parse(sessionStorage.getItem('authUser'))?.extExpiresOn; //sessionStorage.getItem('extExpiresOn');
- const expire = moment(expireDt).utcOffset("+08:00").format("YYYY-DD-MM hh:mm a"); //moment(new Date()); 
- const current = moment().utcOffset("+08:00").format("YYYY-DD-MM hh:mm a") //moment(new Date());
-
-
 realAxiosApi.interceptors.request.use(
   async (config) => {
     const userSession = sessionStorage.getItem("authUser");   
@@ -41,11 +36,6 @@ realAxiosApi.interceptors.request.use(
       //TODO: redirect user to login page
       window.location.href = '/login';
       signOut();      
-      return;
-    } 
-    if(expire >= current === false) {
-      signOut();
-      window.location.href = '/login';
       return;
     }
     const userInfo = JSON.parse(userSession);
@@ -59,7 +49,7 @@ realAxiosApi.interceptors.request.use(
 
 realAxiosApi.interceptors.response.use(
   response => response,
-  error => Promise.reject(error)
+  (error) => { error?.response?.status === 401 && signIn(); } //Promise.reject(error)
 )
 
 export { realAxiosApi }

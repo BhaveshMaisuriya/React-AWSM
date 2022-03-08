@@ -210,8 +210,8 @@
 }
 .order_details_box {
   background-color: #eeeeee;
-  padding: 20px;
-  width: 100%;
+  padding: 20px 0px;
+  width: 99%;
   margin: 0px !important;
 }
 .order_details_box p {
@@ -242,7 +242,7 @@
   width: 200px;
 }
 .order-setting-options:before {
-  content: "";
+  content: '';
   position: absolute;
   right: 5px;
   top: -10px;
@@ -345,7 +345,7 @@
   margin: 0 10px;
 }
 .border-before::before {
-  content: " ";
+  content: ' ';
   border-left: 1px solid #eeeeee;
   position: absolute;
   bottom: -10px;
@@ -653,7 +653,9 @@
   color: #000000;
 }
 
-#clearschedulingConfirm-modal .modal-content .MuiLinearProgress-bar1Determinate {
+#clearschedulingConfirm-modal
+  .modal-content
+  .MuiLinearProgress-bar1Determinate {
   background-color: #fece66;
 }
 #clearschedulingConfirm-modal .modal-content .MuiLinearProgress-determinate {

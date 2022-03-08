@@ -37,6 +37,7 @@ import {
   RUN_AUTO_SCHEDULE,
   GET_OB_TOTAL_UNSCHEDULE,
   UPDATE_SHIPMENT,
+  DRAG_RTS_ORDER_BANK_TO_GANTT_CHART_CONFIRM_RESTRICTIONS,
 } from './actionTypes'
 
 import {
@@ -107,6 +108,7 @@ import {
   getOBTotalUnscheduleFail,
   updateShipmentSuccess,
   updateShipmentFail,
+  dragOrderBankToGanttChartRestricted,
 } from './actions'
 import {
   getOrderBank,
@@ -139,6 +141,7 @@ import {
   putShipment,
   createShipment,
   cancelShipment,
+  confirmSendOrderToVehicle,
 } from '../../helpers/fakebackend_helper'
 
 function* onGetOrderbank({ params = {} }) {
@@ -370,6 +373,7 @@ function* onGetRTSOrderBankGanttChart({ params }) {
       page: params.page,
       shiftDate: params.filter.shift_date.date_from,
     }
+    // console.log(params)
     // page > 0 means user is scrolling
     payload.scrolling = params.page > 0
     yield put(getRTSOderBankGanttChartSuccess(payload))
@@ -379,6 +383,7 @@ function* onGetRTSOrderBankGanttChart({ params }) {
   }
 }
 
+// GANTTCHART Drag&Drop
 function* onDragOrderBankToGanttChart({ shift_date, vehicle, order_banks }) {
   try {
     if (!order_banks) {
@@ -387,36 +392,93 @@ function* onDragOrderBankToGanttChart({ shift_date, vehicle, order_banks }) {
         : yield select(store =>
             store.orderBank?.orderBankTableData?.filter(e => e.isChecked)
           )
-      order_banks = dragOrder.map(e => ({ ...e, vehicle: 'BHF 6666' }))
+      order_banks = dragOrder.map(e => e.id) // <--- map to order indexes for production
+      // order_banks = dragOrder // <--- FULL ORDER BANK RECORD for testing
     }
 
     if (!vehicle) {
       const selectedVehicle = yield select(
-        store => store?.orderBank?.selectedVehicleShipment
+        store => store.orderBank.selectedVehicleShipment
       )
-      vehicle = selectedVehicle.vehicle
+      vehicle = selectedVehicle.resourceId
     }
 
     if (order_banks && order_banks.length > 0) {
-      // const response = yield call(sendOderToVehicle, {
-      //   vehicle: vehicle,
-      //   order_banks: order_banks,
-      //   shift_date: shift_date,
-      // })
+      const response = yield call(sendOderToVehicle, {
+        vehicle: vehicle,
+        order_banks: order_banks,
+        shift_date: shift_date,
+      })
 
-      const response = {
-        data: {
-          soft_constraint: 'soft constraint detected',
-          hard_constraint: 'hard constraint detected',
-          order_banks,
-        },
+      // server will return order_banks with full orderBank, not just my {id}
+      // const response = {
+      //   data: {
+      //     soft_constraint: ['soft constraint detected'],
+      //     // hard_constraint: ['hard constraint detected'],
+      //     order_banks,
+      //   },
+      // }
+
+      const payload = {
+        orders: response.data.order_banks,
+        vehicle,
       }
 
-      yield put(dragOrderBankToGanttChartSuccess(response.data))
+      if (
+        response.data.hard_constraint &&
+        response.data.hard_constraint.length
+      ) {
+        payload.constraints = response.data.hard_constraint
+        payload.requiresConfirmation = false
+      } else if (
+        response.data.soft_constraint &&
+        response.data.soft_constraint.length
+      ) {
+        payload.constraints = response.data.soft_constraint
+        payload.requiresConfirmation = true
+      }
+      yield put(dragOrderBankToGanttChartSuccess(payload))
     }
   } catch (error) {
     console.error(error)
     yield put(dragOrderBankToGanttChartFail(order_banks))
+  }
+}
+
+function* onDragOrderBankToGanttChartConfirm({
+  payload: { proceed, orderIndexes },
+}) {
+  try {
+    if (proceed) {
+      const vehicle = yield select(
+        store => store?.orderBank?.selectedVehicleShipment
+      )
+      const response = yield call(
+        confirmSendOrderToVehicle({
+          actionType: 'Proceed',
+          orderIndexes,
+          vehicle: vehicle.id,
+        })
+      )
+
+      // const response = {
+      //   data: {
+      //     orders: orderIndexes,
+      //     vehicle: vehicle.resourceId,
+      //   },
+      // }
+      yield put(dragOrderBankToGanttChartSuccess(response.data))
+    } else
+      yield call(
+        confirmSendOrderToVehicle({
+          orderIndexes,
+          actionType: 'Cancel',
+          vehicle: vehicle.id,
+        })
+      )
+  } catch (error) {
+    console.error(error)
+    yield put(dragOrderBankToGanttChartFail())
   }
 }
 
@@ -429,9 +491,10 @@ function* onRemoveOrderFromShipment(payload) {
   }
 }
 
-function* onRemoveShipmentFromEvent(payload) {
+function* onRemoveShipmentFromEvent({ params }) {
   try {
-    yield put(removeShipmentFromEventSuccess(payload.params))
+    // @params = { shipmentId, eventId }
+    yield put(removeShipmentFromEventSuccess(params))
   } catch (error) {}
 }
 
@@ -580,6 +643,10 @@ function* orderBankSaga() {
   yield takeLatest(
     DRAG_RTS_ORDER_BANK_TO_GANTT_CHART,
     onDragOrderBankToGanttChart
+  )
+  yield takeLatest(
+    DRAG_RTS_ORDER_BANK_TO_GANTT_CHART_CONFIRM_RESTRICTIONS,
+    onDragOrderBankToGanttChartConfirm
   )
   yield takeLatest(REMOVE_ORDER_FROM_SHIPMENT, onRemoveOrderFromShipment)
   yield takeLatest(REMOVE_SHIPMENT_FROM_EVENT, onRemoveShipmentFromEvent)

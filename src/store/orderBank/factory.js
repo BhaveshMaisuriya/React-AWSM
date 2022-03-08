@@ -54,7 +54,7 @@ export function ensureDateRangeNotExceedingADay({
 }
 
 export function factorizeGanttChartEventBar({
-  orderBank,
+  order,
   vehicleId,
   rtHours,
   isBackground = false,
@@ -83,7 +83,7 @@ export function factorizeGanttChartEventBar({
       },
     }
 
-  const { planned_load_time, planned_end_time, scheduled_status } = orderBank
+  const { planned_load_time, planned_end_time, scheduled_status } = order
 
   const timerange = ensureDateRangeNotExceedingADay({
     from: planned_load_time,
@@ -92,7 +92,7 @@ export function factorizeGanttChartEventBar({
   })
 
   const event = {
-    id: orderBank.id,
+    id: order.id,
     resourceId: vehicleId,
     startDate: timerange.from.format(DATE_TIME_FORMAT),
     endDate: timerange.to.format(DATE_TIME_FORMAT),
@@ -103,15 +103,15 @@ export function factorizeGanttChartEventBar({
     background,
     flags: {
       isBackground,
-      hasSoftRestriction: orderBank.soft_restriction ? true : false,
-      eta: orderBank.eta
-        ? moment.utc(orderBank.eta).format(TIME_FORMAT_SHORT)
+      hasSoftRestriction: order.soft_restriction ? true : false,
+      eta: order.eta
+        ? moment.utc(order.eta).format(TIME_FORMAT_SHORT)
         : '00:00',
-      terminal: orderBank.terminal ?? 'M808',
+      terminal: order.terminal ?? 'M808',
     },
   }
 
-  !orderBank.shipment && (event.resourceOrder = [{ DNNumber: orderBank.dn_no }])
+  !order.shipment && (event.resourceOrder = [{ DNNumber: order.dn_no }])
 
   return event
 }
@@ -131,10 +131,10 @@ export function factorizeGanttChartEventBars(
     })
 
     if (vehicle.order_banks && vehicle.order_banks.length) {
-      vehicle.order_banks.forEach(orderBank =>
+      vehicle.order_banks.forEach(order =>
         events.push(
           factorizeGanttChartEventBar({
-            orderBank,
+            order,
             vehicleId: vehicle.id,
             rtHours,
             isBackground: false,
@@ -156,39 +156,43 @@ export function factorizeGanttChartEventBars(
   return events
 }
 
-export function shipmentFactory(shipments) {
-  let shipmentList = []
-  if (shipments.length > 0) {
-    shipments.forEach(shipment => {
-      let orders = []
-      shipment?.order_banks?.forEach(order => {
-        const event = {
-          id: order?.id,
-          volume: order?.volume,
-          delivery_date: order?.requested_delivery_date,
-          cloud: get(
-            order,
-            'retail_storage_relation.retail_customer_relation.cloud',
-            ''
-          ),
-          name: get(
-            order,
-            'retail_storage_relation.retail_customer_relation.ship_to_company',
-            ''
-          ),
-          ship_to: get(order, 'retail_storage_relation.retail', ''),
-          product: get(order, 'retail_storage_relation.product', ''),
-          isChecked: false,
-          isOnRemove: false,
-        }
-        orders.push(event)
-      })
-      const shipmentItem = {
-        id: shipment?.shipment,
-        orders,
+export function factorizeShipmentTableRow(shipment) {
+  // I only rewrite to get a better codebase, no logic changes
+  const orders = []
+  if (shipment.order_banks && shipment.order_banks.length)
+    shipment.order_banks.forEach(order => {
+      const event = {
+        id: order.id,
+        volume: order.volume,
+        delivery_date: order.requested_delivery_date,
+        cloud: get(
+          order,
+          'retail_storage_relation.retail_customer_relation.cloud',
+          ''
+        ),
+        name: get(
+          order,
+          'retail_storage_relation.retail_customer_relation.ship_to_company',
+          ''
+        ),
+        ship_to: get(order, 'retail_storage_relation.retail', ''),
+        product: get(order, 'retail_storage_relation.product', ''),
+        isChecked: false,
+        isOnRemove: false,
       }
-      shipmentList.push(shipmentItem)
+      orders.push(event)
     })
+
+  return {
+    id: shipment.shipment,
+    orders,
   }
-  return shipmentList
+}
+
+export function factorizeShipmentTableRows(shipments) {
+  const rows = []
+
+  shipments.map(shipment => factorizeShipmentTableRow(shipment))
+
+  return rows
 }

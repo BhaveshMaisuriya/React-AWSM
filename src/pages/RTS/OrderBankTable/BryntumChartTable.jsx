@@ -2,9 +2,12 @@ import React, { useEffect, useRef, useState, useCallback } from 'react'
 import { connect } from 'react-redux'
 import { Row, Col } from 'reactstrap'
 import { createPopper } from '@popperjs/core'
-import { ganttChartTableMapping } from './tableMapping'
-
+import moment from 'moment'
+import { Droppable } from 'react-beautiful-dnd'
 import { BryntumSchedulerPro } from '@bryntum/schedulerpro-react'
+import InfiniteScroll from 'react-infinite-scroll-component'
+
+import { ganttChartTableMapping } from './tableMapping'
 
 import BryntumPopup from './BryntumPopup'
 import RedAlertIcon from './../../../assets/images/AWSM-Red-Alert.svg'
@@ -24,21 +27,12 @@ import {
   updateShipment,
 } from '../../../store/actions'
 import ChartColumnFilter from './ChartColumnFilter'
-import ShiftPopover from './ShiftPopover'
-import { Droppable } from 'react-beautiful-dnd'
 import OrderBankShipmentModal from './OrderBankShipmentModal'
 import OrderBankSapAlertModal from './OrderBankSapAlertModal'
 import OrderBankRoadTankerModal from './OrderBankRoadTankerModal'
 import PlannedLoadTimesModal from './PlannedLoadTimesModal'
 import AlertOverruleModal from './AlertOverruleModal'
-import InfiniteScroll from 'react-infinite-scroll-component'
-import { format, parse } from 'date-fns'
-import moment from 'moment'
-import {
-  DATE_TIME_FORMAT,
-  EVENT_COLOR,
-  TIME_FORMAT_SHORT,
-} from 'store/orderBank/factory'
+import { DATE_TIME_FORMAT, TIME_FORMAT_SHORT } from 'store/orderBank/factory'
 
 import './BryntumChartTable.scss'
 
@@ -64,11 +58,8 @@ export const bryntumSchedulerTableNameForCookie =
 function BryntumChartTable(props) {
   const {
     bryntumCurrentColumns,
-    updateOBEvent,
     onSelectVehicle,
-    ganttEventValidation,
     onFilterChange,
-    dragOrderBankToGanttChart,
     dateConfig,
     terminal,
     ganttChartState,
@@ -79,11 +70,9 @@ function BryntumChartTable(props) {
   const colsRef = useRef(bryntumCurrentColumns)
   const [modal, setModal] = useState(false)
   const [dropdownSelectedItem, setDropdownSelectedItem] = useState(null)
-  const [eventsData, setEventsData] = useState([])
   const [shipmentDblclick, setShipmentDblclick] = useState(false)
   const [roadTankerModalShow, setRoadTankerModal] = useState(false)
   const [selectedVehicleID, setSelectedVehicleID] = useState(null)
-  const [alertOverruleShow, setAlertOverruleShow] = useState(null)
   const firstRender = useRef(true)
   const [filterList, setFilterList] = useState([])
   const [popupShown, showPopup] = useState(false)
@@ -151,7 +140,7 @@ function BryntumChartTable(props) {
     props.clearGanttData()
 
     setTimeout(() => {
-      setBryntumTable(bryntumTable)
+      setBryntumTable({ ...bryntumTable })
     }, 1000)
   }
 
@@ -176,21 +165,6 @@ function BryntumChartTable(props) {
   useEffect(() => {
     tableData.current = props.ganttChartTableData
   }, [props.ganttChartTableData])
-
-  useEffect(() => {
-    // validate gantt event 3
-    if (ganttEventValidation) {
-      if (ganttEventValidation?.alert === 'soft') setAlertOverruleShow('soft')
-      else if (ganttEventValidation?.alert === 'hard')
-        setAlertOverruleShow('hard')
-      else updateOBEventHandler()
-    }
-  }, [ganttEventValidation])
-
-  // validate gantt event 4
-  const updateOBEventHandler = async () => {
-    await updateOBEvent(dropdownSelectedItem)
-  }
 
   const toggle = () => setModal(!modal)
 
@@ -292,24 +266,6 @@ function BryntumChartTable(props) {
     toggle()
   }
 
-  const updateResourceRecords = (updateData, preventClear = false) => {
-    const scheduler = chartRef.current?.instance
-    if (scheduler) {
-      if (preventClear) {
-        scheduler.resourceStore.data = updateData
-      } else {
-        scheduler.resourceStore.removeAll()
-        if (!scheduler.eventStore.data) {
-          scheduler.eventStore.data = eventsData
-        }
-        updateData.forEach(e => {
-          scheduler.resourceStore.add(e)
-        })
-      }
-      tableData.current = updateData
-    }
-  }
-
   const chartConfig = {
     columns: [],
     autoCommit: true,
@@ -335,7 +291,6 @@ function BryntumChartTable(props) {
       },
       eventCopyPaste: false,
       eventDrag: {
-        // constrainDragToResource: true,
         nonWorkingTime: true,
       },
       nonWorkingTime: true,
@@ -349,7 +304,7 @@ function BryntumChartTable(props) {
         },
       },
     },
-    startDate: dateConfig.date_from ?? format(Date.now(), 'yyyy-MM-dd'),
+    startDate: dateConfig.date_from ?? moment.utc().format('YYYY-MM-dd'),
     viewPreset: {
       base: 'hourAndDay',
       headers: [
@@ -414,25 +369,6 @@ function BryntumChartTable(props) {
         eventRecord.resourceId = resourceRecord.id
         showEditor(eventRecord)
         return false
-      },
-      beforeEventDropFinalize: async ({ context }) => {
-        context.async = true
-
-        // validate gantt event 1
-        await dragOrderBankToGanttChart({
-          vehicle: context?.newResource?._data?.vehicle,
-          shift_date: format(
-            context?.startDate ? context?.startDate : new Date(),
-            'yyyy-MM-dd'
-          ),
-          order_banks: [context?.draggedRecords?.[0]?._data?.id],
-        })
-        context.finalize(true)
-      },
-      afterEventDrop: async payload => {
-        const { eventRecord } = payload.context
-        // validate gantt event 2
-        updateModalHandler(EventContextList.UPDATE_SHIPMENT, eventRecord)
       },
     },
     eventMenuFeature: {
@@ -595,18 +531,6 @@ function BryntumChartTable(props) {
     setRoadTankerModal(!roadTankerModalShow)
   }
 
-  function onStatusChange(recordId, value) {
-    const currentTableData = tableData.current
-    const recordIndex = currentTableData.findIndex(e => e.id === recordId)
-    if (recordIndex >= 0) {
-      currentTableData[recordIndex] = {
-        ...currentTableData[recordIndex],
-        status: value,
-      }
-    }
-    updateResourceRecords([...currentTableData], true)
-  }
-
   function generateColumnsObj(tableMap) {
     const text =
       ganttChartTableMapping?.[tableMap]?.label_short ??
@@ -634,19 +558,8 @@ function BryntumChartTable(props) {
               </div>
             )
           }
-          case 'status': {
-            return (
-              <div className="chart-status-cell">
-                <ShiftPopover
-                  record={record}
-                  onChange={onStatusChange}
-                  type="status"
-                />
-              </div>
-            )
-          }
         }
-        return <div>{value}</div>
+        return value
       },
       headerRenderer: ({ column }) => {
         return `
@@ -926,13 +839,13 @@ function BryntumChartTable(props) {
       />
       {/* validate gantt event 5 */}
       <AlertOverruleModal
-        alertType={alertOverruleShow}
-        onCancel={() => {
-          setAlertOverruleShow(false)
-          refreshGanttChartTable()
-        }}
-        alertMessage={ganttEventValidation?.message}
-        onSend={updateOBEventHandler}
+      // alertType={alertOverruleShow}
+      // onCancel={() => {
+      // setAlertOverruleShow(false)
+      // refreshGanttChartTable()
+      // }}
+      // alertMessage={ganttEventValidation?.message}
+      // onSend={updateOBEventHandler}
       />
     </div>
   )
@@ -945,7 +858,6 @@ const mapStateToProps = ({ orderBank }) => {
     ganttChartTableData: orderBank.ganttChartTableData,
     totalRow_ganttChart: orderBank.totalRow_ganttChart,
     ganttChartTableFilter: orderBank.ganttChartTableFilter,
-    isDragging: orderBank.isDragging,
     ganttEventValidation: orderBank.ganttEventValidation,
   }
 }

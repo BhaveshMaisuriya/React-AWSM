@@ -1,3 +1,4 @@
+
 import React, { Component, Fragment } from 'react'
 import { connect } from "react-redux"
 import Page from "../Common"
@@ -19,6 +20,8 @@ class RetailCustomer extends Component {
       subModule: 'retail-customer',
     }
   }
+
+
   componentDidMount() {
     const { onGetRetailCustomer } = this.props
     const { searchFields } = this.state

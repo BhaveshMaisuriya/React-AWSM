@@ -222,15 +222,27 @@ const EditOrderBankModal = props => {
     }
   }
 
-  const disableEdit = (dn_status, dn_no) => {
-    if (dn_status !== 'Clean DN') {
-      if (dn_no) {
+  const disableEdit = (dnStatus, dnNo) => {
+    if (dnStatus !== 'Clean DN') {
+      if (dnNo) {
         return true
       } else {
         return false
       }
     } else {
       return true
+    }
+  }
+
+  const auditLogSummary = (createdBy, updatedBy, createdAt) => {
+    if (updatedBy !== null) {
+      return ` Last Updated By: ${
+        updatedBy ? updatedBy.split('@')[0] : 'Unknown'
+      }
+      on ${createdAt ? format(new Date(createdAt), 'do LLL yyyy') : ''}`
+    } else {
+      return ` Created By: ${createdBy ? createdBy.split('@')[0] : 'Unknown'}
+      on ${createdAt ? format(new Date(createdAt), 'do LLL yyyy') : ''}`
     }
   }
 
@@ -241,13 +253,11 @@ const EditOrderBankModal = props => {
           View/Edit Details: Order ID {editOrderData?.id}
         </span>
         <span className="last-updated-sub-title">
-          {`Last Updated By: ${
-            editOrderData?.updated_by?.split('@')[0] || 'Unknown'
-          } on ${
-            (editOrderData?.created_at &&
-              format(new Date(editOrderData?.created_at), 'do LLL yyyy')) ||
-            ''
-          }`}
+          {auditLogSummary(
+            editOrderData?.created_by || null,
+            editOrderData?.updated_by || null,
+            editOrderData?.created_at || null
+          )}
         </span>
       </ModalHeader>
 

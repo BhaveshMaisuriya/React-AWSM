@@ -509,6 +509,14 @@ export const sendOderToVehicle = params => {
   return axios.post('/rts/order-bank/order-to-gantt', params)
 }
 
+export function confirmSendOrderToVehicle(params) {
+  return axios.post('/rts/order-bank/confirm-order-to-gantt', {
+    vehicle: params.vehicle,
+    orders: params.orderIndexes,
+    actionType: params.actionType,
+  })
+}
+
 export const validateGanttEventChange = params => {
   return axios.post('rts/order-bank/gantt-event-validate', params)
 }

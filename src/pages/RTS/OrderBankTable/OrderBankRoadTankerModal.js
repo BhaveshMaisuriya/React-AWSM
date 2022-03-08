@@ -161,7 +161,7 @@ const OrderBankRoadTankerModal = ({
               onChange={e => onFieldValueChange('status', e)}
               disabled={!isScheduler}
               className="form-control awsm-input"
-            />
+            ></AWSMDropdown>
           </Col>
         </Row>
         <Row>

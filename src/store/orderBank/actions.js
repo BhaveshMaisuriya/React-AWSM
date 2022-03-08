@@ -123,6 +123,8 @@ import {
   UPDATE_SHIPMENT,
   UPDATE_SHIPMENT_SUCCESS,
   UPDATE_SHIPMENT_FAIL,
+  DRAG_RTS_ORDER_BANK_TO_GANTT_CHART_RESTRICTED,
+  DRAG_RTS_ORDER_BANK_TO_GANTT_CHART_CONFIRM_RESTRICTIONS,
 } from './actionTypes'
 
 export const getRTSOrderBankTableData = params => ({
@@ -517,6 +519,12 @@ export const dragOrderBankToGanttChartFail = error => ({
   error,
 })
 
+// @params = { orders: orderBank[], proceed: boolean }
+export const dragOrderBankToGanttChartConfirm = params => ({
+  type: DRAG_RTS_ORDER_BANK_TO_GANTT_CHART_CONFIRM_RESTRICTIONS,
+  payload: params,
+})
+
 export const selectVehicleShipment = ({ vehicle, resourceId }) => ({
   type: SELECT_VEHICLE_RTS_SHIPMENT,
   vehicle,
@@ -549,7 +557,7 @@ export const removeShipmentFromEvent = params => ({
 
 export const removeShipmentFromEventSuccess = params => ({
   type: REMOVE_SHIPMENT_FROM_EVENT_SUCCESS,
-  params,
+  payload: params,
 })
 
 export const removeEvent = params => ({

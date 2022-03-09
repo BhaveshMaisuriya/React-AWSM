@@ -1,4 +1,4 @@
-import { get } from 'lodash'
+import { get, groupBy } from 'lodash'
 import moment from 'moment'
 
 export const TIME_FORMAT_SHORT = 'HH:mm'
@@ -54,8 +54,8 @@ export function ensureDateRangeNotExceedingADay({
 }
 
 export function factorizeGanttChartEventBar({
-  order,
-  vehicleId,
+  data,
+  resourceId,
   rtHours,
   isBackground = false,
   date = new Date().format(DATE_FORMAT),
@@ -70,7 +70,7 @@ export function factorizeGanttChartEventBar({
 
   if (isBackground)
     return {
-      resourceId: vehicleId,
+      resourceId,
       startDate: background.startDate,
       endDate: background.endDate,
       eventType: 'RT_Availability',
@@ -83,7 +83,16 @@ export function factorizeGanttChartEventBar({
       },
     }
 
-  const { planned_load_time, planned_end_time, scheduled_status } = order
+  const {
+    id,
+    planned_load_time,
+    planned_end_time,
+    scheduled_status,
+    soft_restriction,
+    // eta,
+    terminal,
+    orderIndexes,
+  } = data
 
   const timerange = ensureDateRangeNotExceedingADay({
     from: planned_load_time,
@@ -92,8 +101,8 @@ export function factorizeGanttChartEventBar({
   })
 
   const event = {
-    id: order.id,
-    resourceId: vehicleId,
+    id,
+    resourceId: resourceId,
     startDate: timerange.from.format(DATE_TIME_FORMAT),
     endDate: timerange.to.format(DATE_TIME_FORMAT),
     eventType: scheduled_status,
@@ -103,15 +112,16 @@ export function factorizeGanttChartEventBar({
     background,
     flags: {
       isBackground,
-      hasSoftRestriction: order.soft_restriction ? true : false,
-      eta: order.eta
-        ? moment.utc(order.eta).format(TIME_FORMAT_SHORT)
-        : '00:00',
-      terminal: order.terminal ?? 'M808',
+      hasSoftRestriction: soft_restriction ? true : false,
+    },
+    supplement: {
+      // eta: eta ? moment.utc(eta).format(TIME_FORMAT_SHORT) : '00:00',
+      terminal: terminal ?? 'M808',
+      orderIndexes,
     },
   }
 
-  !order.shipment && (event.resourceOrder = [{ DNNumber: order.dn_no }])
+  !data.shipment && (event.resourceOrder = [{ DNNumber: data.dn_no }])
 
   return event
 }
@@ -131,21 +141,25 @@ export function factorizeGanttChartEventBars(
     })
 
     if (vehicle.order_banks && vehicle.order_banks.length) {
-      vehicle.order_banks.forEach(order =>
+      // { route_id: order[] }
+      const groups = groupBy(vehicle.order_banks, 'route_id')
+
+      for (const route in groups) {
+        const orderIndexes = groups[route].map(o => o.id)
         events.push(
           factorizeGanttChartEventBar({
-            order,
-            vehicleId: vehicle.id,
+            data: { ...groups[route][0], id: route, orderIndexes },
+            resourceId: vehicle.id,
             rtHours,
             isBackground: false,
             date,
           })
         )
-      )
+      }
     } else
       events.push(
         factorizeGanttChartEventBar({
-          vehicleId: vehicle.id,
+          resourceId: vehicle.id,
           rtHours,
           isBackground: true,
           date,

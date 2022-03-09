@@ -10,8 +10,8 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 import { ganttChartTableMapping } from './tableMapping'
 
 import BryntumPopup from './BryntumPopup'
-import RedAlertIcon from './../../../assets/images/AWSM-Red-Alert.svg'
-import YellowAlertIcon from './../../../assets/images/AWSM-Soft-Overrule.svg'
+import RedAlertIcon from 'assets/images/AWSM-Red-Alert.svg'
+import YellowAlertIcon from 'assets/images/AWSM-Soft-Overrule.svg'
 import ConfirmDNStatusModal from './confirmDNStatusModal'
 import TerminalRelayModal from './TerminalRelayModal'
 import {
@@ -20,12 +20,12 @@ import {
   sendOrderInGanttChart,
   getShipmentOfOderBankGanttChart,
   removeEvent,
-  updateOBEvent,
-  getGanttEventValidation,
+  // updateOBEvent,
+  // getGanttEventValidation,
   selectVehicleShipment,
-  dragOrderBankToGanttChart,
+  // dragOrderBankToGanttChart,
   updateShipment,
-} from '../../../store/actions'
+} from 'store/actions'
 import ChartColumnFilter from './ChartColumnFilter'
 import OrderBankShipmentModal from './OrderBankShipmentModal'
 import OrderBankSapAlertModal from './OrderBankSapAlertModal'
@@ -63,10 +63,10 @@ function BryntumChartTable(props) {
     dateConfig,
     terminal,
     ganttChartState,
+    handleResetAll,
   } = props
   const tableData = useRef([])
   const chartRef = useRef()
-
   const colsRef = useRef(bryntumCurrentColumns)
   const [modal, setModal] = useState(false)
   const [dropdownSelectedItem, setDropdownSelectedItem] = useState(null)
@@ -90,7 +90,7 @@ function BryntumChartTable(props) {
   useEffect(() => onFilterChange(bryntumTable), [bryntumTable])
 
   useEffect(
-    () => setBryntumTable({ ...bryntumTable, page: 0 }),
+    () => setBryntumTable({ ...bryntumTable, page: 0 , filterCondition: []}),
     [dateConfig, terminal]
   )
 
@@ -446,7 +446,7 @@ function BryntumChartTable(props) {
 
       // <eventRecord.originalData> consult factory.js
       const data = eventRecord.originalData,
-        { flags, background } = eventRecord.originalData
+        { background, flags, supplement } = eventRecord.originalData
 
       let bgTemplate = ''
 
@@ -489,16 +489,14 @@ function BryntumChartTable(props) {
               <p>${eventRecord.id}</p>
             </div>
             <div class="blue-bg brdr-radius">
-              <p>${flags.terminal}</p>
+              <p>${supplement.terminal}</p>
             </div>
             <div class="white-text brdr-radius">
               <p>${moment(data.startDate, DATE_TIME_FORMAT, true).format(
                 TIME_FORMAT_SHORT
               )} hrs</p>
             </div>
-            <div class="green-bg brdr-radius">
-              <p>eta ${flags.eta}</p>
-            </div>
+            
             <div class="white-text brdr-radius">
               <p>${moment(data.endDate, DATE_TIME_FORMAT, true).format(
                 TIME_FORMAT_SHORT
@@ -786,6 +784,7 @@ function BryntumChartTable(props) {
               type={e.type}
               onApply={onApplyFilter}
               onReset={onResetFilter}
+              onResetAll={handleResetAll}
             />
           ))}
       </div>
@@ -876,13 +875,13 @@ const mapDispatchToProps = dispatch => {
       dispatch(sendOrderInGanttChart(params)),
     getShipmentOfOderBankGanttChart: params =>
       dispatch(getShipmentOfOderBankGanttChart(params)),
-    updateOBEvent: params => dispatch(updateOBEvent(params)),
-    getGanttEventValidation: params =>
-      dispatch(getGanttEventValidation(params)),
+    // updateOBEvent: params => dispatch(updateOBEvent(params)),
+    // getGanttEventValidation: params =>
+    //   dispatch(getGanttEventValidation(params)),
     onRemoveEvent: params => dispatch(removeEvent(params)),
     onSelectVehicle: params => dispatch(selectVehicleShipment(params)),
-    dragOrderBankToGanttChart: payload =>
-      dispatch(dragOrderBankToGanttChart(payload)),
+    // dragOrderBankToGanttChart: payload =>
+    //   dispatch(dragOrderBankToGanttChart(payload)),
     updateShipment: params => dispatch(updateShipment(params)),
   }
 }

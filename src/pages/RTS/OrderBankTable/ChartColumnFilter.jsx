@@ -28,6 +28,7 @@ const ChartColumnFilter = ({
   filterKey,
   onApply,
   onReset,
+  onResetAll,
   isGantt,
   selectedFilters,
   setBryntumFilter,
@@ -48,6 +49,10 @@ const ChartColumnFilter = ({
     }))
     setData(_data)
   }, [filterData, selectedFilters[filterKey]])
+
+  useEffect(() => {
+    setFirstTime(!onResetAll)
+  }, [onResetAll])
 
   const onItemChange = text => {
     setData(data => {

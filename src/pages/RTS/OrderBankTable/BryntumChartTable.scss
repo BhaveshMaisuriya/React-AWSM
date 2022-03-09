@@ -38,6 +38,7 @@
 
 .b-sch-event {
   $bg-rt-available: #dce5f0;
+  width: 100%;
 
   &.has-background {
     overflow: visible;
@@ -62,7 +63,6 @@
           display: flex;
           justify-content: center;
           align-items: center;
-          border: 1px white solid;
 
           &.event-data-marquee:hover {
             .event-data-details {

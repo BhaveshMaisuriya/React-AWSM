@@ -189,8 +189,6 @@ const FilterDropdown = ({
    * Handle reset all filtering
    */
   function resetAll() {
-    handleClickReset(dataKey)
-    setCheckedCount(dataFilter?.[dataKey]?.length)
     setAppliedFilters([])
   }
 

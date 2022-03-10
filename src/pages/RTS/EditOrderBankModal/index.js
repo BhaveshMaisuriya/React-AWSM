@@ -33,6 +33,7 @@ import {
   SiteDNTab,
   OrderTab,
 } from './exportAllTab'
+import moment from 'moment'
 
 const timeData = []
 const navItems = [
@@ -72,6 +73,8 @@ const EditOrderBankModal = props => {
   useEffect(() => {
     if (editorderBankData) {
       const temp = { ...editorderBankData }
+      temp.planned_load_time = temp.planned_load_time === null || temp.planned_load_time === '' ? temp.planned_load_time : moment(temp?.planned_load_time).utc().format('HH:mm');
+      temp.eta = temp.eta === null || temp.eta === '' ? temp.eta : moment(temp?.eta).utc().format('HH:mm');
       setEditOrderData(temp)
       setoriginalEditOrderData(temp)
 
@@ -107,16 +110,16 @@ const EditOrderBankModal = props => {
 
   const handleUpdate = async () => {
     const temp = {
-      shift_date: editOrderData?.shift_date, //shiftDate.toISOString().split('T')[0],
+      shift_date: editOrderData?.requested_delivery_date, //shiftDate.toISOString().split('T')[0],
       requested_delivery_date: editOrderData?.requested_delivery_date, //shiftDate.toISOString().split('T')[0],
       my_remark_1: editOrderData?.my_remark_1,
       my_remark_2: editOrderData?.my_remark_2,
       my_remark_3: editOrderData?.my_remark_3,
       terminal: TERMINAL_CODE_MAPPING[editOrderData?.terminal],
       volume: parseInt(editOrderData?.volume),
-      eta: editOrderData?.shift_date + ' ' + editOrderData?.eta,
+      eta: editOrderData?.requested_delivery_date + ' ' + editOrderData?.eta,
       planned_load_time:
-        editOrderData?.shift_date + ' ' + editOrderData?.planned_load_time,
+        editOrderData?.requested_delivery_date + ' ' + editOrderData?.planned_load_time,
       order_remarks: editOrderData?.order_remarks,
       priority: editOrderData?.priority,
       vehicle: editOrderData?.vehicle,

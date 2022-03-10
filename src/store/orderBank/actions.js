@@ -80,11 +80,11 @@ import {
   REMOVE_SHIPMENT_FROM_EVENT_SUCCESS,
   REMOVE_EVENT,
   REMOVE_EVENT_SUCCESS,
-  UPDATE_OB_EVENT,
-  UPDATE_OB_EVENT_SUCCESS,
-  UPDATE_OB_EVENT_FAIL,
+  // UPDATE_OB_EVENT,
+  // UPDATE_OB_EVENT_SUCCESS,
+  // UPDATE_OB_EVENT_FAIL,
   GET_WEB_SOCKET_MESSAGE_SUCCESS,
-  GET_WEB_SOCKET_MESSAGE,
+  // GET_WEB_SOCKET_MESSAGE,
   GET_OB_RT_DETAILS,
   GET_OB_RT_DETAILS_SUCCESS,
   GET_OB_RT_DETAILS_FAIL,
@@ -104,9 +104,9 @@ import {
   DRAG_AND_DROP_SHIPMENT_AREA,
   DRAG_AND_DROP_SHIPMENT_AREA_SUCCESS,
   DRAG_AND_DROP_SHIPMENT_AREA_FAIL,
-  GET_GANTT_EVENT_VALIDATION,
-  GET_GANTT_EVENT_VALIDATION_SUCCESS,
-  GET_GANTT_EVENT_VALIDATION_FAIL,
+  // GET_GANTT_EVENT_VALIDATION,
+  // GET_GANTT_EVENT_VALIDATION_SUCCESS,
+  // GET_GANTT_EVENT_VALIDATION_FAIL,
   GET_SHIPMENT_DETAILS_ON_VEHICLE,
   GET_SHIPMENT_DETAILS_ON_VEHICLE_SUCCESS,
   GET_SHIPMENT_DETAILS_ON_VEHICLE_FAIL,
@@ -123,7 +123,7 @@ import {
   UPDATE_SHIPMENT,
   UPDATE_SHIPMENT_SUCCESS,
   UPDATE_SHIPMENT_FAIL,
-  DRAG_RTS_ORDER_BANK_TO_GANTT_CHART_RESTRICTED,
+  // DRAG_RTS_ORDER_BANK_TO_GANTT_CHART_RESTRICTED,
   DRAG_RTS_ORDER_BANK_TO_GANTT_CHART_CONFIRM_RESTRICTIONS,
 } from './actionTypes'
 
@@ -570,20 +570,18 @@ export const removeEventSuccess = params => ({
   params,
 })
 
-export const updateOBEvent = params => ({
-  type: UPDATE_OB_EVENT,
-  params,
-})
-
-export const updateOBEventSuccess = params => ({
-  type: UPDATE_OB_EVENT_SUCCESS,
-  params,
-})
-
-export const updateOBEventFail = params => ({
-  type: UPDATE_OB_EVENT_FAIL,
-  params,
-})
+// export const updateOBEvent = params => ({
+//   type: UPDATE_OB_EVENT,
+//   params,
+// })
+// export const updateOBEventSuccess = params => ({
+//   type: UPDATE_OB_EVENT_SUCCESS,
+//   params,
+// })
+// export const updateOBEventFail = params => ({
+//   type: UPDATE_OB_EVENT_FAIL,
+//   params,
+// })
 
 export const getWebsocketMessageSuccess = data => ({
   type: GET_WEB_SOCKET_MESSAGE_SUCCESS,
@@ -677,20 +675,20 @@ export const onDragAndDropShipmentAreaFail = error => ({
   payload: error,
 })
 
-export const getGanttEventValidation = params => ({
-  type: GET_GANTT_EVENT_VALIDATION,
-  params,
-})
+// export const getGanttEventValidation = params => ({
+//   type: GET_GANTT_EVENT_VALIDATION,
+//   params,
+// })
 
-export const getGanttEventValidationSuccess = params => ({
-  type: GET_GANTT_EVENT_VALIDATION_SUCCESS,
-  params,
-})
+// export const getGanttEventValidationSuccess = params => ({
+//   type: GET_GANTT_EVENT_VALIDATION_SUCCESS,
+//   params,
+// })
 
-export const getGanttEventValidationFail = params => ({
-  type: GET_GANTT_EVENT_VALIDATION_FAIL,
-  params,
-})
+// export const getGanttEventValidationFail = params => ({
+//   type: GET_GANTT_EVENT_VALIDATION_FAIL,
+//   params,
+// })
 
 export const onDragOrderToShipment = params => ({
   type: DRAG_ORDER_TO_SHIPMENT,

@@ -37,6 +37,9 @@
 }
 
 .b-sch-event {
+  $bg-rt-available: #dce5f0;
+  width: 100%;
+
   &.has-background {
     overflow: visible;
 
@@ -51,6 +54,7 @@
           justify-content: center;
           align-items: center;
           border: none;
+          background-color: $bg-rt-available;
         }
 
         &-data {
@@ -59,7 +63,6 @@
           display: flex;
           justify-content: center;
           align-items: center;
-          border: none;
 
           &.event-data-marquee:hover {
             .event-data-details {
@@ -77,7 +80,7 @@
             visibility: hidden;
             text-align: center;
             width: 180%;
-          
+
             & > div {
               display: inline-block;
               border-radius: 20px;
@@ -86,20 +89,20 @@
                 padding: 2px 8px;
               }
             }
-          
+
             .white-bg {
               background-color: #ffffff;
               color: #000 !important;
             }
-          
+
             .blue-bg {
               background-color: rgb(54, 148, 236);
             }
-          
+
             .white-text {
               color: #fff;
             }
-          
+
             .green-bg {
               background-color: green;
             }

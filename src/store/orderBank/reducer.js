@@ -39,12 +39,12 @@ import {
   UPDATE_ORDERBANK_TABLE_INFORMATION_SUCCESS,
   REMOVE_EVENT_SUCCESS,
   REMOVE_EVENT_FAIL,
-  UPDATE_OB_EVENT_SUCCESS,
-  UPDATE_OB_EVENT_FAIL,
+  // UPDATE_OB_EVENT_SUCCESS,
+  // UPDATE_OB_EVENT_FAIL,
   GET_WEB_SOCKET_MESSAGE_SUCCESS,
-  GET_WEB_SOCKET_MESSAGE,
+  // GET_WEB_SOCKET_MESSAGE,
   GET_OB_RT_DETAILS_SUCCESS,
-  GET_OB_RT_DETAILS_FAIL,
+  // GET_OB_RT_DETAILS_FAIL,
   UPDATE_OB_RT_DETAILS_SUCCESS,
   UPDATE_OB_RT_DETAILS_FAIL,
   GET_CROSS_TERMINAL_SUCCESS,
@@ -59,17 +59,17 @@ import {
   CLEAR_SCHEDULING_SUCCESS,
   DRAG_RTS_ORDER_BANK_TO_GANTT_CHART_FAIL,
   CLEAR_GANTT_DATA,
-  GET_SHIPMENT_DETAIL_FAIL,
+  // GET_SHIPMENT_DETAIL_FAIL,
   GET_SHIPMENT_DETAIL_SUCCESS,
   CLEAR_RTS_ORDER_BANK_TABLE_DATA,
   DRAG_AND_DROP_SHIPMENT_AREA_SUCCESS,
-  GET_GANTT_EVENT_VALIDATION_SUCCESS,
-  GET_GANTT_EVENT_VALIDATION_FAIL,
+  // GET_GANTT_EVENT_VALIDATION_SUCCESS,
+  // GET_GANTT_EVENT_VALIDATION_FAIL,
   GET_SHIPMENT_DETAILS_ON_VEHICLE_SUCCESS,
   GET_SHIPMENT_DETAILS_ON_VEHICLE_FAIL,
   DRAG_ORDER_TO_SHIPMENT_SUCCESS,
   GET_OB_TOTAL_UNSCHEDULE_SUCCESS,
-  GET_OB_TOTAL_UNSCHEDULE_FAIL,
+  // GET_OB_TOTAL_UNSCHEDULE_FAIL,
   SET_BRYNTUM_FILTER,
   UPDATE_SHIPMENT_SUCCESS,
   UPDATE_SHIPMENT_FAIL,
@@ -462,24 +462,17 @@ const RTSOrderBank = (state = initialState, action) => {
         ganttChartTableFilter: filter,
       }
     }
-    case GET_RTS_GANTT_CHART_DATA_FAIL: {
-      state.ganttChart = {
-        table: [],
-        events: [],
-        selectedFilters: {},
-        terminal: {
-          operatingTime: {
-            from: null,
-            to: null,
-          },
-        },
-      }
-
+    case GET_RTS_GANTT_CHART_DATA_FAIL:
       return {
         ...state,
+        ganttChart: {
+          ...state.ganttChart,
+          table: [],
+          events: [],
+        },
         error: action.payload,
       }
-    }
+
     case CLEAR_GANTT_DATA: {
       return {
         ...state,
@@ -561,27 +554,25 @@ const RTSOrderBank = (state = initialState, action) => {
           to: moment.utc(endDate, DATE_TIME_FORMAT, true),
         }
 
-        for (let i = 0; i < orders.length; i++) {
-          const order = orders[i]
+        // GROUPBY route_id
+        // if they were processed correctly, they all have same route_id
+        const route = orders[0].route_id
+        const orderIndexes = orders.map(o => o.id)
+        eventsWithinResource.push(
+          factorizeGanttChartEventBar({
+            // any Order should already contains sufficient data I need
+            data: { ...orders[0], id: route, orderIndexes },
+            resourceId: vehicle.id,
+            rtHours,
+            isBackground: false,
+            date: shiftDate,
+          })
+        )
 
-          if (
-            eventsWithinResource.findIndex(item => item.id === order.id) === -1
-          )
-            eventsWithinResource.push(
-              factorizeGanttChartEventBar({
-                order,
-                vehicleId: vehicle,
-                rtHours,
-                date: shiftDate,
-              })
-            )
-
-          // remove the default background, consult <factory.js> ;)
-          if (i === orders.length - 1)
-            eventsWithinResource = eventsWithinResource.filter(
-              s => !s.flags.isBackground
-            )
-        }
+        // remove the default background, consult <factory.js> ;)
+        eventsWithinResource = eventsWithinResource.filter(
+          s => !s.flags.isBackground
+        )
 
         // purges all old events, updates the new ones
         events = [
@@ -699,27 +690,27 @@ const RTSOrderBank = (state = initialState, action) => {
       }
     }
 
-    case UPDATE_OB_EVENT_SUCCESS: {
-      const { id } = action.params
-      const event = state.ganttChart.events.filter(item => item.id !== id)
-      if (event) {
-        state.ganttChart.events = [...event, action.params]
-      }
-      return {
-        ...state,
-        ganttChart: {
-          ...state.ganttChart,
-          event: [...state.ganttChart.events],
-        },
-        ganttEventValidation: null,
-      }
-    }
-    case UPDATE_OB_EVENT_FAIL: {
-      return {
-        ...state,
-        ganttEventValidation: null,
-      }
-    }
+    // case UPDATE_OB_EVENT_SUCCESS: {
+    //   const { id } = action.params
+    //   const event = state.ganttChart.events.filter(item => item.id !== id)
+    //   if (event) {
+    //     state.ganttChart.events = [...event, action.params]
+    //   }
+    //   return {
+    //     ...state,
+    //     ganttChart: {
+    //       ...state.ganttChart,
+    //       event: [...state.ganttChart.events],
+    //     },
+    //     ganttEventValidation: null,
+    //   }
+    // }
+    // case UPDATE_OB_EVENT_FAIL: {
+    //   return {
+    //     ...state,
+    //     ganttEventValidation: null,
+    //   }
+    // }
     case GET_WEB_SOCKET_MESSAGE_SUCCESS: {
       if (state.socketData.length === 0) {
         return {
@@ -813,18 +804,18 @@ const RTSOrderBank = (state = initialState, action) => {
         shipmentDropData: action.payload,
       }
     }
-    case GET_GANTT_EVENT_VALIDATION_SUCCESS: {
-      return {
-        ...state,
-        ganttEventValidation: action.payload,
-      }
-    }
-    case GET_GANTT_EVENT_VALIDATION_FAIL: {
-      return {
-        ...state,
-        ganttEventValidation: action.payload,
-      }
-    }
+    // case GET_GANTT_EVENT_VALIDATION_SUCCESS: {
+    //   return {
+    //     ...state,
+    //     ganttEventValidation: action.payload,
+    //   }
+    // }
+    // case GET_GANTT_EVENT_VALIDATION_FAIL: {
+    //   return {
+    //     ...state,
+    //     ganttEventValidation: action.payload,
+    //   }
+    // }
 
     case GET_SHIPMENT_DETAILS_ON_VEHICLE_SUCCESS: {
       return {

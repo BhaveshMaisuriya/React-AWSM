@@ -120,7 +120,6 @@ class FixedCoulmnTable extends Component {
       Math.abs(data.sales_variance) > salesValue?.variance_value ||
       Math.abs(data.inventory_variance) > inventoryValue?.variance_value ||
       Math.abs(data.sales_variance_percentage) > salesValue?.variance_percentage
-      //-71 > 1000  || 0 > 3000  || -25.36 > 30   
     ) {
       result = (
         <div className="cursor-pointer" onClick={() => overrideActionColumn(data)}>

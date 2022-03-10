@@ -1,5 +1,4 @@
-
-import React, { Component, Fragment } from 'react'
+import React, { Component, Fragment } from "react"
 import { connect } from "react-redux"
 import Page from "../Common"
 import { getRetailCustomer } from "store/actions"
@@ -8,7 +7,7 @@ import { transformArrayToString, getCookieByKey } from "../Common/helper"
 import RetailCustomerModal from "./RetailCustomerModal"
 import Loader from "components/Common/Loader"
 
-const RetailTableName = 'retail-table'
+const RetailTableName = "retail-table"
 
 class RetailCustomer extends Component {
   constructor(props) {
@@ -17,10 +16,9 @@ class RetailCustomer extends Component {
       searchFields: getCookieByKey(RetailTableName)
         ? JSON.parse(getCookieByKey(RetailTableName))
         : tableColumns,
-      subModule: 'retail-customer',
+      subModule: "retail-customer",
     }
   }
-
 
   componentDidMount() {
     const { onGetRetailCustomer } = this.props
@@ -28,8 +26,8 @@ class RetailCustomer extends Component {
     const params = {
       limit: 10,
       page: 0,
-      sort_dir: 'asc',
-      sort_field: 'ship_to_party',
+      sort_dir: "asc",
+      sort_field: "ship_to_party",
       search_fields: transformArrayToString(searchFields),
     }
     onGetRetailCustomer(params)
@@ -46,7 +44,7 @@ class RetailCustomer extends Component {
     const { searchFields, subModule } = this.state
     return (
       <Fragment>
-        {retailCustomerIsLoading ? <Loader /> : ''}
+        {retailCustomerIsLoading ? <Loader /> : ""}
         {retailCustomer.list && (
           <Page
             tableName={RetailTableName}

@@ -110,9 +110,11 @@ const FilterDropdown = ({
     else if (checkedCount === data.length) setCheckAll(true)
   }, [checkedCount])
 
-  // useEffect(() => {
-  //   !handleResetAll ? resetAll() : null
-  // }, [handleResetAll])
+  useEffect(() => {
+    if (handleResetAll) {
+      resetAll()
+    }
+  }, [handleResetAll])
 
   /**
    * set filter object with text checked and visibility value
@@ -187,8 +189,6 @@ const FilterDropdown = ({
    * Handle reset all filtering
    */
   function resetAll() {
-    handleClickReset(dataKey)
-    setCheckedCount(dataFilter?.[dataKey]?.length)
     setAppliedFilters([])
   }
 

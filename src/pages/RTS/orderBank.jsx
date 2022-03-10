@@ -230,6 +230,7 @@ function OrderBank({
   const [filterQuery, setfilterQuery] = useState('')
   const [srFilterQuery, setSrFilterQuery] = useState('')
   const [resetTable, setResetTable] = useState(false)
+  const [ganttResetFilter, setGanttResetFilter] = useState(false)
   const filterOrderBank = useMemo(() => {
     return {
       terminal: TERMINAL_CODE_MAPPING[terminalTable],
@@ -262,7 +263,6 @@ function OrderBank({
       sortDirection = 'asc',
       filterCondition = [],
     },
-    trigger = false
   ) => {
     let q = ''
     if (filterCondition.length > 0) {
@@ -285,8 +285,6 @@ function OrderBank({
         sort_field: sortField,
       }
 
-      if (trigger) getRTSOderBankGanttChart(payload)
-
       return { payload, currentPage: page }
     })
   }
@@ -299,6 +297,7 @@ function OrderBank({
         terminal: TERMINAL_CODE_MAPPING[terminal],
       },
     })
+    setGanttResetFilter(false)
   }, [bryntumTable])
 
   useEffect(() => {
@@ -492,6 +491,7 @@ function OrderBank({
   }
 
   const onChangeGanttChartDate = value => {
+    setGanttResetFilter(true)
     setShiftDateGantt(state => {
       // make sure new values are actually new
       if (value && !isEqual(state, value)) {
@@ -976,6 +976,7 @@ function OrderBank({
                       <AWSMDropdown
                         value={region}
                         onChange={value => {
+                          setGanttResetFilter(true)
                           setRegionGantt(value)
                           setTerminalGantt(
                             REGION_TERMINAL.find(item => item.region === value)
@@ -990,6 +991,7 @@ function OrderBank({
                       <AWSMDropdown
                         value={terminal}
                         onChange={value => {
+                          setGanttResetFilter(true)
                           setTerminalGantt(value)
                           setCurrentPage(0)
                         }}
@@ -1114,9 +1116,10 @@ function OrderBank({
                             dateConfig={shiftDateGantt}
                             region={region}
                             terminal={terminal}
+                            handleResetAll={ganttResetFilter}
                             clearGanttData={clearGanttData}
-                            onFilterChange={(params, trigger) =>
-                              populateBryntumTable({ ...params }, trigger)
+                            onFilterChange={params =>
+                              populateBryntumTable({ ...params })
                             }
                           />
                           <div className="square_border">
@@ -1167,6 +1170,7 @@ function OrderBank({
                             ganttChartAllRadio={ganttChartAllRadio}
                             bryntumCurrentColumns={bryntumCurrentColumns}
                             dateConfig={shiftDateGantt}
+                            handleResetAll={ganttResetFilter}
                             region={region}
                             terminal={terminal}
                             clearGanttData={clearGanttData}

@@ -22,6 +22,7 @@ function BryntumChartShipment(props) {
     onFilterChange,
     dateConfig,
     terminal,
+    handleResetAll,
   } = props
   const tableData = useRef([])
 
@@ -41,7 +42,7 @@ function BryntumChartShipment(props) {
   useEffect(() => onFilterChange(bryntumTable), [bryntumTable])
 
   useEffect(
-    () => setBryntumTable({ ...bryntumTable, page: 0 }),
+    () => setBryntumTable({ ...bryntumTable, page: 0, filterCondition: [] }),
     [dateConfig, terminal]
   )
 
@@ -58,7 +59,7 @@ function BryntumChartShipment(props) {
     props.clearGanttData()
 
     setTimeout(() => {
-      setBryntumTable(bryntumTable)
+      setBryntumTable({ ...bryntumTable })
     }, 1000)
   }
 
@@ -334,10 +335,10 @@ function BryntumChartShipment(props) {
               type={e.type}
               onApply={onApplyFilter}
               onReset={onResetFilter}
+              onResetAll={handleResetAll}
             />
           ))}
       </div>
-
       <OrderBankRoadTankerModal
         isOpen={roadTankerModalShow}
         toggle={toggleRoadTanker}

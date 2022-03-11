@@ -1,16 +1,6 @@
-@import "./icons.scss";
-
-// Light Theme
-// @import "./bootstrap.scss";
-// @import "./app.scss";
-
-// Dark Theme
-@import "./bootstrap.scss";
-@import "./app.scss";
-
-// RTL Mode
-@import "./bootstrap.scss";
-@import "./app.scss";
+@import './icons.scss';
+@import './bootstrap.scss';
+@import './app.scss';
 
 #sidebar-menu {
   ul {
@@ -254,27 +244,27 @@ span.flatpickr-weekday {
 }
 
 ::placeholder {
-  color: #BDBDBD !important;
+  color: #bdbdbd !important;
   opacity: 1; /* Firefox */
 }
 
 :-ms-input-placeholder {
   /* Internet Explorer 10-11 */
-  color: #BDBDBD !important;
+  color: #bdbdbd !important;
 }
 
 ::-ms-input-placeholder {
   /* Microsoft Edge */
-  color: #BDBDBD !important;
+  color: #bdbdbd !important;
 }
 
 .btn-dan {
   box-sizing: border-box;
-  border: 1px solid #F46A6A;
+  border: 1px solid #f46a6a;
   border-radius: 4px;
   background-color: white;
-  color: #F46A6A !important;
-  :hover{
+  color: #f46a6a !important;
+  :hover {
     background-color: white;
   }
 }

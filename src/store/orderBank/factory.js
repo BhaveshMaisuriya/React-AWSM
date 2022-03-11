@@ -58,13 +58,18 @@ export function factorizeGanttChartEventBar({
   resourceId,
   rtHours,
   isBackground = false,
+  renderBackground = true,
   date = new Date().format(DATE_FORMAT),
 }) {
   const background = {
-    startDate: rtHours.from.isValid()
-      ? rtHours.from.format(DATE_TIME_FORMAT)
-      : null,
-    endDate: rtHours.to.isValid() ? rtHours.to.format(DATE_TIME_FORMAT) : null,
+    startDate:
+      renderBackground && rtHours.from.isValid()
+        ? rtHours.from.format(DATE_TIME_FORMAT)
+        : null,
+    endDate:
+      renderBackground && rtHours.to.isValid()
+        ? rtHours.to.format(DATE_TIME_FORMAT)
+        : null,
     color: EVENT_COLOR.RT_Availability,
   }
 
@@ -141,20 +146,37 @@ export function factorizeGanttChartEventBars(
     })
 
     if (vehicle.order_banks && vehicle.order_banks.length) {
+      // make sure smaller planned_load_time goes first
+      vehicle.order_banks.sort((a, b) => {
+        return new Date(a.planned_load_time) - new Date(b.planned_load_time)
+      })
+
       // { route_id: order[] }
       const groups = groupBy(vehicle.order_banks, 'route_id')
 
       for (const route in groups) {
         const orderIndexes = groups[route].map(o => o.id)
-        events.push(
-          factorizeGanttChartEventBar({
-            data: { ...groups[route][0], id: route, orderIndexes },
-            resourceId: vehicle.id,
-            rtHours,
-            isBackground: false,
-            date,
-          })
-        )
+        const event =
+          events.findIndex(
+            s => s.resourceId === vehicle.id && s.background.startDate
+          ) === -1
+            ? factorizeGanttChartEventBar({
+                data: { ...groups[route][0], id: route, orderIndexes },
+                resourceId: vehicle.id,
+                rtHours,
+                isBackground: false,
+                date,
+              })
+            : factorizeGanttChartEventBar({
+                data: { ...groups[route][0], id: route, orderIndexes },
+                resourceId: vehicle.id,
+                rtHours,
+                isBackground: false,
+                renderBackground: false,
+                date,
+              })
+
+        events.push(event)
       }
     } else
       events.push(

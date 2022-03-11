@@ -90,7 +90,7 @@ function BryntumChartTable(props) {
   useEffect(() => onFilterChange(bryntumTable), [bryntumTable])
 
   useEffect(
-    () => setBryntumTable({ ...bryntumTable, page: 0 , filterCondition: []}),
+    () => setBryntumTable({ ...bryntumTable, page: 0, filterCondition: [] }),
     [dateConfig, terminal]
   )
 
@@ -436,10 +436,10 @@ function BryntumChartTable(props) {
         },
       },
     },
-    horizontalEventSorterFn: (a, b) => (b.startDateMS > a.startDateMS ? 1 : -1),
+    // uncomment this line to make Bryntum sort events descending
+    // then they will be on separate rows
+    // horizontalEventSorterFn: (a, b) => (b.startDateMS > a.startDateMS ? 1 : -1),
     eventRenderer({ eventRecord, renderData }) {
-      eventRecord.cls = 'has-background'
-
       const { instance } = chartRef.current,
         dateToPx = date =>
           instance.getCoordinateFromDate(date) - renderData.left
@@ -447,6 +447,7 @@ function BryntumChartTable(props) {
       // <eventRecord.originalData> consult factory.js
       const data = eventRecord.originalData,
         { background, flags, supplement } = eventRecord.originalData
+      !flags.isBackground && (eventRecord.cls = 'has-background')
 
       let bgTemplate = ''
 

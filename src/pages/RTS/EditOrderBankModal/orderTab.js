@@ -5,6 +5,7 @@ import DatePicker from 'components/Common/DatePicker'
 import TimePicker from 'components/Common/TableInformation/components/TimePicker'
 import AWSMDropdown from 'components/Common/Dropdown'
 import { format } from 'date-fns'
+import moment from 'moment'
 
 const OrderTab = props => {
   const {
@@ -164,7 +165,7 @@ const OrderTab = props => {
               <TimePicker
                 value={
                   data?.planned_load_time &&
-                  format(new Date(data?.planned_load_time), 'HH:mm')
+                  moment(data?.planned_load_time).utc().format('HH:mm')
                 }
                 items={timeData}
                 onChange={value =>
@@ -188,7 +189,7 @@ const OrderTab = props => {
           <div className="d-flex">
             <div className="w-100">
               <TimePicker
-                value={data?.eta && format(new Date(data?.eta), 'HH:mm')}
+                value={data?.eta && moment(data?.eta).utc().format('HH:mm')}
                 items={timeData}
                 onChange={value =>
                   onFieldChange(
@@ -247,10 +248,7 @@ const OrderTab = props => {
               <AWSMInput
                 value={
                   data?.retain
-                    ? format(
-                        new Date(data?.retain.toString()),
-                        'dd-MM-yyyy HH:mm'
-                      )
+                    ? moment(data?.retain).utc().format('DD-MM-yyyy HH:mm')
                     : '00'
                 }
                 disabled={true}
@@ -265,10 +263,7 @@ const OrderTab = props => {
               <AWSMInput
                 value={
                   data?.runout
-                    ? format(
-                        new Date(data?.runout.toString()),
-                        'dd-MM-yyyy HH:mm'
-                      )
+                    ? moment(data?.runout).utc().format('DD-MM-yyyy HH:mm')
                     : '00'
                 }
                 disabled={true}

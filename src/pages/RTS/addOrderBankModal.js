@@ -22,7 +22,7 @@ import REGION_TERMINAL, {
   TERMINAL_CODE_MAPPING,
 } from 'common/data/regionAndTerminal'
 import NoDataIcon from 'assets/images/AWSM-No-Data-Available-Inverted.svg'
-import { format, sub } from 'date-fns'
+import { format, sub, add } from 'date-fns'
 import CloseButton from 'components/Common/CloseButton'
 import { isNull, isUndefined } from 'lodash'
 
@@ -58,7 +58,7 @@ const NewOrderBankModal = props => {
   const [allProductDetailList, setAllProductDetailList] = useState([])
   const [priorityDisable, setPriorityDisable] = useState(false)
   const defaultDate = new Date()
-  const [shiftDate, setShiftDate] = useState(defaultDate)
+  const [shiftDate, setShiftDate] = useState(add(defaultDate, { days: 1 }))
 
   useEffect(() => {
     if (currentState === 'loading') {

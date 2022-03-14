@@ -231,7 +231,7 @@ const OrderTab = props => {
                 value={
                   data?.retain
                     ? moment(data?.retain).utc().format('DD-MM-yyyy HH:mm')
-                    : '00'
+                    : ''
                 }
                 disabled={true}
               />
@@ -246,7 +246,7 @@ const OrderTab = props => {
                 value={
                   data?.runout
                     ? moment(data?.runout).utc().format('DD-MM-yyyy HH:mm')
-                    : '00'
+                    : ''
                 }
                 disabled={true}
               />

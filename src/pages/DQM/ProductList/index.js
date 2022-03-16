@@ -1,12 +1,12 @@
-import React, { Component, Fragment } from "react"
-import { connect } from "react-redux"
-import Page from "../Common"
-import { getProducts } from "store/actions"
-import { tableColumns, tableMapping } from "./tableMapping"
-import { transformArrayToString, getCookieByKey } from "../Common/helper"
-import Loader from "components/Common/Loader"
-import ProductDetailModal from "./ProductDetailModal"
-const ProductTableName = "product-table"
+import React, { Component, Fragment } from 'react'
+import { connect } from 'react-redux'
+import Page from '../Common'
+import { getProducts } from 'store/actions'
+import { tableColumns, tableMapping } from './tableMapping'
+import { transformArrayToString, getCookieByKey } from '../Common/helper'
+import Loader from 'components/Common/Loader'
+import ProductDetailModal from './ProductDetailModal'
+const ProductTableName = 'product-table'
 
 class Product extends Component {
   constructor(props) {
@@ -15,7 +15,7 @@ class Product extends Component {
       searchFields: getCookieByKey(ProductTableName)
         ? JSON.parse(getCookieByKey(ProductTableName))
         : tableColumns,
-      subModule: "product",
+      subModule: 'product',
     }
   }
 
@@ -25,8 +25,8 @@ class Product extends Component {
     const params = {
       limit: 10,
       page: 0,
-      sort_dir: "asc",
-      sort_field: "code",
+      sort_dir: 'asc',
+      sort_field: 'code',
       search_fields: transformArrayToString(searchFields),
     }
     onGetProducts(params)
@@ -38,7 +38,7 @@ class Product extends Component {
     const { searchFields, subModule } = this.state
     return (
       <Fragment>
-        {productsIsLoading ? <Loader /> : ""}
+        {productsIsLoading ? <Loader /> : ''}
         {products.list && (
           <Page
             headerTitle="Product"

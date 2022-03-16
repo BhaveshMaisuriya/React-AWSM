@@ -1,23 +1,23 @@
-import React, { useState, useEffect, useRef } from "react"
-import { connect } from "react-redux"
-import "./VarianceControl.scss"
-import { Modal, ModalBody, ModalHeader } from "reactstrap"
-import ExitConfirmation from "components/Common/ExitConfirmation"
+import React, { useState, useEffect, useRef } from 'react'
+import { connect } from 'react-redux'
+import './VarianceControl.scss'
+import { Modal, ModalBody, ModalHeader } from 'reactstrap'
+import ExitConfirmation from 'components/Common/ExitConfirmation'
 import {
   getSalesAndInventoryVarianceControl,
   updateSalesAndInventoryVarianceControl,
-} from "store/salesAndInventory/actions"
-import AWSMEditIcon from "assets/images/AWSM-Edit-Icon.svg"
-import { ReactSVG } from "react-svg"
-import { format } from "date-fns"
-import CloseButton from "components/Common/CloseButton"
-import { isScheduler } from "helpers/auth_helper"
-import { formatUpdateVarianceControlUploadData } from "./format-update-data.helper"
+} from 'store/salesAndInventory/actions'
+import AWSMEditIcon from 'assets/images/AWSM-Edit-Icon.svg'
+import { ReactSVG } from 'react-svg'
+import { format } from 'date-fns'
+import CloseButton from 'components/Common/CloseButton'
+import { isScheduler } from 'helpers/auth_helper'
+import { formatUpdateVarianceControlUploadData } from './format-update-data.helper'
 
 const headers = [
-  { label: "STATION TANK STATUS", value: "station_tank_status" },
-  { label: "THRESHOLD VALUE (L)", value: "variance_value" },
-  { label: "THRESHOLD (%)", value: "variance_percentage" },
+  { label: 'STATION TANK STATUS', value: 'station_tank_status' },
+  { label: 'THRESHOLD VALUE (L)', value: 'variance_value' },
+  { label: 'THRESHOLD (%)', value: 'variance_percentage' },
 ]
 
 const VarianceInput = ({ value, disabled, onChange }) => {
@@ -48,7 +48,7 @@ const VarianceInput = ({ value, disabled, onChange }) => {
   }
 
   const onPress = event => {
-    if (event.key === "Enter") {
+    if (event.key === 'Enter') {
       inputRef.current.blur()
     }
     const theEvent = event || window.event
@@ -62,7 +62,11 @@ const VarianceInput = ({ value, disabled, onChange }) => {
   }
 
   return (
-    <div className={`variance-input ${isFocus ? "focus" : ""} ${disabled ? "disabled" : ""}`}>
+    <div
+      className={`variance-input ${isFocus ? 'focus' : ''} ${
+        disabled ? 'disabled' : ''
+      }`}
+    >
       <input
         value={value}
         disabled={disabled || !isFocus}
@@ -73,14 +77,24 @@ const VarianceInput = ({ value, disabled, onChange }) => {
         onChange={onValueChange}
         onKeyPress={onPress}
       />
-      <button className="button-edit" disabled={disabled} onClick={onEditButtonClick}>
+      <button
+        className="button-edit"
+        disabled={disabled}
+        onClick={onEditButtonClick}
+      >
         <ReactSVG src={AWSMEditIcon} />
       </button>
     </div>
   )
 }
 
-const VarianceTable = ({ headers = [], items = [], scheduler, onChange, rowKey = "id" }) => {
+const VarianceTable = ({
+  headers = [],
+  items = [],
+  scheduler,
+  onChange,
+  rowKey = 'id',
+}) => {
   const onValueChange = (index, key, value) => {
     const newItems = [...items]
     newItems[index][key] = value
@@ -104,12 +118,14 @@ const VarianceTable = ({ headers = [], items = [], scheduler, onChange, rowKey =
               {headers.map((header, col) => (
                 <td key={header.value}>
                   {col === 0 ? (
-                    <div className="pl-3">{item[header.value] || ""}</div>
+                    <div className="pl-3">{item[header.value] || ''}</div>
                   ) : (
                     <VarianceInput
                       disabled={scheduler}
-                      value={item[header.value] || ""}
-                      onChange={value => onValueChange(row, header.value, value)}
+                      value={item[header.value] || ''}
+                      onChange={value =>
+                        onValueChange(row, header.value, value)
+                      }
                     />
                   )}
                 </td>
@@ -134,7 +150,7 @@ const VarianceControl = ({
   refreshMainTable,
 }) => {
   const scheduler = isScheduler()
-  const currentDate = format(new Date(), "yyyy-MM-dd")
+  const currentDate = format(new Date(), 'yyyy-MM-dd')
   const isHistoricalDate = selectedDate !== currentDate
   const [unmodifiedStatus, setUnmodifiedStatus] = useState(true)
   const [data, setData] = useState({
@@ -202,15 +218,25 @@ const VarianceControl = ({
   }
   const updatedInformation = React.useMemo(
     () =>
-      `Last Updated By: ${data.updated_by ? data?.updated_by?.toString()?.split("@")[0] : "Unknown"}
-    ${data.updated_at ? `on ${format(new Date(data?.updated_at), "do LLL yyyy")}` : ""}`,
+      `Last Updated By: ${
+        data.updated_by
+          ? data?.updated_by?.toString()?.split('@')[0]
+          : 'Unknown'
+      }
+    ${
+      data.updated_at
+        ? `on ${format(new Date(data?.updated_at), 'do LLL yyyy')}`
+        : ''
+    }`,
     [data?.updated_at, data?.updated_by]
   )
 
   return (
     <Modal centered={true} isOpen={open} className="variance-control-modal">
       <div className="variance-control-container">
-        <ModalHeader close={<CloseButton handleClose={() => setIsConfirm(true)} />}>
+        <ModalHeader
+          close={<CloseButton handleClose={() => setIsConfirm(true)} />}
+        >
           <span className="modal-title">Threshold Control</span>
           <span className="last-updated-sub-title">{updatedInformation}</span>
         </ModalHeader>
@@ -230,25 +256,33 @@ const VarianceControl = ({
                   />
                 ) : (
                   <div>
-                    On {selectedDate && format(new Date(selectedDate), "do LLL yyyy")}, there is no
-                    data for Sales
+                    On{' '}
+                    {selectedDate &&
+                      format(new Date(selectedDate), 'do LLL yyyy')}
+                    , there is no data for Sales
                   </div>
                 )}
               </div>
               <div className="px-2">
-                <label className="variance-table-label">INVENTORY THRESHOLD</label>
+                <label className="variance-table-label">
+                  INVENTORY THRESHOLD
+                </label>
                 {data ? (
                   <VarianceTable
                     items={data.inventory}
                     headers={headers}
                     scheduler={scheduler || isHistoricalDate}
                     rowKey="station_tank_status"
-                    onChange={value => onModifyData({ ...data, inventory: value })}
+                    onChange={value =>
+                      onModifyData({ ...data, inventory: value })
+                    }
                   />
                 ) : (
                   <div>
-                    On {selectedDate && format(new Date(selectedDate), "do LLL yyyy")}, there is no
-                    data for Inventory
+                    On{' '}
+                    {selectedDate &&
+                      format(new Date(selectedDate), 'do LLL yyyy')}
+                    , there is no data for Inventory
                   </div>
                 )}
               </div>
@@ -262,7 +296,10 @@ const VarianceControl = ({
                   >
                     Cancel
                   </button>
-                  <button className="btn btn-primary ml-2 px-4" onClick={onUpdate}>
+                  <button
+                    className="btn btn-primary ml-2 px-4"
+                    onClick={onUpdate}
+                  >
                     Update
                   </button>
                 </>
@@ -282,7 +319,8 @@ const mapStateToProps = ({ saleAndInventory }) => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  getSalesAndInventoryVarianceControl: date => dispatch(getSalesAndInventoryVarianceControl(date)),
+  getSalesAndInventoryVarianceControl: date =>
+    dispatch(getSalesAndInventoryVarianceControl(date)),
   updateSalesAndInventoryVarianceControl: data =>
     dispatch(updateSalesAndInventoryVarianceControl(data)),
 })

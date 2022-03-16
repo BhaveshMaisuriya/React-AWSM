@@ -1,10 +1,10 @@
 import React, { Fragment, useEffect, useState } from "react"
 import { Modal, ModalBody, ModalHeader, ModalFooter, Button } from "reactstrap"
 import { connect } from "react-redux"
-import ConfirmationPopup from "../../../components/Common/DeleteConfirmationPopup"
-import RedAlertIcon from "./../../../assets/images/AWSM-Red-Alert.svg"
-import CloseButton from "../../../components/Common/CloseButton"
-import { getShipmentOfOderBankGanttChart } from "../../../store/actions"
+import ConfirmationPopup from "components/Common/DeleteConfirmationPopup"
+import RedAlertIcon from "assets/images/AWSM-Red-Alert.svg"
+import CloseButton from "components/Common/CloseButton"
+import { getShipmentOfOderBankGanttChart } from "store/actions"
 import { shipmentTableColumns } from "./tableMapping"
 
 const OrderbankSapAlertModal = ({ istoggle, open, shipmentOrderBankTableData, getShipmentOfOderBankGanttChart, shipmentClicked, onSend}) => {

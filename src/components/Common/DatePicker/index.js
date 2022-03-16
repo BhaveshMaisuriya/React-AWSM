@@ -1,22 +1,22 @@
-import React, { useState, useMemo, useEffect } from "react"
-import "react-date-range/dist/styles.css"
-import "react-date-range/dist/theme/default.css"
-import { Popover } from "@material-ui/core"
-import DayPicker from "react-day-picker"
-import "./datePicker.scss"
-import AWSM_Calendar from "../../../assets/images/AWSM-Calendar.svg"
-import { ReactSVG } from "react-svg"
-import moment from "moment"
-import { addMonths, format as dateFnsFormat } from "date-fns"
+import React, { useState, useMemo, useEffect } from 'react'
+import 'react-date-range/dist/styles.css'
+import 'react-date-range/dist/theme/default.css'
+import { Popover } from '@material-ui/core'
+import DayPicker from 'react-day-picker'
+import './datePicker.scss'
+import AWSM_Calendar from 'assets/images/AWSM-Calendar.svg'
+import { ReactSVG } from 'react-svg'
+import moment from 'moment'
+import { addMonths, format as dateFnsFormat } from 'date-fns'
 
 const DatePicker = ({
   disabled,
-  format = "Do MMM YYYY",
+  format = 'Do MMM YYYY',
   value,
   onChange,
   startDate = null,
   endDate = null,
-  placeholder = "Select date",
+  placeholder = 'Select date',
   defaultValue = null,
 }) => {
   const [date, setDate] = useState(value ? new Date(value) : null)
@@ -24,11 +24,11 @@ const DatePicker = ({
   const [month, setMonth] = useState(date ?? new Date())
   const open = Boolean(anchorEl)
   const id = Date.now().toString()
-  
+
   useEffect(() => {
     setDate(value ? new Date(value) : null)
   }, [value])
-  
+
   const handleClick = event => {
     setMonth(date ?? new Date())
     setAnchorEl(event.currentTarget)
@@ -39,9 +39,8 @@ const DatePicker = ({
   }
 
   const label = useMemo(() => {
-    return date ? moment(date).format(format) : ""
+    return date ? moment(date).format(format) : ''
   }, [date])
-  
 
   const applyDate = () => {
     if (onChange) {
@@ -49,17 +48,16 @@ const DatePicker = ({
     }
     handleClose()
   }
-  
+
   const onClear = () => {
     setDate(defaultValue ?? null)
-    setAnchorEl(null);
+    setAnchorEl(null)
     if (onChange) {
       onChange(defaultValue ?? null)
     }
   }
 
-
-  const WEEK_DAYS = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"]
+  const WEEK_DAYS = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']
   const weekdayElement = ({ weekday }) => {
     return (
       <div className="DayPicker-Weekday">
@@ -88,7 +86,7 @@ const DatePicker = ({
               />
             </svg>
           </div>
-          <label className="px-2">{dateFnsFormat(date, "MMMM-yyyy")}</label>
+          <label className="px-2">{dateFnsFormat(date, 'MMMM-yyyy')}</label>
           <div onClick={() => setMonth(addMonths(month, 1))}>
             <svg
               className="DayPicker-icon"
@@ -113,16 +111,22 @@ const DatePicker = ({
   const modifiers = useMemo(() => {
     const outRange = { before: startDate, after: endDate }
     return {
-      outRange
+      outRange,
     }
   }, [])
 
-  const DATE_FORMAT = "yyyyMMdd"
-  const onDayClick = (date) => {
-    if (startDate && dateFnsFormat(date, DATE_FORMAT) < dateFnsFormat(startDate, DATE_FORMAT)) {
+  const DATE_FORMAT = 'yyyyMMdd'
+  const onDayClick = date => {
+    if (
+      startDate &&
+      dateFnsFormat(date, DATE_FORMAT) < dateFnsFormat(startDate, DATE_FORMAT)
+    ) {
       return
     }
-    if (endDate && dateFnsFormat(date, DATE_FORMAT) > dateFnsFormat(endDate, DATE_FORMAT)) {
+    if (
+      endDate &&
+      dateFnsFormat(date, DATE_FORMAT) > dateFnsFormat(endDate, DATE_FORMAT)
+    ) {
       return
     }
     setDate(date)
@@ -137,11 +141,15 @@ const DatePicker = ({
         color="primary"
         onClick={handleClick}
         className={`d-flex justify-content-between date-picker-button p-2 ${
-          disabled ? "disabled" : ""
+          disabled ? 'disabled' : ''
         }`}
       >
-        <div className="date-picker-label">{!label && !disabled ? placeholder : label}</div>
-        {!disabled && <ReactSVG className="date-picker-icon" src={AWSM_Calendar} />}
+        <div className="date-picker-label">
+          {!label && !disabled ? placeholder : label}
+        </div>
+        {!disabled && (
+          <ReactSVG className="date-picker-icon" src={AWSM_Calendar} />
+        )}
       </button>
       <Popover
         id={id}
@@ -149,12 +157,12 @@ const DatePicker = ({
         anchorEl={anchorEl}
         onClose={handleClose}
         anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "left",
+          vertical: 'bottom',
+          horizontal: 'left',
         }}
         transformOrigin={{
-          vertical: "top",
-          horizontal: "left",
+          vertical: 'top',
+          horizontal: 'left',
         }}
       >
         <div className="awsm-date-picker">

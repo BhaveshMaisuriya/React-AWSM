@@ -1,26 +1,23 @@
-import React, { useState, useEffect, useRef } from "react"
-import { Formik, Form, Field } from "formik"
-import { isScheduler } from "helpers/auth_helper"
-import { formatNumberInput } from "../format_number_input_helper"
+import React, { useState, useEffect } from 'react'
+import { Formik, Form, Field } from 'formik'
+import { isScheduler } from 'helpers/auth_helper'
+import { formatNumberInput } from '../format_number_input_helper'
 
-const placeholderNormalText = "Type something here..."
-const placeholderNumberOnly = "Numeric only"
-const AddressTab = (props) => {
+const placeholderNumberOnly = 'Numeric only'
+const AddressTab = props => {
   const [data, setData] = useState(props.data)
-  const handleSubmit = values => {
-  }
+  const handleSubmit = values => {}
 
   useEffect(() => {
     props.onChange(data)
   }, [data])
 
-  const handleOnChangeValue = (e) => {
+  const handleOnChangeValue = e => {
     let newData = { ...data }
     newData[e.target.id] = e.target.value
     setData(newData)
   }
   const isDisabledField = isScheduler()
-
 
   return (
     <Formik initialValues={data} onSubmit={handleSubmit}>
@@ -35,7 +32,7 @@ const AddressTab = (props) => {
                   id="address_1"
                   className="form-control awsm-input"
                   value={data?.address_1}
-                  onChange={(e) => handleOnChangeValue(e)}
+                  onChange={e => handleOnChangeValue(e)}
                   disabled
                   // placeholder={isDisabledField ? "" : placeholderNormalText}
                 />
@@ -47,7 +44,7 @@ const AddressTab = (props) => {
                   id="city"
                   className="form-control awsm-input"
                   value={data?.city}
-                  onChange={(e) => handleOnChangeValue(e)}
+                  onChange={e => handleOnChangeValue(e)}
                   disabled
                   // placeholder={isDisabledField ? "" : placeholderNormalText}
                 />
@@ -61,7 +58,7 @@ const AddressTab = (props) => {
                   id="postcode"
                   className="form-control awsm-input"
                   value={data?.postcode}
-                  onChange={(e) => handleOnChangeValue(e)}
+                  onChange={e => handleOnChangeValue(e)}
                   disabled
                   // placeholder={isDisabledField ? "" : placeholderNormalText}
                 />
@@ -73,7 +70,7 @@ const AddressTab = (props) => {
                   id="state"
                   className="form-control awsm-input"
                   value={data?.state}
-                  onChange={(e) => handleOnChangeValue(e)}
+                  onChange={e => handleOnChangeValue(e)}
                   disabled
                   // placeholder={isDisabledField ? "" : placeholderNormalText}
                 />
@@ -87,7 +84,7 @@ const AddressTab = (props) => {
                   id="region_group"
                   className="form-control awsm-input"
                   value={data?.region_group}
-                  onChange={(e) => handleOnChangeValue(e)}
+                  onChange={e => handleOnChangeValue(e)}
                   disabled
                   // placeholder={isDisabledField ? "" : placeholderNormalText}
                 />
@@ -99,7 +96,7 @@ const AddressTab = (props) => {
                   id="country"
                   className="form-control awsm-input"
                   value={data?.country}
-                  onChange={(e) => handleOnChangeValue(e)}
+                  onChange={e => handleOnChangeValue(e)}
                   disabled
                   // placeholder={isDisabledField ? "" : placeholderNormalText}
                 />
@@ -113,10 +110,10 @@ const AddressTab = (props) => {
                   id="latitude"
                   className="form-control awsm-input"
                   value={data?.latitude}
-                  onChange={(e) => handleOnChangeValue(e)}
-                  onKeyDown={formatNumberInput(["e", "E", "+", "-","ê", "Ê"])}
+                  onChange={e => handleOnChangeValue(e)}
+                  onKeyDown={formatNumberInput(['e', 'E', '+', '-', 'ê', 'Ê'])}
                   disabled={true} //isDisabledField
-                  placeholder={isDisabledField ? "" : placeholderNumberOnly}
+                  placeholder={isDisabledField ? '' : placeholderNumberOnly}
                 />
               </div>
               <div className="col-md-6 form-group">
@@ -126,10 +123,10 @@ const AddressTab = (props) => {
                   id="longitude"
                   className="form-control awsm-input"
                   value={data?.longitude}
-                  onChange={(e) => handleOnChangeValue(e)}
-                  onKeyDown={formatNumberInput(["e", "E", "+", "-","ê", "Ê"])}
+                  onChange={e => handleOnChangeValue(e)}
+                  onKeyDown={formatNumberInput(['e', 'E', '+', '-', 'ê', 'Ê'])}
                   disabled={true} //isDisabledField
-                  placeholder={isDisabledField ? "" : placeholderNumberOnly}
+                  placeholder={isDisabledField ? '' : placeholderNumberOnly}
                 />
               </div>
             </div>

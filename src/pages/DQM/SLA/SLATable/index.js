@@ -1,47 +1,47 @@
-import React, { useState, useEffect } from "react"
-import { ReactSVG } from "react-svg"
-import EditIcon from "../../../../assets/images/AWSM-Edit-Icon.svg"
-import TrashIcon from "../../../../assets/images/AWSM-Trash-Icon.svg"
-import createDOMPurify from "dompurify"
-import SLAModalDetail from "../EditModal/SLAModalDetail"
-import { isScheduler } from "../../../../helpers/auth_helper"
+import React, { useState } from 'react'
+import { ReactSVG } from 'react-svg'
+import EditIcon from 'assets/images/AWSM-Edit-Icon.svg'
+import TrashIcon from 'assets/images/AWSM-Trash-Icon.svg'
+import createDOMPurify from 'dompurify'
+import SLAModalDetail from '../EditModal/SLAModalDetail'
+import { isScheduler } from 'helpers/auth_helper'
 
-import "./index.scss"
+import './index.scss'
 
 const tableMapping = {
   item: {
-    label: "ITEM NO.",
-    apiKey: "itemIdentifier",
+    label: 'ITEM NO.',
+    apiKey: 'itemIdentifier',
     columnSize: 0.5,
   },
   description: {
-    label: "Description",
-    apiKey: "description",
+    label: 'Description',
+    apiKey: 'description',
     columnSize: 2,
   },
   kpi: {
-    label: "KPI",
-    apiKey: "kpi",
+    label: 'KPI',
+    apiKey: 'kpi',
     columnSize: 2,
   },
   mitigation_plan: {
-    label: "Mitigation Plan",
-    apiKey: "mitigation_plan",
+    label: 'Mitigation Plan',
+    apiKey: 'mitigation_plan',
     columnSize: 1,
   },
   action_by: {
-    label: "Action By",
-    apiKey: "action_by",
+    label: 'Action By',
+    apiKey: 'action_by',
     columnSize: 1,
   },
   module: {
-    label: "Module",
-    apiKey: "module",
+    label: 'Module',
+    apiKey: 'module',
     columnSize: 1,
   },
   remarks: {
-    label: "Remarks",
-    apiKey: "remarks",
+    label: 'Remarks',
+    apiKey: 'remarks',
     columnSize: 1,
   },
 }
@@ -83,7 +83,7 @@ const SLATable = ({ items, onDeleteSLADetail, scheduler, onUpdate }) => {
   const columns = Object.keys(tableMapping)?.map(key => tableMapping[key])
   if (!isScheduler()) {
     columns.push({
-      label: "Action",
+      label: 'Action',
       apiKey: null,
       columnSize: 0.6,
       TDComponent: TDActionsComponent,
@@ -92,7 +92,8 @@ const SLATable = ({ items, onDeleteSLADetail, scheduler, onUpdate }) => {
   }
 
   const totalColSizes = columns.reduce(
-    (previousValue, currentValue) => previousValue + currentValue.columnSize || 1,
+    (previousValue, currentValue) =>
+      previousValue + currentValue.columnSize || 1,
     0
   )
 
@@ -123,12 +124,18 @@ const SLATable = ({ items, onDeleteSLADetail, scheduler, onUpdate }) => {
               <tr>
                 {columns?.map(({ TDComponent, apiKey, TDComponentProps }) =>
                   TDComponent ? (
-                    <TDComponent index={index} item={item} {...TDComponentProps} />
+                    <TDComponent
+                      index={index}
+                      item={item}
+                      {...TDComponentProps}
+                    />
                   ) : (
                     <td
                       className="ck ck-content"
                       dangerouslySetInnerHTML={{
-                        __html: createDOMPurify.sanitize(apiKey ? item[apiKey] || '' : ''),
+                        __html: createDOMPurify.sanitize(
+                          apiKey ? item[apiKey] || '' : ''
+                        ),
                       }}
                     />
                   )
@@ -138,11 +145,19 @@ const SLATable = ({ items, onDeleteSLADetail, scheduler, onUpdate }) => {
               <tr>
                 <td colSpan={columns.length}>
                   <div className="d-flex align-items-center justify-content-center sla-table-confirm-delete-item">
-                    <div>Are you sure you want to delete this data from this table?</div>
-                    <button className="btn btn-dan ml-3 mr-2" onClick={() => setDeleteItem(null)}>
+                    <div>
+                      Are you sure you want to delete this data from this table?
+                    </div>
+                    <button
+                      className="btn btn-dan ml-3 mr-2"
+                      onClick={() => setDeleteItem(null)}
+                    >
                       Cancel
                     </button>
-                    <button className="btn btn-danger" onClick={() => OnDeleteSLAHandler()}>
+                    <button
+                      className="btn btn-danger"
+                      onClick={() => OnDeleteSLAHandler()}
+                    >
                       Delete
                     </button>
                   </div>

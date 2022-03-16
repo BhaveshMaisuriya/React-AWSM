@@ -1,14 +1,20 @@
-export const formatNumberInput = (invalidChars) => {
-  return (evt) => {
+export const formatNumberInput = invalidChars => {
+  return evt => {
     if (invalidChars.includes(evt.key)) {
       return evt.preventDefault()
     }
   }
 }
 
-export const allowOnlyPhoneNumber = (e) => {
+export const allowOnlyPhoneNumber = e => {
   // character, not with ctrl,cmd, alt key
-  if (e.keyCode >= 65 && e.keyCode <= 90 && (!e.ctrlKey && !e.metaKey) && !e.altKey ) {
+  if (
+    e.keyCode >= 65 &&
+    e.keyCode <= 90 &&
+    !e.ctrlKey &&
+    !e.metaKey &&
+    !e.altKey
+  ) {
     return e.preventDefault()
   }
 
@@ -20,7 +26,6 @@ export const allowOnlyPhoneNumber = (e) => {
   // ` ~ - _ = + \ | [ { ] } ' " ; : / ? , < . >
   const otherKeys = [186, 187, 188, 189, 190, 191, 192, 219, 220, 221, 222]
   if (otherKeys.indexOf(e.keyCode) !== -1) {
-
     // allow minus sign
     if (e.keyCode === 189 && !e.shiftKey) {
       return true

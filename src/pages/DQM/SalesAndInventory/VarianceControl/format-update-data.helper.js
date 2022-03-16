@@ -1,18 +1,29 @@
 export function formatUpdateVarianceControlUploadData(object) {
   const keyValuePairs = Object.entries(object)
   if (!keyValuePairs.every(([_, value]) => Array.isArray(value))) {
-    const invalidFields = keyValuePairs.filter(([_, value]) => !Array.isArray(value)).map(([key]) => key)
-    console.error(invalidFields.join(",") + " not array type: format-update-data.helpers.js -" +
-      " line 5")
+    const invalidFields = keyValuePairs
+      .filter(([_, value]) => !Array.isArray(value))
+      .map(([key]) => key)
+    console.error(
+      invalidFields.join(',') +
+        ' not array type: format-update-data.helpers.js -' +
+        ' line 5'
+    )
     return null
   }
   const result = keyValuePairs.reduce((initObj, [key, value]) => {
     return { ...initObj, ...formatArrayToObj(key, value) }
   }, {})
-  let invalidKeys = Object.entries(result).filter(([_, value]) => Number.isNaN(value))
+  let invalidKeys = Object.entries(result).filter(([_, value]) =>
+    Number.isNaN(value)
+  )
   if (invalidKeys.length !== 0) {
     console.error(`
-        ${invalidKeys.map(([key]) => key).join(",")}: Not number values : format-update-data.helpers.js - line 14
+        ${invalidKeys
+          .map(([key]) => key)
+          .join(
+            ','
+          )}: Not number values : format-update-data.helpers.js - line 14
     `)
     return null
   }
@@ -26,7 +37,7 @@ function formatArrayToObj(prefix, array) {
     const valueKey = `${prefixKey}_variance_value`
     const percentKey = `${prefixKey}_percentage`
     initObj[valueKey] = Number(variance_value)
-    initObj[percentKey] = Number(variance_percentage)/100 // data must be decimal like 0.3. must
+    initObj[percentKey] = Number(variance_percentage) / 100 // data must be decimal like 0.3. must
     // divide from percentage to decimal
     return initObj
   }, {})

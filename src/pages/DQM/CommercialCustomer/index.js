@@ -1,12 +1,12 @@
-import React, { Component, Fragment } from "react"
-import { connect } from "react-redux"
-import Page from "../Common"
-import { getCommercialCustomer } from "store/actions"
-import { tableColumns, tableMapping } from "./tableMapping"
-import { transformArrayToString, getCookieByKey } from "../Common/helper"
-import CommercialCustomerModal from "./CommercialCustomerModal"
-import Loader from "components/Common/Loader"
-const CommercialCustomerTableName = "commercial-table"
+import React, { Component, Fragment } from 'react'
+import { connect } from 'react-redux'
+import Page from '../Common'
+import { getCommercialCustomer } from 'store/actions'
+import { tableColumns, tableMapping } from './tableMapping'
+import { transformArrayToString, getCookieByKey } from '../Common/helper'
+import CommercialCustomerModal from './CommercialCustomerModal'
+import Loader from 'components/Common/Loader'
+const CommercialCustomerTableName = 'commercial-table'
 
 class CommercialCustomer extends Component {
   constructor(props) {
@@ -15,7 +15,7 @@ class CommercialCustomer extends Component {
       searchFields: getCookieByKey(CommercialCustomerTableName)
         ? JSON.parse(getCookieByKey(CommercialCustomerTableName))
         : tableColumns,
-      subModule: "commercial-customer",
+      subModule: 'commercial-customer',
     }
   }
 
@@ -25,8 +25,8 @@ class CommercialCustomer extends Component {
     const params = {
       limit: 10,
       page: 0,
-      sort_dir: "asc",
-      sort_field: "ship_to_party",
+      sort_dir: 'asc',
+      sort_field: 'ship_to_party',
       search_fields: transformArrayToString(searchFields),
     }
     await onGetCommercialCustomer(params)
@@ -43,7 +43,7 @@ class CommercialCustomer extends Component {
     const { searchFields, subModule } = this.state
     return (
       <Fragment>
-        {commercialCustomerIsLoading ? <Loader /> : ""}
+        {commercialCustomerIsLoading ? <Loader /> : ''}
         {commercialCustomer.list && (
           <Page
             onGetMainTable={onGetCommercialCustomer}

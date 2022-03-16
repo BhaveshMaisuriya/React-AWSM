@@ -1,21 +1,21 @@
-import React, { Component, Fragment } from "react"
-import { connect } from "react-redux"
-import Page from "../Common"
-import { getSaleAndInventory } from "store/actions"
-import { tableColumns, tableMapping } from "./tableMapping"
-import { transformArrayToString, getCookieByKey } from "../Common/helper"
-import SalesAndInventoryModal from "./SalesAndInventoryModal"
-import Loader from "components/Common/Loader"
+import React, { Component, Fragment } from 'react'
+import { connect } from 'react-redux'
+import Page from '../Common'
+import { getSaleAndInventory } from 'store/actions'
+import { tableColumns, tableMapping } from './tableMapping'
+import { transformArrayToString, getCookieByKey } from '../Common/helper'
+import SalesAndInventoryModal from './SalesAndInventoryModal'
+import Loader from 'components/Common/Loader'
 import {
   getSalesAndInventoryVarianceControl,
   overrideStatusInActionColumn,
-} from "store/actions"
-import { format } from "date-fns"
+} from 'store/actions'
+import { format } from 'date-fns'
 import REGION_TERMINAL, {
   TERMINAL_CODE_MAPPING,
-} from "common/data/regionAndTerminal"
+} from 'common/data/regionAndTerminal'
 
-const tableName = "salesinventory-table"
+const tableName = 'salesinventory-table'
 
 class SalesInventory extends Component {
   constructor(props) {
@@ -25,22 +25,22 @@ class SalesInventory extends Component {
         ? JSON.parse(getCookieByKey(tableName))
         : tableColumns,
       salesDate: new Date(),
-      subModule: "sales-and-inventory",
+      subModule: 'sales-and-inventory',
     }
   }
 
   formatDate = date => {
-    var result = date.toLocaleDateString("en-GB", {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
+    const result = date.toLocaleDateString('en-GB', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
     })
     return (
-      result.split("/")[2] +
-      "-" +
-      result.split("/")[1] +
-      "-" +
-      result.split("/")[0]
+      result.split('/')[2] +
+      '-' +
+      result.split('/')[1] +
+      '-' +
+      result.split('/')[0]
     )
   }
 
@@ -50,19 +50,19 @@ class SalesInventory extends Component {
 
   onGetMainTableAndAuditLog = () => {
     const defaultTerminal = REGION_TERMINAL.find(
-      option => option.region === "Central"
-    )?.terminal?.find(term => term === "KVDT")
+      option => option.region === 'Central'
+    )?.terminal?.find(term => term === 'KVDT')
     const { onGetSaleAndInventory, getSalesAndInventoryVarianceControl } =
       this.props
     const { searchFields } = this.state
     const params = {
       limit: 10,
       page: 0,
-      sort_dir: "",
-      sort_field: "",
-      search_term: "",
+      sort_dir: '',
+      sort_field: '',
+      search_term: '',
       search_fields: transformArrayToString(searchFields),
-      search_date: format(this.state.salesDate, "yyyy-MM-dd"),
+      search_date: format(this.state.salesDate, 'yyyy-MM-dd'),
       terminal: TERMINAL_CODE_MAPPING[defaultTerminal],
     }
     onGetSaleAndInventory(params)
@@ -74,7 +74,7 @@ class SalesInventory extends Component {
     const downloadParams = {
       limit: null,
       page: currentPage,
-      search_fields: "*",
+      search_fields: '*',
     }
     const { onGetDownloadSales } = this.props
     await onGetDownloadSales(downloadParams)
@@ -100,7 +100,7 @@ class SalesInventory extends Component {
     const { searchFields, salesDate, subModule } = this.state
     return (
       <Fragment>
-        {saleAndInventoryIsLoading ? <Loader /> : ""}
+        {saleAndInventoryIsLoading ? <Loader /> : ''}
         {saleAndInventory.list && (
           <Page
             tableName={tableName}

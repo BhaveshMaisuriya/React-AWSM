@@ -12,6 +12,7 @@ const AlertOverruleModal = ({ confirmRestrictions, ganttChartScheduling }) => {
   return (
     <ConfirmDNStatusModal
       isOpen={constraints.length > 0}
+      requiresConfirmation={requiresConfirmation}
       headerContent={
         <>
           <img src={RedAlertIcon} className="header-icon" alt="alerticon" />
@@ -46,7 +47,17 @@ const AlertOverruleModal = ({ confirmRestrictions, ganttChartScheduling }) => {
         </>
       }
       styleColor="danger"
-      onCancel={() => confirmRestrictions({ proceed: false })}
+      onClose={() =>
+        confirmRestrictions({
+          justClearConstraints: true,
+        })
+      }
+      onCancel={() =>
+        confirmRestrictions({
+          proceed: false,
+          orderIndexes,
+        })
+      }
       onSend={
         requiresConfirmation &&
         (() => confirmRestrictions({ proceed: true, orderIndexes }))

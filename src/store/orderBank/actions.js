@@ -125,6 +125,7 @@ import {
   UPDATE_SHIPMENT_FAIL,
   // DRAG_RTS_ORDER_BANK_TO_GANTT_CHART_RESTRICTED,
   DRAG_RTS_ORDER_BANK_TO_GANTT_CHART_CONFIRM_RESTRICTIONS,
+  HIGHLIGHT_RTS_GANTTCHART,
 } from './actionTypes'
 
 export const getRTSOrderBankTableData = params => ({
@@ -495,6 +496,12 @@ export const getRTSOderBankGanttChartSuccess = response => ({
 export const getRTSOderBankGanttChartFail = error => ({
   type: GET_RTS_GANTT_CHART_DATA_FAIL,
   payload: error,
+})
+
+// @params { highlightBy: 'high' | 'request' | 'future' | 'backlog' }
+export const highlightRTSGanttChart = params => ({
+  type: HIGHLIGHT_RTS_GANTTCHART,
+  payload: params,
 })
 
 export const dragOrderBankToGanttChart = ({

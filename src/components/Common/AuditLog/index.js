@@ -1,32 +1,32 @@
-import React, { Component } from "react"
-import { connect } from "react-redux"
-import PropTypes from "prop-types"
-import { withStyles } from "@material-ui/styles"
-import { format } from "date-fns"
-import TablePagination from "../Pagination"
-import lineIcon from "assets/images/auditlog-line.svg"
-import { getRetailAuditLog } from "store/actions"
-import { Modal, ModalHeader } from "reactstrap"
-import CloseButton from "components/Common/CloseButton"
-import "./style.scss"
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
+import { withStyles } from '@material-ui/styles'
+import { format } from 'date-fns'
+import TablePagination from '../Pagination'
+import lineIcon from 'assets/images/auditlog-line.svg'
+import { getRetailAuditLog } from 'store/actions'
+import { Modal, ModalHeader } from 'reactstrap'
+import CloseButton from 'components/Common/CloseButton'
+import './style.scss'
 
 const styles = {
   profilePic: {
-    display: "flex",
+    display: 'flex',
     flexGrow: 1,
-    alignItems: "center",
+    alignItems: 'center',
   },
   profilePicImg: {
-    width: "42px",
-    height: "42px",
-    borderRadius: "40px",
-    backgroundColor: "#FCAA1B",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    fontSize: "18px",
-    letterSpacing: "0",
-    color: "#FFFFFF",
+    width: '42px',
+    height: '42px',
+    borderRadius: '40px',
+    backgroundColor: '#FCAA1B',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    fontSize: '18px',
+    letterSpacing: '0',
+    color: '#FFFFFF',
   },
   lineIcon: {},
 }
@@ -47,8 +47,8 @@ class AuditLog extends Component {
       page: 0,
       module: subModule,
     }
-    if (subModule === "sales-and-inventory") {
-      payload.trans_date = salesDate ? format(salesDate, "dd-MM-yyyy") : ""
+    if (subModule === 'sales-and-inventory') {
+      payload.trans_date = salesDate ? format(salesDate, 'dd-MM-yyyy') : ''
     }
     onGetAuditLog(payload)
   }
@@ -61,8 +61,8 @@ class AuditLog extends Component {
       page: currentPage,
       module: subModule,
     }
-    if (subModule === "sales-and-inventory") {
-      payload.trans_date = salesDate ? format(salesDate, "dd-MM-yyyy") : ""
+    if (subModule === 'sales-and-inventory') {
+      payload.trans_date = salesDate ? format(salesDate, 'dd-MM-yyyy') : ''
     }
     onGetAuditLog(payload)
   }
@@ -72,7 +72,7 @@ class AuditLog extends Component {
    */
   getUserInitials = theName => {
     const name = theName
-    const firstLetter = name ? name[0] : ""
+    const firstLetter = name ? name[0] : ''
 
     return firstLetter
   }
@@ -80,7 +80,7 @@ class AuditLog extends Component {
   /**
    * Get background colour for stripes audit log table
    */
-  getBackgroundColor = index => (index % 2 !== 0 ? "#F8F8F8" : "transparent")
+  getBackgroundColor = index => (index % 2 !== 0 ? '#F8F8F8' : 'transparent')
 
   /**
    *
@@ -102,20 +102,26 @@ class AuditLog extends Component {
 
     //cut date from string
     let date = new Date(audit.created)
-    let finalDate = date.getDate() + "-" + (date.getMonth() + 1) + "-" + date.getFullYear()
+    let finalDate =
+      date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear()
 
     //cut time from string
-    var hour = date.getHours().toString().length == 1 ? "0" + date.getHours() : date.getHours()
-    var mins =
-      date.getMinutes().toString().length == 1 ? "0" + date.getMinutes() : date.getMinutes()
-    let finalTime = hour + ":" + mins
+    const hour =
+      date.getHours().toString().length == 1
+        ? '0' + date.getHours()
+        : date.getHours()
+    const mins =
+      date.getMinutes().toString().length == 1
+        ? '0' + date.getMinutes()
+        : date.getMinutes()
+    let finalTime = hour + ':' + mins
 
     const { classes } = this.props
     return (
       <div>
         <div className="tracking-icon status-intransit">
           <i>
-            {" "}
+            {' '}
             <img className={classes.lineIcon} src={lineIcon} />
           </i>
         </div>
@@ -126,17 +132,17 @@ class AuditLog extends Component {
         <div
           style={{
             backgroundColor: this.getBackgroundColor(idx),
-            height: "75px",
-            paddingTop: "auto",
-            display: "flex",
+            height: '75px',
+            paddingTop: 'auto',
+            display: 'flex',
           }}
         >
           <div className={classes.profilePic}>
             <div className={`${classes.profilePicImg} tracking-profic-pic`}>
-              {this.getUserInitials(theName || "Null")}
+              {this.getUserInitials(theName || 'Null')}
             </div>
             <div className="tracking-content">
-              <b>{theName || "Null"}</b>
+              <b>{theName || 'Null'}</b>
               <div className="content-text">{text}</div>
             </div>
           </div>
@@ -150,12 +156,7 @@ class AuditLog extends Component {
     const { currentPage } = this.state
     return (
       <React.Fragment>
-        <Modal
-          isOpen={isOpen}
-          toggle={toggle}
-          id="auditLog-modal"
-          contentClassName="modalContainer"
-        >
+        <Modal centered isOpen={isOpen} toggle={toggle} id="auditLog-modal">
           <ModalHeader close={<CloseButton handleClose={toggle} />}>
             <h3>Audit Log</h3>
           </ModalHeader>
@@ -173,7 +174,7 @@ class AuditLog extends Component {
               <div className="container-data">
                 {auditLog?.list.map((audit, idx) => (
                   <div key={idx} className="tracking-item">
-                    {" "}
+                    {' '}
                     {this.modalData(audit, idx)}
                   </div>
                 ))}
@@ -209,4 +210,7 @@ AuditLog.propType = {
   toggle: PropTypes.func.isRequired,
   salesDate: PropTypes.object,
 }
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(AuditLog))
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withStyles(styles)(AuditLog))

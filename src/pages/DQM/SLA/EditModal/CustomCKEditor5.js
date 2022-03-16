@@ -1,15 +1,12 @@
-import React, { useState } from "react"
-import AWSMButtonOption from "../../../../components/Common/AWSMButtonOption"
-import EditIcon from "../../../../assets/images/AWSM-Edit-Icon.svg"
-import TrashIcon from "../../../../assets/images/AWSM-Trash-Icon.svg"
-import { CKEditor } from "@ckeditor/ckeditor5-react"
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic"
-import "./index.scss"
+import React, { useState } from 'react'
+import { CKEditor } from '@ckeditor/ckeditor5-react'
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
+import './index.scss'
 
 const SLARecordEditor = ({ data, onChange }) => {
   const [editor, setEditor] = useState(null)
 
-  const outFormatHandler = (input) =>{
+  const outFormatHandler = input => {
     let data = input.split('<td>')
     let itemIdentifier = data[1].split('</td>')[0]
     let description = data[2].split('</td>')[0]
@@ -36,8 +33,8 @@ const SLARecordEditor = ({ data, onChange }) => {
     }
   }
 
-  const onReady = (editor) => {
-    setEditor(editor);
+  const onReady = editor => {
+    setEditor(editor)
     // const modelRoot = editor.model.document.getRoot();
     // const firstCell = modelRoot.getNodeByPath( [ 0, 0, 0 ] );
     // const tableSelection = editor.plugins.get( 'TableSelection' );
@@ -46,7 +43,7 @@ const SLARecordEditor = ({ data, onChange }) => {
     // editor.focus()
   }
 
-  const InputDataHandler = () =>{
+  const InputDataHandler = () => {
     return `
     <table class="sla-table-detail" style="width: 100%;">
     <tbody>
@@ -69,20 +66,20 @@ const SLARecordEditor = ({ data, onChange }) => {
         editor={ClassicEditor}
         config={{
           toolbar: [
-            "heading",
-            "|",
-            "bold",
-            "italic",
-            "numberedList",
-            "bulletedList",
-            "|",
-            "outdent",
-            "indent",
-            "|",
+            'heading',
+            '|',
+            'bold',
+            'italic',
+            'numberedList',
+            'bulletedList',
+            '|',
+            'outdent',
+            'indent',
+            '|',
           ],
-          removePlugins: ["TableToolbar"],
+          removePlugins: ['TableToolbar'],
         }}
-        id='sla-detail'
+        id="sla-detail"
         name="sla-detail"
         data={InputDataHandler()}
         onChange={onEditorChange}

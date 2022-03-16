@@ -163,23 +163,10 @@ const OrderTab = props => {
           <div className="d-flex">
             <div className="w-100">
               <TimePicker
-                value={
-                  data?.planned_load_time &&
-                  moment(data?.planned_load_time).utc().format('HH:mm')
-                }
-                items={timeData}
-                onChange={value =>
-                  onFieldChange(
-                    'planned_load_time',
-                    format(
-                      new Date(data?.requested_delivery_date),
-                      'yyyy-MM-dd'
-                    ) +
-                      ' ' +
-                      value
-                  )
-                }
-                hasNone
+               value={data?.planned_load_time}
+               items={timeData}
+               onChange={value => onFieldChange("planned_load_time", value)}
+               hasNone
               />
             </div>
           </div>
@@ -189,15 +176,10 @@ const OrderTab = props => {
           <div className="d-flex">
             <div className="w-100">
               <TimePicker
-                value={data?.eta && moment(data?.eta).utc().format('HH:mm')}
-                items={timeData}
-                onChange={value =>
-                  onFieldChange(
-                    'eta',
-                    format(new Date(data?.eta), 'yyyy-MM-dd') + ' ' + value
-                  )
-                }
-                hasNone
+                 value={data?.eta}
+                 items={timeData}
+                 onChange={value => onFieldChange("eta", value)}
+                 hasNone
               />
             </div>
           </div>

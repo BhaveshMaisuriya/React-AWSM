@@ -70,6 +70,7 @@ import {
   clearGanttData,
   clearRTSOrderBankTableData,
   getOBTotalUnschedule,
+  highlightRTSGanttChart,
 } from 'store/orderBank/actions'
 import OrderBankActionModal from './OrderBankActionModal'
 import CrossTerminalModal from './crossTerminalModal'
@@ -132,6 +133,7 @@ function OrderBank({
   totalOrderUnschedule,
   totalRow,
   sendMultipleDn,
+  onHighlightningGanttChart,
 }) {
   const defaultDate = format(addDays(Date.now(), 1), 'yyyy-MM-dd')
   const ganttChartEvents = useSelector(
@@ -256,14 +258,12 @@ function OrderBank({
     },
   })
 
-  const populateBryntumTable = (
-    {
-      page = 0,
-      sortField = 'vehicle',
-      sortDirection = 'asc',
-      filterCondition = [],
-    },
-  ) => {
+  const populateBryntumTable = ({
+    page = 0,
+    sortField = 'vehicle',
+    sortDirection = 'asc',
+    filterCondition = [],
+  }) => {
     let q = ''
     if (filterCondition.length > 0) {
       q = filterCondition
@@ -331,9 +331,9 @@ function OrderBank({
     const results = { DNs: 3, shipment: 2, backlog: 0, SR: 0, HP: 0 }
     if (ganttChartEvents) {
       ganttChartEvents.forEach(item => {
-        if (item.eventFilter === 'backlog') results.backlog++
-        if (item.eventFilter === 'request') results.SR++
-        if (item.eventFilter === 'high') results.HP++
+        if (item.flags.highlightFor === 'backlog') results.backlog++
+        if (item.flags.highlightFor === 'request') results.SR++
+        if (item.flags.highlightFor === 'high') results.HP++
       })
     }
     setOrderSummary(results)
@@ -712,9 +712,11 @@ function OrderBank({
       const value = target.value
       if (value === ganttChartAllRadio && target.checked) {
         target.checked = false
+        onHighlightningGanttChart({ highlightBy: null })
         return setGanttChartAllRadio('')
       }
       target.checked = true
+      onHighlightningGanttChart({ highlightBy: value })
       return setGanttChartAllRadio(value)
     },
     [ganttChartAllRadio]
@@ -764,8 +766,8 @@ function OrderBank({
         temp1.push(item.title)
       }
     })
-    var temp2 = temp1.join().split(',')
-    var temp3 =
+    const temp2 = temp1.join().split(',')
+    const temp3 =
       temp2.length > 1 === true ? temp2[0] + ' & ' + temp2[1] : temp2[0]
     setCheckedValue(temp3)
     setDeleteCheck(temp)
@@ -835,7 +837,7 @@ function OrderBank({
 
   //Object literal checking icon type
   const getIcon = type => {
-    var icons = {
+    const icons = {
       customiseAddIcon: <AddOrderIcon />,
       customiseTableBankIcon: <CustomizeTableIcon />,
       customiseUploadIcon: <UploadIcon />,
@@ -1508,6 +1510,7 @@ const mapDispatchToProps = dispatch => ({
   clearGanttData: () => dispatch(clearGanttData()),
   clearRTSOrderBankTableData: () => dispatch(clearRTSOrderBankTableData()),
   onGetTotalOBUnschedule: params => dispatch(getOBTotalUnschedule(params)),
+  onHighlightningGanttChart: params => dispatch(highlightRTSGanttChart(params)),
 })
 
 const mapStateToProps = ({ orderBank }) => ({

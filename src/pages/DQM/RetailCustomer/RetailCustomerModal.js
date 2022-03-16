@@ -1,6 +1,6 @@
-import React, { useEffect, useMemo, useState } from "react"
-import { connect } from "react-redux"
-import { format } from "date-fns"
+import React, { useEffect, useMemo, useState } from 'react'
+import { connect } from 'react-redux'
+import { format } from 'date-fns'
 import {
   Button,
   Modal,
@@ -14,30 +14,30 @@ import {
   TabContent,
   Row,
   Col,
-} from "reactstrap"
+} from 'reactstrap'
 
 //Components
-import AWSMInput from "components/Common/Input"
-import TabAddress from "components/Common/TableInformation/tabAddress"
-import TabStatus from "components/Common/TableInformation/tabStatus"
-import TabDelivery from "components/Common/TableInformation/tabDelivery"
-import TabContact from "components/Common/TableInformation/tabContact"
-import TabStorage from "components/Common/TableInformation/tabStorage"
-import TabQuota from "components/Common/TableInformation/tabQuota"
-import CloseButton from "components/Common/CloseButton"
+import AWSMInput from 'components/Common/Input'
+import TabAddress from 'components/Common/TableInformation/tabAddress'
+import TabStatus from 'components/Common/TableInformation/tabStatus'
+import TabDelivery from 'components/Common/TableInformation/tabDelivery'
+import TabContact from 'components/Common/TableInformation/tabContact'
+import TabStorage from 'components/Common/TableInformation/tabStorage'
+import TabQuota from 'components/Common/TableInformation/tabQuota'
+import CloseButton from 'components/Common/CloseButton'
 //CSS
-import "./RetailCustomerModal.scss"
-import { Skeleton } from "@material-ui/core"
+import './RetailCustomerModal.scss'
+import { Skeleton } from '@material-ui/core'
 import {
   getTableInformation,
   resetRetailTableInformation,
   updateTableInformation,
-} from "store/actions"
-import { isScheduler } from "helpers/auth_helper"
-import ExitConfirmation from "components/Common/ExitConfirmation"
-import { runValidation } from "../Common/helper"
-import { isEqual } from "lodash"
-import SimpleBar from "simplebar-react"
+} from 'store/actions'
+import { isScheduler } from 'helpers/auth_helper'
+import ExitConfirmation from 'components/Common/ExitConfirmation'
+import { runValidation } from '../Common/helper'
+import { isEqual } from 'lodash'
+import SimpleBar from 'simplebar-react'
 
 const RetailCustomerModal = props => {
   const {
@@ -52,8 +52,10 @@ const RetailCustomerModal = props => {
     updateSuccess,
     refreshMainTable,
   } = props
-  const [currentRetailDetail, setCurrentRetailDetail] = useState(props.currentRetailDetail)
-  const [activeTab, setActiveTab] = useState("1")
+  const [currentRetailDetail, setCurrentRetailDetail] = useState(
+    props.currentRetailDetail
+  )
+  const [activeTab, setActiveTab] = useState('1')
   const scheduler = isScheduler()
   const [isConfirm, setIsConfirm] = useState(false)
 
@@ -90,7 +92,7 @@ const RetailCustomerModal = props => {
   useEffect(async () => {
     if (data && visible) {
       await getTableInformation(data)
-      setActiveTab("1")
+      setActiveTab('1')
     } else if (!visible) {
       resetRetailTableInformation()
     }
@@ -134,7 +136,11 @@ const RetailCustomerModal = props => {
 
   return (
     <>
-      <Modal centered={true} isOpen={visible} className="retail-customer-modal modal-lg">
+      <Modal
+        centered={true}
+        isOpen={visible}
+        className="retail-customer-modal modal-lg"
+      >
         {currentRetailDetail ? (
           <div>
             <ModalHeader close={<CloseButton handleClose={handleClose} />}>
@@ -143,8 +149,13 @@ const RetailCustomerModal = props => {
               </span>
               <span className="last-updated-sub-title">
                 {`Last Updated By: ${
-                  currentRetailDetail.updated_by?.split("@")[0] || "Unknown"
-                } on ${format(new Date(currentRetailDetail.updated_at), "do LLL yyyy") || ""}`}
+                  currentRetailDetail.updated_by?.split('@')[0] || 'Unknown'
+                } on ${
+                  format(
+                    new Date(currentRetailDetail.updated_at),
+                    'do LLL yyyy'
+                  ) || ''
+                }`}
               </span>
             </ModalHeader>
             <ModalBody>
@@ -152,11 +163,17 @@ const RetailCustomerModal = props => {
               <Row className="row">
                 <Col className="col-md-6 form-group">
                   <label>SHIP TO (COMPANY NAME)</label>
-                  <AWSMInput disabled defaultValue={currentRetailDetail.ship_to_company} />
+                  <AWSMInput
+                    disabled
+                    defaultValue={currentRetailDetail.ship_to_company}
+                  />
                 </Col>
                 <Col className="col-md-6 form-group">
                   <label>STATUS IN SAP</label>
-                  <AWSMInput disabled defaultValue={currentRetailDetail.status_sap} />
+                  <AWSMInput
+                    disabled
+                    defaultValue={currentRetailDetail.status_sap}
+                  />
                 </Col>
               </Row>
               <Row className="row">
@@ -164,7 +181,7 @@ const RetailCustomerModal = props => {
                   <label>REMARKS</label>
                   <AWSMInput
                     defaultValue={currentRetailDetail.remarks}
-                    onChange={value => onFieldValueChange("remarks", value)}
+                    onChange={value => onFieldValueChange('remarks', value)}
                     disabled={scheduler}
                     placeholder="Type something here ..."
                   />
@@ -173,49 +190,49 @@ const RetailCustomerModal = props => {
               <Nav pills justified>
                 <NavItem>
                   <NavLink
-                    className={activeTab === "1" ? "active" : ""}
-                    onClick={() => setActiveTab("1")}
+                    className={activeTab === '1' ? 'active' : ''}
+                    onClick={() => setActiveTab('1')}
                   >
                     <span className="d-none d-sm-block">Address</span>
                   </NavLink>
                 </NavItem>
                 <NavItem>
                   <NavLink
-                    className={activeTab === "2" ? "active" : ""}
-                    onClick={() => setActiveTab("2")}
+                    className={activeTab === '2' ? 'active' : ''}
+                    onClick={() => setActiveTab('2')}
                   >
                     <span className="d-none d-sm-block">Delivery</span>
                   </NavLink>
                 </NavItem>
                 <NavItem>
                   <NavLink
-                    className={activeTab === "3" ? "active" : ""}
-                    onClick={() => setActiveTab("3")}
+                    className={activeTab === '3' ? 'active' : ''}
+                    onClick={() => setActiveTab('3')}
                   >
                     <span className="d-none d-sm-block">Status</span>
                   </NavLink>
                 </NavItem>
                 <NavItem>
                   <NavLink
-                    className={activeTab === "4" ? "active" : ""}
-                    onClick={() => setActiveTab("4")}
+                    className={activeTab === '4' ? 'active' : ''}
+                    onClick={() => setActiveTab('4')}
                   >
                     <span className="d-none d-sm-block">Contact</span>
                   </NavLink>
                 </NavItem>
                 <NavItem>
                   <NavLink
-                    className={activeTab === "5" ? "active" : ""}
-                    onClick={() => setActiveTab("5")}
+                    className={activeTab === '5' ? 'active' : ''}
+                    onClick={() => setActiveTab('5')}
                   >
                     <span className="d-none d-sm-block">Storage</span>
                   </NavLink>
                 </NavItem>
                 <NavItem>
                   <NavLink
-                    className={activeTab === "6" ? "active" : ""}
+                    className={activeTab === '6' ? 'active' : ''}
                     onClick={() => {
-                      setActiveTab("6")
+                      setActiveTab('6')
                     }}
                   >
                     <span className="d-none d-sm-block">Quota</span>
@@ -224,7 +241,7 @@ const RetailCustomerModal = props => {
               </Nav>
               <div>
                 <TabContent activeTab={activeTab} className="py-4">
-                  <TabPane tabId="1" style={{ marginRight: "-25px" }}>
+                  <TabPane tabId="1" style={{ marginRight: '-25px' }}>
                     <SimpleBar className="simple-bar">
                       <TabAddress
                         dataList={dataList}
@@ -234,7 +251,7 @@ const RetailCustomerModal = props => {
                       />
                     </SimpleBar>
                   </TabPane>
-                  <TabPane tabId="3" style={{ marginRight: "-25px" }}>
+                  <TabPane tabId="3" style={{ marginRight: '-25px' }}>
                     <SimpleBar className="simple-bar">
                       <TabStatus
                         scheduler={scheduler}
@@ -243,7 +260,7 @@ const RetailCustomerModal = props => {
                       />
                     </SimpleBar>
                   </TabPane>
-                  <TabPane tabId="2" style={{ marginRight: "-25px" }}>
+                  <TabPane tabId="2" style={{ marginRight: '-25px' }}>
                     <SimpleBar className="simple-bar">
                       <TabDelivery
                         scheduler={scheduler}
@@ -252,7 +269,7 @@ const RetailCustomerModal = props => {
                       />
                     </SimpleBar>
                   </TabPane>
-                  <TabPane tabId="4" style={{ marginRight: "-25px" }}>
+                  <TabPane tabId="4" style={{ marginRight: '-25px' }}>
                     <SimpleBar className="simple-bar">
                       <TabContact
                         scheduler={scheduler}
@@ -261,7 +278,7 @@ const RetailCustomerModal = props => {
                       />
                     </SimpleBar>
                   </TabPane>
-                  <TabPane tabId="5" style={{ marginRight: "-25px" }}>
+                  <TabPane tabId="5" style={{ marginRight: '-25px' }}>
                     <SimpleBar className="simple-bar">
                       <TabStorage
                         scheduler={scheduler}
@@ -270,7 +287,7 @@ const RetailCustomerModal = props => {
                       />
                     </SimpleBar>
                   </TabPane>
-                  <TabPane tabId="6" style={{ marginRight: "-25px" }}>
+                  <TabPane tabId="6" style={{ marginRight: '-25px' }}>
                     <SimpleBar className="simple-bar">
                       <TabQuota
                         scheduler={scheduler}
@@ -293,7 +310,12 @@ const RetailCustomerModal = props => {
             <button onClick={handleClose} className="btn-sec">
               Cancel
             </button>
-            <Button disabled={!isUpdateAble} type="submit" color="primary" onClick={handleUpdate}>
+            <Button
+              disabled={!isUpdateAble}
+              type="submit"
+              color="primary"
+              onClick={handleUpdate}
+            >
               Update
             </Button>
           </ModalFooter>

@@ -1,15 +1,15 @@
 import PropTypes from 'prop-types'
-import React, { Component } from "react"
-import { Link } from "react-router-dom"
-import { Dropdown, DropdownToggle, DropdownMenu, Row, Col } from "reactstrap"
-import SimpleBar from "simplebar-react"
+import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
+import { Dropdown, DropdownToggle, DropdownMenu, Row, Col } from 'reactstrap'
+import SimpleBar from 'simplebar-react'
 
 //Import images
-import avatar3 from "../../../assets/images/users/avatar-1.jpg"
-import avatar4 from "../../../assets/images/users/avatar-1.jpg"
+import avatar3 from 'assets/images/users/avatar-1.jpg'
+import avatar4 from 'assets/images/users/avatar-1.jpg'
 
 //i18n
-import { withTranslation } from "react-i18next"
+import { withTranslation } from 'react-i18next'
 
 class NotificationDropdown extends Component {
   constructor(props) {
@@ -39,7 +39,7 @@ class NotificationDropdown extends Component {
             tag="button"
             id="page-header-notifications-dropdown"
           >
-            <i className="bx bx-bell bx-tada"/>
+            <i className="bx bx-bell bx-tada" />
             <span className="badge badge-danger badge-pill">3</span>
           </DropdownToggle>
 
@@ -47,36 +47,34 @@ class NotificationDropdown extends Component {
             <div className="p-3">
               <Row className="align-items-center">
                 <Col>
-                  <h6 className="m-0"> {this.props.t("Notifications")} </h6>
+                  <h6 className="m-0"> {this.props.t('Notifications')} </h6>
                 </Col>
                 <div className="col-auto">
                   <a href="#" className="small">
-                    {" "}
+                    {' '}
                     View All
                   </a>
                 </div>
               </Row>
             </div>
 
-            <SimpleBar style={{ height: "230px" }}>
+            <SimpleBar style={{ height: '230px' }}>
               <Link to="" className="text-reset notification-item">
                 <div className="media">
                   <div className="avatar-xs mr-3">
                     <span className="avatar-title bg-primary rounded-circle font-size-16">
-                      <i className="bx bx-cart"/>
+                      <i className="bx bx-cart" />
                     </span>
                   </div>
                   <div className="media-body">
-                    <h6 className="mt-0 mb-1">
-                      30 Products Updated
-                    </h6>
+                    <h6 className="mt-0 mb-1">30 Products Updated</h6>
                     <div className="font-size-12 text-muted">
                       <p className="mb-1">
                         Products updated in Central Region.
                       </p>
                       <p className="mb-0">
-                        <i className="mdi mdi-clock-outline"/>{" "}
-                        {this.props.t("3 min ago")}{" "}
+                        <i className="mdi mdi-clock-outline" />{' '}
+                        {this.props.t('3 min ago')}{' '}
                       </p>
                     </div>
                   </div>
@@ -92,12 +90,10 @@ class NotificationDropdown extends Component {
                   <div className="media-body">
                     <h6 className="mt-0 mb-1">Sunny Khiani</h6>
                     <div className="font-size-12 text-muted">
-                      <p className="mb-1">
-                        Pending ASR Submissions
-                      </p>
+                      <p className="mb-1">Pending ASR Submissions</p>
                       <p className="mb-0">
-                        <i className="mdi mdi-clock-outline"/>
-                        {this.props.t("1 hours ago")}{" "}
+                        <i className="mdi mdi-clock-outline" />
+                        {this.props.t('1 hours ago')}{' '}
                       </p>
                     </div>
                   </div>
@@ -107,20 +103,18 @@ class NotificationDropdown extends Component {
                 <div className="media">
                   <div className="avatar-xs mr-3">
                     <span className="avatar-title bg-success rounded-circle font-size-16">
-                      <i className="bx bx-badge-check"/>
+                      <i className="bx bx-badge-check" />
                     </span>
                   </div>
                   <div className="media-body">
-                    <h6 className="mt-0 mb-1">
-                      Road Tankers Updated
-                    </h6>
+                    <h6 className="mt-0 mb-1">Road Tankers Updated</h6>
                     <div className="font-size-12 text-muted">
                       <p className="mb-1">
                         Road Tankers updated in Northern Region.
                       </p>
                       <p className="mb-0">
-                        <i className="mdi mdi-clock-outline"/>{" "}
-                        {this.props.t("3 min ago")}
+                        <i className="mdi mdi-clock-outline" />{' '}
+                        {this.props.t('3 min ago')}
                       </p>
                     </div>
                   </div>
@@ -137,12 +131,10 @@ class NotificationDropdown extends Component {
                   <div className="media-body">
                     <h6 className="mt-0 mb-1">Sunny Khiani</h6>
                     <div className="font-size-12 text-muted">
-                      <p className="mb-1">
-                        Team on Duty Schedule Changed.
-                      </p>
+                      <p className="mb-1">Team on Duty Schedule Changed.</p>
                       <p className="mb-0">
-                        <i className="mdi mdi-clock-outline"/>
-                        {this.props.t("1 hours ago")}{" "}
+                        <i className="mdi mdi-clock-outline" />
+                        {this.props.t('1 hours ago')}{' '}
                       </p>
                     </div>
                   </div>
@@ -154,8 +146,8 @@ class NotificationDropdown extends Component {
                 className="btn btn-sm btn-link font-size-14 btn-block text-center"
                 to="#"
               >
-                {" "}
-                {this.props.t("View all")}{" "}
+                {' '}
+                {this.props.t('View all')}{' '}
               </Link>
             </div>
           </DropdownMenu>
@@ -166,7 +158,7 @@ class NotificationDropdown extends Component {
 }
 
 NotificationDropdown.propTypes = {
-  t: PropTypes.any
+  t: PropTypes.any,
 }
 
 export default withTranslation()(NotificationDropdown)

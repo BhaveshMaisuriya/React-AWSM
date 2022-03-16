@@ -20,10 +20,7 @@ import {
   sendOrderInGanttChart,
   getShipmentOfOderBankGanttChart,
   removeEvent,
-  // updateOBEvent,
-  // getGanttEventValidation,
   selectVehicleShipment,
-  // dragOrderBankToGanttChart,
   updateShipment,
 } from 'store/actions'
 import ChartColumnFilter from './ChartColumnFilter'
@@ -65,7 +62,6 @@ function BryntumChartTable(props) {
     ganttChartState,
     handleResetAll,
   } = props
-  const tableData = useRef([])
   const chartRef = useRef()
   const colsRef = useRef(bryntumCurrentColumns)
   const [modal, setModal] = useState(false)
@@ -146,27 +142,15 @@ function BryntumChartTable(props) {
     }, 1000)
   }
 
-  // CONTROL GANTTCHART EVENTS
+  // CONTROL GANTTCHART DATA
   useEffect(() => {
     const { instance: scheduler } = chartRef.current
-    const { eventStore } = scheduler
+    const { eventStore, resourceStore } = scheduler
 
+    resourceStore.data = props.ganttChartTableData
     eventStore.data = ganttChartState.events
-    scheduler.renderRows()
-  }, [ganttChartState.events])
-
-  useEffect(() => {
-    setFilterList(
-      Object.keys(bryntumCurrentColumns).map(e => ({
-        key: e,
-        type: ganttChartTableMapping[e]?.type,
-      }))
-    )
-  }, [bryntumCurrentColumns])
-
-  useEffect(() => {
-    tableData.current = props.ganttChartTableData
-  }, [props.ganttChartTableData])
+    scheduler.refreshRows()
+  }, [ganttChartState.events, props.ganttChartTableData])
 
   const toggle = () => setModal(!modal)
 
@@ -271,17 +255,17 @@ function BryntumChartTable(props) {
   const chartConfig = {
     columns: [],
     autoCommit: true,
-    autoLoad: true,
     syncDataOnLoad: true,
-    autoHeight: true,
     rowHeight: 30,
+    autoHeight: true,
     barMargin: 0,
     createEventOnDblClick: false,
     zoomOnMouseWheel: false,
     forceFit: true,
     features: {
-      eventDragCreate: false,
       taskEdit: false,
+      eventDragCreate: false,
+      eventCopyPaste: false,
       eventEdit: {
         editorConfig: {
           type: 'myCustomEditorType',
@@ -290,12 +274,6 @@ function BryntumChartTable(props) {
       eventTooltip: {
         disabled: true,
       },
-      eventCopyPaste: false,
-      eventDrag: {
-        nonWorkingTime: true,
-      },
-      nonWorkingTime: true,
-      resourceNonWorkingTime: true,
       timeRanges: {
         showCurrentTimeLine: false,
       },
@@ -447,7 +425,8 @@ function BryntumChartTable(props) {
       // <eventRecord.originalData> consult factory.js
       const data = eventRecord.originalData,
         { background, flags, supplement } = eventRecord.originalData
-      !flags.isBackground && (eventRecord.cls = 'has-background')
+      !flags.isBackground && (renderData.cls['has-background'] = true)
+      flags.highlightFor && (renderData.cls['bold'] = true)
 
       let bgTemplate = ''
 
@@ -468,6 +447,13 @@ function BryntumChartTable(props) {
           </div>
         `
       }
+
+      let etaTemplate = ``
+      supplement.etas.forEach(m => {
+        etaTemplate += `<div class="green-bg brdr-radius">
+          <p>eta ${m.format(DATE_TIME_FORMAT)}</p>
+        </div>`
+      })
 
       return flags.isBackground
         ? ''
@@ -497,12 +483,12 @@ function BryntumChartTable(props) {
                 TIME_FORMAT_SHORT
               )} hrs</p>
             </div>
-            
             <div class="white-text brdr-radius">
               <p>${moment(data.endDate, DATE_TIME_FORMAT, true).format(
                 TIME_FORMAT_SHORT
               )} hrs</p>
             </div>
+            ${etaTemplate}
           </div>
         </div>`
     },
@@ -587,48 +573,13 @@ function BryntumChartTable(props) {
   }
 
   useEffect(() => {
-    let isMounted = true // prevent bryntum maximum render
-    if (
-      chartRef.current &&
-      chartRef.current.instance &&
-      isMounted &&
-      !firstRender.current
-    ) {
-      const { instance: scheduler } = chartRef.current
-      const { ganttChartAllRadio } = props
-      if (!ganttChartAllRadio) {
-        setEventsData(prevEventsData => {
-          const newEventsData = prevEventsData.map(event => {
-            event.highlight = true
-            return event
-          })
-          scheduler.eventStore.data = newEventsData
-          return newEventsData
-        })
-      }
-      if (ganttChartAllRadio) {
-        setEventsData(prevEventsData => {
-          const newEventsData = prevEventsData.map(event => {
-            if (event.eventType === 'Scheduled') {
-              event.highlight = event.eventFilter === ganttChartAllRadio
-            }
-            if (event.eventType !== 'Scheduled') {
-              event.highlight = true
-            }
-            return event
-          })
-          scheduler.eventStore.data = newEventsData
-          return newEventsData
-        })
-      }
-    }
+    setFilterList(
+      Object.keys(bryntumCurrentColumns).map(e => ({
+        key: e,
+        type: ganttChartTableMapping[e]?.type,
+      }))
+    )
 
-    return () => {
-      isMounted = false
-    }
-  }, [props.ganttChartAllRadio])
-
-  useEffect(() => {
     if (chartRef.current && !firstRender.current) {
       const { instance: scheduler } = chartRef.current
       for (const col of Object.keys(ganttChartTableMapping)) {
@@ -640,9 +591,7 @@ function BryntumChartTable(props) {
         scheduler.columns.add(generateColumnsObj(newCol))
       }
     }
-  }, [bryntumCurrentColumns])
 
-  useEffect(() => {
     if (bryntumCurrentColumns) {
       Object.keys(bryntumCurrentColumns).forEach(e => {
         const el = document.getElementById(`gantt-chart-column-${e}-button`)
@@ -753,11 +702,7 @@ function BryntumChartTable(props) {
                         <div className="on-dragging" />
                       )}
 
-                      <BryntumSchedulerPro
-                        {...chartConfig}
-                        ref={chartRef}
-                        resources={props.ganttChartTableData}
-                      />
+                      <BryntumSchedulerPro {...chartConfig} ref={chartRef} />
 
                       {popupShown ? (
                         <BryntumPopup
@@ -841,16 +786,7 @@ function BryntumChartTable(props) {
         shiftDate={props.dateConfig.date_from}
         refreshTable={refreshGanttChartTable}
       />
-      {/* validate gantt event 5 */}
-      <AlertOverruleModal
-      // alertType={alertOverruleShow}
-      // onCancel={() => {
-      // setAlertOverruleShow(false)
-      // refreshGanttChartTable()
-      // }}
-      // alertMessage={ganttEventValidation?.message}
-      // onSend={updateOBEventHandler}
-      />
+      <AlertOverruleModal />
     </div>
   )
 }
@@ -858,11 +794,9 @@ function BryntumChartTable(props) {
 const mapStateToProps = ({ orderBank }) => {
   return {
     ganttChartState: orderBank.ganttChart,
-    ganttChartOrderDrag: orderBank.ganttChartOrderDrag,
     ganttChartTableData: orderBank.ganttChartTableData,
     totalRow_ganttChart: orderBank.totalRow_ganttChart,
     ganttChartTableFilter: orderBank.ganttChartTableFilter,
-    ganttEventValidation: orderBank.ganttEventValidation,
   }
 }
 
@@ -876,13 +810,8 @@ const mapDispatchToProps = dispatch => {
       dispatch(sendOrderInGanttChart(params)),
     getShipmentOfOderBankGanttChart: params =>
       dispatch(getShipmentOfOderBankGanttChart(params)),
-    // updateOBEvent: params => dispatch(updateOBEvent(params)),
-    // getGanttEventValidation: params =>
-    //   dispatch(getGanttEventValidation(params)),
     onRemoveEvent: params => dispatch(removeEvent(params)),
     onSelectVehicle: params => dispatch(selectVehicleShipment(params)),
-    // dragOrderBankToGanttChart: payload =>
-    //   dispatch(dragOrderBankToGanttChart(payload)),
     updateShipment: params => dispatch(updateShipment(params)),
   }
 }

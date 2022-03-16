@@ -1,6 +1,6 @@
-import React, { Fragment, useEffect, useMemo, useState } from "react"
-import { connect } from "react-redux"
-import { format } from "date-fns"
+import React, { useEffect, useMemo, useState } from 'react'
+import { connect } from 'react-redux'
+import { format } from 'date-fns'
 import {
   Button,
   Modal,
@@ -14,31 +14,31 @@ import {
   TabContent,
   Row,
   Col,
-} from "reactstrap"
+} from 'reactstrap'
 
 //Components
-import AWSMInput from "../../../components/Common/Input"
-import TabAddress from "../../../components/Common/TableInformation/tabAddress"
-import TabStatus from "../../../components/Common/TableInformation/tabStatus"
-import TabDelivery from "../../../components/Common/TableInformation/tabDelivery"
-import TabContact from "../../../components/Common/TableInformation/tabContact"
-import TabStorage from "../../../components/Common/TableInformation/tabStorage"
-import TabQuota from "../../../components/Common/TableInformation/tabQuota"
-import ExitConfirmation from "../../../components/Common/ExitConfirmation"
+import AWSMInput from 'components/Common/Input'
+import TabAddress from 'components/Common/TableInformation/tabAddress'
+import TabStatus from 'components/Common/TableInformation/tabStatus'
+import TabDelivery from 'components/Common/TableInformation/tabDelivery'
+import TabContact from 'components/Common/TableInformation/tabContact'
+import TabStorage from 'components/Common/TableInformation/tabStorage'
+import TabQuota from 'components/Common/TableInformation/tabQuota'
+import ExitConfirmation from 'components/Common/ExitConfirmation'
 
 //CSS
-import "./CommercialCustomerModal.scss"
-import { Skeleton } from "@material-ui/core"
+import './CommercialCustomerModal.scss'
+import { Skeleton } from '@material-ui/core'
 import {
   getCommercialTableInformation,
   resetCommercialTableInformation,
   updateCommercialTableInformation,
-} from "../../../store/commercialCustomer/actions"
-import { isScheduler } from "../../../helpers/auth_helper"
-import { isEqual } from "lodash"
-import { runValidation } from "../Common/helper"
-import CloseButton from "../../../components/Common/CloseButton"
-import SimpleBar from "simplebar-react"
+} from 'store/commercialCustomer/actions'
+import { isScheduler } from 'helpers/auth_helper'
+import { isEqual } from 'lodash'
+import { runValidation } from '../Common/helper'
+import CloseButton from 'components/Common/CloseButton'
+import SimpleBar from 'simplebar-react'
 
 const CommercialCustomerModal = props => {
   const {
@@ -52,12 +52,11 @@ const CommercialCustomerModal = props => {
     updateCommercialTableInformation,
     updateSuccess,
     refreshMainTable,
-    updateAlert,
   } = props
   const [currentCommercialDetail, setCurrentCommercialDetail] = useState(
     props.currentCommercialDetail
   )
-  const [activeTab, setActiveTab] = useState("1")
+  const [activeTab, setActiveTab] = useState('1')
   const scheduler = isScheduler()
   const [isConfirm, setIsConfirm] = useState(false)
 
@@ -74,11 +73,11 @@ const CommercialCustomerModal = props => {
       onCancel()
     }
   }
-  
+
   const isUpdateAble = useMemo(() => {
-    if(!isEqual(currentCommercialDetail, props.currentCommercialDetail)){
+    if (!isEqual(currentCommercialDetail, props.currentCommercialDetail)) {
       return runValidation(currentCommercialDetail || {})
-    }else{
+    } else {
       return false
     }
   }, [currentCommercialDetail])
@@ -94,7 +93,7 @@ const CommercialCustomerModal = props => {
   useEffect(() => {
     if (data && visible) {
       getCommercialTableInformation(data)
-      setActiveTab("1")
+      setActiveTab('1')
     } else if (!visible) {
       resetCommercialTableInformation()
     }
@@ -132,15 +131,17 @@ const CommercialCustomerModal = props => {
     )
   }
 
-
-
   if (!data) {
     return null
   }
 
   return (
     <>
-      <Modal isOpen={visible} centered={true} className="commercial-customer-modal modal-lg">
+      <Modal
+        isOpen={visible}
+        centered={true}
+        className="commercial-customer-modal modal-lg"
+      >
         {currentCommercialDetail ? (
           <div>
             <ModalHeader close={<CloseButton handleClose={handleClose} />}>
@@ -148,7 +149,14 @@ const CommercialCustomerModal = props => {
                 Ship To Party: {currentCommercialDetail.ship_to_party}
               </span>
               <span className="last-updated-sub-title">
-              {`Last Updated By: ${currentCommercialDetail.updated_by?.split("@")[0] || "Unknown"} on ${format(new Date(currentCommercialDetail.updated_at), "do LLL yyyy") || ""}`}
+                {`Last Updated By: ${
+                  currentCommercialDetail.updated_by?.split('@')[0] || 'Unknown'
+                } on ${
+                  format(
+                    new Date(currentCommercialDetail.updated_at),
+                    'do LLL yyyy'
+                  ) || ''
+                }`}
               </span>
             </ModalHeader>
             <ModalBody className="position-relative">
@@ -174,58 +182,58 @@ const CommercialCustomerModal = props => {
                   <label>REMARKS</label>
                   <AWSMInput
                     defaultValue={currentCommercialDetail.remarks}
-                    onChange={value => onFieldValueChange("remarks", value)}
+                    onChange={value => onFieldValueChange('remarks', value)}
                     disabled={scheduler}
-                    placeholder='Type something here ...'
+                    placeholder="Type something here ..."
                   />
                 </Col>
               </Row>
               <Nav pills justified>
                 <NavItem>
                   <NavLink
-                    className={activeTab === "1" ? "active" : ""}
-                    onClick={() => setActiveTab("1")}
+                    className={activeTab === '1' ? 'active' : ''}
+                    onClick={() => setActiveTab('1')}
                   >
                     <span className="d-none d-sm-block">Address</span>
                   </NavLink>
                 </NavItem>
                 <NavItem>
                   <NavLink
-                    className={activeTab === "2" ? "active" : ""}
-                    onClick={() => setActiveTab("2")}
+                    className={activeTab === '2' ? 'active' : ''}
+                    onClick={() => setActiveTab('2')}
                   >
                     <span className="d-none d-sm-block">Delivery</span>
                   </NavLink>
                 </NavItem>
                 <NavItem>
                   <NavLink
-                    className={activeTab === "3" ? "active" : ""}
-                    onClick={() => setActiveTab("3")}
+                    className={activeTab === '3' ? 'active' : ''}
+                    onClick={() => setActiveTab('3')}
                   >
                     <span className="d-none d-sm-block">Status</span>
                   </NavLink>
                 </NavItem>
                 <NavItem>
                   <NavLink
-                    className={activeTab === "4" ? "active" : ""}
-                    onClick={() => setActiveTab("4")}
+                    className={activeTab === '4' ? 'active' : ''}
+                    onClick={() => setActiveTab('4')}
                   >
                     <span className="d-none d-sm-block">Contact</span>
                   </NavLink>
                 </NavItem>
                 <NavItem>
                   <NavLink
-                    className={activeTab === "5" ? "active" : ""}
-                    onClick={() => setActiveTab("5")}
+                    className={activeTab === '5' ? 'active' : ''}
+                    onClick={() => setActiveTab('5')}
                   >
                     <span className="d-none d-sm-block">Storage</span>
                   </NavLink>
                 </NavItem>
                 <NavItem>
                   <NavLink
-                    className={activeTab === "6" ? "active" : ""}
+                    className={activeTab === '6' ? 'active' : ''}
                     onClick={() => {
-                      setActiveTab("6")
+                      setActiveTab('6')
                     }}
                   >
                     <span className="d-none d-sm-block">Quota</span>
@@ -234,7 +242,7 @@ const CommercialCustomerModal = props => {
               </Nav>
               <div>
                 <TabContent activeTab={activeTab} className="py-4">
-                  <TabPane tabId="1" style={{ marginRight: "-25px" }}>
+                  <TabPane tabId="1" style={{ marginRight: '-25px' }}>
                     <SimpleBar className="simple-bar">
                       <TabAddress
                         dataList={dataList}
@@ -244,7 +252,7 @@ const CommercialCustomerModal = props => {
                       />
                     </SimpleBar>
                   </TabPane>
-                  <TabPane tabId="3" style={{ marginRight: "-25px" }}>
+                  <TabPane tabId="3" style={{ marginRight: '-25px' }}>
                     <SimpleBar className="simple-bar">
                       <TabStatus
                         scheduler={scheduler}
@@ -253,7 +261,7 @@ const CommercialCustomerModal = props => {
                       />
                     </SimpleBar>
                   </TabPane>
-                  <TabPane tabId="2" style={{ marginRight: "-25px" }}>
+                  <TabPane tabId="2" style={{ marginRight: '-25px' }}>
                     <SimpleBar className="simple-bar">
                       <TabDelivery
                         scheduler={scheduler}
@@ -262,7 +270,7 @@ const CommercialCustomerModal = props => {
                       />
                     </SimpleBar>
                   </TabPane>
-                  <TabPane tabId="4" style={{ marginRight: "-25px" }}>
+                  <TabPane tabId="4" style={{ marginRight: '-25px' }}>
                     <SimpleBar className="simple-bar">
                       <TabContact
                         scheduler={scheduler}
@@ -271,7 +279,7 @@ const CommercialCustomerModal = props => {
                       />
                     </SimpleBar>
                   </TabPane>
-                  <TabPane tabId="5" style={{ marginRight: "-25px" }}>
+                  <TabPane tabId="5" style={{ marginRight: '-25px' }}>
                     <SimpleBar className="simple-bar">
                       <TabStorage
                         scheduler={scheduler}
@@ -280,7 +288,7 @@ const CommercialCustomerModal = props => {
                       />
                     </SimpleBar>
                   </TabPane>
-                  <TabPane tabId="6" style={{ marginRight: "-25px" }}>
+                  <TabPane tabId="6" style={{ marginRight: '-25px' }}>
                     <SimpleBar className="simple-bar">
                       <TabQuota
                         scheduler={scheduler}
@@ -297,7 +305,12 @@ const CommercialCustomerModal = props => {
                 <button onClick={handleClose} className="btn-sec">
                   Cancel
                 </button>
-                <Button disabled={!isUpdateAble} type="submit" color="primary" onClick={handleUpdate}>
+                <Button
+                  disabled={!isUpdateAble}
+                  type="submit"
+                  color="primary"
+                  onClick={handleUpdate}
+                >
                   Update
                 </Button>
               </ModalFooter>

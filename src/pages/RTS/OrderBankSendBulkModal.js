@@ -31,7 +31,7 @@ function OrderBankSendBulkModal(props) {
   "Oct",
   "Nov",
   "Dec",];
- var dt = new Date();
+ const dt = new Date();
 
   return (
     <Fragment>

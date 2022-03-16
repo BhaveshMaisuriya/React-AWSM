@@ -1,5 +1,5 @@
-import React, { Component, Fragment } from "react"
-import { format } from "date-fns"
+import React, { Component, Fragment } from 'react'
+import { format } from 'date-fns'
 import {
   Button,
   Modal,
@@ -11,26 +11,26 @@ import {
   ModalFooter,
   ModalBody,
   ModalHeader,
-} from "reactstrap"
-import AvailabilityTab from "./AvailabilityTab"
-import SpecificationTab from "./SpecificationTab"
-import TrailerTab from "./TrailerTab"
-import "./InformationModal.scss"
-import { MODE } from "./constants"
-import AWSMAlert from "../../../components/Common/AWSMAlert/index"
-import { isScheduler } from "../../../helpers/auth_helper"
-import CloseButton from "../../../components/Common/CloseButton"
+} from 'reactstrap'
+import AvailabilityTab from './AvailabilityTab'
+import SpecificationTab from './SpecificationTab'
+import TrailerTab from './TrailerTab'
+import './InformationModal.scss'
+import { MODE } from './constants'
+import AWSMAlert from 'components/Common/AWSMAlert/index'
+import { isScheduler } from 'helpers/auth_helper'
+import CloseButton from 'components/Common/CloseButton'
 
-import SimpleBar from "simplebar-react"
+import SimpleBar from 'simplebar-react'
 import {
   getRoadTankerDetail,
   updateRoadTankerDetail,
   resetCurrentRoadTankerData,
-} from "../../../store/actions"
-import { connect } from "react-redux"
-import ExitConfirmation from "../../../components/Common/ExitConfirmation"
-import { isEqual } from "lodash"
-import { isValidDate } from "../Common/helper"
+} from 'store/actions'
+import { connect } from 'react-redux'
+import ExitConfirmation from 'components/Common/ExitConfirmation'
+import { isEqual } from 'lodash'
+import { isValidDate } from '../Common/helper'
 
 // Information Modal
 class InformationModal extends Component {
@@ -38,7 +38,7 @@ class InformationModal extends Component {
     super(props)
 
     this.state = {
-      activeTab: "1",
+      activeTab: '1',
       mode: MODE.VIEW_AND_AMEND,
       showAlert: false,
       userRole: {
@@ -47,7 +47,7 @@ class InformationModal extends Component {
       updateSuccess: props?.isUpdateSuccess,
       data: props?.currentRoadTanker,
       isConfirm: false,
-      alertMsg: "",
+      alertMsg: '',
       showError: [],
       isUpdateAble: false,
     }
@@ -102,38 +102,38 @@ class InformationModal extends Component {
     let temp = []
     temp = [...temp]
     if (
-      data?.availability?.status_awsm === "Temporary Blocked" &&
+      data?.availability?.status_awsm === 'Temporary Blocked' &&
       !isValidDate(data?.availability?.block_date_range)
     ) {
-      temp.push("block_date_range")
+      temp.push('block_date_range')
     }
 
     if (
       isValidDate(data?.availability?.other_terminal_mobilization_1_date) &&
-      data?.availability?.other_terminal_mobilization_1_name === "None"
+      data?.availability?.other_terminal_mobilization_1_name === 'None'
     ) {
-      temp.push("other_terminal_mobilization_1_name")
+      temp.push('other_terminal_mobilization_1_name')
     }
 
     if (
       isValidDate(data?.availability?.other_terminal_mobilization_2_date) &&
-      data?.availability?.other_terminal_mobilization_2_name === "None"
+      data?.availability?.other_terminal_mobilization_2_name === 'None'
     ) {
-      temp.push("other_terminal_mobilization_2_name")
+      temp.push('other_terminal_mobilization_2_name')
     }
 
     if (
       !isValidDate(data?.availability?.other_terminal_mobilization_2_date) &&
-      data?.availability?.other_terminal_mobilization_2_name !== "None"
+      data?.availability?.other_terminal_mobilization_2_name !== 'None'
     ) {
-      temp.push("other_terminal_mobilization_2_date")
+      temp.push('other_terminal_mobilization_2_date')
     }
 
     if (
       !isValidDate(data?.availability?.other_terminal_mobilization_1_date) &&
-      data?.availability?.other_terminal_mobilization_1_name !== "None"
+      data?.availability?.other_terminal_mobilization_1_name !== 'None'
     ) {
-      temp.push("other_terminal_mobilization_1_date")
+      temp.push('other_terminal_mobilization_1_date')
     }
 
     if (temp.length === 0) {
@@ -157,11 +157,15 @@ class InformationModal extends Component {
   }
 
   isEmptyDate = date => {
-    if (date?.type === "single" && date?.days?.length === 0) {
+    if (date?.type === 'single' && date?.days?.length === 0) {
       return true
-    } else if (date?.type === "range" && date?.date_from === null && date?.date_to === null) {
+    } else if (
+      date?.type === 'range' &&
+      date?.date_from === null &&
+      date?.date_to === null
+    ) {
       return true
-    } else if (date?.type === "") {
+    } else if (date?.type === '') {
       return true
     } else if (date === null) {
       return true
@@ -189,16 +193,19 @@ class InformationModal extends Component {
 
     const handleExitConfirmation = () => {
       if (!isEqual(this.state.data, this.props.currentRoadTanker))
-        return <ExitConfirmation onExit={this.onConfirmExit} onCancel={this.onConfirmCancel} />
+        return (
+          <ExitConfirmation
+            onExit={this.onConfirmExit}
+            onCancel={this.onConfirmCancel}
+          />
+        )
       else this.onConfirmExit()
     }
 
-    const handleUpdate = async e => {
-      // e.preventDefault()
+    const handleUpdate = () => {
       if (this.validateTerminal()) {
         this.setState({ showError: [] })
-        await onUpdateRoadTankerDetail({ vehicle_name: data.vehicle, data })
-        // this.props.onCancel()
+        onUpdateRoadTankerDetail({ vehicle_name: data.vehicle, data })
       }
     }
 
@@ -206,14 +213,6 @@ class InformationModal extends Component {
       this.setState({
         showAlert: !showAlert,
         alertMsg: ergMsg,
-      })
-    }
-
-    const showNameError = ergMsg => {
-      let temp = [...this.state.showError]
-      temp.push(ergMsg)
-      this.setState({
-        showError: temp,
       })
     }
 
@@ -227,7 +226,10 @@ class InformationModal extends Component {
       const footer =
         !scheduler && !this.state.isConfirm ? (
           <ModalFooter>
-            <button className="btn-sec" onClick={() => this.setState({ isConfirm: true })}>
+            <button
+              className="btn-sec"
+              onClick={() => this.setState({ isConfirm: true })}
+            >
               Cancel
             </button>
             {!scheduler && (
@@ -239,21 +241,33 @@ class InformationModal extends Component {
               >
                 Update
               </Button>
-            )}{" "}
+            )}{' '}
           </ModalFooter>
         ) : null
       return footer
     }
 
     return (
-      <Modal centered={true} isOpen={visible} className="table-information modal-lg">
+      <Modal
+        centered={true}
+        isOpen={visible}
+        className="table-information modal-lg"
+      >
         <ModalHeader close={<CloseButton handleClose={handleClose} />}>
-          <span className="modal-title"> Vehicle Id: {currentRoadTanker?.vehicle}</span>
+          <span className="modal-title">
+            {' '}
+            Vehicle Id: {currentRoadTanker?.vehicle}
+          </span>
           <span className="last-updated-sub-title">
-            {`Last Updated By: ${currentRoadTanker?.updated_by?.split("@")[0] || "Unknown"} on ${
+            {`Last Updated By: ${
+              currentRoadTanker?.updated_by?.split('@')[0] || 'Unknown'
+            } on ${
               (currentRoadTanker?.updated_at &&
-                format(new Date(currentRoadTanker?.updated_at), "do LLL yyyy")) ||
-              ""
+                format(
+                  new Date(currentRoadTanker?.updated_at),
+                  'do LLL yyyy'
+                )) ||
+              ''
             }`}
           </span>
         </ModalHeader>
@@ -266,7 +280,7 @@ class InformationModal extends Component {
           }}
         />
         <ModalBody>
-          {this.state.isConfirm ? handleExitConfirmation() : ""}
+          {this.state.isConfirm ? handleExitConfirmation() : ''}
           <Fragment>
             <div>
               <div className="row">
@@ -276,9 +290,8 @@ class InformationModal extends Component {
                     className="form-control awsm-input"
                     type="text"
                     defaultValue={data?.owner}
-                    onChange={e => onFieldValueChange("owner", e.target.value)}
+                    onChange={e => onFieldValueChange('owner', e.target.value)}
                     disabled={true}
-                    // placeholder="Typing something here..."
                   />
                 </div>
               </div>
@@ -289,8 +302,9 @@ class InformationModal extends Component {
                     className="form-control awsm-input"
                     type="text"
                     defaultValue={data?.status_sap}
-                    onChange={e => onFieldValueChange("status_sap", e.target.value)}
-                    // placeholder="Typing something here..."
+                    onChange={e =>
+                      onFieldValueChange('status_sap', e.target.value)
+                    }
                     disabled={true}
                   />
                 </div>
@@ -300,8 +314,9 @@ class InformationModal extends Component {
                     className="form-control awsm-input"
                     type="number"
                     defaultValue={data?.max_volume}
-                    onChange={e => onFieldValueChange("max_volume", e.target.value)}
-                    // placeholder="Numeric only..."
+                    onChange={e =>
+                      onFieldValueChange('max_volume', e.target.value)
+                    }
                     disabled={true}
                   />
                 </div>
@@ -313,9 +328,13 @@ class InformationModal extends Component {
                     className="form-control awsm-input"
                     type="text"
                     defaultValue={data?.remarks}
-                    onChange={e => onFieldValueChange("remarks", e.target.value)}
-                    placeholder={!scheduler ? "Typing something here..." : ""}
-                    disabled={(mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler}
+                    onChange={e =>
+                      onFieldValueChange('remarks', e.target.value)
+                    }
+                    placeholder={!scheduler ? 'Typing something here...' : ''}
+                    disabled={
+                      (mode === MODE.VIEW_AND_AMEND ? false : true) || scheduler
+                    }
                   />
                 </div>
               </div>
@@ -323,9 +342,9 @@ class InformationModal extends Component {
                 <Nav pills justified>
                   <NavItem>
                     <NavLink
-                      className={activeTab === "1" ? "active" : null}
+                      className={activeTab === '1' ? 'active' : null}
                       onClick={() => {
-                        toggle("1")
+                        toggle('1')
                       }}
                     >
                       <span>Availability</span>
@@ -333,9 +352,9 @@ class InformationModal extends Component {
                   </NavItem>
                   <NavItem>
                     <NavLink
-                      className={activeTab === "2" ? "active" : null}
+                      className={activeTab === '2' ? 'active' : null}
                       onClick={() => {
-                        toggle("2")
+                        toggle('2')
                       }}
                     >
                       <span>Specification</span>
@@ -343,9 +362,9 @@ class InformationModal extends Component {
                   </NavItem>
                   <NavItem>
                     <NavLink
-                      className={activeTab === "3" ? "active" : null}
+                      className={activeTab === '3' ? 'active' : null}
                       onClick={() => {
-                        toggle("3")
+                        toggle('3')
                       }}
                     >
                       <span>Trailer</span>
@@ -353,7 +372,7 @@ class InformationModal extends Component {
                   </NavItem>
                 </Nav>
                 <TabContent activeTab={activeTab} className="py-4">
-                  <TabPane tabId="1" style={{ marginRight: "-25px" }}>
+                  <TabPane tabId="1" style={{ marginRight: '-25px' }}>
                     <SimpleBar className="simple-bar-smaller">
                       <AvailabilityTab
                         mode={mode}
@@ -364,10 +383,10 @@ class InformationModal extends Component {
                         statusSap={data?.status_sap}
                         showError={this.state.showError}
                       />
-                      <hr style={{ margin: "2em 0" }} />
+                      <hr style={{ margin: '2em 0' }} />
                     </SimpleBar>
                   </TabPane>
-                  <TabPane tabId="2" style={{ marginRight: "-25px" }}>
+                  <TabPane tabId="2" style={{ marginRight: '-25px' }}>
                     <SimpleBar className="simple-bar-smaller">
                       <SpecificationTab
                         mode={mode}
@@ -375,10 +394,10 @@ class InformationModal extends Component {
                         data={data?.specification}
                         onChange={onFieldValueChange}
                       />
-                      <hr style={{ margin: "2em 0" }} />
+                      <hr style={{ margin: '2em 0' }} />
                     </SimpleBar>
                   </TabPane>
-                  <TabPane tabId="3" style={{ marginRight: "-25px" }}>
+                  <TabPane tabId="3" style={{ marginRight: '-25px' }}>
                     <SimpleBar className="simple-bar-smaller">
                       <TrailerTab
                         mode={mode}
@@ -386,7 +405,7 @@ class InformationModal extends Component {
                         data={data?.trailer}
                         onChange={onFieldValueChange}
                       />
-                      <hr style={{ margin: "2em 0" }} />
+                      <hr style={{ margin: '2em 0' }} />
                     </SimpleBar>
                   </TabPane>
                 </TabContent>

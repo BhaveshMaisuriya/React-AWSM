@@ -75,6 +75,7 @@ import {
   UPDATE_SHIPMENT_FAIL,
   DRAG_RTS_ORDER_BANK_TO_GANTT_CHART,
   DRAG_RTS_ORDER_BANK_TO_GANTT_CHART_CONFIRM_RESTRICTIONS,
+  HIGHLIGHT_RTS_GANTTCHART,
 } from './actionTypes'
 import {
   ensureDateRangeNotExceedingADay,
@@ -84,9 +85,11 @@ import {
   factorizeGanttChartEventBar,
   DATE_TIME_FORMAT,
   factorizeShipmentTableRow,
+  DATE_FORMAT,
 } from './factory'
 import { ToastSuccess, ToastError } from '../../helpers/swal'
 import moment from 'moment'
+import { some } from 'lodash'
 
 const initialState = {
   orderBankData: null,
@@ -440,7 +443,42 @@ const RTSOrderBank = (state = initialState, action) => {
         id: vehicle.vehicle,
       }))
 
-      const newEvents = factorizeGanttChartEventBars(vehicles, shiftDate)
+      const newEvents = []
+      vehicles.forEach(vehicle => {
+        const rtHours = ensureDateRangeNotExceedingADay({
+          from: vehicle.rt_avaiblity_hour_from,
+          to: vehicle.rt_avaiblity_hour_to,
+          date: shiftDate,
+          fillTime: false,
+        })
+
+        // this stupid logic will be changed after proper backend grouping procedure
+        const stupidOrders = []
+        if (vehicle.routes && Object.keys(vehicle.routes).length) {
+          for (const index in vehicle.routes) {
+            // pushing list of orders
+            stupidOrders.push(...vehicle.routes[index])
+          }
+
+          // "JUN"
+          newEvents.push(
+            ...factorizeGanttChartEventBars({
+              orders: stupidOrders,
+              resourceId: vehicle.id,
+              rtHours,
+              date: shiftDate,
+            })
+          )
+        } else
+          newEvents.push(
+            factorizeGanttChartEventBar({
+              resourceId: vehicle.id,
+              rtHours,
+              isBackground: true,
+              date,
+            })
+          )
+      })
 
       if (state.ganttChartTableData.length !== 0 && scrolling && page > 0) {
         ganttChart.events = [...ganttChart.events, ...newEvents]
@@ -472,7 +510,73 @@ const RTSOrderBank = (state = initialState, action) => {
         },
         error: action.payload,
       }
+    case HIGHLIGHT_RTS_GANTTCHART: {
+      const { highlightBy } = action.payload
+      const events = [...state.ganttChart.events]
 
+      if (!events.length) return state
+
+      // this date will always be equal to shift_date on that dropdown box
+      // consult <factory.js>, here no utc() needed because there is no time
+      const shiftDate = moment(events[0].startDate, DATE_FORMAT, true)
+
+      switch (highlightBy) {
+        case 'high':
+          events.forEach(e => {
+            if (
+              some(
+                e.supplement.highPriorities,
+                s => s !== null && s !== undefined
+              )
+            )
+              e.flags.highlightFor = highlightBy
+            else e.flags.highlightFor = null
+          })
+          break
+        case 'request':
+          events.forEach(e => {
+            if (
+              some(
+                e.supplement.specialRequests,
+                s => s !== null && s !== undefined
+              )
+            )
+              e.flags.highlightFor = highlightBy
+            else e.flags.highlightFor = null
+          })
+          break
+        case 'future':
+          events.forEach(e => {
+            if (
+              some(
+                e.supplement.requestedDeliveryDates,
+                s => s.diff(shiftDate, 'day') > 0
+              )
+            )
+              e.flags.highlightFor = highlightBy
+            else e.flags.highlightFor = null
+          })
+          break
+        case 'backlog':
+          events.forEach(e => {
+            if (
+              some(
+                e.supplement.requestedDeliveryDates,
+                s => s.diff(shiftDate, 'day') < 0
+              )
+            )
+              e.flags.highlightFor = highlightBy
+            else e.flags.highlightFor = null
+          })
+          break
+        default:
+          events.forEach(e => (e.flags.highlightFor = '-'))
+          break
+      }
+
+      state.ganttChart.events = events
+      return { ...state }
+    }
     case CLEAR_GANTT_DATA: {
       return {
         ...state,
@@ -557,22 +661,42 @@ const RTSOrderBank = (state = initialState, action) => {
         // GROUPBY route_id
         // if they were processed correctly, they all have same route_id
         const route = orders[0].route_id
+        // const route = '5BRKR6P' //demo
         const orderIndexes = orders.map(o => o.id)
         eventsWithinResource.push(
           factorizeGanttChartEventBar({
             // any Order should already contains sufficient data I need
             data: { ...orders[0], id: route, orderIndexes },
-            resourceId: vehicle.id,
+            resourceId: vehicle,
             rtHours,
             isBackground: false,
+            renderBackground: false,
             date: shiftDate,
           })
-        )
+        ) // make sure smaller startDate goes first
+        eventsWithinResource.sort((a, b) => {
+          return moment(a.startDate, DATE_TIME_FORMAT, true).diff(
+            moment(b.startDate, DATE_TIME_FORMAT, true)
+          )
+        })
 
         // remove the default background, consult <factory.js> ;)
         eventsWithinResource = eventsWithinResource.filter(
           s => !s.flags.isBackground
         )
+
+        eventsWithinResource[0] = {
+          ...eventsWithinResource[0],
+          background: {
+            startDate: rtHours.from.isValid()
+              ? rtHours.from.format(DATE_TIME_FORMAT)
+              : null,
+            endDate: rtHours.to.isValid()
+              ? rtHours.to.format(DATE_TIME_FORMAT)
+              : null,
+            color: EVENT_COLOR.RT_Availability,
+          },
+        }
 
         // purges all old events, updates the new ones
         events = [
@@ -690,27 +814,6 @@ const RTSOrderBank = (state = initialState, action) => {
       }
     }
 
-    // case UPDATE_OB_EVENT_SUCCESS: {
-    //   const { id } = action.params
-    //   const event = state.ganttChart.events.filter(item => item.id !== id)
-    //   if (event) {
-    //     state.ganttChart.events = [...event, action.params]
-    //   }
-    //   return {
-    //     ...state,
-    //     ganttChart: {
-    //       ...state.ganttChart,
-    //       event: [...state.ganttChart.events],
-    //     },
-    //     ganttEventValidation: null,
-    //   }
-    // }
-    // case UPDATE_OB_EVENT_FAIL: {
-    //   return {
-    //     ...state,
-    //     ganttEventValidation: null,
-    //   }
-    // }
     case GET_WEB_SOCKET_MESSAGE_SUCCESS: {
       if (state.socketData.length === 0) {
         return {
@@ -732,11 +835,7 @@ const RTSOrderBank = (state = initialState, action) => {
         orderBankRTDetails: action.payload,
       }
     }
-    // case GET_OB_RT_DETAILS_FAIL: {
-    //   return {
-    //     ...state,
-    //   }
-    // }
+
     case UPDATE_OB_RT_DETAILS_SUCCESS: {
       ToastSuccess.fire({
         title: 'Road Tanker detail has been successfully updated',
@@ -804,18 +903,6 @@ const RTSOrderBank = (state = initialState, action) => {
         shipmentDropData: action.payload,
       }
     }
-    // case GET_GANTT_EVENT_VALIDATION_SUCCESS: {
-    //   return {
-    //     ...state,
-    //     ganttEventValidation: action.payload,
-    //   }
-    // }
-    // case GET_GANTT_EVENT_VALIDATION_FAIL: {
-    //   return {
-    //     ...state,
-    //     ganttEventValidation: action.payload,
-    //   }
-    // }
 
     case GET_SHIPMENT_DETAILS_ON_VEHICLE_SUCCESS: {
       return {
@@ -848,11 +935,7 @@ const RTSOrderBank = (state = initialState, action) => {
         totalOrderUnschedule: action.payload.total ?? 0,
       }
     }
-    // case GET_OB_TOTAL_UNSCHEDULE_FAIL: {
-    //   return {
-    //     ...state,
-    //   }
-    // }
+
     case UPDATE_SHIPMENT_SUCCESS: {
       ToastSuccess.fire()
       // console.log(action.payload)

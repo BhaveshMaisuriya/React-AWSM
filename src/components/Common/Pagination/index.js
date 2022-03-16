@@ -1,12 +1,12 @@
-import React, { Component } from "react"
-import PropTypes from "prop-types"
-import ArrowLeft from "../../../assets/images/arrow-left.png"
-import ArrowLeftG from "../../../assets/images/arrow-left-grey.png"
-import ArrowRight from "../../../assets/images/arrow-right.png"
-import ArrowRightG from "../../../assets/images/arrow-right-grey.png"
-import { Pagination, PaginationItem, PaginationLink } from "reactstrap"
-import { Divider } from "@material-ui/core"
-import "./index.scss"
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import ArrowLeft from 'assets/images/arrow-left.png'
+import ArrowLeftG from 'assets/images/arrow-left-grey.png'
+import ArrowRight from 'assets/images/arrow-right.png'
+import ArrowRightG from 'assets/images/arrow-right-grey.png'
+import { Pagination, PaginationItem, PaginationLink } from 'reactstrap'
+import { Divider } from '@material-ui/core'
+import './index.scss'
 
 class CustomPagination extends Component {
   constructor(props) {
@@ -53,13 +53,22 @@ class CustomPagination extends Component {
   }
 
   renderDivider = () => {
-    return <Divider orientation="vertical" flexItem light className="Pagination-Divider" />
+    return (
+      <Divider
+        orientation="vertical"
+        flexItem
+        light
+        className="Pagination-Divider"
+      />
+    )
   }
 
   renderPageDots = () => {
     return (
       <PaginationItem disabled>
-        <PaginationLink className="Pagination-Button Pagination-Text">{"..."}</PaginationLink>
+        <PaginationLink className="Pagination-Button Pagination-Text">
+          {'...'}
+        </PaginationLink>
       </PaginationItem>
     )
   }
@@ -67,9 +76,13 @@ class CustomPagination extends Component {
   getPagenumbers = pageNumbers => {
     const { totalPages, currentPage, numShownPages } = this.props
     let newPageNumbers = 0
-    if (currentPage < numShownPages - 1) newPageNumbers = pageNumbers.splice(0, numShownPages)
+    if (currentPage < numShownPages - 1)
+      newPageNumbers = pageNumbers.splice(0, numShownPages)
     else if (totalPages - currentPage <= numShownPages - 1)
-      newPageNumbers = pageNumbers.splice(totalPages - numShownPages, numShownPages)
+      newPageNumbers = pageNumbers.splice(
+        totalPages - numShownPages,
+        numShownPages
+      )
     else
       newPageNumbers = pageNumbers.splice(
         currentPage - Math.ceil(numShownPages / 3),
@@ -98,19 +111,26 @@ class CustomPagination extends Component {
                   aria-label="Previous Page"
                   className="Pagination-Button Pagination-First-Button"
                 >
-                  <img src={currentPage === 0 ? ArrowLeftG : ArrowLeft} className="img-arrow" />
+                  <img
+                    src={currentPage === 0 ? ArrowLeftG : ArrowLeft}
+                    className="img-arrow"
+                  />
                 </PaginationLink>
               </PaginationItem>
               {this.renderDivider()}
-              {currentPage >= numShownPages - 1 ? this.renderPage(firstPage) : ""}
-              {currentPage >= numShownPages - 1 ? this.renderPageDots() : ""}
+              {currentPage >= numShownPages - 1
+                ? this.renderPage(firstPage)
+                : ''}
+              {currentPage >= numShownPages - 1 ? this.renderPageDots() : ''}
               {newpageNumbers.map(number => this.renderPage(number))}
-              {totalPages - currentPage > numShownPages - 1 || (currentPage < 8 && totalPages > 8)
+              {totalPages - currentPage > numShownPages - 1 ||
+              (currentPage < 8 && totalPages > 8)
                 ? this.renderPageDots()
-                : ""}
-              {totalPages - currentPage > numShownPages - 1 || (currentPage < 8 && totalPages > 8)
+                : ''}
+              {totalPages - currentPage > numShownPages - 1 ||
+              (currentPage < 8 && totalPages > 8)
                 ? this.renderPage(totalPages)
-                : ""}
+                : ''}
               {this.renderDivider()}
               <PaginationItem disabled={currentPage >= totalPages - 1}>
                 <PaginationLink
@@ -119,7 +139,9 @@ class CustomPagination extends Component {
                   className="Pagination-Button"
                 >
                   <img
-                    src={currentPage >= totalPages - 1 ? ArrowRightG : ArrowRight}
+                    src={
+                      currentPage >= totalPages - 1 ? ArrowRightG : ArrowRight
+                    }
                     className="img-arrow"
                   />
                 </PaginationLink>

@@ -1,49 +1,40 @@
-import React, { Component, Fragment } from "react"
-import { connect } from "react-redux"
-import {
-  getSLAAuditLog,
-  getSLAItems,
-  updateSLAItem,
-} from "../../../store/actions"
-import Loader from "../../../components/Common/Loader"
-import { Link } from "react-router-dom"
-import { CustomEyeIcon } from "../Common/icon"
-import AuditLog from "../../../components/Common/AuditLog"
-import selectAllIcon2 from "../../../assets/images/AWSM-Checked-box.svg"
-import selectAllIcon3 from "../../../assets/images/AWSM-Checkbox.svg"
-import selectAllIcon4 from "../../../assets/images/AWSM-Checkbox-Indetermine.svg"
+import React, { Component, Fragment } from 'react'
+import { connect } from 'react-redux'
+import { getSLAItems, updateSLAItem } from 'store/actions'
+import Loader from 'components/Common/Loader'
+import { Link } from 'react-router-dom'
+import { CustomEyeIcon } from '../Common/icon'
+import AuditLog from 'components/Common/AuditLog'
+import selectAllIcon2 from 'assets/images/AWSM-Checked-box.svg'
+import selectAllIcon3 from 'assets/images/AWSM-Checkbox.svg'
+import selectAllIcon4 from 'assets/images/AWSM-Checkbox-Indetermine.svg'
 import {
   Popover,
   PopoverBody,
   Card,
   CardBody,
   Col,
-  Modal,
-  ModalHeader,
   Nav,
   NavItem,
   NavLink,
   Row,
   TabContent,
   TabPane,
-  Label,
-} from "reactstrap"
-import classnames from "classnames"
-import SLATab from "./SLATab"
-import "./sla.scss"
-import Attachments from "./attachments"
-import SLATable from "./SLATable"
-import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown"
-import { FormControlLabel } from "@material-ui/core"
-import Checkbox from "@material-ui/core/Checkbox"
-import MyDocument from "./Download-pdf/MyDocument"
-import { DownloadIcon , DownloadPDFIcon } from "../Common/icon"
-import { removeKeywords } from "../Common/helper"
-import { isNull } from "lodash"
-import html2canvas from "html2canvas"
-import jsPDF from "jspdf"
-import AWSMAlert from "components/Common/AWSMAlert"
-
+} from 'reactstrap'
+import classnames from 'classnames'
+import SLATab from './SLATab'
+import './sla.scss'
+import Attachments from './attachments'
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown'
+import { FormControlLabel } from '@material-ui/core'
+import Checkbox from '@material-ui/core/Checkbox'
+import MyDocument from './Download-pdf/MyDocument'
+import { DownloadPDFIcon } from '../Common/icon'
+import { removeKeywords } from '../Common/helper'
+import { isNull } from 'lodash'
+import html2canvas from 'html2canvas'
+import jsPDF from 'jspdf'
+import AWSMAlert from 'components/Common/AWSMAlert'
 
 const UntickIcon = () => <img src={selectAllIcon3} alt="icon" />
 const CheckedIcon = () => <img src={selectAllIcon2} alt="icon" />
@@ -61,7 +52,7 @@ class SLA extends Component {
       rowsAudit: 6,
       currentAuditPage: 0,
       modal: false,
-      activeTab: "0",
+      activeTab: '0',
       showDownloadOption: false,
       showDownloadOptionCbd: false,
       showDownloadOptionInternal: false,
@@ -93,8 +84,8 @@ class SLA extends Component {
     const params = {
       limit: 10,
       page: 0,
-      sort_dir: "asc",
-      sort_field: "code",
+      sort_dir: 'asc',
+      sort_field: 'code',
     }
     onGetSLAItems(params)
   }
@@ -108,11 +99,18 @@ class SLA extends Component {
     })
   }
 
-  toggleDownload = (val) => {
-    this.setState({ CurrentVal: val });
-    val === '0' && this.setState({ showDownloadOption: !this.state.showDownloadOption })
-    val === '1' && this.setState({ showDownloadOptionCbd: !this.state.showDownloadOptionCbd })
-    val === '2' && this.setState({ showDownloadOptionInternal: !this.state.showDownloadOptionInternal })
+  toggleDownload = val => {
+    this.setState({ CurrentVal: val })
+    val === '0' &&
+      this.setState({ showDownloadOption: !this.state.showDownloadOption })
+    val === '1' &&
+      this.setState({
+        showDownloadOptionCbd: !this.state.showDownloadOptionCbd,
+      })
+    val === '2' &&
+      this.setState({
+        showDownloadOptionInternal: !this.state.showDownloadOptionInternal,
+      })
   }
 
   /**
@@ -154,7 +152,7 @@ class SLA extends Component {
     const modalContent = modal ? (
       <AuditLog
         rowsAudit={6}
-        subModule={"sla"}
+        subModule={'sla'}
         isOpen={this.state.modal}
         toggle={this.toggle}
       />
@@ -177,22 +175,22 @@ class SLA extends Component {
     if (temp[index].checked === true) {
       if (
         temp.filter(val => val.checked === true).length === temp.length - 1 ||
-        temp[index].id === "0"
+        temp[index].id === '0'
       ) {
-        temp.map((item, index) => {
+        temp.map(item => {
           item.checked = true
         })
       }
-    } else if (temp[index].id === "0" && temp[index].checked === false) {
-      temp.map((item, index) => {
+    } else if (temp[index].id === '0' && temp[index].checked === false) {
+      temp.map(item => {
         item.checked = false
       })
     } else {
       temp[temp.length - 1].checked = false
     }
 
-    let temp1 = []
-    temp.map((item, index) => {
+    const temp1 = []
+    temp.map(item => {
       if (item.checked === true) {
         temp1.push(item)
       }
@@ -208,29 +206,29 @@ class SLA extends Component {
     if (temp[index].checked === true) {
       if (
         temp.filter(val => val.checked === true).length === temp.length - 1 ||
-        temp[index].id === "0"
+        temp[index].id === '0'
       ) {
-        temp.map((item, index) => {
+        temp.map(item => {
           item.checked = true
         })
       }
-    } else if (temp[index].id === "0" && temp[index].checked === false) {
-      temp.map((item, index) => {
+    } else if (temp[index].id === '0' && temp[index].checked === false) {
+      temp.map(item => {
         item.checked = false
       })
     } else {
       temp[temp.length - 1].checked = false
     }
 
-    let temp1 = []
-    temp.map((item, index) => {
+    const temp1 = []
+    temp.map(item => {
       if (item.checked === true) {
         temp1.push(item)
       }
     })
     this.setState({ checkedValuesCbd: temp1 })
     this.setState({ downloadCheckCbd: temp })
-  }  
+  }
 
   getCheckedDownloadValInternal(index) {
     const temp = [...this.state.downloadCheckInternal]
@@ -239,101 +237,101 @@ class SLA extends Component {
     if (temp[index].checked === true) {
       if (
         temp.filter(val => val.checked === true).length === temp.length - 1 ||
-        temp[index].id === "0"
+        temp[index].id === '0'
       ) {
-        temp.map((item, index) => {
+        temp.map(item => {
           item.checked = true
         })
       }
-    } else if (temp[index].id === "0" && temp[index].checked === false) {
-      temp.map((item, index) => {
+    } else if (temp[index].id === '0' && temp[index].checked === false) {
+      temp.map(item => {
         item.checked = false
       })
     } else {
       temp[temp.length - 1].checked = false
     }
 
-    let temp1 = []
-    temp.map((item, index) => {
+    const temp1 = []
+    temp.map(item => {
       if (item.checked === true) {
         temp1.push(item)
       }
     })
     this.setState({ checkedValuesInternal: temp1 })
     this.setState({ downloadCheckInternal: temp })
-  }  
+  }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
     if (nextProps.slaData && nextProps.slaData.rbd) {
-      let temp = []
+      const temp = []
       nextProps.slaData.rbd.map((item, index) => {
         temp.push({ ...item, checked: true })
       })
-      temp.push({ title: "Select All", checked: true, id: "0" })
+      temp.push({ title: 'Select All', checked: true, id: '0' })
       this.setState({ downloadCheck: temp })
       this.setState({ checkedValues: temp })
     }
     if (nextProps.slaData && nextProps.slaData.cbd) {
-      let temp = []
+      const temp = []
       nextProps.slaData.cbd.map((item, index) => {
         temp.push({ ...item, checked: true })
       })
-      temp.push({ title: "Select All", checked: true, id: "0" })
+      temp.push({ title: 'Select All', checked: true, id: '0' })
       this.setState({ downloadCheckCbd: temp })
       this.setState({ checkedValuesCbd: temp })
     }
     if (nextProps.slaData && nextProps.slaData.internal) {
-      let temp = []
+      const temp = []
       nextProps.slaData.internal.map((item, index) => {
         temp.push({ ...item, checked: true })
       })
-      temp.push({ title: "Select All", checked: true, id: "0" })
+      temp.push({ title: 'Select All', checked: true, id: '0' })
       this.setState({ downloadCheckInternal: temp })
       this.setState({ checkedValuesInternal: temp })
     }
   }
 
-  async generatePdfCbd() {
+  generatePdfCbd() {
     this.setState({ downloadingCbd: true })
     this.setState({ showDownloadOptionCbd: !this.state.showDownloadOptionCbd })
 
-    const showDiv = document.getElementById("showPDf")
-    showDiv.style.display = "block"
-    const input = document.getElementById("sla_pdf")
+    const showDiv = document.getElementById('showPDf')
+    showDiv.style.display = 'block'
+    const input = document.getElementById('sla_pdf')
 
     html2canvas(input).then(async canvas => {
-      const imgData = canvas.toDataURL("image/jpg", 1.0)
+      const imgData = canvas.toDataURL('image/jpg', 1.0)
 
-      var imgHeight = 0
-      var imgWidth = 210
-      var pageHeight = 295
+      let imgHeight = 0
+      let imgWidth = 210
+      let pageHeight = 295
       imgHeight = (canvas.height * imgWidth) / canvas.width
-      var heightLeft = imgHeight
+      let heightLeft = imgHeight
 
-      var totalPages = Math.ceil(imgHeight / pageHeight) - 1
-      var doc = new jsPDF("p", "mm", "a4")
-      var position = 0
+      let totalPages = Math.ceil(imgHeight / pageHeight) - 1
+      let doc = new jsPDF('p', 'mm', 'a4')
+      let position = 0
 
-      doc.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight)
+      doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight)
       heightLeft -= pageHeight
 
-      for (var i = 1; i <= totalPages; i++) {
+      for (let i = 1; i <= totalPages; i++) {
         position = heightLeft - imgHeight
         doc.addPage()
-        doc.addImage(imgData, "PNG", 0, position * i, imgWidth, imgHeight)
+        doc.addImage(imgData, 'PNG', 0, position * i, imgWidth, imgHeight)
       }
-      let all = []
+      const all = []
       this.state.checkedValuesCbd.map(item => {
         all.push(item.title)
       })
-      var pdfName =
-        this.state.checkedValuesCbd.filter(val => val.id === "0").length > 0
-          ? "SLA_CBD_All"
-          : `SLA_CBD_${all.join("_")}`
+      const pdfName =
+        this.state.checkedValuesCbd.filter(val => val.id === '0').length > 0
+          ? 'SLA_CBD_All'
+          : `SLA_CBD_${all.join('_')}`
 
-      await doc.save(`${pdfName}.pdf`)
+      doc.save(`${pdfName}.pdf`)
 
-      showDiv.style.display = "none"
+      showDiv.style.display = 'none'
       this.setState({ downloadingCbd: false })
       this.setState({ showSnackAlertCbd: true })
     })
@@ -343,43 +341,43 @@ class SLA extends Component {
     this.setState({ downloading: true })
     this.setState({ showDownloadOption: !this.state.showDownloadOption })
 
-    const showDiv = document.getElementById("showPDf")
-    showDiv.style.display = "block"
-    const input = document.getElementById("sla_pdf")
+    const showDiv = document.getElementById('showPDf')
+    showDiv.style.display = 'block'
+    const input = document.getElementById('sla_pdf')
 
     html2canvas(input).then(async canvas => {
-      const imgData = canvas.toDataURL("image/jpg", 1.0)
+      const imgData = canvas.toDataURL('image/jpg', 1.0)
 
-      var imgHeight = 0
-      var imgWidth = 210
-      var pageHeight = 295
+      let imgHeight = 0
+      let imgWidth = 210
+      let pageHeight = 295
       imgHeight = (canvas.height * imgWidth) / canvas.width
-      var heightLeft = imgHeight
+      let heightLeft = imgHeight
 
-      var totalPages = Math.ceil(imgHeight / pageHeight) - 1
-      var doc = new jsPDF("p", "mm", "a4")
-      var position = 0
+      let totalPages = Math.ceil(imgHeight / pageHeight) - 1
+      let doc = new jsPDF('p', 'mm', 'a4')
+      let position = 0
 
-      doc.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight)
+      doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight)
       heightLeft -= pageHeight
 
-      for (var i = 1; i <= totalPages; i++) {
+      for (let i = 1; i <= totalPages; i++) {
         position = heightLeft - imgHeight
         doc.addPage()
-        doc.addImage(imgData, "PNG", 0, position * i, imgWidth, imgHeight)
+        doc.addImage(imgData, 'PNG', 0, position * i, imgWidth, imgHeight)
       }
-      let all = []
+      const all = []
       this.state.checkedValues.map(item => {
         all.push(item.title)
       })
-      var pdfName =
-        this.state.checkedValues.filter(val => val.id === "0").length > 0
-          ? "SLA_RBD_All"
-          : `SLA_RBD_${all.join("_")}`
+      const pdfName =
+        this.state.checkedValues.filter(val => val.id === '0').length > 0
+          ? 'SLA_RBD_All'
+          : `SLA_RBD_${all.join('_')}`
 
       await doc.save(`${pdfName}.pdf`)
 
-      showDiv.style.display = "none"
+      showDiv.style.display = 'none'
       this.setState({ downloading: false })
       this.setState({ showSnackAlert: true })
     })
@@ -391,43 +389,44 @@ class SLA extends Component {
       showDownloadOptionInternal: !this.state.showDownloadOptionInternal,
     })
 
-    const showDiv = document.getElementById("showPDf")
-    showDiv.style.display = "block"
-    const input = document.getElementById("sla_pdf")
+    const showDiv = document.getElementById('showPDf')
+    showDiv.style.display = 'block'
+    const input = document.getElementById('sla_pdf')
 
     html2canvas(input).then(async canvas => {
-      const imgData = canvas.toDataURL("image/jpg", 1.0)
+      const imgData = canvas.toDataURL('image/jpg', 1.0)
 
-      var imgHeight = 0
-      var imgWidth = 210
-      var pageHeight = 295
+      let imgHeight = 0
+      let imgWidth = 210
+      let pageHeight = 295
       imgHeight = (canvas.height * imgWidth) / canvas.width
-      var heightLeft = imgHeight
+      let heightLeft = imgHeight
 
-      var totalPages = Math.ceil(imgHeight / pageHeight) - 1
-      var doc = new jsPDF("p", "mm", "a4")
-      var position = 0
+      let totalPages = Math.ceil(imgHeight / pageHeight) - 1
+      let doc = new jsPDF('p', 'mm', 'a4')
+      let position = 0
 
-      doc.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight)
+      doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight)
       heightLeft -= pageHeight
 
-      for (var i = 1; i <= totalPages; i++) {
+      for (let i = 1; i <= totalPages; i++) {
         position = heightLeft - imgHeight
         doc.addPage()
-        doc.addImage(imgData, "PNG", 0, position * i, imgWidth, imgHeight)
+        doc.addImage(imgData, 'PNG', 0, position * i, imgWidth, imgHeight)
       }
-      let all = []
+      const all = []
       this.state.checkedValuesInternal.map(item => {
         all.push(item.title)
       })
-      var pdfName =
-        this.state.checkedValuesInternal.filter(val => val.id === "0").length > 0
-          ? "SLA_INTERNAL_All"
-          : `SLA_INTERNAL_${all.join("_")}`
+      const pdfName =
+        this.state.checkedValuesInternal.filter(val => val.id === '0').length >
+        0
+          ? 'SLA_INTERNAL_All'
+          : `SLA_INTERNAL_${all.join('_')}`
 
       await doc.save(`${pdfName}.pdf`)
 
-      showDiv.style.display = "none"
+      showDiv.style.display = 'none'
       this.setState({ downloadingInternal: false })
       this.setState({ showSnackAlertInternal: true })
     })
@@ -435,7 +434,7 @@ class SLA extends Component {
 
   onInputChange(event) {
     const target = event.target
-    let newData = [...this.state.downloadCheck]
+    const newData = [...this.state.downloadCheck]
     newData.map(item => {
       if (target.value === item.title) {
         item.checked = !item.checked
@@ -445,11 +444,11 @@ class SLA extends Component {
     this.setState({ downloadCheck: newData })
   }
   pxToMm = px => {
-    return Math.floor(px / document.getElementById("myMm").offsetHeight)
+    return Math.floor(px / document.getElementById('myMm').offsetHeight)
   }
 
   mmToPx = mm => {
-    return document.getElementById("myMm").offsetHeight * mm
+    return document.getElementById('myMm').offsetHeight * mm
   }
 
   range = (start, end) => {
@@ -464,7 +463,7 @@ class SLA extends Component {
   render() {
     const { slaData } = this.props
     if (!slaData || !slaData.rbd) return <Loader />
-    
+
     return (
       <Fragment>
         {this.state.downloading === true && <Loader />}
@@ -473,7 +472,9 @@ class SLA extends Component {
         <div className="page-content">
           <div className="container-fluid">
             <div className="d-flex align-items-center justify-content-between">
-              <h4 className="sla-title">Service Level Agreement (SLA) / Procedures</h4>
+              <h4 className="sla-title">
+                Service Level Agreement (SLA) / Procedures
+              </h4>
               <div className="d-flex align-items-end">
                 <Link
                   to="#"
@@ -481,7 +482,7 @@ class SLA extends Component {
                     this.modalHandler()
                   }}
                 >
-                   <CustomEyeIcon/>  View Audit Log
+                  <CustomEyeIcon /> View Audit Log
                 </Link>
               </div>
             </div>
@@ -489,12 +490,12 @@ class SLA extends Component {
               <Nav tabs className="nav-tabs-custom nav-sla">
                 <NavItem>
                   <NavLink
-                    style={{ cursor: "pointer" }}
+                    style={{ cursor: 'pointer' }}
                     className={classnames({
-                      active: this.state.activeTab === "0",
+                      active: this.state.activeTab === '0',
                     })}
                     onClick={() => {
-                      this.toggleTabs("0")
+                      this.toggleTabs('0')
                     }}
                   >
                     <h5 className="d-none d-sm-block">
@@ -504,12 +505,12 @@ class SLA extends Component {
                 </NavItem>
                 <NavItem>
                   <NavLink
-                    style={{ cursor: "pointer" }}
+                    style={{ cursor: 'pointer' }}
                     className={classnames({
-                      active: this.state.activeTab === "1",
+                      active: this.state.activeTab === '1',
                     })}
                     onClick={() => {
-                      this.toggleTabs("1")
+                      this.toggleTabs('1')
                     }}
                   >
                     <h5 className="d-none d-sm-block">
@@ -519,12 +520,12 @@ class SLA extends Component {
                 </NavItem>
                 <NavItem>
                   <NavLink
-                    style={{ cursor: "pointer" }}
+                    style={{ cursor: 'pointer' }}
                     className={classnames({
-                      active: this.state.activeTab === "2",
+                      active: this.state.activeTab === '2',
                     })}
                     onClick={() => {
-                      this.toggleTabs("2")
+                      this.toggleTabs('2')
                     }}
                   >
                     <h5 className="d-none d-sm-block">INTERNAL</h5>
@@ -532,12 +533,12 @@ class SLA extends Component {
                 </NavItem>
                 <NavItem>
                   <NavLink
-                    style={{ cursor: "pointer" }}
+                    style={{ cursor: 'pointer' }}
                     className={classnames({
-                      active: this.state.activeTab === "3",
+                      active: this.state.activeTab === '3',
                     })}
                     onClick={() => {
-                      this.toggleTabs("3")
+                      this.toggleTabs('3')
                     }}
                   >
                     <h5 className="d-none d-sm-block">ATTACHMENTS</h5>
@@ -546,12 +547,12 @@ class SLA extends Component {
               </Nav>
               <Card>
                 <CardBody>
-                  {this.state.activeTab === "3" && (
+                  {this.state.activeTab === '3' && (
                     <TabContent activeTab="3" className="p-3 text-muted">
                       <TabPane tabId="3">
                         <Attachments
                           activeAttachTab={() =>
-                            this.setState({ activeTab: "3" })
+                            this.setState({ activeTab: '3' })
                           }
                         />
                       </TabPane>
@@ -573,7 +574,7 @@ class SLA extends Component {
                           >
                             <div className="excel-download-btn">
                               <span className="download-icon">
-                                <DownloadPDFIcon/>
+                                <DownloadPDFIcon />
                               </span>
                               <span className="download-button-message">
                                 Download PDF
@@ -586,7 +587,7 @@ class SLA extends Component {
                             placement="bottom"
                             isOpen={this.state.showDownloadOption}
                             trigger="legacy"
-                            style={{ width: "auto" }}
+                            style={{ width: 'auto' }}
                             toggle={() => this.toggleDownload('0')}
                           >
                             <PopoverBody className="sla-rbd-download">
@@ -597,7 +598,10 @@ class SLA extends Component {
                                       <div
                                         key={row.title}
                                         className={`d-flex align-items-center ${
-                                          row.checked && row.title != "Select All" ? "item-checked" : ""
+                                          row.checked &&
+                                          row.title != 'Select All'
+                                            ? 'item-checked'
+                                            : ''
                                         }`}
                                       >
                                         <FormControlLabel
@@ -607,35 +611,39 @@ class SLA extends Component {
                                             this.getCheckedDownloadVal(index)
                                           }
                                           checked={row.checked}
-                                          className={`checkmark ${row.title === "Select All" ? "select-all" : ""}`}
+                                          className={`checkmark ${
+                                            row.title === 'Select All'
+                                              ? 'select-all'
+                                              : ''
+                                          }`}
                                           control={
                                             <Checkbox
-                                            icon={
-                                                  row.title === "Select All" ? (
-                                                    <SelectAllUntick />
-                                                  ) : (
-                                                    <UntickIcon />
-                                                  )
-                                                }
+                                              icon={
+                                                row.title === 'Select All' ? (
+                                                  <SelectAllUntick />
+                                                ) : (
+                                                  <UntickIcon />
+                                                )
+                                              }
                                               checkedIcon={<CheckedIcon />}
                                               style={{
-                                                height: "24px",
-                                                width: "5px",
-                                                marginLeft: "20px",
-                                                marginTop: "10px",
+                                                height: '24px',
+                                                width: '5px',
+                                                marginLeft: '20px',
+                                                marginTop: '10px',
                                               }}
                                             />
                                           }
                                           label={
                                             isNull(row.title)
-                                              ? "-"
+                                              ? '-'
                                               : removeKeywords(row.title)
                                           }
                                         />
                                       </div>
                                     )
                                   })}
-                                <div id="myMm" style={{ height: "1mm" }} />
+                                <div id="myMm" style={{ height: '1mm' }} />
                                 <div className="pdf-wid">
                                   <button
                                     disabled={this.state.downloading}
@@ -643,8 +651,8 @@ class SLA extends Component {
                                     onClick={this.generatePdf}
                                   >
                                     {this.state.downloading
-                                      ? "Downloading..."
-                                      : "Download"}
+                                      ? 'Downloading...'
+                                      : 'Download'}
                                   </button>
                                 </div>
                               </>
@@ -668,7 +676,7 @@ class SLA extends Component {
                           >
                             <div className="excel-download-btn">
                               <span className="download-icon">
-                              <DownloadPDFIcon/>
+                                <DownloadPDFIcon />
                               </span>
                               <span className="download-button-message">
                                 Download PDF
@@ -681,7 +689,7 @@ class SLA extends Component {
                             placement="bottom"
                             isOpen={this.state.showDownloadOptionCbd}
                             trigger="legacy"
-                            style={{ width: "auto" }}
+                            style={{ width: 'auto' }}
                             toggle={() => this.toggleDownload('1')}
                           >
                             <PopoverBody className="sla-rbd-download">
@@ -693,7 +701,10 @@ class SLA extends Component {
                                         <div
                                           key={row.title}
                                           className={`d-flex align-items-center ${
-                                            row.checked && row.title != "Select All" ? "item-checked" : ""
+                                            row.checked &&
+                                            row.title != 'Select All'
+                                              ? 'item-checked'
+                                              : ''
                                           }`}
                                         >
                                           <FormControlLabel
@@ -705,11 +716,15 @@ class SLA extends Component {
                                               )
                                             }
                                             checked={row.checked}
-                                            className={`checkmark ${row.title === "Select All" ? "select-all" : ""}`}
+                                            className={`checkmark ${
+                                              row.title === 'Select All'
+                                                ? 'select-all'
+                                                : ''
+                                            }`}
                                             control={
                                               <Checkbox
-                                              icon={
-                                                  row.title === "Select All" ? (
+                                                icon={
+                                                  row.title === 'Select All' ? (
                                                     <SelectAllUntick />
                                                   ) : (
                                                     <UntickIcon />
@@ -717,16 +732,16 @@ class SLA extends Component {
                                                 }
                                                 checkedIcon={<CheckedIcon />}
                                                 style={{
-                                                  height: "24px",
-                                                  width: "5px",
-                                                  marginLeft: "20px",
-                                                  marginTop: "10px",
+                                                  height: '24px',
+                                                  width: '5px',
+                                                  marginLeft: '20px',
+                                                  marginTop: '10px',
                                                 }}
                                               />
                                             }
                                             label={
                                               isNull(row.title)
-                                                ? "-"
+                                                ? '-'
                                                 : removeKeywords(row.title)
                                             }
                                           />
@@ -734,7 +749,7 @@ class SLA extends Component {
                                       )
                                     }
                                   )}
-                                <div id="myMm" style={{ height: "1mm" }} />
+                                <div id="myMm" style={{ height: '1mm' }} />
                                 <div className="pdf-wid">
                                   <button
                                     disabled={this.state.downloadingCbd}
@@ -742,8 +757,8 @@ class SLA extends Component {
                                     onClick={this.generatePdfCbd}
                                   >
                                     {this.state.downloadingCbd
-                                      ? "Downloading..."
-                                      : "Download"}
+                                      ? 'Downloading...'
+                                      : 'Download'}
                                   </button>
                                 </div>
                               </>
@@ -767,7 +782,7 @@ class SLA extends Component {
                           >
                             <div className="excel-download-btn">
                               <span className="download-icon">
-                              <DownloadPDFIcon/>
+                                <DownloadPDFIcon />
                               </span>
                               <span className="download-button-message">
                                 Download PDF
@@ -780,56 +795,67 @@ class SLA extends Component {
                             placement="bottom"
                             isOpen={this.state.showDownloadOptionInternal}
                             trigger="legacy"
-                            style={{ width: "auto" }}
+                            style={{ width: 'auto' }}
                             toggle={() => this.toggleDownload('2')}
                           >
                             <PopoverBody className="sla-rbd-download">
                               <>
                                 {this.state.downloadCheckInternal.length > 0 &&
-                                  this.state.downloadCheckInternal.map((row, index) => {
-                                    return (
-                                      <div
-                                        key={row.title}
-                                        className={`d-flex align-items-center ${
-                                          row.checked && row.title != "Select All" ? "item-checked" : ""
-                                        }`}
-                                      >
-                                        <FormControlLabel
-                                          key={`${row.title}`}
-                                          value={`${row.title}`}
-                                          onChange={() =>
-                                            this.getCheckedDownloadValInternal(index)
-                                          }
-                                          checked={row.checked}
-                                          className={`checkmark ${row.title === "Select All" ? "select-all" : ""}`}
-                                          control={
-                                            <Checkbox
-                                            icon={
-                                                  row.title === "Select All" ? (
+                                  this.state.downloadCheckInternal.map(
+                                    (row, index) => {
+                                      return (
+                                        <div
+                                          key={row.title}
+                                          className={`d-flex align-items-center ${
+                                            row.checked &&
+                                            row.title != 'Select All'
+                                              ? 'item-checked'
+                                              : ''
+                                          }`}
+                                        >
+                                          <FormControlLabel
+                                            key={`${row.title}`}
+                                            value={`${row.title}`}
+                                            onChange={() =>
+                                              this.getCheckedDownloadValInternal(
+                                                index
+                                              )
+                                            }
+                                            checked={row.checked}
+                                            className={`checkmark ${
+                                              row.title === 'Select All'
+                                                ? 'select-all'
+                                                : ''
+                                            }`}
+                                            control={
+                                              <Checkbox
+                                                icon={
+                                                  row.title === 'Select All' ? (
                                                     <SelectAllUntick />
                                                   ) : (
                                                     <UntickIcon />
                                                   )
                                                 }
-                                              checkedIcon={<CheckedIcon />}
-                                              style={{
-                                                height: "24px",
-                                                width: "5px",
-                                                marginLeft: "20px",
-                                                marginTop: "10px",
-                                              }}
-                                            />
-                                          }
-                                          label={
-                                            isNull(row.title)
-                                              ? "-"
-                                              : removeKeywords(row.title)
-                                          }
-                                        />
-                                      </div>
-                                    )
-                                  })}
-                                <div id="myMm" style={{ height: "1mm" }} />
+                                                checkedIcon={<CheckedIcon />}
+                                                style={{
+                                                  height: '24px',
+                                                  width: '5px',
+                                                  marginLeft: '20px',
+                                                  marginTop: '10px',
+                                                }}
+                                              />
+                                            }
+                                            label={
+                                              isNull(row.title)
+                                                ? '-'
+                                                : removeKeywords(row.title)
+                                            }
+                                          />
+                                        </div>
+                                      )
+                                    }
+                                  )}
+                                <div id="myMm" style={{ height: '1mm' }} />
                                 <div className="pdf-wid">
                                   <button
                                     disabled={this.state.downloadingInternal}
@@ -837,8 +863,8 @@ class SLA extends Component {
                                     onClick={this.generatePdfInternal}
                                   >
                                     {this.state.downloadingInternal
-                                      ? "Downloading..."
-                                      : "Download"}
+                                      ? 'Downloading...'
+                                      : 'Download'}
                                   </button>
                                 </div>
                               </>
@@ -857,25 +883,27 @@ class SLA extends Component {
             {this.runAuditLogModal()}
           </div>
         </div>
-        <div id="showPDf" style={{ display: "none" }}>
+        <div id="showPDf" style={{ display: 'none' }}>
           <MyDocument
             data={
-              this.state.CurrentVal === '0' ? 
-                this.state.checkedValues.filter(val => val.id === "0").length > 0
-                ? slaData.rbd
-                : this.state.checkedValues
-              : this.state.CurrentVal === '1' ? 
-                this.state.checkedValuesCbd.filter(val => val.id === "0").length > 0
-                ? slaData.cbd
-                : this.state.checkedValuesCbd
-              : 
-                this.state.checkedValuesInternal.filter(val => val.id === "0").length > 0
+              this.state.CurrentVal === '0'
+                ? this.state.checkedValues.filter(val => val.id === '0')
+                    .length > 0
+                  ? slaData.rbd
+                  : this.state.checkedValues
+                : this.state.CurrentVal === '1'
+                ? this.state.checkedValuesCbd.filter(val => val.id === '0')
+                    .length > 0
+                  ? slaData.cbd
+                  : this.state.checkedValuesCbd
+                : this.state.checkedValuesInternal.filter(val => val.id === '0')
+                    .length > 0
                 ? slaData.internal
                 : this.state.checkedValuesInternal
             }
             type={this.state.CurrentVal}
           />
-         </div>
+        </div>
         {this.state.showSnackAlert && (
           <AWSMAlert
             status="success"

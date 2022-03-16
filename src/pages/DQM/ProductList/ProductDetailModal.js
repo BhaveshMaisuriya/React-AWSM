@@ -1,18 +1,17 @@
-import React, { PureComponent } from "react"
-import { connect } from "react-redux"
-import { format } from "date-fns"
-import { Button, Modal, ModalFooter, ModalBody, ModalHeader, Col, Row } from "reactstrap"
-import CloseButton from "../../../components/Common/CloseButton"
-import { isScheduler } from "../../../helpers/auth_helper"
+import React, { PureComponent } from 'react'
+import { connect } from 'react-redux'
+import { format } from 'date-fns'
+import { Button, Modal, ModalFooter, ModalBody, ModalHeader } from 'reactstrap'
+import CloseButton from 'components/Common/CloseButton'
+import { isScheduler } from 'helpers/auth_helper'
 import {
   getProductDetail,
   resetProductDetail,
   updateProductDetail,
-} from "../../../store/actions"
-import AWSMDropdown from "../../../components/Common/Dropdown"
-import "./ProductDetailModal.scss"
-import { isEqual } from "lodash"
-import AWSMInput from "components/Common/Input"
+} from 'store/actions'
+import AWSMDropdown from 'components/Common/Dropdown'
+import './ProductDetailModal.scss'
+import { isEqual } from 'lodash'
 
 class ProductDetailModal extends PureComponent {
   constructor(props) {
@@ -90,37 +89,30 @@ class ProductDetailModal extends PureComponent {
   }
 
   handleInputChange = event => {
-    const newInput = {
-      [event.target.name]: event.target.value,
-    }
     this.setState({
       updateDictionary: {
         ...this.state.updateDictionary,
-        ...{ remarks: event.target.value }
-        // ...newInput,
+        ...{ remarks: event.target.value },
       },
     })
-    
   }
 
   onFieldValueChange(fieldName, value) {
-    const newData = { ...this.state.updateDictionary }    
+    const newData = { ...this.state.updateDictionary }
     newData[fieldName] = value
-    this.setState({updateDictionary: newData})
+    this.setState({ updateDictionary: newData })
   }
 
-  isUpdateAble(){
-    if (!isEqual(this.state.updateDictionary, this.props.currentProduct)){
+  isUpdateAble() {
+    if (!isEqual(this.state.updateDictionary, this.props.currentProduct)) {
       return true
     }
   }
-
 
   renderModalBody() {
     const { currentProduct } = this.props
     const { updateDictionary } = this.state
     const isDisabledField = isScheduler()
-    // const isDisabledField = false    
     return (
       <>
         {updateDictionary !== {} ? (
@@ -152,7 +144,7 @@ class ProductDetailModal extends PureComponent {
                   <AWSMDropdown
                     value={updateDictionary.status_awsm}
                     name="status_awsm"
-                    items={["ACTIVE", "INACTIVE"]}
+                    items={['ACTIVE', 'INACTIVE']}
                     onChange={ev => {
                       this.setState({
                         updateDictionary: {
@@ -242,21 +234,25 @@ class ProductDetailModal extends PureComponent {
                   />
                 </div>
               </div>
-               <div className="row">
-                 <div className="col-md-12 form-group">
-                   <label> REMARKS</label>
-                   <input
-                     className="form-control awsm-input"
-                     type="text"
-                     defaultValue={updateDictionary.remarks}
-                     name="remarks"
-                     disabled={isDisabledField}
-                     onChange={(e) => this.onFieldValueChange("remarks", e.target.value)}
-                     onBlur={(e) => this.onFieldValueChange("remarks", e.target.value)}
-                     placeholder='Type something here ...'
-                   />
-                 </div>
-               </div>
+              <div className="row">
+                <div className="col-md-12 form-group">
+                  <label> REMARKS</label>
+                  <input
+                    className="form-control awsm-input"
+                    type="text"
+                    defaultValue={updateDictionary.remarks}
+                    name="remarks"
+                    disabled={isDisabledField}
+                    onChange={e =>
+                      this.onFieldValueChange('remarks', e.target.value)
+                    }
+                    onBlur={e =>
+                      this.onFieldValueChange('remarks', e.target.value)
+                    }
+                    placeholder="Type something here ..."
+                  />
+                </div>
+              </div>
             </div>
           </ModalBody>
         ) : null}
@@ -268,7 +264,11 @@ class ProductDetailModal extends PureComponent {
             >
               Cancel
             </button>
-            <Button disabled={!this.isUpdateAble()} onClick={this.handleUpdate.bind(this)} color="primary">
+            <Button
+              disabled={!this.isUpdateAble()}
+              onClick={this.handleUpdate.bind(this)}
+              color="primary"
+            >
               Update
             </Button>
           </ModalFooter>
@@ -286,20 +286,34 @@ class ProductDetailModal extends PureComponent {
 
     if (!currentProduct)
       return (
-        <Modal centered={true} isOpen={visible} className="commercial-customer-modal modal-lg">
+        <Modal
+          centered={true}
+          isOpen={visible}
+          className="commercial-customer-modal modal-lg"
+        >
           <ModalHeader close={externalCloseBtn}>
             <span className="modal-title">PRODUCT CODE</span>
           </ModalHeader>
         </Modal>
       )
     return (
-      <Modal centered={true} isOpen={visible} className="commercial-customer-modal modal-lg">
+      <Modal
+        centered={true}
+        isOpen={visible}
+        className="commercial-customer-modal modal-lg"
+      >
         <ModalHeader close={externalCloseBtn}>
           <span className="modal-title">
             Product Code: {updateDictionary.code}
           </span>
           <span className="last-updated-sub-title">
-          {`Last Updated By: ${currentProduct?.updated_by?.split("@")[0] || "Unknown"} on ${currentProduct?.updated_at && format(new Date(currentProduct?.updated_at), "do LLL yyyy") || ""}`}
+            {`Last Updated By: ${
+              currentProduct?.updated_by?.split('@')[0] || 'Unknown'
+            } on ${
+              (currentProduct?.updated_at &&
+                format(new Date(currentProduct?.updated_at), 'do LLL yyyy')) ||
+              ''
+            }`}
           </span>
         </ModalHeader>
         {this.state.displayConfirmationBox

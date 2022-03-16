@@ -39,6 +39,11 @@
 .b-sch-event {
   $bg-rt-available: #dce5f0;
   width: 100%;
+  opacity: 0.6;
+
+  &.bold {
+    opacity: 1;
+  }
 
   &.has-background {
     overflow: visible;

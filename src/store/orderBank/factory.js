@@ -1,8 +1,8 @@
-import { get, groupBy } from 'lodash'
 import moment from 'moment'
+import { get, groupBy, sortBy, uniq } from 'lodash'
 
 export const TIME_FORMAT_SHORT = 'HH:mm'
-const DATE_FORMAT = 'YYYY-MM-DD'
+export const DATE_FORMAT = 'YYYY-MM-DD'
 export const DATE_TIME_FORMAT = 'YYYY-MM-DD HH:mm'
 export const EVENT_COLOR = {
   Scheduled: '#84B0E9',
@@ -86,6 +86,7 @@ export function factorizeGanttChartEventBar({
       flags: {
         isBackground,
       },
+      supplement: {},
     }
 
   const {
@@ -94,9 +95,12 @@ export function factorizeGanttChartEventBar({
     planned_end_time,
     scheduled_status,
     soft_restriction,
-    // eta,
     terminal,
     orderIndexes,
+    etas,
+    srs,
+    hps,
+    requestedDeliveryDates, // DATE_FORMAT
   } = data
 
   const timerange = ensureDateRangeNotExceedingADay({
@@ -118,11 +122,15 @@ export function factorizeGanttChartEventBar({
     flags: {
       isBackground,
       hasSoftRestriction: soft_restriction ? true : false,
+      highlightFor: '-',
     },
     supplement: {
-      // eta: eta ? moment.utc(eta).format(TIME_FORMAT_SHORT) : '00:00',
-      terminal: terminal ?? 'M808',
       orderIndexes,
+      terminal,
+      etas,
+      specialRequests: srs,
+      highPriorities: hps,
+      requestedDeliveryDates,
     },
   }
 
@@ -131,63 +139,46 @@ export function factorizeGanttChartEventBar({
   return event
 }
 
-export function factorizeGanttChartEventBars(
-  roadTankers,
-  date = new Date().format(DATE_FORMAT)
-) {
+export function factorizeGanttChartEventBars({
+  orders,
+  rtHours,
+  resourceId,
+  date = new Date().format(DATE_FORMAT),
+}) {
+  // make sure smaller start date goes first
+  orders.sort(
+    (a, b) => new Date(a.planned_load_time) - new Date(b.planned_load_time)
+  )
+
   const events = []
 
-  roadTankers.forEach(vehicle => {
-    const rtHours = ensureDateRangeNotExceedingADay({
-      from: vehicle.rt_avaiblity_hour_from,
-      to: vehicle.rt_avaiblity_hour_to,
+  const routes = groupBy(orders, 'route_id')
+  for (const id in routes) {
+    const groupedOrders = routes[id]
+
+    const event = factorizeGanttChartEventBar({
+      data: {
+        ...groupedOrders[0],
+        id,
+        orderIndexes: groupedOrders.map(o => o.id),
+        etas: sortBy(uniq(groupedOrders.map(o => o.eta))).map(v =>
+          moment.utc(v)
+        ),
+        requestedDeliveryDates: groupedOrders.map(o =>
+          moment(o.requested_delivery_date, DATE_FORMAT, true)
+        ),
+        srs: groupedOrders.map(o => o.sr),
+        hps: groupedOrders.map(o => o.hp),
+      },
+      resourceId,
+      rtHours,
+      isBackground: false,
+      renderBackground: id === Object.keys(routes)[0],
       date,
-      fillTime: false,
     })
 
-    if (vehicle.order_banks && vehicle.order_banks.length) {
-      // make sure smaller planned_load_time goes first
-      vehicle.order_banks.sort((a, b) => {
-        return new Date(a.planned_load_time) - new Date(b.planned_load_time)
-      })
-
-      // { route_id: order[] }
-      const groups = groupBy(vehicle.order_banks, 'route_id')
-
-      for (const route in groups) {
-        const orderIndexes = groups[route].map(o => o.id)
-        const event =
-          events.findIndex(
-            s => s.resourceId === vehicle.id && s.background.startDate
-          ) === -1
-            ? factorizeGanttChartEventBar({
-                data: { ...groups[route][0], id: route, orderIndexes },
-                resourceId: vehicle.id,
-                rtHours,
-                isBackground: false,
-                date,
-              })
-            : factorizeGanttChartEventBar({
-                data: { ...groups[route][0], id: route, orderIndexes },
-                resourceId: vehicle.id,
-                rtHours,
-                isBackground: false,
-                renderBackground: false,
-                date,
-              })
-
-        events.push(event)
-      }
-    } else
-      events.push(
-        factorizeGanttChartEventBar({
-          resourceId: vehicle.id,
-          rtHours,
-          isBackground: true,
-          date,
-        })
-      )
-  })
+    events.push(event)
+  }
 
   return events
 }

@@ -1,8 +1,7 @@
-import React, { Component } from "react"
-import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined"
-import Tooltip from "@material-ui/core/Tooltip"
-import informationIcon from "../../../../assets/images/AWSM-Information.svg"
-import { format } from "date-fns"
+import React, { Component } from 'react'
+import Tooltip from '@material-ui/core/Tooltip'
+import informationIcon from 'assets/images/AWSM-Information.svg'
+import { format } from 'date-fns'
 export default class DeliveryTab extends Component {
   constructor(props) {
     super(props)
@@ -39,25 +38,25 @@ export default class DeliveryTab extends Component {
           <thead>
             <tr>
               <th>
-                DATE{" "}
+                DATE{' '}
                 <Tooltip title="1 week historical data">
                   <img src={informationIcon} />
                 </Tooltip>
               </th>
               <th>
-                VOLUME (L){" "}
+                VOLUME (L){' '}
                 <Tooltip title="1 week historical data">
                   <img src={informationIcon} />
                 </Tooltip>
               </th>
               <th>
-                VOLUME ADJUSTMENT (L){" "}
+                VOLUME ADJUSTMENT (L){' '}
                 <Tooltip title="1 week historical data taken from Yesterday Delivery Adjustment (L)">
                   <img src={informationIcon} />
                 </Tooltip>
               </th>
               <th>
-                TOTAL DELIVERY (L){" "}
+                TOTAL DELIVERY (L){' '}
                 <Tooltip title="1 week historical data taken Total Delivery = Past Delivery Volume + Past Delivery Volume Adjustment">
                   <img src={informationIcon} />
                 </Tooltip>
@@ -68,7 +67,7 @@ export default class DeliveryTab extends Component {
             {data?.map(record => {
               return (
                 <tr>
-                  <td>{format(new Date(record?.date), "do LLL yyyy")}</td>
+                  <td>{format(new Date(record?.date), 'do LLL yyyy')}</td>
                   <td>{record?.volume}</td>
                   <td>{record?.volume_adjustment}</td>
                   <td>{record?.total_delivery}</td>

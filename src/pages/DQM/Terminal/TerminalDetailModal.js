@@ -1,19 +1,21 @@
-import React, { Fragment, PureComponent } from "react"
-import { connect } from "react-redux"
-import { Button, Modal, ModalFooter, ModalBody, ModalHeader } from "reactstrap"
-import { format } from "date-fns"
-import { isScheduler } from "helpers/auth_helper"
-import { getTerminalTableInformation, updateTerminalTableInformation
-} from "store/actions"
-import AddressTab from "./AddressTab"
-import ContactTab from "./ContactTab"
-import StatusTab from "./StatusTab"
-import StorageTab from "./StorageTab"
-import "./TerminalDetailModal.scss"
-import classnames from "classnames"
-import SimpleBar from "simplebar-react"
-import { isEqual } from "lodash"
-import CloseButton from "components/Common/CloseButton"
+import React, { Fragment, PureComponent } from 'react'
+import { connect } from 'react-redux'
+import { Button, Modal, ModalFooter, ModalBody, ModalHeader } from 'reactstrap'
+import { format } from 'date-fns'
+import { isScheduler } from 'helpers/auth_helper'
+import {
+  getTerminalTableInformation,
+  updateTerminalTableInformation,
+} from 'store/actions'
+import AddressTab from './AddressTab'
+import ContactTab from './ContactTab'
+import StatusTab from './StatusTab'
+import StorageTab from './StorageTab'
+import './TerminalDetailModal.scss'
+import classnames from 'classnames'
+import SimpleBar from 'simplebar-react'
+import { isEqual } from 'lodash'
+import CloseButton from 'components/Common/CloseButton'
 import {
   Col,
   Nav,
@@ -22,16 +24,16 @@ import {
   Row,
   TabContent,
   TabPane,
-} from "reactstrap"
-import ExitConfirmation from "components/Common/ExitConfirmation"
-import AWSMAlert from "components/Common/AWSMAlert"
-import { isValidDate } from "../Common/helper"
+} from 'reactstrap'
+import ExitConfirmation from 'components/Common/ExitConfirmation'
+import AWSMAlert from 'components/Common/AWSMAlert'
+import { isValidDate } from '../Common/helper'
 
 class TerminalDetailModal extends PureComponent {
   constructor(props) {
     super(props)
     this.state = {
-      activeTab: "1",
+      activeTab: '1',
       modal: true,
       event: {},
       updateDictionary: {},
@@ -47,10 +49,10 @@ class TerminalDetailModal extends PureComponent {
       },
     }
     this.errors = {
-      addressTab:[],
+      addressTab: [],
       statusTab: [],
       contactTab: [],
-      storageTab:[],
+      storageTab: [],
     }
   }
 
@@ -61,7 +63,7 @@ class TerminalDetailModal extends PureComponent {
 
   componentDidUpdate(prevProps, prevStates) {
     const { dataSource } = this.state
-    if (!isEqual(prevStates.dataSource, dataSource)) {     
+    if (!isEqual(prevStates.dataSource, dataSource)) {
       this.validate()
     }
   }
@@ -78,67 +80,78 @@ class TerminalDetailModal extends PureComponent {
 
   async handleUpdate() {
     const { errors } = this
-      if (Object.values(errors).some(errorList => errorList.length > 0)) {
-        const errorTabs = Object.keys(errors)
-        errorTabs.forEach(tab => {
-          this.errors[tab].forEach(({ field }) => {
-            if (
-              this.state.forceBlur?.[tab]?.[field] !== undefined ||
-              this.state.forceBlur?.[tab]?.[field] != null
-            ) {
-              this.setState({
-                forceBlur: {
-                  [tab]: {
-                    [field]: true,
-                  },
+    if (Object.values(errors).some(errorList => errorList.length > 0)) {
+      const errorTabs = Object.keys(errors)
+      errorTabs.forEach(tab => {
+        this.errors[tab].forEach(({ field }) => {
+          if (
+            this.state.forceBlur?.[tab]?.[field] !== undefined ||
+            this.state.forceBlur?.[tab]?.[field] != null
+          ) {
+            this.setState({
+              forceBlur: {
+                [tab]: {
+                  [field]: true,
                 },
-              })
-            }
-          })
-        })
-      }
-
-      const { code } = this.props.data
-      const { dataSource } = this.state
-
-      let error_code = [];
-      if(dataSource?.storage){
-        for(const key in dataSource.storage){
-          if (key.startsWith("product_") &&
-            dataSource.storage[key] &&
-            dataSource.storage[key].code === null){
-            this.errors.storageTab.push({field:key})
-            error_code.push('1')
+              },
+            })
           }
+        })
+      })
+    }
+
+    const { code } = this.props.data
+    const { dataSource } = this.state
+
+    let error_code = []
+    if (dataSource?.storage) {
+      for (const key in dataSource.storage) {
+        if (
+          key.startsWith('product_') &&
+          dataSource.storage[key] &&
+          dataSource.storage[key].code === null
+        ) {
+          this.errors.storageTab.push({ field: key })
+          error_code.push('1')
         }
       }
-      if(error_code.length > 0){
-        this.errors.storageTab.push({field:"product"})
-        this.setState({error_code: 'Please fill product code'})
-        this.setState({ isValidated: true })
-      }
-      if(dataSource?.contact?.supervisor?.email && !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,4}$/.test(dataSource?.contact?.supervisor?.email)){
-        error_code.push('1')
-        this.errors.contactTab.push({field:"email"})
-        this.setState({ isValidated: true })
+    }
+    if (error_code.length > 0) {
+      this.errors.storageTab.push({ field: 'product' })
+      this.setState({ error_code: 'Please fill product code' })
+      this.setState({ isValidated: true })
+    }
+    if (
+      dataSource?.contact?.supervisor?.email &&
+      !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,4}$/.test(
+        dataSource?.contact?.supervisor?.email
+      )
+    ) {
+      error_code.push('1')
+      this.errors.contactTab.push({ field: 'email' })
+      this.setState({ isValidated: true })
+    }
+
+    if (
+      dataSource?.contact?.superintendant?.email &&
+      !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,4}$/.test(
+        dataSource?.contact?.superintendant?.email
+      )
+    ) {
+      error_code.push('1')
+      this.errors.contactTab.push({ field: 'email' })
+      this.setState({ isValidated: true })
+    }
+
+    if (Object.keys(this.errors).some(key => this.errors[key].length > 0)) {
+      this.setState({ error_code_display: true, isValidated: true }, () => {
+        setTimeout(() => this.setState({ error_code_display: false }), 3000)
+        for (const tab in this.errors) {
+          this.errors[tab] = []
         }
-
-      if(dataSource?.contact?.superintendant?.email && !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,4}$/.test(dataSource?.contact?.superintendant?.email)){
-        error_code.push('1')
-        this.errors.contactTab.push({field:"email"})
-        this.setState({ isValidated: true })
-      }
-
-      if(Object.keys(this.errors).some(key => this.errors[key].length > 0)){
-        this.setState({error_code_display:true, isValidated:true},
-          ()=> {
-            setTimeout(()=> this.setState({error_code_display:false}),3000)
-            for (const tab in this.errors){
-              this.errors[tab] = []
-            }
-          })
-        return
-      }
+      })
+      return
+    }
 
     await this.props.onUpdateTableInformation({
       ship_to_party: code,
@@ -179,7 +192,7 @@ class TerminalDetailModal extends PureComponent {
       storage?.loading_time > 1440 ||
       storage?.turnaround_time > 1440
     ) {
-      this.errors.storageTab.push({field:"product"})
+      this.errors.storageTab.push({ field: 'product' })
       exceedValues.push(1)
     }
     for (let i = 1; i < 50; i++) {
@@ -190,34 +203,34 @@ class TerminalDetailModal extends PureComponent {
           storage?.[`product_${i}`]?.volume_capping_volume_2 > 10000000
         ) {
           exceedValues.push(1)
-          this.errors.storageTab.push({field:"product"})
+          this.errors.storageTab.push({ field: 'product' })
         }
       } else {
         break
       }
     }
 
-    if (status?.status_awsm === "Temp Inactive") {
+    if (status?.status_awsm === 'Temp Inactive') {
       if (!status?.inactive_date_range_1?.type) {
         exceedValues.push(1)
       }
       if (
-        status?.inactive_date_range_1?.type === "single" &&
+        status?.inactive_date_range_1?.type === 'single' &&
         status?.inactive_date_range_1?.days?.length === 0
       ) {
         exceedValues.push(1)
       }
       if (
-        status?.inactive_date_range_1?.type === "range" &&
+        status?.inactive_date_range_1?.type === 'range' &&
         (!status?.inactive_date_range_1?.date_from ||
           !status?.inactive_date_range_1?.date_to)
       ) {
         exceedValues.push(1)
       }
     }
-    if (status && typeof status === "object") {
+    if (status && typeof status === 'object') {
       const isValidDates = Object.keys(status).every(key => {
-        if (key.startsWith("no_delivery_interval")) {
+        if (key.startsWith('no_delivery_interval')) {
           return isValidDate(status[key])
         }
         return true
@@ -245,7 +258,7 @@ class TerminalDetailModal extends PureComponent {
   }
 
   handleInputVisibility = () => {
-    if (!isEqual(this.state.dataSource, this.props.currentTerminal)){
+    if (!isEqual(this.state.dataSource, this.props.currentTerminal)) {
       return true
     }
   }
@@ -264,7 +277,7 @@ class TerminalDetailModal extends PureComponent {
       this.errors = newErrors
     }
   }
-  disabledUpdate = (val) => {
+  disabledUpdate = val => {
     this.setState({ isValidated: val })
   }
 
@@ -292,14 +305,20 @@ class TerminalDetailModal extends PureComponent {
         >
           <div className="header-title">Terminal Code: {data.code}</div>
           <div className="header-subtitle">
-          {`Last Updated By: ${currentTerminal?.updated_by?.split("@")[0] || "Unknown"} on ${currentTerminal?.updated_at && format(new Date(currentTerminal?.updated_at), "do LLL yyyy") || ""}`}
+            {`Last Updated By: ${
+              currentTerminal?.updated_by?.split('@')[0] || 'Unknown'
+            } on ${
+              (currentTerminal?.updated_at &&
+                format(new Date(currentTerminal?.updated_at), 'do LLL yyyy')) ||
+              ''
+            }`}
           </div>
         </ModalHeader>
         <>
           {currentTerminal ? (
             <>
               <ModalBody>
-                {this.state.isConfirm ? this.handleExitConfirmation() : ""}
+                {this.state.isConfirm ? this.handleExitConfirmation() : ''}
                 <Fragment>
                   <>
                     <Row className="row">
@@ -307,14 +326,14 @@ class TerminalDetailModal extends PureComponent {
                         <label>TERMINAL NAME</label>
                         <input
                           placeholder={
-                            !isDisabledField && "Type something here..."
+                            !isDisabledField && 'Type something here...'
                           }
                           className="form-control awsm-input"
                           type="text"
                           defaultValue={currentTerminal.name}
                           disabled={true}
                           onChange={e =>
-                            this.onFieldChange("name", e.target.value)
+                            this.onFieldChange('name', e.target.value)
                           }
                         />
                       </Col>
@@ -326,14 +345,14 @@ class TerminalDetailModal extends PureComponent {
                         <label>REMARKS</label>
                         <input
                           placeholder={
-                            !isDisabledField && "Type something here..."
+                            !isDisabledField && 'Type something here...'
                           }
                           className="form-control awsm-input"
                           type="text"
                           defaultValue={currentTerminal.remarks}
                           disabled={isDisabledField}
                           onChange={e =>
-                            this.onFieldChange("remarks", e.target.value)
+                            this.onFieldChange('remarks', e.target.value)
                           }
                         />
                       </Col>
@@ -343,10 +362,10 @@ class TerminalDetailModal extends PureComponent {
                     <NavItem>
                       <NavLink
                         className={classnames({
-                          active: this.state.activeTab === "1",
+                          active: this.state.activeTab === '1',
                         })}
                         onClick={() => {
-                          this.toggleTab("1")
+                          this.toggleTab('1')
                         }}
                       >
                         {/* <i className="bx bx-chat font-size-20 d-sm-none" /> */}
@@ -356,10 +375,10 @@ class TerminalDetailModal extends PureComponent {
                     <NavItem>
                       <NavLink
                         className={classnames({
-                          active: this.state.activeTab === "2",
+                          active: this.state.activeTab === '2',
                         })}
                         onClick={() => {
-                          this.toggleTab("2")
+                          this.toggleTab('2')
                         }}
                       >
                         {/* <i className="bx bx-group font-size-20 d-sm-none" /> */}
@@ -369,10 +388,10 @@ class TerminalDetailModal extends PureComponent {
                     <NavItem>
                       <NavLink
                         className={classnames({
-                          active: this.state.activeTab === "3",
+                          active: this.state.activeTab === '3',
                         })}
                         onClick={() => {
-                          this.toggleTab("3")
+                          this.toggleTab('3')
                         }}
                       >
                         {/* <i className="bx bx-book-content font-size-20 d-sm-none" /> */}
@@ -382,10 +401,10 @@ class TerminalDetailModal extends PureComponent {
                     <NavItem>
                       <NavLink
                         className={classnames({
-                          active: this.state.activeTab === "4",
+                          active: this.state.activeTab === '4',
                         })}
                         onClick={() => {
-                          this.toggleTab("4")
+                          this.toggleTab('4')
                         }}
                       >
                         {/* <i className="bx bx-chat font-size-20 d-sm-none" /> */}
@@ -400,51 +419,51 @@ class TerminalDetailModal extends PureComponent {
 
                   {/* tab content */}
                   <TabContent activeTab={this.state.activeTab} className="py-4">
-                    <TabPane tabId="1" style={{ marginRight: "-25px" }}>
+                    <TabPane tabId="1" style={{ marginRight: '-25px' }}>
                       <SimpleBar className="simple-bar">
                         <AddressTab
                           data={currentTerminal?.address}
                           onChange={value =>
-                            this.onFieldChange("address", value)
+                            this.onFieldChange('address', value)
                           }
                         />
-                        <hr style={{ margin: "2em 0" }} />
+                        <hr style={{ margin: '2em 0' }} />
                       </SimpleBar>
                     </TabPane>
-                    <TabPane tabId="2" style={{ marginRight: "-25px" }}>
+                    <TabPane tabId="2" style={{ marginRight: '-25px' }}>
                       <SimpleBar className="simple-bar">
                         <StorageTab
                           data={currentTerminal?.storage}
                           onChange={value =>
-                            this.onFieldChange("storage", value)
+                            this.onFieldChange('storage', value)
                           }
                           error_code={this.state.error_code}
                           disabledUpdate={this.disabledUpdate}
                         />
                       </SimpleBar>
                     </TabPane>
-                    <TabPane tabId="3" style={{ marginRight: "-25px" }}>
+                    <TabPane tabId="3" style={{ marginRight: '-25px' }}>
                       <SimpleBar className="simple-bar">
                         <StatusTab
                           data={currentTerminal?.status}
                           onChange={value =>
-                            this.onFieldChange("status", value)
+                            this.onFieldChange('status', value)
                           }
                           handleErrors={this.handleErrors}
                           forceBlur={this.state.forceBlur.statusTab}
                         />
-                        <hr style={{ margin: "2em 0" }} />
+                        <hr style={{ margin: '2em 0' }} />
                       </SimpleBar>
                     </TabPane>
-                    <TabPane tabId="4" style={{ marginRight: "-25px" }}>
+                    <TabPane tabId="4" style={{ marginRight: '-25px' }}>
                       <SimpleBar className="simple-bar">
                         <ContactTab
                           data={currentTerminal?.contact}
                           onChange={value =>
-                            this.onFieldChange("contact", value)
+                            this.onFieldChange('contact', value)
                           }
                         />
-                        <hr style={{ margin: "2em 0" }} />
+                        <hr style={{ margin: '2em 0' }} />
                       </SimpleBar>
                     </TabPane>
                   </TabContent>
@@ -459,7 +478,12 @@ class TerminalDetailModal extends PureComponent {
                     Cancel
                   </button>
                   <Button
-                    disabled={!this.handleInputVisibility() === true && isValidated === false ? true : false}
+                    disabled={
+                      !this.handleInputVisibility() === true &&
+                      isValidated === false
+                        ? true
+                        : false
+                    }
                     onClick={this.handleUpdate.bind(this)}
                     color="primary"
                   >
@@ -470,14 +494,17 @@ class TerminalDetailModal extends PureComponent {
             </>
           ) : null}
         </>
-        {this.state.error_code_display !== "" && (
+        {this.state.error_code_display !== '' && (
           <AWSMAlert
             status="error"
-            message={`Please fill in necessary data in ${
-              Object.keys(this.errors)
-                .filter((key)=> this.errors[key].length > 0)
-                .map((key)=> key.charAt(0).toUpperCase() + key.slice(1,-"tab".length))
-                .join(", ")} to save`}
+            message={`Please fill in necessary data in ${Object.keys(
+              this.errors
+            )
+              .filter(key => this.errors[key].length > 0)
+              .map(
+                key => key.charAt(0).toUpperCase() + key.slice(1, -'tab'.length)
+              )
+              .join(', ')} to save`}
             openAlert={this.state.error_code_display}
             closeAlert={() => this.setState({ error_code_display: false })}
           />
@@ -494,8 +521,10 @@ const mapStateToProps = ({ terminal }) => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  fetchTableInformation: params => dispatch(getTerminalTableInformation(params)),
-  onUpdateTableInformation: params => dispatch(updateTerminalTableInformation(params)),
+  fetchTableInformation: params =>
+    dispatch(getTerminalTableInformation(params)),
+  onUpdateTableInformation: params =>
+    dispatch(updateTerminalTableInformation(params)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(TerminalDetailModal)

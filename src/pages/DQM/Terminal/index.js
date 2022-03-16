@@ -1,13 +1,13 @@
-import React, { Component, Fragment } from "react"
-import { connect } from "react-redux"
-import Page from "../Common"
-import { getTerminal, resetCurrentTerminalDetail } from "store/actions"
-import { tableColumns, tableMapping } from "./tableMapping"
-import { transformArrayToString, getCookieByKey } from "../Common/helper"
-import TerminalDetailModal from "./TerminalDetailModal"
-import Loader from "components/Common/Loader"
+import React, { Component, Fragment } from 'react'
+import { connect } from 'react-redux'
+import Page from '../Common'
+import { getTerminal, resetCurrentTerminalDetail } from 'store/actions'
+import { tableColumns, tableMapping } from './tableMapping'
+import { transformArrayToString, getCookieByKey } from '../Common/helper'
+import TerminalDetailModal from './TerminalDetailModal'
+import Loader from 'components/Common/Loader'
 
-const TerminalTableName = "terminal-table"
+const TerminalTableName = 'terminal-table'
 
 class Terminal extends Component {
   constructor(props) {
@@ -16,7 +16,7 @@ class Terminal extends Component {
       searchFields: getCookieByKey(TerminalTableName)
         ? JSON.parse(getCookieByKey(TerminalTableName))
         : tableColumns,
-      subModule: "terminal",
+      subModule: 'terminal',
     }
   }
 
@@ -26,8 +26,8 @@ class Terminal extends Component {
     const params = {
       limit: 10,
       page: 0,
-      sort_dir: "asc",
-      sort_field: "code",
+      sort_dir: 'asc',
+      sort_field: 'code',
       search_fields: transformArrayToString(searchFields),
     }
     onGetTerminal(params)
@@ -45,7 +45,7 @@ class Terminal extends Component {
     const { searchFields, subModule } = this.state
     return (
       <Fragment>
-        {terminalTableIsLoading ? <Loader /> : ""}
+        {terminalTableIsLoading ? <Loader /> : ''}
         {terminalTable.list && (
           <Page
             headerTitle="Terminal"

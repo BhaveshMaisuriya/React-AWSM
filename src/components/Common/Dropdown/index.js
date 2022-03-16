@@ -1,9 +1,9 @@
-import React, { useState,useEffect } from "react"
-import { Dropdown, DropdownMenu, DropdownToggle } from "reactstrap"
-import "./dropdown.scss"
+import React, { useState, useEffect } from 'react'
+import { Dropdown, DropdownMenu, DropdownToggle } from 'reactstrap'
+import './dropdown.scss'
 // import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown"
-import { ReactSVG } from "react-svg"
-import ArrowDropDownIcon from "../../../assets/images/AWSM-Dropdown.svg"
+import { ReactSVG } from 'react-svg'
+import ArrowDropDownIcon from 'assets/images/AWSM-Dropdown.svg'
 
 /**
  * Dropdown menu
@@ -22,8 +22,8 @@ const AWSMDropdown = ({
   disabled = false,
   RowComponent = null,
   flip = false,
-  placeholder = "Select",
-  hasNone = false
+  placeholder = 'Select',
+  hasNone = false,
 }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const toggle = () => setDropdownOpen(prevState => !prevState)
@@ -41,15 +41,18 @@ const AWSMDropdown = ({
     }
   }
   // here using ref to scroll the selected item into view
-  useEffect(()=>{
-    if (dropdownOpen && itemsRef.current && itemsRef.current.length > 0){
-      const indexSelectedRef = itemsRef.current.findIndex(ref => ref?.classList.contains("bg-primary-green"))
+  useEffect(() => {
+    if (dropdownOpen && itemsRef.current && itemsRef.current.length > 0) {
+      const indexSelectedRef = itemsRef.current.findIndex(ref =>
+        ref?.classList.contains('bg-primary-green')
+      )
       const element = itemsRef.current?.[indexSelectedRef]
-      if (indexSelectedRef !== -1 && element){
-        element.parentNode.scrollTop = element.offsetTop -  element.parentNode.offsetTop
+      if (indexSelectedRef !== -1 && element) {
+        element.parentNode.scrollTop =
+          element.offsetTop - element.parentNode.offsetTop
       }
     }
-  },[dropdownOpen])
+  }, [dropdownOpen])
 
   return (
     <Dropdown isOpen={dropdownOpen} toggle={toggle}>
@@ -60,17 +63,20 @@ const AWSMDropdown = ({
         disabled={disabled}
       >
         <div
-          className={`d-flex align-items-center awsm-select-toggle ${error === true ? 'border-danger' : '' } p-2 position-relative ${disabled ? "disabled" : ""
-            }`}
+          className={`d-flex align-items-center awsm-select-toggle ${
+            error === true ? 'border-danger' : ''
+          } p-2 position-relative ${disabled ? 'disabled' : ''}`}
         >
-          <div>{(!value || value === "None")  ? placeholder : value}</div>
-          {!disabled && <ReactSVG src={ArrowDropDownIcon} className="awsm-dropdown-arrow" />}
+          <div>{!value || value === 'None' ? placeholder : value}</div>
+          {!disabled && (
+            <ReactSVG src={ArrowDropDownIcon} className="awsm-dropdown-arrow" />
+          )}
         </div>
       </DropdownToggle>
 
-      <DropdownMenu  className="awsm-select-menu w-100" flip={flip}>
+      <DropdownMenu className="awsm-select-menu w-100" flip={flip}>
         {items &&
-        (hasNone ? ["None"].concat(items) : items).map((item, index) =>
+          (hasNone ? ['None'].concat(items) : items).map((item, index) =>
             RowComponent ? (
               <RowComponent
                 key={index}
@@ -83,11 +89,13 @@ const AWSMDropdown = ({
                 key={index}
                 onClick={() => onValueChange(item, index)}
                 // highlight selected item here
-                className={`awsm-select-item ${(item === value || !value && item === "None") && 
-                "bg-primary-green text-white"}`}
+                className={`awsm-select-item ${
+                  (item === value || (!value && item === 'None')) &&
+                  'bg-primary-green text-white'
+                }`}
                 ref={ref => itemsRef.current.push(ref)}
               >
-                {item || "-"}
+                {item || '-'}
               </div>
             )
           )}

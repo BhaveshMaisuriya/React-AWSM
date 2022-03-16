@@ -1,42 +1,37 @@
-import React, { useEffect, useState, useRef, Fragment } from "react"
-import cloneDeep from "lodash/cloneDeep"
-import TablePagination from "../../../components/Common/Pagination"
-import EditOutlinedIcon from "@material-ui/icons/EditOutlined"
-import SystemUpdateAltOutlinedIcon from "@material-ui/icons/SystemUpdateAltOutlined"
-import DeleteOutlinedIcon from "@material-ui/icons/DeleteOutlined"
-import VisibilityOutlinedIcon from "@material-ui/icons/VisibilityOutlined"
-import { connect } from "react-redux"
-import Tooltip from "@material-ui/core/Tooltip"
-import { getSLAPdfDownload, getDeletePdf, getRenamePdf } from "store/actions"
-import { Col, Modal, ModalBody, ModalHeader, ModalFooter, Row } from "reactstrap"
-import AWSMInput from "components/Common/Input"
-import AWSMAlert from "components/Common/AWSMAlert"
-import { ReactSVG } from "react-svg"
-import CustomTrashIcon from "../../../assets/images/AWSM-Trash-Icon-sla.svg"
-import CustomViewIcon from "../../../assets/images/AWSM-View.svg"
-import CustomDownloadIcon from "../../../assets/images/AWSM-Download.svg"
-import CustomEditIcon from "../../../assets/images/AWSM-Edit.svg"
-import { Icon, InputBase, IconButton } from "@material-ui/core"
-import SearchIcon from "../../../assets/images/AWSM-search.svg"
+import React, { useEffect, useState, Fragment } from 'react'
+import cloneDeep from 'lodash/cloneDeep'
+import TablePagination from 'components/Common/Pagination'
+import { connect } from 'react-redux'
+import Tooltip from '@material-ui/core/Tooltip'
+import { getSLAPdfDownload, getDeletePdf, getRenamePdf } from 'store/actions'
+import { Col, Modal, ModalBody, ModalHeader, Row } from 'reactstrap'
+import AWSMInput from 'components/Common/Input'
+import AWSMAlert from 'components/Common/AWSMAlert'
+import { ReactSVG } from 'react-svg'
+import CustomTrashIcon from 'assets/images/AWSM-Trash-Icon-sla.svg'
+import CustomViewIcon from 'assets/images/AWSM-View.svg'
+import CustomDownloadIcon from 'assets/images/AWSM-Download.svg'
+import CustomEditIcon from 'assets/images/AWSM-Edit.svg'
+import { Icon, InputBase, IconButton } from '@material-ui/core'
+import SearchIcon from 'assets/images/AWSM-search.svg'
 
 function SLAPdfTable(props) {
   const rowsPerPage = 10
-  const [value, setValue] = useState("")
   const [tableDatas, setTableDatas] = useState([])
   const [filterTableDatas, setFilterTableDatas] = useState([])
   const [tableHeader, setTableHeader] = useState([])
   const [currentPage, setCurrentPage] = useState(0)
   const [collection, setCollection] = useState([])
-  const [currentAction, setCurrentAction] = useState("")
-  const [currentFileName, setCurrentFileName] = useState("")
-  const [renameFileName, setRenameFileName] = useState("")
+  const [currentAction, setCurrentAction] = useState('')
+  const [currentFileName, setCurrentFileName] = useState('')
+  const [renameFileName, setRenameFileName] = useState('')
   const [renameOpen, setRenameOpen] = useState(false)
   const [deleteOpen, setDeleteOpen] = useState(false)
   const [selectedItem, setSelectedItem] = useState({})
-  const [deleteId, setDeleteId] = useState("")
-  const [alertMessage, setAlertMessage] = useState("")
+  const [deleteId, setDeleteId] = useState('')
+  const [alertMessage, setAlertMessage] = useState('')
   const [showAlert, setShowAlert] = useState(false)
-  const [alertStatus, setAlertStatus] = useState("")
+  const [alertStatus, setAlertStatus] = useState('')
 
   useEffect(() => {
     async function fetchData() {
@@ -44,12 +39,12 @@ function SLAPdfTable(props) {
       if (slaPdfs !== null && slaPdfs !== undefined) {
         await getAllPdfLists(slaPdfs)
         const tableHead = {
-          filename: "FILE NAME",
-          created_at: "TIME UPDATED",
-          created_by: "UPLOADED BY",
-          action: "ACTION",
+          filename: 'FILE NAME',
+          created_at: 'TIME UPDATED',
+          created_by: 'UPLOADED BY',
+          action: 'ACTION',
         }
-        await setTableHeader(tableHead)
+        setTableHeader(tableHead)
       }
     }
     fetchData()
@@ -60,11 +55,11 @@ function SLAPdfTable(props) {
     if (slaPdfDownload !== null) {
       const blob = base64toBlob(slaPdfDownload.data.data)
       const PdfUrl = URL.createObjectURL(blob)
-      if (currentAction === "view") {
-        window.open(PdfUrl, "_blank")
+      if (currentAction === 'view') {
+        window.open(PdfUrl, '_blank')
       } else {
         const linkSource = `data:application/pdf;base64,${slaPdfDownload.data.data}`
-        const downloadLink = document.createElement("a")
+        const downloadLink = document.createElement('a')
         downloadLink.href = linkSource
         downloadLink.download = slaPdfDownload.data.filename
         downloadLink.click()
@@ -79,43 +74,44 @@ function SLAPdfTable(props) {
     while (length--) {
       out[length] = bytes.charCodeAt(length)
     }
-    return new Blob([out], { type: "application/pdf" })
+    return new Blob([out], { type: 'application/pdf' })
   }
 
   const getAllPdfLists = async slaPdfs => {
     let allData = []
-    var months = [
-      "Jan",
-      "Feb",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "Aug",
-      "Sept",
-      "Oct",
-      "Nov",
-      "Dec",
+    let months = [
+      'Jan',
+      'Feb',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'Aug',
+      'Sept',
+      'Oct',
+      'Nov',
+      'Dec',
     ]
 
-    slaPdfs.map((item, index) => {
-      var uploadedDate = ""
-      var uploadedTime = ""
-      var getFullDate = new Date(item.created_at)
-      var hours = getFullDate.getHours()
-      var minutes = getFullDate.getMinutes()
-      var ampm = hours >= 12 ? "pm" : "am"
+    slaPdfs.map(item => {
+      let uploadedDate = ''
+      let uploadedTime = ''
+      let getFullDate = new Date(item.created_at)
+      let hours = getFullDate.getHours()
+      let minutes = getFullDate.getMinutes()
+      let ampm = hours >= 12 ? 'pm' : 'am'
       hours = hours % 12
       hours = hours ? hours : 12 // the hour '0' should be '12'
-      minutes = minutes < 10 ? "0" + minutes : minutes
+      minutes = minutes < 10 ? '0' + minutes : minutes
       uploadedDate =
         getFullDate.getDate() +
-        " " +
+        ' ' +
         months[getFullDate.getMonth()] +
-        " " +
+        ' ' +
         getFullDate.getFullYear()
-      uploadedTime = getFullDate.getHours() + ":" + getFullDate.getMinutes() + " " + ampm
+      uploadedTime =
+        getFullDate.getHours() + ':' + getFullDate.getMinutes() + ' ' + ampm
 
       allData.push({
         filename: item.filename,
@@ -137,13 +133,13 @@ function SLAPdfTable(props) {
             </Tooltip>
             &nbsp;&nbsp;&nbsp;&nbsp;
             <Tooltip title="Download PDF">
-              <Icon onClick={() => downloadViewPdf(item, "download")}>
+              <Icon onClick={() => downloadViewPdf(item, 'download')}>
                 <ReactSVG src={CustomDownloadIcon} />
               </Icon>
             </Tooltip>
             &nbsp;&nbsp;&nbsp;&nbsp;
             <Tooltip title="View PDF">
-              <Icon onClick={() => downloadViewPdf(item, "view")}>
+              <Icon onClick={() => downloadViewPdf(item, 'view')}>
                 <ReactSVG src={CustomViewIcon} />
               </Icon>
             </Tooltip>
@@ -165,7 +161,7 @@ function SLAPdfTable(props) {
   }
 
   const reNamePdf = async item => {
-    setRenameFileName(item.filename.split(".pdf")[0])
+    setRenameFileName(item.filename.split('.pdf')[0])
     setRenameOpen(!renameOpen)
     setSelectedItem(item)
   }
@@ -174,13 +170,13 @@ function SLAPdfTable(props) {
     const { onGetRenamePdf } = props
     await onGetRenamePdf({
       id: selectedItem.id,
-      filename: renameFileName + ".pdf",
+      filename: renameFileName + '.pdf',
       remarks: selectedItem.remarks,
     })
     toggleRename()
     setShowAlert(true)
-    setAlertStatus("success")
-    setAlertMessage("PDF Renamed Successfully.")
+    setAlertStatus('success')
+    setAlertMessage('PDF Renamed Successfully.')
   }
 
   const deletePdf = async item => {
@@ -193,9 +189,9 @@ function SLAPdfTable(props) {
     const { onGetDeletePdf } = props
     await onGetDeletePdf({ id: deleteId })
     toggleDelete()
-    setAlertStatus("success")
+    setAlertStatus('success')
     setShowAlert(true)
-    setAlertMessage("PDF Deleted Successfully.")
+    setAlertMessage('PDF Deleted Successfully.')
   }
 
   useEffect(() => {
@@ -214,8 +210,7 @@ function SLAPdfTable(props) {
   }
 
   const GetSearchedValue = async val => {
-    setValue(val)
-    if (val === "") {
+    if (val === '') {
       setCollection(cloneDeep(tableDatas.slice(0, rowsPerPage)))
       setFilterTableDatas(tableDatas)
     } else {
@@ -228,7 +223,9 @@ function SLAPdfTable(props) {
       )
       await setCollection(data)
       await setFilterTableDatas(
-        tableDatas.filter(item => item.filename.toLowerCase().indexOf(query) > -1)
+        tableDatas.filter(
+          item => item.filename.toLowerCase().indexOf(query) > -1
+        )
       )
     }
   }
@@ -255,7 +252,9 @@ function SLAPdfTable(props) {
   }
 
   const headRow = () => {
-    return Object.values(tableHeader).map((title, index) => <td key={index}>{title}</td>)
+    return Object.values(tableHeader).map((title, index) => (
+      <td key={index}>{title}</td>
+    ))
   }
 
   const toggleRename = () => {
@@ -268,7 +267,9 @@ function SLAPdfTable(props) {
 
   return (
     <>
-      {tableDatas.length === 0 && <p className="not_found">No Uploaded Documents Found!</p>}
+      {tableDatas.length === 0 && (
+        <p className="not_found">No Uploaded Documents Found!</p>
+      )}
       {tableDatas.length > 0 && (
         <Fragment>
           <div className="search-sla">
@@ -284,7 +285,9 @@ function SLAPdfTable(props) {
           <div className="top-page-number">
             <div className="enteriesText">
               {`${currentPage * rowsPerPage + 1} to ${
-                filterTableDatas.length - (currentPage * rowsPerPage + rowsPerPage) < 0
+                filterTableDatas.length -
+                  (currentPage * rowsPerPage + rowsPerPage) <
+                0
                   ? filterTableDatas.length
                   : currentPage * rowsPerPage + rowsPerPage
               } of ${filterTableDatas.length} enteries`}
@@ -318,7 +321,10 @@ function SLAPdfTable(props) {
         <ModalBody>
           <Row>
             <Col lg={10}>
-              <AWSMInput value={renameFileName} onChange={value => setRenameFileName(value)} />
+              <AWSMInput
+                value={renameFileName}
+                onChange={value => setRenameFileName(value)}
+              />
             </Col>
             <Col lg={2}>
               <div className="d-flex align-items-center h-100">.pdf</div>
@@ -328,7 +334,10 @@ function SLAPdfTable(props) {
         <Row>
           <Col>
             <div className="d-flex justify-content-end pr-3 mt-2 mb-4">
-              <button className="btn btn-outline-primary mr-3" onClick={toggleRename}>
+              <button
+                className="btn btn-outline-primary mr-3"
+                onClick={toggleRename}
+              >
                 Cancel
               </button>
               <button className="btn btn-primary" onClick={RenamePdf}>
@@ -360,7 +369,10 @@ function SLAPdfTable(props) {
         <Row>
           <Col>
             <div className="d-flex justify-content-end pr-3 mt-2 mb-4">
-              <button className="btn btn-outline-danger mr-3" onClick={toggleDelete}>
+              <button
+                className="btn btn-outline-danger mr-3"
+                onClick={toggleDelete}
+              >
                 Cancel
               </button>
               <button className="btn btn-danger" onClick={DeletePdf}>
@@ -394,4 +406,3 @@ const mapDispatchToProps = dispatch => ({
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(SLAPdfTable)
-// export default SLAPdfTable;

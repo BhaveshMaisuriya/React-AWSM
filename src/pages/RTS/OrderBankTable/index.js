@@ -415,13 +415,9 @@ class index extends Component {
           )
           break
         case 'retainrunout':
-          var d = new Date(data[v])
           result = (
             <div className="custom-td-overflow">
-              {data[v]
-                ? moment(data[v]).utc().format('DD-MM-yyyy HH:mm')
-                : //format(new Date(data[v]), 'dd-MM-yyyy ') + d.getUTCHours() + ':' + d.getUTCMinutes()
-                  ''}
+              {data[v] ? moment(data[v]).utc().format('DD-MM-yyyy HH:mm') : ''}
             </div>
           )
           break

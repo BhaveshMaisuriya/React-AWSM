@@ -1,113 +1,72 @@
-. Change the Font -> Need the Font***
+<!-- PROJECT LOGO -->
+<br />
+<div align="center">
+  <h1 align="center">AWSM (Automated Wet Stock Management project)</h1>
 
-. Change Logo -> DONE
-. Change Theme COlor -> DONE
-. Add HighCharts -> DONE
-. Add Bryntum -> DONE
-
-
-. Change UI according to new mocks for Dashboard
-. Change Data & Link Few Pages
-
-. Add Proper Data in Gannt Charts
-. Change UI/UX for Secondary Colors & Chart Colors & Button Colors & Text Fields etc.
-. RTS
+  <p align="center">
+    <a href="https://awsm.petronas.com/">PROD enviroment</a>
+    ·
+    <a href="https://dev.awsm.petronas.com/">DEV enviroment</a>
+  </p>
+</div>
 
 
+#### Technologies stack
 
+[![React Badge](https://img.shields.io/badge/-React-61DBFB?style=for-the-badge&labelColor=black&logo=react&logoColor=61DBFB)](#) [![Javascript Badge](https://img.shields.io/badge/-Javascript-F0DB4F?style=for-the-badge&labelColor=black&logo=javascript&logoColor=F0DB4F)](#) [![Nodejs Badge](https://img.shields.io/badge/-Nodejs-3C873A?style=for-the-badge&labelColor=black&logo=node.js&logoColor=3C873A)](#)
+[![Bootstrap Badge](https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white)](#)
 
+<br />
 
-Libraries to Remove : 
-1. Apex Charts
-2. Chartist Charts
-3. ChartJS Charts
-4. EChart Charts
-5. Toast UI Charts
-6. Sparkline Charts
-7. Knob Charts
-8. Google Maps
-9. Vector Maps
-10. Leaflet Maps
-11. FirebaseSDK (Demo Login via Firebase) 
-12. AWS Amplify SDK (Demo Login via Cognito)
+## Install
 
-For Production : 
-1. Enable Code Splitting & Lazy Loading
-2. Enable Brotli Compression
-3. Add Caching Headers on CDN
-4. 
+1. Clone the project.
 
+```sh
+git clone https://petronasvsts.visualstudio.com/PDB%20AWSM/_git/PDB-AWSM-Frontend
+```
 
+> **NOTE**: Or you use the CLONE IN VSCODE features provided.
 
+<br/>
 
+1. Run the npm command below to install the project dependecies.
 
+```sh
+npm install
+```
 
+2. Login with the credentils 
+   
+   
+Development Environment
 
+| Email | Password |
+|--|--|
+| awsm.user01@pethlab.com | Welcome@123456 |
+| awsm.user02@pethlab.com | Welcome@123456 |
+| awsm.user03@pethlab.com | Welcome@123456 |
+| awsm.user04@pethlab.com | Welcome@123456 |
+| awsm.user05@pethlab.com | Welcome@123456 |
+| awsm.user06@pethlab.com | Welcome@123456 |
+| awsm.user07@pethlab.com | Welcome@123456 |
+| awsm.user08@pethlab.com | Welcome@123456 |
+| awsm.user09@pethlab.com | Welcome@123456 |
+| awsm.user10@pethlab.com | Welcome@123456 |
 
+   * [Additional Login Credentials](https://petronasvsts.visualstudio.com/PDB%20AWSM/_wiki/wikis/PDB-AWSM.wiki/5383/Environments)
+## Usage
 
+2. Run the npm command below to start the application.
 
+```sh
+npm start
+```
 
+<br />
 
+## <img src="https://user-images.githubusercontent.com/1303154/88677602-1635ba80-d120-11ea-84d8-d263ba5fc3c0.gif" width="28px" alt="hi"> Acknowledgments!
 
+We really appreciate your contribution to the team. Great team with great people
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-** DQM Dashboard
-// Add Chat Component to Dashboard to replace welcome sunny card
-// Chat card on right, remaining on left
-// Groups -> Central, Northern, Southern, Eastern, Borneo
-/ Add Region to Username under chats
-
-// Latest Transaction -> Master Data Upcoming Changes
-Date, Data Module, Current Data, Future Data, Comments, View Details Button
-
-// Summary of Data Submission by Retail Station
-// Filter by Inventory Data, Sale Data, All Data -> ComboBox or Dropdown with View More Data & Percentage
-// 34k -> 10/100 from yesterday
-
-Tabular Format -> Switch Sales Data or Inventory Data -> Show 10 results
-// Number of sales data error by station or product
-// Number of inventory data error by station product
-
-
-
-Current Month + Next Month Calendar -> Dotted/Details/Selected 
-
-** DQM - Sales & Inventory Summary
-
-Search by Region, Product, Sorting
-Tabular Format
-
-Summary of Data Submission
-Sales Data error Table format
-Edit option -> Showing Calculated Data -> Overwrite or keep existing data -> Text Box , 2buttons
-
-List of all Overwritten/Keep changes - historical changes activity
-
-** DQM - Retail Station Page by sitename, siteid, sales data submission, inventory data submission, quality of data ()
-Search/Filter on Retail Stations -> Tabular Format
-Edit/Modify Data on a full page form
-
-Audit Log -> Inside Details Page of Retail Station Page
-
-** DQM - Commercial Customer
-
-** Road Tanker _ Tabular Format with Search and Detail Page
-** DQM Cloud Clusters -> Show Map with Polygons/Circles with search functionality
-** DQM Employee Data -> CRUD Users
-** SLA Compliance -> Search /Filter Tabular Format
-** DQM Order Forecast -> Form for Festive Schedule
+<br />

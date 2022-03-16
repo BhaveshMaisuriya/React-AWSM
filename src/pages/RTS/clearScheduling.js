@@ -1,7 +1,7 @@
-import React, { useState, useEffect, Fragment } from "react"
-import { Modal, ModalHeader, ModalFooter } from "reactstrap"
-import LinearProgress from "@material-ui/core/LinearProgress"
-import Box from "@material-ui/core/Box"
+import React, { useState, useEffect, Fragment } from 'react'
+import { Modal, ModalHeader, ModalFooter } from 'reactstrap'
+import LinearProgress from '@material-ui/core/LinearProgress'
+import Box from '@material-ui/core/Box'
 
 function ClearScheduling(props) {
   const { clearScheduling, toggle, checkedValue } = props
@@ -13,7 +13,9 @@ function ClearScheduling(props) {
   useEffect(() => {
     if (open === true) {
       const timer = setInterval(() => {
-        setProgress(prevProgress => (prevProgress >= 100 ? 100 : prevProgress + 10))
+        setProgress(prevProgress =>
+          prevProgress >= 100 ? 100 : prevProgress + 10
+        )
       }, 500)
       return () => {
         clearInterval(timer)
@@ -29,10 +31,10 @@ function ClearScheduling(props) {
     }
   }, [progress])
 
-  const onClear = async () => {
+  const onClear = () => {
     setOpenModal(false)
     setProgress(10)
-    await onToggleConfirm()
+    onToggleConfirm()
     // props.toggle();
   }
 
@@ -41,24 +43,19 @@ function ClearScheduling(props) {
   }
 
   const months = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
   ]
-
-  const currentDate = () => {
-    var today = new Date()
-    return today.getDate() + " " + months[today.getMonth() + 1] + " " + today.getFullYear()
-  }
   return (
     <Fragment>
       <Modal
@@ -73,9 +70,9 @@ function ClearScheduling(props) {
         <p>
           Are you sure you want to proceed with this shipment cancellation?
           <br />
-          All order under this shipment will be drop back to Unscheduled list in Order Bank
+          All order under this shipment will be drop back to Unscheduled list in
+          Order Bank
         </p>
-        {/* <p>This action cannot be undone. Are you sure you want to clear {props.checkedValue} on {currentDate()}? All order will be drop back to Unscheduled list in Order Bank.</p> */}
         <ModalFooter>
           <div className="d-flex">
             <button className="btn btn-dan" onClick={toggle}>
@@ -98,10 +95,10 @@ function ClearScheduling(props) {
         <ModalHeader>
           <h3>Clear {checkedValue}</h3>
         </ModalHeader>
-        <div className={checkedValue.length >= 35 ? "yellowbar" : ""}>
+        <div className={checkedValue.length >= 35 ? 'yellowbar' : ''}>
           <p>Please wait until action is complete.</p>
-          <Box sx={{ display: "flex", alignItems: "center" }}>
-            <Box sx={{ width: "100%", mr: 1 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Box sx={{ width: '100%', mr: 1 }}>
               <LinearProgress variant="determinate" value={progress} />
             </Box>
           </Box>

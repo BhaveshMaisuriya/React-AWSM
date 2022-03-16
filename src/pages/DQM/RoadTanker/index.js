@@ -1,13 +1,13 @@
-import React, { Component, Fragment } from "react"
-import { connect } from "react-redux"
-import Page from "../Common"
-import { getRoadTanker } from "store/actions"
-import { tableColumns, tableMapping } from "./tableMapping"
-import InformationModal from "./InformationModal"
-import { transformArrayToString, getCookieByKey } from "../Common/helper"
-import Loader from "components/Common/Loader"
+import React, { Component, Fragment } from 'react'
+import { connect } from 'react-redux'
+import Page from '../Common'
+import { getRoadTanker } from 'store/actions'
+import { tableColumns, tableMapping } from './tableMapping'
+import InformationModal from './InformationModal'
+import { transformArrayToString, getCookieByKey } from '../Common/helper'
+import Loader from 'components/Common/Loader'
 
-const RoadTankerTableName = "road-tanker-table"
+const RoadTankerTableName = 'road-tanker-table'
 class RoadTanker extends Component {
   constructor(props) {
     super(props)
@@ -16,7 +16,7 @@ class RoadTanker extends Component {
         ? JSON.parse(getCookieByKey(RoadTankerTableName))
         : tableColumns,
       isRoadTankerTIVisible: true,
-      subModule: "road-tanker",
+      subModule: 'road-tanker',
     }
   }
 
@@ -26,8 +26,8 @@ class RoadTanker extends Component {
     const params = {
       limit: 10,
       page: 0,
-      sort_dir: "asc",
-      sort_field: "vehicle",
+      sort_dir: 'asc',
+      sort_field: 'vehicle',
       search_fields: transformArrayToString(searchFields),
     }
     onGetRoadTanker(params)
@@ -45,7 +45,7 @@ class RoadTanker extends Component {
 
     return (
       <Fragment>
-        {roadTankerIsLoading ? <Loader /> : ""}
+        {roadTankerIsLoading ? <Loader /> : ''}
         {roadTanker.list && (
           <Page
             onGetMainTable={onGetRoadTanker}

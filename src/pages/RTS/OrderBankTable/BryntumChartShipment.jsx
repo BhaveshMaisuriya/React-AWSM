@@ -25,11 +25,10 @@ function BryntumChartShipment(props) {
     handleResetAll,
   } = props
   const tableData = useRef([])
-
+  const gridRef = useRef()
   const colsRef = useRef(bryntumCurrentColumns)
   const [roadTankerModalShow, setRoadTankerModal] = useState(false)
   const [selectedVehicleID, setSelectedVehicleID] = useState(null)
-  const schedulerProRef = useRef()
   const firstRender = useRef(true)
   const [filterList, setFilterList] = useState([])
   const [bryntumTable, setBryntumTable] = useState({
@@ -46,15 +45,6 @@ function BryntumChartShipment(props) {
     [dateConfig, terminal]
   )
 
-  useEffect(() => {
-    setFilterList(
-      Object.keys(bryntumCurrentColumns).map(e => ({
-        key: e,
-        type: ganttChartTableMapping[e]?.type,
-      }))
-    )
-  }, [bryntumCurrentColumns])
-
   const refreshGanttChartTable = () => {
     props.clearGanttData()
 
@@ -64,7 +54,7 @@ function BryntumChartShipment(props) {
   }
 
   const updateResourceRecords = (updateData, preventClear = false) => {
-    const scheduler = schedulerProRef.current?.instance
+    const scheduler = gridRef.current?.instance
     if (scheduler) {
       if (preventClear) {
         scheduler.data = updateData
@@ -77,7 +67,7 @@ function BryntumChartShipment(props) {
     }
   }
 
-  const schedulerproConfig = {
+  const chartConfig = {
     columns: [],
     autoHeight: true,
     fullLastRow: false,
@@ -202,10 +192,29 @@ function BryntumChartShipment(props) {
   }
 
   for (const tableMap of Object.keys(colsRef.current)) {
-    schedulerproConfig.columns.push(generateColumnsObj(tableMap))
+    chartConfig.columns.push(generateColumnsObj(tableMap))
   }
 
   useEffect(() => {
+    setFilterList(
+      Object.keys(bryntumCurrentColumns).map(e => ({
+        key: e,
+        type: ganttChartTableMapping[e]?.type,
+      }))
+    )
+
+    if (gridRef.current && !firstRender.current) {
+      const { instance: scheduler } = gridRef.current
+      for (const col of Object.keys(ganttChartTableMapping)) {
+        if (scheduler.columns.get(col)) {
+          scheduler.columns.get(col).remove()
+        }
+      }
+      for (const newCol of Object.keys(bryntumCurrentColumns)) {
+        scheduler.columns.add(generateColumnsObj(newCol))
+      }
+    }
+
     if (bryntumCurrentColumns) {
       Object.keys(bryntumCurrentColumns).forEach(e => {
         const el = document.getElementById(`chart-column-${e}-button`)
@@ -309,11 +318,9 @@ function BryntumChartShipment(props) {
                     {snapshot.isDraggingOver && <div className="on-dragging" />}
                     <div className="rounded wrapper-bryntum-shipment-grid border-bryntum-table">
                       <BryntumGrid
-                        {...schedulerproConfig}
-                        autoSync
+                        {...chartConfig}
                         data={props.ganttChartTableData}
-                        syncDataOnLoad
-                        ref={schedulerProRef}
+                        ref={gridRef}
                       />
                     </div>
                   </div>

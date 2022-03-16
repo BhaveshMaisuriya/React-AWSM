@@ -1,15 +1,18 @@
-import React, { useState, useEffect, useMemo } from "react"
-import { connect } from "react-redux"
-import { Modal, ModalHeader, ModalBody, Table } from "reactstrap"
-import InputWithSuffix from "components/Common/TankStatusModal/InputWithSuffix"
-import ExitConfirmation from "components/Common/ExitConfirmation/index"
-import "./TankStatusModal.scss"
-import { updateSalesAndInventoryTankStatus, getSalesAndInventoryTankStatus } from "store/actions"
-import CloseButton from "components/Common/CloseButton"
-import { isScheduler } from "helpers/auth_helper"
-import { format } from "date-fns"
+import React, { useState, useEffect, useMemo } from 'react'
+import { connect } from 'react-redux'
+import { Modal, ModalHeader, ModalBody, Table } from 'reactstrap'
+import InputWithSuffix from 'components/Common/TankStatusModal/InputWithSuffix'
+import ExitConfirmation from 'components/Common/ExitConfirmation/index'
+import './TankStatusModal.scss'
+import {
+  updateSalesAndInventoryTankStatus,
+  getSalesAndInventoryTankStatus,
+} from 'store/actions'
+import CloseButton from 'components/Common/CloseButton'
+import { isScheduler } from 'helpers/auth_helper'
+import { format } from 'date-fns'
 
-const strArray = ["LV1", "LV2", "Normal", "TC"]
+const strArray = ['LV1', 'LV2', 'Normal', 'TC']
 
 const TankStatusModal = props => {
   const scheduler = isScheduler()
@@ -25,7 +28,7 @@ const TankStatusModal = props => {
   const [modalConfirm, setModalConfirm] = useState(false)
   const [unmodifiedStatus, setUnmodifiedStatus] = useState(true)
   const [data, setData] = useState({ ...tankStatus })
-  const currentDate = format(new Date(), "yyyy-MM-dd")
+  const currentDate = format(new Date(), 'yyyy-MM-dd')
   const isHistoricalDate = selectedDate !== currentDate
   const handleUpdateButtonOnclick = () => {
     onUpdateSalesAndInventoryTankStatus(data)
@@ -71,7 +74,10 @@ const TankStatusModal = props => {
 
   const showExitConfirmation = () => {
     return !unmodifiedStatus ? (
-      <ExitConfirmation onExit={handleExitModalConfirm} onCancel={handleCancelModalConfirm} />
+      <ExitConfirmation
+        onExit={handleExitModalConfirm}
+        onCancel={handleCancelModalConfirm}
+      />
     ) : (
       handleExitModalConfirm()
     )
@@ -79,19 +85,36 @@ const TankStatusModal = props => {
 
   const updatedInformation = useMemo(
     () =>
-      `Last Updated By: ${data.updated_by ? data?.updated_by?.toString()?.split("@")[0] : "Unknown"}
-    ${data.updated_at ? `on ${format(new Date(data?.updated_at), "do LLL yyyy")}` : ""}`,
+      `Last Updated By: ${
+        data.updated_by
+          ? data?.updated_by?.toString()?.split('@')[0]
+          : 'Unknown'
+      }
+    ${
+      data.updated_at
+        ? `on ${format(new Date(data?.updated_at), 'do LLL yyyy')}`
+        : ''
+    }`,
     [data?.updated_at, data?.updated_by]
   )
 
   return (
     <>
       <div className={`tank_status`}>
-        <Modal centered={true} isOpen={open} size={`lg`} className="tank-status-modal">
+        <Modal
+          centered={true}
+          isOpen={open}
+          size={`lg`}
+          className="tank-status-modal"
+        >
           <div className="variance-control-container">
-            <ModalHeader close={<CloseButton handleClose={() => setModalConfirm(true)} />}>
+            <ModalHeader
+              close={<CloseButton handleClose={() => setModalConfirm(true)} />}
+            >
               <span className="modal-title">{modalTitle}</span>
-              <span className="last-updated-sub-title">{updatedInformation}</span>
+              <span className="last-updated-sub-title">
+                {updatedInformation}
+              </span>
             </ModalHeader>
             <ModalBody className="variance-control-content position-relative">
               {modalConfirm && showExitConfirmation()}
@@ -100,10 +123,14 @@ const TankStatusModal = props => {
                   <Table responsive className="tank-status-table">
                     <thead>
                       <tr>
-                        <th className="item first-item header">Station Tank Status</th>
+                        <th className="item first-item header">
+                          Station Tank Status
+                        </th>
                         <th className="item header">Lower Value</th>
                         <th className="item header">Upper Value</th>
-                        <th className="item last-item header">Percentage (%)</th>
+                        <th className="item last-item header">
+                          Percentage (%)
+                        </th>
                       </tr>
                     </thead>
                     <tbody>
@@ -150,10 +177,12 @@ const TankStatusModal = props => {
                 </div>
                 <br />
                 <div className="col-md-7 capacity">
-                  <div className="capacity-title">Absolute Tank Capacity (%)</div>
+                  <div className="capacity-title">
+                    Absolute Tank Capacity (%)
+                  </div>
                   <InputWithSuffix
                     value={data?.absolute_tank_capacity}
-                    fieldName={"absolute_tank_capacity"}
+                    fieldName={'absolute_tank_capacity'}
                     inputType={`baseInput`}
                     TextOnChangeValue={handleOnchangeValueData}
                     isEdit={!scheduler && !isHistoricalDate}
@@ -194,8 +223,10 @@ const mapStateToProps = saleAndInventory => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  onGetSalesAndInventoryTankStatus: date => dispatch(getSalesAndInventoryTankStatus(date)),
-  onUpdateSalesAndInventoryTankStatus: data => dispatch(updateSalesAndInventoryTankStatus(data)),
+  onGetSalesAndInventoryTankStatus: date =>
+    dispatch(getSalesAndInventoryTankStatus(date)),
+  onUpdateSalesAndInventoryTankStatus: data =>
+    dispatch(updateSalesAndInventoryTankStatus(data)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(TankStatusModal)

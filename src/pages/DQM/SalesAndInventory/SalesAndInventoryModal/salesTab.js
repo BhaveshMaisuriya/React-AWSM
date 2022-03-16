@@ -68,22 +68,31 @@ const SalesTab = ({ data, onChange, inventoryData }) => {
       <div className="row">
         <div className="col-md-6 form-group">
           <label>
-            YESTERDAY'S SALES ADJUSTMENT (L)<span className="extra-lbl">D-1</span>
+            YESTERDAY'S SALES ADJUSTMENT (L)
+            <span className="extra-lbl">D-1</span>
           </label>
           <VarianceInput
             className="form-control awsm-input"
             value={validateNaN(data?.yesterday_sales_adjustment)}
-            onChange={value => onVarianceControlChange(value, 'yesterday_sales_adjustment')}
+            onChange={value =>
+              onVarianceControlChange(value, 'yesterday_sales_adjustment')
+            }
           />
         </div>
         <div className="col-md-6 form-group">
           <label>
-            YESTERDAY'S SALES ADJUSTMENT REMARKS<span className="extra-lbl">D-1</span>
+            YESTERDAY'S SALES ADJUSTMENT REMARKS
+            <span className="extra-lbl">D-1</span>
           </label>
           <input
             className="form-control awsm-input"
             value={data?.yesterday_sales_adjustment_remarks || ''}
-            onChange={e => onChangeHandler(e.target.value, 'yesterday_sales_adjustment_remarks')}
+            onChange={e =>
+              onChangeHandler(
+                e.target.value,
+                'yesterday_sales_adjustment_remarks'
+              )
+            }
           />
         </div>
       </div>
@@ -101,7 +110,9 @@ const SalesTab = ({ data, onChange, inventoryData }) => {
             className="form-control awsm-input"
             value={parseFloat(validateNaN(data?.sales_final_figure).toFixed(3))}
             disabled="true"
-            onChange={e => onChangeHandler(e.target.value, 'sales_final_figure')}
+            onChange={e =>
+              onChangeHandler(e.target.value, 'sales_final_figure')
+            }
           />
         </div>
         <div className="col-md-6 form-group">
@@ -134,7 +145,9 @@ const SalesTab = ({ data, onChange, inventoryData }) => {
             className="form-control awsm-input"
             value={data?.expected_sales ? data?.sales_variance_percent : 'NA'}
             disabled="true"
-            onChange={e => onChangeHandler(e.target.value, 'sales_variance_percent')}
+            onChange={e =>
+              onChangeHandler(e.target.value, 'sales_variance_percent')
+            }
           />
         </div>
       </div>

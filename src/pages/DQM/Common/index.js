@@ -1,73 +1,78 @@
-import React, { Component } from "react"
-import SearchBar from "components/Common/SearchBar"
-import TablePagination from "components/Common/Pagination"
-import PropTypes from "prop-types"
-import { withStyles } from "@material-ui/styles"
-import IconButton from "@material-ui/core/IconButton"
-import { connect } from "react-redux"
-import { Row, Col, Card, CardBody, Popover, PopoverBody } from "reactstrap"
-import { ReactSVG } from "react-svg"
-import { Link } from "react-router-dom"
-import customiseTableIcon from "assets/images/AWSM-Customise-Table.svg"
-import AuditLog from "components/Common/AuditLog"
-import Loader from "components/Common/Loader"
-import FixedColumnTable from "components/Common/FrozenTableColumn"
-import CustomizeTableModal from "components/Common/CustomizeTable"
-import { transformArrayToString, transformObjectToStringSentence, filterObject } from "./helper"
-import "./style.scss"
-import DownloadExcelButton from "components/Common/DownloadExcelS3"
-import AWSMAlert from "components/Common/AWSMAlert"
-import VarianceControl from "../SalesAndInventory/VarianceControl"
-import TankStatusModal from "../SalesAndInventory/TankStatusModal/TankStatusModal"
-import VarianceIcon from "assets/images/AWSM-Variance-Control.svg"
-import TankIcon from "assets/images/AWSM-Tank-Status.svg"
-import AWSMDropdown from "components/Common/Dropdown"
-import DatePicker from "components/Common/DatePicker"
-import REGION_TERMINAL from "common/data/regionAndTerminal"
-import { format, subDays } from "date-fns"
-import { CustomCSVIcon, CustomEyeIcon } from "./icon"
-import CsvFileUpload from "./CsvFileUpload"
-import { TERMINAL_CODE_MAPPING } from "common/data/regionAndTerminal"
-import { isEqual } from "lodash"
-import { isScheduler } from "helpers/auth_helper"
+import React, { Component } from 'react'
+import SearchBar from 'components/Common/SearchBar'
+import TablePagination from 'components/Common/Pagination'
+import PropTypes from 'prop-types'
+import { withStyles } from '@material-ui/styles'
+import IconButton from '@material-ui/core/IconButton'
+import { connect } from 'react-redux'
+import { Row, Col, Card, CardBody, Popover, PopoverBody } from 'reactstrap'
+import { ReactSVG } from 'react-svg'
+import { Link } from 'react-router-dom'
+import customiseTableIcon from 'assets/images/AWSM-Customise-Table.svg'
+import AuditLog from 'components/Common/AuditLog'
+import Loader from 'components/Common/Loader'
+import FixedColumnTable from 'components/Common/FrozenTableColumn'
+import CustomizeTableModal from 'components/Common/CustomizeTable'
+import {
+  transformArrayToString,
+  transformObjectToStringSentence,
+  filterObject,
+} from './helper'
+import './style.scss'
+import DownloadExcelButton from 'components/Common/DownloadExcelS3'
+import AWSMAlert from 'components/Common/AWSMAlert'
+import VarianceControl from '../SalesAndInventory/VarianceControl'
+import TankStatusModal from '../SalesAndInventory/TankStatusModal/TankStatusModal'
+import VarianceIcon from 'assets/images/AWSM-Variance-Control.svg'
+import TankIcon from 'assets/images/AWSM-Tank-Status.svg'
+import AWSMDropdown from 'components/Common/Dropdown'
+import DatePicker from 'components/Common/DatePicker'
+import REGION_TERMINAL from 'common/data/regionAndTerminal'
+import { format, subDays } from 'date-fns'
+import { CustomCSVIcon, CustomEyeIcon } from './icon'
+import CsvFileUpload from './CsvFileUpload'
+import { TERMINAL_CODE_MAPPING } from 'common/data/regionAndTerminal'
+import { isEqual } from 'lodash'
+import { isScheduler } from 'helpers/auth_helper'
 
 const styles = {
   headerText: {
-    marginLeft: "15px",
-    marginBottom: "15px",
-    paddingRight: "32px",
-    textAlign: "right",
-    fontSize: "14px",
-    letterSpacing: "0",
-    color: "#00A19C",
+    marginLeft: '15px',
+    marginBottom: '15px',
+    paddingRight: '32px',
+    textAlign: 'right',
+    fontSize: '14px',
+    letterSpacing: '0',
+    color: '#00A19C',
   },
   modalHeader: {
-    display: "flex",
+    display: 'flex',
     flexGrow: 1,
-    justifyContent: "space-between",
-    alignItems: "center",
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
 }
 class Pages extends Component {
-  defaultRegion = REGION_TERMINAL.find(option => option.region === "Central")?.region
-  defaultTerminal = REGION_TERMINAL.find(option => option.region === "Central")?.terminal?.find(
-    term => term === "KVDT"
-  )
+  defaultRegion = REGION_TERMINAL.find(option => option.region === 'Central')
+    ?.region
+  defaultTerminal = REGION_TERMINAL.find(
+    option => option.region === 'Central'
+  )?.terminal?.find(term => term === 'KVDT')
   constructor(props) {
     super(props)
     this.state = {
       currentPage: 0,
       rowsPerPage: 10,
-      searchTerm: "",
-      sortField: "",
-      sortDir: "",
+      searchTerm: '',
+      sortField: '',
+      sortDir: '',
       searchFields: this.props.tableColumns,
       q: {},
       modal: false,
       customizeModalOpen: false,
       selectedItem: null,
       loader: false,
-      error_message: "",
+      error_message: '',
       alert: false,
       varianceControl: false,
       tankStatusModal: false,
@@ -95,13 +100,16 @@ class Pages extends Component {
       limit: 10,
       page: currentPage,
       search_term: searchTerm,
-      search_fields: pathName === "/sales-inventory" ? "*" : transformArrayToString(searchFields),
+      search_fields:
+        pathName === '/sales-inventory'
+          ? '*'
+          : transformArrayToString(searchFields),
       q: transformObjectToStringSentence(q),
       sort_dir: sortDir,
       sort_field: sortField,
     }
-    if (pathName === "/sales-inventory") {
-      params.search_date = format(this.state.salesDate, "yyyy-MM-dd")
+    if (pathName === '/sales-inventory') {
+      params.search_date = format(this.state.salesDate, 'yyyy-MM-dd')
       params.terminal = TERMINAL_CODE_MAPPING[this.state.terminal]
     }
     if (params.q.length < 1) delete params.q
@@ -133,9 +141,9 @@ class Pages extends Component {
   handleQueryParameterChange = (qValue, type) => {
     const { q } = this.state
     let newQ = {}
-    if (type === "insert") {
+    if (type === 'insert') {
       newQ = { ...q, ...qValue }
-    } else if (type === "remove") {
+    } else if (type === 'remove') {
       newQ = { ...filterObject(q, qValue) }
     }
     this.resetPageNo()
@@ -212,8 +220,8 @@ class Pages extends Component {
     const newState = {
       modalTI: true,
     }
-    if (e && e.target && e.target.getAttribute("data-index") != null) {
-      newState.selectedItem = e.target.getAttribute("data-index")
+    if (e && e.target && e.target.getAttribute('data-index') != null) {
+      newState.selectedItem = e.target.getAttribute('data-index')
     }
     this.setState(newState)
   }
@@ -248,8 +256,8 @@ class Pages extends Component {
     const pathName = window.location.pathname
 
     return (modalTI && ModalComponent) ||
-      pathName === "/retail-customer" ||
-      pathName === "/commercial-customer" ? (
+      pathName === '/retail-customer' ||
+      pathName === '/commercial-customer' ? (
       <ModalComponent
         data={
           this.props.tableData && this.props.tableData.list
@@ -283,7 +291,8 @@ class Pages extends Component {
       {
         ...this.state,
         region: value,
-        terminal: REGION_TERMINAL.find(option => option.region === value)?.terminal?.[0],
+        terminal: REGION_TERMINAL.find(option => option.region === value)
+          ?.terminal?.[0],
       },
       this.onDateAndTerminalChange
     )
@@ -319,11 +328,14 @@ class Pages extends Component {
     const params = {
       limit: 10,
       page: 0,
-      sort_dir: "",
-      sort_field: "",
-      search_term: "",
-      search_fields: pathName === "/sales-inventory" ? "*" : transformArrayToString(searchFields),
-      search_date: salesDate ? format(salesDate, "yyyy-MM-dd") : "",
+      sort_dir: '',
+      sort_field: '',
+      search_term: '',
+      search_fields:
+        pathName === '/sales-inventory'
+          ? '*'
+          : transformArrayToString(searchFields),
+      search_date: salesDate ? format(salesDate, 'yyyy-MM-dd') : '',
       terminal: TERMINAL_CODE_MAPPING[terminal],
     }
     this.setState({
@@ -334,7 +346,7 @@ class Pages extends Component {
     }
   }
 
-  componentDidUpdate(prevProps, prevState, snapshot) {
+  componentDidUpdate(prevProps) {
     if (
       this.props.isUpdateSuccess &&
       !isEqual(this.props.isUpdateSuccess, prevProps.isUpdateSuccess)
@@ -357,7 +369,7 @@ class Pages extends Component {
       overrideActionColumn,
       subModule,
     } = this.props
-    if (!tableData || tableData.length === 0) return ""
+    if (!tableData || tableData.length === 0) return ''
     const scheduler = isScheduler()
     return (
       <React.Fragment>
@@ -374,14 +386,22 @@ class Pages extends Component {
         <VarianceControl
           open={this.state.varianceControl}
           closeDialog={() => this.setState({ varianceControl: false })}
-          selectedDate={this.state.salesDate ? format(this.state.salesDate, "yyyy-MM-dd") : ""}
+          selectedDate={
+            this.state.salesDate
+              ? format(this.state.salesDate, 'yyyy-MM-dd')
+              : ''
+          }
           refreshMainTable={this.getCustomerData}
         />
         <TankStatusModal
           open={this.state.tankStatusModal}
           handleClose={() => this.setState({ tankStatusModal: false })}
           modalTitle={`Tank Status`}
-          selectedDate={this.state.salesDate ? format(this.state.salesDate, "yyyy-MM-dd") : ""}
+          selectedDate={
+            this.state.salesDate
+              ? format(this.state.salesDate, 'yyyy-MM-dd')
+              : ''
+          }
           refreshMainTable={this.getCustomerData}
         />
         <div className="page-content">
@@ -392,8 +412,8 @@ class Pages extends Component {
                 className={`${classes.headerText} d-flex justify-content-between align-items-center`}
               >
                 <div className="vertical-hr-right">
-                  {(locationPath === "/retail-customer" ||
-                    locationPath === "/commercial-customer") &&
+                  {(locationPath === '/retail-customer' ||
+                    locationPath === '/commercial-customer') &&
                     !scheduler && (
                       <>
                         <button
@@ -404,7 +424,9 @@ class Pages extends Component {
                             <span className="download-icon-csv">
                               <CustomCSVIcon />
                             </span>
-                            <span className="download-button-message-csv">CSV File</span>
+                            <span className="download-button-message-csv">
+                              CSV File
+                            </span>
                             <div className="arrow-down" />
                           </div>
                         </button>
@@ -415,26 +437,32 @@ class Pages extends Component {
                           isOpen={this.state.showDownloadOption}
                           trigger="legacy"
                           style={{
-                            width: "150px",
-                            textAlign: "left",
-                            boxShadow: "#ccc 2px 1px 10px",
+                            width: '150px',
+                            textAlign: 'left',
+                            boxShadow: '#ccc 2px 1px 10px',
                           }}
                           toggle={() =>
                             this.setState({
-                              showDownloadOption: !this.state.showDownloadOption,
+                              showDownloadOption:
+                                !this.state.showDownloadOption,
                             })
                           }
                         >
                           <PopoverBody className="mainCsv">
                             <div className="csvDropdown">
                               <p onClick={() => this.uploadCSV()}>Upload CSV</p>
-                              <p onClick={() => this.downloadCSV()}>Download CSV</p>
+                              <p onClick={() => this.downloadCSV()}>
+                                Download CSV
+                              </p>
                             </div>
                           </PopoverBody>
                         </Popover>
                       </>
                     )}
-                  <DownloadExcelButton subModule={subModule} salesDate={this.props.salesDate} />
+                  <DownloadExcelButton
+                    subModule={subModule}
+                    salesDate={this.props.salesDate}
+                  />
                   <div className="separate" />
                 </div>
                 <Link
@@ -461,27 +489,29 @@ class Pages extends Component {
                       <div className={`table-top-bar`}>
                         <div
                           className={`top-page-number ${
-                            locationPath === "/sales-inventory" &&
-                            "sales-first col enteriesText-snl p-0"
+                            locationPath === '/sales-inventory' &&
+                            'sales-first col enteriesText-snl p-0'
                           }`}
                         >
                           <div className="enteriesText">
                             <p className="pr-2 mb-0">
                               {`${currentPage * rowsPerPage + 1} to ${
-                                tableData.total_rows - (currentPage * rowsPerPage + rowsPerPage) < 0
+                                tableData.total_rows -
+                                  (currentPage * rowsPerPage + rowsPerPage) <
+                                0
                                   ? tableData.total_rows
                                   : currentPage * rowsPerPage + rowsPerPage
                               } of ${tableData.total_rows} entries${
-                                locationPath === "/sales-inventory"
+                                locationPath === '/sales-inventory'
                                   ? `, ${this.props.overrideCount} record exceeds variance threshold`
-                                  : ""
+                                  : ''
                               }`}
                             </p>
-                            {locationPath === "/sales-inventory" && (
+                            {locationPath === '/sales-inventory' && (
                               <div className="separate-snl" />
                             )}
                           </div>
-                          {locationPath === "/sales-inventory" && (
+                          {locationPath === '/sales-inventory' && (
                             <div className="col-10 p-0 d-flex align-items-center ml-4">
                               <label className=" mb-0 pr-2">DATE</label>
                               <div className="col-2 w-100 p-0 mr-4">
@@ -493,13 +523,16 @@ class Pages extends Component {
                                   defaultValue={new Date()}
                                 />
                               </div>
-                              <label className="mb-0 pr-2 w-min">REGION & TERMINAL</label>
+                              <label className="mb-0 pr-2 w-min">
+                                REGION & TERMINAL
+                              </label>
                               <div className="d-flex w-100">
                                 <div className="col-3 p-0">
                                   <AWSMDropdown
                                     placeholder=""
                                     items={REGION_TERMINAL.filter(
-                                      option => option.region !== "*Special Product"
+                                      option =>
+                                        option.region !== '*Special Product'
                                     ).map(e => e.region)}
                                     value={this.state.region}
                                     onChange={this.onRegionChange}
@@ -509,8 +542,9 @@ class Pages extends Component {
                                   <AWSMDropdown
                                     placeholder=""
                                     items={
-                                      REGION_TERMINAL.find(e => e.region === this.state.region)
-                                        ?.terminal
+                                      REGION_TERMINAL.find(
+                                        e => e.region === this.state.region
+                                      )?.terminal
                                     }
                                     value={this.state.terminal}
                                     onChange={this.onTerminalChange}
@@ -522,13 +556,16 @@ class Pages extends Component {
                         </div>
                         <div
                           className={`d-flex align-items-center ${
-                            locationPath === "/sales-inventory" && "sales-first flex-custom"
+                            locationPath === '/sales-inventory' &&
+                            'sales-first flex-custom'
                           }`}
                         >
-                          {locationPath === "/sales-inventory" && (
+                          {locationPath === '/sales-inventory' && (
                             <>
                               <button
-                                onClick={() => this.setState({ varianceControl: true })}
+                                onClick={() =>
+                                  this.setState({ varianceControl: true })
+                                }
                                 className="btn btn-outline-primary modal-button"
                               >
                                 Threshold Control
@@ -536,7 +573,9 @@ class Pages extends Component {
                               </button>
                               <button
                                 className="btn btn-outline-primary ml-2 mr-2 modal-button"
-                                onClick={() => this.setState({ tankStatusModal: true })}
+                                onClick={() =>
+                                  this.setState({ tankStatusModal: true })
+                                }
                               >
                                 <ReactSVG src={TankIcon} />
                                 Tank Status
@@ -544,7 +583,10 @@ class Pages extends Component {
                               <div className="separate" />
                             </>
                           )}
-                          <IconButton aria-label="delete" onClick={this.handleOpenCustomizeTable}>
+                          <IconButton
+                            aria-label="delete"
+                            onClick={this.handleOpenCustomizeTable}
+                          >
                             <img src={customiseTableIcon} />
                           </IconButton>
                         </div>
@@ -565,20 +607,23 @@ class Pages extends Component {
                         rowsPerPage={rowsPerPage}
                         currentPage={currentPage}
                         onChangePage={this.handleChangePage}
-                        totalPages={Math.ceil(tableData.total_rows / rowsPerPage)}
+                        totalPages={Math.ceil(
+                          tableData.total_rows / rowsPerPage
+                        )}
                       />
                     </CardBody>
                   }
                 </Card>
               </Col>
-              {this.state.loader === false && this.state.error_message !== "" && (
-                <AWSMAlert
-                  status="error"
-                  message={this.state.error_message}
-                  openAlert={this.state.alert}
-                  closeAlert={() => this.setState({ alert: false })}
-                />
-              )}
+              {this.state.loader === false &&
+                this.state.error_message !== '' && (
+                  <AWSMAlert
+                    status="error"
+                    message={this.state.error_message}
+                    openAlert={this.state.alert}
+                    closeAlert={() => this.setState({ alert: false })}
+                  />
+                )}
               <AWSMAlert
                 status={this.state.csvStatus}
                 message={this.state.csvMessage}
@@ -586,7 +631,8 @@ class Pages extends Component {
                 closeAlert={() => this.setState({ csvAlert: false })}
               />
             </Row>
-            {(this.state.openCsvModal === true || this.state.downloadCsv === true) && (
+            {(this.state.openCsvModal === true ||
+              this.state.downloadCsv === true) && (
               <CsvFileUpload
                 currentPage={locationPath}
                 isOpen={this.state.openCsvModal}

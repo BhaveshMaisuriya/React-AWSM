@@ -1,10 +1,10 @@
-import React, { useEffect, useState, useRef, Fragment } from "react"
-import cloneDeep from "lodash/cloneDeep"
-import TablePagination from "../../../components/Common/Pagination"
+import React, { useEffect, useState, Fragment } from 'react'
+import cloneDeep from 'lodash/cloneDeep'
+import TablePagination from 'components/Common/Pagination'
 
 function SLATable(props) {
   const rowsPerPage = 10
-  const [value, setValue] = useState("")
+  const [value, setValue] = useState('')
   const [tableDatas, setTableDatas] = useState([])
   const [tableHeader, setTableHeader] = useState([])
   const [currentPage, setCurrentPage] = useState(0)
@@ -28,7 +28,9 @@ function SLATable(props) {
       const query = val.toLowerCase()
       setCurrentPage(0)
       const data = cloneDeep(
-        tableDatas.filter(item => item.name.toLowerCase().indexOf(query) > -1).slice(0, rowsPerPage)
+        tableDatas
+          .filter(item => item.name.toLowerCase().indexOf(query) > -1)
+          .slice(0, rowsPerPage)
       )
       setCollection(data)
     }
@@ -56,12 +58,16 @@ function SLATable(props) {
   }
 
   const headRow = () => {
-    return Object.values(tableHeader).map((title, index) => <td key={index}>{title}</td>)
+    return Object.values(tableHeader).map((title, index) => (
+      <td key={index}>{title}</td>
+    ))
   }
 
   return (
     <>
-      {tableDatas?.length === 0 && <p className="not_found">No Uploaded Documents Found!</p>}
+      {tableDatas?.length === 0 && (
+        <p className="not_found">No Uploaded Documents Found!</p>
+      )}
       {tableDatas?.length > 0 && (
         <Fragment>
           <div className="search">
@@ -75,7 +81,8 @@ function SLATable(props) {
           <div className="top-page-number">
             <div className="enteriesText">
               {`${currentPage * rowsPerPage + 1} to ${
-                tableDatas?.length - (currentPage * rowsPerPage + rowsPerPage) < 0
+                tableDatas?.length - (currentPage * rowsPerPage + rowsPerPage) <
+                0
                   ? tableDatas?.length
                   : currentPage * rowsPerPage + rowsPerPage
               } of ${tableDatas?.length} enteries`}

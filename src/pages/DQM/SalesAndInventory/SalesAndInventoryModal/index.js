@@ -1,5 +1,5 @@
-import React, { Component, Fragment } from "react"
-import { format } from "date-fns"
+import React, { Component, Fragment } from 'react'
+import { format } from 'date-fns'
 import {
   Modal,
   ModalHeader,
@@ -9,32 +9,31 @@ import {
   NavLink,
   NavItem,
   TabContent,
-  TabPane
-} from "reactstrap"
-import "./index.scss"
-import DetailsTab from "./detailsTab"
-import SalesTab from "./salesTab"
-import InventoryTab from "./inventoryTab"
-import DeliveryTab from "./deliveryTab"
+  TabPane,
+} from 'reactstrap'
+import './index.scss'
+import DetailsTab from './detailsTab'
+import SalesTab from './salesTab'
+import InventoryTab from './inventoryTab'
+import DeliveryTab from './deliveryTab'
 import {
   getDetailsSales,
-  updateSalesAndInventoryDetail
-} from "../../../../store/salesAndInventory/actions"
-import { connect } from "react-redux"
-import { isScheduler } from "../../../../helpers/auth_helper"
-import CloseButton from "../../../../components/Common/CloseButton"
-import ExitConfirmation from "../../../../components/Common/ExitConfirmation"
-import _ from "lodash"
+  updateSalesAndInventoryDetail,
+} from 'store/salesAndInventory/actions'
+import { connect } from 'react-redux'
+import CloseButton from 'components/Common/CloseButton'
+import ExitConfirmation from 'components/Common/ExitConfirmation'
+import _ from 'lodash'
 class SalesAndInventoryTableInformation extends Component {
   constructor(props) {
     super(props)
 
     this.state = {
-      activeTab: "1",
+      activeTab: '1',
       isDataModified: false,
       isConfirm: false,
       updateSuccess: false,
-      data: props.currentSalesAndInventory
+      data: props.currentSalesAndInventory,
     }
 
     // this.handleEvent = this.handleEvent.bind(this)
@@ -52,7 +51,10 @@ class SalesAndInventoryTableInformation extends Component {
   }
 
   componentDidMount() {
-    const { onGetSalesAndInventoryDetail, data: { trans_id: recordId } } = this.props
+    const {
+      onGetSalesAndInventoryDetail,
+      data: { trans_id: recordId },
+    } = this.props
     /*
       dispatch action to run saga for calling api for getting detail of record.
      */
@@ -68,9 +70,12 @@ class SalesAndInventoryTableInformation extends Component {
     if (prevState.name !== this.state.name) {
       this.handler()
     }
-    if (JSON.stringify(currentSalesAndInventory) !== JSON.stringify(previousSalesAndInventory)) {
+    if (
+      JSON.stringify(currentSalesAndInventory) !==
+      JSON.stringify(previousSalesAndInventory)
+    ) {
       this.setState({
-        data: currentSalesAndInventory
+        data: currentSalesAndInventory,
       })
     }
   }
@@ -83,7 +88,7 @@ class SalesAndInventoryTableInformation extends Component {
   onFieldValueChange = (fieldName, value) => {
     const newData = { ...this.state.data }
     if (_.isArray(fieldName)) {
-      for(let i = 0; i < fieldName.length; i++) {
+      for (let i = 0; i < fieldName.length; i++) {
         newData[fieldName[i]] = value[i]
       }
     } else {
@@ -93,12 +98,11 @@ class SalesAndInventoryTableInformation extends Component {
   }
 
   render() {
-    const scheduler = isScheduler()
     const {
       visible,
       onUpdateSalesAndInventoryDetail,
       data: { trans_id: recordId },
-      currentSalesAndInventory
+      currentSalesAndInventory,
     } = this.props
     const { activeTab, data, isConfirm } = this.state
     const toggle = tab => {
@@ -106,8 +110,6 @@ class SalesAndInventoryTableInformation extends Component {
         this.setState({ activeTab: tab })
       }
     }
-
-
 
     const handleUpdate = event => {
       event.preventDefault()
@@ -120,7 +122,7 @@ class SalesAndInventoryTableInformation extends Component {
         const { updated_at, updated_by, ...updateValue } = data
         const uploadData = {
           updateValue,
-          preValue
+          preValue,
         }
         onUpdateSalesAndInventoryDetail(recordId, uploadData)
       }
@@ -140,7 +142,11 @@ class SalesAndInventoryTableInformation extends Component {
 
     return (
       <>
-        <Modal centered={true} isOpen={visible} className="commercial-customer-modal modal-lg">
+        <Modal
+          centered={true}
+          isOpen={visible}
+          className="commercial-customer-modal modal-lg"
+        >
           <ModalHeader
             close={
               <CloseButton
@@ -149,11 +155,23 @@ class SalesAndInventoryTableInformation extends Component {
             }
           >
             <span className="modal-title">Record ID: {`${recordId}`}</span>
-            <span className="date-sub-title">| Date:
-              {this.props.salesDate && format(this.props.salesDate, "do LLL yyyy") || ""}
+            <span className="date-sub-title">
+              | Date:
+              {(this.props.salesDate &&
+                format(this.props.salesDate, 'do LLL yyyy')) ||
+                ''}
             </span>
             <span className="last-updated-sub-title">
-            {`Last Updated By: ${currentSalesAndInventory.updated_by?.split("@")[0] || "Unknown"} on ${currentSalesAndInventory.updated_at && format(new Date(currentSalesAndInventory.updated_at), "do LLL yyyy") || ""}`}
+              {`Last Updated By: ${
+                currentSalesAndInventory.updated_by?.split('@')[0] || 'Unknown'
+              } on ${
+                (currentSalesAndInventory.updated_at &&
+                  format(
+                    new Date(currentSalesAndInventory.updated_at),
+                    'do LLL yyyy'
+                  )) ||
+                ''
+              }`}
             </span>
           </ModalHeader>
 
@@ -164,9 +182,9 @@ class SalesAndInventoryTableInformation extends Component {
                 <Nav pills justified>
                   <NavItem>
                     <NavLink
-                      className={activeTab === "1" ? "active" : null}
+                      className={activeTab === '1' ? 'active' : null}
                       onClick={() => {
-                        toggle("1")
+                        toggle('1')
                       }}
                     >
                       <span>Details</span>
@@ -174,9 +192,9 @@ class SalesAndInventoryTableInformation extends Component {
                   </NavItem>
                   <NavItem>
                     <NavLink
-                      className={activeTab === "2" ? "active" : null}
+                      className={activeTab === '2' ? 'active' : null}
                       onClick={() => {
-                        toggle("2")
+                        toggle('2')
                       }}
                     >
                       <span>Sales</span>
@@ -184,9 +202,9 @@ class SalesAndInventoryTableInformation extends Component {
                   </NavItem>
                   <NavItem>
                     <NavLink
-                      className={activeTab === "3" ? "active" : null}
+                      className={activeTab === '3' ? 'active' : null}
                       onClick={() => {
-                        toggle("3")
+                        toggle('3')
                       }}
                     >
                       <span>Inventory</span>
@@ -194,9 +212,9 @@ class SalesAndInventoryTableInformation extends Component {
                   </NavItem>
                   <NavItem>
                     <NavLink
-                      className={activeTab === "4" ? "active" : null}
+                      className={activeTab === '4' ? 'active' : null}
                       onClick={() => {
-                        toggle("4")
+                        toggle('4')
                       }}
                     >
                       <span>Delivery</span>
@@ -213,7 +231,7 @@ class SalesAndInventoryTableInformation extends Component {
                     </div>
                   </TabPane>
                   <TabPane tabId="2">
-                  <div className="simple-bar-sale">
+                    <div className="simple-bar-sale">
                       <SalesTab
                         data={data?.sales}
                         inventoryData={data?.inventory}
@@ -266,13 +284,13 @@ class SalesAndInventoryTableInformation extends Component {
 
 const mapStateToProps = ({ saleAndInventory }) => ({
   currentSalesAndInventory: saleAndInventory?.currentSalesAndInventory,
-  isUpdateSuccess: saleAndInventory.currentSalesAndInventory?.isUpdateSuccess
+  isUpdateSuccess: saleAndInventory.currentSalesAndInventory?.isUpdateSuccess,
 })
 
 const mapDispatchToProps = dispatch => ({
   onGetSalesAndInventoryDetail: recordId => dispatch(getDetailsSales(recordId)),
   onUpdateSalesAndInventoryDetail: (recordId, data) =>
-    dispatch(updateSalesAndInventoryDetail(recordId, data))
+    dispatch(updateSalesAndInventoryDetail(recordId, data)),
 })
 
 export default connect(

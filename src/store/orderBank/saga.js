@@ -413,28 +413,28 @@ function* onDragOrderBankToGanttChart({ shift_date, vehicle, order_banks }) {
       // server will return order_banks with full orderBank, not just my {id}
       // const response = {
       //   data: {
-      //     soft_constraint: ['soft constraint detected'],
-      //     // hard_constraint: ['hard constraint detected'],
-      //     order_banks,
+      //     soft_constraints: ['soft constraint detected'],
+      //     // hard_constraints: ['hard constraint detected'],
+      //     data: order_banks,
       //   },
       // }
 
       const payload = {
-        orders: response.data.order_banks,
+        orders: order_banks,
         vehicle,
       }
 
       if (
-        response.data.hard_constraint &&
-        response.data.hard_constraint.length
+        response.data.hard_constraints &&
+        response.data.hard_constraints.length
       ) {
-        payload.constraints = response.data.hard_constraint
+        payload.constraints = response.data.hard_constraints
         payload.requiresConfirmation = false
       } else if (
-        response.data.soft_constraint &&
-        response.data.soft_constraint.length
+        response.data.soft_constraints &&
+        response.data.soft_constraints.length
       ) {
-        payload.constraints = response.data.soft_constraint
+        payload.constraints = response.data.soft_constraints
         payload.requiresConfirmation = true
       }
       yield put(dragOrderBankToGanttChartSuccess(payload))
@@ -445,22 +445,26 @@ function* onDragOrderBankToGanttChart({ shift_date, vehicle, order_banks }) {
   }
 }
 
-function* onDragOrderBankToGanttChartConfirm({
-  payload: { proceed, orderIndexes },
-}) {
+// function* onDragOrderBankToGanttChartConfirm({ proceed, orderIndexes }) {
+function* onDragOrderBankToGanttChartConfirm(params) {
+  const { payload } = params
+  const {
+    proceed = false,
+    orderIndexes = [],
+    justClearConstraints = false,
+  } = payload
+  const vehicle = yield select(
+    store => store?.orderBank?.selectedVehicleShipment
+  )
   try {
     if (proceed) {
-      const vehicle = yield select(
-        store => store?.orderBank?.selectedVehicleShipment
-      )
       const response = yield call(
         confirmSendOrderToVehicle({
           actionType: 'Proceed',
-          orderIndexes,
-          vehicle: vehicle.id,
+          order_banks: [...orderIndexes],
+          vehicle: vehicle.resourceId,
         })
       )
-
       // const response = {
       //   data: {
       //     orders: orderIndexes,
@@ -468,14 +472,17 @@ function* onDragOrderBankToGanttChartConfirm({
       //   },
       // }
       yield put(dragOrderBankToGanttChartSuccess(response.data))
-    } else
-      yield call(
-        confirmSendOrderToVehicle({
-          orderIndexes,
-          actionType: 'Cancel',
-          vehicle: vehicle.id,
-        })
-      )
+    } else {
+      if (!justClearConstraints) {
+        yield call(
+          confirmSendOrderToVehicle({
+            order_banks: [...orderIndexes],
+            actionType: 'Cancel',
+            vehicle: vehicle.resourceId,
+          })
+        )
+      }
+    }
   } catch (error) {
     console.error(error)
     yield put(dragOrderBankToGanttChartFail())

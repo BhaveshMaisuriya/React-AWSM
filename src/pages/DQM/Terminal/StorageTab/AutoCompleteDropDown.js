@@ -1,10 +1,9 @@
-import React, { useState } from "react"
-import { Dropdown, DropdownMenu, DropdownToggle, Input } from "reactstrap"
-// import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown"
-import { ReactSVG } from "react-svg"
-import ArrowDropDownIcon from "../../../../assets/images/AWSM-Dropdown.svg"
-import { isScheduler } from "helpers/auth_helper"
-import searchIcon from "../../../../assets/images/AWSM-search.svg"
+import React, { useState } from 'react'
+import { Dropdown, DropdownMenu, DropdownToggle, Input } from 'reactstrap'
+import { ReactSVG } from 'react-svg'
+import ArrowDropDownIcon from 'assets/images/AWSM-Dropdown.svg'
+import { isScheduler } from 'helpers/auth_helper'
+import searchIcon from 'assets/images/AWSM-search.svg'
 
 /**
  * Dropdown menu
@@ -22,7 +21,7 @@ const AutoCompleteDropDown = ({
   disabled = false,
   RowComponent = null,
   placeholder,
-  error = false
+  error = false,
 }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const toggle = () => setDropdownOpen(prevState => !prevState)
@@ -48,25 +47,24 @@ const AutoCompleteDropDown = ({
   const isDisableValue = isDisabledField.toString()
   return (
     <Dropdown isOpen={dropdownOpen} toggle={toggle}>
-      <DropdownToggle
-        data-toggle="dropdown"
-        tag="div"
-        // aria-expanded={dropdownOpen}
-        disabled={disabled}
-      >
+      <DropdownToggle data-toggle="dropdown" tag="div" disabled={disabled}>
         <div
           className={`awsm-select-toggle p-2 position-relative ${
-            disabled ? "disabled" : ""
-          } ${error ? "border-danger" : ""}`}
+            disabled ? 'disabled' : ''
+          } ${error ? 'border-danger' : ''}`}
         >
           <Input
             defaultValue={value ? value : placeholder}
             className={
-              isDisableValue === "true" ? "addl-value" : "addl-value-storage"
+              isDisableValue === 'true' ? 'addl-value' : 'addl-value-storage'
             }
             onChange={onChangeInput.bind(this)}
           ></Input>
-          {searchIcon ? <ReactSVG src={searchIcon} className="awsm-dropdown-arrow" /> : <ReactSVG src={ArrowDropDownIcon} className="awsm-dropdown-arrow" />}
+          {searchIcon ? (
+            <ReactSVG src={searchIcon} className="awsm-dropdown-arrow" />
+          ) : (
+            <ReactSVG src={ArrowDropDownIcon} className="awsm-dropdown-arrow" />
+          )}
         </div>
       </DropdownToggle>
       <DropdownMenu className="awsm-select-menu w-100">
@@ -85,7 +83,7 @@ const AutoCompleteDropDown = ({
                 onClick={() => onValueChange(item)}
                 className="awsm-select-item"
               >
-                {item?.code || "-"}
+                {item?.code || '-'}
               </div>
             )
           )}

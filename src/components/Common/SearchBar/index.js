@@ -1,27 +1,27 @@
-import React, { Component } from "react"
-import PropTypes from "prop-types"
-import { withStyles } from "@material-ui/styles"
-import InputBase from "@material-ui/core/InputBase"
-import IconButton from "@material-ui/core/IconButton"
-import SearchIcon from "../../../assets/images/AWSM-search.svg"
-import { isEqual } from "lodash"
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import { withStyles } from '@material-ui/styles'
+import InputBase from '@material-ui/core/InputBase'
+import IconButton from '@material-ui/core/IconButton'
+import SearchIcon from 'assets/images/AWSM-search.svg'
+import { isEqual } from 'lodash'
 
 const styles = {
   root: {
-    padding: "2px 4px",
-    display: "flex",
-    alignItems: "center",
-    height: "40px",
-    width: "376px",
-    border: "1px solid #D9D9D9",
-    borderRadius: "4px",
-    backgroundColor: "#FFFFFF",
+    padding: '2px 4px',
+    display: 'flex',
+    alignItems: 'center',
+    height: '40px',
+    width: '376px',
+    border: '1px solid #D9D9D9',
+    borderRadius: '4px',
+    backgroundColor: '#FFFFFF',
     // marginTop: "20px",
   },
   input: {
     marginLeft: 8,
     flex: 1,
-    fontSize: "13px",
+    fontSize: '13px',
   },
   iconButton: {
     padding: 10,
@@ -37,8 +37,8 @@ class SearchBar extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      searchBoxTextValue: "",
-      searchedTerm: "",
+      searchBoxTextValue: '',
+      searchedTerm: '',
     }
   }
 
@@ -51,9 +51,9 @@ class SearchBar extends Component {
       )
   }
 
-  getEnterClick = (e) => {
+  getEnterClick = e => {
     if (e.key === 'Enter') {
-      this.handleSearchOnClick();
+      this.handleSearchOnClick()
     }
   }
 
@@ -75,7 +75,7 @@ class SearchBar extends Component {
           onChange={inputValue =>
             this.handleSearchOnChange(inputValue.target.value)
           }
-          onKeyDown={(e) => this.getEnterClick(e)}
+          onKeyDown={e => this.getEnterClick(e)}
         />
         <IconButton
           className={classes.iconButton}

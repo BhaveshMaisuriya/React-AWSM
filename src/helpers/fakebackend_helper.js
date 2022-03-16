@@ -73,7 +73,7 @@ const postJwtRegister = (url, data) => {
       throw response.data
     })
     .catch(err => {
-      var message
+      let message
       if (err.response && err.response.status) {
         switch (err.response.status) {
           case 404:
@@ -512,7 +512,7 @@ export const sendOderToVehicle = params => {
 export function confirmSendOrderToVehicle(params) {
   return axios.post('/rts/order-bank/confirm-order-to-gantt', {
     vehicle: params.vehicle,
-    orders: params.orderIndexes,
+    order_banks: params.order_banks,
     actionType: params.actionType,
   })
 }

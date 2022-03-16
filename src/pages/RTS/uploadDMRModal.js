@@ -122,10 +122,10 @@ function UploadDMRModal(props) {
         />
       )}
       <Modal
+        centered
         isOpen={props.open}
         toggle={props.onCancel}
         id="auditLog-modal"
-        contentClassName="modalContainer"
       >
       <ModalHeader toggle={props.onCancel}>
         <h3>Upload DMR</h3>

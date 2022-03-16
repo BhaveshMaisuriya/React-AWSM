@@ -1,29 +1,28 @@
-import React from "react"
-import { Snackbar, IconButton } from "@material-ui/core"
-import CloseIcon from "@material-ui/icons/Close"
-import Alert from "@material-ui/lab/Alert"
-import CloseButton from "./../AlertCloseButton"
-import AlertSuccess from "./../../../assets/images/AWSM-success-alert.svg"
-import { alertConfig } from "./helper"
+import React from 'react'
+import { Snackbar, IconButton } from '@material-ui/core'
+import Alert from '@material-ui/lab/Alert'
+import CloseButton from './../AlertCloseButton'
+import AlertSuccess from 'assets/images/AWSM-success-alert.svg'
+import { alertConfig } from './helper'
 
 const AWSMAlert = ({ status, message, openAlert, closeAlert }) => {
-  let statusConfig = alertConfig[status] || alertConfig["error"]
-  let color = ""
-  let colorBack = ""
+  let statusConfig = alertConfig[status] || alertConfig['error']
+  let color = ''
+  let colorBack = ''
   switch (status) {
     case true:
-    case "success":
-      color = "#4CAF50"
-      colorBack = "#edf7ed"
+    case 'success':
+      color = '#4CAF50'
+      colorBack = '#edf7ed'
       break
     case false:
-    case "error":
-      color = "#f44336"
-      colorBack = "#fdecea"
+    case 'error':
+      color = '#f44336'
+      colorBack = '#fdecea'
       break
     default:
-      color = "#ff9800"
-      colorBack = "#fff4e5"
+      color = '#ff9800'
+      colorBack = '#fff4e5'
       break
   }
 
@@ -31,9 +30,9 @@ const AWSMAlert = ({ status, message, openAlert, closeAlert }) => {
     <Snackbar
       style={{
         border: `solid 1px ${statusConfig.color}`,
-        borderRadius: "5px",
-        width: "fit-content",
-        marginLeft: "auto",
+        borderRadius: '5px',
+        width: 'fit-content',
+        marginLeft: 'auto',
       }}
       open={openAlert}
       message={
@@ -46,9 +45,9 @@ const AWSMAlert = ({ status, message, openAlert, closeAlert }) => {
         </Alert>
       }
       ContentProps={{
-        style: { backgroundColor: statusConfig.colorBack, padding: "0 15px" },
+        style: { backgroundColor: statusConfig.colorBack, padding: '0 15px' },
       }}
-      anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
       onClose={closeAlert}
       autoHideDuration={3000}
       action={

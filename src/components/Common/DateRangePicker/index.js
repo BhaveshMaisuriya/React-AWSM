@@ -1,21 +1,21 @@
-import React, { useEffect, useMemo, useState } from "react"
-import { format, addMonths, addDays, startOfWeek } from "date-fns"
-import DayPicker from "react-day-picker"
-import "react-day-picker/lib/style.css"
-import "./day-picker.scss"
-import CheckBox from "@material-ui/core/Checkbox"
-import Popover from "@material-ui/core/Popover"
-import AWSM_Calendar from "../../../assets/images/AWSM-Calendar.svg"
-import { ReactSVG } from "react-svg"
-import { isValidDate } from "../../../pages/DQM/Common/helper"
+import React, { useEffect, useMemo, useState } from 'react'
+import { format, addMonths, addDays, startOfWeek } from 'date-fns'
+import DayPicker from 'react-day-picker'
+import 'react-day-picker/lib/style.css'
+import './day-picker.scss'
+import CheckBox from '@material-ui/core/Checkbox'
+import Popover from '@material-ui/core/Popover'
+import AWSM_Calendar from 'assets/images/AWSM-Calendar.svg'
+import { ReactSVG } from 'react-svg'
+import { isValidDate } from 'pages/DQM/Common/helper'
 
-const WEEK_DAYS = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"]
-const DISPLAY_DATE_FORMAT = "do MMM yyyy"
-const SAVE_DATE_FORMAT = "yyyy-MM-dd"
+const WEEK_DAYS = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']
+const DISPLAY_DATE_FORMAT = 'do MMM yyyy'
+const SAVE_DATE_FORMAT = 'yyyy-MM-dd'
 
 const dateObjectTemplate = {
   id: null,
-  type: "",
+  type: '',
   time_from: null,
   time_to: null,
   days: [],
@@ -29,10 +29,10 @@ const DateRangePicker = ({
   disabled = false,
   onChange = () => {},
   onBlur = () => {},
-  types = ["single", "range", "every", "daily"],
+  types = ['single', 'range', 'every', 'daily'],
   startDate = new Date(),
   endDate = null,
-  placeholder = "Select date",
+  placeholder = 'Select date',
   disablePreviousDayBeforeSelect = false,
   error = false,
   validateTime = false,
@@ -60,35 +60,37 @@ const DateRangePicker = ({
   }, [value])
 
   const isRange = useMemo(() => {
-    return value.type === "range"
+    return value.type === 'range'
   }, [value])
 
   const modifiers = useMemo(() => {
     const outRange = { before: startDate, after: endDate }
-    if (value.type === "every") {
+    if (value.type === 'every') {
       return {
         every: { daysOfWeek: getDay(value.days) },
         outRange: outRange,
       }
-    } else if (value.type === "range") {
+    } else if (value.type === 'range') {
       if (!value.date_to && !value.date_from) {
         return {
           outRange: outRange,
         }
       }
-      const dateTo = value.date_to ? new Date(value.date_to) : new Date(value.date_from)
+      const dateTo = value.date_to
+        ? new Date(value.date_to)
+        : new Date(value.date_from)
       const dateFrom = new Date(value.date_from)
       const range = {
         from: dateFrom,
         to: dateTo,
       }
       return [dateTo, dateFrom, range, outRange]
-    } else if (value.type === "daily") {
+    } else if (value.type === 'daily') {
       return {
         every: { daysOfWeek: [0, 1, 2, 3, 4, 5, 6] },
         outRange: outRange,
       }
-    } else if (value.type === "single") {
+    } else if (value.type === 'single') {
       return value.date_from
         ? [new Date(value.date_from), null, null, outRange]
         : [null, null, null, outRange]
@@ -98,41 +100,49 @@ const DateRangePicker = ({
   }, [selectedWeekDays, defaultValue, value, startDate, endDate])
 
   const labelValue = useMemo(() => {
-    if (!value || typeof value !== "object") {
-      return ""
+    if (!value || typeof value !== 'object') {
+      return ''
     }
-    if (value.type === "every") {
+    if (value.type === 'every') {
       if (value.days.length === 7) {
-        return "Every day"
+        return 'Every day'
       }
-      return value.days && value.days.length > 0 ? `Every ${value.days.join(", ")}` : ""
-    } else if (value.type === "range") {
+      return value.days && value.days.length > 0
+        ? `Every ${value.days.join(', ')}`
+        : ''
+    } else if (value.type === 'range') {
       if (value.date_from > value.date_to) {
         return `From ${
-          value.date_to ? format(new Date(value.date_to), DISPLAY_DATE_FORMAT) : "Select date"
+          value.date_to
+            ? format(new Date(value.date_to), DISPLAY_DATE_FORMAT)
+            : 'Select date'
         } to ${
           !value.date_from
-            ? "select another date"
+            ? 'select another date'
             : format(new Date(value.date_from), DISPLAY_DATE_FORMAT)
         }`
       } else {
         return `From ${
-          value.date_from ? format(new Date(value.date_from), DISPLAY_DATE_FORMAT) : "Select date"
+          value.date_from
+            ? format(new Date(value.date_from), DISPLAY_DATE_FORMAT)
+            : 'Select date'
         } to ${
           !value.date_to
-            ? "select another date"
+            ? 'select another date'
             : format(new Date(value.date_to), DISPLAY_DATE_FORMAT)
         }`
       }
-    } else if (value.type === "single") {
-      return value.date_from ? format(new Date(value.date_from), DISPLAY_DATE_FORMAT) : ""
-    } else if (value.type === "daily") {
-      return "Every day"
+    } else if (value.type === 'single') {
+      return value.date_from
+        ? format(new Date(value.date_from), DISPLAY_DATE_FORMAT)
+        : ''
+    } else if (value.type === 'daily') {
+      return 'Every day'
     }
   }, [value])
 
   const onWeekSelectDay = day => {
-    if (!types.includes("every")) {
+    if (!types.includes('every')) {
       return
     }
     const newSelectedDays = [...selectedWeekDays]
@@ -144,10 +154,12 @@ const DateRangePicker = ({
     }
     setValue({
       ...value,
-      type: newSelectedDays.length > 0 ? "every" : null,
+      type: newSelectedDays.length > 0 ? 'every' : null,
       days:
         newSelectedDays.length > 0
-          ? newSelectedDays.sort().map(day => format(addDays(startOfWeek(Date.now()), day), "cccc"))
+          ? newSelectedDays
+              .sort()
+              .map(day => format(addDays(startOfWeek(Date.now()), day), 'cccc'))
           : [],
       date_from: null,
       date_to: null,
@@ -156,32 +168,30 @@ const DateRangePicker = ({
 
   const onDayClick = day => {
     if (
-      (!types.includes("range") && !types.includes("single")) ||
-      (startDate && format(day, "yyyyMMdd") < format(startDate, "yyyyMMdd")) ||
-      (endDate && format(day, "yyyyMMdd") > format(endDate, "yyyyMMdd"))
+      (!types.includes('range') && !types.includes('single')) ||
+      (startDate && format(day, 'yyyyMMdd') < format(startDate, 'yyyyMMdd')) ||
+      (endDate && format(day, 'yyyyMMdd') > format(endDate, 'yyyyMMdd'))
     ) {
       return
     }
     const newValue = { ...value }
-    if (newValue.type === "range") {
+    if (newValue.type === 'range') {
       newValue.days = []
       if (newValue.date_to && value.date_from) {
         newValue.date_from = format(day, SAVE_DATE_FORMAT)
         newValue.date_to = null
       } else if (newValue.date_from) {
-        if(newValue.date_from > format(day, SAVE_DATE_FORMAT))
-        {
+        if (newValue.date_from > format(day, SAVE_DATE_FORMAT)) {
           newValue.date_to = newValue.date_from
           newValue.date_from = format(day, SAVE_DATE_FORMAT)
+        } else {
+          newValue.date_to = format(day, SAVE_DATE_FORMAT)
         }
-        else {
-        newValue.date_to = format(day, SAVE_DATE_FORMAT)
-      }
       } else {
         newValue.date_from = format(day, SAVE_DATE_FORMAT)
       }
     } else {
-      newValue.type = "single"
+      newValue.type = 'single'
       newValue.date_from = format(day, SAVE_DATE_FORMAT)
       newValue.date_to = null
     }
@@ -200,14 +210,16 @@ const DateRangePicker = ({
   }
 
   const open = Boolean(anchorEl)
-  const id = open ? "date-range-picker" : undefined
+  const id = open ? 'date-range-picker' : undefined
 
   const weekdayElement = ({ weekday }) => {
     return (
       <div
         onClick={() => onWeekSelectDay(weekday)}
         className={`DayPicker-Weekday ${
-          selectedWeekDays.includes(weekday) && value.type === "every" ? "select" : ""
+          selectedWeekDays.includes(weekday) && value.type === 'every'
+            ? 'select'
+            : ''
         }`}
         role="columnheader"
       >
@@ -236,7 +248,7 @@ const DateRangePicker = ({
               />
             </svg>
           </div>
-          <label className="px-2">{format(date, "MMMM-yyyy")}</label>
+          <label className="px-2">{format(date, 'MMMM-yyyy')}</label>
           <div onClick={() => setMonth(addMonths(month, 1))}>
             <svg
               className="DayPicker-icon"
@@ -265,7 +277,7 @@ const DateRangePicker = ({
   const onClear = () => {
     const newValue = {
       ...defaultValue,
-      type: defaultDate ? "single" : "",
+      type: defaultDate ? 'single' : '',
       days: [],
       date_from: defaultDate || null,
       date_to: null,
@@ -292,8 +304,13 @@ const DateRangePicker = ({
   }
 
   const dateError = useMemo(() => {
-    if (validateTime && value && (value.time_from || value.time_to) && !isValidDate(value)) {
-      return "Please select date"
+    if (
+      validateTime &&
+      value &&
+      (value.time_from || value.time_to) &&
+      !isValidDate(value)
+    ) {
+      return 'Please select date'
     }
     return false
   }, [value])
@@ -301,7 +318,7 @@ const DateRangePicker = ({
   const onRangeChange = () => {
     setValue({
       ...value,
-      type: !isRange ? "range" : "single",
+      type: !isRange ? 'range' : 'single',
       days: [],
       date_from: null,
       date_to: null,
@@ -322,14 +339,18 @@ const DateRangePicker = ({
         onClick={handleClick}
         onBlur={onBlur}
         className={`d-flex justify-content-between align-items-center py-2 w-100 calendar-label ${
-          (error || dateError) && !disabled && "border-danger"
-        } ${disabled ? "disabled" : ""}`}
+          (error || dateError) && !disabled && 'border-danger'
+        } ${disabled ? 'disabled' : ''}`}
       >
         <div className="date-picker-label">
           {!disabled && !labelValue ? placeholder : labelValue}
         </div>
-        {!disabled && <ReactSVG className="date-picker-icon" src={AWSM_Calendar} />}
-        {dateError && !disabled && <div className="calendar-error">{dateError}</div>}
+        {!disabled && (
+          <ReactSVG className="date-picker-icon" src={AWSM_Calendar} />
+        )}
+        {dateError && !disabled && (
+          <div className="calendar-error">{dateError}</div>
+        )}
       </button>
       <Popover
         id={id}
@@ -337,12 +358,12 @@ const DateRangePicker = ({
         anchorEl={anchorEl}
         onClose={handleClose}
         anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "center",
+          vertical: 'bottom',
+          horizontal: 'center',
         }}
         transformOrigin={{
-          vertical: "top",
-          horizontal: "center",
+          vertical: 'top',
+          horizontal: 'center',
         }}
         className="date-range-popover"
       >
@@ -354,10 +375,12 @@ const DateRangePicker = ({
             captionElement={captionElement}
             onDayClick={onDayClick}
             navbarElement={navbarElement}
-            disabledDays={disablePreviousDayBeforeSelect && [{ before: startDate }]}
+            disabledDays={
+              disablePreviousDayBeforeSelect && [{ before: startDate }]
+            }
           />
           <div className="d-flex justify-content-between align-items-center mb-2">
-            {types.includes("range") ? (
+            {types.includes('range') ? (
               <div className="d-flex align-items-center">
                 <CheckBox checked={isRange} onChange={() => onRangeChange()} />
                 <label>Start and End date</label>
@@ -366,7 +389,10 @@ const DateRangePicker = ({
               <div />
             )}
             <div className="d-flex pr-3">
-              <button className="btn btn-outline-primary mr-2 btn-date-range" onClick={onClear}>
+              <button
+                className="btn btn-outline-primary mr-2 btn-date-range"
+                onClick={onClear}
+              >
                 Clear
               </button>
               <button

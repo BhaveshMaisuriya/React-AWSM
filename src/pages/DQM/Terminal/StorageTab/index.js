@@ -1,8 +1,8 @@
-import React, { useState, useMemo, useEffect } from "react"
-import styles from "./storageTab.module.css"
-import Product from "./Product"
-import { isScheduler } from "../../../../helpers/auth_helper"
-import AWSMInputNumber from "../../../../components/Common/InputNumber"
+import React, { useState, useMemo, useEffect } from 'react'
+import styles from './storageTab.module.css'
+import Product from './Product'
+import { isScheduler } from 'helpers/auth_helper'
+import AWSMInputNumber from 'components/Common/InputNumber'
 
 const newProductTemplate = {
   id: null,
@@ -46,14 +46,14 @@ const StorageTab = ({ data, onChange, error_code, disabledUpdate }) => {
   }
 
   const onAddProduct = () => {
-    if (productList.length >= 20){
-      return;
+    if (productList.length >= 20) {
+      return
     }
-    let newProductKey = "product_1"
+    let newProductKey = 'product_1'
     if (productList.length > 0) {
-      const lastProductKey = productList.sort((a,b)=> a - b ).pop()
+      const lastProductKey = productList.sort((a, b) => a - b).pop()
       newProductKey =
-        "product_" + (Number(lastProductKey.substring(8)) + 1).toString()
+        'product_' + (Number(lastProductKey.substring(8)) + 1).toString()
     }
     const newStorageData = { ...storageData }
     newStorageData[newProductKey] = newProductTemplate
@@ -63,15 +63,15 @@ const StorageTab = ({ data, onChange, error_code, disabledUpdate }) => {
   const productList = useMemo(
     () =>
       Object.keys(storageData).filter(key => {
-        if (key !== "product_dropdown") return key.startsWith("product_")
+        if (key !== 'product_dropdown') return key.startsWith('product_')
       }),
     [storageData]
   )
   function renderExceedError(key, max) {
     if (storageData?.[key] > max) {
-      disabledUpdate(true);
+      disabledUpdate(true)
       return (
-        <p style={{ color: "#f46a6a", fontSize: "80%", marginTop: "5px" }}>
+        <p style={{ color: '#f46a6a', fontSize: '80%', marginTop: '5px' }}>
           Must not exceed {max}
         </p>
       )
@@ -82,57 +82,54 @@ const StorageTab = ({ data, onChange, error_code, disabledUpdate }) => {
     <div>
       <div className="d-flex">
         <div className="w-50 mr-12">
-          <label className={`${renderExceedError("loading_bay_no", 100)}`}>
+          <label className={`${renderExceedError('loading_bay_no', 100)}`}>
             NO OF LOADING BAY
           </label>
           <AWSMInputNumber
             disabled={scheduler}
             defaultValue={storageData?.loading_bay_no}
             placeholder="Numeric only"
-            onChange={value => onFieldChange("loading_bay_no", value)}
-            // max={100}
-            renderExceedError={renderExceedError("loading_bay_no", 100)}
+            onChange={value => onFieldChange('loading_bay_no', value)}
+            renderExceedError={renderExceedError('loading_bay_no', 100)}
           />
-          {renderExceedError("loading_bay_no", 100)}
+          {renderExceedError('loading_bay_no', 100)}
         </div>
         <div className="w-50 ml-12">
           <label>MAX VOL THRESHOLD</label>
           <AWSMInputNumber
             disabled={scheduler}
             defaultValue={storageData?.max_volume_threshold}
-            onChange={value => onFieldChange("max_volume_threshold", value)}
+            onChange={value => onFieldChange('max_volume_threshold', value)}
             placeholder="Numeric only"
           />
         </div>
       </div>
       <div className="d-flex mt-3">
         <div className="w-50 mr-12">
-          <label className={`${renderExceedError("loading_time", 1440)}`}>
+          <label className={`${renderExceedError('loading_time', 1440)}`}>
             LOADING TIME (MIN)
           </label>
           <AWSMInputNumber
             disabled={scheduler}
             defaultValue={storageData?.loading_time}
-            onChange={value => onFieldChange("loading_time", value)}
+            onChange={value => onFieldChange('loading_time', value)}
             placeholder="Numeric only"
-            renderExceedError={renderExceedError("loading_time", 1440)}
-            // max={1440}
+            renderExceedError={renderExceedError('loading_time', 1440)}
           />
-          {renderExceedError("loading_time", 1440)}
+          {renderExceedError('loading_time', 1440)}
         </div>
         <div className="w-50 ml-12">
-          <label className={`${renderExceedError("turnaround_time", 1440)}`}>
+          <label className={`${renderExceedError('turnaround_time', 1440)}`}>
             TURNAROUND TIME (MIN)
           </label>
           <AWSMInputNumber
             disabled={scheduler}
             defaultValue={storageData?.turnaround_time}
-            onChange={value => onFieldChange("turnaround_time", value)}
+            onChange={value => onFieldChange('turnaround_time', value)}
             placeholder="Numeric only"
-            renderExceedError={renderExceedError("turnaround_time", 1440)}
-            // max={1440}
+            renderExceedError={renderExceedError('turnaround_time', 1440)}
           />
-          {renderExceedError("turnaround_time", 1440)}
+          {renderExceedError('turnaround_time', 1440)}
         </div>
       </div>
       {productList.length < 1 && !scheduler && (
@@ -148,7 +145,7 @@ const StorageTab = ({ data, onChange, error_code, disabledUpdate }) => {
           </div>
         </div>
       )}
-      {productList.map((key, index) => {
+      {productList.map(key => {
         return (
           <Product
             key={key}
@@ -163,7 +160,7 @@ const StorageTab = ({ data, onChange, error_code, disabledUpdate }) => {
           />
         )
       })}
-      <hr style={{ margin: "2em 0" }} />
+      <hr style={{ margin: '2em 0' }} />
       {productList.length > 0 && !scheduler && (
         <div onClick={onAddProduct} className="mt-4 dqm-product-add">
           + Add product

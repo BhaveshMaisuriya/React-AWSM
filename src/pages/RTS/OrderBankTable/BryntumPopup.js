@@ -1,45 +1,45 @@
 /**
  * Popup Component
  */
-import React from "react"
-import "./BryntumPopup.scss"
-import CancelIcon from "../../../assets/images/AWSM-Cancel-Icon.svg"
-import BlockIcon from "@material-ui/icons/Block"
-import { connect } from "react-redux"
-import { getShipmentDetailsOnVehicle } from "../../../store/actions"
+import React from 'react'
+import './BryntumPopup.scss'
+import CancelIcon from 'assets/images/AWSM-Cancel-Icon.svg'
+import BlockIcon from '@material-ui/icons/Block'
+import { connect } from 'react-redux'
+import { getShipmentDetailsOnVehicle } from 'store/actions'
 
 const fakeData = [
   {
     station: {
       ship_to: 36114489,
-      name: "MAJU GAS TRADING",
-      planned_load_time: "09:00",
+      name: 'MAJU GAS TRADING',
+      planned_load_time: '09:00',
       loading_time: 1,
       duration_from_terminal: 3,
-      ETA: "13:00",
+      ETA: '13:00',
     },
     order_1: {
-      product: "Primax 97 Premium",
-      volume: "5460L",
-      station_category: "lv1",
+      product: 'Primax 97 Premium',
+      volume: '5460L',
+      station_category: 'lv1',
       dn_no: 1234,
     },
   },
   {
     station: {
       ship_to: 36114564,
-      name: "ONE SH TRADING",
+      name: 'ONE SH TRADING',
       planned_load_time: null,
       loading_time: null,
       duration_from_terminal: null,
-      ETA: "17:00",
-      depart_time_from_prev_station: "14:00",
+      ETA: '17:00',
+      depart_time_from_prev_station: '14:00',
       duration_from_prev_station: 3,
     },
     order_1: {
-      product: "Primax 95 Premium",
-      volume: "5460L",
-      station_category: "lv1",
+      product: 'Primax 95 Premium',
+      volume: '5460L',
+      station_category: 'lv1',
       dn_no: 1234,
       blocked_dn: true,
     },
@@ -54,16 +54,16 @@ class Popup extends React.Component {
     super()
 
     // Extract values used in the editor and keep them in state
-    const { eventRecord,shipmentDetailsOnVehicle } = props
+    const { eventRecord, shipmentDetailsOnVehicle } = props
     this.state = {
       startDate: null,
       endDate: null,
-      eventType: "Meeting",
-      location: "",
+      eventType: 'Meeting',
+      location: '',
       resourceId: null,
       id: null,
       duration: null,
-      durationUnit: "",
+      durationUnit: '',
     }
     for (const key in this.state) {
       if (eventRecord[key]) {
@@ -157,7 +157,7 @@ class Popup extends React.Component {
   render() {
     const convertLoadTime = (duration, durationUnit) => {
       switch (durationUnit) {
-        case "day":
+        case 'day':
           const hours = Math.floor(duration * 24)
           const minutes = (((duration * 24) % 1) * 60).toFixed(0)
           return `${hours}:${minutes}`
@@ -169,7 +169,7 @@ class Popup extends React.Component {
       <div className="popup-mask">
         <div className="popup">
           <header>
-            Shipment Details: Vehicle No {this.state.resourceId}&nbsp;{" "}
+            Shipment Details: Vehicle No {this.state.resourceId}&nbsp;{' '}
             <span className="close-popup" onClick={this.props.closePopup}>
               <img src={CancelIcon} />
             </span>
@@ -179,7 +179,8 @@ class Popup extends React.Component {
               <li>Terminal: KVDT M808</li>
               <li>Shipment No: {this.state.id}</li>
               <li>
-                Planned Load Time: {convertLoadTime(this.state.duration, this.state.durationUnit)}
+                Planned Load Time:{' '}
+                {convertLoadTime(this.state.duration, this.state.durationUnit)}
               </li>
             </ul>
           </div>
@@ -204,7 +205,9 @@ class Popup extends React.Component {
                       <p>Ship To: {order.station.ship_to}</p>
                       <p>Name: {order.station.name}</p>
                       {order.station.planned_load_time ? (
-                        <p>Planned load time: {order.station.planned_load_time}</p>
+                        <p>
+                          Planned load time: {order.station.planned_load_time}
+                        </p>
                       ) : null}
                     </td>
                     <td>
@@ -212,7 +215,9 @@ class Popup extends React.Component {
                         <div>
                           <p>Product: {order.order_1.product}</p>
                           <p>Volume: {order.order_1.volume}</p>
-                          <p>Station Category: {order.order_1.station_category}</p>
+                          <p>
+                            Station Category: {order.order_1.station_category}
+                          </p>
                           <p>DN No. : {order.order_1.dn_no}</p>
                           <p>
                             {order.order_1.blocked_dn ? (
@@ -223,7 +228,7 @@ class Popup extends React.Component {
                           </p>
                         </div>
                       ) : (
-                        "N.A"
+                        'N.A'
                       )}
                     </td>
                     <td>
@@ -231,7 +236,9 @@ class Popup extends React.Component {
                         <div>
                           <p>Product: {order.order_2.product}</p>
                           <p>Volume: {order.order_2.volume}</p>
-                          <p>Station Category: {order.order_2.station_category}</p>
+                          <p>
+                            Station Category: {order.order_2.station_category}
+                          </p>
                           <p>DN No. : {order.order_2.dn_no}</p>
                           <p>
                             {order.order_2.blocked_dn ? (
@@ -242,7 +249,7 @@ class Popup extends React.Component {
                           </p>
                         </div>
                       ) : (
-                        "N.A"
+                        'N.A'
                       )}
                     </td>
                     <td>
@@ -250,7 +257,9 @@ class Popup extends React.Component {
                         <div>
                           <p>Product: {order.order_3.product}</p>
                           <p>Volume: {order.order_3.volume}</p>
-                          <p>Station Category: {order.order_3.station_category}</p>
+                          <p>
+                            Station Category: {order.order_3.station_category}
+                          </p>
                           <p>DN No. : {order.order_3.dn_no}</p>
                           <p>
                             {order.order_3.blocked_dn ? (
@@ -261,7 +270,7 @@ class Popup extends React.Component {
                           </p>
                         </div>
                       ) : (
-                        "N.A"
+                        'N.A'
                       )}
                     </td>
                     <td>
@@ -269,7 +278,9 @@ class Popup extends React.Component {
                         <div>
                           <p>Product: {order.order_4.product}</p>
                           <p>Volume: {order.order_4.volume}</p>
-                          <p>Station Category: {order.order_4.station_category}</p>
+                          <p>
+                            Station Category: {order.order_4.station_category}
+                          </p>
                           <p>DN No. : {order.order_4.dn_no}</p>
                           <p>
                             {order.order_4.blocked_dn ? (
@@ -280,7 +291,7 @@ class Popup extends React.Component {
                           </p>
                         </div>
                       ) : (
-                        "N.A"
+                        'N.A'
                       )}
                     </td>
                     <td>
@@ -288,7 +299,9 @@ class Popup extends React.Component {
                         <div>
                           <p>Product: {order.order_5.product}</p>
                           <p>Volume: {order.order_5.volume}</p>
-                          <p>Station Category: {order.order_5.station_category}</p>
+                          <p>
+                            Station Category: {order.order_5.station_category}
+                          </p>
                           <p>DN No. : {order.order_5.dn_no}</p>
                           <p>
                             {order.order_5.blocked_dn ? (
@@ -299,7 +312,7 @@ class Popup extends React.Component {
                           </p>
                         </div>
                       ) : (
-                        "N.A"
+                        'N.A'
                       )}
                     </td>
                   </tr>
@@ -314,16 +327,15 @@ class Popup extends React.Component {
 }
 const mapStateToProps = ({ orderBank }) => {
   return {
-    shipmentDetailsOnVehicle: orderBank.shipmentDetailsOnVehicle
+    shipmentDetailsOnVehicle: orderBank.shipmentDetailsOnVehicle,
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    getShipmentDetailsOnVehicle: params => dispatch(getShipmentDetailsOnVehicle(params))
+    getShipmentDetailsOnVehicle: params =>
+      dispatch(getShipmentDetailsOnVehicle(params)),
   }
 }
-
-
 
 export default connect(mapStateToProps, mapDispatchToProps)(Popup)

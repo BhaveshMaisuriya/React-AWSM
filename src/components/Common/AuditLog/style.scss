@@ -1,5 +1,11 @@
 //STYLE FOR AUDIT LOG MODAL
 
+#auditLog-modal {
+  max-width: 900px;
+}
+
+// unnecessary styling
+// https://reactstrap.github.io/?path=/docs/components-modal--modal
 #auditLog-modal .modalContainer {
   width: 900px !important;
   height: 100%;

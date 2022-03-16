@@ -1,9 +1,9 @@
-import React, { useState,useEffect } from "react"
-import { Dropdown, DropdownToggle, DropdownMenu, Input } from "reactstrap"
-import "./timePicker.scss"
+import React, { useState, useEffect } from 'react'
+import { Dropdown, DropdownToggle, DropdownMenu } from 'reactstrap'
+import './timePicker.scss'
 // import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown"
-import { ReactSVG } from "react-svg"
-import ArrowDropDownIcon from "../../../../assets/images/AWSM-Dropdown.svg"
+import { ReactSVG } from 'react-svg'
+import ArrowDropDownIcon from 'assets/images/AWSM-Dropdown.svg'
 /**
  *
  * @param items
@@ -31,7 +31,7 @@ const AWSMDropdown = ({
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const toggle = () => setDropdownOpen(prevState => !prevState)
   const [itemSelected, setValue] = useState(
-    (!value) ? "Select time" : items ? value : ""
+    !value ? 'Select time' : items ? value : ''
   )
   const itemsRef = React.createRef()
   itemsRef.current = []
@@ -45,15 +45,18 @@ const AWSMDropdown = ({
   }
 
   // here using ref to scroll the selected item into view
-  useEffect(()=>{
-    if (dropdownOpen && itemsRef.current && itemsRef.current.length > 0){
-      const indexSelectedRef = itemsRef.current.findIndex(ref => ref?.classList.contains("bg-primary-green"))
+  useEffect(() => {
+    if (dropdownOpen && itemsRef.current && itemsRef.current.length > 0) {
+      const indexSelectedRef = itemsRef.current.findIndex(ref =>
+        ref?.classList.contains('bg-primary-green')
+      )
       const element = itemsRef.current?.[indexSelectedRef]
-      if (indexSelectedRef !== -1 && element){
-          element.parentNode.scrollTop = element.offsetTop -  element.parentNode.offsetTop
+      if (indexSelectedRef !== -1 && element) {
+        element.parentNode.scrollTop =
+          element.offsetTop - element.parentNode.offsetTop
       }
     }
-  },[dropdownOpen])
+  }, [dropdownOpen])
 
   return (
     <Dropdown isOpen={dropdownOpen} toggle={toggle}>
@@ -66,29 +69,38 @@ const AWSMDropdown = ({
       >
         <div
           className={`awsm-select-toggle p-2 position-relative  ${
-            disabled ? "disabled" : ""
-          } ${!disabled && error ? "border-danger" : ""}`}
+            disabled ? 'disabled' : ''
+          } ${!disabled && error ? 'border-danger' : ''}`}
         >
-          <div>{value && value !== "None" ? value.toString().substring(0, 5) : disabled ? "" : "Select time"}</div>
-          {!disabled && <ReactSVG src={ArrowDropDownIcon} className="awsm-dropdown-arrow" />}
-          {!disabled && error && <div className="time-error">
-            {error}
-          </div>}
+          <div>
+            {value && value !== 'None'
+              ? value.toString().substring(0, 5)
+              : disabled
+              ? ''
+              : 'Select time'}
+          </div>
+          {!disabled && (
+            <ReactSVG src={ArrowDropDownIcon} className="awsm-dropdown-arrow" />
+          )}
+          {!disabled && error && <div className="time-error">{error}</div>}
         </div>
       </DropdownToggle>
       <DropdownMenu className="awsm-select-menu w-100" flip={flip}>
         {items &&
-        (hasNone ? ["None"].concat(items) : items).map((item, index) => (
+          (hasNone ? ['None'].concat(items) : items).map((item, index) => (
             <div
               ref={ref => itemsRef.current.push(ref)}
               key={index}
               onClick={() => onValueChange(item, index)}
               // highlight selected item here
               className={`awsm-select-item 
-              ${(itemSelected === item || 
-                value?.toString().substring(0,5) === item ||
-                (!value && item === "None")) && 
-                "bg-primary-green text-white"}`}>
+              ${
+                (itemSelected === item ||
+                  value?.toString().substring(0, 5) === item ||
+                  (!value && item === 'None')) &&
+                'bg-primary-green text-white'
+              }`}
+            >
               {item}
             </div>
           ))}

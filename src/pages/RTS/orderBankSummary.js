@@ -12,9 +12,12 @@ const OrderBankSummary = props => {
     setSMP(0)
     if (data) {
       data.map(item => {
-        if (item.order_type.toString().toUpperCase() === 'ASR') setASR(item.volume)
-        else if (item.order_type.toString().toUpperCase() === 'COMM') setComm(item.volume)
-        else if (item.order_type.toString().toUpperCase() === 'SMP') setSMP(item.volume)
+        if (item.order_type.toString().toUpperCase() === 'ASR')
+          setASR(item.volume)
+        else if (item.order_type.toString().toUpperCase() === 'COMM')
+          setComm(item.volume)
+        else if (item.order_type.toString().toUpperCase() === 'SMP')
+          setSMP(item.volume)
       })
     }
   }, [data])
@@ -24,10 +27,14 @@ const OrderBankSummary = props => {
     const numberOfDigits = absoluteValue.toString().length
     let result = 0
     if (numberOfDigits < 4) result = absoluteValue
-    else if (numberOfDigits < 7) result = (absoluteValue / 1000).toFixed(1) + 'k'
-    else if (numberOfDigits < 10) result = (absoluteValue / 1000000).toFixed(1) + 'm'
-    else if (numberOfDigits < 13) result = (absoluteValue / 1000000000).toFixed(1) + 'b'
-    else if (numberOfDigits < 16) result = (absoluteValue / 1000000000000).toFixed(1) + 't'
+    else if (numberOfDigits < 7)
+      result = (absoluteValue / 1000).toFixed(1) + 'k'
+    else if (numberOfDigits < 10)
+      result = (absoluteValue / 1000000).toFixed(1) + 'm'
+    else if (numberOfDigits < 13)
+      result = (absoluteValue / 1000000000).toFixed(1) + 'b'
+    else if (numberOfDigits < 16)
+      result = (absoluteValue / 1000000000000).toFixed(1) + 't'
     return result
   }
 
@@ -38,9 +45,11 @@ const OrderBankSummary = props => {
 
   return (
     <>
-      {`${totalOrders} orders, ${validateWithOrders(asr)} ASR, ${validateWithOrders(
-        smp
-      )} SMP, ${validateWithOrders(comm)} Comm, Total ${validateWithOrders(asr + smp + comm)}`}
+      {`${totalOrders} orders, ${validateWithOrders(
+        asr
+      )} ASR, ${validateWithOrders(smp)} SMP, ${validateWithOrders(
+        comm
+      )} Comm, Total ${validateWithOrders(asr + smp + comm)}`}
     </>
   )
 }

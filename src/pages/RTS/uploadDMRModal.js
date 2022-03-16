@@ -52,8 +52,10 @@ function UploadDMRModal(props) {
   useEffect(async() => {
     const { uploadDMR, uploadDMRError } = props;
     if(uploadDMR !== null || uploadDMRError !== null){
-      if (!!uploadDMR) {
-        props.alertShow();
+      if (uploadDMRError === null) {
+        props.alertShow('success');
+      } else {
+        props.alertShow('error');
       }
       props.onSave();
       

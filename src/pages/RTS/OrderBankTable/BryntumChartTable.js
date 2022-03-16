@@ -24,7 +24,7 @@ import {
   getShipmentOfOderBankGanttChart,
   removeEvent,
   updateOBEvent,
-  getGanttEventValidation,
+  // getGanttEventValidation,
   selectVehicleShipment,
   dragOrderBankToGanttChart,
   updateShipment,
@@ -1001,8 +1001,8 @@ const mapDispatchToProps = dispatch => {
     getShipmentOfOderBankGanttChart: params =>
       dispatch(getShipmentOfOderBankGanttChart(params)),
     updateOBEvent: params => dispatch(updateOBEvent(params)),
-    getGanttEventValidation: params =>
-      dispatch(getGanttEventValidation(params)),
+    // getGanttEventValidation: params =>
+      // dispatch(getGanttEventValidation(params)),
     onRemoveEvent: params => dispatch(removeEvent(params)),
     onSelectVehicle: params => dispatch(selectVehicleShipment(params)),
     dragOrderBankToGanttChart: payload =>

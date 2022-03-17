@@ -333,9 +333,10 @@ function* sendRequestPaymentInGanttChart({ payload }) {
   // <payload> is Event data, consult factory.js
   try {
     // HACK: US 258072 - GanttChart Create-Shipment
-    const response = yield call(createShipment, { id: payload.id })
+    // const response = yield call(createShipment, { id: payload.id })
     // const response = { data: { id: payload.id, scheduled_status: 'BlockedDN' } }
-    yield put(processPaymentInGanttChartSuccess(response.data))
+    // yield put(processPaymentInGanttChartSuccess(response.data))
+    console.log(payload)
   } catch (error) {
     yield put(processPaymentInGanttChartFail(error))
   }
@@ -345,38 +346,39 @@ function* sendRequestCancelPaymentInGanttChart({ payload }) {
   // <payload> is Event data, consult factory.js
   try {
     // HACK: US 258067 - GanttChart Cancel-Shipment
-    const response = yield call(cancelShipment, { id: payload.id })
+    // const response = yield call(cancelShipment, { id: payload.id })
     // const response = { data: { id: 632, scheduled_status: 'PendingShipment' } }
-    yield put(cancelPaymentInGanttChartSuccess(response.data))
+    // yield put(cancelPaymentInGanttChartSuccess(response.data))
+    console.log(payload)
   } catch (error) {
     yield put(cancelPaymentInGanttChartFail(error))
   }
 }
 
-function* sendRequestOrderPaymentInGanttChart({ params }) {
+function* sendRequestOrderPaymentInGanttChart({ payload }) {
   // <params> is Event data, consult factory.js
   try {
-    const ids = [params.id]
-
-    const response = yield call(sendRTSOrderBank, ids)
-    yield put(sendOrderInGanttChartSuccess(response.data))
+    // const ids = [params.id]
+    console.log(payload)
+    // const response = yield call(sendRTSOrderBank, ids)
+    // yield put(sendOrderInGanttChartSuccess(response.data))
   } catch (error) {
     yield put(sendOrderInGanttChartFail(error))
   }
 }
 
-function* onGetRTSOrderBankGanttChart({ params }) {
+function* onGetRTSOrderBankGanttChart({ payload }) {
   try {
-    const response = yield call(getRTSOderBankGanttChart, params)
-    const payload = {
+    const response = yield call(getRTSOderBankGanttChart, payload)
+    const params = {
       ...response,
-      page: params.page,
-      shiftDate: params.filter.shift_date.date_from,
+      page: payload.page,
+      shiftDate: payload.filter.shift_date.date_from,
     }
     // console.log(params)
     // page > 0 means user is scrolling
-    payload.scrolling = params.page > 0
-    yield put(getRTSOderBankGanttChartSuccess(payload))
+    params.scrolling = payload.page > 0
+    yield put(getRTSOderBankGanttChartSuccess(params))
   } catch (error) {
     console.error(error)
     yield put(getRTSOderBankGanttChartFail(error))
@@ -401,6 +403,9 @@ function* onDragOrderBankToGanttChart({ shift_date, vehicle, order_banks }) {
         store => store.orderBank.selectedVehicleShipment
       )
       vehicle = selectedVehicle.resourceId
+      shift_date = yield select(
+        store => store.orderBank.ganttChart.terminal.shiftDate
+      )
     }
 
     if (order_banks && order_banks.length > 0) {

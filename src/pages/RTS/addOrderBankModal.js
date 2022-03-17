@@ -197,7 +197,7 @@ const NewOrderBankModal = props => {
   }
 
   const onFieldChange = (key, value) => {
-    setUpdatedData(true);
+    setUpdatedData(true)
     const newOrderData = { ...orderData }
     if (key === 'product_name') {
       const pro_code = allProductDetailList.find(res => res.name === value)
@@ -231,7 +231,7 @@ const NewOrderBankModal = props => {
 
   const onSearchOrder = async () => {
     setCurrentState('loading')
-    setUpdatedData(false);
+    setUpdatedData(false)
     const { onGetTableInformation } = props
     await onGetTableInformation({ ship_to_party: shiptoNo })
   }
@@ -283,7 +283,7 @@ const NewOrderBankModal = props => {
 
   const onCancelClick = () => {
     if ((shiptoNo !== '' || defaultDate !== shiftDate) && updatedData === true) {
-      setIsConfirm(true);
+      setIsConfirm(true)
     } else {
       onCancel('cancel')
       setCurrentState('')

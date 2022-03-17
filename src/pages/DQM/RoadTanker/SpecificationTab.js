@@ -53,9 +53,10 @@ class SpecificationTab extends PureComponent {
       let restriction_dropdown = data?.restriction_code_dropdown
       let restriction = data?.restriction_code
 
-      restriction_value = data?.restriction_code_dropdown.find(val => {
-        return val.code === restriction
-      })?.description
+      // restriction_value = data?.restriction_code_dropdown.find(val => {
+      //   return val.code === restriction
+      // })?.description
+
       const rtRestriction =
         !isRTRestrictionAdding && restriction_dropdown ? (
           <AutoCompleteSearchDropDown

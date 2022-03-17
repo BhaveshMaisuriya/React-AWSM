@@ -131,10 +131,9 @@ export function factorizeGanttChartEventBar({
       specialRequests: srs,
       highPriorities: hps,
       requestedDeliveryDates,
+      resourceOrder: !data.shipment ? [{ DNNumber: data.dn_no }] : [],
     },
   }
-
-  !data.shipment && (event.resourceOrder = [{ DNNumber: data.dn_no }])
 
   return event
 }

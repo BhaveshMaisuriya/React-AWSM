@@ -1,0 +1,19 @@
+parameters:
+  - name: folder_name
+    type: string
+  - name: bucket_name
+    type: string
+  - name: cf_distribution
+    type: string
+
+steps:
+  - task: AWSShellScript@1
+    displayName: Deploy to S3
+    inputs:
+      awsCredentials: AWS-DEV
+      regionName: ap-southeast-1
+      scriptType: inline
+      inlineScript: |
+        aws s3 sync ${{ parameters.folder_name }} s3://${{ parameters.bucket_name }}/ --delete --exclude '*.svg'
+        aws s3 sync ${{ parameters.folder_name }} s3://${{ parameters.bucket_name }}/ --delete --exclude '*' --include '*.svg' --content-type 'image/svg+xml'
+        aws cloudfront create-invalidation --distribution-id ${{ parameters.cf_distribution }} --paths "/*"

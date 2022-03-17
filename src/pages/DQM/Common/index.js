@@ -503,7 +503,7 @@ class Pages extends Component {
                                   : currentPage * rowsPerPage + rowsPerPage
                               } of ${tableData.total_rows} entries${
                                 locationPath === '/sales-inventory'
-                                  ? `, ${this.props.overrideCount} record exceeds variance threshold`
+                                  ? `, ${this.props.overrideCount} record exceeds variance threshold...`
                                   : ''
                               }`}
                             </p>

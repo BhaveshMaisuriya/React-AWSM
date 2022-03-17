@@ -10,7 +10,6 @@ const ConfirmDNStatusModal = ({
   headerContent,
   bodyContent,
   styleColor = 'success',
-  requiresConfirmation,
 }) => {
   return (
     <Modal isOpen={isOpen} style={{ top: '30%', maxWidth: '530px' }}>
@@ -18,19 +17,17 @@ const ConfirmDNStatusModal = ({
         {headerContent}
       </ModalHeader>
       <ModalBody>{bodyContent}</ModalBody>
-      {requiresConfirmation && (
-        <ModalFooter>
-          <button
-            className={`btn btn-outline-${styleColor} mr-2`}
-            onClick={onCancel}
-          >
-            Cancel
-          </button>
-          <Button className={`btn btn-${styleColor}`} onClick={onSend}>
-            Proceed
-          </Button>
-        </ModalFooter>
-      )}
+      <ModalFooter>
+        <button
+          className={`btn btn-outline-${styleColor} mr-2`}
+          onClick={onCancel}
+        >
+          Cancel
+        </button>
+        <Button className={`btn btn-${styleColor}`} onClick={onSend}>
+          Proceed
+        </Button>
+      </ModalFooter>
     </Modal>
   )
 }

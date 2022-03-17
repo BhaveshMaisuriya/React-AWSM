@@ -53,9 +53,9 @@ function UploadDMRModal(props) {
     const { uploadDMR, uploadDMRError } = props;
     if(uploadDMR !== null || uploadDMRError !== null){
       if (uploadDMRError === null) {
-        props.alertShow('success');
+        props.alertShow('success')
       } else {
-        props.alertShow('error');
+        props.alertShow('error')
       }
       props.onSave();
       

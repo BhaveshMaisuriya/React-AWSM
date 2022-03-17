@@ -427,7 +427,7 @@ class index extends Component {
       }
       return (
         (v != 'notes' || expandSearch) && (
-          <td key={data[v] + index}>{result}</td>
+          <td key={data[v] + index + v}>{result}</td>
         )
       )
     })

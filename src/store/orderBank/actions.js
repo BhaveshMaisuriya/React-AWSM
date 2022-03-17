@@ -438,9 +438,9 @@ export const getCrossTerminalFail = error => ({
   payload: error,
 })
 
-export const processPaymentInGanttChart = params => ({
+export const processPaymentInGanttChart = payload => ({
   type: PROCESS_PAYMENT_IN_GANTT_CHART,
-  payload: params,
+  payload,
 })
 
 export const processPaymentInGanttChartSuccess = response => ({
@@ -453,9 +453,9 @@ export const processPaymentInGanttChartFail = error => ({
   payload: error,
 })
 
-export const cancelPaymentInGanttChart = params => ({
+export const cancelPaymentInGanttChart = payload => ({
   type: CANCEL_PAYMENT_IN_GANTT_CHART,
-  payload: params,
+  payload,
 })
 
 export const cancelPaymentInGanttChartSuccess = response => ({
@@ -468,9 +468,9 @@ export const cancelPaymentInGanttChartFail = error => ({
   payload: error,
 })
 
-export const sendOrderInGanttChart = params => ({
+export const sendOrderInGanttChart = payload => ({
   type: SEND_ORDER_IN_GANTT_CHART,
-  params,
+  payload,
 })
 
 export const sendOrderInGanttChartSuccess = response => ({
@@ -483,9 +483,9 @@ export const sendOrderInGanttChartFail = error => ({
   payload: error,
 })
 
-export const getRTSOderBankGanttChart = params => ({
+export const getRTSOderBankGanttChart = payload => ({
   type: GET_RTS_GANTT_CHART_DATA,
-  params,
+  payload,
 })
 
 export const getRTSOderBankGanttChartSuccess = response => ({

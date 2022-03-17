@@ -202,6 +202,7 @@ function OrderBank({
   const [showDeleteOption, setShowDeleteOption] = useState(false)
   const [clearScheduling, setClearScheduling] = useState(false)
   const [showAlertDMR, setShowAlertDMR] = useState(false)
+  const [DMRMsg, setDMRMsg] = useState('')
   const [showAlertCrossTerminal, setShowAlertCrossTerminal] = useState(false)
   const [deleteCheck, setDeleteCheck] = useState(deleteCheckOption)
   const [checkedValue, setCheckedValue] = useState('Manual Scheduling')
@@ -468,7 +469,8 @@ function OrderBank({
     setReloadData(false)
   }
 
-  const onGetShowAlert = () => {
+  const onGetShowAlert = (val) => {
+    setDMRMsg(val)
     setShowAlertDMR(!showAlertDMR)
   }
 
@@ -1423,8 +1425,8 @@ function OrderBank({
               )}
               {showAlertDMR && (
                 <AWSMAlert
-                  status="success"
-                  message="Data has successfully been updated via CSV file"
+                  status={DMRMsg}
+                  message={DMRMsg === 'success' ? "Data has successfully been updated via CSV file" : "Key already exist!"}
                   openAlert={showAlertDMR}
                   closeAlert={() => setShowAlertDMR(false)}
                 />

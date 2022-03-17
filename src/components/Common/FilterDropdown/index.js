@@ -9,6 +9,7 @@ import './index.scss'
 import ReplayIcon from '@material-ui/icons/Replay'
 import { format } from 'date-fns'
 import CustomCheckbox from 'components/Common/CustomCheckbox'
+import moment from 'moment'
 
 const FilterDropdown = ({
   handleResetAll,
@@ -339,7 +340,7 @@ const FilterDropdown = ({
                         ) {
                           return row?.text && row?.text.length < 24
                             ? '-'
-                            : format(new Date(row.text), 'dd-MM-yyyy HH:mm')
+                            : moment(row.text).utc().format('DD-MM-yyyy HH:mm')
                         }
                         if (dataKey === 'requested_delivery_date') {
                           return checkNullValue(row.text)

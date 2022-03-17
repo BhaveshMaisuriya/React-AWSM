@@ -27,7 +27,6 @@
     "@testing-library/jest-dom": "^5.11.6",
     "@testing-library/react": "^11.2.2",
     "@testing-library/user-event": "^12.2.2",
-    "@toast-ui/react-chart": "^1.0.2",
     "@vtaits/react-color-picker": "^0.1.1",
     "apexcharts": "^3.22.2",
     "availity-reactstrap-validation": "^2.7.0",

@@ -34,6 +34,7 @@ import {
   OrderTab,
 } from './exportAllTab'
 import moment from 'moment'
+import CloseButton from 'components/Common/CloseButton'
 
 const timeData = []
 const navItems = [
@@ -73,8 +74,14 @@ const EditOrderBankModal = props => {
   useEffect(() => {
     if (editorderBankData) {
       const temp = { ...editorderBankData }
-      temp.planned_load_time = temp.planned_load_time === null || temp.planned_load_time === '' ? temp.planned_load_time : moment(temp?.planned_load_time).utc().format('HH:mm');
-      temp.eta = temp.eta === null || temp.eta === '' ? temp.eta : moment(temp?.eta).utc().format('HH:mm');
+      temp.planned_load_time =
+        temp.planned_load_time === null || temp.planned_load_time === ''
+          ? temp.planned_load_time
+          : moment(temp?.planned_load_time).utc().format('HH:mm')
+      temp.eta =
+        temp.eta === null || temp.eta === ''
+          ? temp.eta
+          : moment(temp?.eta).utc().format('HH:mm')
       setEditOrderData(temp)
       setoriginalEditOrderData(temp)
 
@@ -119,7 +126,9 @@ const EditOrderBankModal = props => {
       volume: parseInt(editOrderData?.volume),
       eta: editOrderData?.requested_delivery_date + ' ' + editOrderData?.eta,
       planned_load_time:
-        editOrderData?.requested_delivery_date + ' ' + editOrderData?.planned_load_time,
+        editOrderData?.requested_delivery_date +
+        ' ' +
+        editOrderData?.planned_load_time,
       order_remarks: editOrderData?.order_remarks,
       priority: editOrderData?.priority,
       vehicle: editOrderData?.vehicle,
@@ -251,7 +260,7 @@ const EditOrderBankModal = props => {
 
   return (
     <Modal isOpen={open} className="new-order-modal">
-      <ModalHeader toggle={toggle}>
+      <ModalHeader close={<CloseButton handleClose={toggle} />}>
         <span className="modal-title">
           View/Edit Details: Order ID {editOrderData?.id}
         </span>

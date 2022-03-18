@@ -421,7 +421,7 @@ const NewOrderBankModal = props => {
   }
 
   return (
-    <Modal centered={true} isOpen={open} className="new-order-modal">
+    <Modal isOpen={open} className="new-order-modal">
       <ModalHeader close={<CloseButton handleClose={onCancelClick} />}>
         <span className="modal-title">Add New order</span>
       </ModalHeader>

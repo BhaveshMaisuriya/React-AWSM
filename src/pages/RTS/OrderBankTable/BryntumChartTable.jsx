@@ -730,7 +730,7 @@ function BryntumChartTable(props) {
           isOpen={modal}
           onSend={() => sendRequestsHandler(null)}
           onCancel={() => setModal(!modal)}
-          onClose={() => setModal(!modal)}
+          // onClose={() => setModal(!modal)}
           headerContent={contextMenuItem?.header ?? ''}
           bodyContent={`Are you sure you want to ${
             contextMenuItem?.body ?? ''

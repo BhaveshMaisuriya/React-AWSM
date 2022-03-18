@@ -87,11 +87,7 @@ const OrderBankRoadTankerModal = ({
   }
 
   return (
-    <Modal
-      centered={true}
-      isOpen={isOpen}
-      className="modal-xl commercial-customer-modal"
-    >
+    <Modal isOpen={isOpen} className="modal-lg commercial-customer-modal">
       <ModalHeader close={<CloseButton handleClose={handleClose} />}>
         <div className="header-title">Vehicle: {selectedVehicleID}</div>
       </ModalHeader>

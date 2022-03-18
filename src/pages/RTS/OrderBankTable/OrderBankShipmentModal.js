@@ -1,15 +1,15 @@
 import { Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap'
 import { connect } from 'react-redux'
 import { shipmentTableColumns } from './tableMapping'
-
+import CloseButton from 'components/Common/CloseButton'
 function OrderBankShipmentModal(props) {
   function toggle() {
     props.istoggle()
   }
   return (
     <>
-      <Modal centered isOpen={props.open} toggle={toggle} id="auditLog-modal">
-        <ModalHeader toggle={toggle}>
+      <Modal isOpen={props.open}>
+        <ModalHeader close={<CloseButton handleClose={toggle} />}>
           <span class="h3">Shipment Details: Vehicle No VBF 5559</span>
         </ModalHeader>
         <ModalBody>

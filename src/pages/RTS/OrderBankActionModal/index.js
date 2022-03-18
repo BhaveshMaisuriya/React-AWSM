@@ -1,8 +1,16 @@
-import React, { useState, useEffect } from "react"
-import { Modal, ModalBody, ModalHeader, ModalFooter} from "reactstrap"
-import "./index.scss"
+import React from 'react'
+import { Modal, ModalBody, ModalHeader, ModalFooter } from 'reactstrap'
+import CloseButton from 'components/Common/CloseButton'
+import './index.scss'
 
-const OrderBankActionModal = ({open, title, subTitle, onClose, type, onSubmit}) => {
+const OrderBankActionModal = ({
+  open,
+  title,
+  subTitle,
+  onClose,
+  type,
+  onSubmit,
+}) => {
   const onSubmitClick = () => {
     if (onSubmit) {
       onSubmit()
@@ -13,16 +21,18 @@ const OrderBankActionModal = ({open, title, subTitle, onClose, type, onSubmit}) 
   }
 
   return (
-    <Modal centered={true} isOpen={open} className="order-bank-action-modal">
-      <ModalHeader toggle={onClose}>
+    <Modal isOpen={open} className="order-bank-action-modal">
+      <ModalHeader close={<CloseButton handleClose={onClose} />}>
         {title}
       </ModalHeader>
-      <ModalBody>
-        {subTitle}
-      </ModalBody>
+      <ModalBody>{subTitle}</ModalBody>
       <ModalFooter className="d-flex align-items-center justify-content-end">
-        <button className="btn btn-outline-primary" onClick={onClose}>Cancel</button>
-        <button className="btn btn-primary" onClick={onSubmitClick}>{type === "RefreshDN" ? "Refresh" : "Send"}</button>
+        <button className="btn btn-outline-primary" onClick={onClose}>
+          Cancel
+        </button>
+        <button className="btn btn-primary" onClick={onSubmitClick}>
+          {type === 'RefreshDN' ? 'Refresh' : 'Send'}
+        </button>
       </ModalFooter>
     </Modal>
   )

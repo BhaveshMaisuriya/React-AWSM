@@ -232,7 +232,7 @@ const VarianceControl = ({
   )
 
   return (
-    <Modal centered={true} isOpen={open} className="variance-control-modal">
+    <Modal isOpen={open} className="variance-control-modal">
       <div className="variance-control-container">
         <ModalHeader
           close={<CloseButton handleClose={() => setIsConfirm(true)} />}

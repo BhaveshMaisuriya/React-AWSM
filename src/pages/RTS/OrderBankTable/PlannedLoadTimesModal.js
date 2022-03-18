@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import moment from 'moment'
 import { Modal, ModalBody, ModalHeader } from 'reactstrap'
 import AWSMInput from 'components/Common/Input'
+import CloseButton from 'components/Common/CloseButton'
 
 const PlannedLoadTimesModal = ({ isOpen, onSend, onCancel, data }) => {
   const [form, setForm] = useState({
@@ -40,8 +41,10 @@ const PlannedLoadTimesModal = ({ isOpen, onSend, onCancel, data }) => {
   }
 
   return (
-    <Modal isOpen={isOpen} className="deleteModal">
-      <ModalHeader toggle={onCancel}>Planned Load Time</ModalHeader>
+    <Modal isOpen={isOpen}>
+      <ModalHeader close={<CloseButton handleClose={onCancel} />}>
+        Planned Load Time
+      </ModalHeader>
       <ModalBody className="pl-4 terminal-relay">
         <p>Please enter the correct planned load time for this shipment</p>
         <div className="mb-2 terminal-relay">PLANNED LOAD TIME (00:00)</div>

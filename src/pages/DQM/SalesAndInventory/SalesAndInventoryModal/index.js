@@ -141,143 +141,137 @@ class SalesAndInventoryTableInformation extends Component {
     }
 
     return (
-      <>
-        <Modal
-          centered={true}
-          isOpen={visible}
-          className="commercial-customer-modal modal-lg"
+      <Modal isOpen={visible} className="commercial-customer-modal modal-lg">
+        <ModalHeader
+          close={
+            <CloseButton
+              handleClose={() => this.setState({ isConfirm: true })}
+            />
+          }
         >
-          <ModalHeader
-            close={
-              <CloseButton
-                handleClose={() => this.setState({ isConfirm: true })}
-              />
-            }
-          >
-            <span className="modal-title">Record ID: {`${recordId}`}</span>
-            <span className="date-sub-title">
-              | Date:
-              {(this.props.salesDate &&
-                format(this.props.salesDate, 'do LLL yyyy')) ||
-                ''}
-            </span>
-            <span className="last-updated-sub-title">
-              {`Last Updated By: ${
-                currentSalesAndInventory.updated_by?.split('@')[0] || 'Unknown'
-              } on ${
-                (currentSalesAndInventory.updated_at &&
-                  format(
-                    new Date(currentSalesAndInventory.updated_at),
-                    'do LLL yyyy'
-                  )) ||
-                ''
-              }`}
-            </span>
-          </ModalHeader>
+          <span className="modal-title">Record ID: {`${recordId}`}</span>
+          <span className="date-sub-title">
+            | Date:
+            {(this.props.salesDate &&
+              format(this.props.salesDate, 'do LLL yyyy')) ||
+              ''}
+          </span>
+          <span className="last-updated-sub-title">
+            {`Last Updated By: ${
+              currentSalesAndInventory.updated_by?.split('@')[0] || 'Unknown'
+            } on ${
+              (currentSalesAndInventory.updated_at &&
+                format(
+                  new Date(currentSalesAndInventory.updated_at),
+                  'do LLL yyyy'
+                )) ||
+              ''
+            }`}
+          </span>
+        </ModalHeader>
 
-          <ModalBody>
-            {this.state.isConfirm && handleExitConfirmation()}
-            <Fragment>
-              <div>
-                <Nav pills justified>
-                  <NavItem>
-                    <NavLink
-                      className={activeTab === '1' ? 'active' : null}
-                      onClick={() => {
-                        toggle('1')
-                      }}
-                    >
-                      <span>Details</span>
-                    </NavLink>
-                  </NavItem>
-                  <NavItem>
-                    <NavLink
-                      className={activeTab === '2' ? 'active' : null}
-                      onClick={() => {
-                        toggle('2')
-                      }}
-                    >
-                      <span>Sales</span>
-                    </NavLink>
-                  </NavItem>
-                  <NavItem>
-                    <NavLink
-                      className={activeTab === '3' ? 'active' : null}
-                      onClick={() => {
-                        toggle('3')
-                      }}
-                    >
-                      <span>Inventory</span>
-                    </NavLink>
-                  </NavItem>
-                  <NavItem>
-                    <NavLink
-                      className={activeTab === '4' ? 'active' : null}
-                      onClick={() => {
-                        toggle('4')
-                      }}
-                    >
-                      <span>Delivery</span>
-                    </NavLink>
-                  </NavItem>
-                </Nav>
-                <TabContent activeTab={activeTab}>
-                  <TabPane tabId="1">
-                    <div className="simple-bar-sale">
-                      <DetailsTab
-                        data={data?.details}
-                        onChange={this.onFieldValueChange}
-                      />
-                    </div>
-                  </TabPane>
-                  <TabPane tabId="2">
-                    <div className="simple-bar-sale">
-                      <SalesTab
-                        data={data?.sales}
-                        inventoryData={data?.inventory}
-                        onChange={this.onFieldValueChange}
-                      />
-                    </div>
-                  </TabPane>
-                  <TabPane tabId="3">
-                    <div className="simple-bar-sale">
-                      <InventoryTab
-                        data={data?.inventory}
-                        onChange={this.onFieldValueChange}
-                        salesDate={this.props.salesDate}
-                      />
-                    </div>
-                  </TabPane>
-                  <TabPane tabId="4">
-                    <div className="simple-bar-sale">
-                      <DeliveryTab
-                        data={data?.delivery}
-                        onChange={this.onFieldValueChange}
-                      />
-                    </div>
-                  </TabPane>
-                </TabContent>
-              </div>
-            </Fragment>
-          </ModalBody>
-          {!isConfirm && (
-            <ModalFooter>
-              <button
-                className="btn-sec px-4"
-                onClick={() => this.setState({ isConfirm: true })}
-              >
-                Cancel
-              </button>
-              <button
-                className="btn btn-primary ml-2 px-4"
-                onClick={e => handleUpdate(e)}
-              >
-                Update
-              </button>
-            </ModalFooter>
-          )}
-        </Modal>
-      </>
+        <ModalBody>
+          {this.state.isConfirm && handleExitConfirmation()}
+          <Fragment>
+            <div>
+              <Nav pills justified>
+                <NavItem>
+                  <NavLink
+                    className={activeTab === '1' ? 'active' : null}
+                    onClick={() => {
+                      toggle('1')
+                    }}
+                  >
+                    <span>Details</span>
+                  </NavLink>
+                </NavItem>
+                <NavItem>
+                  <NavLink
+                    className={activeTab === '2' ? 'active' : null}
+                    onClick={() => {
+                      toggle('2')
+                    }}
+                  >
+                    <span>Sales</span>
+                  </NavLink>
+                </NavItem>
+                <NavItem>
+                  <NavLink
+                    className={activeTab === '3' ? 'active' : null}
+                    onClick={() => {
+                      toggle('3')
+                    }}
+                  >
+                    <span>Inventory</span>
+                  </NavLink>
+                </NavItem>
+                <NavItem>
+                  <NavLink
+                    className={activeTab === '4' ? 'active' : null}
+                    onClick={() => {
+                      toggle('4')
+                    }}
+                  >
+                    <span>Delivery</span>
+                  </NavLink>
+                </NavItem>
+              </Nav>
+              <TabContent activeTab={activeTab}>
+                <TabPane tabId="1">
+                  <div className="simple-bar-sale">
+                    <DetailsTab
+                      data={data?.details}
+                      onChange={this.onFieldValueChange}
+                    />
+                  </div>
+                </TabPane>
+                <TabPane tabId="2">
+                  <div className="simple-bar-sale">
+                    <SalesTab
+                      data={data?.sales}
+                      inventoryData={data?.inventory}
+                      onChange={this.onFieldValueChange}
+                    />
+                  </div>
+                </TabPane>
+                <TabPane tabId="3">
+                  <div className="simple-bar-sale">
+                    <InventoryTab
+                      data={data?.inventory}
+                      onChange={this.onFieldValueChange}
+                      salesDate={this.props.salesDate}
+                    />
+                  </div>
+                </TabPane>
+                <TabPane tabId="4">
+                  <div className="simple-bar-sale">
+                    <DeliveryTab
+                      data={data?.delivery}
+                      onChange={this.onFieldValueChange}
+                    />
+                  </div>
+                </TabPane>
+              </TabContent>
+            </div>
+          </Fragment>
+        </ModalBody>
+        {!isConfirm && (
+          <ModalFooter>
+            <button
+              className="btn-sec px-4"
+              onClick={() => this.setState({ isConfirm: true })}
+            >
+              Cancel
+            </button>
+            <button
+              className="btn btn-primary ml-2 px-4"
+              onClick={e => handleUpdate(e)}
+            >
+              Update
+            </button>
+          </ModalFooter>
+        )}
+      </Modal>
     )
   }
 }

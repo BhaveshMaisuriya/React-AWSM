@@ -577,18 +577,18 @@ export const removeEventSuccess = params => ({
   params,
 })
 
-export const updateOBEvent = params => ({
-  type: UPDATE_OB_EVENT,
-  params,
-})
-export const updateOBEventSuccess = params => ({
-  type: UPDATE_OB_EVENT_SUCCESS,
-  params,
-})
-export const updateOBEventFail = params => ({
-  type: UPDATE_OB_EVENT_FAIL,
-  params,
-})
+// export const updateOBEvent = params => ({
+//   type: UPDATE_OB_EVENT,
+//   params,
+// })
+// export const updateOBEventSuccess = params => ({
+//   type: UPDATE_OB_EVENT_SUCCESS,
+//   params,
+// })
+// export const updateOBEventFail = params => ({
+//   type: UPDATE_OB_EVENT_FAIL,
+//   params,
+// })
 
 export const getWebsocketMessageSuccess = data => ({
   type: GET_WEB_SOCKET_MESSAGE_SUCCESS,

@@ -12,6 +12,7 @@ import Box from '@material-ui/core/Box'
 import CloseIcon from '@material-ui/icons/Close'
 import CheckIcon from '@material-ui/icons/Check'
 import { getUploadCsv, getDownloadCsv, setUploadCsv } from 'store/actions'
+import CloseButton from 'components/Common/CloseButton'
 
 function CsvFileUpload(props) {
   const [alert, setAlert] = useState(true)
@@ -158,14 +159,15 @@ function CsvFileUpload(props) {
           closeAlert={() => setAlert(false)}
         />
       )}
-      <Modal
-        centered
-        isOpen={props.isOpen}
-        toggle={props.toggle}
-        id="auditLog-modal"
-      >
+      <Modal isOpen={props.isOpen} id="auditLog-modal">
         <ModalHeader
-          toggle={isDragActive || uploading === true ? '' : props.toggle}
+          close={
+            <CloseButton
+              handleClose={
+                isDragActive || uploading === true ? '' : props.toggle
+              }
+            />
+          }
         >
           <h3>Upload CSV File</h3>
         </ModalHeader>

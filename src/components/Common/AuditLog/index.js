@@ -155,42 +155,40 @@ class AuditLog extends Component {
     const { rowsAudit, auditLog, isOpen, toggle } = this.props
     const { currentPage } = this.state
     return (
-      <React.Fragment>
-        <Modal centered isOpen={isOpen} toggle={toggle} id="auditLog-modal">
-          <ModalHeader close={<CloseButton handleClose={toggle} />}>
-            <h3>Audit Log</h3>
-          </ModalHeader>
-          <div className="tracking-list">
-            <div className="date-time">
-              <b>DATE/TIME</b>
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <b>ACTION</b>
-            </div>
-            {auditLog?.list.length === 0 ? (
-              <div className="audit-no-records">
-                <p>No Records Found!</p>
-              </div>
-            ) : (
-              <div className="container-data">
-                {auditLog?.list.map((audit, idx) => (
-                  <div key={idx} className="tracking-item">
-                    {' '}
-                    {this.modalData(audit, idx)}
-                  </div>
-                ))}
-              </div>
-            )}
-            <div>&nbsp;</div>
-            <TablePagination
-              rowsPerPage={rowsAudit}
-              currentPage={currentPage}
-              onChangePage={this.handlePageChange}
-              totalPages={Math.ceil(auditLog?.total_rows / rowsAudit)}
-              numShownPages={9}
-            />
+      <Modal isOpen={isOpen} id="auditLog-modal">
+        <ModalHeader close={<CloseButton handleClose={toggle} />}>
+          <h3>Audit Log</h3>
+        </ModalHeader>
+        <div className="tracking-list">
+          <div className="date-time">
+            <b>DATE/TIME</b>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <b>ACTION</b>
           </div>
-        </Modal>
-      </React.Fragment>
+          {auditLog?.list.length === 0 ? (
+            <div className="audit-no-records">
+              <p>No Records Found!</p>
+            </div>
+          ) : (
+            <div className="container-data">
+              {auditLog?.list.map((audit, idx) => (
+                <div key={idx} className="tracking-item">
+                  {' '}
+                  {this.modalData(audit, idx)}
+                </div>
+              ))}
+            </div>
+          )}
+          <div>&nbsp;</div>
+          <TablePagination
+            rowsPerPage={rowsAudit}
+            currentPage={currentPage}
+            onChangePage={this.handlePageChange}
+            totalPages={Math.ceil(auditLog?.total_rows / rowsAudit)}
+            numShownPages={9}
+          />
+        </div>
+      </Modal>
     )
   }
 }

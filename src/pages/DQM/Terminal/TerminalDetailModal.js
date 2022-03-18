@@ -288,14 +288,10 @@ class TerminalDetailModal extends PureComponent {
         this.setState({ activeTab: tab })
       }
     }
-    const { onCancel, visible, currentTerminal, data } = this.props
+    const { visible, currentTerminal, data } = this.props
     const isDisabledField = isScheduler()
     return (
-      <Modal
-        centered={true}
-        isOpen={visible}
-        className="commercial-customer-modal terminal-detail-modal modal-lg"
-      >
+      <Modal isOpen={visible} className="commercial-customer-modal modal-lg">
         <ModalHeader
           close={
             <CloseButton
@@ -303,8 +299,8 @@ class TerminalDetailModal extends PureComponent {
             />
           }
         >
-          <div className="header-title">Terminal Code: {data.code}</div>
-          <div className="header-subtitle">
+          <span className="modal-title">Terminal Code: {data.code}</span>
+          <span className="last-updated-sub-title">
             {`Last Updated By: ${
               currentTerminal?.updated_by?.split('@')[0] || 'Unknown'
             } on ${
@@ -312,188 +308,178 @@ class TerminalDetailModal extends PureComponent {
                 format(new Date(currentTerminal?.updated_at), 'do LLL yyyy')) ||
               ''
             }`}
-          </div>
+          </span>
         </ModalHeader>
-        <>
-          {currentTerminal ? (
-            <>
-              <ModalBody>
-                {this.state.isConfirm ? this.handleExitConfirmation() : ''}
-                <Fragment>
-                  <>
-                    <Row className="row">
-                      <Col className="col-md-6 form-group">
-                        <label>TERMINAL NAME</label>
-                        <input
-                          placeholder={
-                            !isDisabledField && 'Type something here...'
-                          }
-                          className="form-control awsm-input"
-                          type="text"
-                          defaultValue={currentTerminal.name}
-                          disabled={true}
-                          onChange={e =>
-                            this.onFieldChange('name', e.target.value)
-                          }
-                        />
-                      </Col>
-                      <Col className="col-md-6 form-group"></Col>
-                    </Row>
+        {currentTerminal ? (
+          <>
+            <ModalBody>
+              {this.state.isConfirm ? this.handleExitConfirmation() : ''}
+              <Fragment>
+                <>
+                  <Row className="row">
+                    <Col className="col-md-6 form-group">
+                      <label>TERMINAL NAME</label>
+                      <input
+                        placeholder={
+                          !isDisabledField && 'Type something here...'
+                        }
+                        className="form-control awsm-input"
+                        type="text"
+                        defaultValue={currentTerminal.name}
+                        disabled={true}
+                        onChange={e =>
+                          this.onFieldChange('name', e.target.value)
+                        }
+                      />
+                    </Col>
+                    <Col className="col-md-6 form-group"></Col>
+                  </Row>
 
-                    <Row className="row">
-                      <Col className="col-md-12 form-group">
-                        <label>REMARKS</label>
-                        <input
-                          placeholder={
-                            !isDisabledField && 'Type something here...'
-                          }
-                          className="form-control awsm-input"
-                          type="text"
-                          defaultValue={currentTerminal.remarks}
-                          disabled={isDisabledField}
-                          onChange={e =>
-                            this.onFieldChange('remarks', e.target.value)
-                          }
-                        />
-                      </Col>
-                    </Row>
-                  </>
-                  <Nav pills justified>
-                    <NavItem>
-                      <NavLink
-                        className={classnames({
-                          active: this.state.activeTab === '1',
-                        })}
-                        onClick={() => {
-                          this.toggleTab('1')
-                        }}
-                      >
-                        {/* <i className="bx bx-chat font-size-20 d-sm-none" /> */}
-                        <span className="d-none d-sm-block">Address</span>
-                      </NavLink>
-                    </NavItem>
-                    <NavItem>
-                      <NavLink
-                        className={classnames({
-                          active: this.state.activeTab === '2',
-                        })}
-                        onClick={() => {
-                          this.toggleTab('2')
-                        }}
-                      >
-                        {/* <i className="bx bx-group font-size-20 d-sm-none" /> */}
-                        <span className="d-none d-sm-block">Storage</span>
-                      </NavLink>
-                    </NavItem>
-                    <NavItem>
-                      <NavLink
-                        className={classnames({
-                          active: this.state.activeTab === '3',
-                        })}
-                        onClick={() => {
-                          this.toggleTab('3')
-                        }}
-                      >
-                        {/* <i className="bx bx-book-content font-size-20 d-sm-none" /> */}
-                        <span className="d-none d-sm-block">Status</span>
-                      </NavLink>
-                    </NavItem>
-                    <NavItem>
-                      <NavLink
-                        className={classnames({
-                          active: this.state.activeTab === '4',
-                        })}
-                        onClick={() => {
-                          this.toggleTab('4')
-                        }}
-                      >
-                        {/* <i className="bx bx-chat font-size-20 d-sm-none" /> */}
-                        <span className="d-none d-sm-block">Contact</span>
-                      </NavLink>
-                    </NavItem>
-                    <NavItem />
-                    <NavItem />
-                    <NavItem />
-                    <NavItem />
-                  </Nav>
+                  <Row className="row">
+                    <Col className="col-md-12 form-group">
+                      <label>REMARKS</label>
+                      <input
+                        placeholder={
+                          !isDisabledField && 'Type something here...'
+                        }
+                        className="form-control awsm-input"
+                        type="text"
+                        defaultValue={currentTerminal.remarks}
+                        disabled={isDisabledField}
+                        onChange={e =>
+                          this.onFieldChange('remarks', e.target.value)
+                        }
+                      />
+                    </Col>
+                  </Row>
+                </>
+                <Nav pills justified>
+                  <NavItem>
+                    <NavLink
+                      className={classnames({
+                        active: this.state.activeTab === '1',
+                      })}
+                      onClick={() => {
+                        this.toggleTab('1')
+                      }}
+                    >
+                      {/* <i className="bx bx-chat font-size-20 d-sm-none" /> */}
+                      <span className="d-none d-sm-block">Address</span>
+                    </NavLink>
+                  </NavItem>
+                  <NavItem>
+                    <NavLink
+                      className={classnames({
+                        active: this.state.activeTab === '2',
+                      })}
+                      onClick={() => {
+                        this.toggleTab('2')
+                      }}
+                    >
+                      {/* <i className="bx bx-group font-size-20 d-sm-none" /> */}
+                      <span className="d-none d-sm-block">Storage</span>
+                    </NavLink>
+                  </NavItem>
+                  <NavItem>
+                    <NavLink
+                      className={classnames({
+                        active: this.state.activeTab === '3',
+                      })}
+                      onClick={() => {
+                        this.toggleTab('3')
+                      }}
+                    >
+                      {/* <i className="bx bx-book-content font-size-20 d-sm-none" /> */}
+                      <span className="d-none d-sm-block">Status</span>
+                    </NavLink>
+                  </NavItem>
+                  <NavItem>
+                    <NavLink
+                      className={classnames({
+                        active: this.state.activeTab === '4',
+                      })}
+                      onClick={() => {
+                        this.toggleTab('4')
+                      }}
+                    >
+                      {/* <i className="bx bx-chat font-size-20 d-sm-none" /> */}
+                      <span className="d-none d-sm-block">Contact</span>
+                    </NavLink>
+                  </NavItem>
+                  <NavItem />
+                  <NavItem />
+                  <NavItem />
+                  <NavItem />
+                </Nav>
 
-                  {/* tab content */}
-                  <TabContent activeTab={this.state.activeTab} className="py-4">
-                    <TabPane tabId="1" style={{ marginRight: '-25px' }}>
-                      <SimpleBar className="simple-bar">
-                        <AddressTab
-                          data={currentTerminal?.address}
-                          onChange={value =>
-                            this.onFieldChange('address', value)
-                          }
-                        />
-                        <hr style={{ margin: '2em 0' }} />
-                      </SimpleBar>
-                    </TabPane>
-                    <TabPane tabId="2" style={{ marginRight: '-25px' }}>
-                      <SimpleBar className="simple-bar">
-                        <StorageTab
-                          data={currentTerminal?.storage}
-                          onChange={value =>
-                            this.onFieldChange('storage', value)
-                          }
-                          error_code={this.state.error_code}
-                          disabledUpdate={this.disabledUpdate}
-                        />
-                      </SimpleBar>
-                    </TabPane>
-                    <TabPane tabId="3" style={{ marginRight: '-25px' }}>
-                      <SimpleBar className="simple-bar">
-                        <StatusTab
-                          data={currentTerminal?.status}
-                          onChange={value =>
-                            this.onFieldChange('status', value)
-                          }
-                          handleErrors={this.handleErrors}
-                          forceBlur={this.state.forceBlur.statusTab}
-                        />
-                        <hr style={{ margin: '2em 0' }} />
-                      </SimpleBar>
-                    </TabPane>
-                    <TabPane tabId="4" style={{ marginRight: '-25px' }}>
-                      <SimpleBar className="simple-bar">
-                        <ContactTab
-                          data={currentTerminal?.contact}
-                          onChange={value =>
-                            this.onFieldChange('contact', value)
-                          }
-                        />
-                        <hr style={{ margin: '2em 0' }} />
-                      </SimpleBar>
-                    </TabPane>
-                  </TabContent>
-                </Fragment>
-              </ModalBody>
-              {!isDisabledField && !this.state.isConfirm ? (
-                <ModalFooter>
-                  <button
-                    className="btn-sec"
-                    onClick={() => this.setState({ isConfirm: true })}
-                  >
-                    Cancel
-                  </button>
-                  <Button
-                    disabled={
-                      !this.handleInputVisibility() === true &&
-                      isValidated === false
-                        ? true
-                        : false
-                    }
-                    onClick={this.handleUpdate.bind(this)}
-                    color="primary"
-                  >
-                    Update
-                  </Button>
-                </ModalFooter>
-              ) : null}
-            </>
-          ) : null}
-        </>
+                {/* tab content */}
+                <TabContent activeTab={this.state.activeTab} className="py-4">
+                  <TabPane tabId="1" style={{ marginRight: '-25px' }}>
+                    <SimpleBar className="simple-bar">
+                      <AddressTab
+                        data={currentTerminal?.address}
+                        onChange={value => this.onFieldChange('address', value)}
+                      />
+                      <hr style={{ margin: '2em 0' }} />
+                    </SimpleBar>
+                  </TabPane>
+                  <TabPane tabId="2" style={{ marginRight: '-25px' }}>
+                    <SimpleBar className="simple-bar">
+                      <StorageTab
+                        data={currentTerminal?.storage}
+                        onChange={value => this.onFieldChange('storage', value)}
+                        error_code={this.state.error_code}
+                        disabledUpdate={this.disabledUpdate}
+                      />
+                    </SimpleBar>
+                  </TabPane>
+                  <TabPane tabId="3" style={{ marginRight: '-25px' }}>
+                    <SimpleBar className="simple-bar">
+                      <StatusTab
+                        data={currentTerminal?.status}
+                        onChange={value => this.onFieldChange('status', value)}
+                        handleErrors={this.handleErrors}
+                        forceBlur={this.state.forceBlur.statusTab}
+                      />
+                      <hr style={{ margin: '2em 0' }} />
+                    </SimpleBar>
+                  </TabPane>
+                  <TabPane tabId="4" style={{ marginRight: '-25px' }}>
+                    <SimpleBar className="simple-bar">
+                      <ContactTab
+                        data={currentTerminal?.contact}
+                        onChange={value => this.onFieldChange('contact', value)}
+                      />
+                      <hr style={{ margin: '2em 0' }} />
+                    </SimpleBar>
+                  </TabPane>
+                </TabContent>
+              </Fragment>
+            </ModalBody>
+            {!isDisabledField && !this.state.isConfirm ? (
+              <ModalFooter>
+                <button
+                  className="btn-sec"
+                  onClick={() => this.setState({ isConfirm: true })}
+                >
+                  Cancel
+                </button>
+                <Button
+                  disabled={
+                    !this.handleInputVisibility() === true &&
+                    isValidated === false
+                      ? true
+                      : false
+                  }
+                  onClick={this.handleUpdate.bind(this)}
+                  color="primary"
+                >
+                  Update
+                </Button>
+              </ModalFooter>
+            ) : null}
+          </>
+        ) : null}
         {this.state.error_code_display !== '' && (
           <AWSMAlert
             status="error"

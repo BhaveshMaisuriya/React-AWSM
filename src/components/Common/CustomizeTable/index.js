@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react"
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd"
+import React, { useEffect, useState } from 'react'
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 
 // Components
-import AWSMCheckBox from "common/CheckBox"
-import { XIcon, AlertIcon, EllipsisIcon, RefreshDotIcon } from "./icons"
-import CloseButton from "../CloseButton"
+import AWSMCheckBox from 'common/CheckBox'
+import { XIcon, AlertIcon, EllipsisIcon, RefreshDotIcon } from './icons'
+import CloseButton from '../CloseButton'
 // Css
-import "./customizeTable.scss"
+import './customizeTable.scss'
 import {
   Modal,
   ModalBody,
@@ -14,7 +14,7 @@ import {
   ModalFooter,
   Col,
   Row,
-} from "reactstrap"
+} from 'reactstrap'
 /**
  * Select item component
  * @param item
@@ -38,7 +38,7 @@ const ItemSelect = ({ item, onChange }) => {
         color="primary"
       />
       <div className="">
-        {item.label} {item.extraText ? <i>{item.extraText}</i> : ""}
+        {item.label} {item.extraText ? <i>{item.extraText}</i> : ''}
       </div>
     </div>
   )
@@ -87,7 +87,7 @@ const DragContainer = ({ items, onChange, onUpdateOne }) => {
         {provided => (
           <div {...provided.droppableProps} ref={provided.innerRef}>
             {items.map((item, index) =>
-              item.key !== "frozen" ? (
+              item.key !== 'frozen' ? (
                 <Draggable key={item.id} draggableId={item.id} index={index}>
                   {(provided, snapshot) => (
                     <div
@@ -95,7 +95,7 @@ const DragContainer = ({ items, onChange, onUpdateOne }) => {
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}
                       className={`drag-content ${
-                        snapshot.isDragging ? "drag-content-dragging" : ""
+                        snapshot.isDragging ? 'drag-content-dragging' : ''
                       }`}
                     >
                       <div className="d-flex">
@@ -104,8 +104,8 @@ const DragContainer = ({ items, onChange, onUpdateOne }) => {
                           <EllipsisIcon />
                         </div>
                         <div className="drag-content-label">
-                          {item.label}{" "}
-                          {item.extraText ? <i>{item.extraText}</i> : ""}
+                          {item.label}{' '}
+                          {item.extraText ? <i>{item.extraText}</i> : ''}
                         </div>
                       </div>
                       <div
@@ -118,7 +118,7 @@ const DragContainer = ({ items, onChange, onUpdateOne }) => {
                   )}
                 </Draggable>
               ) : (
-                ""
+                ''
               )
             )}
             {provided.placeholder}
@@ -136,8 +136,8 @@ const DragContainer = ({ items, onChange, onUpdateOne }) => {
  * @param expires
  */
 function setCookie(name, value, expires) {
-  document.cookie = [`${name}=${value}`, `expires=${expires}`, "path=/"].join(
-    " ;"
+  document.cookie = [`${name}=${value}`, `expires=${expires}`, 'path=/'].join(
+    ' ;'
   )
 }
 
@@ -152,9 +152,9 @@ function getCookieByKey(key) {
       return null
     }
     return document.cookie
-      .split("; ")
+      .split('; ')
       .find(row => row.startsWith(key))
-      .split("=")[1]
+      .split('=')[1]
   } catch (err) {
     return null
   }
@@ -184,7 +184,7 @@ const CustomizeTableModal = ({
   availableMetric = {},
   defaultMetric = [],
   metricArray = false,
-  metricKey = "id",
+  metricKey = 'id',
   maxMetrics = null,
 }) => {
   // State
@@ -213,7 +213,7 @@ const CustomizeTableModal = ({
   const frozenCols = React.useMemo(() => {
     if (!availableMetric) return []
     return Object.keys(availableMetric).filter(
-      metric => availableMetric[metric].key === "frozen"
+      metric => availableMetric[metric].key === 'frozen'
     )
   }, [availableMetric])
 
@@ -221,7 +221,7 @@ const CustomizeTableModal = ({
     availableMetricTransform.sort((a, b) => b.checked - a.checked)
   )
   const [itemToDrag, setItemToDrag] = useState([])
-  const [error, setError] = useState("")
+  const [error, setError] = useState('')
 
   useEffect(() => {
     const newItemToDrag = []
@@ -237,7 +237,7 @@ const CustomizeTableModal = ({
   }, [])
   // Function handler
   const onItemSelectChange = item => {
-    if (typeof maxMetrics === "number") {
+    if (typeof maxMetrics === 'number') {
       if (maxMetrics < defaultMetric.length) {
         return console.error(
           `maxMetrics(${maxMetrics}) is smaller than minMetrics(${defaultMetric.length})`
@@ -266,7 +266,7 @@ const CustomizeTableModal = ({
       newItemToDrag.length >= defaultMetric.length &&
       newItemToDrag.length <= maxMetrics
     ) {
-      setError("")
+      setError('')
     }
     setItemToDrag(newItemToDrag)
 
@@ -289,7 +289,7 @@ const CustomizeTableModal = ({
           item.checked ? { ...item, disabled: true } : item
         )
       )
-      if (pathName === "/sales-inventory")
+      if (pathName === '/sales-inventory')
         return setError(
           `Must not be less than ${defaultMetric.length - 2} metrics`
         )
@@ -297,8 +297,8 @@ const CustomizeTableModal = ({
         `Must not be less than ${defaultMetric.length - 1} metrics`
       )
     }
-    if (typeof maxMetrics !== "number") {
-      setError("")
+    if (typeof maxMetrics !== 'number') {
+      setError('')
     }
   }
 
@@ -318,7 +318,7 @@ const CustomizeTableModal = ({
       return
     }
     const itemKeys = itemToDrag.map(item => item.id)
-    setCookie(tableName, JSON.stringify(itemKeys), "01 Dec 3000 12:00:00 UTC")
+    setCookie(tableName, JSON.stringify(itemKeys), '01 Dec 3000 12:00:00 UTC')
     setInitMetric(itemKeys)
     setItemToSelect(itemToSelect.sort((a, b) => b.checked - a.checked))
 
@@ -335,7 +335,7 @@ const CustomizeTableModal = ({
    */
   const onExit = () => {
     onRevertToInitial()
-    setError("")
+    setError('')
     if (closeDialog) {
       closeDialog()
     }
@@ -345,7 +345,7 @@ const CustomizeTableModal = ({
    * On key down
    */
   const onKeyPress = e => {
-    if (e.key === "Escape") onExit()
+    if (e.key === 'Escape') onExit()
   }
 
   /**
@@ -370,7 +370,7 @@ const CustomizeTableModal = ({
       }
     }
     setItemToDrag(newItemToDrag)
-    setError("")
+    setError('')
   }
 
   /**
@@ -393,12 +393,12 @@ const CustomizeTableModal = ({
       }
     }
     setItemToDrag(newItemToDrag)
-    setError("")
+    setError('')
   }
 
   return (
     <div onKeyDown={onKeyPress}>
-      <Modal isOpen={open} centered={true} id="customize_popup">
+      <Modal isOpen={open} id="customize_popup">
         <ModalHeader close={<CloseButton handleClose={onExit} />}>
           <div>Customise Column</div>
         </ModalHeader>
@@ -407,14 +407,14 @@ const CustomizeTableModal = ({
             <div className="available-metrics">
               <h5>Available Metrics</h5>
               {itemToSelect.map(item =>
-                item.key !== "frozen" ? (
+                item.key !== 'frozen' ? (
                   <ItemSelect
                     key={item.id}
                     onChange={onItemSelectChange}
                     item={item}
                   />
                 ) : (
-                  ""
+                  ''
                 )
               )}
             </div>

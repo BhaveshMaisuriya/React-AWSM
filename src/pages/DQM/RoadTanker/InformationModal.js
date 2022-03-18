@@ -248,11 +248,7 @@ class InformationModal extends Component {
     }
 
     return (
-      <Modal
-        centered={true}
-        isOpen={visible}
-        className="table-information modal-lg"
-      >
+      <Modal isOpen={visible} className="retail-customer-modal modal-lg">
         <ModalHeader close={<CloseButton handleClose={handleClose} />}>
           <span className="modal-title">
             {' '}

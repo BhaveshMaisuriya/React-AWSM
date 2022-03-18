@@ -98,6 +98,7 @@ const OrderTab = props => {
           <div className="d-flex">
             <div className="w-100">
               <AWSMInput
+                type="number"
                 value={data?.volume}
                 disabled={false}
                 onChange={value => onFieldChange('volume', value)}

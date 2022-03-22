@@ -8,24 +8,22 @@ const DeleteConfirmationPopup = ({ open, istoggle, deleteFunction }) => {
     istoggle()
   }
   return (
-    <Modal isOpen={open}>
+    <Modal isOpen={open} className="rts-small-modal">
       <ModalHeader close={<CloseButton handleClose={istoggle}></CloseButton>}>
         Delete Shipment Confirmation
       </ModalHeader>
       <ModalBody>
-        <p>
-          This action cannot be undone.
-          <br />
-          Are you sure want to proceed with the shipment deletion?
-          <br />
-          This shipment will be deleted in both RTS and SAP.
-        </p>
+        This action cannot be undone.
+        <br />
+        Are you sure want to proceed with the shipment deletion?
+        <br />
+        This shipment will be deleted in both RTS and SAP.
       </ModalBody>
       <ModalFooter>
-        <Button className="btn-dan" onClick={istoggle}>
+        <Button className="btn btn-outline-danger mr-2" onClick={istoggle}>
           Cancel
         </Button>
-        <Button className="btn-danger" onClick={onClickProceed}>
+        <Button className="btn btn-danger" onClick={onClickProceed}>
           Proceed
         </Button>
       </ModalFooter>

@@ -1,10 +1,17 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import { Col, Modal, ModalBody, ModalHeader, Row } from 'reactstrap'
+import {
+  Col,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
+  Row,
+} from 'reactstrap'
 import REGION_TERMINAL, {
   TERMINAL_CODE_MAPPING,
 } from '../../common/data/regionAndTerminal'
-import AWSMDropdown from '../../components/Common/Dropdown'
-import ExitConfirmation from '../../components/Common/ExitConfirmation'
+import AWSMDropdown from 'components/Common/Dropdown'
+import ExitConfirmation from 'components/Common/ExitConfirmation'
 import CloseButton from 'components/Common/CloseButton'
 
 function CrossTerminalModal(props) {
@@ -69,22 +76,20 @@ function CrossTerminalModal(props) {
   }
 
   return (
-    <Modal id="crossterminal-modal" isOpen={open}>
+    <Modal isOpen={open} className="rts-small-modal">
       <ModalHeader close={<CloseButton handleClose={onCancelClick} />}>
         Cross Terminal
       </ModalHeader>
-      <ModalBody className="position-relative h-250 scroll pl-30">
+      <ModalBody>
         {isConfirm && (
           <ExitConfirmation onExit={onConfirmExit} onCancel={onConfirmCancel} />
         )}
         {!isConfirm && (
           <>
-            <p>
-              {' '}
-              Please select the required terminal. The order will be place under
-              the selected terminal once you click Update.
-            </p>
-            <p className="order-bank-region-label">REGION & TERMINAL</p>
+            Please select the required terminal. The order will be place under
+            the selected terminal once you click Update. <br />
+            <br />
+            <h5 className="order-bank-region-label">REGION & TERMINAL</h5>
             <Row>
               <Col lg={6}>
                 <AWSMDropdown
@@ -101,20 +106,20 @@ function CrossTerminalModal(props) {
                 />
               </Col>
             </Row>
-            <div className="d-flex align-items-center justify-content-end pt-12">
-              <button
-                onClick={onCancelClick}
-                className="btn btn-outline-primary mr-2"
-              >
-                Cancel
-              </button>
-              <button onClick={() => onSaveClick()} className="btn btn-primary">
-                Update
-              </button>
-            </div>
           </>
         )}
       </ModalBody>
+      <ModalFooter>
+        <button
+          onClick={onCancelClick}
+          className="btn btn-outline-primary mr-2"
+        >
+          Cancel
+        </button>
+        <button onClick={() => onSaveClick()} className="btn btn-primary">
+          Update
+        </button>
+      </ModalFooter>
     </Modal>
   )
 }

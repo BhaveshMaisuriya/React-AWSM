@@ -381,15 +381,16 @@ const RTSOrderBank = (state = initialState, action) => {
       })
 
       const records = action.payload // array of Order records
+      console.log(records)
 
-      const events = [...state.ganttChart.events]
-      records.forEach(o => {
-        const existingEvent = events.find(s => s.id === o.id)
+      // const events = [...state.ganttChart.events]
+      // records.forEach(o => {
+      //   const existingEvent = events.find(s => s.id === o.id)
 
-        if (existingEvent) existingEvent.resourceOrder[0].DNNumber = o.dn_no
-      })
+      //   if (existingEvent) existingEvent.resourceOrder[0].DNNumber = o.dn_no
+      // })
 
-      state.ganttChart.events = events
+      // state.ganttChart.events = events
 
       return { ...state }
     }

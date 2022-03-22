@@ -75,8 +75,8 @@
               background: #d6c5e0;
             }
             .pending {
-              color: #7F7F7F;
-              background: #E0E0E0;
+              color: #7f7f7f;
+              background: #e0e0e0;
             }
           }
           .rts-table-nodata {
@@ -312,10 +312,29 @@
 .opacity-20 {
   opacity: 0.2;
 }
-.terminal-relay {
-  color: #4a4a4a;
-  font-weight: 500;
-  font-size: 14px;
+// .terminal-relay {
+//   color: #4a4a4a;
+//   font-weight: 500;
+//   font-size: 14px;
+//   max-width: 95%;
+// }
+
+.rts-small-modal {
+  .modal-content {
+    min-width: 500px;
+    .modal-body {
+      color: #4a4a4a;
+      font-weight: 500;
+      font-size: 14px;
+      max-width: 95%;
+    }
+    .modal-footer {
+      button {
+        height: 40px;
+        width: 120px;
+      }
+    }
+  }
 }
 
 .top-shipment-details {

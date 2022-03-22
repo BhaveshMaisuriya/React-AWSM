@@ -1,5 +1,5 @@
 import React from 'react'
-import { Modal, ModalBody, ModalHeader } from 'reactstrap'
+import { Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap'
 import CloseButton from 'components/Common/CloseButton'
 
 function DeleteMultipleModal(props) {
@@ -12,24 +12,22 @@ function DeleteMultipleModal(props) {
   }
 
   return (
-    <Modal isOpen={open}>
+    <Modal isOpen={open} className="rts-small-modal">
       <ModalHeader close={<CloseButton handleClose={toggle} />}>
         Delete Multiple Order Confirmation
       </ModalHeader>
-      <ModalBody className="position-relative scroll pl-30">
-        <p>
-          This action cannot be undone. Are you sure you want to delete these
-          Orders?
-        </p>
-        <div className="d-flex align-items-center justify-content-end">
-          <button onClick={toggle} className="btn btn-outline-danger mr-2">
-            Cancel
-          </button>
-          <button onClick={onSave} className="btn btn-danger">
-            Delete
-          </button>
-        </div>
+      <ModalBody>
+        This action cannot be undone. Are you sure you want to delete these
+        Orders?
       </ModalBody>
+      <ModalFooter>
+        <button onClick={toggle} className="btn btn-outline-danger mr-2">
+          Cancel
+        </button>
+        <button onClick={onSave} className="btn btn-danger">
+          Delete
+        </button>
+      </ModalFooter>
     </Modal>
   )
 }

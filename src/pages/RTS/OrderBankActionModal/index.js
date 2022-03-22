@@ -21,13 +21,13 @@ const OrderBankActionModal = ({
   }
 
   return (
-    <Modal isOpen={open} className="order-bank-action-modal">
+    <Modal isOpen={open} className="rts-small-modal">
       <ModalHeader close={<CloseButton handleClose={onClose} />}>
         {title}
       </ModalHeader>
       <ModalBody>{subTitle}</ModalBody>
-      <ModalFooter className="d-flex align-items-center justify-content-end">
-        <button className="btn btn-outline-primary" onClick={onClose}>
+      <ModalFooter>
+        <button className="btn btn-outline-primary mr-2" onClick={onClose}>
           Cancel
         </button>
         <button className="btn btn-primary" onClick={onSubmitClick}>

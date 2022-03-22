@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import moment from 'moment'
-import { Modal, ModalBody, ModalHeader } from 'reactstrap'
+import { Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap'
 import AWSMInput from 'components/Common/Input'
 import CloseButton from 'components/Common/CloseButton'
 
@@ -41,14 +41,14 @@ const PlannedLoadTimesModal = ({ isOpen, onSend, onCancel, data }) => {
   }
 
   return (
-    <Modal isOpen={isOpen}>
+    <Modal isOpen={isOpen} className="rts-small-modal">
       <ModalHeader close={<CloseButton handleClose={onCancel} />}>
         Planned Load Time
       </ModalHeader>
-      <ModalBody className="pl-4 terminal-relay">
+      <ModalBody>
         <p>Please enter the correct planned load time for this shipment</p>
-        <div className="mb-2 terminal-relay">PLANNED LOAD TIME (00:00)</div>
-        <div className="d-flex mb-4 terminal-relay">
+        <div className="mb-2">PLANNED LOAD TIME (00:00)</div>
+        <div className="d-flex mb-4">
           <div className="order-bank-region w-100">
             <AWSMInput
               onChange={val => onChange(val)}
@@ -59,19 +59,19 @@ const PlannedLoadTimesModal = ({ isOpen, onSend, onCancel, data }) => {
             <span className="text-danger">{form.error}</span>
           </div>
         </div>
-        <div className="d-flex align-items-center justify-content-end">
-          <button onClick={onCancel} className="btn btn-outline-success mr-2">
-            Cancel
-          </button>
-          <button
-            className="btn btn-success"
-            disabled={form.isSubmitBlocked}
-            onClick={submit}
-          >
-            Update
-          </button>
-        </div>
       </ModalBody>
+      <ModalFooter>
+        <button onClick={onCancel} className="btn btn-outline-success mr-2">
+          Cancel
+        </button>
+        <button
+          className="btn btn-success"
+          disabled={form.isSubmitBlocked}
+          onClick={submit}
+        >
+          Update
+        </button>
+      </ModalFooter>
     </Modal>
   )
 }

@@ -17,10 +17,10 @@ import NonAuthLayout from './components/NonAuthLayout'
 import './assets/scss/theme.scss'
 
 // Import fackbackend Configuration file
-import fakeBackend from './helpers/AuthType/fakeBackend'
+// import fakeBackend from './helpers/AuthType/fakeBackend'
 
 // Activating fake backend
-fakeBackend()
+// fakeBackend()
 
 class App extends Component {
   constructor(props) {

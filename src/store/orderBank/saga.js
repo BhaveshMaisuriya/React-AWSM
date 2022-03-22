@@ -80,7 +80,7 @@ import {
   removeOrderFromShipmentFail,
   removeShipmentFromEventSuccess,
   removeEventSuccess,
-  // updateOBEventSuccess,
+  updateOBEventSuccess,
   getOBRTDetailsSuccess,
   getOBRTDetailsFail,
   updateOBRTDetailsSuccess,
@@ -515,11 +515,11 @@ function* onRemoveEvent(payload) {
   } catch (error) {}
 }
 
-// function* onUpdateEvent(payload) {
-//   try {
-//     yield put(updateOBEventSuccess(payload.params))
-//   } catch (error) {}
-// }
+function* onUpdateEvent(payload) {
+  try {
+    yield put(updateOBEventSuccess(payload.params))
+  } catch (error) {}
+}
 
 // function* onGetGanttEventValidation(payload) {
 //   try {

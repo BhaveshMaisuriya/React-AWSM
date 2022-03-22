@@ -499,7 +499,7 @@ class index extends Component {
           sort_field: fieldToSort,
           filter: payloadFilter.filterOrderBank,
         })
-      }, 2000)
+      }, 5000)
     }
   }
 

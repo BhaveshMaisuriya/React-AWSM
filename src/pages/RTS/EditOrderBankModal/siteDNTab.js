@@ -65,7 +65,7 @@ const SiteDNTab = props => {
           </div>
         </Col>
         <Col>
-          <label className="text-upper">DN Date</label>
+          <label className="text-upper">DN CREATION DATE</label>
           <div className="d-flex">
             <div className="w-100">
               <AWSMInput value={dataChecker(data?.dn_date)} disabled={true} />
@@ -75,7 +75,7 @@ const SiteDNTab = props => {
       </Row>
       <Row className="w-100 mt-4">
         <Col>
-          <label className="text-upper">DN Time Creation.</label>
+          <label className="text-upper">DN TIME CREATION</label>
           <div className="d-flex">
             <div className="w-100">
               <AWSMInput value={dataChecker(data?.dn_created_at)} disabled={true} />
@@ -83,7 +83,7 @@ const SiteDNTab = props => {
           </div>
         </Col>
         <Col>
-          <label className="text-upper">DN Created By</label>
+          <label className="text-upper">DN CREATED BY</label>
           <div className="d-flex">
             <div className="w-100">
               <AWSMInput value={dataChecker(data?.dn_created_by)} disabled={true} />

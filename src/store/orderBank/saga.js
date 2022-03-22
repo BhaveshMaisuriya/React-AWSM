@@ -280,9 +280,9 @@ function* onGetOrderBankAuditLog() {
 function* onGetClearScheduling(params) {
   try {
     const response = yield call(getClearScheduling, params)
-    yield put(getClearSchedulingSuccess(response))
+    // yield put(getClearSchedulingSuccess(response))
   } catch (error) {
-    yield put(getClearSchedulingFail(error))
+    // yield put(getClearSchedulingFail(error))
   }
 }
 
@@ -291,7 +291,7 @@ function* onGetSendBulkShipment(params) {
     const response = yield call(getSendBulkShipment, params)
     yield put(getSendBulkShipmentSuccess(response))
   } catch (error) {
-    yield put(getSendBulkShipmentFail(error))
+    // yield put(getSendBulkShipmentFail(error))
   }
 }
 
@@ -358,10 +358,9 @@ function* sendRequestCancelPaymentInGanttChart({ payload }) {
 function* sendRequestOrderPaymentInGanttChart({ payload }) {
   // <params> is Event data, consult factory.js
   try {
-    // const ids = [params.id]
-    console.log(payload)
-    // const response = yield call(sendRTSOrderBank, ids)
-    // yield put(sendOrderInGanttChartSuccess(response.data))
+    const ids = payload.supplement.orderIndexes
+    const response = yield call(sendRTSOrderBank, ids)
+    yield put(sendOrderInGanttChartSuccess(response.data))
   } catch (error) {
     yield put(sendOrderInGanttChartFail(error))
   }

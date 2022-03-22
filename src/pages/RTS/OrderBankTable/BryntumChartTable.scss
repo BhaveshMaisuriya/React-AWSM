@@ -75,9 +75,9 @@
               -moz-transform: translateX(100%);
               -webkit-transform: translateX(100%);
               transform: translateX(100%);
-              -moz-animation: scroll-left 8s linear infinite;
-              -webkit-animation: scroll-left 8s linear infinite;
-              animation: scroll-left 8s linear infinite;
+              -moz-animation: scroll-left 4s linear infinite;
+              -webkit-animation: scroll-left 4s linear infinite;
+              animation: scroll-left 4s linear infinite;
             }
           }
 
@@ -85,30 +85,29 @@
             visibility: hidden;
             text-align: center;
             width: 180%;
+            display: flex;
 
-            & > div {
-              display: inline-block;
+            &-block {
+              display: inline-flex;
+              align-items: center;
               border-radius: 20px;
-              p {
-                margin-bottom: 0;
-                padding: 2px 8px;
-              }
             }
 
-            .white-bg {
+            &-text {
+              display: inline-flex;
+              align-items: center;
+            }
+
+            .drops {
               background-color: #ffffff;
-              color: #000 !important;
+              color: #000;
             }
 
-            .blue-bg {
+            .terminal {
               background-color: rgb(54, 148, 236);
             }
 
-            .white-text {
-              color: #fff;
-            }
-
-            .green-bg {
+            .eta {
               background-color: green;
             }
           }

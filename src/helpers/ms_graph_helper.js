@@ -9,19 +9,25 @@ const axiosClient = axios.create({
 })
 
 export function getUserProperties() {
-  return axiosClient.get(`https://graph.microsoft.com/v1.0/me/?$select=displayName, mail`, {
-    headers: {
-      Authorization: 'Bearer ' + sessionStorage.getItem('apiAccessToken'),
-      responseType: 'json',
-    },
-  })
+  return axiosClient.get(
+    `https://graph.microsoft.com/v1.0/me/?$select=displayName, mail`,
+    {
+      headers: {
+        Authorization: 'Bearer ' + sessionStorage.getItem('apiAccessToken'),
+        responseType: 'json',
+      },
+    }
+  )
 }
 
 export function getUserImage(inputUPN) {
-  return axiosClient.get(`https://graph.microsoft.com/beta/users/${inputUPN}/photo/$value`, {
-    headers: {
-      Authorization: 'Bearer ' + sessionStorage.getItem('apiAccessToken'),
-      responseType: 'blob',
-    },
-  })
+  return axiosClient.get(
+    `https://graph.microsoft.com/beta/users/${inputUPN}/photo/$value`,
+    {
+      headers: {
+        Authorization: 'Bearer ' + sessionStorage.getItem('apiAccessToken'),
+        responseType: 'blob',
+      },
+    }
+  )
 }

@@ -13,7 +13,7 @@ const ConfirmDNStatusModal = ({
   requiresConfirmation = true, //setting to false will remove the Cancel and Proceed button
 }) => {
   return (
-    <Modal isOpen={isOpen} style={{ maxWidth: '530px' }}>
+    <Modal isOpen={isOpen} className="rts-small-modal">
       <ModalHeader
         close={
           <CloseButton

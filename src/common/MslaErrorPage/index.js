@@ -1,7 +1,7 @@
-import React from 'react';
+import React from 'react'
 
 const MslaErrorPage = () => {
-  const onLoadRequest = () => window.location.reload();
+  const onLoadRequest = () => window.location.reload()
   return (
     <div className="w-100 vh-100 d-flex align-items-center justify-content-center">
       <div className="d-flex flex-column align-items-center justify-content-center">
@@ -13,4 +13,4 @@ const MslaErrorPage = () => {
     </div>
   )
 }
-export default MslaErrorPage;
+export default MslaErrorPage

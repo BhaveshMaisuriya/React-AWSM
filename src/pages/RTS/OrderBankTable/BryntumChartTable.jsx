@@ -145,20 +145,29 @@ function BryntumChartTable(props) {
 
   // CONTROL GANTTCHART DATA
   useEffect(() => {
-    const { instance: scheduler } = chartRef.current
-    const { eventStore, resourceStore } = scheduler
+    ;(async () => {
+      const { instance: scheduler } = chartRef.current
+      const { resourceStore } = scheduler
 
-    resourceStore.data = props.ganttChartTableData
-    eventStore.data = ganttChartState.events
-    scheduler.refreshRows()
-  }, [ganttChartState.events, props.ganttChartTableData])
+      await resourceStore.loadDataAsync(props.ganttChartTableData)
+    })()
+  }, [props.ganttChartTableData])
+
+  useEffect(() => {
+    ;(async () => {
+      const { instance: scheduler } = chartRef.current
+      const { eventStore } = scheduler
+
+      await eventStore.loadDataAsync(ganttChartState.events)
+    })()
+  }, [ganttChartState.events])
 
   const updateModalHandler = (type, eventData) => {
     const data = { type }
     switch (type) {
       case EventContextList.CREATE_SHIPMENT:
         data.header = 'Create Shipment'
-        data.body = 'Proceed for Shipment Creation?'
+        data.body = 'proceed for shipment creation?'
         data.styleColor = 'success'
         // this is Event data, consult factory.js
         data.record = eventData
@@ -173,7 +182,7 @@ function BryntumChartTable(props) {
       case EventContextList.SEND_ORDER:
         data.type = EventContextList.SEND_ORDER
         data.header = 'Send Orders for DN'
-        data.body = "Send this shipment's orders for DN?"
+        data.body = "send this shipment's orders for DN?"
         data.styleColor = 'success'
         // this is Event data, consult factory.js
         data.record = eventData
@@ -378,7 +387,7 @@ function BryntumChartTable(props) {
           },
         },
         plannedLoadTime: {
-          text: 'Planned Load Times',
+          text: 'Planned Load Time',
           onItem({ eventRecord }) {
             updateModalHandler(EventContextList.PLAN_LOAD_TIMES, eventRecord)
           },
@@ -414,6 +423,9 @@ function BryntumChartTable(props) {
       // <eventRecord.originalData> consult factory.js
       const data = eventRecord.originalData,
         { background, flags, supplement } = eventRecord.originalData
+
+      if (flags.isBackground) return ''
+
       !flags.isBackground && (renderData.cls['has-background'] = true)
       flags.highlightFor && (renderData.cls['bold'] = true)
 
@@ -439,17 +451,13 @@ function BryntumChartTable(props) {
 
       let etaTemplate = ``
       supplement.etas.forEach(m => {
-        etaTemplate += `<div class="green-bg brdr-radius">
-          <p>eta ${m.format(DATE_TIME_FORMAT)}</p>
+        etaTemplate += `<div class="event-data-details-block eta mr-1 my-2 px-2 py-1">
+          eta ${m.format(DATE_TIME_FORMAT)}
         </div>`
       })
 
-      return flags.isBackground
-        ? ''
-        : `${bgTemplate}
-        <div class="event-data ${
-          renderData.width < 360 && 'event-data-marquee'
-        }"
+      return `${bgTemplate}
+        <div class="event-data event-data-marquee"
             style="background-color: ${eventRecord.eventColor}; 
                    width: ${renderData.width}px;">
           ${
@@ -461,21 +469,21 @@ function BryntumChartTable(props) {
           ${flags.hasSoftRestriction ? `<img src=${YellowAlertIcon} />` : ''}
 
           <div class="event-data-details">
-            <div class="white-bg brdr-radius">
-              <p>${eventRecord.id}</p>
+            <div class="event-data-details-block drops mr-1 my-2 px-2 py-1">
+              ${supplement.etas.length}
             </div>
-            <div class="blue-bg brdr-radius">
-              <p>${supplement.terminal}</p>
+            <div class="event-data-details-block terminal my-2 px-2 py-1">
+              ${supplement.terminal}
             </div>
-            <div class="white-text brdr-radius">
-              <p>${moment(data.startDate, DATE_TIME_FORMAT, true).format(
+            <div class="event-data-details-text my-2 px-2">
+              ${moment(data.startDate, DATE_TIME_FORMAT, true).format(
                 TIME_FORMAT_SHORT
-              )} hrs</p>
+              )} hrs
             </div>
-            <div class="white-text brdr-radius">
-              <p>${moment(data.endDate, DATE_TIME_FORMAT, true).format(
+            <div class="event-data-details-text my-2 px-2">
+              ${moment(data.endDate, DATE_TIME_FORMAT, true).format(
                 TIME_FORMAT_SHORT
-              )} hrs</p>
+              )} hrs
             </div>
             ${etaTemplate}
           </div>

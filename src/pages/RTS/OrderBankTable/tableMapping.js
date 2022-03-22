@@ -1,31 +1,31 @@
 const tableColumns = [
-  "priority",
-  "notes",
-  "format_ship_to",
-  "format_name",
-  "format_cloud",
-  "trip_no",
-  "requested_delivery_date",
-  "format_product",
-  "volume",
-  "retain",
-  "runout",
-  "format_product_category",
-  "dn_status",
-  "split_id",
-  "order_type",
-  "format_accessibility",
-  "order_remarks",
+  'priority',
+  'notes',
+  'format_ship_to',
+  'format_name',
+  'format_cloud',
+  'trip_no',
+  'requested_delivery_date',
+  'format_product',
+  'volume',
+  'retain',
+  'runout',
+  'format_product_category',
+  'dn_status',
+  'split_id',
+  'order_type',
+  'format_accessibility',
+  'order_remarks',
 ]
 
 const shipmentTableColumns = [
-  "no.",
-  "station",
-  "order 1",
-  "order 2",
-  "order 3",
-  "order 4",
-  "order 5",
+  'no.',
+  'station',
+  'order 1',
+  'order 2',
+  'order 3',
+  'order 4',
+  'order 5',
 ]
 
 const tableMapping = {
@@ -429,105 +429,101 @@ const tableMapping = {
 }
 
 const ganttChartTableColumns = [
-  "vehicle",
-  "max_volume",
-  "status",
-  "utilization_rate",
-  "restriction_code",
+  'vehicle',
+  'max_volume',
+  'status',
+  'utilPer',
+  'restriction_code',
 ]
 
 const ganttChartTableDefaultColumns = {
   vehicle: {
-    label: "VEHICLE ID",
-    columnSize: "cell-text",
+    label: 'VEHICLE ID',
+    columnSize: 'cell-text',
   },
-  utilization_rate: {
-    label: "Util (%)",
-    columnSize: "cell-text",
+  utilPer: {
+    label: 'Util (%)',
+    columnSize: 'cell-text',
   },
   status: {
-    label: "Status",
-    columnSize: "cell-text"
+    label: 'Status',
+    columnSize: 'cell-text',
   },
   max_volume: {
-    label: "Cap (L)",
-    columnSize: "cell-text",
+    label: 'Cap (L)',
+    columnSize: 'cell-text',
   },
   restriction_code: {
-    label: "RT Code",
-    columnSize: "cell-text",
+    label: 'RT Code',
+    columnSize: 'cell-text',
   },
 }
 
 const ganttChartTableMapping = {
   vehicle: {
-    label: "Vehicle",
-    columnSize: "cell-text",
-    key: "frozen",
+    label: 'Vehicle',
+    columnSize: 'cell-text',
+    key: 'frozen',
   },
   max_volume: {
-    label: "Cap (L)",
-    columnSize: "cell-text",
+    label: 'Cap (L)',
+    columnSize: 'cell-text',
   },
   owner: {
-    label: "Name",
-    columnSize: "cell-text",
+    label: 'Name',
+    columnSize: 'cell-text',
   },
   chartering_type: {
-    label: "Type",
-    columnSize: "cell-text",
+    label: 'Type',
+    columnSize: 'cell-text',
   },
   shift_type: {
-    label: "Shift",
-    columnSize: "cell-text",
-    type: "list",
+    label: 'Shift',
+    columnSize: 'cell-text',
+    type: 'list',
   },
   status: {
-    label: "Status",
-    columnSize: "cell-text",
+    label: 'Status',
+    columnSize: 'cell-text',
   },
   pump_type: {
-    label: "Pump",
-    columnSize: "cell-text",
+    label: 'Pump',
+    columnSize: 'cell-text',
   },
   daily_available_hours: {
-    label: "Hours",
-    columnSize: "cell-text",
+    label: 'Hours',
+    columnSize: 'cell-text',
   },
-  utilization_rate: {
-    label: "Util (%)",
-    columnSize: "cell-text",
+  utilPer: {
+    label: 'Util (%)',
+    columnSize: 'cell-text',
   },
   product_type_sap: {
-    label: "Product",
-    columnSize: "cell-text",
-  },
-  cap: {
-    label: "Capacity",
-    columnSize: "cell-text",
+    label: 'Product',
+    columnSize: 'cell-text',
   },
   compartment_no: {
-    label: "No. of Comp",
-    columnSize: "cell-text",
-    label_short: "NO. OF...",
+    label: 'No. of Comp',
+    columnSize: 'cell-text',
+    label_short: 'NO. OF...',
   },
   max_weight: {
-    label: "Max Weight",
-    columnSize: "cell-text",
-    label_short: "MAX W...",
+    label: 'Max Weight',
+    columnSize: 'cell-text',
+    label_short: 'MAX W...',
   },
   customer_type: {
-    label: "Cust Type",
-    columnSize: "cell-text",
-    label_short: "CUST T...",
+    label: 'Cust Type',
+    columnSize: 'cell-text',
+    label_short: 'CUST T...',
   },
   restriction_code: {
-    label: "RT Code",
-    columnSize: "cell-text",
+    label: 'RT Code',
+    columnSize: 'cell-text',
   },
   remarks: {
-    label: "Remarks",
-    columnSize: "cell-text",
+    label: 'Remarks',
+    columnSize: 'cell-text',
   },
 }
 

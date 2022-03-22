@@ -1,7 +1,8 @@
 import React, { useState, useEffect, Fragment } from 'react'
-import { Modal, ModalHeader, ModalFooter } from 'reactstrap'
+import { Modal, ModalHeader, ModalFooter, ModalBody } from 'reactstrap'
 import LinearProgress from '@material-ui/core/LinearProgress'
 import Box from '@material-ui/core/Box'
+import CloseButton from 'components/Common/CloseButton'
 
 function ClearScheduling(props) {
   const { clearScheduling, toggle, checkedValue } = props
@@ -42,67 +43,43 @@ function ClearScheduling(props) {
     setOpen(!open)
   }
 
-  const months = [
-    'Jan',
-    'Feb',
-    'Mar',
-    'Apr',
-    'May',
-    'Jun',
-    'Jul',
-    'Aug',
-    'Sep',
-    'Oct',
-    'Nov',
-    'Dec',
-  ]
   return (
     <Fragment>
-      <Modal
-        isOpen={openModal}
-        toggle={toggle}
-        id="clearscheduling-modal"
-        contentClassName="modalContainer"
-      >
-        <ModalHeader toggle={props.toggle}>
-          <h3>Cancel Shipment Confirmation</h3>
+      <Modal isOpen={openModal} className="rts-small-modal">
+        <ModalHeader close={<CloseButton handleClose={toggle} />}>
+          Cancel Shipment Confirmation
         </ModalHeader>
-        <p>
+        <ModalBody>
           Are you sure you want to proceed with this shipment cancellation?
           <br />
           All order under this shipment will be drop back to Unscheduled list in
           Order Bank
-        </p>
+        </ModalBody>
         <ModalFooter>
-          <div className="d-flex">
-            <button className="btn btn-dan" onClick={toggle}>
-              Cancel
-            </button>
-            <button className="btn btn-danger ml-2" onClick={onClear}>
-              Proceed
-            </button>
-          </div>
+          <button className="btn btn-outline-danger" onClick={toggle}>
+            Cancel
+          </button>
+          <button className="btn btn-danger ml-2" onClick={onClear}>
+            Proceed
+          </button>
         </ModalFooter>
       </Modal>
 
       {/* progress */}
-      <Modal
-        isOpen={open}
-        toggle={onToggleConfirm}
-        id="clearschedulingConfirm-modal"
-        contentClassName="modalContainer"
-      >
-        <ModalHeader>
-          <h3>Clear {checkedValue}</h3>
+      <Modal isOpen={open} className="rts-small-modal">
+        <ModalHeader close={<CloseButton handleClose={props.toggle} />}>
+          Clear {checkedValue}
         </ModalHeader>
-        <div className={checkedValue.length >= 35 ? 'yellowbar' : ''}>
-          <p>Please wait until action is complete.</p>
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Box sx={{ width: '100%', mr: 1 }}>
-              <LinearProgress variant="determinate" value={progress} />
+        <ModalBody>
+          <div className={checkedValue.length >= 35 ? 'yellowbar' : ''}>
+            <p>Please wait until action is complete.</p>
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <Box sx={{ width: '100%', mr: 1 }}>
+                <LinearProgress variant="determinate" value={progress} />
+              </Box>
             </Box>
-          </Box>
-        </div>
+          </div>
+        </ModalBody>
       </Modal>
     </Fragment>
   )

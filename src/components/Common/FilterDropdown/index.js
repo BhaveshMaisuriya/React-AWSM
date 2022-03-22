@@ -340,11 +340,7 @@ const FilterDropdown = ({
                         ) {
                           return row?.text && row?.text.length < 24
                             ? '-'
-<<<<<<< HEAD
                             : moment(row.text).utc().format('DD-MM-yyyy HH:mm')
-=======
-                            : moment(row.text).utc().format('DD-MM-yyyy HH:mm') //format(new Date(row.text), 'dd-MM-yyyy HH:mm')
->>>>>>> 4bd8af324955870edc455fd3d34e0450a513cd49
                         }
                         if (dataKey === 'requested_delivery_date') {
                           return checkNullValue(row.text)

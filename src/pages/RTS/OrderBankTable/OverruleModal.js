@@ -21,9 +21,9 @@ const OverruleModal = ({
         <img src={AlertIcon} />
         &nbsp;{isSoftOverrule ? 'Soft' : 'Hard'} Overrule Alert!
       </ModalHeader>
-      <ModalBody className="pl-4 terminal-relay">
+      <ModalBody>
         <p>{isSoftOverrule ? softMessage : hardMessage}</p>
-        <div className="d-flex mb-4 terminal-relay">
+        <div className="d-flex mb-4">
           <div className="order-bank-region w-100">
             <AWSMInput placeholder={overruleMessage} />
           </div>

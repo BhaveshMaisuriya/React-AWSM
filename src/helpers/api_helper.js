@@ -1,16 +1,16 @@
-import axios from "axios"
-import { getIdToken, signIn, signOut } from "../AuthService"
-import moment from "moment"
+import axios from 'axios'
+import { getIdToken, signIn, signOut } from '../AuthService'
+import moment from 'moment'
 
 //apply base url for axios
 // TODO dummy api endpoint
-const API_URL = "https://6073f3f2066e7e0017e78a3d.mockapi.io/api/v1/"
+const API_URL = 'https://6073f3f2066e7e0017e78a3d.mockapi.io/api/v1/'
 
 const axiosApi = axios.create({
   baseURL: API_URL,
   headers: {
     'content-type': 'application/json',
-    Authorization: 'Bearer ' + sessionStorage.getItem('apiAccessToken')
+    Authorization: 'Bearer ' + sessionStorage.getItem('apiAccessToken'),
   },
 })
 
@@ -28,26 +28,25 @@ const realAxiosApi = axios.create({
     'content-type': 'application/json',
   },
 })
-const expireDt = JSON.parse(sessionStorage.getItem('authUser'))?.extExpiresOn; //sessionStorage.getItem('extExpiresOn');
- const expire = moment(expireDt).utcOffset("+08:00").format("YYYY-DD-MM hh:mm a"); //moment(new Date()); 
- const current = moment().utcOffset("+08:00").format("YYYY-DD-MM hh:mm a") //moment(new Date());
-
+const expireDt = JSON.parse(sessionStorage.getItem('authUser'))?.extExpiresOn //sessionStorage.getItem('extExpiresOn');
+const expire = moment(expireDt).utcOffset('+08:00').format('YYYY-DD-MM hh:mm a') //moment(new Date());
+const current = moment().utcOffset('+08:00').format('YYYY-DD-MM hh:mm a') //moment(new Date());
 
 realAxiosApi.interceptors.request.use(
-  async (config) => {
-    const userSession = sessionStorage.getItem("authUser");   
+  async config => {
+    const userSession = sessionStorage.getItem('authUser')
     if (!userSession) {
       //TODO: redirect user to login page
-      window.location.href = '/login';
-      signOut();      
-      return;
-    } 
+      window.location.href = '/login'
+      signOut()
+      return
+    }
     // if(expire >= current === false) {
     //   signOut();
     //   window.location.href = '/login';
     //   return;
     // }
-    const userInfo = JSON.parse(userSession);
+    const userInfo = JSON.parse(userSession)
     config.headers = {
       Authorization: await getIdToken(userInfo),
     }
@@ -58,7 +57,9 @@ realAxiosApi.interceptors.request.use(
 
 realAxiosApi.interceptors.response.use(
   response => response,
-  (error) => { error?.response?.status === 401 && signIn() } //Promise.reject(error)
+  error => {
+    error?.response?.status === 401 && signIn()
+  } //Promise.reject(error)
 )
 
 export { realAxiosApi }

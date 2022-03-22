@@ -1,7 +1,7 @@
 import REGION_TERMINAL from 'common/data/regionAndTerminal'
 import AWSMDropdown from 'components/Common/Dropdown'
 import React, { useState, useMemo, useEffect } from 'react'
-import { Modal, ModalBody, ModalHeader } from 'reactstrap'
+import { Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap'
 import CloseButton from 'components/Common/CloseButton'
 
 const TerminalRelayModal = ({ isOpen, onSend, onCancel }) => {
@@ -16,17 +16,17 @@ const TerminalRelayModal = ({ isOpen, onSend, onCancel }) => {
     setTerminal(terminalList && terminalList.length ? terminalList[0] : [])
   }, [region])
   return (
-    <Modal isOpen={isOpen}>
+    <Modal isOpen={isOpen} className="rts-small-modal">
       <ModalHeader close={<CloseButton handleClose={onCancel} />}>
         Terminal Relay
       </ModalHeader>
-      <ModalBody className="pl-4 terminal-relay">
+      <ModalBody>
         <p>
           Please select the required terminal if you wish to perform terminal
           relay on this shipment
         </p>
-        <div className="mb-2 terminal-relay">REGION & TERMINAL</div>
-        <div className="d-flex mb-4 terminal-relay">
+        <div className="mb-2">REGION & TERMINAL</div>
+        <div className="d-flex mb-4">
           <div className="order-bank-region w-100">
             <AWSMDropdown
               value={region}
@@ -45,15 +45,15 @@ const TerminalRelayModal = ({ isOpen, onSend, onCancel }) => {
             />
           </div>
         </div>
-        <div className="d-flex align-items-center justify-content-end">
-          <button onClick={onCancel} className={`btn btn-outline-success mr-2`}>
-            Cancel
-          </button>
-          <button onClick={onSend} className={`btn btn-success`}>
-            Update
-          </button>
-        </div>
       </ModalBody>
+      <ModalFooter>
+        <button onClick={onCancel} className={`btn btn-outline-success mr-2`}>
+          Cancel
+        </button>
+        <button onClick={onSend} className={`btn btn-success`}>
+          Update
+        </button>
+      </ModalFooter>
     </Modal>
   )
 }
